@@ -1,6 +1,8 @@
 ## My Home Energy Planner
 
-Open source home energy assessment based on emoncms and emoncms module openbem
+Open source home energy assessment based on emoncms and emoncms module openbem:
+
+see original: [https://github.com/emoncms/openbem](https://github.com/emoncms/openbem)
 
 ![MyHomeEnergyPlanner.png](docs/files/MyHomeEnergyPlanner.png)
 
