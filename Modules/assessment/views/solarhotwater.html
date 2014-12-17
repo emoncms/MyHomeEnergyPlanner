@@ -1,0 +1,98 @@
+<h3>Solar Hot Water system</h3>
+
+<table class="table">
+  <tr><td>Aperture area of solar collector, m2</td><td><input key="data.SHW.A" type="text" style="width:50px"></td></tr>
+  
+  <tr><td>Zero-loss collector efficiency, η0, from test certificate or Table H1</td><td><input key="data.SHW.n0" type="text" style="width:50px"></td></tr>
+  
+  <tr><td>Collector linear heat loss coefficient, a1, from test certificate</td><td><input key="data.SHW.a1" type="text" style="width:50px"></td></tr>
+  
+  <tr><td>Collector 2nd order heat loss coefficient, a2, from test certificate</td><td><input key="data.SHW.a2" type="text" style="width:50px"></td></tr>
+
+  <tr><td>a* = 0.892 (a1 + 45 a2)</td><td><span key="data.SHW.a" dp=2></span></td></tr>
+
+  <tr><td>Collector performance ratio a*/η0</td><td><span key="data.SHW.collector_performance_ratio" dp=2></span></td></tr>
+
+  <tr>
+    <td>Collector Orientation</td>
+    <td>
+      <select key="data.SHW.orientation" style="width:80px">
+        <option value=0>North</option>
+        <option value=1>NE/NW</option>
+        <option value=2>East/West</option>
+        <option value=3>SE/SW</option>
+        <option value=4>South</option>
+      </select>
+    </td>
+  </tr>
+  
+  <tr><td>Collector Inclination (degrees i.e 35 degrees)</td><td><input key="data.SHW.inclination" type="text" style="width:50px"></td></tr>
+
+  <tr><td>Annual solar radiation per m2 from U3.3 in Appendix U for the orientation and tilt of the collector</td><td><span key="data.SHW.annual_solar" dp=0></span> kWh</td></tr>
+  
+  <tr>
+    <td>Overshading factor</td>
+    <td>
+      <select key="data.SHW.overshading" style="width:100px">
+        <option value=0.5>Heavy > 80%</option>
+        <option value=0.65>Significant 60% - 80%</option>
+        <option value=0.8>Modest 20% - 60%</option>
+        <option value=1>None or very little, less than 20%</option>
+      </select>
+    </td>
+  </tr>
+
+  <tr><td>Solar energy available</td><td><span key="data.SHW.solar_energy_available" dp=0></span> kWh</td></tr>
+  
+</table>
+
+<h4>Utilisation</h4>
+
+<p>The overall performance of solar water systems depends on how the hot water system is used, e.g. daily draw-off patterns and the use of other water heating devices such as a boiler or an immersion. The procedure described here is not suitable for detailed design in a particular case. It is intended to give a representative value of the solar contribution to domestic water heating over a range of users</p>
+
+<table class="table">
+
+  <tr><td>Load</td><td><span key="data.water_heating.annual_energy_content" dp=0></span> kWh</td></tr>
+  
+  <tr><td>Solar-to-load ratio</td><td><span key="data.SHW.solar_load_ratio" dp=2></span></td></tr>
+  
+  <tr><td>Utilisation factor</td><td><span key="data.SHW.utilisation_factor" dp=2></span></td></tr>
+  
+  <tr><td>Collector performance factor</td><td><span key="data.SHW.collector_performance_factor" dp=2></span></td></tr>
+  
+  <tr><td>Dedicated solar storage volume, Vs, (litres)</td><td><input key="data.SHW.Vs" type="text" style="width:50px" /></td></tr>
+  
+  <tr><td>If combined cylinder, total volume of cylinder (litres)</td><td><input key="data.SHW.combined_cylinder_volume" type="text" style="width:50px" /></td></tr>
+  
+  <tr><td>Effective solar volume, Veff</td><td><span key="data.SHW.Veff"></span> litres</td></tr>
+  
+  <tr><td>Daily hot water demand, Vd,average [from <a href="http://localhost/dev/openbem/waterheating">water heating</a>]</td><td><span key="data.water_heating.Vd_average" dp=0></span> litres</td></tr> 
+  
+  <tr><td>Volume ratio Veff/Vd,average</td><td><span key="data.SHW.volume_ratio" dp=2></span></td></tr>
+
+  <tr><td>Solar storage volume factor f2 = 1 + 0.2 × ln(Volume Ratio) = </td><td><span key="data.SHW.f2" dp=2></span></td></tr> 
+  
+  <tr><td>Annual solar input Qs (kWh)</td><td><span key="data.SHW.Qs" dp=0></span> kWh</td></tr>
+</table>
+
+<!--
+<h4>Monthly solar input Qs (kWh)</h4>
+<table class="table">
+<tr>
+  <td></td>
+  <td>Jan</td>
+  <td>Feb</td>
+  <td>Mar</td>
+  <td>Apr</td>
+  <td>May</td>
+  <td>Jun</td>
+  <td>Jul</td>
+  <td>Aug</td>
+  <td>Sep</td>
+  <td>Oct</td>
+  <td>Nov</td>
+  <td>Dec</td>
+</tr>
+  <tbody id="Qs_monthly" title="Monthly solar input" dp=0></tbody>
+</table>
+-->

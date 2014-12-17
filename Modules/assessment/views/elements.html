@@ -1,0 +1,162 @@
+<div class="page">
+    
+    <hr>
+    <h3>Walls, Roof & Floors</h3>
+    <hr>
+    
+    <p><i>Note: If the element length and height is given it will automatically calculate and override the area calculation. Leave length and height blank and enter area for ceilings and floors and other elements where its easier to enter the area directly.</i></p>
+    
+    <table class="table">
+    
+        <tr>
+            <th>Type</th>
+            <th style="text-align:left">Element Name</th>
+            <th>Length<br>(m)</th>
+            <th>Height<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Window<br>Area<br>(m<sup>2</sup>)</th>
+            <th>Net<br>Area<br>(m<sup>2</sup>)</th>
+            <th>U-value<br>(W/K.m2)</th>
+            <th>k-value<br>(kJ/K.m2)</th>
+            <th>W/K</th>
+            <th></th>
+
+        </tr>
+        
+        <tbody id="element-template" style="display:none">
+            <tr>
+                <td style="text-align:left">
+                    <select key="data.fabric.elements.template.type" style="width:100px">
+                        <option>floor</option>
+                        <option>wall</option>
+                        <option>roof</option>
+                    </select>
+                </td>
+                
+                <td style="text-align:left"><input style="text-align:left; width:150px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
+
+                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                <td><span key="data.fabric.elements.template.windowarea" dp=1>0.0</span>m<sup>2</sup></td>
+                <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
+                
+                <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:40px" /></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.kvalue" style="width:40px" /></td>
+                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
+                <td><i class="icon-trash delete-element" row="template" style="cursor:pointer"></i></td>
+
+            </tr>
+        </tbody>
+        
+        <tbody id="elements"></tbody>
+
+        <tr>
+            <td style="text-align:left">
+                <button id="add-element" class="btn">Add new element</button>
+            </td>
+            <td></th>
+            <td></td>
+            <td></th>
+            <td></td>
+            <td></td>
+        </tr>
+        
+    </table>
+    
+    <hr>
+    <h3>Windows</h3>
+    <hr>
+    <table class="table">
+    
+        <tr>
+            <th style="text-align:left">Window Name</th>
+            <th style="text-align:left">Description</th>
+            <th>subtract<br>from:</th>
+            <th>Width<br>(m)</th>
+            <th>Height<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Orientation</th>
+            <th>Over<br>shading</th>
+            <th>g</th>
+            <th>gL</th>
+            <th>ff</th>
+            <th>U-value<br>(W/K.m2)</th>
+            <th>Gain</th>
+            <th>W/K</th>
+            <th></th>
+        </tr>
+        
+        <tbody id="window-template" style="display:none">
+            <tr>
+                <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
+                <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.description"></td>
+                <td>
+                    <select key="data.fabric.elements.template.subtractfrom" style="width:55px">
+                    
+                    </select>
+                </td>
+                
+                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+                
+                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                
+                <td>
+                    <select key="data.fabric.elements.template.orientation" style="width:80px">
+                        <option value=0 >North</option>
+                        <option value=1 >NE/NW</option>
+                        <option value=2 >East/West</option>
+                        <option value=3 >SE/SW</option>
+                        <option value=4 >South</option>
+                    </select>
+                
+                </td>
+                <td>
+                    <select key="data.fabric.elements.template.overshading" style="width:85px">
+                        <option value=0 >Heavy > 80%</option>
+                        <option value=1 >More than average > 60%-80%</option>
+                        <option value=2 >Average or unknown 20-60%</option>
+                        <option value=3 >Very little < 20% </option>
+                    </select>
+                </td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.g" style="width:30px" /></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.gL" style="width:30px" /></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.ff" style="width:30px" /></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:30px" /></td>
+                <td><span key="data.fabric.elements.template.gain" dp=0>0</span>W</td>
+                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
+                <td><i class="icon-trash delete-element" row="template" style="cursor:pointer"></i></td>
+                
+            </tr>
+        </tbody>
+        
+        <tbody id="windows"></tbody>
+
+        <tr>
+            <td style="text-align:left">
+                <button id="add-window" class="btn">Add new window</button>
+            </td>
+            <td></th>
+            <td></td>
+        </tr>
+        
+    </table>
+    
+    <table class="table">
+    <tr><td>Total fabric heat loss:</td><td><span key="data.fabric.total_heat_loss_WK" dp=0>0</span> W/K</td></tr>
+    <tr><td>Ventilation heat loss:</td><td><span key="data.ventilation.average_WK" dp=0>0</span> W/K</td></tr>
+    <tr><td>Total W/K heat loss:</td><td><span key="data.totalWK" dp=0>0</span> W/K</td></tr>
+
+    
+    <tr><td>Total fabric thermal capacity:</td><td><span key="data.fabric.total_thermal_capacity" dp=0>0</span> kJ/K.m3</td></tr>
+    <tr><td>Annual solar gains:</td><td><span key="data.fabric.annual_solar_gain" dp=0>0</span> W (<span key="data.fabric.annual_solar_gain_kwh" dp=0>0</span> kWh)</td></tr>
+    </table>
+    
+    <!--
+    <pre>
+        <div id="export"></div>
+    </pre>
+    -->
+    
+</div>

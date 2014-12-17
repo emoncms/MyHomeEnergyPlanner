@@ -1,0 +1,47 @@
+<h3>Heat Balance</h3>
+<h4>Temperatures</h4>
+<table class="table table-bordered">
+<tr>
+  <th></th>
+  <th>Jan</th>
+  <th>Feb</th>
+  <th>Mar</th>
+  <th>Apr</th>
+  <th>May</th>
+  <th>Jun</th>
+  <th>Jul</th>
+  <th>Aug</th>
+  <th>Sep</th>
+  <th>Oct</th>
+  <th>Nov</th>
+  <th>Dec</th>
+</tr>
+<tbody class="monthly" key="data.external_temperature" title="External temperature" units="C" dp=1></tbody>
+<tbody class="monthly" key="data.internal_temperature" title="Internal temperature" units="C" dp=1></tbody>
+<tbody class="monthly" key="data.space_heating.delta_T" title="Delta T" units="K" dp=1></tbody>
+
+<tr><td><h4>Losses</h4></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+<tbody id="losses_list"></tbody>
+<tbody class="monthly" key="data.space_heating.total_losses" title="Total Losses" units="W" dp=0></tbody>
+
+<tr><td><h4>Gains</h4></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+<tbody id="gains_list"></tbody>
+<tbody class="monthly" key="data.space_heating.total_gains" title="Total Gains" units="W" dp=0></tbody>
+<tbody class="monthly" key="data.space_heating.utilisation_factor" title="Utilisation factor for gains" units="" dp=2></tbody>
+<tbody class="monthly" key="data.space_heating.useful_gains" title="Useful gains" units="W" dp=0></tbody>
+
+<tr><td><h4>Heat demand</h4></td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+
+<tbody class="monthly" key="data.space_heating.heat_demand" title="Heat demand" units="W" dp=0></tbody>
+<tbody class="monthly" key="data.space_heating.heat_demand_kwh" title="Heat demand (kWh/month)" units="" dp=0></tbody>
+<tbody class="monthly" key="data.space_heating.cooling_demand" title="Cooling demand" units="W" dp=0></tbody>
+<tbody class="monthly" key="data.space_heating.cooling_demand_kwh" title="Cooling demand (kWh/month)" units="" dp=0></tbody>
+</table>
+
+<p>Annual heat demand: <span key="data.space_heating.annual_heating_demand" dp=0></span> kWh</p>
+<p>Annual cooling demand: <span key="data.space_heating.annual_cooling_demand" dp=0></span> kWh</p>

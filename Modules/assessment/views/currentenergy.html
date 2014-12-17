@@ -1,0 +1,188 @@
+<h3>Current Energy Use</h3>
+<p>Preliminary implementation of the input page for pre-retrofit actual energy use.</p>
+<p>Electricity C02 emissions currently based on 100% renewable electricity, to be developed further.</p> 
+
+<table class="table">
+    <tr>
+        <th></th>
+        <th>Annual use</th>
+        <th>Efficiency</th>
+        <th>kWh/d</th>
+        <th>Annual CO2</th>
+    </tr>
+    <tr>
+        <td>Electricity</td>
+        <td><input type="text" value="0" key="data.currentenergy.electric_annual_kwh" style="width:60px" /> kWh</td>
+        <td></td>
+        <td><span key="data.currentenergy.electric_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.electric_co2"></span> kg</td>
+    </tr>
+
+    <tr>
+        <td>Electricity: Storage Heaters</td>
+        <td><input type="text" value="0" key="data.currentenergy.storageheaters_annual_kwh" style="width:60px" /> kWh</td>
+        <td></td>
+        <td><span key="data.currentenergy.storageheaters_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.storageheaters_co2"></span> kg</td>
+    </tr>
+
+    <tr>
+        <td>Electricity: Heatpump<br>
+        <i style="font-size:12px">annual electricity input to the heatpump</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.heatpump_annual_kwh" style="width:60px" /> kWh</td>
+        <td><input type="text" value="0" key="data.currentenergy.heatpump_efficiency" style="width:60px" /> %</td>
+        <td><span key="data.currentenergy.heatpump_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.heatpump_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Electricity: Water heating</td>
+        <td><input type="text" value="0" key="data.currentenergy.waterheating_annual_kwh" style="width:60px" /> kWh</td>
+        <td></td>
+        <td><span key="data.currentenergy.waterheating_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.waterheating_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Electricity: Electric Car</td>
+        <td><input type="text" value="0" key="data.currentenergy.electriccar_annual_kwh" style="width:60px" /> kWh</td>
+        <td></td>
+        <td><span key="data.currentenergy.electriccar_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.electriccar_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Wood Logs<br>
+        <i style="font-size:12px">1380 kWh/m3, 0 kgC02/m3</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.woodlogs_annual_m3" style="width:60px" /> m3</td>
+        <td><input type="text" value="0" key="data.currentenergy.woodlogs_efficiency" style="width:60px" /> %</td>
+        <td><span key="data.currentenergy.woodlogs_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.woodlogs_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Wood Pellets<br>
+        <i style="font-size:12px">4800 kWh/m3, 0 kgC02/m3</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.woodpellets_annual_m3" style="width:60px" /> m3</td>
+        <td><input type="text" value="0" key="data.currentenergy.woodpellets_efficiency" style="width:60px" /> %</td>
+         <td><span key="data.currentenergy.woodpellets_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.woodpellets_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Oil<br>
+        <i style="font-size:12px">10.27 kWh/L, 2.518 kgC02/L</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.oil_annual_L" style="width:60px" /> L</td>
+        <td><input type="text" value="0" key="data.currentenergy.oil_efficiency" style="width:60px" /> %</td>
+        <td><span key="data.currentenergy.oil_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.oil_co2"></span> kg</td>  
+    </tr>
+    
+    <tr>
+        <td>Gas<br>
+        <i style="font-size:12px">9.8 kWh/m3, 2.198 kgC02/m3</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.gas_annual_m3" style="width:60px" /> m3</td>
+        <td><input type="text" value="0" key="data.currentenergy.gas_efficiency" style="width:60px" /> %</td>
+        <td><span key="data.currentenergy.gas_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.gas_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>LPG<br>
+        <i style="font-size:12px">11.0 kWh/m3, 1.5 kgC02/m3</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.LPG_annual_L" style="width:60px" /> L</td>
+        <td><input type="text" value="0" key="data.currentenergy.LPG_efficiency" style="width:60px" /> %</td>
+        <td><span key="data.currentenergy.LPG_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.LPG_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Bottled Gas<br>
+        <i style="font-size:12px">13.9 kWh/kg, 1.5 kgC02/kg</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.bottledgas_annual_kg" style="width:60px" /> kg</td>
+        <td><input type="text" value="0" key="data.currentenergy.bottledgas_efficiency" style="width:60px" /> %</td>
+        <td><span key="data.currentenergy.bottledgas_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.bottledgas_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Electric car (miles)<br>
+        <i style="font-size:12px">miles not included in home electricty above<br>Assuming 100% green electricity</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.electriccar2_annual_miles" style="width:60px" /> miles</td>
+        <td><input type="text" value="0" key="data.currentenergy.electriccar2_milesperkwh" style="width:60px" /> miles/kwh</td>
+        <td><span key="data.currentenergy.electriccar2_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.electriccar2_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Car 1<br>
+        <i style="font-size:12px">9.7 kWh/Litre, 2.31 kgC02/Litre</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.car1_annual_miles" style="width:60px" /> miles</td>
+        <td><input type="text" value="0" key="data.currentenergy.car1_mpg" style="width:60px" /> mpg</td>
+        <td><span key="data.currentenergy.car1_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.car1_co2" dp=0></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Car 2<br>
+        <i style="font-size:12px">9.7 kWh/Litre, 2.31 kgC02/Litre</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.car2_annual_miles" style="width:60px" /> miles</td>
+        <td><input type="text" value="0" key="data.currentenergy.car2_mpg" style="width:60px" /> mpg</td>
+        <td><span key="data.currentenergy.car2_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.car2_co2" dp=0></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Car 3<br>
+        <i style="font-size:12px">9.7 kWh/Litre, 2.31 kgC02/Litre</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.car3_annual_miles" style="width:60px" /> miles</td>
+        <td><input type="text" value="0" key="data.currentenergy.car3_mpg" style="width:60px" /> mpg</td>
+        <td><span key="data.currentenergy.car3_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.car3_co2" dp=0></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Motorbike<br>
+        <i style="font-size:12px">9.7 kWh/Litre, 2.31 kgC02/Litre</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.motorbike_annual_miles" style="width:60px" /> miles</td>
+        <td><input type="text" value="0" key="data.currentenergy.motorbike_mpg" style="width:60px" /> mpg</td>
+        <td><span key="data.currentenergy.motorbike_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.motorbike_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Bus<br>
+        <i style="font-size:12px">0.53 kWh/mile, 0.176 kgC02/mile</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.bus_miles" style="width:60px" /> miles</td>
+        <td></td>
+        <td><span key="data.currentenergy.bus_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.bus_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>National Rail<br>
+        <i style="font-size:12px">0.096 kWh/mile, 0.096 kgC02/mile</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.train_miles" style="width:60px" /> miles</td>
+        <td></td>
+        <td><span key="data.currentenergy.train_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.train_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Boat<br>
+        <i style="font-size:12px">1.0 kWh/mile, 0.192 kgC02/mile</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.boat_miles" style="width:60px" /> miles</td>
+        <td></td>
+        <td><span key="data.currentenergy.boat_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.boat_co2"></span> kg</td>
+    </tr>
+    
+    <tr>
+        <td>Plane<br>
+        <i style="font-size:12px">0.69 kWh/mile, 0.43 kgC02/mile</i></td>
+        <td><input type="text" value="0" key="data.currentenergy.plane_miles" style="width:60px" /> miles</td>
+        <td></td>
+        <td><span key="data.currentenergy.plane_kwhd" dp=1></span> kWh/d</td>
+        <td><span key="data.currentenergy.plane_co2"></span> kg</td>
+    </tr>
+</table>

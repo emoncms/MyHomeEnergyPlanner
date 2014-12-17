@@ -1,0 +1,45 @@
+<h3>Appliance list</h3>
+
+<p>This module provides an alternate method of calculating energy use and gains from lighting, cooking and appliances.</p>
+
+<p>Start by calculating an estimate for daily electricity consumption by making a list of all lighting, cooking and appliances in your home. Enter an estimate for how many hours each item is used and how much power in Watt's it consumes. (Do not include electric space heaters as these are calculated seperatly) </p>
+
+<table class="table">
+
+    <tr>
+        <th style="text-align:left">Item name</th>
+        <th>Power (W)</th>
+        <th>Use time (hours)</th>
+        <th>Energy (Wh)</th>
+    </tr>
+    
+    <tbody id="template" style="display:none">
+        <tr>
+            <td style="text-align:left"><input style="text-align:left; width:200px" type="text" key="data.appliancelist.list.z.name"></td>
+            <td><input type="text" value="0" key="data.appliancelist.list.z.power" style="width:60px" /></th>
+            <td><input type="text" value="0" key="data.appliancelist.list.z.hours" style="width:60px" /></th>
+            <td><span key="data.appliancelist.list.z.energy"></span> Wh</th>
+        </tr>
+    </tbody>
+    
+    <tbody id="appliancelist"></tbody>
+
+    <tr>
+        <td style="text-align:left">
+            <button id="add-item" class="btn">Add new item</button>
+        </td>
+        <td></th>
+        <td></td>
+        <td></th>
+        <td></td>
+        <td></td>
+    </tr>
+    
+</table>
+<br>
+<h4>Totals</h4>
+<table class="table">
+<tr><td>Total daily watt-hours: </td><td><span key="data.appliancelist.totalwh"></span> Wh</td></tr>
+<tr><td>Annual energy consumption: </td><td><span key="data.appliancelist.annualkwh" dp=0></span> kWh</td></tr>
+<tr><td>Space heating gains: </td><td><span key="data.appliancelist.gains_W" dp=0></span> Watts</td></tr>
+</table>

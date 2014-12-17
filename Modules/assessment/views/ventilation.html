@@ -1,0 +1,119 @@
+
+<div class="page">
+
+    <hr>
+    <h3>Ventilation & Infiltration</h3>
+    <hr>
+    <br>
+    
+    <table class="table">
+
+        <tr>
+            <th style="text-align:left">Air tightness test:</th>
+            <th style="width:60%"></th>
+        </tr>
+        
+        <tr>
+            <td style="text-align:left">Calculate infiltration rate based on air tightness test:</td>
+            <td><input key="data.ventilation.air_permeability_test" type="checkbox" /></td>
+        </tr>
+        
+        <tbody id="air_permeability_value_tbody">
+            <tr>
+                <td style="text-align:left">Air permeability value, q50, expressed in cubic metres per hour per square metre of envelope area:</td>
+                <td><input key="data.ventilation.air_permeability_value" type="text" style="width:60px"/></td>
+            </tr>
+        </tbody>
+        
+    </table>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th style="text-align:left; width:16.6%">Enter number of:</th>
+                <th style="text-align:left; width:16.6%"></th>
+                <th style="text-align:left; width:16.6%"></th>
+                <th style="text-align:left; width:16.6%"></th>
+                <th style="text-align:left; width:16.6%"></th>
+                <th style="text-align:left; width:16.6%"></th>
+            </tr>
+        </tbody>
+        
+        <tr>
+            <td style="text-align:left">Chimneys</td><td style="text-align:left"><input key="data.ventilation.number_of_chimneys" type="text" style="width:50px"/></td>
+            <td style="text-align:left">Open flues</td><td style="text-align:left"><input key="data.ventilation.number_of_openflues" type="text" style="width:50px"/></td>
+            <td style="text-align:left">Intermittent fans</td><td style="text-align:left"><input key="data.ventilation.number_of_intermittentfans" type="text" style="width:50px"/></td>
+        </tr>
+        
+        <tr>
+            <td style="text-align:left">Passive vents</td><td style="text-align:left"><input key="data.ventilation.number_of_passivevents" type="text" style="width:50px"/></td>
+            <td style="text-align:left">Flueless gas fires</td><td style="text-align:left"><input key="data.ventilation.number_of_fluelessgasfires" type="text" style="width:50px"/></td>    
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tbody id="structural">
+            <tr>
+                <th style="text-align:left">Structural infiltration</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <td style="text-align:left">Walls</td>
+                <td style="text-align:left">
+                    <select key="data.ventilation.dwelling_construction" style="width:180px">
+                        <option value='timberframe'>Timber Frame (+0.2)</option>
+                        <option value='masonry'>Masonry (+0.35)</option>
+                    </select>
+                </td>
+                <td style="text-align:left">Percentage of windows and<br>doors draught proofed</td>
+                <td style="text-align:left">
+                    <div class="input-append">
+                        <input key="data.ventilation.percentage_draught_proofed" type="text" style="width:50px">
+                        <span class="add-on">%</span>
+                    </div>
+                </td>  
+                <td style="text-align:left">Number of storeys</td><td><span key="data.num_of_floors"></span></td>
+            </tr>
+            <tr>
+                <td style="text-align:left">Floor</td>
+                <td style="text-align:left">
+                    <select key="data.ventilation.suspended_wooden_floor" style="width:180px">
+                        <option value="unsealed" >Suspended unsealed wooden floor (+0.2)</option>
+                        <option value="sealed">Suspended sealed wooden floor (+0.1)</option>
+                        <option value="0">Solid floor (+0)</option>
+                    </select>
+                </td>
+                <td style="text-align:left">Draught Lobby</td>
+                <td style="text-align:left"><input key="data.ventilation.draught_lobby" type="checkbox" /></td>
+                <td style="text-align:left">Number of sides sheltered</td><td><input key="data.ventilation.number_of_sides_sheltered" type="text" style="width:50px"/></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    
+    <p> 
+
+    <div class="input-prepend">
+        <span class="add-on">Select ventilation type:</span>
+        <select key="data.ventilation.ventilation_type" style="width:560px">
+            <option value='a'>Balanced mechanical ventilation with heat recovery (MVHR)</option>
+            <option value='b'>Balanced mechanical ventilation without heat recovery (MV)</option>
+            <option value='c'>Whole house extract ventilation or positive input ventilation from outside</option>
+            <option value='d'>Natural ventilation or whole house positive input ventilation from loft</option>
+        </select>
+    </div>
+    </p>
+
+    <div id="system_air_change_rate_div">
+        <p>Air change rate through the system (If exhaust air heat pump see Appendix N): <input key="data.ventilation.system_air_change_rate" type="text" style="width:50px" /></p>
+    </div>
+
+    <div id="balanced_heat_recovery_efficiency_div">
+        <p>Heat recovery efficiency allowing for in-use factor: <input key="data.ventilation.balanced_heat_recovery_efficiency" type="text" style="width:50px" /> %</p>
+    </div>
+

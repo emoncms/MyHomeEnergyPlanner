@@ -1,0 +1,57 @@
+<div id="bound">
+        <hr>
+            <h3>Overview</h3>
+            <a class="house_graphic" style="margin-top:-23px; float:right">Show house graphic</a>
+        <hr>
+        <div style="width:100%; height:430px; position:relative">
+
+
+
+        <canvas id="house" height="430px"></canvas>
+        
+        <div id="house-floor" style="position:absolute; top:335px; left:680px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Floor</b><br><span key="data.fabric.total_floor_WK" dp=1></span> W/K</p>
+        </div>
+        
+        <div id="house-roof" style="position:absolute; top:10px; left:780px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Roof</b><br><span key="data.fabric.total_roof_WK" dp=1></span> W/K</p>
+        </div>
+        
+        <div id="house-walls" style="position:absolute; top:130px; left:780px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Walls</b><br><span key="data.fabric.total_wall_WK" dp=1></span> W/K</p>
+        </div>
+        
+        
+        <div id="house-windows" style="position:absolute; top:120px; left:300px; text-align:right">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Windows</b><br><span key="data.fabric.total_window_WK" dp=1></span> W/K</p>
+        </div>
+        
+        <div id="house-ventilation" style="position:absolute; top:320px; left:300px; text-align:right">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Ventilation</b><br><span key="data.ventilation.average_WK" dp=1></span> W/K</p>
+        </div>
+        
+        <div style="position:absolute; top:340px; left:0px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>SAP Rating:</b> <span key="data.SAP.rating" dp=1></span></p>
+        </div>
+        
+        <div style="position:absolute; top:370px; left:0px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Annual Energy cost:</b> £<span key="data.total_cost" dp=0></span></p>
+        </div>
+        
+        
+        <div style="position:absolute; top:50%; left:44%;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>TOTAL:</b> <span key="data.totalWK" dp=0></span> W/K</p>
+        </div>
+        
+        <div style="position:absolute; top:400px; left:0px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Space heating demand</b> <span key="data.fabric_energy_efficiency" dp=0></span> kWh/m2.year</p>
+        </div>
+        
+        <div style="position:absolute; top:430px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Primary energy demand</b> <span key="data.primary_energy_use_m2" dp=0></span> kWh/m2.year</p>
+        </div>
+        
+        </div>
+        <br><br>
+
+</div>

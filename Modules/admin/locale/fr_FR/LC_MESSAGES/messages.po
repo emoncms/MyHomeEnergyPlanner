@@ -1,0 +1,87 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: emoncms3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-05-01 11:54+0100\n"
+"PO-Revision-Date: 2013-05-01 11:55+0100\n"
+"Last-Translator: VIALAT Mickael <contact@planete-domotique.com>\n"
+"Language-Team: Baptiste Gaultier (Télécom Bretagne) <baptiste."
+"gaultier@telecom-bretagne.eu>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SearchPath-0: ../../..\n"
+
+#: ../../../admin_db_view.php:1
+msgid "Database setup, update and status check"
+msgstr "Configuration, mise à jour et vérification de la base de données"
+
+#: ../../../admin_db_view.php:2
+msgid ""
+"This page displays the output of the database setup and update process which "
+"checks the database requirements of each module installed and enter any new "
+"table or fields if required."
+msgstr ""
+"Cette page affiche le résultat de la configuration et de la mise à jour de "
+"la base de données suivant les besoins de tous les modules installés."
+
+#: ../../../admin_db_view.php:3
+msgid ""
+"If all the item statuses below show ok that means your database is setup "
+"correctly."
+msgstr ""
+"Si tous les élements ci-dessous sont ok, votre base de données a été mise à "
+"jour correctement."
+
+#: ../../../admin_db_view.php:7
+msgid "Schema item"
+msgstr "Schéma bdd"
+
+#: ../../../admin_db_view.php:7
+msgid "Name"
+msgstr "Nom"
+
+#: ../../../admin_db_view.php:7
+msgid "Status"
+msgstr "Satus"
+
+#: ../../../admin_main_view.php:7 ../../../update_view.php:29
+msgid "Update database"
+msgstr "Mise à jour de la base de données"
+
+#: ../../../admin_main_view.php:8
+msgid ""
+"Run this after updating emoncms, after installing a new module or to check "
+"emoncms database status."
+msgstr ""
+"Lancez cette commande après une mise à jour de Emoncms, après l'installation "
+"d'un nouveau module ou pour tester l'intégrité de la base de données"
+
+#: ../../../admin_main_view.php:12
+msgid "Update & check"
+msgstr "Mise à jour & Analyse"
+
+#: ../../../admin_menu.php:7
+msgid "Admin"
+msgstr "Admin"
+
+#: ../../../update_view.php:37
+msgid "Apply changes"
+msgstr "Appliquer les modifications"
+
+#: ../../../update_view.php:44
+msgid "Check for further updates"
+msgstr "Tester les mises à jour"
+
+#: ../../../update_view.php:51
+msgid "Database is up to date "
+msgstr "La base de données est à jour"
+
+#: ../../../update_view.php:51
+msgid "Nothing to do"
+msgstr "Aucune mise à jour nécessaire"
