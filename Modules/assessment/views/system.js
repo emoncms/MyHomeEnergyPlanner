@@ -48,6 +48,7 @@ function add_energy_system(z,x)
     var prefixA = "#energyrequirements [key='data.energy_systems.template.x";
     var prefixB = 'data.energy_systems.'+z+'.'+x;
     $(prefixA+".system']").attr('key',prefixB+'.system');
+    $(prefixA+".description']").attr('key',prefixB+'.description');
     $(prefixA+".fraction']").attr('key',prefixB+'.fraction');
     $(prefixA+".demand']").attr('key',prefixB+'.demand');
     $(prefixA+".efficiency']").attr('key',prefixB+'.efficiency');

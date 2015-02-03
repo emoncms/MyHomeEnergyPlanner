@@ -65,14 +65,17 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         
             <tr>
                 <td style="text-align:left">Supplied by:</td>
+                <td>Description</td>
                 <td>Fraction</td>
                 <td>Demand</td>
                 <td>Efficiency</td>
                 <td>Fuel input </td>
+                
                 <td><i class="icon-plus add-system" style="cursor:pointer" eid="template">+</i></td>
             </tr>
             
@@ -83,9 +86,10 @@
                 <td style="text-align:left">
                     <select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>
                 </td>
+                <td><input type="text" key="data.energy_systems.template.x.description" style="width:120px"/></td>
                 <td><input type="text" key="data.energy_systems.template.x.fraction" dp=2 style="width:60px"/></td>
                 <td><span key="data.energy_systems.template.x.demand" dp=0></span> kWh/year</td>
-                <td><input type="text" key="data.energy_systems.template.x.efficiency" dp=2 style="width:60px"></td>
+                <td><input type="text" key="data.energy_systems.template.x.efficiency" dp=3 style="width:60px"></td>
                 <td><span key="data.energy_systems.template.x.fuelinput" dp=0></span> kWh/year</td>
                 <td><span class="delete-system" eid="eid" sid="sid" style="cursor:pointer"><a>Delete</a></span></td>
             </tr>

@@ -330,6 +330,7 @@ var openbem = {
             {
                 inputdata.energy_systems[z].push({
                     system: data.energy_systems[z][i].system,
+                    description: data.energy_systems[z][i].description,
                     fraction: data.energy_systems[z][i].fraction,
                     efficiency: data.energy_systems[z][i].efficiency
                 });
