@@ -1,13 +1,17 @@
-$("#openbem").on("click",'#add-element', function(){
-    var size = Object.size(data.fabric.elements)+1;
-    var name = "Element "+size;
-    data.fabric.elements.push({type:'wall', name: name, l:0, h:0, area: 0, uvalue: 0, wk: 0});
-    add_element(size-1);
+$("#openbem").on("click",'#add-element', function() {
+    data.fabric.elements.push({type:'wall', name: 'Element', l:0, h:0, area: 0, uvalue: 0, wk: 0});
+    var newelementid = data.fabric.elements.length - 1;
+    add_element(newelementid);
     update();
     
     
-    // $("#windows [key='data.fabric.elements."+z+".subtractfrom']").append("<option value='"+i+"'>"+data.fabric.elements[i].name+"</option>");
-
+    for (z in data.fabric.elements)
+    {
+        if (data.fabric.elements[z].type=="window")
+        {
+            $("#windows [key='data.fabric.elements."+z+".subtractfrom']").append("<option value='"+newelementid+"'>"+data.fabric.elements[newelementid].name+"</option>");
+        }
+    }
 });
 
 $("#openbem").on("click",'#add-window', function(){

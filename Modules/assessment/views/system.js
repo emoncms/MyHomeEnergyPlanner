@@ -2,7 +2,13 @@ $("#openbem").on("click",'.add-system', function(){
     var z = $(this).attr('eid');
     data.energy_systems[z].push({system: "electric", fraction:1.0, efficiency:1.0});
     update();
-    openbem.save();
+});
+
+$("#openbem").on("click",'.delete-system', function(){
+    var sid = $(this).attr('sid');
+    var eid = $(this).attr('eid');
+    data.energy_systems[eid].splice(sid,1);
+    update();
 });
 
 function system_UpdateUI()
@@ -46,6 +52,9 @@ function add_energy_system(z,x)
     $(prefixA+".demand']").attr('key',prefixB+'.demand');
     $(prefixA+".efficiency']").attr('key',prefixB+'.efficiency');
     $(prefixA+".fuelinput']").attr('key',prefixB+'.fuelinput');
+    
+    $("#energyrequirements [eid='eid']").attr('eid',z); 
+    $("#energyrequirements [sid='sid']").attr('sid',x); 
     
     $("#energyrequirements [z='tmp']").attr('z',z);
     $("#energyrequirements [x='tmp']").attr('x',x);

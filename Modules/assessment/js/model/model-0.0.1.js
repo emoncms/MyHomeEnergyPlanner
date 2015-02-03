@@ -99,8 +99,8 @@ calc.start = function()
 
 calc.floors = function()
 {    
-    if (this.data.floors==undefined) this.data.floors = {};
-    
+    if (this.data.floors==undefined) this.data.floors = [];
+ 
     for (z in this.data.floors)
     {
         this.data.floors[z].volume = this.data.floors[z].area * this.data.floors[z].height;
@@ -145,7 +145,7 @@ calc.occupancy = function()
 calc.fabric = function() 
 {
     if (this.data.fabric==undefined) this.data.fabric = {};
-    if (this.data.fabric.elements==undefined) this.data.fabric.elements = {};
+    if (this.data.fabric.elements==undefined) this.data.fabric.elements = [];
     
     this.data.fabric.total_heat_loss_WK = 0;
     this.data.fabric.total_thermal_capacity = 0;
@@ -172,6 +172,10 @@ calc.fabric = function()
         }
         this.data.fabric.elements[z].netarea = this.data.fabric.elements[z].area;
         
+        if (this.data.fabric.elements[z].type!='window') {
+            this.data.fabric.elements[z].windowarea = 0;
+        }
+        
         // Subtract window areas:
         
         for (w in this.data.fabric.elements)
@@ -186,7 +190,7 @@ calc.fabric = function()
                     {
                         windowarea = this.data.fabric.elements[w]['l'] * this.data.fabric.elements[w]['h'];
                     }
-                    this.data.fabric.elements[z].windowarea = windowarea;
+                    this.data.fabric.elements[z].windowarea += windowarea;
                     this.data.fabric.elements[z].netarea -= windowarea;
                 }
             }

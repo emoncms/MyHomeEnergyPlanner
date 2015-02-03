@@ -104,8 +104,6 @@
     
     load_view("#topgraphic",'topgraphic');
     
-
-
     var projectid = <?php echo $projectid; ?>;
     var p = openbem.get(projectid);
     
@@ -162,6 +160,7 @@
     
     function update()
     {
+        console.log("updating");
         project[scenario] = calc.run(project[scenario]);
         data = project[scenario];
         
@@ -169,6 +168,8 @@
         draw_openbem_graphics();
         
         $("."+scenario+"_sap_rating").html(project[scenario].SAP.rating.toFixed(0));
+        
+        openbem.set(projectid,project);
     }
     
     $("#openbem").on("change",'[key]', function(){
@@ -182,8 +183,6 @@
         
         $("#openbem").trigger("onKeyChange",{key:key,value:val});
         update();
-        
-        openbem.set(projectid,project);
     });
     
     $("#openbem").on('click',".scenario-block", function() {
