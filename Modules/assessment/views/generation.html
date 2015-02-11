@@ -10,7 +10,7 @@
         <th>Feed in tariff (£/kWh)</th>
     </tr>
     <tr>
-        <td>Solar PV</td>
+        <td>or Solar PV</td>
         <td><input type="text" value="0" key="data.generation.solar_annual_kwh" style="width:60px" /></td>
         <td><input type="text" value="0" key="data.generation.solar_fraction_used_onsite" style="width:60px" /></td>
         <td><input type="text" value="0" key="data.generation.solar_FIT" style="width:60px" /></td>
@@ -28,3 +28,50 @@
         <td><input type="text" value="0" key="data.generation.hydro_FIT" style="width:60px" /></td>
     </tr>
 </table>
+
+<hr><h3>Solar PV Calculator</h3><hr>
+
+<table class="table">
+
+  <tr>
+    <td>Array Installed Capacity kWp</td>
+    <td><input type="text" value="0" key="data.generation.solarpv_kwp_installed" style="width:60px" /> kWp</td>
+  </tr>
+
+  <tr>
+    <td>Array Orientation</td>
+    <td>
+      <select key="data.generation.solarpv_orientation" style="width:250px">
+        <option value=0>North</option>
+        <option value=1>NE/NW</option>
+        <option value=2>East/West</option>
+        <option value=3>SE/SW</option>
+        <option value=4>South</option>
+      </select>
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Array Inclination (degrees i.e 35 degrees)</td>
+    <td><input type="text" value="0" key="data.generation.solarpv_inclination" style="width:60px" /> degrees</td>
+  </tr>
+  
+  <tr>
+    <td>Overshading factor</td>
+    <td>
+      <select key="data.generation.solarpv_overshading" style="width:250px">
+        <option value=0.5>Heavy > 80%</option>
+        <option value=0.65>Significant 60% - 80%</option>
+        <option value=0.8>Modest 20% - 60%</option>
+        <option value=1>None or very little, less than 20%</option>
+      </select>
+    </td>
+  </tr>
+
+  <tr><td>Annual generation:</td><td><span key="data.generation.solarpv_annual_kwh" dp=0></span> kWh/year</td></tr>
+
+  <tr><td>Fraction used on-site</td><td><input type="text" value="0" key="data.generation.solarpv_fraction_used_onsite" style="width:60px" /></td></tr>
+  <tr><td>Feed in tariff (£/kWh)</td><td><input type="text" value="0" key="data.generation.solarpv_FIT" style="width:60px" /></td></tr>
+</table>
+
+

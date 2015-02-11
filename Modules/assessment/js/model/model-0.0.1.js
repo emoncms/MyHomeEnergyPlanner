@@ -49,6 +49,7 @@ calc.run = function(datain)
     calc.water_heating();
     calc.SHW();
     calc.appliancelist();
+    calc.solarpv();
     calc.generation();
     calc.currentenergy();
     
@@ -1022,6 +1023,30 @@ calc.appliancelist = function()
     }
 };
 
+calc.solarpv = function() {
+
+    if (this.data.generation.solarpv_orientation==undefined) this.data.generation.solarpv_orientation = 4;
+    if (this.data.generation.solarpv_kwp_installed==undefined) this.data.generation.solarpv_kwp_installed = 0;
+    if (this.data.generation.solarpv_inclination==undefined) this.data.generation.solarpv_inclination = 35;
+    if (this.data.generation.solarpv_overshading==undefined) this.data.generation.solarpv_overshading = 1;
+    if (this.data.generation.solarpv_fraction_used_onsite==undefined) this.data.generation.solarpv_fraction_used_onsite = 0.5;
+    if (this.data.generation.solarpv_FIT==undefined) this.data.generation.solarpv_FIT = 0;
+    
+    var kWp = this.data.generation.solarpv_kwp_installed;
+    // 0:North, 1:NE/NW, 2:East/West, 3:SE/SW, 4:South
+    var orient = this.data.generation.solarpv_orientation;
+    
+    var p = this.data.generation.solarpv_inclination;
+    var overshading_factor = this.data.generation.solarpv_overshading;
+
+    // annual_solar_radiation 
+    // U3.3 in Appendix U for the applicable climate and orientation and tilt of the PV
+    // Z PV is the overshading factor from Table H2.
+    // p: tilt
+    var annual_solar_radiation = annual_solar_rad(this.data.region,orient,p)
+    this.data.generation.solarpv_annual_kwh = 0.8 * kWp * annual_solar_radiation * overshading_factor;
+};
+
 calc.generation = function()
 {
     if (this.data.generation==undefined) this.data.generation = {
@@ -1057,6 +1082,14 @@ calc.generation = function()
             this.data.energy_systems.hydro[0] = {system: "electric", fraction: 1, efficiency: 1};
             this.data.total_income += this.data.generation.hydro_annual_kwh * this.data.generation.hydro_FIT;
         }
+        
+        if (this.data.generation.solarpv_annual_kwh>0)
+        {
+            this.data.energy_requirements.solarpv2 = {name: "Solar PV", quantity: -this.data.generation.solarpv_annual_kwh * this.data.generation.solarpv_fraction_used_onsite};
+            this.data.energy_systems.solarpv2 = [];
+            this.data.energy_systems.solarpv2[0] = {system: "electric", fraction: 1, efficiency: 1};
+            this.data.total_income += this.data.generation.solarpv_annual_kwh * this.data.generation.solarpv_FIT;
+        }        
     }
 };
 
@@ -1181,6 +1214,8 @@ calc.currentenergy = function()
     
 
 };
+
+
 
 //---------------------------------------------------------------------------------------------
 // SEPERATED MODEL FUNCTIONS
