@@ -25,18 +25,18 @@ function assessment_controller()
         require "Modules/assessment/assessment_model.php";
         $assessment = new Assessment($mysqli);
     
-        if ($route->action == 'list' && $session['write']) $result = $assessment->get_list();
+        if ($route->action == 'list' && $session['write']) $result = $assessment->get_list($session['userid']);
         if ($route->action == 'create' && $session['write']) $result = $assessment->create($session['userid'],get('name'),get('description'));
-        if ($route->action == 'delete' && $session['write']) $result = $assessment->delete(get('id'));
+        if ($route->action == 'delete' && $session['write']) $result = $assessment->delete($session['userid'],get('id'));
 
-        if ($route->action == 'get' && $session['write']) $result = $assessment->get(get('id'));
+        if ($route->action == 'get' && $session['write']) $result = $assessment->get($session['userid'],get('id'));
         
         if ($route->action == 'setdata' && $session['write'])
         {
             $data = null;
             if (isset($_POST['data'])) $data = $_POST['data'];
             if (!isset($_POST['data']) && isset($_GET['data'])) $data = $_GET['data'];
-            if ($data && $data!=null) $result = $assessment->set_data(post('id'),$data);
+            if ($data && $data!=null) $result = $assessment->set_data($session['userid'],post('id'),$data);
         }
     }
 

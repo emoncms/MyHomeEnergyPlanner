@@ -1,4 +1,5 @@
 <?php
+
 // no direct access
 defined('EMONCMS_EXEC') or die('Restricted access');
 
@@ -13,11 +14,29 @@ class Assessment
     {
         $this->mysqli = $mysqli;
         $this->tablename = "assessment";
+        $this->accesstable ="assessment_access";
     }
     
-    public function get_list()
+    public function admin($userid)
     {
-        $result = $this->mysqli->query("SELECT id,name,description,userid,author,mdate,status FROM ".$this->tablename);
+        $userid = (int) $userid;
+        
+        // check if userid is an admin user or can only view own account
+        // $result = $this->mysqli->query("SELECT admin FROM ".$this->accesstable." WHERE `userid`='$userid'");
+        // $row = $result->fetch_array();
+        // if ($row && isset($row['admin']) && $row['admin']==1) return true;
+        
+        global $assessment_admin_users;
+        if (in_array($userid,$assessment_admin_users)) return true;
+        return false;
+    }
+    
+    public function get_list($userid)
+    {
+        $userid = (int) $userid;
+
+        $limit_to_user = ""; if (!$this->admin($userid)) $limit_to_user = " WHERE `userid`='$userid'";
+        $result = $this->mysqli->query("SELECT id,name,description,userid,author,mdate,status FROM ".$this->tablename.$limit_to_user);
         
         $projects = array();
         while($row = $result->fetch_object()) $projects[] = $row;
@@ -40,7 +59,7 @@ class Assessment
         // Dont save if json_decode fails
 
         $data = false;
-        $result = $this->mysqli->query("INSERT INTO ".$this->tablename." (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`) VALUES ('$name','$description','$status','$userid','$author','$mdate','$data')");
+        $result = $this->mysqli->query("INSERT INTO ".$this->tablename." (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data')");
         $id = $this->mysqli->insert_id;
 
         
@@ -56,16 +75,26 @@ class Assessment
         return $project;
     }
     
-    public function delete($id)
+    public function delete($userid,$id)
     {
         $id = (int) $id;
+        $userid = (int) $userid;
+        
+        $limit_to_user = ""; 
+        if (!$this->admin($userid)) $limit_to_user = " WHERE `userid`='$userid'";
+        
         $result = $this->mysqli->query("DELETE FROM ".$this->tablename." WHERE `id` = '$id'");
         return array("Deleted");
     }
     
-    public function get($id)
+    public function get($userid,$id)
     {
         $id = (int) $id;
+        $userid = (int) $userid;
+        
+        $limit_to_user = ""; 
+        if (!$this->admin($userid)) $limit_to_user = " WHERE `userid`='$userid'";
+        
         $result = $this->mysqli->query("SELECT * FROM ".$this->tablename." WHERE `id` = '$id'");
         $row = $result->fetch_object();
         
@@ -73,9 +102,14 @@ class Assessment
         return $row;
     }
     
-    public function set_data($id,$data)
+    public function set_data($userid,$id,$data)
     {
         $id = (int) $id;
+        $userid = (int) $userid;
+        
+        $limit_to_user = ""; 
+        if (!$this->admin($userid)) $limit_to_user = " AND `userid`='$userid'";
+        
         $data = preg_replace('/[^\w\s-.",:{}\[\]]/','',$data);
         $data = json_decode($data);
         
@@ -86,7 +120,7 @@ class Assessment
 
             $data = json_encode($data);
           
-            $stmt = $this->mysqli->prepare("UPDATE ".$this->tablename." SET `data` = ?, `mdate` = ? WHERE `id` = ?");
+            $stmt = $this->mysqli->prepare("UPDATE ".$this->tablename." SET `data` = ?, `mdate` = ? WHERE `id` = ?".$limit_to_user);
             $stmt->bind_param("ssi", $data, $mdate, $id);
             $stmt->execute();
 

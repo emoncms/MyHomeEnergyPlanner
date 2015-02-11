@@ -49,7 +49,6 @@ calc.run = function(datain)
     calc.water_heating();
     calc.SHW();
     calc.appliancelist();
-    calc.solarpv();
     calc.generation();
     calc.currentenergy();
     
@@ -1023,14 +1022,26 @@ calc.appliancelist = function()
     }
 };
 
-calc.solarpv = function() {
+calc.generation = function() {
 
-    if (this.data.generation.solarpv_orientation==undefined) this.data.generation.solarpv_orientation = 4;
-    if (this.data.generation.solarpv_kwp_installed==undefined) this.data.generation.solarpv_kwp_installed = 0;
-    if (this.data.generation.solarpv_inclination==undefined) this.data.generation.solarpv_inclination = 35;
-    if (this.data.generation.solarpv_overshading==undefined) this.data.generation.solarpv_overshading = 1;
-    if (this.data.generation.solarpv_fraction_used_onsite==undefined) this.data.generation.solarpv_fraction_used_onsite = 0.5;
-    if (this.data.generation.solarpv_FIT==undefined) this.data.generation.solarpv_FIT = 0;
+    if (this.data.generation==undefined) this.data.generation = {
+        solar_annual_kwh: 0, 
+        solar_fraction_used_onsite: 0.5, 
+        solar_FIT: 0,
+        wind_annual_kwh: 0, 
+        wind_fraction_used_onsite: 0.5, 
+        wind_FIT: 0,
+        hydro_annual_kwh: 0, 
+        hydro_fraction_used_onsite: 0.5, 
+        hydro_FIT: 0,
+        
+        solarpv_orientation: 4,
+        solarpv_kwp_installed: 0,
+        solarpv_inclination: 35,
+        solarpv_overshading: 1,
+        solarpv_fraction_used_onsite: 0.5,
+        solarpv_FIT: 0
+    };
     
     var kWp = this.data.generation.solarpv_kwp_installed;
     // 0:North, 1:NE/NW, 2:East/West, 3:SE/SW, 4:South
@@ -1045,15 +1056,10 @@ calc.solarpv = function() {
     // p: tilt
     var annual_solar_radiation = annual_solar_rad(this.data.region,orient,p)
     this.data.generation.solarpv_annual_kwh = 0.8 * kWp * annual_solar_radiation * overshading_factor;
-};
 
-calc.generation = function()
-{
-    if (this.data.generation==undefined) this.data.generation = {
-        solar_annual_kwh: 0, solar_fraction_used_onsite: 0.5, solar_FIT: 0,
-        wind_annual_kwh: 0, wind_fraction_used_onsite: 0.5, wind_FIT: 0,
-        hydro_annual_kwh: 0, hydro_fraction_used_onsite: 0.5, hydro_FIT: 0
-    };
+    // ----------
+
+
     
     this.data.generation.total_energy_income = 0;
     

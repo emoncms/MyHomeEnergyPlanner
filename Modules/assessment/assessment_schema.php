@@ -10,3 +10,8 @@ $schema['assessment'] = array(
     'status' => array('type' => 'text'),
     'data' => array('type' => 'text')
 );
+
+$schema['assessment_access'] = array(
+    'admin' => array('type' => 'int(11)', 'default'=>0),
+    'userid' => array('type' => 'int(11)')
+);

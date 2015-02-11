@@ -1,4 +1,7 @@
 <?php
+    // Insert user id's of admin users here
+    $assessment_admin_users = array(1);
+
     $app_title = "OpenEnergyMonitor";
     $app_description = "Open Source Home Energy Assessment";
     $app_color = "#0699fa";

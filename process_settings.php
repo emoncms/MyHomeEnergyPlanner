@@ -27,7 +27,8 @@ if(file_exists(dirname(__FILE__)."/settings.php"))
     if (!isset($server) || $server=="") $error_out .= '<p>missing setting: $server</p>';
     if (!isset($database) || $database=="") $error_out .= '<p>missing setting: $database</p>';
     if ($enable_password_reset && !isset($smtp_email_settings)) $error_out .= '<p>missing setting: $smtp_email_settings</p>';
-        
+    
+    if (!isset($assessment_admin_users)) $assessment_admin_users = array(1);    
 
     if (!isset($redis_enabled)) $redis_enabled = true;
     
