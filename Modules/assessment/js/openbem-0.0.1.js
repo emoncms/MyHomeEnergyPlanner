@@ -176,6 +176,7 @@ var openbem = {
         }
 
         inputdata.fabric = {
+            thermal_bridging_yvalue: data.fabric.thermal_bridging_yvalue,
             elements: []
         };
 

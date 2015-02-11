@@ -146,6 +146,7 @@ calc.fabric = function()
 {
     if (this.data.fabric==undefined) this.data.fabric = {};
     if (this.data.fabric.elements==undefined) this.data.fabric.elements = [];
+    if (this.data.fabric.thermal_bridging_yvalue==undefined) this.data.fabric.thermal_bridging_yvalue = 0.15;
     
     this.data.fabric.total_heat_loss_WK = 0;
     this.data.fabric.total_thermal_capacity = 0;
@@ -156,6 +157,8 @@ calc.fabric = function()
     this.data.fabric.total_window_WK = 0;
     
     this.data.fabric.annual_solar_gain = 0;
+    
+    this.data.fabric.total_external_area = 0;
             
     // Solar gains
     var sum = 0;
@@ -199,6 +202,12 @@ calc.fabric = function()
         
         this.data.fabric.elements[z].wk = this.data.fabric.elements[z].netarea * this.data.fabric.elements[z].uvalue;
         this.data.fabric.total_heat_loss_WK += this.data.fabric.elements[z].wk;
+        
+        // By checking that the u-value is not 0 = internal walls we can calculate total external area
+        if (this.data.fabric.elements[z].uvalue!=0) {
+            this.data.fabric.total_external_area += this.data.fabric.elements[z].netarea;
+        }
+        
         
         if (this.data.fabric.elements[z].type == 'floor') this.data.fabric.total_floor_WK += this.data.fabric.elements[z].wk;
         if (this.data.fabric.elements[z].type == 'wall') this.data.fabric.total_wall_WK += this.data.fabric.elements[z].wk;
@@ -248,6 +257,10 @@ calc.fabric = function()
             this.data.fabric.annual_solar_gain += this.data.fabric.elements[z].gain;
         }
     }
+    
+    this.data.fabric.thermal_bridging_heat_loss = this.data.fabric.total_external_area * this.data.fabric.thermal_bridging_yvalue;
+    
+    this.data.fabric.total_heat_loss_WK += this.data.fabric.thermal_bridging_heat_loss;
     
     this.data.fabric.annual_solar_gain_kwh = this.data.fabric.annual_solar_gain * 0.024 * 365;
     this.data.TMP = this.data.fabric.total_thermal_capacity / this.data.TFA;
