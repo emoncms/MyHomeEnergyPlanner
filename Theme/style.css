@@ -3,7 +3,7 @@
 }
 
 #bound {
-    width: 950px;
+    max-width:1200px;
     height: auto;
     text-align: left;
     background-color:#fff;

@@ -238,4 +238,8 @@
     $("#rating").hide();
     $(".house_graphic").html("Hide house graphic");
     
+    $(window).resize(function(){
+        draw_openbem_graphics();
+    });
+    
 </script>
