@@ -164,6 +164,8 @@ var openbem = {
     extract_inputdata: function(data)
     {
         var inputdata = {};
+        
+        inputdata.scenario_name = data.scenario_name;
 
         inputdata.region = data.region;
         inputdata.altitude = data.altitude

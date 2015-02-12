@@ -36,13 +36,13 @@
             
                 <div class="side-block scenario-block" scenario="template" style="cursor:pointer">
                     
-                    <h3>title (<span class="template_sap_rating"></span>)</h3>
+                    <h3>title scenarioname (<span class="template_sap_rating"></span>)</h3>
                     <div class="menu-content">
                         <div class="scenario-nav-heading">Core input</a></div>
                         <div class="scenario-nav"><a href="#template/context">Floors</a></div>
                         <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
                         <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
-                        <div class="scenario-nav"><a href="#template/system">Heating System</a></div>
+                        <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
                         <div class="scenario-nav-heading">Extended input</a></div>
                         <div class="scenario-nav"><a href="#template/currentenergy">Current Energy</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_LAC"/><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
@@ -119,6 +119,9 @@
     for (s in project) {
         var tmp = mastermenu.replace(/template/g,s);
         tmp = tmp.replace("title",s.charAt(0).toUpperCase()+s.slice(1));
+        var name = "";
+        if (project[s].scenario_name!=undefined) name = project[s].scenario_name;
+        tmp = tmp.replace("scenarioname",": "+name.charAt(0).toUpperCase()+name.slice(1)); 
         $("#scenario-list").append(tmp);
     }
     $(".menu-content").hide();

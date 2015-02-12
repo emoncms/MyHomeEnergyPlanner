@@ -3,7 +3,7 @@
 }
 
 #bound {
-    width: 1180px;
+    width: 950px;
     height: auto;
     text-align: left;
     background-color:#fff;
@@ -57,7 +57,7 @@
 body {
     background-color:#eee;
     font-family: 'Ubuntu', sans-serif;
-    font-size: 18px;
+   
     padding:0px;
     margin:0px;
 }
