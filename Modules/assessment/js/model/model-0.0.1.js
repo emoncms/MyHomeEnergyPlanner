@@ -60,7 +60,9 @@ calc.run = function(datain)
     this.data.totalWK = this.data.fabric.total_heat_loss_WK + this.data.ventilation.average_WK;
    
     this.data.primary_energy_use_m2 = this.data.primary_energy_use/this.data.TFA;
-    
+    this.data.kgco2perm2 = this.data.annualco2/this.data.TFA;
+    this.data.kwhdpp = (this.data.energy_use/365.0)/this.data.occupancy;
+    this.data.primarykwhdpp = (this.data.primary_energy_use/365.0)/this.data.occupancy;
     return this.data;
 }
 
@@ -85,6 +87,7 @@ calc.start = function()
     this.data.total_cost = 0;
     this.data.total_income = 0;
     this.data.primary_energy_use = 0;
+    this.data.kgco2perm2 = 0;
     this.data.primary_energy_use_bills = 0;
     this.data.fabric_energy_efficiency = 0;
     
@@ -656,7 +659,15 @@ calc.space_heating = function()
 calc.energy_systems = function() 
 {
     if (this.data.energy_systems == undefined) this.data.energy_systems = {};
-    if (this.data.fuels == undefined) this.data.fuels = datasets.fuels;
+    
+    // Copy dataset over to user data without overwritting user changed properties
+    var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
+    for (fuel in tmpfuels) {
+        for (prop in tmpfuels[fuel]) {
+            if (this.data.fuels[fuel]!=undefined && this.data.fuels[fuel][prop]!=undefined) tmpfuels[fuel][prop] = this.data.fuels[fuel][prop]
+        }
+    }
+    this.data.fuels = tmpfuels;
     
     this.data.fuel_totals = {};
     
@@ -676,16 +687,23 @@ calc.energy_systems = function()
             var fuel = datasets.energysystems[system].fuel;
             if (this.data.fuel_totals[fuel]==undefined) this.data.fuel_totals[fuel] = {name: fuel, quantity:0};
             this.data.fuel_totals[fuel].quantity += this.data.energy_systems[z][x].fuelinput;
-            
-            this.data.primary_energy_use += this.data.energy_systems[z][x].fuelinput;
         }
     }
     
+    this.data.energy_use = 0;
+    this.data.annualco2 = 0;
     for (z in this.data.fuel_totals)
-    { 
+    {   
         this.data.fuel_totals[z].annualcost = this.data.fuel_totals[z].quantity * this.data.fuels[z].fuelcost;
         this.data.fuel_totals[z].fuelcost = this.data.fuels[z].fuelcost;
+        this.data.fuel_totals[z].primaryenergy = this.data.fuel_totals[z].quantity * this.data.fuels[z].primaryenergyfactor;
+        this.data.fuel_totals[z].annualco2 = this.data.fuel_totals[z].quantity * this.data.fuels[z].co2factor;
+        
         this.data.total_cost += this.data.fuel_totals[z].annualcost;
+        
+        this.data.energy_use += this.data.fuel_totals[z].quantity;
+        this.data.primary_energy_use += this.data.fuel_totals[z].primaryenergy;
+        this.data.annualco2 += this.data.fuel_totals[z].annualco2;
     }
     
     this.data.net_cost = this.data.total_cost - this.data.total_income;
@@ -1092,8 +1110,9 @@ calc.generation = function() {
         if (this.data.generation.solarpv_annual_kwh>0)
         {
             this.data.energy_requirements.solarpv2 = {name: "Solar PV", quantity: -this.data.generation.solarpv_annual_kwh * this.data.generation.solarpv_fraction_used_onsite};
-            this.data.energy_systems.solarpv2 = [];
-            this.data.energy_systems.solarpv2[0] = {system: "electric", fraction: 1, efficiency: 1};
+            if (this.data.energy_systems.solarpv2==undefined) {
+                this.data.energy_systems.solarpv2 = [{system: "electric", fraction: 1, efficiency: 1}];
+            }
             this.data.total_income += this.data.generation.solarpv_annual_kwh * this.data.generation.solarpv_FIT;
         }        
     }

@@ -102,10 +102,14 @@
     <hr>
     <h3>Fuel requirements & costs</h3>
     <hr>
-    <table class="table fc">
+    <table class="table">
         <tr>
             <th style="text-align:left">Fuel type</th>
             <th>Fuel quantity</th>
+            <th>kgCO2/kWh</th>
+            <th>Annual kg CO2</th>
+            <th>Primary Energy<br>Factor</th>
+            <th>Primary<br>Energy</th>
             <th>Unit cost</th>
             <th>Annual cost</th>
         </tr>
@@ -114,6 +118,13 @@
             <tr>
                 <td style="text-align:left"><span key="data.fuel_totals.z.name"></span></td>
                 <td><span key="data.fuel_totals.z.quantity" dp=0></span> kWh</td>
+                
+                <td>x<input type="text" key="data.fuels.f.co2factor" value=0 style="width:60px"/></td>
+                <td><span key="data.fuel_totals.z.annualco2" dp=0></span> kg</td>
+                                
+                <td>x<input type="text" key="data.fuels.f.primaryenergyfactor" value=0 style="width:60px"/></td>
+                <td><span key="data.fuel_totals.z.primaryenergy" dp=0></span> kWh</td>
+                
                 <td>£ <input type="text" key="data.fuels.f.fuelcost" value=0 style="width:60px"/></td>
                 <td>£<span key="data.fuel_totals.z.annualcost" dp=0></span></td>
             </tr>
@@ -125,11 +136,19 @@
             <td style="text-align:left"><b>Total energy cost:</b></td>
             <td></td>
             <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td><b>£<span key="data.total_cost" dp=0></span></b> (<span key="data.SAP.rating" dp=0></span>)</td>
         </tr>
         
         <tr>
             <td style="text-align:left"><b>Total energy income (FIT's):</b></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td><b>£<span key="data.total_income" dp=0></span></b></td>
@@ -139,9 +158,11 @@
             <td style="text-align:left"><b>Net cost:</b></td>
             <td></td>
             <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td><b>£<span key="data.net_cost" dp=0></span></b></td>
         </tr>
-    </table>
-    
-    
+    </table>    
 </div>

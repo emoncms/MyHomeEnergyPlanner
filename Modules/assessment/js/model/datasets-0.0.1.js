@@ -2,12 +2,13 @@
 var datasets = {
 
     fuels: {
-      'oil':{fuelcost:0.051},
-      'gas':{fuelcost:0.043},
-      'wood':{fuelcost:0.00},
-      'electric':{fuelcost:0.145},
-      'electric-high':{fuelcost:0.155},
-      'electric-low':{fuelcost:0.07},
+      'oil':{fuelcost:0.051, co2factor: 0.298, primaryenergyfactor:1.10},
+      'gas':{fuelcost:0.043, co2factor: 0.216, primaryenergyfactor:1.22},
+      'wood':{fuelcost:0.00, co2factor: 0.019, primaryenergyfactor:1.04},
+      'electric':{fuelcost:0.145, co2factor: 0.519, primaryenergyfactor:3.07},
+      'greenelectric':{fuelcost:0.145, co2factor: 0.020, primaryenergyfactor:1.5},
+      'electric-high':{fuelcost:0.155, co2factor: 0.519, primaryenergyfactor:3.07},
+      'electric-low':{fuelcost:0.07, co2factor: 0.519, primaryenergyfactor:3.07},
     },
     
     regions: [
@@ -158,6 +159,7 @@ var datasets = {
     
     energysystems: {
         'heatpump':{name:"Heatpump", efficiency:3.0, fuel: 'electric'},
+        'greenheatpump':{name:"100% Green Electric Heatpump", efficiency:3.0, fuel: 'greenelectric'},
         'woodbatch':{name:"Wood batch boiler", efficiency:0.92, fuel: 'wood'},
         'woodpellet':{name:"Wood pellet boiler", efficiency:0.92, fuel: 'wood'},
         'woodstove':{name:"Wood stove", efficiency:0.87, fuel: 'wood'},
@@ -173,6 +175,7 @@ var datasets = {
         'electric-high':{name:"High rate electric", efficiency:1.0, fuel: 'electric-high'},
         'electric-low':{name:"Low rate electric", efficiency:1.0, fuel: 'electric-low'},
         'electric':{name:"Electric", efficiency:1.0, fuel: 'electric'},
+        'greenelectric':{name:"100% Green Electric", efficiency:1.0, fuel: 'greenelectric'},
 
         'other-wood':{name:"Other wood", efficiency:1.0, fuel: 'wood'},
         'other-oil':{name:"Other oil", efficiency:1.0, fuel: 'oil'},   

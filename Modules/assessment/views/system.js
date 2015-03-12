@@ -29,8 +29,13 @@ function system_UpdateUI()
         $("#fuel_totals").append($("#fuel_totals_template").html());
         $("#fuel_totals [key='data.fuel_totals.z.name']").attr('key','data.fuel_totals.'+z+'.name');
         $("#fuel_totals [key='data.fuel_totals.z.quantity']").attr('key','data.fuel_totals.'+z+'.quantity');
+        $("#fuel_totals [key='data.fuel_totals.z.primaryenergy']").attr('key','data.fuel_totals.'+z+'.primaryenergy');
+        $("#fuel_totals [key='data.fuel_totals.z.annualco2']").attr('key','data.fuel_totals.'+z+'.annualco2');
+        
         $("#fuel_totals [key='data.fuel_totals.z.annualcost']").attr('key','data.fuel_totals.'+z+'.annualcost');
         $("#fuel_totals [key='data.fuels.f.fuelcost']").attr('key','data.fuels.'+z+'.fuelcost');
+        $("#fuel_totals [key='data.fuels.f.primaryenergyfactor']").attr('key','data.fuels.'+z+'.primaryenergyfactor');
+        $("#fuel_totals [key='data.fuels.f.co2factor']").attr('key','data.fuels.'+z+'.co2factor');
     }
 }
 

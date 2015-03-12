@@ -3,11 +3,11 @@
             <h3>Overview</h3>
             <a class="house_graphic" style="margin-top:-23px; float:right">Show house graphic</a>
         <hr>
-        <div style="width:100%; height:430px; position:relative">
+        <div style="width:100%; height:490px; position:relative">
 
 
 
-        <canvas id="house" height="430px"></canvas>
+        <canvas id="house" height="490px"></canvas>
         
         <div id="house-floor" style="position:absolute; top:335px; left:680px;">
         <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Floor</b><br><span key="data.fabric.total_floor_WK" dp=1></span> W/K</p>
@@ -49,6 +49,14 @@
         
         <div style="position:absolute; top:430px;">
         <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Primary energy demand</b> <span key="data.primary_energy_use_m2" dp=0></span> kWh/m2.year</p>
+        </div>
+        
+        <div style="position:absolute; top:460px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>CO2</b> <span key="data.kgco2perm2" dp=0></span> kgCO2/m2</p>
+        </div>
+        
+        <div style="position:absolute; top:490px;">
+        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Energy use per person</b> <span key="data.kwhdpp" dp=0></span> kWh/d per person (primary: <span key="data.primarykwhdpp" dp=0></span> kWh/d per person)</p>
         </div>
         
         </div>
