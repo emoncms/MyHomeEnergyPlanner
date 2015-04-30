@@ -675,6 +675,7 @@ calc.space_heating = function()
 calc.energy_systems = function() 
 {
     if (this.data.energy_systems == undefined) this.data.energy_systems = {};
+    if (this.data.fuels == undefined) this.data.fuels = {};
     
     // Copy dataset over to user data without overwritting user changed properties
     var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
