@@ -33,6 +33,8 @@ function system_UpdateUI()
         $("#fuel_totals [key='data.fuel_totals.z.annualco2']").attr('key','data.fuel_totals.'+z+'.annualco2');
         
         $("#fuel_totals [key='data.fuel_totals.z.annualcost']").attr('key','data.fuel_totals.'+z+'.annualcost');
+        $("#fuel_totals [key='data.fuels.f.standingcharge']").attr('key','data.fuels.'+z+'.standingcharge');
+        
         $("#fuel_totals [key='data.fuels.f.fuelcost']").attr('key','data.fuels.'+z+'.fuelcost');
         $("#fuel_totals [key='data.fuels.f.primaryenergyfactor']").attr('key','data.fuels.'+z+'.primaryenergyfactor');
         $("#fuel_totals [key='data.fuels.f.co2factor']").attr('key','data.fuels.'+z+'.co2factor');

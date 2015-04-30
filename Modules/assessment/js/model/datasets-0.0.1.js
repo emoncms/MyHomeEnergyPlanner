@@ -2,13 +2,13 @@
 var datasets = {
 
     fuels: {
-      'oil':{fuelcost:0.051, co2factor: 0.298, primaryenergyfactor:1.10},
-      'gas':{fuelcost:0.043, co2factor: 0.216, primaryenergyfactor:1.22},
-      'wood':{fuelcost:0.00, co2factor: 0.019, primaryenergyfactor:1.04},
-      'electric':{fuelcost:0.145, co2factor: 0.519, primaryenergyfactor:3.07},
-      'greenelectric':{fuelcost:0.145, co2factor: 0.020, primaryenergyfactor:1.5},
-      'electric-high':{fuelcost:0.155, co2factor: 0.519, primaryenergyfactor:3.07},
-      'electric-low':{fuelcost:0.07, co2factor: 0.519, primaryenergyfactor:3.07},
+      'oil':{fuelcost:0.051, standingcharge: 0, co2factor: 0.298, primaryenergyfactor:1.10},
+      'gas':{fuelcost:0.043, standingcharge: 0, co2factor: 0.216, primaryenergyfactor:1.22},
+      'wood':{fuelcost:0.00, standingcharge: 0, co2factor: 0.019, primaryenergyfactor:1.04},
+      'electric':{fuelcost:0.145, standingcharge: 0, co2factor: 0.519, primaryenergyfactor:3.07},
+      'greenelectric':{fuelcost:0.145, standingcharge: 0, co2factor: 0.020, primaryenergyfactor:1.5},
+      'electric-high':{fuelcost:0.155, standingcharge: 0, co2factor: 0.519, primaryenergyfactor:3.07},
+      'electric-low':{fuelcost:0.07, standingcharge: 0, co2factor: 0.519, primaryenergyfactor:3.07},
     },
     
     regions: [

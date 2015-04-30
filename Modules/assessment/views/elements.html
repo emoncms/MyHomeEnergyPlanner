@@ -9,7 +9,6 @@
     <table class="table">
     
         <tr>
-            <th>Type</th>
             <th style="text-align:left">Element Name</th>
             <th>Length<br>(m)</th>
             <th>Height<br>(m)</th>
@@ -25,14 +24,6 @@
         
         <tbody id="element-template" style="display:none">
             <tr>
-                <td style="text-align:left">
-                    <select key="data.fabric.elements.template.type" style="width:100px">
-                        <option>floor</option>
-                        <option>wall</option>
-                        <option>roof</option>
-                    </select>
-                </td>
-                
                 <td style="text-align:left"><input style="text-align:left; width:150px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
 
                 <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
@@ -53,7 +44,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button id="add-element" class="btn">Add new element</button>
+                <button id="add-element" class="btn">Add new wall</button>
             </td>
             <td></th>
             <td></td>
@@ -63,6 +54,118 @@
         </tr>
         
     </table>
+    
+    <p>Total wall area: <span key="data.fabric.total_wall_area" dp=1></span> m2</p>
+    
+    <hr>
+    <h3>Floors</h3>
+    <hr>
+    
+    <table class="table">
+    
+        <tr>
+            <th style="text-align:left">Floor Name</th>
+            <th>Length<br>(m)</th>
+            <th>Width<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Window<br>Area<br>(m<sup>2</sup>)</th>
+            <th>Net<br>Area<br>(m<sup>2</sup>)</th>
+            <th>U-value<br>(W/K.m2)</th>
+            <th>k-value<br>(kJ/K.m2)</th>
+            <th>W/K</th>
+            <th></th>
+
+        </tr>
+        
+        <tbody id="floor-template" style="display:none">
+            <tr>
+                <td style="text-align:left"><input style="text-align:left; width:150px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
+
+                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                <td><span key="data.fabric.elements.template.windowarea" dp=1>0.0</span>m<sup>2</sup></td>
+                <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
+                
+                <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:40px" /></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.kvalue" style="width:40px" /></td>
+                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
+                <td><span class="icon-trash delete-floor" row="template" style="cursor:pointer"><a>Delete</a></span></td>
+
+            </tr>
+        </tbody>
+        
+        <tbody id="floors"></tbody>
+
+        <tr>
+            <td style="text-align:left">
+                <button id="add-floor" class="btn">Add new floor</button>
+            </td>
+            <td></th>
+            <td></td>
+            <td></th>
+            <td></td>
+            <td></td>
+        </tr>
+        
+    </table>
+    
+    <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m2</p>
+    
+    <hr>
+    <h3>Roof's</h3>
+    <hr>
+    
+    <table class="table">
+    
+        <tr>
+            <th style="text-align:left">Element Name</th>
+            <th>Length<br>(m)</th>
+            <th>Width<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Window<br>Area<br>(m<sup>2</sup>)</th>
+            <th>Net<br>Area<br>(m<sup>2</sup>)</th>
+            <th>U-value<br>(W/K.m2)</th>
+            <th>k-value<br>(kJ/K.m2)</th>
+            <th>W/K</th>
+            <th></th>
+
+        </tr>
+        
+        <tbody id="roof-template" style="display:none">
+            <tr>
+                <td style="text-align:left"><input style="text-align:left; width:150px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
+
+                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                <td><span key="data.fabric.elements.template.windowarea" dp=1>0.0</span>m<sup>2</sup></td>
+                <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
+                
+                <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:40px" /></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.kvalue" style="width:40px" /></td>
+                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
+                <td><span class="icon-trash delete-roof" row="template" style="cursor:pointer"><a>Delete</a></span></td>
+
+            </tr>
+        </tbody>
+        
+        <tbody id="roofs"></tbody>
+
+        <tr>
+            <td style="text-align:left">
+                <button id="add-roof" class="btn">Add new roof</button>
+            </td>
+            <td></th>
+            <td></td>
+            <td></th>
+            <td></td>
+            <td></td>
+        </tr>
+        
+    </table>
+    
+    <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m2</p>
     
     <hr>
     <h3>Windows</h3>
@@ -143,6 +246,9 @@
         </tr>
         
     </table>
+    
+    <p>Total window area: <span key="data.fabric.total_window_area" dp=1></span> m2</p>
+    
     <hr>
     <h3>Thermal Bridging</h3><hr>
     <table class="table">

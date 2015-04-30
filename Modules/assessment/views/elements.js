@@ -14,6 +14,38 @@ $("#openbem").on("click",'#add-element', function() {
     }
 });
 
+$("#openbem").on("click",'#add-roof', function() {
+    data.fabric.elements.push({type:'roof', name: 'Element', l:0, h:0, area: 0, uvalue: 0, wk: 0});
+    var newelementid = data.fabric.elements.length - 1;
+    add_roof(newelementid);
+    update();
+    
+    
+    for (z in data.fabric.elements)
+    {
+        if (data.fabric.elements[z].type=="window")
+        {
+            $("#windows [key='data.fabric.elements."+z+".subtractfrom']").append("<option value='"+newelementid+"'>"+data.fabric.elements[newelementid].name+"</option>");
+        }
+    }
+});
+
+$("#openbem").on("click",'#add-floor', function() {
+    data.fabric.elements.push({type:'floor', name: 'Element', l:0, h:0, area: 0, uvalue: 0, wk: 0});
+    var newelementid = data.fabric.elements.length - 1;
+    add_floor(newelementid);
+    update();
+    
+    
+    for (z in data.fabric.elements)
+    {
+        if (data.fabric.elements[z].type=="window")
+        {
+            $("#windows [key='data.fabric.elements."+z+".subtractfrom']").append("<option value='"+newelementid+"'>"+data.fabric.elements[newelementid].name+"</option>");
+        }
+    }
+});
+
 $("#openbem").on("click",'#add-window', function(){
     var size = Object.size(data.fabric.elements)+1;
     var name = "Window";
@@ -24,7 +56,7 @@ $("#openbem").on("click",'#add-window', function(){
         l:0,
         h:0,
         area: 0,
-        uvalue: 0, 
+        uvalue: 0,
         wk: 0,
         orientation: 3,
         overshading: 2,
@@ -40,16 +72,23 @@ $("#openbem").on("click",'.delete-element', function(){
     var row = $(this).attr('row');
     $(this).closest('tr').remove();
     data.fabric.elements.splice(row,1);
-    
-    $("#elements").html("");
-    $("#windows").html("");
-    for (z in data.fabric.elements) {
-        if (data.fabric.elements[z].type!='window') {
-            add_element(z);
-        } else {
-            add_window(z);
-        }
-    }
+    elements_initUI();
+    update();
+});
+
+$("#openbem").on("click",'.delete-floor', function(){
+    var row = $(this).attr('row');
+    $(this).closest('tr').remove();
+    data.fabric.elements.splice(row,1);
+    elements_initUI();
+    update();
+});
+
+$("#openbem").on("click",'.delete-roof', function(){
+    var row = $(this).attr('row');
+    $(this).closest('tr').remove();
+    data.fabric.elements.splice(row,1);
+    elements_initUI();
     update();
 });
 
@@ -68,6 +107,40 @@ function add_element(z)
     $("#elements [key='data.fabric.elements.template.wk']").attr('key','data.fabric.elements.'+z+'.wk');
     
     $("#elements [row='template']").attr('row',z);  
+}
+
+function add_floor(z)
+{
+    $("#floors").append($("#floor-template").html());
+    $("#floors [key='data.fabric.elements.template.type']").attr('key','data.fabric.elements.'+z+'.type');
+    $("#floors [key='data.fabric.elements.template.name']").attr('key','data.fabric.elements.'+z+'.name');
+    $("#floors [key='data.fabric.elements.template.l']").attr('key','data.fabric.elements.'+z+'.l');
+    $("#floors [key='data.fabric.elements.template.h']").attr('key','data.fabric.elements.'+z+'.h');
+    $("#floors [key='data.fabric.elements.template.area']").attr('key','data.fabric.elements.'+z+'.area');
+    $("#floors [key='data.fabric.elements.template.windowarea']").attr('key','data.fabric.elements.'+z+'.windowarea');
+    $("#floors [key='data.fabric.elements.template.netarea']").attr('key','data.fabric.elements.'+z+'.netarea');
+    $("#floors [key='data.fabric.elements.template.uvalue']").attr('key','data.fabric.elements.'+z+'.uvalue');
+    $("#floors [key='data.fabric.elements.template.kvalue']").attr('key','data.fabric.elements.'+z+'.kvalue');
+    $("#floors [key='data.fabric.elements.template.wk']").attr('key','data.fabric.elements.'+z+'.wk');
+    
+    $("#floors [row='template']").attr('row',z);  
+}
+
+function add_roof(z)
+{
+    $("#roofs").append($("#roof-template").html());
+    $("#roofs [key='data.fabric.elements.template.type']").attr('key','data.fabric.elements.'+z+'.type');
+    $("#roofs [key='data.fabric.elements.template.name']").attr('key','data.fabric.elements.'+z+'.name');
+    $("#roofs [key='data.fabric.elements.template.l']").attr('key','data.fabric.elements.'+z+'.l');
+    $("#roofs [key='data.fabric.elements.template.h']").attr('key','data.fabric.elements.'+z+'.h');
+    $("#roofs [key='data.fabric.elements.template.area']").attr('key','data.fabric.elements.'+z+'.area');
+    $("#roofs [key='data.fabric.elements.template.windowarea']").attr('key','data.fabric.elements.'+z+'.windowarea');
+    $("#roofs [key='data.fabric.elements.template.netarea']").attr('key','data.fabric.elements.'+z+'.netarea');
+    $("#roofs [key='data.fabric.elements.template.uvalue']").attr('key','data.fabric.elements.'+z+'.uvalue');
+    $("#roofs [key='data.fabric.elements.template.kvalue']").attr('key','data.fabric.elements.'+z+'.kvalue');
+    $("#roofs [key='data.fabric.elements.template.wk']").attr('key','data.fabric.elements.'+z+'.wk');
+    
+    $("#roofs [row='template']").attr('row',z);  
 }
 
 function add_window(z)
@@ -101,11 +174,19 @@ function add_window(z)
 
 function elements_initUI()
 {
+    $("#elements").html("");
+    $("#roofs").html("");
+    $("#floors").html("");
+    $("#windows").html("");
     // Initial addition of floors
     for (z in data.fabric.elements) {
-        if (data.fabric.elements[z].type!='window') {
+        if (data.fabric.elements[z].type=='wall') {
             add_element(z);
-        } else {
+        } else if (data.fabric.elements[z].type=='floor') {
+            add_floor(z);
+        } else if (data.fabric.elements[z].type=='roof') {
+            add_roof(z);
+        } else if (data.fabric.elements[z].type=='window') {
             add_window(z);
         }
     }

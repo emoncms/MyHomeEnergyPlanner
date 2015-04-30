@@ -107,10 +107,11 @@
             <th style="text-align:left">Fuel type</th>
             <th>Fuel quantity</th>
             <th>kgCO2/kWh</th>
-            <th>Annual kg CO2</th>
-            <th>Primary Energy<br>Factor</th>
+            <th>Annual<br>kgCO2</th>
+            <th>Primary<br>Energy<br>Factor</th>
             <th>Primary<br>Energy</th>
             <th>Unit cost</th>
+            <th>Daily<br>Standing<br>charge</th>
             <th>Annual cost</th>
         </tr>
         
@@ -126,6 +127,7 @@
                 <td><span key="data.fuel_totals.z.primaryenergy" dp=0></span> kWh</td>
                 
                 <td>£ <input type="text" key="data.fuels.f.fuelcost" value=0 style="width:60px"/></td>
+                <td>£ <input type="text" key="data.fuels.f.standingcharge" value=0 style="width:60px"/></td>
                 <td>£<span key="data.fuel_totals.z.annualcost" dp=0></span></td>
             </tr>
         </tbody>
@@ -140,11 +142,13 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
             <td><b>£<span key="data.total_cost" dp=0></span></b> (<span key="data.SAP.rating" dp=0></span>)</td>
         </tr>
         
         <tr>
-            <td style="text-align:left"><b>Total energy income (FIT's):</b></td>
+            <td style="text-align:left"><b>Total energy income<br>(FIT's):</b></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -156,6 +160,7 @@
         
         <tr>
             <td style="text-align:left"><b>Net cost:</b></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>

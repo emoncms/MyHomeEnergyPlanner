@@ -67,6 +67,12 @@ var graph = {
         ymin = 0;
         
         ymax = (ymax - (r / 2)) + (r/1.5);
+        
+        for (z in graph.targets) { 
+            if (graph.targets[z].target>ymax) ymax = graph.targets[z].target;
+        }
+      
+        // if (ymax<140) ymax = 140;
         //if (this.ymax!=undefined) ymax = this.ymax;
         
         xmin -= 1.3;
@@ -76,7 +82,7 @@ var graph = {
         
 
         
-        
+        this.ytick = Math.round (ymax / 10)
         
         
         ctx.font="16px Arial";
@@ -90,8 +96,8 @@ var graph = {
         
         ctx.textAlign = "right";
         ctx.font="13px Arial";
-        ctx.fillStyle = "#222";
-        ctx.strokeStyle = "#222";
+        ctx.fillStyle = "#666";
+        ctx.strokeStyle = "#666";
         
         for (var i=0; i<=Math.round(ymax/this.ytick); i++)
         {
@@ -101,7 +107,7 @@ var graph = {
             ctx.fillText(i*this.ytick, 51,y+4);
         }
         ctx.stroke();
-        
+               
         ctx.beginPath();
         for (s in series)
         {
@@ -113,7 +119,7 @@ var graph = {
                   
                 var barwidth = ((0.65) / (xmax - xmin)) * this.width;
                 
-                ctx.fillStyle = "#ff2712";
+                ctx.fillStyle = "rgba(255,39,18,0.4)";
                 ctx.fillRect(x-(barwidth/2),y,barwidth,this.margin.top+plot_height-y);
                   
                   
@@ -130,8 +136,20 @@ var graph = {
             ctx.stroke();
         }
         
+        for (z in graph.targets)
+        {
+            var y = this.margin.top + plot_height - (((graph.targets[z].target - ymin) / (ymax - ymin)) * plot_height);
+       
+            ctx.strokeStyle = "#ff2712";
+            ctx.moveTo(55,y);
+            ctx.lineTo(this.width,y);
+            ctx.stroke();
+            
+            ctx.fillStyle = "#ff2712";
+            ctx.textAlign = "left";
+            ctx.fillText(graph.targets[z].name,60,y-5);
+        }
         
-   
         
     }
 

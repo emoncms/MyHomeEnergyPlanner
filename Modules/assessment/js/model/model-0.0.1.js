@@ -162,7 +162,11 @@ calc.fabric = function()
     this.data.fabric.annual_solar_gain = 0;
     
     this.data.fabric.total_external_area = 0;
-            
+    
+    this.data.fabric.total_wall_area = 0;
+    this.data.fabric.total_floor_area = 0;
+    this.data.fabric.total_roof_area = 0;
+    this.data.fabric.total_window_area = 0;      
     // Solar gains
     var sum = 0;
     var gains = [0,0,0,0,0,0,0,0,0,0,0,0];
@@ -212,10 +216,22 @@ calc.fabric = function()
         }
         
         
-        if (this.data.fabric.elements[z].type == 'floor') this.data.fabric.total_floor_WK += this.data.fabric.elements[z].wk;
-        if (this.data.fabric.elements[z].type == 'wall') this.data.fabric.total_wall_WK += this.data.fabric.elements[z].wk;
-        if (this.data.fabric.elements[z].type == 'roof') this.data.fabric.total_roof_WK += this.data.fabric.elements[z].wk;
-        if (this.data.fabric.elements[z].type == 'window') this.data.fabric.total_window_WK += this.data.fabric.elements[z].wk;
+        if (this.data.fabric.elements[z].type == 'floor') {
+            this.data.fabric.total_floor_WK += this.data.fabric.elements[z].wk;
+            this.data.fabric.total_floor_area += this.data.fabric.elements[z].netarea;
+        }
+        if (this.data.fabric.elements[z].type == 'wall') {
+            this.data.fabric.total_wall_WK += this.data.fabric.elements[z].wk;
+            this.data.fabric.total_wall_area += this.data.fabric.elements[z].netarea;
+        }
+        if (this.data.fabric.elements[z].type == 'roof') {
+            this.data.fabric.total_roof_WK += this.data.fabric.elements[z].wk;
+            this.data.fabric.total_roof_area += this.data.fabric.elements[z].netarea;
+        }
+        if (this.data.fabric.elements[z].type == 'window') {
+            this.data.fabric.total_window_WK += this.data.fabric.elements[z].wk;
+            this.data.fabric.total_window_area += this.data.fabric.elements[z].netarea;
+        }
                 
         // Calculate total thermal capacity
         if (this.data.fabric.elements[z].kvalue!=undefined) {
@@ -694,7 +710,8 @@ calc.energy_systems = function()
     this.data.annualco2 = 0;
     for (z in this.data.fuel_totals)
     {   
-        this.data.fuel_totals[z].annualcost = this.data.fuel_totals[z].quantity * this.data.fuels[z].fuelcost;
+        console.log(this.data.fuel_totals[z].standingcharge);
+        this.data.fuel_totals[z].annualcost = this.data.fuel_totals[z].quantity * this.data.fuels[z].fuelcost + this.data.fuels[z].standingcharge*365;
         this.data.fuel_totals[z].fuelcost = this.data.fuels[z].fuelcost;
         this.data.fuel_totals[z].primaryenergy = this.data.fuel_totals[z].quantity * this.data.fuels[z].primaryenergyfactor;
         this.data.fuel_totals[z].annualco2 = this.data.fuel_totals[z].quantity * this.data.fuels[z].co2factor;
