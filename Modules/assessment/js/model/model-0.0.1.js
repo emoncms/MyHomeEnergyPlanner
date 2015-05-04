@@ -192,7 +192,7 @@ calc.fabric = function()
         {
             if (this.data.fabric.elements[w].type=='window')
             {
-                if (this.data.fabric.elements[w].subtractfrom == z)
+                if (this.data.fabric.elements[w].subtractfrom!=undefined && this.data.fabric.elements[w].subtractfrom == z)
                 {
                     var windowarea = this.data.fabric.elements[w].area;
                     
@@ -676,7 +676,7 @@ calc.energy_systems = function()
 {
     if (this.data.energy_systems == undefined) this.data.energy_systems = {};
     if (this.data.fuels == undefined) this.data.fuels = {};
-    
+        
     // Copy dataset over to user data without overwritting user changed properties
     var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
     for (fuel in tmpfuels) {

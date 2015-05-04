@@ -1,115 +1,84 @@
 function draw_openbem_graphics()
 {
-    var width = $("#bound").width();
-    $("#house").attr("width",width);
+    var floorwk = data.fabric.total_floor_WK;
+    var ventilationwk = data.ventilation.average_WK;
+    var windowswk = data.fabric.total_window_WK;
+    var wallswk = data.fabric.total_wall_WK;
+    var roofwk = data.fabric.total_roof_WK;
+    
+    var totalwk = floorwk + ventilationwk + windowswk + wallswk + roofwk;
+    
+    var uscale = 30;
 
-    var canvas = document.getElementById("house");
-    var ctx = canvas.getContext("2d");
-
-    mid = width/2;
-    bottom = 320;
-
-    ctx.fillStyle = "rgba(99,86,71,0.8)";
-    ctx.fillRect(mid+100,bottom-135,10,110);  // Right side
-    ctx.fillRect(mid-110,bottom-95,10,30);    // House mid left
-
-    // House bottom
-    x = mid;
-    y = bottom;
-    ctx.beginPath();
-        ctx.moveTo(x-0,y-0);
-        x += 100; ctx.lineTo(x,y);
-        y -= 25; ctx.lineTo(x,y);
-        x += 10; ctx.lineTo(x,y);
-        y += 35; ctx.lineTo(x,y);
-        x -= 220; ctx.lineTo(x,y);
-        y -= 35; ctx.lineTo(x,y);
-        x += 10; ctx.lineTo(x,y);
-        y += 25; ctx.lineTo(x,y);
-    ctx.closePath();
-    ctx.fill();
-
-    // House roof
-    x = mid - 110;
-    y = bottom - 125;
-    ctx.beginPath();
-
-        x += 10; y -= 20;
-        ctx.moveTo(x,y);
-
-        y += 10; ctx.lineTo(x,y);
-        x -= 10; ctx.lineTo(x,y);
-
-        y -= 10; ctx.lineTo(x,y);
-        x -= 10; ctx.lineTo(x,y);
-        y -= 5; ctx.lineTo(x,y);
-
-        x += (100+20);
-        y -= Math.tan(2*Math.PI*((35)/360))*120;
-        ctx.lineTo(x,y);
-
-        x += (100+20);
-        y += Math.tan(2*Math.PI*((35)/360))*120;
-        ctx.lineTo(x,y);
-
-        y += 5; ctx.lineTo(x,y);
-        x -= 10; ctx.lineTo(x,y);
-        y += 10; ctx.lineTo(x,y);
-
-        x -= 10; ctx.lineTo(x,y);
-        y -= 10; ctx.lineTo(x,y);
-
-        x -= (100);
-        y -= Math.tan(2*Math.PI*((35)/360))*100;
-        ctx.lineTo(x,y);
-      
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.fillStyle = "rgba(99,86,71,0.3)";
-    ctx.fillRect(mid - 109,bottom - 65,8,40);     // Window bottom
-    ctx.fillRect(mid - 109,bottom - 135,8,40);    // Window top
-
-    // Arrows
-    ctx.fillStyle = "rgba(99,86,71,0.8)";
-    draw_arrow(ctx,mid-140,bottom-110,2*Math.PI*(180/360),data.fabric.total_window_WK*100,0.625);
-    draw_arrow(ctx,mid-140,bottom-20,2*Math.PI*(180/360),data.ventilation.average_WK*100,0.625);
-    draw_arrow(ctx,mid+140,bottom-80,2*Math.PI*(0/360),data.fabric.total_wall_WK*100,0.625);
-    draw_arrow(ctx,mid+70,bottom-210,2*Math.PI*(-55/360),data.fabric.total_roof_WK*100,0.625);
-    draw_arrow(ctx,mid,bottom+30,2*Math.PI*(90/360),data.fabric.total_floor_WK*100,0.625);
-
-    $("#house-floor").css({"position":"absolute","top": (bottom+8) + "px","left": (mid+35) + "px"});
-    $("#house-ventilation").css({"position":"absolute","top": bottom + "px","left": (mid - 220) + "px"});
-    $("#house-windows").css({"position":"absolute","top": (bottom-200) + "px","left": (mid - 220) + "px"});
-    $("#house-walls").css({"position":"absolute","top": (bottom-200) + "px","left": (mid + 140) + "px"});
-    $("#house-roof").css({"position":"absolute","top": (bottom-280) + "px","left": (mid + 110) + "px"});
-
-    // Energy
-    var colors = ["#009a44","#2dca73","#b8f351","#f5ec00","#ffac4d","#fd8130","#fd001a"];
-
-    x=0; y=80; maxbarwidth=0.25*width; step=0.025*width; align='left'; spacing=8; barheight=30;
-
-    for (var i=0; i<7; i++) {
-        ctx.fillStyle = colors[i];
-        var barwidth = maxbarwidth-(7-i)*step;
-        if (align=='left') ctx.fillRect(x,y,barwidth,barheight);
-        if (align=='right') ctx.fillRect(x-barwidth,y,barwidth,barheight);
-        y += barheight + spacing;
-    }
-
-    // Carbon
-    var colors = ["#6cdafb","#20b8ea","#039cd8","#0079c2","#bbbcbe","#a1a0a5","#818085"];
-
-    x=width; y=80; align='right';
-
-    for (var i=0; i<7; i++) {
-        ctx.fillStyle = colors[i];
-        var barwidth = maxbarwidth-(7-i)*step;
-        if (align=='left') ctx.fillRect(x,y,barwidth,barheight);
-        if (align=='right') ctx.fillRect(x-barwidth,y,barwidth,barheight);
-        y += barheight + spacing;
-    }
-
+    var s1 = Math.sqrt(floorwk / uscale);
+    var s2 = Math.sqrt(ventilationwk / uscale);
+    var s3 = Math.sqrt(windowswk / uscale);
+    var s4 = Math.sqrt(wallswk / uscale);
+    var s5 = Math.sqrt(roofwk / uscale);
+    
+    $("#house-floor").attr("transform","translate(500,620) rotate(90) scale("+s1+")");
+    $("#house-ventilation").attr("transform","translate(260,535) rotate(180) scale("+s2+")");
+    $("#house-windows").attr("transform","translate(260,345) rotate(180) scale("+s3+")");
+    $("#house-walls").attr("transform","translate(740,460) rotate(0) scale("+s4+")");
+    $("#house-roof").attr("transform","translate(630,175) rotate(-55) scale("+s5+")");
+    
+    $("#house-floorwk").html(Math.round(floorwk)+" W/K");
+    $("#house-ventilationwk").html(Math.round(ventilationwk)+" W/K");
+    $("#house-windowswk").html(Math.round(windowswk)+" W/K");
+    $("#house-wallswk").html(Math.round(wallswk)+" W/K");
+    $("#house-roofwk").html(Math.round(roofwk)+" W/K");
+    $("#house-totalwk").html(Math.round(totalwk)+" W/K");
+    
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Space heating demand",
+        value: Math.round(data.fabric_energy_efficiency),
+        units: "kWh/m2",
+        targets: {
+            //"Passivhaus": 15,
+            "Passivhaus retrofit": 25,
+            "UK Average": 145
+        }
+    };
+    targetbar("spaceheating", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Primary energy demand",
+        value: Math.round(data.primary_energy_use_m2),
+        units: "kWh/m2",
+        targets: {
+            "Passivhaus": 120,
+            "UK Average": 350
+        }
+    };
+    targetbar("primaryenergy", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "CO2 Emission rate",
+        value: Math.round(data.kgco2perm2),
+        units: "kgCO2/m2",
+        targets: {
+            "80% by 2050": 17,
+            "UK Average": 85
+        }
+    };
+    targetbar("co2", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "SAP Rating",
+        value: Math.round(data.SAP.rating),
+        units: "",
+        targets: {
+            "G": 0,
+            "F": 25,
+            "E": 47,
+            "D": 66,
+            "C": 83,
+            "B": 97,
+            "A": 110
+        }
+    };
+    targetbar("saprating", options);
 }
 
   function draw_rating(ctx)

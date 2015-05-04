@@ -1,65 +1,46 @@
 <div id="bound">
         <hr>
             <h3>Overview</h3>
-            <a class="house_graphic" style="margin-top:-23px; float:right">Show house graphic</a>
+            <a class="house_graphic" style="margin-top:-30px; float:right">Show house graphic</a>
         <hr>
-        <div style="width:100%; height:490px; position:relative">
-
-
-
-        <canvas id="house" height="490px"></canvas>
         
-        <div id="house-floor" style="position:absolute; top:335px; left:680px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Floor</b><br><span key="data.fabric.total_floor_WK" dp=1></span> W/K</p>
+        
+        <div style="width:500px; float:right;">
+            <br>
+            <div id="spaceheating" style="width:500px; height:60px;"></div><br>
+            <div id="primaryenergy" style="width:500px; height:60px"></div><br>
+            <div id="co2" style="width:500px; height:65px"></div><br>
+            <div id="saprating" style="width:500px; height:65px"></div>
         </div>
         
-        <div id="house-roof" style="position:absolute; top:10px; left:780px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Roof</b><br><span key="data.fabric.total_roof_WK" dp=1></span> W/K</p>
-        </div>
-        
-        <div id="house-walls" style="position:absolute; top:130px; left:780px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Walls</b><br><span key="data.fabric.total_wall_WK" dp=1></span> W/K</p>
-        </div>
-        
-        
-        <div id="house-windows" style="position:absolute; top:120px; left:300px; text-align:right">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Windows</b><br><span key="data.fabric.total_window_WK" dp=1></span> W/K</p>
-        </div>
-        
-        <div id="house-ventilation" style="position:absolute; top:320px; left:300px; text-align:right">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Ventilation</b><br><span key="data.ventilation.average_WK" dp=1></span> W/K</p>
-        </div>
-        
-        <div style="position:absolute; top:340px; left:0px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>SAP Rating:</b> <span key="data.SAP.rating" dp=1></span></p>
-        </div>
-        
-        <div style="position:absolute; top:370px; left:0px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Annual Energy cost:</b> £<span key="data.total_cost" dp=0></span></p>
-        </div>
-        
-        
-        <div style="position:absolute; top:50%; left:44%;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>TOTAL:</b> <span key="data.totalWK" dp=0></span> W/K</p>
-        </div>
-        
-        <div style="position:absolute; top:400px; left:0px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Space heating demand</b> <span key="data.fabric_energy_efficiency" dp=0></span> kWh/m2.year</p>
-        </div>
-        
-        <div style="position:absolute; top:430px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Primary energy demand</b> <span key="data.primary_energy_use_m2" dp=0></span> kWh/m2.year</p>
-        </div>
-        
-        <div style="position:absolute; top:460px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>CO2</b> <span key="data.kgco2perm2" dp=0></span> kgCO2/m2</p>
-        </div>
-        
-        <div style="position:absolute; top:490px;">
-        <p style="color: rgb(99,86,71); font-size:18px; padding-top:10px"><b>Energy use per person</b> <span key="data.kwhdpp" dp=0></span> kWh/d per person (primary: <span key="data.primarykwhdpp" dp=0></span> kWh/d per person)</p>
-        </div>
-        
-        </div>
-        <br><br>
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+            
+            <g id="house-floor"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+            <g id="house-ventilation"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+            <g id="house-windows"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+            <g id="house-walls"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+            <g id="house-roof"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+            
+            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+                <text x="580" y="648" style="font-weight:bold">Floor</text>
+                <text id="house-floorwk" x="580" y="680">50 W/K</text>
+                
+                <text x="720" y="180" style="font-weight:bold">Roof</text>
+                <text id="house-roofwk" x="720" y="215">50 W/K</text>
+                
+                <text x="740" y="320" style="font-weight:bold">Walls</text>
+                <text id="house-wallswk" x="740" y="355">50 W/K</text>
+                
+                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
+                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
+                
+                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
+                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
+                
+                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+            </g>
+        </svg>
 
 </div>

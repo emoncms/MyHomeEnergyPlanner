@@ -98,21 +98,56 @@
             $route->action = $default_action_auth;
         }
     }
+    
+    if ($route->controller == 'input' && $route->action == 'post') $route->format = 'json';
+    if ($route->controller == 'input' && $route->action == 'bulk') $route->format = 'json';
 
     // 6) Load the main page controller
     $output = controller($route->controller);
 
-
+    // If no controller of this name - then try username
+    // need to actually test if there isnt a controller rather than if no content
+    // is returned from the controller.
+    if (!$output['content'] && $public_profile_enabled && $route->controller!='admin')
+    {
+        $userid = $user->get_id($route->controller);
+        if ($userid) {
+            $route->subaction = $route->action;
+            $session['userid'] = $userid;
+            $session['username'] = $route->controller;
+            $session['read'] = 1;
+            $session['profile'] = 1;
+            $route->action = $public_profile_action;
+            $output = controller($public_profile_controller);
+        }
+    }
+    
+    $theme = "assessment";
+    if ($route->controller=="input") $theme = "monitor";
+    if ($route->controller=="feed") $theme = "monitor";
+    if ($route->controller=="vis") $theme = "monitor";
+    if ($route->controller=="dashboard") $theme = "monitor";
+    
     // 7) Output
     if ($route->format == 'json')
     {
         header('Content-Type: application/json');
-        print json_encode($output['content']);
+        if ($route->controller=='time') {
+            print $output['content'];
+        } elseif ($route->controller=='input' && $route->action=='post') {
+            print $output['content'];
+        } elseif ($route->controller=='input' && $route->action=='bulk') {
+            print $output['content'];
+        } else {
+            print json_encode($output['content']);
+        }
     }
     
     if ($route->format == 'html')
     {
         $menu = load_menu();
+     
         $output['mainmenu'] = view("Theme/menu_view.php", array());
-        print view("Theme/theme.php", $output);
+        if ($embed == 0) print view("Theme/theme.php", $output);
+        if ($embed == 1) print view("Theme/embed.php", $output);
     }

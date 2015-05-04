@@ -18,14 +18,16 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/user/user.js"></script>
 
-<div class="login-block">
+<div style="margin: 0px auto; max-width:392px; padding:10px;">
+    <div style="max-width:392px; margin-right:20px; padding-top:45px; padding-bottom:15px; color: #888;">
+        <!--
+        <img style="margin:12px;" src="<?php echo $path; ?>Theme/emoncms_logo.png" alt="Emoncms" width="256" height="46" />
+        -->
+    </div>
 
-    <div>
+    <div class="login-container">
 
         <div id="login-form"  class="well" style="text-align:left">
-        
-            <h3>Login</h3><hr>
-        
             <p>
                 <label><?php echo _('Username:'); ?>
                     <input type="text" tabindex="1" name="username"  />
@@ -53,7 +55,7 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
             <div id="error" class="alert alert-error" style="display:none;"></div>
 
             <p class="login-item">
-                <?php if ($enable_rememberme) { ?><label class="checkbox"><input type="checkbox" tabindex="5" id="rememberme" value="1" name="rememberme"><?php echo '&nbsp;'._('Remember me')."<br>"; ?></label><br /><?php } ?>
+                <?php if ($enable_rememberme) { ?><label class="checkbox"><input type="checkbox" tabindex="5" id="rememberme" value="1" name="rememberme"><?php echo '&nbsp;'._('Remember me'); ?></label><br /><?php } ?>
                 <button id="login" class="btn btn-primary" tabindex="6" type="button"><?php echo _('Login'); ?></button>
                 <?php if ($allowusersregister) { echo '&nbsp;'._('or').'&nbsp;' ?><a id="register-link"  href="#"><?php echo _('register'); ?></a><?php } ?>
             </p>
@@ -167,7 +169,7 @@ $(document).ready(function() {
 
         if (result.success)
         {
-            window.location.href = path+"assessment/list";
+            window.location.href = path+"user/view";
         }
         else
         {

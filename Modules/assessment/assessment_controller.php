@@ -40,5 +40,5 @@ function assessment_controller()
         }
     }
 
-    return array('content'=>$result);
+    return array('content'=>$result, 'fullwidth'=>true);
 }

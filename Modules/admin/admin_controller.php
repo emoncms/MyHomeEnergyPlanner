@@ -22,6 +22,8 @@ function admin_controller()
     if ($updatelogin || $session['admin'])
         $sessionadmin = true;
 
+    // if ($session['userid']==4) $sessionadmin = true;
+
     if ($sessionadmin)
     {
         if ($route->action == 'view') $result = view("Modules/admin/admin_main_view.php", array());

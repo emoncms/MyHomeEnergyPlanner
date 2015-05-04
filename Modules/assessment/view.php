@@ -14,7 +14,7 @@
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-0.0.1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-0.0.1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph.js"></script>
-
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow.js"></script>
 
@@ -45,11 +45,11 @@
                         <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
                         <div class="scenario-nav-heading">Extended input</a></div>
                         <div class="scenario-nav"><a href="#template/currentenergy">Current Energy</a></div>
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_LAC"/><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/><a href="#template/waterheating">Water Heating</a></div>
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/><a href="#template/solarhotwater">Solar Hot Water heating</a></div>
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/><a href="#template/appliancelist">Appliance List</a></div>
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/><a href="#template/generation">Generation</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_LAC"/> <a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/> <a href="#template/appliancelist">Appliance List</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
                         <div class="scenario-nav-heading">Reporting</a></div>
                         <div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
                         <?php foreach ($reports as $report) { ?>
@@ -95,6 +95,8 @@
 
 
 <script>
+
+    $("#openbem").css("background-color","#eee");
 
     var path = "<?php echo $path; ?>";
     var jspath = path+"Modules/assessment/";
