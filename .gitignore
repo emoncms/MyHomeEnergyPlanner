@@ -1,5 +1,9 @@
 settings.php
 emoncms.log
-Modules/assessment/views/report.html
-Modules/assessment/views/report.js
+Modules/input
+Modules/feed
+Modules/dashboard
+MOdules/vis
+Modules/assessment/views/ccreport.html
+Modules/assessment/views/ccreport.js
 
