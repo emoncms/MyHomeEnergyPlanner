@@ -12,7 +12,7 @@
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-0.0.1.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-0.0.1.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-0.0.1.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-0.0.2.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath.js"></script>
