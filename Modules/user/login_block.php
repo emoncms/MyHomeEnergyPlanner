@@ -169,7 +169,7 @@ $(document).ready(function() {
 
         if (result.success)
         {
-            window.location.href = path+"user/view";
+            window.location.href = path+"assessment/list";
         }
         else
         {
@@ -196,7 +196,7 @@ $(document).ready(function() {
                 result = user.login(username,password);
                 if (result.success)
                 {
-                    window.location.href = path+"user/view";
+                    window.location.href = path+"assessment/list";
                 }
             }
             else
