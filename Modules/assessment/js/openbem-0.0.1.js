@@ -167,6 +167,8 @@ var openbem = {
         
         inputdata.scenario_name = data.scenario_name;
 
+        inputdata.household = data.household;
+
         inputdata.region = data.region;
         inputdata.altitude = data.altitude
         inputdata.use_custom_occupancy = data.use_custom_occupancy;

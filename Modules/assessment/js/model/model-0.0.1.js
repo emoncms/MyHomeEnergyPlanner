@@ -72,6 +72,7 @@ calc.start = function()
     // Global namespace variables:
     if (this.data.region == undefined) this.data.region = 0;
     if (this.data.altitude == undefined) this.data.altitude = 0;
+    if (this.data.household == undefined) this.data.household = {};
     
     this.data.num_of_floors = 0;
     this.data.TFA = 0;
@@ -711,7 +712,6 @@ calc.energy_systems = function()
     this.data.annualco2 = 0;
     for (z in this.data.fuel_totals)
     {   
-        console.log(this.data.fuel_totals[z].standingcharge);
         this.data.fuel_totals[z].annualcost = this.data.fuel_totals[z].quantity * this.data.fuels[z].fuelcost + this.data.fuels[z].standingcharge*365;
         this.data.fuel_totals[z].fuelcost = this.data.fuels[z].fuelcost;
         this.data.fuel_totals[z].primaryenergy = this.data.fuel_totals[z].quantity * this.data.fuels[z].primaryenergyfactor;

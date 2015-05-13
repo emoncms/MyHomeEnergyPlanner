@@ -44,6 +44,7 @@
                         <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
                         <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
                         <div class="scenario-nav-heading">Extended input</a></div>
+                        <div class="scenario-nav"><a href="#template/householdquestionnaire">Household Questionnaire</a></div>
                         <div class="scenario-nav"><a href="#template/currentenergy">Current Energy</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_LAC"/> <a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
@@ -183,7 +184,7 @@
         var input_type = $(this).attr('type');
         if (input_type=='checkbox') val = $(this)[0].checked;
         
-        if (!isNaN(val)) val *= 1;
+        if (!isNaN(val) && val!="") val *= 1;
         varset(key,val);
         
         $("#openbem").trigger("onKeyChange",{key:key,value:val});
