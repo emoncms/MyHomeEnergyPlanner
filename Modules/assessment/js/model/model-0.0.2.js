@@ -1138,124 +1138,143 @@ calc.generation = function() {
 
 calc.currentenergy = function()
 {
-    if (this.data.currentenergy==undefined) this.data.currentenergy = {
-        electric_annual_kwh: 0,
-        storageheaters_annual_kwh: 0,
-        waterheating_annual_kwh: 0,
-        electriccar_annual_kwh: 0,
-        heatpump_annual_kwh: 0,
-        woodlogs_annual_m3: 0,
-        woodpellets_annual_m3: 0,
-        oil_annual_L: 0,
-        gas_annual_m3: 0,
-        LPG_annual_L: 0,
-        bottledgas_annual_kg: 0,
+    var defaults = {
+        'electric': { name: "Electricity", note:"", 
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            
+        'electric-heating': { name: "Electricity for direct heating", note:"e.g: Storage Heaters", 
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            
+        'electric-heatpump': { name: "Electricity for heatpump", note:"annual electricity input to the heatpump", 
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            
+        'electric-waterheating': { name: "Electricity for water heating", note:"",
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
         
-        electriccar2_annual_miles: 0,
-        electriccar2_milesperkwh: 4,
-        
-        car1_annual_miles: 0,
-        car1_mpg: 35,
-        
-        car2_annual_miles: 0,
-        car2_mpg: 35,
-
-        car3_annual_miles: 0,
-        car3_mpg: 35,
-        
-        motorbike_annual_miles: 0,
-        motorbike_mpg: 35,
-        
-        bus_miles: 0,
-        train_miles: 0, 
-        boat_miles: 0, 
-        plane_miles: 0 
+        'electric-car': { name: "Electric car", note: "",
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            
+            
+        'wood-logs': { name:"Wood Logs", note:"",
+            quantity:0, units: "m3", kwh: 1380, co2: 0.00, primaryenergy: 1.1, unitcost:69, standingcharge:0.00},
+        'wood-pellets': { name:"Wood Pellets", note:"",
+            quantity:0, units: "m3", kwh: 4800, co2: 0.00, primaryenergy: 1.1, unitcost:240, standingcharge:0.00},
+        'oil': { name:"Oil", note:"",
+            quantity:0, units: "L", kwh: 10.27, co2: 2.518, primaryenergy: 1.1, unitcost:0.55, standingcharge:0.00},
+        'gas': { name:"Mains gas", note:"",
+            quantity:0, units: "m3", kwh: 9.8, co2: 2.198, primaryenergy: 1.1, unitcost:0.4214, standingcharge:0.00},
+        'lpg': { name:"LPG", note:"",
+            quantity:0, units: "kWh", kwh: 11.0, co2: 1.5, primaryenergy: 1.1, unitcost:0.55, standingcharge:0.00},
+        'bottledgas': { name:"Bottled gas", note:"",
+            quantity:0, units: "kg", kwh: 13.9, co2: 2.198, primaryenergy: 1.1, unitcost:1.8, standingcharge:0.00},
+            
+            
+        //'electric-car-miles': { name: "Electric car (miles)", note: "miles not included in home electricty above, assuming 100% green electricity",
+        //    quantity:0, units: "miles", kwh: 0.25, co2: 0.02, primaryenergy: 2.4, unitcost:0.00, standingcharge:0.00},
+            
+        'car1': { name: "Car 1", note:"",
+            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            
+        'car2': { name: "Car 2", note:"",
+            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            
+        'car3': { name: "Car 3", note:"",
+            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            
+        'motorbike': { name: "Motorbike", note:"",
+            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            
+        'bus': { name: "Bus", note:"",
+            quantity:0, units: "miles", kwh: 0.53, co2: 0.176, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            
+        'train': { name: "Train", note:"",
+            quantity:0, units: "miles", kwh: 0.096, co2: 0.096, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            
+        'boat': { name: "Boat", note:"",
+            quantity:0, units: "miles", kwh: 1.0, co2: 0.192, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            
+        'plane': { name: "Plane", note:"",
+            quantity:0, units: "miles", kwh: 0.69, co2: 0.43, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00}
     };
     
-    var sum = 0;
+    if (this.data.currentenergy==undefined) this.data.currentenergy = {};
     
-    this.data.currentenergy.electric_kwhd = this.data.currentenergy.electric_annual_kwh / 365.0;
-    this.data.currentenergy.electric_co2 = this.data.currentenergy.electric_annual_kwh * 0.02;
-    sum += this.data.currentenergy.electric_annual_kwh;
+    if (this.data.currentenergy.energyitems==undefined) {
+        this.data.currentenergy.energyitems = defaults;
+    }
     
-    this.data.currentenergy.storageheaters_kwhd = this.data.currentenergy.storageheaters_annual_kwh / 365.0;
-    this.data.currentenergy.storageheaters_co2 = this.data.currentenergy.storageheaters_annual_kwh * 0.02;
-    sum += this.data.currentenergy.storageheaters_annual_kwh;
+    energy = this.data.currentenergy.energyitems;
     
-    this.data.currentenergy.heatpump_kwhd = this.data.currentenergy.heatpump_annual_kwh / 365.0;
-    this.data.currentenergy.heatpump_co2 = this.data.currentenergy.heatpump_annual_kwh * 0.02;
-    sum += this.data.currentenergy.heatpump_annual_kwh;
+    for (z in defaults) {
+        energy[z].name = defaults[z].name;
+        energy[z].units = defaults[z].units;
+        energy[z].kwh = defaults[z].kwh;
+        energy[z].co2 = defaults[z].co2;
+        energy[z].primaryenergy = defaults[z].primaryenergy;
+    }
     
-    this.data.currentenergy.waterheating_kwhd = this.data.currentenergy.waterheating_annual_kwh / 365.0;
-    this.data.currentenergy.waterheating_co2 = this.data.currentenergy.waterheating_annual_kwh * 0.02;
-    sum += this.data.currentenergy.waterheating_annual_kwh;
-    
-    this.data.currentenergy.electriccar_kwhd = this.data.currentenergy.electriccar_annual_kwh / 365.0;
-    this.data.currentenergy.electriccar_co2 = this.data.currentenergy.electriccar_annual_kwh * 0.02;
-    
-    // ------    
+    var electrictags = ['electric','electric-heating','electric-heatpump','electric-waterheating','electric-car'];
+    for (z in electrictags) {
+        var tag = electrictags[z];
+        if (this.data.currentenergy.greenenergy) {
+            energy[tag].co2 = 0.02; 
+            energy[tag].primaryenergy = 1.3;
+        } else {
+            energy[tag].co2 = 0.512;
+            energy[tag].primaryenergy = 2.4;
+        }
+    }
 
-    this.data.currentenergy.woodlogs_kwhd = (this.data.currentenergy.woodlogs_annual_m3 * 1380) / 365.0;
-    this.data.currentenergy.woodlogs_co2 = 0;
-    sum += (this.data.currentenergy.woodlogs_annual_m3 * 1380);
     
-    this.data.currentenergy.woodpellets_kwhd = (this.data.currentenergy.woodpellets_annual_m3 * 4800) / 365.0;
-    this.data.currentenergy.woodpellets_co2 = 0;
-    sum += (this.data.currentenergy.woodpellets_annual_m3 * 4800);
-    
-    this.data.currentenergy.oil_kwhd = (this.data.currentenergy.oil_annual_L * 10.27) / 365.0;
-    this.data.currentenergy.oil_co2 = (this.data.currentenergy.oil_annual_L * 2.518);
-    sum += this.data.currentenergy.oil_annual_L * 10.27;
-    
-    this.data.currentenergy.gas_kwhd = (this.data.currentenergy.gas_annual_m3 * 9.8) / 365.0;
-    this.data.currentenergy.gas_co2 = (this.data.currentenergy.gas_annual_m3 * 2.198);
-    sum += this.data.currentenergy.gas_annual_m3 * 9.8;
-    
-    this.data.currentenergy.LPG_kwhd = (this.data.currentenergy.LPG_annual_L * 11.0) / 365.0;
-    this.data.currentenergy.LPG_co2 = (this.data.currentenergy.LPG_annual_L * 1.5);
-    sum += this.data.currentenergy.LPG_annual_L * 11.0;
-    
-    this.data.currentenergy.bottledgas_kwhd = (this.data.currentenergy.bottledgas_annual_kg * 13.9) / 365.0;
-    this.data.currentenergy.bottledgas_co2 = (this.data.currentenergy.bottledgas_annual_kg * 1.5);
-    sum += this.data.currentenergy.bottledgas_annual_kg * 13.9;
-    
-    // ------
-    
-    this.data.currentenergy.electriccar2_kwhd = (this.data.currentenergy.electriccar2_annual_miles/this.data.currentenergy.electriccar2_milesperkwh) / 365.0;
-    this.data.currentenergy.electriccar2_co2 = (this.data.currentenergy.electriccar2_annual_miles/this.data.currentenergy.electriccar2_milesperkwh) * 0.02;
+    for (item in energy) 
+    {
+        if (energy[item].mpg==undefined ) {
+            energy[item].annual_kwh = energy[item].quantity * energy[item].kwh;
+        } else {
+            energy[item].annual_kwh = (energy[item].quantity / energy[item].mpg) * energy[item].kwh;
+        }
+        energy[item].kwhd = energy[item].annual_kwh / 365.0;
+        
+        if (energy[item].mpg==undefined ) {
+            energy[item].annual_co2 = energy[item].quantity * energy[item].co2;
+        } else {
+            energy[item].annual_co2 = (energy[item].quantity / energy[item].mpg) * energy[item].co2;
+        }
+        
+        energy[item].annual_cost = (energy[item].quantity * energy[item].unitcost) + (365*energy[item].standingcharge);
+        
 
-
-    this.data.currentenergy.car1_kwhd = ((this.data.currentenergy.car1_annual_miles/this.data.currentenergy.car1_mpg)*4.54609*9.7) / 365.0;
-    this.data.currentenergy.car1_co2 = ((this.data.currentenergy.car1_annual_miles/this.data.currentenergy.car1_mpg)*4.54609) * 2.31;
+    }
     
-    this.data.currentenergy.car2_kwhd = ((this.data.currentenergy.car2_annual_miles/this.data.currentenergy.car2_mpg)*4.54609*9.7) / 365.0;
-    this.data.currentenergy.car2_co2 = ((this.data.currentenergy.car2_annual_miles/this.data.currentenergy.car2_mpg)*4.54609) * 2.31; 
+    var spaceheatingtags = ['electric-heating','electric-heatpump','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
     
-    this.data.currentenergy.car3_kwhd = ((this.data.currentenergy.car3_annual_miles/this.data.currentenergy.car3_mpg)*4.54609*9.7) / 365.0;
-    this.data.currentenergy.car3_co2 = ((this.data.currentenergy.car3_annual_miles/this.data.currentenergy.car3_mpg)*4.54609) * 2.31;
-
-    this.data.currentenergy.motorbike_kwhd = ((this.data.currentenergy.motorbike_annual_miles/this.data.currentenergy.motorbike_mpg)*4.54609*9.7) / 365.0;
-    this.data.currentenergy.motorbike_co2 = ((this.data.currentenergy.motorbike_annual_miles/this.data.currentenergy.motorbike_mpg)*4.54609) * 2.31;   
+    var spaceheating_annual_kwh = 0;
+    for (z in spaceheatingtags) {
+        spaceheating_annual_kwh += energy[spaceheatingtags[z]].annual_kwh
+    }
     
-    // -------
+    var primaryenergytags = ['electric', 'electric-heating','electric-waterheating', 'electric-heatpump','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
+    var total_co2 = 0;
+    var total_cost = 0;
+    var primaryenergy_annual_kwh = 0;
+    for (z in primaryenergytags) {
+        var item = primaryenergytags[z];
+        primaryenergy_annual_kwh += energy[item].annual_kwh * energy[item].primaryenergy;
+        total_co2 += energy[item].annual_co2;
+        total_cost += energy[item].annual_cost;
+    }
     
-    this.data.currentenergy.bus_kwhd = (this.data.currentenergy.bus_miles * 0.53)/365.0;
-    this.data.currentenergy.bus_co2 = this.data.currentenergy.bus_miles * 0.176;
+    this.data.currentenergy.energyitems = energy;
     
-    this.data.currentenergy.train_kwhd = (this.data.currentenergy.train_miles * 0.096)/365.0;
-    this.data.currentenergy.train_co2 = this.data.currentenergy.train_miles * 0.096;
-    
-    this.data.currentenergy.boat_kwhd = (this.data.currentenergy.boat_miles * 1.0)/365.0;
-    this.data.currentenergy.boat_co2 = this.data.currentenergy.boat_miles * 0.192;
-    
-    this.data.currentenergy.plane_kwhd = (this.data.currentenergy.plane_miles * 0.69)/365.0;
-    this.data.currentenergy.plane_co2 = this.data.currentenergy.plane_miles * 0.43;
-    // RFI = 3 0.43 kg per mile
-    
-    this.data.primary_energy_use_bills = sum;
-    
-    
-
+    this.data.currentenergy.spaceheating_annual_kwh = spaceheating_annual_kwh;
+    this.data.currentenergy.primaryenergy_annual_kwh = primaryenergy_annual_kwh;
+    this.data.currentenergy.total_co2 = total_co2;
+    this.data.currentenergy.total_cost = total_cost;
+        
+    this.data.currentenergy.spaceheating_annual_kwhm2 = spaceheating_annual_kwh/this.data.TFA;
+    this.data.currentenergy.primaryenergy_annual_kwhm2 = primaryenergy_annual_kwh/this.data.TFA;
+    this.data.currentenergy.total_co2m2 = total_co2/this.data.TFA;
+    this.data.currentenergy.total_costm2 = total_cost/this.data.TFA;
 };
 
 

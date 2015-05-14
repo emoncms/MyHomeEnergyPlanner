@@ -237,37 +237,8 @@ var openbem = {
         inputdata.generation = data.generation;
         
         inputdata.currentenergy = {
-            electric_annual_kwh: data.currentenergy.electric_annual_kwh,
-            storageheaters_annual_kwh: data.currentenergy.storageheaters_annual_kwh,
-            waterheating_annual_kwh: data.currentenergy.waterheating_annual_kwh,
-            electriccar_annual_kwh: data.currentenergy.electriccar_annual_kwh,
-            heatpump_annual_kwh: data.currentenergy.heatpump_annual_kwh,
-            woodlogs_annual_m3: data.currentenergy.woodlogs_annual_m3,
-            woodpellets_annual_m3: data.currentenergy.woodpellets_annual_m3,
-            oil_annual_L: data.currentenergy.oil_annual_L,
-            gas_annual_m3: data.currentenergy.gas_annual_m3,
-            LPG_annual_L: data.currentenergy.LPG_annual_L,
-            bottledgas_annual_kg: data.currentenergy.bottledgas_annual_kg,
-            
-            electriccar2_annual_miles: data.currentenergy.electriccar2_annual_miles,
-            electriccar2_milesperkwh: data.currentenergy.electriccar2_milesperkwh,
-            
-            car1_annual_miles: data.currentenergy.car1_annual_miles,
-            car1_mpg: data.currentenergy.car1_mpg,
-            
-            car2_annual_miles: data.currentenergy.car2_annual_miles,
-            car2_mpg: data.currentenergy.car2_mpg,
-
-            car3_annual_miles: data.currentenergy.car3_annual_miles,
-            car3_mpg: data.currentenergy.car3_mpg,
-            
-            motorbike_annual_miles: data.currentenergy.motorbike_annual_miles,
-            motorbike_mpg: data.currentenergy.motorbike_mpg,
-            
-            bus_miles: data.currentenergy.bus_miles,
-            train_miles: data.currentenergy.train_miles, 
-            boat_miles: data.currentenergy.boat_miles,
-            plane_miles: data.currentenergy.plane_miles
+            energyitems: data.currentenergy.energyitems,
+            greenenergy: data.currentenergy.greenenergy
         };
         
         // Waterheating
