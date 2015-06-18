@@ -31,7 +31,6 @@
 
 */
 
-
 var calc = {data:{}};
 
 calc.run = function(datain)
@@ -69,7 +68,7 @@ calc.run = function(datain)
 calc.start = function()
 {
     if (this.data==null) this.data = {};
-    // Global namespace variables:
+    
     if (this.data.region == undefined) this.data.region = 0;
     if (this.data.altitude == undefined) this.data.altitude = 0;
     if (this.data.household == undefined) this.data.household = {};
