@@ -138,16 +138,13 @@ var calc = function()
     {
         add_defaults(data, {use_custom_occupancy: false,
                             custom_occupancy: 1});
-        
-        if (data.TFA > 13.9) {
+
+        if (data.use_custom_occupancy) {
+            data.occupancy = data.custom_occupancy;
+        } else if (data.TFA > 13.9) {
             data.occupancy = 1 + 1.76 * (1 - Math.exp(-0.000349 * Math.pow((data.TFA -13.9),2))) + 0.0013 * (data.TFA - 13.9);
         } else {
             data.occupancy = 1;
-        }
-
-        if (data.use_custom_occupancy)
-        {
-            data.occupancy = data.custom_occupancy;
         }
     }
     
