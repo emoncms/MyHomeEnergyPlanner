@@ -34,6 +34,19 @@
 // encapsulated style of construction for calling
 var calc = function()
 {
+    var add_defaults = function(data, add)
+    {
+        Object.keys(add).forEach(function(key) {
+            if (!(key in data)) {
+                data[key] = add[key];
+            } else {
+                add_defaults(data[key], add[key]);
+            }
+        });
+        
+        return data;
+    }
+    
     var run = function(data)
     {
         start(data);
@@ -65,12 +78,13 @@ var calc = function()
     };
 
     var start = function(data) {
-        if (data==null) data = {};
-        
-        if (data.region == undefined) data.region = 0;
-        if (data.altitude == undefined) data.altitude = 0;
-        if (data.household == undefined) data.household = {};
+        data = data || {}
 
+        add_defaults(data,
+                     {region:0,
+                      altitude:0,
+                      household:0});
+        
         data.num_of_floors = 0;
         data.TFA = 0;
         data.volume = 0;
@@ -101,8 +115,8 @@ var calc = function()
 
     var floors = function(data)
     {
-        if (data.floors==undefined) data.floors = [];
-
+        add_defaults(data, {floors:[]});
+        
         data.floors.forEach(
             function(floor)
             {
@@ -122,8 +136,9 @@ var calc = function()
 
     var occupancy = function(data)
     {
-        if (data.use_custom_occupancy==undefined) data.use_custom_occupancy = false;
-        if (data.custom_occupancy==undefined) data.custom_occupancy = 1;
+        add_defaults(data, {use_custom_occupancy: false,
+                            custom_occupancy: 1});
+        
         if (data.TFA > 13.9) {
             data.occupancy = 1 + 1.76 * (1 - Math.exp(-0.000349 * Math.pow((data.TFA -13.9),2))) + 0.0013 * (data.TFA - 13.9);
         } else {
@@ -147,10 +162,10 @@ var calc = function()
 
     var fabric = function(data)
     {
-        if (data.fabric==undefined) data.fabric = {};
-        if (data.fabric.elements==undefined) data.fabric.elements = [];
-        if (data.fabric.thermal_bridging_yvalue==undefined) data.fabric.thermal_bridging_yvalue = 0.15;
-
+        add_defaults(data,
+                     {fabric: {elements: [],
+                               thermal_bridging_yvalue: 0.15}});
+        
         data.fabric.total_heat_loss_WK = 0;
         data.fabric.total_thermal_capacity = 0;
 
@@ -326,11 +341,7 @@ var calc = function()
             balanced_heat_recovery_efficiency: 100
         }
 
-        if (data.ventilation==undefined) data.ventilation = {};
-        for (var z in defaults)
-        {
-            if (data.ventilation[z]==undefined) data.ventilation[z] = defaults[z];
-        }
+        add_defaults(data, {ventilation: defaults});
 
         var total = 0;
         total += data.ventilation.number_of_chimneys * 40;
@@ -451,12 +462,13 @@ var calc = function()
     //---------------------------------------------------------------------------------------------
     var temperature = function (data)
     {
-        if (data.temperature==undefined) data.temperature = {};
-        if (data.temperature.control_type==undefined) data.temperature.control_type = 1;
-        if (data.temperature.living_area==undefined) data.temperature.living_area = data.TFA;
-        if (data.temperature.target==undefined) data.temperature.target = 21;
-        if (data.temperature.responsiveness==undefined) data.temperature.responsiveness = 1;
-
+        add_defaults(data,
+                     {temperature: {
+                         control_type:1,
+                         living_area: data.TFA,
+                         target: 21,
+                         responsiveness: 1}});
+        
         var R = data.temperature.responsiveness;
         var Th = data.temperature.target;
         var TMP = data.TMP; // data.TMP;
@@ -583,9 +595,9 @@ var calc = function()
 
     var space_heating = function(data)
     {
-        if (data.space_heating==undefined) data.space_heating = {};
-        if (data.space_heating.use_utilfactor_forgains==undefined) data.space_heating.use_utilfactor_forgains = true;
-
+        add_defaults(data,
+                     {space_heating:{use_utilfactor_forgains: true}});
+        
         // These might all need to be defined within the space_heating namespace to be accessible in the ui.
         var delta_T = [];
         var total_losses = [];
@@ -676,17 +688,9 @@ var calc = function()
 
     var energy_systems = function(data)
     {
-        if (data.energy_systems == undefined) data.energy_systems = {};
-        if (data.fuels == undefined) data.fuels = {};
-
-        // Copy dataset over to user data without overwritting user changed properties
-        var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
-        for (fuel in tmpfuels) {
-            for (var prop in tmpfuels[fuel]) {
-                if (data.fuels[fuel]!=undefined && data.fuels[fuel][prop]!=undefined) tmpfuels[fuel][prop] = data.fuels[fuel][prop]
-            }
-        }
-        data.fuels = tmpfuels;
+        add_defaults(data,
+                     energy_systems:{},
+                     fuels: JSON.parse(JSON.stringify(datasets.fuels)));
 
         data.fuel_totals = {};
 
@@ -753,11 +757,11 @@ var calc = function()
     
     var LAC = function(data)
     {
-        if (data.LAC==undefined) data.LAC = {};
-        if (data.LAC.LLE==undefined) data.LAC.LLE = 1;
-        if (data.LAC.L==undefined) data.LAC.L = 1;
-        if (data.LAC.reduced_internal_heat_gains==undefined) data.LAC.reduced_internal_heat_gains = false;
-
+        add_defaults(data,
+                     {LAC: {LLE: 1,
+                            L: 1,
+                            reduced_internal_heat_gains: false}});
+        
         // average annual energy consumption for lighting if no low-energy lighting is used is:
         data.LAC.EB = 59.73 * Math.pow((data.TFA * data.occupancy),0.4714);
 
@@ -853,7 +857,7 @@ var calc = function()
 
     var SHW = function (data)
     {
-        if (data.SHW==undefined) data.SHW = {};
+        add_defaults(data, {SHW:{}});
         /*
          if (data.SHW.A==undefined) data.SHW.A = 1.25;
          if (data.SHW.n0==undefined) data.SHW.n0 = 0.599;
@@ -910,13 +914,16 @@ var calc = function()
 
     var water_heating = function(data)
     {
-        if (data.water_heating==undefined) data.water_heating = {};
-        if (data.water_heating.combi_loss==undefined) data.water_heating.combi_loss = [0,0,0,0,0,0,0,0,0,0,0,0];
-        if (data.water_heating.solar_water_heating==undefined) data.water_heating.solar_water_heating = false;
-        data.water_heating.pipework_insulated_fraction = 1;
-
-
+        add_defaults(data,
+                     {water_heating: {combi_loss:[0,0,0,0,0,0,0,0,0,0,0,0],                              
+                                      solar_water_heating:false,
+                                      low_water_use_design: false,
+                                      /// QUESTION: Should the pipework_insulated_fraction be being set to 1, or should the default be 1?
+                                      ///           Previously this was being set to 1, so any user input value would be ignored.
+                                      pipework_insulated_fraction: 1}});
+        
         data.water_heating.Vd_average = (25 * data.occupancy) + 36;
+
         if (data.water_heating.low_water_use_design) data.water_heating.Vd_average *= 0.95;
 
         var Vd_m = [];
@@ -1040,7 +1047,9 @@ var calc = function()
 
     var appliancelist = function(data)
     {
-        if (data.appliancelist==undefined) data.appliancelist = {list:[{name: "LED Light", power: 6, hours: 12}]};
+        add_defaults(data, {appliancelist:{list:[]}});
+        // this default appliance cannot safely be added by add_defaults, because if there was a 0th appliance we don't want to set a default name, power or hours on it.
+        if (data.appliancelist.list.length === 0) data.appliancelist.push({name: "LED Light", power: 6, hours: 12});
 
         data.appliancelist.totalwh = 0;
         data.appliancelist.annualkwh = 0;
@@ -1064,8 +1073,7 @@ var calc = function()
 
 
     var generation = function(data) {
-
-        if (data.generation==undefined) data.generation = {
+        add_defaults(data, {generation: {
             solar_annual_kwh: 0,
             solar_fraction_used_onsite: 0.5,
             solar_FIT: 0,
@@ -1082,7 +1090,7 @@ var calc = function()
             solarpv_overshading: 1,
             solarpv_fraction_used_onsite: 0.5,
             solarpv_FIT: 0
-        };
+        }});
 
         var kWp = data.generation.solarpv_kwp_installed;
         // 0:North, 1:NE/NW, 2:East/West, 3:SE/SW, 4:South
@@ -1099,7 +1107,6 @@ var calc = function()
         data.generation.solarpv_annual_kwh = 0.8 * kWp * annual_solar_radiation * overshading_factor;
 
         // ----------
-
 
 
         data.generation.total_energy_income = 0;
@@ -1202,12 +1209,8 @@ var calc = function()
                        quantity:0, units: "miles", kwh: 0.69, co2: 0.43, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00}
         };
 
-        if (data.currentenergy==undefined) data.currentenergy = {};
-
-        if (data.currentenergy.energyitems==undefined) {
-            data.currentenergy.energyitems = defaults;
-        }
-
+        add_defaults(data, {currentenergy: defaults});
+        
         var energy = data.currentenergy.energyitems;
 
         for (var z in defaults) {
