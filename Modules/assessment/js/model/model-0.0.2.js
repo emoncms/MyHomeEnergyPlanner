@@ -169,6 +169,7 @@ var calc = function()
     {
         add_defaults(data,
                      {fabric: {elements: [],
+                               // QUESTION: table S13 has more factors, based on age band
                                thermal_bridging_yvalue: 0.15}});
         
         data.fabric.total_heat_loss_WK = 0;
