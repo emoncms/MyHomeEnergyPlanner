@@ -192,93 +192,93 @@ var calc = function()
         var sum = 0;
         var gains = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-        for (var z in data.fabric.elements)
-        {
-            // Calculate heat loss through elements
-
-            // Use element length and height if given rather than area.
-            if (data.fabric.elements[z]['l']!=undefined && data.fabric.elements[z]['l']!='' && data.fabric.elements[z]['h']!=undefined && data.fabric.elements[z]['h']!='')
-            {
-                data.fabric.elements[z].area = data.fabric.elements[z]['l'] * data.fabric.elements[z]['h'];
+        // assign areas to each element
+        data.fabric.elements.forEach(
+            function(element) {
+                if (typeof element.l === 'number' && typeof element.h === 'number') {
+                    element.area = element.l * element.h;
+                }
+                if (typeof element.area !== 'number') {
+                    element.area = 0;
+                }
+                element.netarea = element.area;
             }
-            data.fabric.elements[z].netarea = data.fabric.elements[z].area;
+        );
 
-            if (data.fabric.elements[z].type!='window') {
-                data.fabric.elements[z].windowarea = 0;
-            }
-
-            // Subtract window areas:
-
-            for (var w in data.fabric.elements)
-            {
-                if (data.fabric.elements[w].type=='window')
-                {
-                    if (data.fabric.elements[w].subtractfrom!=undefined && data.fabric.elements[w].subtractfrom == z)
-                    {
-                        var windowarea = data.fabric.elements[w].area;
-
-                        if (data.fabric.elements[w]['l']!=undefined && data.fabric.elements[w]['l']!='' && data.fabric.elements[w]['h']!=undefined && data.fabric.elements[w]['h']!='')
-                        {
-                            windowarea = data.fabric.elements[w]['l'] * data.fabric.elements[w]['h'];
-                        }
-                        data.fabric.elements[z].windowarea += windowarea;
-                        data.fabric.elements[z].netarea -= windowarea;
+        // net off window areas from things which have windows in them
+        data.fabric.elements.forEach(
+            function(element) {
+                if (element.type === 'window' && typeof element.subtractfrom === 'number') {
+                    var subtractfrom = data.fabric.elements[element.subtractfrom];
+                    if (typeof subtractfrom.windowarea !== 'number') {
+                        subtractfrom.windowarea = 0;
                     }
+                    subtractfrom.windowarea += element.area;
+                    subtractfrom.netarea -= element.area;
                 }
             }
+        );
 
-
-            data.fabric.elements[z].wk = data.fabric.elements[z].netarea * data.fabric.elements[z].uvalue;
-            data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
+        // compute the heat loss for each element, now we know the net areas
+        data.fabric.elements.forEach(function(element)
+        {
+            element.wk = element.netarea * element.uvalue;
+            data.fabric.total_heat_loss_WK += element.wk;
 
             // By checking that the u-value is not 0 = internal walls we can calculate total external area
-            if (data.fabric.elements[z].uvalue!=0) {
-                data.fabric.total_external_area += data.fabric.elements[z].netarea;
+            if (element.uvalue != 0) {
+                data.fabric.total_external_area += element.netarea;
             }
 
-
-            if (data.fabric.elements[z].type == 'floor') {
-                data.fabric.total_floor_WK += data.fabric.elements[z].wk;
-                data.fabric.total_floor_area += data.fabric.elements[z].netarea;
+            switch (element.type) {
+                case: 'floor'
+                data.fabric.total_floor_WK += element.wk;
+                data.fabric.total_floor_area += element.netarea;
+                break;
+            case 'wall':
+                data.fabric.total_wall_WK += element.wk;
+                data.fabric.total_wall_area += element.netarea;
+                break;
+            case 'roof':
+                data.fabric.total_roof_WK += element.wk;
+                data.fabric.total_roof_area += element.netarea;
+                break;
+            case 'window':
+                data.fabric.total_window_WK += element.wk;
+                data.fabric.total_window_area += element.netarea;
+                break;
+            default:
+                console.warn('unknown element type', element.type, element);
             }
-            if (data.fabric.elements[z].type == 'wall') {
-                data.fabric.total_wall_WK += data.fabric.elements[z].wk;
-                data.fabric.total_wall_area += data.fabric.elements[z].netarea;
-            }
-            if (data.fabric.elements[z].type == 'roof') {
-                data.fabric.total_roof_WK += data.fabric.elements[z].wk;
-                data.fabric.total_roof_area += data.fabric.elements[z].netarea;
-            }
-            if (data.fabric.elements[z].type == 'window') {
-                data.fabric.total_window_WK += data.fabric.elements[z].wk;
-                data.fabric.total_window_area += data.fabric.elements[z].netarea;
-            }
-
+            
             // Calculate total thermal capacity
-            if (data.fabric.elements[z].kvalue!=undefined) {
-                data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;
+            if (element.kvalue != 0) {
+                /// QUESTION: should this have been element.area, or should it be net area?
+                ///           I have changed it to net area, as I don't think the windows in a wall contribute
+                ///           to its k-value.
+                data.fabric.total_thermal_capacity += element.kvalue * element.netarea;
             }
 
-            if (data.fabric.elements[z].type == 'window')
+            if (element.type == 'window')
             {
-                var orientation = data.fabric.elements[z]['orientation'];
-                var area = data.fabric.elements[z]['area'];
-                var overshading = data.fabric.elements[z]['overshading'];
-                var g = data.fabric.elements[z]['g'];
-                var ff = data.fabric.elements[z]['ff'];
+                var orientation = element['orientation'];
+                var area = element['area'];
+                var overshading = element['overshading'];
+                var g = element['g'];
+                var ff = element['ff'];
 
                 var gain = 0;
+
+                // Access factor table: first dimention is shading factor, 2nd in winter, summer.
+                var table_6d = [[0.3,0.5],[0.54,0.7],[0.77,0.9],[1.0,1.0]];
 
                 // The gains for a given window are calculated for each month
                 // the result of which needs to be put in a bin for totals for jan, feb etc..
                 for (var month=0; month<12; month++)
                 {
-                    // Access factor table: first dimention is shading factor, 2nd in winter, summer.
-                    var table_6d = [[0.3,0.5],[0.54,0.7],[0.77,0.9],[1.0,1.0]];
-
                     // access factor is time of year dependent
                     // Summer months: 5:June, 6:July, 7:August and 8:September (where jan = month 0)
-                    var summer = 0; if (month>=5 && month<=8) summer = 1;
+                    var summer = (month >= 5 && month <= 8) ? 0 : 1;
                     var access_factor = table_6d[overshading][summer];
 
                     // Map orientation code from window to solar rad orientation codes.
@@ -291,12 +291,12 @@ var calc = function()
                     gain += gain_month;
                 }
 
-                var accessfactor = [0.5,0.67,0.83,1.0];
+                var accessfactor = [0.5, 0.67, 0.83, 1.0];
                 sum += 0.9 * area * g * ff * accessfactor[overshading];
-                data.fabric.elements[z].gain = gain / 12.0;
-                data.fabric.annual_solar_gain += data.fabric.elements[z].gain;
+                element.gain = gain / 12.0;
+                data.fabric.annual_solar_gain += element.gain;
             }
-        }
+        });
 
         data.fabric.thermal_bridging_heat_loss = data.fabric.total_external_area * data.fabric.thermal_bridging_yvalue;
 
@@ -312,7 +312,6 @@ var calc = function()
 
         data.gains_W["solar"] = gains;
         data.GL = sum / data.TFA;
-
     }
 
     
