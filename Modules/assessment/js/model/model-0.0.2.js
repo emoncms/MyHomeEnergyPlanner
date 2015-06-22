@@ -34,6 +34,14 @@
 // encapsulated style of construction for calling
 var calc = function()
 {
+    /*
+     * A function which adds default values onto an object from another object.
+     * For example, saying add_defaults({}, {a:1}), will modify the first argument
+     * to have property 'a' with value '1'. Calling add_defaults({a:2}, {a:1}) will 
+     * have no effect on the first argument, as 'a' is already specified.
+     * The function is recursive on the local properties of things to add, so for example
+     * add_defaults({a:{b:1}}, {a:{c:3}}) will result in the object {a:{b:1, c:3}}.
+     */
     var add_defaults = function(data, add)
     {
         Object.keys(add).forEach(function(key) {
