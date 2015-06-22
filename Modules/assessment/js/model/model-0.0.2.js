@@ -53,7 +53,33 @@ var calc = function()
         });
         
         return data;
-    }
+    };
+
+    /*
+     * Given an object, return an array containing the values of all the properties
+     * on that object; for example
+     * values({a:[1,2,3], b:foo}) => [[1,2,3], foo]
+     */
+    var values = function(object) {
+        return Object.keys(object).map(function(key) {return object[key];});
+    };
+
+    var add = function(a, b) {return a+b;};
+
+    /*
+     * Given a binary function f, return a function which takes two arrays
+     * and returns a new array produced by applying f to each pair from the arrays.
+     * For example pointwise(add)([1,2,3], [4,5,6]) => [5,7,9]
+     */
+    var pointwise = function(f) {
+        return function(a, b) {
+            var out = [];
+            for (var x = 0; x<x.length && x<b.length; x++) {
+                out.push(f(a[x], b[x]));
+            }
+            return out;
+        };
+    };
     
     var run = function(data)
     {
@@ -384,70 +410,67 @@ var calc = function()
 
         infiltration *= shelter_factor;
 
-        var adjusted_infiltration = [];
-        for (var m = 0; m<12; m++)
-        {
-            var windspeed = datasets.table_u2[data.region][m];
-            var windfactor = windspeed / 4;
-            adjusted_infiltration[m] = infiltration * windfactor;
-        }
-
+        var adjusted_infiltration =
+                datasets.table_u2[data.region]
+                .map(function(windspeed) {
+                    return infiltration * windspeed / 4;
+                });
+       
         // (24a)m effective_air_change_rate
         // (22b)m adjusted_infiltration
         // (23b)  this.input.effective_air_change_rate.exhaust_air_heat_pump
         // (23c)  this.input.balanced_heat_recovery_efficiency
-        var effective_air_change_rate = [];
-        switch(data.ventilation.ventilation_type)
-        {
+
+        var infiltration_to_ach;
+        switch (data.ventilation.ventilation_type) {
         case 'a':
-            for (var m = 0; m<12; m++)
-            {
+            var offset = data.ventilation.system_air_change_rate *
+                (1 - data.ventilation.balanced_heat_recovery_efficiency / 100.0);
+            infiltration_to_ach = function(infiltration) {
                 // (24a)m = (22b)m + (23b) x (1 - (23c) / 100)
-                effective_air_change_rate[m] = adjusted_infiltration[m] + data.ventilation.system_air_change_rate * (1 - data.ventilation.balanced_heat_recovery_efficiency / 100.0);
-            }
+                return infiltration + offset;
+            };
             break;
-
         case 'b':
-            for (var m = 0; m<12; m++)
-            {
-                // (24b)m = (22b)m + (23b)
-                effective_air_change_rate[m] = adjusted_infiltration[m] + data.ventilation.system_air_change_rate;
-            }
+            var offset = data.ventilation.system_air_change_rate;
+            // (24b)m = (22b)m + (23b) 
+            infiltration_to_ach = function(infiltration) {
+                return infiltration + offset;
+            };
             break;
-
         case 'c':
-            for (var m = 0; m<12; m++)
-            {
+            var system_ach = data.ventilation.system_air_change_rate;
+            infiltration_to_ach = function(infiltration) {
                 // if (22b)m < 0.5 × (23b), then (24c) = (23b); otherwise (24c) = (22b) m + 0.5 × (23b)
-                // effective_air_change_rate[m] =
-                if (adjusted_infiltration[m] < 0.5 * data.ventilation.system_air_change_rate) {
-                    effective_air_change_rate[m] = data.ventilation.system_air_change_rate;
-                } else {
-                    effective_air_change_rate[m] = adjusted_infiltration[m] + (0.5 * data.ventilation.system_air_change_rate);
-                }
-            }
+                return Math.max(system_ach, infiltration + 0.5*system_ach);
+            };
             break;
-
         case 'd':
-            for (var m = 0; m<12; m++)
-            {
-                // if (22b)m ≥ 1, then (24d)m = (22b)m otherwise (24d)m = 0.5 + [(22b)m2 × 0.5]
-                if (adjusted_infiltration[m] >= 1) {
-                    effective_air_change_rate[m] = adjusted_infiltration[m];
+            // if (22b)m ≥ 1, then (24d)m = (22b)m otherwise (24d)m = 0.5 + [(22b)m2 × 0.5]
+            infiltration_to_ach = function(infiltration) {
+                if (infiltration >= 1) {
+                    return infiltration;
                 } else {
-                    effective_air_change_rate[m] = 0.5 + Math.pow(adjusted_infiltration[m],2) * 0.5;
+                    return 0.5 + Math.pow(infiltration, 2) * 0.5;
                 }
             }
             break;
+        default:
+            console.error('unknown ventilation type', data.ventilation.ventilation_type);
+            infiltration_to_ach = function(i) { return i; };
+            break;
         }
-
+        
+        var effective_air_change_rate = adjusted_infiltration.map(infiltration_to_ach);
+        
         var sum = 0;
-        var infiltration_WK = [];
-        for (var m = 0; m<12; m++)
-        {
-            infiltration_WK[m] = effective_air_change_rate[m] * data.volume * 0.33;
-            sum += infiltration_WK[m];
-        }
+
+        var infiltration_WK = effective_air_change_rate.map(function(ach) {
+            var WK = ach * data.volume * 0.33;
+            sum += WK;
+            return WK;
+        });
+        
         data.ventilation.average_WK = sum / 12.0;
 
         data.ventilation.effective_air_change_rate = effective_air_change_rate;
@@ -478,25 +501,16 @@ var calc = function()
         var Th = data.temperature.target;
         var TMP = data.TMP; // data.TMP;
 
-        var H = [0,0,0,0,0,0,0,0,0,0,0,0];
-        var HLP = [];
-        var G = [0,0,0,0,0,0,0,0,0,0,0,0];
+        var H = values(data.losses_WK)   // over each type of losses
+                .reduce(pointwise(add)); // add month-wise
 
-        for (m=0; m<12; m++)
-        {
-            for (var z in data.losses_WK) {
-                H[m] += data.losses_WK[z][m];
-                HLP[m] = H[m] / data.TFA;
-            }
+        var HLP = H.map(function(h) {return h / data.TFA;}); // over H, divide by TFA
+        var G = values(data.gains_W)     // over each type of gains
+                .reduce(pointwise(add)); // add month-wise
 
-            for (var z in data.gains_W) G[m] += data.gains_W[z][m];
-        }
-
-        var Te = [];
-        for (var m =0; m<12; m++)
-        {
-            Te[m] = datasets.table_u1[data.region][m]-(0.3*data.altitude/50);
-        }
+        var Te = datasets.table_u1[data.region].map(function(Te_m) {
+            return Te_m - (0.3 * data.altitude / 50);
+        });
 
         //----------------------------------------------------------------------------------------------------------------
         // 7. Mean internal temperature (heating season)
