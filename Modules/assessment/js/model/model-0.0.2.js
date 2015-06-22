@@ -356,19 +356,19 @@ var calc = function()
         total += data.ventilation.number_of_fluelessgasfires * 10;
 
         var infiltration = 0;
-        if (data.volume!=0) {
+        if (data.volume !== 0) {
             infiltration = total / data.volume;
         }
 
-        if (data.ventilation.air_permeability_test==false)
+        if (data.ventilation.air_permeability_test === false)
         {
             infiltration += (data.num_of_floors - 1) * 0.1;
 
-            if (data.ventilation.dwelling_construction=='timberframe') infiltration += 0.2;
-            if (data.ventilation.dwelling_construction=='masonry') infiltration += 0.35;
+            if (data.ventilation.dwelling_construction === 'timberframe') infiltration += 0.2;
+            if (data.ventilation.dwelling_construction === 'masonry') infiltration += 0.35;
 
-            if (data.ventilation.suspended_wooden_floor=='unsealed') infiltration += 0.2;
-            if (data.ventilation.suspended_wooden_floor=='sealed') infiltration += 0.1;
+            if (data.ventilation.suspended_wooden_floor === 'unsealed') infiltration += 0.2;
+            if (data.ventilation.suspended_wooden_floor === 'sealed') infiltration += 0.1;
 
             if (!data.ventilation.draught_lobby) infiltration += 0.05;
 
