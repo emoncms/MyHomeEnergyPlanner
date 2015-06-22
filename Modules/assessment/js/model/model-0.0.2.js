@@ -65,6 +65,8 @@ var calc = function()
     };
 
     var add = function(a, b) {return a+b;};
+    var sub = function(a, b) {return a-b;};
+    var mul = function(a, b) {return a*b;};
 
     /*
      * Given a binary function f, return a function which takes two arrays
@@ -80,6 +82,11 @@ var calc = function()
             return out;
         };
     };
+
+    var v_add = pointwise(add);
+    var v_sub = pointwise(sub);
+    var v_mul = pointwise(mul);
+    var watts_to_kwh = function(watts) {return watts * 0.024;};
     
     var run = function(data)
     {
@@ -502,11 +509,11 @@ var calc = function()
         var TMP = data.TMP; // data.TMP;
 
         var H = values(data.losses_WK)   // over each type of losses
-                .reduce(pointwise(add)); // add month-wise
+                .reduce(v_add); // add month-wise
 
         var HLP = H.map(function(h) {return h / data.TFA;}); // over H, divide by TFA
         var G = values(data.gains_W)     // over each type of gains
-                .reduce(pointwise(add)); // add month-wise
+                .reduce(v_add); // add month-wise
 
         var Te = datasets.table_u1[data.region].map(function(Te_m) {
             return Te_m - (0.3 * data.altitude / 50);
@@ -618,63 +625,47 @@ var calc = function()
                      {space_heating:{use_utilfactor_forgains: true}});
         
         // These might all need to be defined within the space_heating namespace to be accessible in the ui.
-        var delta_T = [];
-        var total_losses = [];
-        var total_gains = [];
+        // DeltaT (Difference between Internal and External temperature)
+        var delta_T = v_sub(data.internal_temperature, data.external_temperature);
+        // H values by month
+        var H = values(data.losses_WK).reduce(v_add);
+        // heat losses = H * deltaT
+        var total_losses = v_mul(H, delta_T);
+        // gains by month
+        var total_gains = values(data.gains_W).reduce(v_add);
         var utilisation_factor = [];
-        var useful_gains = [];
-
-        var heat_demand = [];
-        var cooling_demand = [];
-        var heat_demand_kwh = [];
-        var cooling_demand_kwh = [];
-
-        var annual_heating_demand = 0;
-        var annual_cooling_demand = 0;
 
         for (var m=0; m<12; m++)
         {
-            // DeltaT (Difference between Internal and External temperature)
-            delta_T[m] = data.internal_temperature[m] - data.external_temperature[m];
-
-            // Monthly heat loss totals
-            var H = 0; // heat transfer coefficient
-            for (z in data.losses_WK) H += data.losses_WK[z][m];
-            total_losses[m] = H * delta_T[m];
-
-            // Monthly heat gains total
-            var G = 0;
-            for (z in data.gains_W) G += data.gains_W[z][m];
-            total_gains[m] = G;
-
             // Calculate overall utilisation factor for gains
-            var HLP = H / data.TFA;
+            var HLP = H[m] / data.TFA;
             utilisation_factor[m] = calc_utilisation_factor(data.TMP,HLP,H,data.internal_temperature[m],data.external_temperature[m],total_gains[m]);
-
-            // Apply utilisation factor if chosen:
-            if (data.space_heating.use_utilfactor_forgains) {
-                useful_gains[m] = total_gains[m] * utilisation_factor[m];
-            } else {
-                useful_gains[m] = total_gains[m];
-            }
-
-            // Space heating demand is simply the difference between the heat loss rate
-            // for our target internal temperature and the gains.
-            heat_demand[m] = total_losses[m] - useful_gains[m];
-            cooling_demand[m] = 0;
-
-            // Case of cooling:
-            if (heat_demand[m]<0) {
-                cooling_demand[m] = useful_gains[m] - total_losses[m];
-                heat_demand[m] = 0;
-            }
-
-            heat_demand_kwh[m] = 0.024 * heat_demand[m] * datasets.table_1a[m];
-            cooling_demand_kwh[m] = 0.024 * cooling_demand[m] * datasets.table_1a[m];
-
-            annual_heating_demand += heat_demand_kwh[m];
-            annual_cooling_demand += cooling_demand_kwh[m];
         }
+
+        // either multiply utilisation factors by gainss, or just use gainss
+        var useful_gains =
+                data.space_heating.use_utilfactor_forgains ?
+                  v_mul(utilisation_factor, total_gains) : total_gains;
+
+        // heat demand is losses net gains.
+        var heat_demand = v_sub(total_losses, useful_gains);
+
+        // cooling demand is negative heat demand
+        var cooling_demand = heat_demand.map(function(demand) {
+            if (demand < 0) return -demand;
+            else return 0;
+        });
+        
+        // eliminate negative heat demands
+        heat_demand = heat_demand.map(function(demand) {return Math.max(demand, 0);});
+
+        // convert to kWh: watts * days -> kWh / year
+        var heat_demand_kwh =    v_mul(heat_demand,    datasets.table_1a).map(watts_to_kwh);
+        var cooling_demand_kwh = v_mul(cooling_demand, datasets.table_1a).map(watts_to_kwh);
+
+        // sum over months
+        var annual_heating_demand = heat_demand_kwh.reduce(add);
+        var annual_cooling_demand = cooling_demand_kwh.reduce(add);
 
         data.space_heating.delta_T = delta_T;
         data.space_heating.total_losses = total_losses;
