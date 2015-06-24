@@ -34,7 +34,10 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
 
         <div id="login-form"  class="well" style="text-align:left">
         
+        
         <h2>Login</h2>
+        <p><b>My Home Energy Planner</b></p>
+        
             <p>
                 <label><?php echo _('Username:'); ?>
                     <input type="text" tabindex="1" name="username"  />
