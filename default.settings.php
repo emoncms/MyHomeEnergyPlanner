@@ -60,7 +60,7 @@
 
     // Default controller and action if none are specified and user is logged in
     $default_controller_auth = "assessment";
-    $default_action_auth = "view";
+    $default_action_auth = "list";
     
     // Public profile functionality
     $public_profile_enabled = TRUE;
