@@ -18,6 +18,9 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/user/user.js"></script>
 
+<br><br>
+<div style="background-image:url('background.jpg'); background-repeat: no-repeat; width:100%; background-size:1200px; background-position: center; ">
+
 <div style="margin: 0px auto; max-width:392px; padding:10px;">
     <div style="max-width:392px; margin-right:20px; padding-top:45px; padding-bottom:15px; color: #888;">
         <!--
@@ -26,8 +29,12 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
     </div>
 
     <div class="login-container">
+    
+        
 
         <div id="login-form"  class="well" style="text-align:left">
+        
+        <h2>Login</h2>
             <p>
                 <label><?php echo _('Username:'); ?>
                     <input type="text" tabindex="1" name="username"  />
@@ -92,6 +99,9 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
         </div>
 
     </div>
+</div>
+
+<br><br>
 </div>
 
 <script>
