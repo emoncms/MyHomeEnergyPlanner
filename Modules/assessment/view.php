@@ -7,17 +7,17 @@
     global $reports;
 ?>        
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-0.0.1.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-0.0.2.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-0.0.2.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-0.0.1.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-0.0.2.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
