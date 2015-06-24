@@ -704,41 +704,40 @@ var calc = function()
 
         data.fuel_totals = {};
 
-        for (var z in data.energy_requirements)
-        {
-            var quantity = data.energy_requirements[z].quantity;
+        Object.keys(data.energy_requirements)
+            .forEach(function(requirement_type) {
+                var requirement = data.energy_requirements[requirement_type];
+                var quantity = requirement.quantity;
+                var systems = data.energy_systems[requirement_type] = (data.energy_systems[requirement_type] || []);
 
-            if (data.energy_systems[z]==undefined) data.energy_systems[z] = [];
+                systems.forEach(function(the_system) {
+                    the_system.demand = quantity * the_system.fraction;
+                    the_system.fuelinput = the_system.demand / the_system.efficiency;
+                    var fuel = datasets.energysystems[the_system.system].fuel;
 
-            for (var x in data.energy_systems[z])
-            {
-                data.energy_systems[z][x].demand = quantity * data.energy_systems[z][x].fraction;
-
-                data.energy_systems[z][x].fuelinput = data.energy_systems[z][x].demand / data.energy_systems[z][x].efficiency;
-
-                var system = data.energy_systems[z][x].system;
-                var fuel = datasets.energysystems[system].fuel;
-                if (data.fuel_totals[fuel]==undefined) data.fuel_totals[fuel] = {name: fuel, quantity:0};
-                data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
-            }
-        }
+                    var totals = data.fuel_totals = (data.fuel_totals[fuel] || {name:fuel, quantity:0});
+                    totals.quantity += the_system.fuelinput;
+                });
+            });
 
         data.energy_use = 0;
         data.annualco2 = 0;
-        for (z in data.fuel_totals)
-        {
-            data.fuel_totals[z].annualcost = data.fuel_totals[z].quantity * data.fuels[z].fuelcost + data.fuels[z].standingcharge*365;
-            data.fuel_totals[z].fuelcost = data.fuels[z].fuelcost;
-            data.fuel_totals[z].primaryenergy = data.fuel_totals[z].quantity * data.fuels[z].primaryenergyfactor;
-            data.fuel_totals[z].annualco2 = data.fuel_totals[z].quantity * data.fuels[z].co2factor;
 
-            data.total_cost += data.fuel_totals[z].annualcost;
+        Object.keys(data.fuel_totals)
+            .forEach(function(fuel_type) {
+                var total = data.fuel_totals[fuel_type];
+                var fuel = data.fuels[fuel_type];
 
-            data.energy_use += data.fuel_totals[z].quantity;
-            data.primary_energy_use += data.fuel_totals[z].primaryenergy;
-            data.annualco2 += data.fuel_totals[z].annualco2;
-        }
+                total.annualcost = total.quantity * fuel.fuelcost + fuel.standingcharge * 365;
+                total.fuelcost = fuel.fuelcost;
+                total.primaryenergy = total.quantity * fuel.primaryenergyfactor;
+                total.annualco2 = total.quantity * fuel.co2factor;
 
+                data.total_cost += total.annualcost;
+                data.energy_use += total.quantity;
+                data.annualco2  += total.annualco2;
+            });
+        
         data.net_cost = data.total_cost - data.total_income;
     };
 
