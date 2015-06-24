@@ -19,7 +19,7 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
 <script type="text/javascript" src="<?php echo $path; ?>Modules/user/user.js"></script>
 
 <br><br>
-<div style="background-image:url('background.jpg'); background-repeat: no-repeat; width:100%; background-size:1200px; background-position: center; ">
+<div style="background-image:url('<?php echo $path; ?>background.jpg'); background-repeat: no-repeat; width:100%; background-size:1200px; background-position: center; ">
 
 <div style="margin: 0px auto; max-width:392px; padding:10px;">
     <div style="max-width:392px; margin-right:20px; padding-top:45px; padding-bottom:15px; color: #888;">
