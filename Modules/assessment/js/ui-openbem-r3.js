@@ -5,8 +5,9 @@ function draw_openbem_graphics()
     var windowswk = data.fabric.total_window_WK;
     var wallswk = data.fabric.total_wall_WK;
     var roofwk = data.fabric.total_roof_WK;
+    var thermalbridgewk = data.fabric.thermal_bridging_heat_loss;
     
-    var totalwk = floorwk + ventilationwk + windowswk + wallswk + roofwk;
+    var totalwk = floorwk + ventilationwk + windowswk + wallswk + roofwk + thermalbridgewk;
     
     var uscale = 30;
 
