@@ -1,71 +1,58 @@
-$("#openbem").on("click",'#add-element', function() {
-    data.fabric.elements.push({type:'wall', name: 'Element', l:0, h:0, area: 0, uvalue: 0, wk: 0});
-    var newelementid = data.fabric.elements.length - 1;
-    add_element(newelementid);
-    update();
-    
-    
-    for (z in data.fabric.elements)
-    {
-        if (data.fabric.elements[z].type=="window")
-        {
-            $("#windows [key='data.fabric.elements."+z+".subtractfrom']").append("<option value='"+newelementid+"'>"+data.fabric.elements[newelementid].name+"</option>");
+$("#openbem").on("click",'.add-element-from-lib', function() {
+    var tag = $(this).attr("tags");
+    var out = "";
+    for (z in element_library){
+        if (element_library[z].tags.indexOf(tag)!=-1) {
+            out += "<tr class='librow add-element' lib='"+z+"' type='"+tag+"'>";
+            out += "<td>"+z+"</td>";
+            out += "<td>"+element_library[z].name+"</td>";
+            out += "<td>"+element_library[z].source+"</td>";
+            out += "<td>"+element_library[z].uvalue+" W/K.m2</td>";
+            out += "<td>"+element_library[z].kvalue+" kJ/K.m2</td>";
+            out += "</tr>";
         }
     }
+    $("#element_library").html(out);
+    $('#myModal').modal('show');
 });
 
-$("#openbem").on("click",'#add-roof', function() {
-    data.fabric.elements.push({type:'roof', name: 'Element', l:0, h:0, area: 0, uvalue: 0, wk: 0});
+$("#openbem").on("click",'.add-element', function() {
+    
+    var lib = $(this).attr("lib");
+    var type = $(this).attr("type").toLowerCase();
+    
+    // Create default element
+    var element = {type:type,name:type,lib:lib,l:0,h:0,area:0,uvalue:0,kvalue:0,wk:0};
+    
+    // If library is defined replace defaults with parameters from library
+    if (lib!=undefined) {
+        for (z in element_library[lib]) element[z] = element_library[lib][z];
+    }
+    
+    if (type=="window") {
+        element.orientation = 3;
+        element.overshading = 2;
+    }
+    
+    data.fabric.elements.push(element);
+    
     var newelementid = data.fabric.elements.length - 1;
-    add_roof(newelementid);
+    if (type=="wall") add_element("#elements",newelementid);
+    if (type=="roof") add_element("#roofs",newelementid);
+    if (type=="floor") add_element("#floors",newelementid);
+    if (type=="window") add_window(newelementid);
+    
     update();
     
-    
-    for (z in data.fabric.elements)
-    {
-        if (data.fabric.elements[z].type=="window")
-        {
-            $("#windows [key='data.fabric.elements."+z+".subtractfrom']").append("<option value='"+newelementid+"'>"+data.fabric.elements[newelementid].name+"</option>");
+    if (type!="window" && type!="floor") {
+        for (z in data.fabric.elements) {
+            if (data.fabric.elements[z].type=="window") {
+                $("#windows [key='data.fabric.elements."+z+".subtractfrom']").append("<option value='"+newelementid+"'>"+data.fabric.elements[newelementid].name+"</option>");
+            }
         }
     }
-});
-
-$("#openbem").on("click",'#add-floor', function() {
-    data.fabric.elements.push({type:'floor', name: 'Element', l:0, h:0, area: 0, uvalue: 0, wk: 0});
-    var newelementid = data.fabric.elements.length - 1;
-    add_floor(newelementid);
-    update();
     
-    
-    for (z in data.fabric.elements)
-    {
-        if (data.fabric.elements[z].type=="window")
-        {
-            $("#windows [key='data.fabric.elements."+z+".subtractfrom']").append("<option value='"+newelementid+"'>"+data.fabric.elements[newelementid].name+"</option>");
-        }
-    }
-});
-
-$("#openbem").on("click",'#add-window', function(){
-    var size = Object.size(data.fabric.elements)+1;
-    var name = "Window";
-    data.fabric.elements.push({
-        type:'window', 
-        name: name,
-        description: "",
-        l:0,
-        h:0,
-        area: 0,
-        uvalue: 0,
-        wk: 0,
-        orientation: 3,
-        overshading: 2,
-        g: 0.76,
-        gL: 0.8,
-        ff: 0.7
-    });
-    add_window(size-1);
-    update();
+    $('#myModal').modal('hide');
 });
 
 $("#openbem").on("click",'.delete-element', function(){
@@ -76,71 +63,59 @@ $("#openbem").on("click",'.delete-element', function(){
     update();
 });
 
-$("#openbem").on("click",'.delete-floor', function(){
+
+$("#openbem").on("click",'.apply-measure-list', function() {
     var row = $(this).attr('row');
-    $(this).closest('tr').remove();
-    data.fabric.elements.splice(row,1);
-    elements_initUI();
-    update();
+    var element = data.fabric.elements[row];
+    
+    var out = "";
+    for (z in measures_library){
+        if (measures_library[z].criteria.indexOf(element.lib)!=-1) {
+            out += "<tr class='librow apply-measure' lib='"+z+"' row='"+row+"'>";
+            out += "<td>"+z+"</td>";
+            out += "<td>"+measures_library[z].name+"</td>";
+            out += "<td>"+measures_library[z].source+"</td>";
+            out += "<td>"+measures_library[z].uvalue+" W/K.m2</td>";
+            out += "<td>"+measures_library[z].kvalue+" kJ/K.m2</td>";
+            out += "</tr>";
+        }
+    }
+    $("#measures_library").html(out);
+    $('#myModal-measures').modal('show');
 });
 
-$("#openbem").on("click",'.delete-roof', function(){
+$("#openbem").on("click",'.apply-measure', function() {
+    var lib = $(this).attr('lib');
     var row = $(this).attr('row');
-    $(this).closest('tr').remove();
-    data.fabric.elements.splice(row,1);
-    elements_initUI();
+    
+    if (lib!=undefined) {
+        for (z in measures_library[lib]) data.fabric.elements[row][z] = measures_library[lib][z];
+        data.fabric.elements[row].lib = lib;
+    }
+    
     update();
+    
+    $('#myModal-measures').modal('hide');
 });
 
-function add_element(z)
-{
-    $("#elements").append($("#element-template").html());
-    $("#elements [key='data.fabric.elements.template.type']").attr('key','data.fabric.elements.'+z+'.type');
-    $("#elements [key='data.fabric.elements.template.name']").attr('key','data.fabric.elements.'+z+'.name');
-    $("#elements [key='data.fabric.elements.template.l']").attr('key','data.fabric.elements.'+z+'.l');
-    $("#elements [key='data.fabric.elements.template.h']").attr('key','data.fabric.elements.'+z+'.h');
-    $("#elements [key='data.fabric.elements.template.area']").attr('key','data.fabric.elements.'+z+'.area');
-    $("#elements [key='data.fabric.elements.template.windowarea']").attr('key','data.fabric.elements.'+z+'.windowarea');
-    $("#elements [key='data.fabric.elements.template.netarea']").attr('key','data.fabric.elements.'+z+'.netarea');
-    $("#elements [key='data.fabric.elements.template.uvalue']").attr('key','data.fabric.elements.'+z+'.uvalue');
-    $("#elements [key='data.fabric.elements.template.kvalue']").attr('key','data.fabric.elements.'+z+'.kvalue');
-    $("#elements [key='data.fabric.elements.template.wk']").attr('key','data.fabric.elements.'+z+'.wk');
-    
-    $("#elements [row='template']").attr('row',z);  
-}
 
-function add_floor(z)
-{
-    $("#floors").append($("#floor-template").html());
-    $("#floors [key='data.fabric.elements.template.type']").attr('key','data.fabric.elements.'+z+'.type');
-    $("#floors [key='data.fabric.elements.template.name']").attr('key','data.fabric.elements.'+z+'.name');
-    $("#floors [key='data.fabric.elements.template.l']").attr('key','data.fabric.elements.'+z+'.l');
-    $("#floors [key='data.fabric.elements.template.h']").attr('key','data.fabric.elements.'+z+'.h');
-    $("#floors [key='data.fabric.elements.template.area']").attr('key','data.fabric.elements.'+z+'.area');
-    $("#floors [key='data.fabric.elements.template.windowarea']").attr('key','data.fabric.elements.'+z+'.windowarea');
-    $("#floors [key='data.fabric.elements.template.netarea']").attr('key','data.fabric.elements.'+z+'.netarea');
-    $("#floors [key='data.fabric.elements.template.uvalue']").attr('key','data.fabric.elements.'+z+'.uvalue');
-    $("#floors [key='data.fabric.elements.template.kvalue']").attr('key','data.fabric.elements.'+z+'.kvalue');
-    $("#floors [key='data.fabric.elements.template.wk']").attr('key','data.fabric.elements.'+z+'.wk');
-    
-    $("#floors [row='template']").attr('row',z);  
-}
 
-function add_roof(z)
+function add_element(id,z)
 {
-    $("#roofs").append($("#roof-template").html());
-    $("#roofs [key='data.fabric.elements.template.type']").attr('key','data.fabric.elements.'+z+'.type');
-    $("#roofs [key='data.fabric.elements.template.name']").attr('key','data.fabric.elements.'+z+'.name');
-    $("#roofs [key='data.fabric.elements.template.l']").attr('key','data.fabric.elements.'+z+'.l');
-    $("#roofs [key='data.fabric.elements.template.h']").attr('key','data.fabric.elements.'+z+'.h');
-    $("#roofs [key='data.fabric.elements.template.area']").attr('key','data.fabric.elements.'+z+'.area');
-    $("#roofs [key='data.fabric.elements.template.windowarea']").attr('key','data.fabric.elements.'+z+'.windowarea');
-    $("#roofs [key='data.fabric.elements.template.netarea']").attr('key','data.fabric.elements.'+z+'.netarea');
-    $("#roofs [key='data.fabric.elements.template.uvalue']").attr('key','data.fabric.elements.'+z+'.uvalue');
-    $("#roofs [key='data.fabric.elements.template.kvalue']").attr('key','data.fabric.elements.'+z+'.kvalue');
-    $("#roofs [key='data.fabric.elements.template.wk']").attr('key','data.fabric.elements.'+z+'.wk');
+    $(id).append($("#element-template").html());
+    $(id+" [key='data.fabric.elements.template.type']").attr('key','data.fabric.elements.'+z+'.type');
+    $(id+" [key='data.fabric.elements.template.name']").attr('key','data.fabric.elements.'+z+'.name');
+    $(id+" [key='data.fabric.elements.template.lib']").attr('key','data.fabric.elements.'+z+'.lib');
+    $(id+" [key='data.fabric.elements.template.l']").attr('key','data.fabric.elements.'+z+'.l');
+    $(id+" [key='data.fabric.elements.template.h']").attr('key','data.fabric.elements.'+z+'.h');
+    $(id+" [key='data.fabric.elements.template.area']").attr('key','data.fabric.elements.'+z+'.area');
+    $(id+" [key='data.fabric.elements.template.windowarea']").attr('key','data.fabric.elements.'+z+'.windowarea');
+    $(id+" [key='data.fabric.elements.template.netarea']").attr('key','data.fabric.elements.'+z+'.netarea');
+    $(id+" [key='data.fabric.elements.template.uvalue']").attr('key','data.fabric.elements.'+z+'.uvalue');
+    $(id+" [key='data.fabric.elements.template.kvalue']").attr('key','data.fabric.elements.'+z+'.kvalue');
+    $(id+" [key='data.fabric.elements.template.wk']").attr('key','data.fabric.elements.'+z+'.wk');
     
-    $("#roofs [row='template']").attr('row',z);  
+    $(id+" [row='template']").attr('row',z);  
 }
 
 function add_window(z)
@@ -167,7 +142,7 @@ function add_window(z)
     
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
-        if (data.fabric.elements[i].type!='window') subtractfromhtml += "<option value='"+i+"'>"+data.fabric.elements[i].name+"</option>";
+        if (data.fabric.elements[i].type!='window' && data.fabric.elements[i].type!='floor') subtractfromhtml += "<option value='"+i+"'>"+data.fabric.elements[i].name+"</option>";
     }
     $("#windows [key='data.fabric.elements."+z+".subtractfrom']").html(subtractfromhtml);
 }
@@ -178,14 +153,15 @@ function elements_initUI()
     $("#roofs").html("");
     $("#floors").html("");
     $("#windows").html("");
+    
     // Initial addition of floors
     for (z in data.fabric.elements) {
         if (data.fabric.elements[z].type=='wall') {
-            add_element(z);
+            add_element("#elements",z);
         } else if (data.fabric.elements[z].type=='floor') {
-            add_floor(z);
+            add_element("#floors",z);
         } else if (data.fabric.elements[z].type=='roof') {
-            add_roof(z);
+            add_element("#roofs",z);
         } else if (data.fabric.elements[z].type=='window') {
             add_window(z);
         }

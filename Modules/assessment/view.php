@@ -11,6 +11,7 @@
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-0.0.2.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-0.0.2.js"></script>
 
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-0.0.1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-0.0.2.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph.js"></script>
@@ -58,7 +59,7 @@
                         <?php } ?>
                         <div class="scenario-nav"><a href="#template/export">Import/Export</a></div>
                         <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
-                        
+                        <div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>
                         
                         
                     </div>
@@ -96,6 +97,8 @@
 
 
 <script>
+
+    var changelog = "";
 
     $("#openbem").css("background-color","#eee");
 
@@ -185,10 +188,13 @@
         if (input_type=='checkbox') val = $(this)[0].checked;
         
         if (!isNaN(val) && val!="") val *= 1;
-        varset(key,val);
+        var lastval = varset(key,val);
         
         $("#openbem").trigger("onKeyChange",{key:key,value:val});
         update();
+        
+        console.log(key+ " changed from "+lastval+" to "+val);
+        changelog += key+ " changed from "+lastval+" to "+val+"<br>";
     });
     
     $("#openbem").on('click',".scenario-block", function() {

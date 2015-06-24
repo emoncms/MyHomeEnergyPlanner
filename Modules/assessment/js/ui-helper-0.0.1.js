@@ -26,30 +26,38 @@ function load_view(eid,view)
 
 function varset(key,value)
 {
+    var lastval = "";
     var p = key.split('.');
 
     switch (p.length) {
         case 0:
             break;
         case 1:
+            lastval = window[p[0]];
             window[p[0]] = value;
             break;
         case 2:
+            lastval = window[p[0]][p[1]];
             window[p[0]][p[1]] = value;
             break;
         case 3:
+            lastval = window[p[0]][p[1]][p[2]];
             window[p[0]][p[1]][p[2]] = value;
             break;
         case 4:
+            lastval = window[p[0]][p[1]][p[2]][p[3]];
             window[p[0]][p[1]][p[2]][p[3]] = value;
             break;
         case 5:
+            lastval = window[p[0]][p[1]][p[2]][p[3]][p[4]];
             window[p[0]][p[1]][p[2]][p[3]][p[4]] = value;
             break;
         case 6:
+            lastval = window[p[0]][p[1]][p[2]][p[3]][p[4]][p[5]];
             window[p[0]][p[1]][p[2]][p[3]][p[4]][p[5]] = value;
             break;
     }
+    return lastval;
 }
 
 function InitUI()

@@ -188,6 +188,7 @@ var openbem = {
             inputdata.fabric.elements[z] = {
                 type: data.fabric.elements[z].type,
                 name: data.fabric.elements[z].name,
+                lib: data.fabric.elements[z].lib,
                 subtractfrom: data.fabric.elements[z].subtractfrom,
                 l: data.fabric.elements[z].l,
                 h: data.fabric.elements[z].h,
