@@ -3,7 +3,7 @@
   $d = $path."Modules/assessment/";
 ?>
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-0.0.1.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r3.js"></script>
 
 <div id="left-pane">
 
