@@ -79,7 +79,7 @@ function draw_openbem_graphics()
             "A": 110
         }
     };
-    targetbar("saprating", options);
+    //targetbar("saprating", options);
 }
 
   function draw_rating(ctx)
