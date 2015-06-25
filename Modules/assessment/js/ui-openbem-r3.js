@@ -66,20 +66,15 @@ function draw_openbem_graphics()
     targetbar("co2", options);
     // ---------------------------------------------------------------------------------
     var options = {
-        name: "SAP Rating",
-        value: Math.round(data.SAP.rating),
-        units: "",
+        name: "Per person energy use",
+        value: data.kwhdpp.toFixed(1),
+        units: "kWh/day",
         targets: {
-            "G": 0,
-            "F": 25,
-            "E": 47,
-            "D": 66,
-            "C": 83,
-            "B": 97,
-            "A": 110
+            "70% heating saving": 8.6,
+            "UK Average": 19.6
         }
     };
-    //targetbar("saprating", options);
+    targetbar("perperson", options);
 }
 
   function draw_rating(ctx)
