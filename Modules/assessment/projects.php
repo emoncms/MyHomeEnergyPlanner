@@ -55,6 +55,20 @@
     </div>
 </div>
 
+<div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel"><?php echo _('WARNING deleting a project is permanent'); ?></h3>
+    </div>
+    <div class="modal-body">
+        <p><?php echo _('Are you sure you want to delete this project?'); ?></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo _('Cancel'); ?></button>
+        <button id="confirmdelete" class="btn btn-primary"><?php echo _('Delete permanently'); ?></button>
+    </div>
+</div>
+
 <script>
 
 var path = "<?php echo $path; ?>";
@@ -99,11 +113,24 @@ $("#create-new-step2").click(function(){
 $("#projects").on('click','.delete-project', function() {
     var projectid = $(this).attr('projectid');
     var z = $(this).attr('z');
+    
+    $('#myModal').modal('show');
+    $('#myModal').attr('the_id',projectid);
+    $('#myModal').attr('the_row',z);
+});
+
+$("#confirmdelete").click(function()
+{
+    var projectid = $('#myModal').attr('the_id');
+    var z = $('#myModal').attr('the_row');
+
     if (openbem.delete(projectid))
     {
         projects.splice(z,1);
         draw_projects();
     }
+    
+    $('#myModal').modal('hide');
 });
 
 $("#projects").on('change','.project-status', function() {
@@ -117,7 +144,7 @@ $("#projects").on('change','.project-status', function() {
 
 function draw_projects()
 {
-    var status_options = ["Complete","In progress","Demo"];
+    var status_options = ["Complete","In progress","Test"];
     
     var out = "";
     for (s in status_options) {
@@ -133,7 +160,7 @@ function draw_projects()
                 var color = "";
                 if (projects[z].status == "Complete") color = " alert-success";
                 if (projects[z].status == "In progress") color = " alert-info";
-                if (projects[z].status == "Demo") color = " alert-error";
+                if (projects[z].status == "Test") color = " alert-error";
 
                 out += "<td><select class='project-status"+color+"' z="+z+" projectid="+projects[z].id+">";
                 for (o in status_options) {
