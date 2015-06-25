@@ -69,14 +69,14 @@ $("#openbem").on("click",'.apply-measure-list', function() {
     var element = data.fabric.elements[row];
     
     var out = "";
-    for (z in measures_library){
-        if (measures_library[z].criteria.indexOf(element.lib)!=-1) {
+    for (z in element_library){
+        if (element_library[z].criteria.indexOf(element.lib)!=-1) {
             out += "<tr class='librow apply-measure' lib='"+z+"' row='"+row+"'>";
             out += "<td>"+z+"</td>";
-            out += "<td>"+measures_library[z].name+"</td>";
-            out += "<td>"+measures_library[z].source+"</td>";
-            out += "<td>"+measures_library[z].uvalue+" W/K.m2</td>";
-            out += "<td>"+measures_library[z].kvalue+" kJ/K.m2</td>";
+            out += "<td>"+element_library[z].name+"</td>";
+            out += "<td>"+element_library[z].source+"</td>";
+            out += "<td>"+element_library[z].uvalue+" W/K.m2</td>";
+            out += "<td>"+element_library[z].kvalue+" kJ/K.m2</td>";
             out += "</tr>";
         }
     }
@@ -89,7 +89,7 @@ $("#openbem").on("click",'.apply-measure', function() {
     var row = $(this).attr('row');
     
     if (lib!=undefined) {
-        for (z in measures_library[lib]) data.fabric.elements[row][z] = measures_library[lib][z];
+        for (z in element_library[lib]) data.fabric.elements[row][z] = element_library[lib][z];
         data.fabric.elements[row].lib = lib;
     }
     

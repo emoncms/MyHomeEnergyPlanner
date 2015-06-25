@@ -11,7 +11,7 @@
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r4.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
