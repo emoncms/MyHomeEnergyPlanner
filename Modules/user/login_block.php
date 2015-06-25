@@ -32,7 +32,7 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
     
         
 
-        <div id="login-form"  class="well" style="text-align:left">
+        <div id="login-form"  class="well" style="text-align:left; background-color:rgba(240,240,240,0.9)">
         
         
         <h2>Login</h2>

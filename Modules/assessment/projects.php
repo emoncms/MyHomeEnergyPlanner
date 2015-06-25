@@ -43,8 +43,8 @@
           <th>Author</th>
           <th>Status</th>
           <th>Modified</th>
-          <th></th>
-          <th></th>
+          <th style="width:40px"></th>
+          <th style="width:30px"></th>
         </tr>
         
         <tbody id="projects"></tbody>
@@ -106,32 +106,61 @@ $("#projects").on('click','.delete-project', function() {
     }
 });
 
+$("#projects").on('change','.project-status', function() {
+    var projectid = $(this).attr('projectid');
+    var z = $(this).attr('z');
+    var status = $(this).val();
+    openbem.set_status(projectid,status);
+    projects[z].status = status;
+    draw_projects();
+});
+
 function draw_projects()
 {
+    var status_options = ["Complete","In progress","Demo"];
+    
     var out = "";
-    for (z in projects)
-    {
-      out += "<tr>";
-      out += "<td>"+projects[z].name+"</td>";
-      out += "<td>"+projects[z].description+"</td>";
-      out += "<td>"+projects[z].author+"</td>";
-      out += "<td><select><option>In Progress</option></select></td>";
-      
-      var t = new Date();
-      var d = new Date(projects[z].mdate*1000);
-      
-      if (t.getYear()==d.getYear()) {
-        var mins = d.getMinutes();
-        if (mins<10) mins = "0"+mins;
-        out += "<td>"+d.getHours()+":"+mins+" "+d.getDate()+" "+months[d.getMonth()]+"</td>";
-      } else {
-        out += "<td>"+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()+"</td>";
-      }
-      
-     
-      out += '<td><a href="'+path+'assessment/view?id='+projects[z].id+'"><span class="label label-info">Open <i class="icon-folder-open icon-white"></i></span></a></td>';
-      out += '<td><span class="delete-project" projectid='+projects[z].id+' z='+z+' style="cursor:pointer">Delete</span></td>';
-      out += "</tr>";
+    for (s in status_options) {
+        out += "<tr><th>"+status_options[s]+"</th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
+        for (z in projects)
+        {
+            if (status_options[s] == projects[z].status) {
+                out += "<tr>";
+                out += "<td>"+projects[z].name+"</td>";
+                out += "<td style='font-style:italic; color:#888'>"+projects[z].description+"</td>";
+                out += "<td>"+projects[z].author+"</td>";
+
+                var color = "";
+                if (projects[z].status == "Complete") color = " alert-success";
+                if (projects[z].status == "In progress") color = " alert-info";
+                if (projects[z].status == "Demo") color = " alert-error";
+
+                out += "<td><select class='project-status"+color+"' z="+z+" projectid="+projects[z].id+">";
+                for (o in status_options) {
+                    var selected = "";
+                    if (projects[z].status == status_options[o]) 
+                        selected = " selected"
+                    out += "<option "+selected+">"+status_options[o]+"</option>";
+                }
+                out += "</select></td>";
+
+                var t = new Date();
+                var d = new Date(projects[z].mdate*1000);
+
+                if (t.getYear()==d.getYear()) {
+                var mins = d.getMinutes();
+                if (mins<10) mins = "0"+mins;
+                    out += "<td>"+d.getHours()+":"+mins+" "+d.getDate()+" "+months[d.getMonth()]+"</td>";
+                } else {
+                    out += "<td>"+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()+"</td>";
+                }
+
+
+                out += '<td><a href="'+path+'assessment/view?id='+projects[z].id+'"><span class="label label-info">Open <i class="icon-folder-open icon-white"></i></span></a></td>';
+                out += '<td><span class="delete-project" projectid='+projects[z].id+' z='+z+' style="cursor:pointer"><span class="label label-important"><i class="icon-trash icon-white"></i></span></td>';
+                out += "</tr>";
+            }
+        }
     }
 
     $("#projects").html(out);

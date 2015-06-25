@@ -44,6 +44,13 @@ var openbem = {
         $.ajax({ type: 'GET', url: path+"assessment/delete.json", data: "id="+id, async: false, success: function(data){result=data;} });
         return result;
     },
+    
+    'set_status':function(id,status)
+    {
+        var result = 0;
+        $.ajax({ type: 'GET', url: path+"assessment/setstatus.json", data: "id="+id+"&status="+status, async: false, success: function(data){result=data;} });
+        return result;
+    },
 
     /*
     'getprojectdetails':function(project_id)

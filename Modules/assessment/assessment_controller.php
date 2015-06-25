@@ -31,6 +31,13 @@ function assessment_controller()
 
         if ($route->action == 'get' && $session['write']) $result = $assessment->get($session['userid'],get('id'));
         
+        if ($route->action == 'setstatus' && $session['write']) {
+            if (isset($_GET['status'])) {
+                $status = $_GET['status'];
+                $result = $assessment->set_status($session['userid'],get('id'),$status);
+            }
+        }
+        
         if ($route->action == 'setdata' && $session['write'])
         {
             $data = null;

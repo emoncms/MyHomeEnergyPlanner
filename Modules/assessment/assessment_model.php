@@ -102,6 +102,22 @@ class Assessment
         return $row;
     }
     
+    public function set_status($userid,$id,$status)
+    {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        $status = preg_replace('/[^\w\s]/','',$status);
+        
+        $limit_to_user = ""; 
+        if (!$this->admin($userid)) $limit_to_user = " AND `userid`='$userid'";
+        print $id;
+        $stmt = $this->mysqli->prepare("UPDATE ".$this->tablename." SET `status` = ? WHERE `id` = ?".$limit_to_user);
+        $stmt->bind_param("si", $status, $id);
+        $stmt->execute();
+        
+        if ($this->mysqli->affected_rows==1) return true; else return false;
+    }
+    
     public function set_data($userid,$id,$data)
     {
         $id = (int) $id;
