@@ -86,7 +86,10 @@ var calc = function()
     var v_add = pointwise(add);
     var v_sub = pointwise(sub);
     var v_mul = pointwise(mul);
-    var watts_to_kwh = function(watts) {return watts * 0.024;};
+    /* given a number of watt-days, produce a number of kWh */
+    var watt_days_to_kwh = function(watts) {return watts * 0.024;};
+    /* given a constant wattage, give kWh/year */
+    var watts_to_kwh_yr = function(watts) {return watts * 0.024 * 365;};
     
     var run = function(data)
     {
@@ -335,7 +338,8 @@ var calc = function()
 
         data.fabric.total_heat_loss_WK += data.fabric.thermal_bridging_heat_loss;
 
-        data.fabric.annual_solar_gain_kwh = data.fabric.annual_solar_gain * 0.024 * 365;
+        // QUESTION: TODO: are the units correct here?
+        data.fabric.annual_solar_gain_kwh = watts_to_kwh_yr(data.fabric.annual_solar_gain);
         data.TMP = data.fabric.total_thermal_capacity / data.TFA;
 
         var monthly_fabric_heat_loss = [];
@@ -660,8 +664,8 @@ var calc = function()
         heat_demand = heat_demand.map(function(demand) {return Math.max(demand, 0);});
 
         // convert to kWh: watts * days -> kWh / year
-        var heat_demand_kwh =    v_mul(heat_demand,    datasets.table_1a).map(watts_to_kwh);
-        var cooling_demand_kwh = v_mul(cooling_demand, datasets.table_1a).map(watts_to_kwh);
+        var heat_demand_kwh =    v_mul(heat_demand,    datasets.table_1a).map(watt_days_to_kwh);
+        var cooling_demand_kwh = v_mul(cooling_demand, datasets.table_1a).map(watt_days_to_kwh);
 
         // sum over months
         var annual_heating_demand = heat_demand_kwh.reduce(add);
