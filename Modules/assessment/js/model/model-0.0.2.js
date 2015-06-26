@@ -767,7 +767,7 @@ var calc = function()
         }
     };
 
-    
+    // Lighting appliances and cooking
     var LAC = function(data)
     {
         add_defaults(data,
@@ -776,35 +776,49 @@ var calc = function()
                             reduced_internal_heat_gains: false}});
         
         // average annual energy consumption for lighting if no low-energy lighting is used is:
-        data.LAC.EB = 59.73 * Math.pow((data.TFA * data.occupancy),0.4714);
+        var X = Math.pow((data.TFA * data.occupancy),0.4714);
+        data.LAC.EB = 59.73 * X;
 
+        var compute_gains = function(baseline, scale, shift, reduction) {
+            var energy = [];
+            var gains = [];
+
+            var sum = 0;
+            for (var m=0; m<12; m++) {
+                // TODO suggest making these unit conversions a bit clearer
+                var days_in_month = datasets.table_1a[m];
+                
+                energy[m] = baseline * (1.0 + (scale * Math.cos((2*Math.PI * (m - shift))/12.0))) * days_in_month / 365.0;
+                sum += energy[m];
+
+                gains[m] = energy[m] * 0.85 * 1000 / (24 * days_in_month) * reduction;
+
+                return {gains: gains, energy: energy, sum: sum};
+            }
+        };
+        
         if (data.LAC.L!=0)
         {
-            data.LAC.C1 = 1 - (0.50 * data.LAC.LLE / data.LAC.L);
-            data.LAC.C2 = 0;
-            if (data.GL<=0.095) {
-                data.LAC.C2 = 52.2 * Math.pow(data.GL,2) - 9.94 * data.GL + 1.433;
-            } else {
-                data.LAC.C2 = 0.96;
-            }
+            
+                data.LAC.C1 = 1 - (0.50 * data.LAC.LLE / data.LAC.L);
+                data.LAC.C2 = 0;
+                
+                if (data.GL<=0.095) {
+                    data.LAC.C2 = 52.2 * Math.pow(data.GL,2) - 9.94 * data.GL + 1.433;
+                } else {
+                    data.LAC.C2 = 0.96;
+                }
+                
+                data.LAC.EL = data.LAC.EB * data.LAC.C1 * data.LAC.C2;
 
-            data.LAC.EL = data.LAC.EB * data.LAC.C1 * data.LAC.C2;
-
-            var EL_monthly = [];
-            var GL_monthly = [];
-
-            var EL_sum = 0;
-            for (var m=0; m<12; m++) {
-                EL_monthly[m] = data.LAC.EL * (1.0 + (0.5 * Math.cos((2*Math.PI * (m - 0.2))/12.0))) * datasets.table_1a[m] / 365.0;
-                EL_sum += EL_monthly[m];
-
-                GL_monthly[m] = EL_monthly[m] * 0.85 * 1000 / (24 * datasets.table_1a[m]);
-                if (data.LAC.reduced_internal_heat_gains) GL_monthly[m] = 0.4 * EL_monthly[m];
-            }
-
+                var lighting_results = compute_gains(data,LAC.EL,
+                                                     0.5,
+                                                     0.2,
+                                                     data.LAC.reduced_internal_heat_gains ? 0.4 : 1.0);
             if (data.use_LAC) {
-                data.gains_W["Lighting"] = GL_monthly;
-                if (EL_sum>0) data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum};
+                data.gains_W["Lighting"] = lighting_results.gains;
+                if (lighting_results.sum>0) data.energy_requirements.lighting =
+                    {name: "Lighting", quantity: lighting_results.sum};
             }
         }
 
@@ -813,32 +827,24 @@ var calc = function()
          Electrical appliances
 
          */
-
-        // The initial value of the annual energy use in kWh for electrical appliances is
-        var EA_initial = 207.8 * Math.pow((data.TFA * data.occupancy),0.4714);
-
-        var EA_monthly = [];
-        var GA_monthly = [];
-        var EA = 0; // Re-calculated the annual total as the sum of the monthly values
-        for (var m=0; m<12; m++)
         {
-            // The appliances energy use in kWh in month m (January = 1 to December = 12) is
-            EA_monthly[m] = EA_initial * (1.0 + (0.157 * Math.cos((2*Math.PI * (m - 1.78))/12.0))) * datasets.table_1a[m] / 365.0;
-            EA += EA_monthly[m];
+            var EA_initial = 207.8 * X;
+            var appliance_results = compute_gains(EA_initial,
+                                                  0.157,
+                                                  1.78,
+                                                  data.LAC.reduced_internal_heat_gains ? 0.67 : 1.0);
 
-            GA_monthly[m] = EA_monthly[m] * 1000 / (24 * datasets.table_1a[m]);
-            if (data.LAC.reduced_internal_heat_gains) GA_monthly[m] = 0.67 * GA_monthly[m];
+            data.LAC.EA = appliance_results.sum;
+
+            if (data.use_LAC) {
+                data.gains_W["Appliances"] = appliance_results.gains;
+                if (appliance_results.sum >0) data.energy_requirements.appliances =
+                    {name: "Appliances", quantity: appliance_results.sum};
+            }
         }
-
-        // The annual CO2 emissions in kg/m2/year associated with electrical appliances is
-        var appliances_CO2 = (EA * 0.522 ) / data.TFA;
-
-        if (data.use_LAC) {
-            data.gains_W["Appliances"] = GA_monthly;
-            if (EA>0) data.energy_requirements.appliances = {name: "Appliances", quantity: EA};
-        }
-
-        data.LAC.EA = EA;
+        
+        // QUESTION: this variable was never used - is that intentional
+        // var appliances_CO2 = (EA * 0.522 ) / data.TFA;
 
         /*
 
@@ -847,18 +853,18 @@ var calc = function()
          */
 
         // Internal heat gains in watts from cooking
-        var GC = 35 + 7 * data.occupancy;
-
-        // When lower internal heat gains are assumed for the calculation
-        if (data.LAC.reduced_internal_heat_gains) GC = 23 + 5 * data.occupancy;
+        var GC = (data.LAC.reduced_internal_heat_gains) ?
+                (23 + 5 * data.occupancy) : // When lower internal heat gains are assumed for the calculation
+                (35 + 7 * data.occupancy);  // standard gains
 
         var GC_monthly = [];
         for (var m=0; m<12; m++) GC_monthly[m] = GC;
 
         // CO2 emissions in kg/m2/year associated with cooking
+        // QUESTION: this variable is never read - have you left it outcome of something
         var cooking_CO2 = (119 + 24 * data.occupancy) / data.TFA;
 
-        data.LAC.EC = GC * 0.024 * 365;
+        data.LAC.EC = watts_to_kwh_yr(GC);
 
         if (data.use_LAC) {
             data.gains_W["Cooking"] = GC_monthly;
