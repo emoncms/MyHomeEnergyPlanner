@@ -1073,7 +1073,7 @@ var calc = function()
         data.appliancelist.totalwh = 0;
         data.appliancelist.annualkwh = 0;
 
-        for (z in data.appliancelist.list) {
+        for (var z in data.appliancelist.list) {
             data.appliancelist.list[z].energy = data.appliancelist.list[z].power * data.appliancelist.list[z].hours;
             data.appliancelist.totalwh += data.appliancelist.list[z].energy;
         }
@@ -1179,7 +1179,7 @@ var calc = function()
             'electric-heatpump': { name: "Electricity for heatpump", note:"annual electricity input to the heatpump",
                                    quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
 
-            'electric-waterheating': { name: "Electricity for water heating", note:"",
+            'electric-waterheating': { name: "Electricityf or water heating", note:"",
                                        quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
 
             'electric-car': { name: "Electric car", note: "",
@@ -1228,21 +1228,25 @@ var calc = function()
                        quantity:0, units: "miles", kwh: 0.69, co2: 0.43, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00}
         };
 
-        add_defaults(data, {currentenergy: defaults});
+        add_defaults(data, {currentenergy: {energyitems: defaults}});
         
         var energy = data.currentenergy.energyitems;
 
-        for (var z in defaults) {
+        Object.keys(defaults).forEach(function(z) {
             energy[z].name = defaults[z].name;
             energy[z].units = defaults[z].units;
             energy[z].kwh = defaults[z].kwh;
             energy[z].co2 = defaults[z].co2;
             energy[z].primaryenergy = defaults[z].primaryenergy;
-        }
+        });
+        
+        var electrictags = ['electric',
+                            'electric-heating',
+                            'electric-heatpump',
+                            'electric-waterheating',
+                            'electric-car'];
 
-        var electrictags = ['electric','electric-heating','electric-heatpump','electric-waterheating','electric-car'];
-        for (var z in electrictags) {
-            var tag = electrictags[z];
+        electrictags.forEach(function(tag) {
             if (data.currentenergy.greenenergy) {
                 energy[tag].co2 = 0.02;
                 energy[tag].primaryenergy = 1.3;
@@ -1250,47 +1254,61 @@ var calc = function()
                 energy[tag].co2 = 0.512;
                 energy[tag].primaryenergy = 2.4;
             }
-        }
+        });
 
-
-        for (var item in energy)
-        {
-            if (energy[item].mpg==undefined ) {
-                energy[item].annual_kwh = energy[item].quantity * energy[item].kwh;
+        values(energy).forEach(function(energyitem) {
+            if (energyitem.mpg==undefined ) {
+                energyitem.annual_kwh = energyitem.quantity * energyitem.kwh;
             } else {
-                energy[item].annual_kwh = (energy[item].quantity / energy[item].mpg) * energy[item].kwh;
+                energyitem.annual_kwh = (energyitem.quantity / energyitem.mpg) * energyitem.kwh;
             }
-            energy[item].kwhd = energy[item].annual_kwh / 365.0;
+            energyitem.kwhd = energyitem.annual_kwh / 365.0;
 
-            if (energy[item].mpg==undefined ) {
-                energy[item].annual_co2 = energy[item].quantity * energy[item].co2;
+            if (energyitem.mpg==undefined ) {
+                energyitem.annual_co2 = energyitem.quantity * energyitem.co2;
             } else {
-                energy[item].annual_co2 = (energy[item].quantity / energy[item].mpg) * energy[item].co2;
+                energyitem.annual_co2 = (energyitem.quantity / energyitem.mpg) * energyitem.co2;
             }
 
-            energy[item].annual_cost = (energy[item].quantity * energy[item].unitcost) + (365*energy[item].standingcharge);
+            energyitem.annual_cost =
+                (energyitem.quantity * energyitem.unitcost)
+                + (365*energyitem.standingcharge);
+        });
 
-
-        }
-
-        var spaceheatingtags = ['electric-heating','electric-heatpump','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
+        var spaceheatingtags = ['electric-heating',
+                                'electric-heatpump',
+                                'wood-logs',
+                                'wood-pellets',
+                                'oil',
+                                'gas',
+                                'lpg',
+                                'bottledgas'];
 
         var spaceheating_annual_kwh = 0;
-        for (z in spaceheatingtags) {
-            spaceheating_annual_kwh += energy[spaceheatingtags[z]].annual_kwh
-        }
+        spaceheatingtags.forEach(function(tag) {
+            spaceheating_annual_kwh += energy[tag].annual_kwh
+        });
 
-        var primaryenergytags = ['electric', 'electric-heating','electric-waterheating', 'electric-heatpump','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
+        var primaryenergytags = ['electric',
+                                 'electric-heating',
+                                 'electric-waterheating',
+                                 'electric-heatpump',
+                                 'wood-logs',
+                                 'wood-pellets',
+                                 'oil',
+                                 'gas',
+                                 'lpg',
+                                 'bottledgas'];
         var total_co2 = 0;
         var total_cost = 0;
         var primaryenergy_annual_kwh = 0;
-        for (z in primaryenergytags) {
-            var item = primaryenergytags[z];
-            primaryenergy_annual_kwh += energy[item].annual_kwh * energy[item].primaryenergy;
-            total_co2 += energy[item].annual_co2;
-            total_cost += energy[item].annual_cost;
-        }
 
+        primaryenergytags.forEach(function(tag) {
+            primaryenergy_annual_kwh += energy[tag].annual_kwh * energy[tag].primaryenergy;
+            total_co2 += energy[tag].annual_co2;
+            total_cost += energy[tag].annual_cost;
+        });
+        
         data.currentenergy.energyitems = energy;
 
         data.currentenergy.spaceheating_annual_kwh = spaceheating_annual_kwh;
@@ -1348,18 +1366,16 @@ var calc = function()
         return 0.024 * sum;
     }
 
-
     var calc_solar_gains_from_windows = function(windows,region)
     {
         var gains = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-        for (var z in windows)
-        {
-            var orientation = windows[z]['orientation'];
-            var area = windows[z]['area'];
-            var overshading = windows[z]['overshading'];
-            var g = windows[z]['g'];
-            var ff = windows[z]['ff'];
+        values(windows).forEach(function(window) {
+            var orientation = window.orientation;
+            var area = window.area;
+            var overshading = window.overshading;
+            var g = window.g;
+            var ff = window.ff;
 
             // The gains for a given window are calculated for each month
             // the result of which needs to be put in a bin for totals for jan, feb etc..
@@ -1380,7 +1396,8 @@ var calc = function()
 
                 gains[month] += access_factor * area * solar_rad(region,orientation,90,month) * 0.9 * g * ff;
             }
-        }
+        });
+        
         return gains;
     }
 
