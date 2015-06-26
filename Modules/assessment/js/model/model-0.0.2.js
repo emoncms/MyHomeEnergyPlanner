@@ -992,9 +992,9 @@ var calc = function()
                 if (m>=5 && m<=8) {
                     hours_per_day = 3;
                 } else {
-                    if (data.water_heating.hot_water_control_type == "no_cylinder_thermostat") hours_per_day = 11;
-                    if (data.water_heating.hot_water_control_type == "cylinder_thermostat_without_timer") hours_per_day = 5;
-                    if (data.water_heating.hot_water_control_type == "cylinder_thermostat_with_timer") hours_per_day = 3;
+                    if (data.water_heating.hot_water_control_type === "no_cylinder_thermostat") hours_per_day = 11;
+                    if (data.water_heating.hot_water_control_type === "cylinder_thermostat_without_timer") hours_per_day = 5;
+                    if (data.water_heating.hot_water_control_type === "cylinder_thermostat_with_timer") hours_per_day = 3;
                     if (data.water_heating.community_heating) hours_per_day = 3;
                 }
 
