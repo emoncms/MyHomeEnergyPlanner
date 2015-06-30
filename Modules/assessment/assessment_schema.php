@@ -12,6 +12,20 @@ $schema['assessment'] = array(
 );
 
 $schema['assessment_access'] = array(
-    'admin' => array('type' => 'int(11)', 'default'=>0),
+    'id' => array('type' => 'int(11)'),
+    'userid' => array('type' => 'int(11)'),
+    'orgid' => array('type' => 'int(11)'),
+    'write' => array('type' => 'int(11)')
+);
+
+$schema['organisations'] = array(
+    'id' => array('type' => 'int(11)', 'Null'=>'NO', 'Key'=>'PRI', 'Extra'=>'auto_increment'),
+    'name' => array('type' => 'text')
+);
+
+$schema['organisation_membership'] = array(
+    'orgid' => array('type' => 'int(11)'),
     'userid' => array('type' => 'int(11)')
 );
+
+

@@ -38,6 +38,8 @@
                 <div class="side-block scenario-block" scenario="template" style="cursor:pointer">
                     
                     <h3>title scenarioname (<span class="template_sap_rating"></span>)</h3>
+                    
+                    
                     <div class="menu-content">
                         <div class="scenario-nav-heading">Core input</a></div>
                         <div class="scenario-nav"><a href="#template/context">Floors</a></div>
@@ -60,7 +62,8 @@
                         <div class="scenario-nav"><a href="#template/export">Import/Export</a></div>
                         <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
                         <div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>
-                        
+                        <br>
+                        <div class="scenario-nav delete-scenario">Delete scenario <i class="icon-trash"></i></div>
                         
                     </div>
                 </div>
@@ -226,6 +229,19 @@
         $("#scenario-list").append(tmp);
         
         scenario = s;
+        update();
+    });
+    
+    $("#openbem").on('click',".delete-scenario", function() {
+        var s = $(this).parent().parent().attr('scenario');
+        console.log("DELETE "+s);
+        
+        
+        if (s!="master") delete project[s];
+        scenario = "master";
+        $(".scenario-block[scenario="+s+"]").hide();
+        
+        //console.log(project);
         update();
     });
     

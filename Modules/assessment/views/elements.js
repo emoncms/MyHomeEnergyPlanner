@@ -80,8 +80,8 @@ $("#openbem").on("click",'.apply-measure-list', function() {
             out += "</tr>";
         }
     }
-    $("#measures_library").html(out);
-    $('#myModal-measures').modal('show');
+    $("#element_library").html(out);
+    $('#myModal').modal('show');
 });
 
 $("#openbem").on("click",'.apply-measure', function() {
@@ -95,7 +95,50 @@ $("#openbem").on("click",'.apply-measure', function() {
     
     update();
     
-    $('#myModal-measures').modal('hide');
+    $('#myModal').modal('hide');
+});
+
+
+$("#create-element").click(function() {
+    //
+    $("#myModalcreateelement").modal('show');
+    $('#myModal').modal('hide');
+});
+
+$("#create-element-type").change(function(){
+   var type = $(this).val();
+   if (type == "Window") {
+       $(".create-element-window-options").show();
+   } else {
+       $(".create-element-window-options").hide();
+   }
+});
+
+$("#create-element-save").click(function() {
+
+    var type = $("#create-element-type").val();
+    var tag = $("#create-element-tag").val();
+    
+    if (element_library[tag]==undefined) {
+        element_library[tag] = {};
+        
+        element_library[tag].name = $("#create-element-name").val();
+        element_library[tag].source = $("#create-element-source").val();
+        element_library[tag].uvalue = $("#create-element-uvalue").val();
+        element_library[tag].kvalue = $("#create-element-kvalue").val();
+        
+        if (type=="Window") element_library[tag].g = $("#create-element-g").val();
+        if (type=="Window") element_library[tag].gL = $("#create-element-gL").val();
+        if (type=="Window") element_library[tag].ff = $("#create-element-ff").val();
+        
+        element_library[tag].tags = [type],
+        element_library[tag].criteria = $("#create-element-criteria").val().split(",");
+        
+        $("#myModalcreateelement").modal('hide');
+    } else {
+        alert("Element or measure already exists");
+    }
+   
 });
 
 

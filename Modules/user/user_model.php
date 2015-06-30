@@ -467,7 +467,6 @@ class User
     //---------------------------------------------------------------------------------------
     // Get by other paramater methods
     //---------------------------------------------------------------------------------------
-
     public function get_id($username)
     {
         if (!ctype_alnum($username)) return false;
@@ -503,7 +502,14 @@ class User
     //---------------------------------------------------------------------------------------
     // Special methods
     //---------------------------------------------------------------------------------------
-
+    public function get_name($userid)
+    {
+        $userid = intval($userid);
+        $result = $this->mysqli->query("SELECT username FROM users WHERE id=$userid");
+        $data = $result->fetch_object();
+        return $data->username;
+    }
+    
     public function get($userid)
     {
         $userid = intval($userid);

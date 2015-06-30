@@ -51,7 +51,8 @@
                 <td><input type="text" value="0" key="data.fabric.elements.template.kvalue" style="width:40px" /></td>
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
                 <td><button class="apply-measure-list" row="template">Apply Measure</button></td>
-                <td><span class="delete-element" row="template" style="cursor:pointer"><a>Delete <i class="icon-trash"></i></a></span></td>
+                <td><span class="delete-element" row="template" style="cursor:pointer"><a><i class="icon-trash"></i></a></span></td>
+                <td><input type="checkbox" /></td>
 
             </tr>
         </tbody>
@@ -186,7 +187,7 @@
                 <td><span key="data.fabric.elements.template.gain" dp=0>0</span>W</td>
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
                 <td><button class="apply-measure-list" row="template">Apply Measure</button></td>
-                <td><span class="delete-element" row="template" style="cursor:pointer">Delete <i class="icon-trash"></i></span></td>
+                <td><span class="delete-element" row="template" style="cursor:pointer"><i class="icon-trash"></i></span></td>
                 
             </tr>
         </tbody>
@@ -225,14 +226,7 @@
     <tr><td>Annual solar gains:</td><td><span key="data.fabric.annual_solar_gain" dp=0>0</span> W (<span key="data.fabric.annual_solar_gain_kwh" dp=0>0</span> kWh)</td></tr>
     
 
-    </table>
-    
-    <!--
-    <pre>
-        <div id="export"></div>
-    </pre>
-    -->
-    
+    </table>    
 </div>
 
 
@@ -248,22 +242,46 @@
         
     </div>
     <div class="modal-footer">
+        <button class="btn" id="create-element">Create new element</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
     </div>
 </div>
 
-<div id="myModal-measures" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+<div id="myModalcreateelement" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Measures Library</h3>
-        <p>Click select measure to apply:</p>
+        <h3 id="myModalLabel">Create new element or measure</h3>
     </div>
     <div class="modal-body" style="height:500px">
-        <table id="measures_library" class="table">
-        </table>
+        <p>
+            <div class="input-prepend" style="float:right">
+                <span class="add-on">Type</span>
+                <select id="create-element-type">
+                    <option>Wall</option>
+                    <option>Floor</option>
+                    <option>Roof</option>
+                    <option>Window</option>
+                </select>
+            </div>
+            Enter details of new element or measure to be created.
+        </p>
         
+        <table class="table">
+            <tr><td>Tag</td><td><input type="text" id="create-element-tag" /></td></tr>
+            <tr><td>Name</td><td><input type="text" id="create-element-name" /></td></tr>
+            <tr><td>Source</td><td><input type="text" id="create-element-source" /></td></tr>
+            <tr><td>U-value</td><td><input type="text" id="create-element-uvalue" /></td></tr>
+            <tr><td>K-value</td><td><input type="text" id="create-element-kvalue" /></td></tr>
+            <tbody class="create-element-window-options" style="display:none">
+                <tr><td>g</td><td><input type="text" id="create-element-g" /></td></tr>
+                <tr><td>gL</td><td><input type="text" id="create-element-gL" /></td></tr>
+                <tr><td>Frame factor (ff)</td><td><input type="text" id="create-element-ff" /></td></tr>
+            </tbody>
+            <tr><td>Criteria to be measure</td><td><input type="text" id="create-element-criteria" /></td></tr>
+        </table>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn" id="create-element-save">Save</button>
     </div>
 </div>
