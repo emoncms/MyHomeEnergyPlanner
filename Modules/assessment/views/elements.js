@@ -250,15 +250,27 @@ $("#openbem").on("click",'.apply-measure', function() {
 
 $("#openbem").on("click",".edit-element",function() {
     var lib = $(this).attr('lib');
-
+    var type = element_library[lib].tags[0];
+    
     $("#create-element-tag").val(lib);
     $("#create-element-name").val(element_library[lib].name);
     $("#create-element-source").val(element_library[lib].source);
     $("#create-element-uvalue").val(element_library[lib].uvalue);
     $("#create-element-kvalue").val(element_library[lib].kvalue);
-    $("#create-element-criteria").val(element_library[lib].criteria.join(","))
- 
+    $("#create-element-criteria").val(element_library[lib].criteria.join(","));
+    
+    $("#create-element-type").val(type);
+    if (type=="Window") {
+        $("#create-element-g").val(element_library[lib].g);
+        $("#create-element-gL").val(element_library[lib].gL);
+        $("#create-element-ff").val(element_library[lib].ff);
+        $(".create-element-window-options").show();
+    }
+    
     $("#myModalcreateelement").modal('show');
     $('#myModal').modal('hide');
+    
+
+
 });
 
