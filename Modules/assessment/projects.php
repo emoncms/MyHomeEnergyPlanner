@@ -62,7 +62,7 @@ body .modal {
             </div>
         </div>
     </div>
-    
+    <!--
     <div class="side-block-2">
         <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Recent activity</b></div>
         <div style="padding:10px">
@@ -76,7 +76,7 @@ body .modal {
         </div>
         </div>
     </div>
-    
+    -->
 </div>
 
 <div id="right-pane" class="assessments">
