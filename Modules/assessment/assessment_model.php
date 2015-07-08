@@ -208,4 +208,47 @@ class Assessment
         }
         return $users;
     }
+    
+    // ------------------------------------------------------------------------------------------------
+    // LIBRARY
+    // ------------------------------------------------------------------------------------------------
+    
+    // Show library that belongs to organisation in organisation view
+    //
+    // Show library that belongs to user in user view
+    //
+    // Allow creation of element from any library that user has access to with dropdown menu to select
+    // personal library or organisational library
+    // $result = $this->mysqli->query("SELECT * FROM library_access WHERE `userid`='$userid' AND `id`='$id'");
+    
+    public function loadlibrary($userid)
+    {
+        $userid = (int) $userid;
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid'");
+        if ($result->num_rows==1) {
+            $row = $result->fetch_object();
+            return json_decode($row->data);
+        } else {
+            return new stdClass();
+        }
+    }
+    
+    public function savelibrary($userid,$data)
+    {
+        $userid = (int) $userid;
+        $data = json_encode(json_decode($data));
+        $data = $this->mysqli->real_escape_string($data);
+        $data = preg_replace('/[^\w\s-.",:{}\[\]]/','',$data);
+        
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid'");
+        
+        if ($result->num_rows==0)
+            $result = $this->mysqli->query("INSERT INTO element_library (`userid`) VALUES ('$userid')");
+
+        $req = $this->mysqli->prepare("UPDATE element_library SET `data` = ? WHERE `userid` = ?");
+        $req->bind_param("si", $data, $userid);
+        $req->execute();
+        
+        return true;
+    }
 }

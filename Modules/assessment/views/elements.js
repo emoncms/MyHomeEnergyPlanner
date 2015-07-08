@@ -1,21 +1,3 @@
-$("#openbem").on("click",'.add-element-from-lib', function() {
-    var tag = $(this).attr("tags");
-    var out = "";
-    for (z in element_library){
-        if (element_library[z].tags.indexOf(tag)!=-1) {
-            out += "<tr class='librow add-element' lib='"+z+"' type='"+tag+"'>";
-            out += "<td>"+z+"</td>";
-            out += "<td>"+element_library[z].name+"</td>";
-            out += "<td>"+element_library[z].source+"</td>";
-            out += "<td>"+element_library[z].uvalue+" W/K.m2</td>";
-            out += "<td>"+element_library[z].kvalue+" kJ/K.m2</td>";
-            out += "</tr>";
-        }
-    }
-    $("#element_library").html(out);
-    $('#myModal').modal('show');
-});
-
 $("#openbem").on("click",'.add-element', function() {
     
     var lib = $(this).attr("lib");
@@ -63,42 +45,6 @@ $("#openbem").on("click",'.delete-element', function(){
     update();
 });
 
-
-$("#openbem").on("click",'.apply-measure-list', function() {
-    var row = $(this).attr('row');
-    var element = data.fabric.elements[row];
-    
-    var out = "";
-    for (z in element_library){
-        if (element_library[z].criteria.indexOf(element.lib)!=-1) {
-            out += "<tr class='librow apply-measure' lib='"+z+"' row='"+row+"'>";
-            out += "<td>"+z+"</td>";
-            out += "<td>"+element_library[z].name+"</td>";
-            out += "<td>"+element_library[z].source+"</td>";
-            out += "<td>"+element_library[z].uvalue+" W/K.m2</td>";
-            out += "<td>"+element_library[z].kvalue+" kJ/K.m2</td>";
-            out += "</tr>";
-        }
-    }
-    $("#element_library").html(out);
-    $('#myModal').modal('show');
-});
-
-$("#openbem").on("click",'.apply-measure', function() {
-    var lib = $(this).attr('lib');
-    var row = $(this).attr('row');
-    
-    if (lib!=undefined) {
-        for (z in element_library[lib]) data.fabric.elements[row][z] = element_library[lib][z];
-        data.fabric.elements[row].lib = lib;
-    }
-    
-    update();
-    
-    $('#myModal').modal('hide');
-});
-
-
 $("#create-element").click(function() {
     //
     $("#myModalcreateelement").modal('show');
@@ -119,7 +65,7 @@ $("#create-element-save").click(function() {
     var type = $("#create-element-type").val();
     var tag = $("#create-element-tag").val();
     
-    if (element_library[tag]==undefined) {
+    //if (element_library[tag]==undefined) {
         element_library[tag] = {};
         
         element_library[tag].name = $("#create-element-name").val();
@@ -134,11 +80,14 @@ $("#create-element-save").click(function() {
         element_library[tag].tags = [type],
         element_library[tag].criteria = $("#create-element-criteria").val().split(",");
         
+        $.ajax({type: "POST", url: path+"assessment/savelibrary.json", data:"data="+JSON.stringify(element_library), success: function(result){
+            console.log("save library result: "+result);
+        }});
+        
         $("#myModalcreateelement").modal('hide');
-    } else {
-        alert("Element or measure already exists");
-    }
-   
+    //} else {
+    //    alert("Element or measure already exists");
+    //}
 });
 
 
@@ -209,4 +158,107 @@ function elements_initUI()
             add_window(z);
         }
     }
+    
+    loadlibrary();
 }
+
+//-----------------------------------------------------------------------------------------------
+// Element library
+//-----------------------------------------------------------------------------------------------
+
+function loadlibrary() {
+    element_library = {};
+    // try loading the library from the database
+    $.ajax({ url: path+"assessment/loadlibrary.json", datatype:"json", success: function(result){
+        element_library = result;
+        // check if library is empty
+        var num = 0; for (z in element_library) num++;
+        // if empty load standard library
+        if (num==0) element_library = standard_element_library;
+    }});
+}
+
+$("#openbem").on("click",'.add-element-from-lib', function() {
+    var tag = $(this).attr("tags");
+    var out = "";
+    for (z in element_library){
+        if (element_library[z].tags.indexOf(tag)!=-1) {
+            out += "<tr class='librow' lib='"+z+"' type='"+tag+"'>";
+            out += "<td>"+z+"</td>";
+            
+            out += "<td>"+element_library[z].name;
+            out += "<br><span style='font-size:13px'><b>Source:</b> "+element_library[z].source+"</span>";
+            if (element_library[z].criteria.length) 
+                out += "<br><span style='font-size:13px'><b>Measure criteria:</b> "+element_library[z].criteria.join(", ")+"</span>";
+            out += "</td>";
+            
+            out += "<td style='width:200px; font-size:13px'>";
+                out += "<b>U-value:</b> "+element_library[z].uvalue+" W/K.m2";
+                out += "<br><b>k-value:</b> "+element_library[z].kvalue+" kJ/K.m2";
+                if (element_library[z].tags[0]=="Window") {
+                    out += "<br><b>g:</b> "+element_library[z].g+", ";
+                    out += "<b>gL:</b> "+element_library[z].gL+", ";
+                    out += "<b>ff:</b> "+element_library[z].ff;
+                }
+            out += "</td>";
+            
+            out += "<td style='width:120px' >";
+                out += "<i style='cursor:pointer' class='icon-pencil edit-element' lib='"+z+"' type='"+tag+"'></i>";
+                // out += "<i class='icon-trash' style='margin-left:20px'></i>";
+                out += "<button class='add-element btn' style='margin-left:20px' lib='"+z+"' type='"+tag+"'>use</button</i>";
+            out += "</td>";
+            out += "</tr>";
+        }
+    }
+    $("#element_library").html(out);
+    $('#myModal').modal('show');
+});
+
+$("#openbem").on("click",'.apply-measure-list', function() {
+    var row = $(this).attr('row');
+    var element = data.fabric.elements[row];
+    
+    var out = "";
+    for (z in element_library){
+        if (element_library[z].criteria.indexOf(element.lib)!=-1) {
+            out += "<tr class='librow apply-measure' lib='"+z+"' row='"+row+"'>";
+            out += "<td>"+z+"</td>";
+            out += "<td>"+element_library[z].name+"</td>";
+            out += "<td>"+element_library[z].source+"</td>";
+            out += "<td>"+element_library[z].uvalue+" W/K.m2</td>";
+            out += "<td>"+element_library[z].kvalue+" kJ/K.m2</td>";
+            // out += "<td>"+element_library[z].criteria.join(",")+"</td>";
+            out += "</tr>";
+        }
+    }
+    $("#element_library").html(out);
+    $('#myModal').modal('show');
+});
+
+$("#openbem").on("click",'.apply-measure', function() {
+    var lib = $(this).attr('lib');
+    var row = $(this).attr('row');
+    
+    if (lib!=undefined) {
+        for (z in element_library[lib]) data.fabric.elements[row][z] = element_library[lib][z];
+        data.fabric.elements[row].lib = lib;
+    }
+    
+    update();
+    $('#myModal').modal('hide');
+});
+
+$("#openbem").on("click",".edit-element",function() {
+    var lib = $(this).attr('lib');
+
+    $("#create-element-tag").val(lib);
+    $("#create-element-name").val(element_library[lib].name);
+    $("#create-element-source").val(element_library[lib].source);
+    $("#create-element-uvalue").val(element_library[lib].uvalue);
+    $("#create-element-kvalue").val(element_library[lib].kvalue);
+    $("#create-element-criteria").val(element_library[lib].criteria.join(","))
+ 
+    $("#myModalcreateelement").modal('show');
+    $('#myModal').modal('hide');
+});
+

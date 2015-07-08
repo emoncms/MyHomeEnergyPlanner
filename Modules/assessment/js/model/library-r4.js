@@ -1,4 +1,4 @@
-var element_library = {
+var standard_element_library = {
 
     "CV1": {
         name: "Uninsulated cavity brick", 

@@ -28,4 +28,9 @@ $schema['organisation_membership'] = array(
     'userid' => array('type' => 'int(11)')
 );
 
+$schema['element_library'] = array(
+    'userid' => array('type' => 'int(11)'),
+    'data' => array('type' => 'text')
+);
+
 

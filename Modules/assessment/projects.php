@@ -45,7 +45,7 @@ body .modal {
             <div id="organisationmembers"></div>
             <br>
             <div class="input-append">
-                <input id="organisation-add-member-name" type="text" style="width:205px" />
+                <input id="organisation-add-member-name" type="text" style="width:180px" />
                 <button id="organisation-add-member" class="btn">Add member</button>
             </div>
         </div>

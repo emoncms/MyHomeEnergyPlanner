@@ -15,7 +15,7 @@ function assessment_controller()
     if ($route->format == 'html') {
         if ($route->action == "view" && $session['write'])
             $result = view("Modules/assessment/view.php",array());
-
+            
         if ($route->action == "list" && $session['write'])
             $result = view("Modules/assessment/projects.php",array());
     }
@@ -102,6 +102,17 @@ function assessment_controller()
             } else {
                 $result = array("success"=>false, "message"=>'Sorry, user "'.$username.'" does not exist!?');
             }
+        }
+        
+        // Save library
+        if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
+            $library = $_POST['data'];
+            $result = $assessment->savelibrary($session['userid'],$library);
+        }
+        
+        // Load library
+        if ($route->action == 'loadlibrary' && $session['write']) {
+            $result = $assessment->loadlibrary($session['userid']);
         }
         
     }

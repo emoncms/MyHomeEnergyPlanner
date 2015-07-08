@@ -1,6 +1,6 @@
 <style>
 .librow {
-    cursor:pointer;
+    /*cursor:pointer;*/
     
 }
 
@@ -237,6 +237,15 @@
         <p>Click on an element from the library to add:</p>
     </div>
     <div class="modal-body" style="height:500px">
+        <!--
+        Select library:
+        <select>
+            <option>My elements</option>
+            <option>Carbon Coop</option>
+            <option>Create new</option>
+        </select>
+        -->
+    
         <table id="element_library" class="table">
         </table>
         
@@ -250,7 +259,7 @@
 <div id="myModalcreateelement" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Create new element or measure</h3>
+        <h3 id="myModalLabel">Create or edit element or measure</h3>
     </div>
     <div class="modal-body" style="height:500px">
         <p>
