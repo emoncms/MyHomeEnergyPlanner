@@ -211,10 +211,10 @@ $("#assessment-create").click(function(){
             data: "name="+name+"&description="+description + orgselector, 
             success: function(project) {
                 projects.push(project);
-                draw_projects("#projects",projects);  
+                draw_projects("#projects",projects); 
+                $("#noprojects").hide(); 
             }
         });
-        $("#noprojects").hide();
         $("#project-name-input").val("");
         $("#project-description-input").val("");
         $("#modal-assessment-create").modal("hide");
@@ -345,7 +345,7 @@ function draw_projects(element,projects)
     }
 
     $(element).html(out);
-    if (projects.length==0) $("#noprojects").show();
+    if (projects.length==0) $("#noprojects").show(); else $("#noprojects").hide();
 }
 
 

@@ -115,6 +115,19 @@ function assessment_controller()
             $result = $assessment->loadlibrary($session['userid']);
         }
         
+        // Upgrade (temporary)    
+        /*
+        if ($route->action == "upgrade" && $session['admin'])
+        {
+            $result = $mysqli->query("SELECT id, userid, author FROM assessment");
+            $out = array();
+            while ($row = $result->fetch_object()) {
+                $out[] = $row;
+                $assessment->access($row->id,$row->userid,1);
+            }
+            $result = $out;
+        }
+        */
     }
 
     return array('content'=>$result, 'fullwidth'=>true);

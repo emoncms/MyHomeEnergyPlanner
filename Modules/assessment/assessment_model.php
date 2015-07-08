@@ -180,15 +180,27 @@ class Assessment
         
         // 1. Check if user exists
         $userid = $user->get_id($username);
-        if ($userid===false) return "User does not exist";
-        
-        // 2. Check if already shared with user
-        $result = $this->mysqli->query("SELECT * FROM assessment_access WHERE `id` = '$id' AND `userid`='$userid'");
-        if ($result->num_rows==1) return "Already shared";
-        
-        // 3. Register share
-        $this->access($id,$userid,1);
-        return "Assessment shared";
+        if ($userid===false) {
+            $result = $this->mysqli->query("SELECT * FROM organisations WHERE `name`='$username'");
+            if ($result->num_rows==1) {
+                $row = $result->fetch_object();
+                $orgid = $row->id;
+                
+                $result = $this->mysqli->query("SELECT * FROM assessment_access WHERE `id` = '$id' AND `orgid`='$orgid'");
+                if ($result->num_rows==1) return "Already shared";
+                
+                $this->org_access($id,$orgid,1);
+                return "Assessment shared";
+            }
+        } else {
+            // 2. Check if already shared with user
+            $result = $this->mysqli->query("SELECT * FROM assessment_access WHERE `id` = '$id' AND `userid`='$userid'");
+            if ($result->num_rows==1) return "Already shared";
+            
+            // 3. Register share
+            $this->access($id,$userid,1);
+            return "Assessment shared";
+        }
     }
     
     public function getshared($id)

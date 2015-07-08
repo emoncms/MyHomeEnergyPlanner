@@ -63,7 +63,7 @@
                         <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
                         <div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>
                         <br>
-                        <div class="scenario-nav delete-scenario">Delete scenario <i class="icon-trash"></i></div>
+                        <!--<div class="scenario-nav delete-scenario">Delete scenario <i class="icon-trash"></i></div>-->
                         
                     </div>
                 </div>

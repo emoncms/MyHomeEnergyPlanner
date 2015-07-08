@@ -78,10 +78,14 @@ class Organisation
             $orgresult = $this->mysqli->query("SELECT * FROM organisations WHERE `id`='$orgid'");
             $orgrow = $orgresult->fetch_object();
             // return full organisation details here
+            
+            $resnumassessments = $this->mysqli->query("SELECT * FROM assessment_access WHERE `orgid`='$orgid'");
+            $numassessments = $resnumassessments->num_rows;
+            
             $organisations[$orgid] = array(
                 "orgid"=>$orgid,
                 "name"=>$orgrow->name,
-                "assessments"=>10,
+                "assessments"=>$numassessments,
                 "members"=>array()
             );
             
