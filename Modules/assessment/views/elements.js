@@ -174,11 +174,10 @@ function loadlibrarylist(callback) {
     $.ajax({ url: path+"assessment/listlibrary.json", datatype:"json", success: function(result){
         mylibraries = result;
         
-        if (selected_library==-1 && mylibraries.length>0) {
+        if (selected_library!=-1 && mylibraries.length>0) {
             selected_library = mylibraries[0].id;
         } else {
             $.ajax({ url: path+"assessment/newlibrary.json", data: "name=StandardLibrary", datatype:"json", async:false, success: function(result){
-                console.log(result);
                 selected_library = result;
                 element_library = standard_element_library;
                 mylibraries[0] = {id:selected_library, name:"StandardLibrary"};
