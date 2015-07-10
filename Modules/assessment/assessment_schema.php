@@ -35,4 +35,11 @@ $schema['element_library'] = array(
     'data' => array('type' => 'text')
 );
 
+$schema['element_library_access'] = array(
+    'id' => array('type' => 'int(11)'),
+    'userid' => array('type' => 'int(11)'),
+    'orgid' => array('type' => 'int(11)'),
+    'write' => array('type' => 'int(11)')
+);
+
 

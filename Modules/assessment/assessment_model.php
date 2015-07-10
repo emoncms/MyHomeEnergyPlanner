@@ -247,10 +247,16 @@ class Assessment
     public function listlibrary($userid)
     {
         $userid = (int) $userid;
-        $result = $this->mysqli->query("SELECT id,name FROM element_library WHERE `userid`='$userid'");
+        $result = $this->mysqli->query("SELECT id FROM element_library_access WHERE `userid`='$userid'");
         
         $libraries = array();
-        while($row = $result->fetch_object()) $libraries[] = $row;
+        while($row = $result->fetch_object()) {
+            $id = $row->id;
+            $libresult = $this->mysqli->query("SELECT id,name FROM element_library WHERE `id`='$id'");
+            $librow = $libresult->fetch_object();
+            $libraries[] = $librow;
+        }
+        
         return $libraries;
     }
     
@@ -258,6 +264,8 @@ class Assessment
     {
         $userid = (int) $userid;
         $id = (int) $id;
+        if (!$this->has_access_library($userid,$id)) return false;
+        
         $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid' AND `id`='$id'");
         
         if ($result->num_rows==1) {
@@ -274,13 +282,17 @@ class Assessment
         $name = preg_replace('/[^\w\s]/','',$name);
         
         $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`) VALUES ('$userid','$name','{}')");
-        return $this->mysqli->insert_id;
+        $id = $this->mysqli->insert_id;
+
+        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`) VALUES ('$id','$userid','0')");
+        return $id;
     }
     
     public function savelibrary($userid,$id,$data)
     {
         $userid = (int) $userid;
         $id = (int) $id;
+        if (!$this->has_access_library($userid,$id)) return false;
         
         $data = json_encode(json_decode($data));
         $data = $this->mysqli->real_escape_string($data);
@@ -295,5 +307,21 @@ class Assessment
         $req->execute();
         
         return true;
+    }
+    
+    public function has_access_library($userid,$id)
+    {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        // Check if user has direct or shared access
+        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid' AND `id`='$id'");
+        if ($result->num_rows==1) return true;
+        
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
+        while($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid' AND `id`='$id'");
+            if ($result2->num_rows==1) return true;
+        }
     }
 }
