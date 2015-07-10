@@ -347,3 +347,15 @@ $("#openbem").on("click","#cancelnewlibrary",function() {
     $(".new-library-view").hide();
 });
 
+$("#open-share-library").click(function(){
+    $("#modal-share-library").modal('show');
+    $('#myModal').modal('hide');
+});
+
+$("#share-library").click(function() {
+    var username = $("#sharename").val();
+    if (selected_library!=-1) {
+        $.ajax({ url: path+"assessment/sharelibrary.json", data: "id="+selected_library+"&name="+username, success: function(data){
+        }});
+    }
+});

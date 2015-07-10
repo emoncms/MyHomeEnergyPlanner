@@ -243,6 +243,9 @@
             <select id="library-select"></select>
         </div>
         
+        Share library: 
+        <i id="open-share-library" class="icon-share"></i>
+        
         <div class="new-library-view" style="display:none;">
             <div class="input-append input-prepend">
                 <span class="add-on">Enter name for new library</span>
@@ -299,5 +302,26 @@
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button class="btn" id="create-element-save">Save</button>
+    </div>
+</div>
+
+<div id="modal-share-library" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Share library: </h3>
+    </div>
+    <div class="modal-body">
+    
+    <p>Shared with:</p>
+    <p><i>Shared with list not implemented yet</i></p>
+    <table class="table" id="shared-with-table">
+    </table>
+    
+    <p>Enter user, or organisation name to share this library with:</p>
+    <input id="sharename" type="text" style="width:420px"/>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="share-library" class="btn btn-primary">Share</button>
     </div>
 </div>
