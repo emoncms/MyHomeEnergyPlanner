@@ -230,21 +230,28 @@
 </div>
 
 
-<div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+<div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Element Library</h3>
         <p>Click on an element from the library to add:</p>
     </div>
     <div class="modal-body" style="height:500px">
-        <!--
-        Select library:
-        <select>
-            <option>My elements</option>
-            <option>Carbon Coop</option>
-            <option>Create new</option>
-        </select>
-        -->
+        
+        <div class="input-prepend library-select-view">
+            <span class="add-on">Select library:</span>
+            <select id="library-select"></select>
+        </div>
+        
+        <div class="new-library-view" style="display:none;">
+            <div class="input-append input-prepend">
+                <span class="add-on">Enter name for new library</span>
+                <input type="text" id="newlibrary-name" />
+                <button id="newlibrary" class="btn">Create</button>
+                <button id="cancelnewlibrary" class="btn">Cancel</button>
+            </div>
+        </div>
+        
     
         <table id="element_library" class="table">
         </table>
@@ -256,7 +263,7 @@
     </div>
 </div>
 
-<div id="myModalcreateelement" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false">
+<div id="myModalcreateelement" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Create or edit element or measure</h3>

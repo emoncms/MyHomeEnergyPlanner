@@ -80,7 +80,7 @@ $("#create-element-save").click(function() {
         element_library[tag].tags = [type],
         element_library[tag].criteria = $("#create-element-criteria").val().split(",");
         
-        $.ajax({type: "POST", url: path+"assessment/savelibrary.json", data:"data="+JSON.stringify(element_library), success: function(result){
+        $.ajax({type: "POST", url: path+"assessment/savelibrary.json", data:"id="+selected_library+"&data="+JSON.stringify(element_library), success: function(result){
             console.log("save library result: "+result);
         }});
         
@@ -159,27 +159,69 @@ function elements_initUI()
         }
     }
     
-    loadlibrary();
+    loadlibrarylist(function(){
+        loadlibrary(selected_library,function(){});
+    });
 }
 
 //-----------------------------------------------------------------------------------------------
 // Element library
 //-----------------------------------------------------------------------------------------------
 
-function loadlibrary() {
+function loadlibrarylist(callback) {
+    var mylibraries = [];
+    
+    $.ajax({ url: path+"assessment/listlibrary.json", datatype:"json", success: function(result){
+        mylibraries = result;
+        
+        if (selected_library==-1 && mylibraries.length>0) {
+            selected_library = mylibraries[0].id;
+        } else {
+            $.ajax({ url: path+"assessment/newlibrary.json", data: "name=StandardLibrary", datatype:"json", async:false, success: function(result){
+                console.log(result);
+                selected_library = result;
+                element_library = standard_element_library;
+                mylibraries[0] = {id:selected_library, name:"StandardLibrary"};
+                $.ajax({type: "POST", url: path+"assessment/savelibrary.json", data:"id="+selected_library+"&data="+JSON.stringify(element_library), success: function(result){
+                    console.log("save library result: "+result);
+                }});
+            }});
+        }
+        
+        var out = "";
+        for (z in mylibraries) {
+            out += "<option value="+mylibraries[z].id+">"+mylibraries[z].name+"</option>";
+        }
+        
+        out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
+        $("#library-select").html(out);
+        $("#library-select").val(selected_library);
+        
+        callback();
+    }});
+}
+
+function loadlibrary(id,callback) {
     element_library = {};
+    // selected_library = id
     // try loading the library from the database
-    $.ajax({ url: path+"assessment/loadlibrary.json", datatype:"json", success: function(result){
+    $.ajax({ url: path+"assessment/loadlibrary.json", data: "id="+id, datatype:"json", success: function(result){
         element_library = result;
         // check if library is empty
         var num = 0; for (z in element_library) num++;
         // if empty load standard library
-        if (num==0) element_library = standard_element_library;
+        // if (num==0) element_library = standard_element_library;
+        callback();
     }});
 }
 
 $("#openbem").on("click",'.add-element-from-lib', function() {
     var tag = $(this).attr("tags");
+    draw_library(tag);
+});
+
+function draw_library(tag)
+{
     var out = "";
     for (z in element_library){
         if (element_library[z].tags.indexOf(tag)!=-1) {
@@ -212,7 +254,8 @@ $("#openbem").on("click",'.add-element-from-lib', function() {
     }
     $("#element_library").html(out);
     $('#myModal').modal('show');
-});
+
+}
 
 $("#openbem").on("click",'.apply-measure-list', function() {
     var row = $(this).attr('row');
@@ -269,8 +312,37 @@ $("#openbem").on("click",".edit-element",function() {
     
     $("#myModalcreateelement").modal('show');
     $('#myModal').modal('hide');
-    
+});
 
 
+$("#openbem").on("click",".newlibraryoption",function() {
+    $(".library-select-view").hide();
+    $(".new-library-view").show();
+});
+
+$("#openbem").on("click","#newlibrary",function() {
+    var name = $("#newlibrary-name").val();
+    console.log("newlibrary:"+name);
+    $.ajax({ url: path+"assessment/newlibrary.json", data: "name="+name, datatype:"json", success: function(result){
+        console.log("result: "+result);
+        loadlibrarylist();
+        $(".library-select-view").show();
+        $(".new-library-view").hide();
+    }});
+});
+
+$("#library-select").change(function(){
+    var id = $(this).val() * 1.0;
+    if (id!=-1) {
+        console.log(id);
+        selected_library = id;
+        loadlibrary(id,function(){
+            draw_library("Wall");
+        });
+    }
+});
+$("#openbem").on("click","#cancelnewlibrary",function() {
+    $(".library-select-view").show();
+    $(".new-library-view").hide();
 });
 

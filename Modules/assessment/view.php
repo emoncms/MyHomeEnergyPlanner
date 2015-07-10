@@ -19,6 +19,13 @@
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 
+<style>
+    .modal-backdrop
+    {
+        opacity:0.3 !important;
+    }
+</style>
+
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
  
@@ -102,6 +109,7 @@
 <script>
 
     var changelog = "";
+    var selected_library = -1;
 
     $("#openbem").css("background-color","#eee");
 

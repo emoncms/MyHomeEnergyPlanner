@@ -20,6 +20,8 @@ class Assessment
     
     public function has_access($userid,$id)
     {
+        $id = (int) $id;
+        $userid = (int) $userid;
         // Check if user has direct or shared access
         $result = $this->mysqli->query("SELECT * FROM assessment_access WHERE `userid`='$userid' AND `id`='$id'");
         if ($result->num_rows==1) return true;
@@ -166,17 +168,25 @@ class Assessment
     
     public function access($id,$userid,$write)
     {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        $write = (int) $write;
         $result = $this->mysqli->query("INSERT INTO assessment_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '$write'");
     }
     
     public function org_access($id,$orgid,$write)
     {
+        $id = (int) $id;
+        $orgid = (int) $orgid;
+        $write = (int) $write;
         $result = $this->mysqli->query("INSERT INTO assessment_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '$write'");
     }
     
     public function share($id,$username)
     {
         global $user;
+        $id = (int) $id;
+        $username = preg_replace('/[^\w\s]/','',$username);
         
         // 1. Check if user exists
         $userid = $user->get_id($username);
@@ -205,6 +215,7 @@ class Assessment
     
     public function getshared($id)
     {
+        $id = (int) $id;
         $result = $this->mysqli->query("SELECT * FROM assessment_access WHERE `id` = '$id'");
         $users = array();
         while($row = $result->fetch_object()) {
@@ -233,10 +244,22 @@ class Assessment
     // personal library or organisational library
     // $result = $this->mysqli->query("SELECT * FROM library_access WHERE `userid`='$userid' AND `id`='$id'");
     
-    public function loadlibrary($userid)
+    public function listlibrary($userid)
     {
         $userid = (int) $userid;
-        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid'");
+        $result = $this->mysqli->query("SELECT id,name FROM element_library WHERE `userid`='$userid'");
+        
+        $libraries = array();
+        while($row = $result->fetch_object()) $libraries[] = $row;
+        return $libraries;
+    }
+    
+    public function loadlibrary($userid,$id)
+    {
+        $userid = (int) $userid;
+        $id = (int) $id;
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid' AND `id`='$id'");
+        
         if ($result->num_rows==1) {
             $row = $result->fetch_object();
             return json_decode($row->data);
@@ -245,20 +268,30 @@ class Assessment
         }
     }
     
-    public function savelibrary($userid,$data)
+    public function newlibrary($userid,$name)
     {
         $userid = (int) $userid;
+        $name = preg_replace('/[^\w\s]/','',$name);
+        
+        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`) VALUES ('$userid','$name','{}')");
+        return $this->mysqli->insert_id;
+    }
+    
+    public function savelibrary($userid,$id,$data)
+    {
+        $userid = (int) $userid;
+        $id = (int) $id;
+        
         $data = json_encode(json_decode($data));
         $data = $this->mysqli->real_escape_string($data);
         $data = preg_replace('/[^\w\s-.",:{}\[\]]/','',$data);
         
-        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid'");
-        
-        if ($result->num_rows==0)
-            $result = $this->mysqli->query("INSERT INTO element_library (`userid`) VALUES ('$userid')");
+        // $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid' AND ");
+        // if ($result->num_rows==0)
+        //     $result = $this->mysqli->query("INSERT INTO element_library (`userid`) VALUES ('$userid')");
 
-        $req = $this->mysqli->prepare("UPDATE element_library SET `data` = ? WHERE `userid` = ?");
-        $req->bind_param("si", $data, $userid);
+        $req = $this->mysqli->prepare("UPDATE element_library SET `data` = ? WHERE `userid` = ? AND `id`= ?");
+        $req->bind_param("sii", $data, $userid, $id);
         $req->execute();
         
         return true;

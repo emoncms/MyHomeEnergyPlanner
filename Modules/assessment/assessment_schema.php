@@ -29,7 +29,9 @@ $schema['organisation_membership'] = array(
 );
 
 $schema['element_library'] = array(
+    'id' => array('type' => 'int(11)', 'Null'=>'NO', 'Key'=>'PRI', 'Extra'=>'auto_increment'),
     'userid' => array('type' => 'int(11)'),
+    'name' => array('type' => 'text'),
     'data' => array('type' => 'text')
 );
 

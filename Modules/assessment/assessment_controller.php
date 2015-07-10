@@ -104,16 +104,15 @@ function assessment_controller()
             }
         }
         
+        if ($route->action == 'listlibrary' && $session['write']) $result = $assessment->listlibrary($session['userid']);
+        if ($route->action == 'newlibrary' && $session['write']) $result = $assessment->newlibrary($session['userid'],get('name'));
+        
         // Save library
         if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
-            $library = $_POST['data'];
-            $result = $assessment->savelibrary($session['userid'],$library);
+            $result = $assessment->savelibrary($session['userid'],post('id'),$_POST['data']);
         }
         
-        // Load library
-        if ($route->action == 'loadlibrary' && $session['write']) {
-            $result = $assessment->loadlibrary($session['userid']);
-        }
+        if ($route->action == 'loadlibrary' && $session['write']) $result = $assessment->loadlibrary($session['userid'],get('id'));
         
         // Upgrade (temporary)    
         /*
