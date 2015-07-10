@@ -53,8 +53,8 @@ function assessment_controller()
         }
         
         if ($route->action == 'delete' && $session['write']) $result = $assessment->delete($session['userid'],get('id'));
-        if ($route->action == 'share' && $session['write']) $result = $assessment->share(get('id'),get('username'));
-        if ($route->action == 'getshared' && $session['write']) $result = $assessment->getshared(get('id'));
+        if ($route->action == 'share' && $session['write']) $result = $assessment->share($session['userid'],get('id'),get('username'));
+        if ($route->action == 'getshared' && $session['write']) $result = $assessment->getshared($session['userid'],get('id'));
         if ($route->action == 'get' && $session['write']) $result = $assessment->get($session['userid'],get('id'));
         
         if ($route->action == 'setstatus' && $session['write']) {
@@ -113,6 +113,8 @@ function assessment_controller()
         }
         
         if ($route->action == 'loadlibrary' && $session['write']) $result = $assessment->loadlibrary($session['userid'],get('id'));
+        
+        if ($route->action == 'sharelibrary' && $session['write']) $result = $assessment->sharelibrary($session['userid'],get('id'),get('name'));
         
         // Upgrade (temporary)    
         /*

@@ -182,15 +182,19 @@ class Assessment
         $result = $this->mysqli->query("INSERT INTO assessment_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '$write'");
     }
     
-    public function share($id,$username)
+    public function share($userid,$id,$username)
     {
-        global $user;
         $id = (int) $id;
+        $userid = (int) $userid;
         $username = preg_replace('/[^\w\s]/','',$username);
+        
+        if (!$this->has_access($userid,$id)) return false;
+        
+        global $user;
         
         // 1. Check if user exists
         $userid = $user->get_id($username);
-        if ($userid===false) {
+        if ($userid==false) {
             $result = $this->mysqli->query("SELECT * FROM organisations WHERE `name`='$username'");
             if ($result->num_rows==1) {
                 $row = $result->fetch_object();
@@ -213,9 +217,12 @@ class Assessment
         }
     }
     
-    public function getshared($id)
+    public function getshared($userid,$id)
     {
         $id = (int) $id;
+        $userid = (int) $userid;
+        if (!$this->has_access($userid,$id)) return false;
+        
         $result = $this->mysqli->query("SELECT * FROM assessment_access WHERE `id` = '$id'");
         $users = array();
         while($row = $result->fetch_object()) {
@@ -257,6 +264,19 @@ class Assessment
             $libraries[] = $librow;
         }
         
+        // Load organisation libraries
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");   // get list of org that user belongs to
+        while($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");     // get list of libraries that belong to org
+            while($row2 = $result2->fetch_object()) {
+                $id = $row2->id;
+                $libresult = $this->mysqli->query("SELECT id,name FROM element_library WHERE `id`='$id'");      // get library id and name
+                $librow = $libresult->fetch_object();
+                $libraries[] = $librow;
+            }
+        }
+        
         return $libraries;
     }
     
@@ -266,7 +286,7 @@ class Assessment
         $id = (int) $id;
         if (!$this->has_access_library($userid,$id)) return false;
         
-        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid' AND `id`='$id'");
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id`='$id'");
         
         if ($result->num_rows==1) {
             $row = $result->fetch_object();
@@ -322,6 +342,42 @@ class Assessment
             $orgid = $row->orgid;
             $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid' AND `id`='$id'");
             if ($result2->num_rows==1) return true;
+        }
+    }
+    
+    public function sharelibrary($userid,$id,$username)
+    {
+        global $user;
+        $id = (int) $id;
+        $userid = (int) $userid;
+        $username = preg_replace('/[^\w\s]/','',$username);
+        
+         if (!$this->has_access_library($userid,$id)) return false;
+        
+        // 1. Check if user exists
+        $userid = $user->get_id($username);
+        
+        if ($userid==false) {
+            $result = $this->mysqli->query("SELECT * FROM organisations WHERE `name`='$username'");
+            if ($result->num_rows==1) {
+                $row = $result->fetch_object();
+                $orgid = $row->id;
+                
+                $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id' AND `orgid`='$orgid'");
+                if ($result->num_rows==1) return "Already shared";
+                
+                // $this->org_access($id,$orgid,1);
+                $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '1'");
+                return "Assessment shared";
+            }
+        } else {
+            // 2. Check if already shared with user
+            $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id' AND `userid`='$userid'");
+            if ($result->num_rows==1) return "Already shared";
+            
+            // 3. Register share
+            $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '1'");
+            return "Assessment shared";
         }
     }
 }
