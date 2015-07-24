@@ -274,6 +274,15 @@ $("#share-project").click(function() {
     var projectid = $('#modal-share-project').attr('the_id');
     $.ajax({ url: path+"assessment/share.json", data: "id="+projectid+"&username="+username, success: function(data){
         console.log(data);
+        
+        $.ajax({ url: path+"assessment/getshared.json", data: "id="+projectid, success: function(shared){
+            var out = "";
+            for (var i in shared) {
+                if (myusername!=shared[i].username) out += "<tr><td>"+shared[i].username+"</td></tr>";
+            }
+            if (out=="") out = "<tr><td>This assessment is currently private</td></tr>";
+            $("#shared-with-table").html(out);
+        }});
     }});
 });
 
