@@ -256,12 +256,15 @@ class Assessment
         $userid = (int) $userid;
         $result = $this->mysqli->query("SELECT id FROM element_library_access WHERE `userid`='$userid'");
         
+        $loadedlibs = array();
+        
         $libraries = array();
         while($row = $result->fetch_object()) {
             $id = $row->id;
             $libresult = $this->mysqli->query("SELECT id,name FROM element_library WHERE `id`='$id'");
             $librow = $libresult->fetch_object();
-            $libraries[] = $librow;
+            if (!in_array($id,$loadedlibs)) $libraries[] = $librow;
+            $loadedlibs[] = $id;
         }
         
         // Load organisation libraries
@@ -273,7 +276,8 @@ class Assessment
                 $id = $row2->id;
                 $libresult = $this->mysqli->query("SELECT id,name FROM element_library WHERE `id`='$id'");      // get library id and name
                 $librow = $libresult->fetch_object();
-                $libraries[] = $librow;
+                if (!in_array($id,$loadedlibs)) $libraries[] = $librow;
+                $loadedlibs[] = $id;
             }
         }
         
@@ -379,5 +383,29 @@ class Assessment
             $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '1'");
             return "Assessment shared";
         }
+    }
+    
+    // Get shared
+    
+    public function getsharedlibrary($userid,$id)
+    {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        if (!$this->has_access_library($userid,$id)) return false;
+        
+        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id'");
+        $users = array();
+        while($row = $result->fetch_object()) {
+            global $user;
+            if ($row->userid!=0) $username = $user->get_name($row->userid);
+            if ($row->orgid!=0) {
+                $orgid = $row->orgid;
+                $orgresult = $this->mysqli->query("SELECT * FROM organisations WHERE `id`='$orgid'");
+                $orgrow = $orgresult->fetch_object();
+                $username = $orgrow->name;
+            }
+            $users[] = array('orgid'=>$row->orgid, 'userid'=>$row->userid, 'username'=>$username);
+        }
+        return $users;
     }
 }

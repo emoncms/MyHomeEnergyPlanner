@@ -242,14 +242,11 @@
     
     $("#openbem").on('click',".delete-scenario", function() {
         var s = $(this).parent().parent().attr('scenario');
-        console.log("DELETE "+s);
-        
         
         if (s!="master") delete project[s];
         scenario = "master";
         $(".scenario-block[scenario="+s+"]").hide();
         
-        //console.log(project);
         update();
     });
     

@@ -116,6 +116,8 @@ function assessment_controller()
         
         if ($route->action == 'sharelibrary' && $session['write']) $result = $assessment->sharelibrary($session['userid'],get('id'),get('name'));
         
+        if ($route->action == 'getsharedlibrary' && $session['write']) $result = $assessment->getsharedlibrary($session['userid'],get('id'));
+        
         // Upgrade (temporary)    
         /*
         if ($route->action == "upgrade" && $session['admin'])
