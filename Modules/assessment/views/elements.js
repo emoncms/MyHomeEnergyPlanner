@@ -174,11 +174,13 @@ function loadlibrarylist(callback) {
     $.ajax({ url: path+"assessment/listlibrary.json", datatype:"json", success: function(result){
         mylibraries = result;
         
-        if (mylibraries.length>0) {
-            if (selected_library==-1) {
-                selected_library = mylibraries[0].id;
-            } 
-        } else {
+        var standardlibcreated = false;
+        for (z in mylibraries) {
+            if (mylibraries[z].name=="StandardLibrary") standardlibcreated = true;
+        }
+        
+        if (!standardlibcreated) 
+        {
             $.ajax({ url: path+"assessment/newlibrary.json", data: "name=StandardLibrary", datatype:"json", async:false, success: function(result){
                 selected_library = result;
                 element_library = standard_element_library;
@@ -188,6 +190,8 @@ function loadlibrarylist(callback) {
                 }});
             }});
         }
+        
+        selected_library = mylibraries[0].id;
         
         var out = "";
         for (z in mylibraries) {
