@@ -912,6 +912,13 @@ calc.water_heating = function()
     if (this.data.water_heating.solar_water_heating==undefined) this.data.water_heating.solar_water_heating = false;
     this.data.water_heating.pipework_insulated_fraction = 1;
     
+    if (this.data.water_heating.manufacturer_loss_factor==undefined) this.data.water_heating.manufacturer_loss_factor = 0;
+    if (this.data.water_heating.temperature_factor_a==undefined) this.data.water_heating.temperature_factor_a = 0;
+    
+    if (this.data.water_heating.storage_volume==undefined) this.data.water_heating.storage_volume = 0;
+    if (this.data.water_heating.loss_factor_b==undefined) this.data.water_heating.loss_factor_b = 0;
+    if (this.data.water_heating.volume_factor_b==undefined) this.data.water_heating.volume_factor_b = 0;
+    if (this.data.water_heating.temperature_factor_b==undefined) this.data.water_heating.temperature_factor_b = 0;
     
     this.data.water_heating.Vd_average = (25 * this.data.occupancy) + 36;
     if (this.data.water_heating.low_water_use_design) this.data.water_heating.Vd_average *= 0.95;
@@ -953,7 +960,7 @@ calc.water_heating = function()
         // MONTHLY STORAGE LOSSES
         monthly_storage_loss[m] = datasets.table_1a[m] * energy_lost_from_water_storage;
 
-        if (this.data.water_heating.contains_dedicated_solar_storage_or_WWHRS) {
+        if (this.data.water_heating.contains_dedicated_solar_storage_or_WWHRS && this.data.water_heating.storage_volume>0) {
           monthly_storage_loss[m] = monthly_storage_loss[m] * ((this.data.water_heating.storage_volume-this.data.water_heating.Vs) / (this.data.water_heating.storage_volume));
         }
        
@@ -985,7 +992,6 @@ calc.water_heating = function()
     }
     
     //----------------------------------------------------------------------------------------
-    
     var waterheating_gains = [];
     var annual_waterheating_demand = 0;
     for (var m=0; m<12; m++) {
