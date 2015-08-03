@@ -1146,61 +1146,77 @@ calc.currentenergy = function()
 {
     var defaults = {
         'electric': { name: "Electricity", note:"", 
-            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Electric"},
             
         'electric-heating': { name: "Electricity for direct heating", note:"e.g: Storage Heaters", 
-            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Electric"},
             
         'electric-heatpump': { name: "Electricity for heatpump", note:"annual electricity input to the heatpump", 
-            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Electric"},
             
         'electric-waterheating': { name: "Electricity for water heating", note:"",
-            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Electric"},
         
         'electric-car': { name: "Electric car", note: "",
-            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0},
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Electric"},
             
+            
+        'electric-e7': { name: "Electricity (Economy 7)", note:"", 
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Economy 7"},
+            
+        'electric-heating-e7': { name: "Electricity for direct heating (Economy 7)", note:"e.g: Storage Heaters", 
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Economy 7"},
+            
+        'electric-heatpump-e7': { name: "Electricity for heatpump (Economy 7)", note:"annual electricity input to the heatpump", 
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Economy 7"},
+            
+        'electric-waterheating-e7': { name: "Electricity for water heating (Economy 7)", note:"",
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Economy 7"},
+        
+        'electric-car-e7': { name: "Electric car (Economy 7)", note: "",
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Economy 7"},
+                  
             
         'wood-logs': { name:"Wood Logs", note:"",
-            quantity:0, units: "m3", kwh: 1380, co2: 0.00, primaryenergy: 1.1, unitcost:69, standingcharge:0.00},
+            quantity:0, units: "m3", kwh: 1380, co2: 0.00, primaryenergy: 1.1, unitcost:69, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
         'wood-pellets': { name:"Wood Pellets", note:"",
-            quantity:0, units: "m3", kwh: 4800, co2: 0.00, primaryenergy: 1.1, unitcost:240, standingcharge:0.00},
+            quantity:0, units: "m3", kwh: 4800, co2: 0.00, primaryenergy: 1.1, unitcost:240, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
         'oil': { name:"Oil", note:"",
-            quantity:0, units: "L", kwh: 10.27, co2: 2.518, primaryenergy: 1.1, unitcost:0.55, standingcharge:0.00},
+            quantity:0, units: "L", kwh: 10.27, co2: 2.518, primaryenergy: 1.1, unitcost:0.55, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
         'gas': { name:"Mains gas", note:"",
-            quantity:0, units: "m3", kwh: 9.8, co2: 2.198, primaryenergy: 1.1, unitcost:0.4214, standingcharge:0.00},
+            quantity:0, units: "m3", kwh: 9.8, co2: 2.198, primaryenergy: 1.1, unitcost:0.4214, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
         'lpg': { name:"LPG", note:"",
-            quantity:0, units: "kWh", kwh: 11.0, co2: 1.5, primaryenergy: 1.1, unitcost:0.55, standingcharge:0.00},
+            quantity:0, units: "kWh", kwh: 11.0, co2: 1.5, primaryenergy: 1.1, unitcost:0.55, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
         'bottledgas': { name:"Bottled gas", note:"",
-            quantity:0, units: "kg", kwh: 13.9, co2: 2.198, primaryenergy: 1.1, unitcost:1.8, standingcharge:0.00},
+            quantity:0, units: "kg", kwh: 13.9, co2: 2.198, primaryenergy: 1.1, unitcost:1.8, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
             
             
         //'electric-car-miles': { name: "Electric car (miles)", note: "miles not included in home electricty above, assuming 100% green electricity",
         //    quantity:0, units: "miles", kwh: 0.25, co2: 0.02, primaryenergy: 2.4, unitcost:0.00, standingcharge:0.00},
             
         'car1': { name: "Car 1", note:"",
-            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00, selected:0, group: "Transport"},
             
         'car2': { name: "Car 2", note:"",
-            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00, selected:0, group: "Transport"},
             
         'car3': { name: "Car 3", note:"",
-            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00, selected:0, group: "Transport"},
             
         'motorbike': { name: "Motorbike", note:"",
-            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            quantity:0, units: "miles", mpg: 35.0, kwh: 9.7*4.5, co2: 2.31*4.5, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00, selected:0, group: "Transport"},
             
         'bus': { name: "Bus", note:"",
-            quantity:0, units: "miles", kwh: 0.53, co2: 0.176, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            quantity:0, units: "miles", kwh: 0.53, co2: 0.176, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00, selected:0, group: "Transport"},
             
         'train': { name: "Train", note:"",
-            quantity:0, units: "miles", kwh: 0.096, co2: 0.096, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            quantity:0, units: "miles", kwh: 0.096, co2: 0.096, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00, selected:0, group: "Transport"},
             
         'boat': { name: "Boat", note:"",
-            quantity:0, units: "miles", kwh: 1.0, co2: 0.192, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00},
+            quantity:0, units: "miles", kwh: 1.0, co2: 0.192, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00, selected:0, group: "Transport"},
             
         'plane': { name: "Plane", note:"",
-            quantity:0, units: "miles", kwh: 0.69, co2: 0.43, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00}
+            quantity:0, units: "miles", kwh: 0.69, co2: 0.43, primaryenergy: 1.1, unitcost:0.00, standingcharge:0.00, selected:0, group: "Transport"}
     };
     
     if (this.data.currentenergy==undefined) this.data.currentenergy = {};
@@ -1209,14 +1225,21 @@ calc.currentenergy = function()
         this.data.currentenergy.energyitems = defaults;
     }
     
+    for (z in this.data.currentenergy.energyitems) {
+        if (this.data.currentenergy.energyitems[z].selected==undefined) this.data.currentenergy.energyitems[z].selected = 0;
+        if (this.data.currentenergy.energyitems[z].group==undefined) this.data.currentenergy.energyitems[z].group = defaults[z].group;
+    }
+    
     energy = this.data.currentenergy.energyitems;
     
     for (z in defaults) {
+        if (energy[z]==undefined) energy[z] = defaults[z];
         energy[z].name = defaults[z].name;
         energy[z].units = defaults[z].units;
         energy[z].kwh = defaults[z].kwh;
         energy[z].co2 = defaults[z].co2;
         energy[z].primaryenergy = defaults[z].primaryenergy;
+        energy[z].group = defaults[z].group;
     }
     
     var electrictags = ['electric','electric-heating','electric-heatpump','electric-waterheating','electric-car'];
@@ -1252,14 +1275,14 @@ calc.currentenergy = function()
 
     }
     
-    var spaceheatingtags = ['electric-heating','electric-heatpump','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
+    var spaceheatingtags = ['electric-heating','electric-heatpump','electric-heating-e7','electric-heatpump-e7','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
     
     var spaceheating_annual_kwh = 0;
     for (z in spaceheatingtags) {
         spaceheating_annual_kwh += energy[spaceheatingtags[z]].annual_kwh
     }
     
-    var primaryenergytags = ['electric', 'electric-heating','electric-waterheating', 'electric-heatpump','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
+    var primaryenergytags = ['electric', 'electric-heating','electric-waterheating', 'electric-heatpump','electric-e7', 'electric-heating-e7','electric-waterheating-e7', 'electric-heatpump-e7','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
     var total_co2 = 0;
     var total_cost = 0;
     var primaryenergy_annual_kwh = 0;
