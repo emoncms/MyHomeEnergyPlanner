@@ -1234,17 +1234,19 @@ calc.currentenergy = function()
         if (this.data.currentenergy.energyitems[z].group==undefined) this.data.currentenergy.energyitems[z].group = defaults[z].group;
     }
     
-    energy = this.data.currentenergy.energyitems;
-    
-    for (z in defaults) {
-        if (energy[z]==undefined) energy[z] = defaults[z];
-        energy[z].name = defaults[z].name;
-        energy[z].units = defaults[z].units;
-        energy[z].kwh = defaults[z].kwh;
-        energy[z].co2 = defaults[z].co2;
-        energy[z].primaryenergy = defaults[z].primaryenergy;
-        energy[z].group = defaults[z].group;
+    var tmp = JSON.parse(JSON.stringify(defaults));
+    for (z in tmp) {
+        if (this.data.currentenergy.energyitems[z]!=undefined) {
+            tmp[z].selected = this.data.currentenergy.energyitems[z].selected;
+            if (this.data.currentenergy.energyitems[z].quantity>0) tmp[z].selected = 1;
+            tmp[z].quantity = this.data.currentenergy.energyitems[z].quantity;
+            tmp[z].unitcost = this.data.currentenergy.energyitems[z].unitcost;
+            tmp[z].standingcharge = this.data.currentenergy.energyitems[z].standingcharge;
+            if (tmp[z].mpg!=undefined) tmp[z].mpg = this.data.currentenergy.energyitems[z].mpg;
+        }
     }
+    
+    var energy = tmp;
     
     var electrictags = ['electric','electric-heating','electric-heatpump','electric-waterheating','electric-car'];
     for (z in electrictags) {
