@@ -1289,12 +1289,16 @@ calc.currentenergy = function()
     }
     
     var primaryenergytags = ['electric', 'electric-heating','electric-waterheating', 'electric-heatpump','electric-e7', 'electric-heating-e7','electric-waterheating-e7', 'electric-heatpump-e7','wood-logs','wood-pellets','oil','gas','gas-kwh','lpg','bottledgas'];
+    
     var total_co2 = 0;
     var total_cost = 0;
     var primaryenergy_annual_kwh = 0;
+    var enduse_annual_kwh = 0;
     for (z in primaryenergytags) {
         var item = primaryenergytags[z];
         primaryenergy_annual_kwh += energy[item].annual_kwh * energy[item].primaryenergy;
+        enduse_annual_kwh += energy[item].annual_kwh;
+        
         total_co2 += energy[item].annual_co2;
         total_cost += energy[item].annual_cost;
     }
@@ -1310,6 +1314,7 @@ calc.currentenergy = function()
     this.data.currentenergy.primaryenergy_annual_kwhm2 = primaryenergy_annual_kwh/this.data.TFA;
     this.data.currentenergy.total_co2m2 = total_co2/this.data.TFA;
     this.data.currentenergy.total_costm2 = total_cost/this.data.TFA;
+    this.data.currentenergy.energyuseperperson = (enduse_annual_kwh/365.0) / this.data.occupancy;
 };
 
 

@@ -41,6 +41,55 @@ function currentenergy_initUI() {
     $("#currentenergy_energyitems").html(out);
 }
 
+function currentenergy_UpdateUI()
+{
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Space heating demand",
+        value: Math.round(data.currentenergy.spaceheating_annual_kwhm2),
+        units: "kWh/m2",
+        targets: {
+            //"Passivhaus": 15,
+            "Passivhaus retrofit": 25,
+            "UK Average": 145
+        }
+    };
+    targetbar("currentenergy-spaceheating", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Primary energy demand",
+        value: Math.round(data.currentenergy.primaryenergy_annual_kwhm2),
+        units: "kWh/m2",
+        targets: {
+            "Passivhaus": 120,
+            "UK Average": 350
+        }
+    };
+    targetbar("currentenergy-primaryenergy", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "CO2 Emission rate",
+        value: Math.round(data.currentenergy.total_co2m2),
+        units: "kgCO2/m2",
+        targets: {
+            "80% by 2050": 17,
+            "UK Average": 85
+        }
+    };
+    targetbar("currentenergy-co2", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Per person energy use",
+        value: data.currentenergy.energyuseperperson.toFixed(1),
+        units: "kWh/day",
+        targets: {
+            "70% heating saving": 8.6,
+            "UK Average": 19.6
+        }
+    };
+    targetbar("currentenergy-perperson", options);
+}
+
 $("#add_energyitem").click(function(){
     var tag = $("#energyitem_select").val();
     console.log(tag);
