@@ -1176,6 +1176,11 @@ calc.currentenergy = function()
         'electric-car-e7': { name: "Electric car (Economy 7)", note: "",
             quantity:0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost:0.15, standingcharge:0.0, selected:0, group: "Economy 7"},
                   
+
+        'gas': { name:"Mains gas", note:"",
+            quantity:0, units: "m3", kwh: 9.8, co2: 2.198, primaryenergy: 1.1, unitcost:0.4214, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
+        'gas-kwh': { name:"Mains gas in kWh", note:"",
+            quantity:0, units: "kWh", kwh: 1.0, co2: 0.224, primaryenergy: 1.1, unitcost:0.043, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
             
         'wood-logs': { name:"Wood Logs", note:"",
             quantity:0, units: "m3", kwh: 1380, co2: 0.00, primaryenergy: 1.1, unitcost:69, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
@@ -1183,8 +1188,7 @@ calc.currentenergy = function()
             quantity:0, units: "m3", kwh: 4800, co2: 0.00, primaryenergy: 1.1, unitcost:240, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
         'oil': { name:"Oil", note:"",
             quantity:0, units: "L", kwh: 10.27, co2: 2.518, primaryenergy: 1.1, unitcost:0.55, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
-        'gas': { name:"Mains gas", note:"",
-            quantity:0, units: "m3", kwh: 9.8, co2: 2.198, primaryenergy: 1.1, unitcost:0.4214, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
+
         'lpg': { name:"LPG", note:"",
             quantity:0, units: "kWh", kwh: 11.0, co2: 1.5, primaryenergy: 1.1, unitcost:0.55, standingcharge:0.00, selected:0, group: "Heating (non-electric)"},
         'bottledgas': { name:"Bottled gas", note:"",
@@ -1275,14 +1279,14 @@ calc.currentenergy = function()
 
     }
     
-    var spaceheatingtags = ['electric-heating','electric-heatpump','electric-heating-e7','electric-heatpump-e7','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
+    var spaceheatingtags = ['electric-heating','electric-heatpump','electric-heating-e7','electric-heatpump-e7','wood-logs','wood-pellets','oil','gas','gas-kwh','lpg','bottledgas'];
     
     var spaceheating_annual_kwh = 0;
     for (z in spaceheatingtags) {
         spaceheating_annual_kwh += energy[spaceheatingtags[z]].annual_kwh
     }
     
-    var primaryenergytags = ['electric', 'electric-heating','electric-waterheating', 'electric-heatpump','electric-e7', 'electric-heating-e7','electric-waterheating-e7', 'electric-heatpump-e7','wood-logs','wood-pellets','oil','gas','lpg','bottledgas'];
+    var primaryenergytags = ['electric', 'electric-heating','electric-waterheating', 'electric-heatpump','electric-e7', 'electric-heating-e7','electric-waterheating-e7', 'electric-heatpump-e7','wood-logs','wood-pellets','oil','gas','gas-kwh','lpg','bottledgas'];
     var total_co2 = 0;
     var total_cost = 0;
     var primaryenergy_annual_kwh = 0;
