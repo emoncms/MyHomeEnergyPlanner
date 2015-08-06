@@ -677,6 +677,9 @@ calc.energy_systems = function()
 {
     if (this.data.energy_systems == undefined) this.data.energy_systems = {};
     if (this.data.fuels == undefined) this.data.fuels = {};
+    if (this.data.systemlibrary == undefined) {
+        this.data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
+    }
         
     // Copy dataset over to user data without overwritting user changed properties
     var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
@@ -698,31 +701,36 @@ calc.energy_systems = function()
         for (x in this.data.energy_systems[z])
         {
             this.data.energy_systems[z][x].demand = quantity * this.data.energy_systems[z][x].fraction;
+            
+            var system = this.data.energy_systems[z][x].system;
+            if (this.data.systemlibrary[system]!=undefined) {
+                this.data.energy_systems[z][x].name = this.data.systemlibrary[system].name;
+                this.data.energy_systems[z][x].efficiency = this.data.systemlibrary[system].efficiency;
+            }
         }
     }
     
-    // Winter and summer efficiency mod
-    /*
-    var n_winter = 0.9;
-    var n_summer = 0.8;
+    // Apply Winter and summer efficiency modification to water heating system if its a shared water + space heating system.
     
     for (var a in this.data.energy_systems["waterheating"]) {
         var system_water = this.data.energy_systems["waterheating"][a].system;
         
         for (var b in this.data.energy_systems["space_heating"]) {
-            var system_space = this.data.energy_systems["waterheating"][b].system;
+            var system_space = this.data.energy_systems["space_heating"][b].system;
             
             if (system_water == system_space) {
+            
                 var Q_water = this.data.energy_systems["waterheating"][a].demand;
                 var Q_space = this.data.energy_systems["space_heating"][b].demand;
                 
+                var n_winter = this.data.systemlibrary[system_water].winter;
+                var n_summer = this.data.systemlibrary[system_water].summer;
                 var n = (Q_water + Q_space) / ((Q_space/n_winter)+(Q_water/n_summer));
-                console.log(system_water+" "+n);
                 
-                // this.data.energy_systems["waterheating"][a].efficiency = n;
+                this.data.energy_systems["waterheating"][a].efficiency = n;
             }
         }
-    }*/
+    }
     
     for (z in this.data.energy_requirements)
     {   
@@ -731,9 +739,12 @@ calc.energy_systems = function()
             this.data.energy_systems[z][x].fuelinput = this.data.energy_systems[z][x].demand / this.data.energy_systems[z][x].efficiency;
             
             var system = this.data.energy_systems[z][x].system;
-            var fuel = datasets.energysystems[system].fuel;
-            if (this.data.fuel_totals[fuel]==undefined) this.data.fuel_totals[fuel] = {name: fuel, quantity:0};
-            this.data.fuel_totals[fuel].quantity += this.data.energy_systems[z][x].fuelinput;
+            
+            if (this.data.systemlibrary[system]!=undefined) {
+                var fuel = this.data.systemlibrary[system].fuel;
+                if (this.data.fuel_totals[fuel]==undefined) this.data.fuel_totals[fuel] = {name: fuel, quantity:0};
+                this.data.fuel_totals[fuel].quantity += this.data.energy_systems[z][x].fuelinput;
+            }
         }
     }
     

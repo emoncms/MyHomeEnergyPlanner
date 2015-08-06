@@ -306,6 +306,7 @@ var openbem = {
         }
 
         // Energy systems
+        inputdata.systemlibrary = data.systemlibrary;
         inputdata.energy_systems = {}
         for (z in data.energy_systems) {
             inputdata.energy_systems[z] = [];

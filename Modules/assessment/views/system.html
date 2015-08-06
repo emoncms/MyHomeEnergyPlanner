@@ -70,13 +70,13 @@
         
             <tr>
                 <td style="text-align:left">Supplied by:</td>
-                <td>Description</td>
+                <td>Notes</td>
                 <td>Fraction</td>
                 <td>Demand</td>
                 <td>Efficiency</td>
                 <td>Fuel input </td>
                 
-                <td><i class="icon-plus add-system" style="cursor:pointer" eid="template"><button class="btn" style="padding-top:2px; padding-bottom:2px">Add</button></i></td>
+                <td style="text-align:center"><span class="modal-add-system" style="cursor:pointer" eid="template"><button class="btn" style="padding-top:2px; padding-bottom:2px"><i class="icon-plus"></i> Add</button></span></td>
             </tr>
             
         </tbody>
@@ -84,14 +84,15 @@
         <tbody id="suppliedby-template" style="display:none">
             <tr>
                 <td style="text-align:left">
-                    <select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>
+                    <span key="data.energy_systems.template.x.name"></span>
+                    <!--<select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>-->
                 </td>
                 <td><input type="text" key="data.energy_systems.template.x.description" style="width:120px"/></td>
                 <td><input type="text" key="data.energy_systems.template.x.fraction" dp=2 style="width:60px"/></td>
                 <td><span key="data.energy_systems.template.x.demand" dp=0></span> kWh/year</td>
-                <td><input type="text" key="data.energy_systems.template.x.efficiency" dp=3 style="width:60px"></td>
+                <td><span key="data.energy_systems.template.x.efficiency" dp=3></span></td>
                 <td><span key="data.energy_systems.template.x.fuelinput" dp=0></span> kWh/year</td>
-                <td><span class="delete-system" eid="eid" sid="sid" style="cursor:pointer"><a>Delete</a></span></td>
+                <td style="text-align:center"><span class="delete-system" eid="eid" sid="sid" style="cursor:pointer"><a><i class="icon-trash"></i></a></span></td>
             </tr>
         </tbody>
         
@@ -170,4 +171,35 @@
             <td><b>£<span key="data.net_cost" dp=0></span></b></td>
         </tr>
     </table>    
+</div>
+
+<div id="modal-system-library" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="modal-system-library-label" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="modal-system-library-label">System Library</h3>
+    </div>
+    <div class="modal-body" style="height:500px">
+    
+        <div id="modal-system-library-table-view" style="display:none">
+            System library:<br><br>
+            <table id="system-library-table" class="table"></table>
+        </div>
+        
+        <div id="modal-system-library-editnew-view" style="display:none">
+            Edit or create a new system:<br><br>
+            
+            <p>System tag:<br><input type="text" class="edit-system-tag" /></p>
+            <p>Name:<br><input type="text" class="edit-system-name" /></p>
+            <p>Default efficiency:<br><input type="text" class="edit-system-efficiency" /></p>
+            <p>Winter efficinecy:<br><input type="text" class="edit-system-winter" /></p>
+            <p>Summer efficinecy:<br><input type="text" class="edit-system-summer" /></p>
+            <p>Fuel:<br><input type="text" class="edit-system-fuel" /></p>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <button class="btn create-system">Create new system</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn btn-success save-system" style="display:none">Save</button>
+    </div>
 </div>

@@ -1,7 +1,83 @@
 $("#openbem").on("click",'.add-system', function(){
-    var z = $(this).attr('eid');
-    data.energy_systems[z].push({system: "electric", fraction:1.0, efficiency:1.0});
+    var system = $(this).attr('system');
+    var eid = $(this).attr('eid');
+    data.energy_systems[eid].push({system: system, fraction:1.0});
+    $("#modal-system-library").modal("hide");
     update();
+});
+
+$("#openbem").on("click",'.save-system', function(){
+
+    var system = $(".edit-system-tag").val();
+    data.systemlibrary[system] = {
+        name: $(".edit-system-name").val(),
+        efficiency: $(".edit-system-efficiency").val(),
+        winter: $(".edit-system-winter").val(),
+        summer: $(".edit-system-summer").val(),
+        fuel: $(".edit-system-fuel").val(),
+    
+    };
+    $("#modal-system-library").modal("hide");
+    update();
+});
+
+$("#openbem").on("click",'.edit-system', function(){
+    var system = $(this).attr('system');
+    
+    $(".edit-system-tag").val(system);
+    $(".edit-system-name").val(data.systemlibrary[system].name);
+    $(".edit-system-efficiency").val(data.systemlibrary[system].efficiency);
+    $(".edit-system-winter").val(data.systemlibrary[system].winter);
+    $(".edit-system-summer").val(data.systemlibrary[system].summer);
+    $(".edit-system-fuel").val(data.systemlibrary[system].fuel);
+    
+    $("#modal-system-library-table-view").hide();
+    $("#modal-system-library-editnew-view").show();
+    
+    $(".save-system").show();
+});
+
+$("#openbem").on("click",'.create-system', function(){
+    console.log("create system");
+    $(".edit-system-tag").val("");
+    $(".edit-system-name").val("");
+    $(".edit-system-efficiency").val("1.0");
+    $(".edit-system-winter").val("1.0");
+    $(".edit-system-summer").val("1.0");
+    $(".edit-system-fuel").val("electric");
+    
+    $("#modal-system-library-table-view").hide();
+    $("#modal-system-library-editnew-view").show();
+    
+    $(".save-system").show();
+});
+    
+$("#openbem").on("click",'.modal-add-system', function(){
+    var eid = $(this).attr('eid');
+    
+    var out = "";
+    for (z in data.systemlibrary) {
+        out += "<tr><td>"+data.systemlibrary[z].name+"<br>";
+        out += "<span style='font-size:80%'>";
+        out += "<b>Efficiency:</b> "+Math.round(data.systemlibrary[z].efficiency*100)+"%, ";
+        out += "<b>Winter:</b> "+Math.round(data.systemlibrary[z].winter*100)+"%, ";
+        out += "<b>Summer:</b> "+Math.round(data.systemlibrary[z].summer*100)+"%, ";
+        out += "<b>Fuel:</b> "+data.systemlibrary[z].fuel;
+        out += "</span></td>";
+        
+        out += "<td></td>";
+        out += "<td style='text-align:right'>";
+        out += "<button eid='"+eid+"' system='"+z+"' class='btn edit-system'>Edit</button>";
+        out += "<button eid='"+eid+"' system='"+z+"' class='btn add-system'>Use</button>";
+        out += "</td>";
+        out += "</tr>";
+    }
+    $("#system-library-table").html(out);
+    
+    $("#modal-system-library-table-view").show();
+    $("#modal-system-library-editnew-view").hide();
+    $("#modal-system-library").modal("show");
+    $(".save-system").hide();
 });
 
 $("#openbem").on("click",'.delete-system', function(){
@@ -46,7 +122,6 @@ $("#openbem").on("change",'.heating_system_selector', function(){
     var system = $(this).val();
     var x = $(this).attr("x");
     var z = $(this).attr("z");
-    data.energy_systems[z][x].efficiency = datasets.energysystems[system].efficiency;
 });
 
 function add_energy_system(z,x)
@@ -55,6 +130,7 @@ function add_energy_system(z,x)
     var prefixA = "#energyrequirements [key='data.energy_systems.template.x";
     var prefixB = 'data.energy_systems.'+z+'.'+x;
     $(prefixA+".system']").attr('key',prefixB+'.system');
+    $(prefixA+".name']").attr('key',prefixB+'.name');
     $(prefixA+".description']").attr('key',prefixB+'.description');
     $(prefixA+".fraction']").attr('key',prefixB+'.fraction');
     $(prefixA+".demand']").attr('key',prefixB+'.demand');
@@ -70,8 +146,8 @@ function add_energy_system(z,x)
 
 function system_initUI()
 {
-    var out = "";
-    for (z in datasets.energysystems) out += "<option value='"+z+"'>"+datasets.energysystems[z].name+"</option>";
-    $(".heating_system_selector").html(out);
+    //var out = "";
+    //for (z in datasets.energysystems) out += "<option value='"+z+"'>"+datasets.energysystems[z].name+"</option>";
+    //$(".heating_system_selector").html(out);
 }
 

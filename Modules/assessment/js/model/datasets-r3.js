@@ -158,28 +158,19 @@ var datasets = {
     ],
     
     energysystems: {
-        'heatpump':{name:"Heatpump", efficiency:3.0, fuel: 'electric'},
-        'greenheatpump':{name:"100% Green Electric Heatpump", efficiency:3.0, fuel: 'greenelectric'},
-        'woodbatch':{name:"Wood batch boiler", efficiency:0.92, fuel: 'wood'},
-        'woodpellet':{name:"Wood pellet boiler", efficiency:0.92, fuel: 'wood'},
-        'woodstove':{name:"Wood stove", efficiency:0.87, fuel: 'wood'},
-        'openwoodfire':{name:"Open wood fire", efficiency:0.25, fuel: 'wood'},
+        'electric':{name:"Standard Electric", efficiency:1.0, winter:1.0, summer:1.0, fuel: 'electric'},
+        'gasboiler':{name:"Standard Gas boiler", efficiency:0.90, winter:0.90, summer:0.80, fuel: 'gas'},
+        'oilboiler':{name:"Oil boiler", efficiency:0.85, winter:0.85, summer:0.85, fuel: 'oil'},
+        'heatpump':{name:"Heatpump", efficiency:3.0, winter:3.0, summer:3.0, fuel: 'electric'},
+        
+        'woodbatch':{name:"Wood batch boiler", efficiency:0.92, winter:0.92, summer:0.92, fuel: 'wood'},
+        'woodpellet':{name:"Wood pellet boiler", efficiency:0.92, winter:0.92, summer:0.92, fuel: 'wood'},
+        'woodstove':{name:"Wood stove", efficiency:0.87, winter:0.87, summer:0.87, fuel: 'wood'},
+        'openwoodfire':{name:"Open wood fire", efficiency:0.25, winter:0.25, summer:0.25, fuel: 'wood'},
 
-        'oilrangecooker':{name:"Oil range cooker", efficiency:0.55, fuel: 'oil'},
-        'gasboiler':{name:"Gas boiler", efficiency:0.90, fuel: 'gas'},
-        'oilboiler':{name:"Oil boiler", efficiency:0.85, fuel: 'oil'},
-
-        'electricheater':{name:"Electric room heater", efficiency:1.0, fuel: 'electric'},
-        'electricimmersion':{name:"Electric immersion heater", efficiency:1.0, fuel: 'electric'},
-
-        'electric-high':{name:"High rate electric", efficiency:1.0, fuel: 'electric-high'},
-        'electric-low':{name:"Low rate electric", efficiency:1.0, fuel: 'electric-low'},
-        'electric':{name:"Electric", efficiency:1.0, fuel: 'electric'},
-        'greenelectric':{name:"100% Green Electric", efficiency:1.0, fuel: 'greenelectric'},
-
-        'other-wood':{name:"Other wood", efficiency:1.0, fuel: 'wood'},
-        'other-oil':{name:"Other oil", efficiency:1.0, fuel: 'oil'},   
-        'other-gas':{name:"Other gas", efficiency:1.0, fuel: 'gas'},
-        'other-electric':{name:"Other electric", efficiency:1.0, fuel: 'electric'}
+        'electricheater':{name:"Electric room heater", efficiency:1.0, winter:1.0, summer:1.0, fuel: 'electric'},
+        'electricimmersion':{name:"Electric immersion heater", efficiency:1.0, winter:1.0, summer:1.0, fuel: 'electric'},
+        'electric-high':{name:"High rate electric", efficiency:1.0, winter:1.0, summer:1.0, fuel: 'electric-high'},
+        'electric-low':{name:"Low rate electric", efficiency:1.0, winter:1.0, summer:1.0, fuel: 'electric-low'},
     }
 }
