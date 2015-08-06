@@ -100,7 +100,7 @@
     <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m2</p>
     
     <hr>
-    <h3>Roof's</h3>
+    <h3>Roofs</h3>
     <hr>
     
     <table class="table">
@@ -124,12 +124,23 @@
     <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m2</p>
     
     <hr>
-    <h3>Windows</h3>
+    <h3>Windows, doors and roof-lights</h3>
     <hr>
+    
+    <p>
+        <div style="float:left"><b>Key:</b></div>
+        <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#fff; float:left"></div>
+        <div style="float:left">Windows</div>
+        <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#aaffaa; float:left"></div>
+        <div style="float:left">Roof-lights</div>
+        <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#ffcccc; float:left"></div>
+        <div style="float:left">Doors</div>
+    </p><br><br>
     
     <table class="table">
     
         <tr>
+            <!--<th>Type</th>-->
             <th style="text-align:left; width:100px">Window<br>Name</th>
             <th style="text-align:left">Description</th>
             <th>subtract<br>from:</th>
@@ -149,6 +160,15 @@
         
         <tbody id="window-template" style="display:none">
             <tr>
+                <!--
+                <td>
+                    <select key="data.fabric.elements.template.openingtype" style="width:50px">
+                        <option>Window</option>
+                        <option>Roof-light</option>
+                        <option>Door</option>
+                    </select>
+                </td>
+                -->
                 <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
                 <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.description"></td>
                 <td>

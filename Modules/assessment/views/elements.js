@@ -130,6 +130,18 @@ function add_window(z)
     $("#windows [key='data.fabric.elements.template.wk']").attr('key','data.fabric.elements.'+z+'.wk');
     $("#windows [key='data.fabric.elements.template.gain']").attr('key','data.fabric.elements.'+z+'.gain');
     
+    var name = data.fabric.elements[z].name;
+    name = name.toLowerCase();
+    
+    
+    if (name.indexOf("door")!=-1) {
+         $("#windows [key='data.fabric.elements."+z+".name']").parent().parent().css('background-color','#ffeeee');
+    }
+    
+    if (name.indexOf("roof")!=-1) {
+         $("#windows [key='data.fabric.elements."+z+".name']").parent().parent().css('background-color','#eeffee');
+    }
+    
     $("#windows [row='template']").attr('row',z);
     
     var subtractfromhtml = "<option value='no' ></option>";
@@ -162,6 +174,25 @@ function elements_initUI()
     loadlibrarylist(function(){
         loadlibrary(selected_library,function(){});
     });
+}
+
+function elements_UpdateUI()
+{
+    for (z in data.fabric.elements) {
+    
+        if (data.fabric.elements[z].type=='window') {
+            var name = data.fabric.elements[z].name;
+            name = name.toLowerCase();
+            
+            var color = "#fff";
+            if (name.indexOf("door")!=-1) color = '#ffeeee';
+            if (name.indexOf("roof")!=-1) color = '#ddffdd';
+            
+            $("#windows [key='data.fabric.elements."+z+".name']").parent().parent().css('background-color',color);
+    
+        }
+    
+    }
 }
 
 //-----------------------------------------------------------------------------------------------
