@@ -110,6 +110,7 @@
 
     var changelog = "";
     var selected_library = -1;
+    var selected_library_tag = "Wall";
 
     $("#openbem").css("background-color","#eee");
 

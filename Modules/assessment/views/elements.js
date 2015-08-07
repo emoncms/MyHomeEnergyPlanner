@@ -252,8 +252,8 @@ function loadlibrary(id,callback) {
 }
 
 $("#openbem").on("click",'.add-element-from-lib', function() {
-    var tag = $(this).attr("tags");
-    draw_library(tag);
+    selected_library_tag = $(this).attr("tags");
+    draw_library(selected_library_tag);
 });
 
 function draw_library(tag)
@@ -373,7 +373,7 @@ $("#library-select").change(function(){
         console.log(id);
         selected_library = id;
         loadlibrary(id,function(){
-            draw_library("Wall");
+            draw_library(selected_library_tag);
         });
     }
 });
