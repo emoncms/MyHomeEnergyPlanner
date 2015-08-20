@@ -1,0 +1,27 @@
+.right-align-item-list {
+	margin-bottom: 8rem;
+	margin-top: 2rem;
+
+	li {
+		width: 90%;
+		float: right;
+		border-bottom: 1px dashed $red;
+		margin-top: 1rem;
+	}
+
+	&:after {
+		content: '';
+		display: block;
+		clear: both;
+	}	
+}
+
+@media screen and (max-width: 675px) {
+	.right-align-item-list li {
+		width: 100%;
+	}
+
+	.right-align-item-list {
+		margin-bottom: 0rem;
+	}
+}

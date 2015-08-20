@@ -1,0 +1,49 @@
+/**
+ * Modified Version of
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ * ( Only applies to the wrapper and removed some rarer elements)
+ */
+.carbon-report-wrapper {
+	div, span, object, iframe,
+	h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+	a, em, img, q, s, small, strike,
+	b, u, i, center, strong,
+	dl, dt, dd, ol, ul, li, label, 
+	table, caption, tbody, tfoot, thead, tr, th, td,
+	article, canvas, footer, header,
+	menu, nav, output, section {
+		margin: 0;
+		padding: 0;
+		border: 0;
+		font-size: 100%;
+		font: inherit;
+		vertical-align: baseline;
+	}
+	/* HTML5 display-role reset for older browsers */
+	article, aside, details, figcaption, figure, 
+	footer, header, hgroup, menu, nav, section {
+		display: block;
+	}
+	body {
+		line-height: 1;
+	}
+	ol, ul {
+		list-style: none;
+	}
+	blockquote, q {
+		quotes: none;
+	}
+	blockquote:before, blockquote:after,
+	q:before, q:after {
+		content: '';
+		content: none;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+	*, *:after, *:before {
+		box-sizing: border-box;
+	}
+}

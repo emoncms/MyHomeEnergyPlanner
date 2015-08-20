@@ -1,0 +1,239 @@
+.carbon-report-wrapper { 
+
+	.three-col-table {
+	// Temp
+	margin-bottom: 1em;
+	width: 100%;
+	text-align: left;
+	// border-spacing: 10px;
+	// border-collapse: separate;
+
+	thead th {
+		// border-top: 1px solid $red;
+		// border-bottom: 1px solid $red;
+		position: relative;
+		color: $red;
+
+		&:before, &:after {
+			content: '';
+			display: block;
+			height: 1px;
+			background: $red;
+			left: 15px;
+			right: 15px;
+			position: absolute;
+		}
+
+		&:before {
+			top: 0;
+		}
+
+		&:after {
+			bottom: 0;
+		}
+
+		&:last-of-type {
+			&:before, &:after {
+				right: 0;
+			}
+		}
+	}
+
+	td, th {
+		padding: 10px 0 10px 15px;
+		width: 25%;
+	}
+
+	td {
+		color: $grey;
+	}
+
+	.half-width {
+		width: 50%;
+		padding-left: 0;
+		color: $black;
+
+		&:before, &:after {
+			left: 0;
+			right: 15px;
+		}
+	}
+}
+
+.five-col-table {
+	border-spacing: 15px;
+	border-collapse: separate;
+	text-align: left;
+	margin: 0 -15px 1em -15px;
+
+	.highlighted-col {
+		color: $red;
+	}
+
+	th {
+		color: $red;
+		font-weight: bold;
+		border-top: 2px solid $red;
+		padding-top: 7px;
+		padding-bottom: 15px;
+	}
+
+	td {
+		border-bottom: 1px dashed $red;
+		padding-bottom: 15px;
+	}
+
+	.text-width-limiter {
+		max-width: 450px;	
+	}
+
+	.highlighted-col{
+		width: 15%;
+	}
+	.cost {
+		width: 5%;
+	}
+	
+	tr:last-of-type td {
+		border-bottom: 0;
+	}
+}
+
+.table-sub-total {
+	border-top: 2px solid $red;
+	padding-top: 7px;
+	float: right;
+	width: 50%;
+	text-align: left;
+
+	.sub-total {
+		display: block;
+		line-height: 1;
+		font-weight: bold;
+	}
+}
+
+.five-col-table-wrapper {
+	margin-bottom: 2em;
+}
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+	.five-col-table, .three-col-table {
+		border-spacing: 0;
+		border-collapse: collapse;
+		width: 100%;
+		margin: 0 auto 2em auto;
+
+		/* Force table to not be like tables anymore */
+		table, thead, tbody, th, td, tr { 
+			display: block; 
+		}
+		
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr { 
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+		
+		tr { 
+			border-top: 1px solid $red;
+			border-bottom: 1px solid $red;
+			padding: 20px 0;
+		}
+		
+		td { 
+			/* Behave  like a "row" */
+			border: none;
+			border-bottom: 1px solid #eee; 
+			position: relative;
+			padding-left: 50%;
+			padding-top: 15px;
+		}
+
+
+		
+		td:before { 
+			/* Now like a table header */
+			position: absolute;
+			/* Top/left values mimic padding */
+			top: 15px;
+			left: 6px;
+			width: 45%; 
+			padding-right: 10px; 
+			white-space: nowrap;
+		}
+		
+		/*
+		Label the data
+		*/
+
+
+		.highlighted-col, .cost {
+			width: 100%;
+		}
+
+		tr td:last-of-type {
+			border-bottom: none;
+		}
+	}
+
+	.table-sub-total {
+		margin-top: 2em;
+		float: left;
+	}
+
+	.five-col-table {
+		td:nth-of-type(1):before { content: "Name"; }
+		td:nth-of-type(2):before { content: "Description"; }
+		td:nth-of-type(3):before { content: "Benefits (in order)"; }
+		td:nth-of-type(4):before { content: "Cost"; }
+		td:nth-of-type(5):before { content: "Completed By"; }
+	}
+
+	.three-col-table {
+		td:nth-of-type(1):before { content: "Typical Home (SAP)"}
+		td:nth-of-type(2):before { content: "Your Home"}
+		
+				td { 
+			padding-left: 0%;
+			width: 100%;
+			padding-top: 50px;
+		}
+
+
+		
+		td:before { 
+			left: 0px;
+		}
+
+	}
+
+}
+
+
+@media 
+only screen and (max-width: 465px) {
+	.five-col-table  {
+		
+		td { 
+			padding-left: 0%;
+			width: 100%;
+			padding-top: 50px;
+		}
+
+
+		
+		td:before { 
+			left: 0px;
+		}
+	}
+}
+}

@@ -6,5 +6,6 @@ Modules/dashboard
 Modules/vis
 Modules/assessment/views/ccreport.html
 Modules/assessment/views/ccreport.js
+Modules/assessment/.sass-cache
 Modules/assessment/views/householdquestionnaire.html
 background.jpg
