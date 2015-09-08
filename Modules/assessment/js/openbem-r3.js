@@ -51,6 +51,13 @@ var openbem = {
         $.ajax({ type: 'GET', url: path+"assessment/setstatus.json", data: "id="+id+"&status="+status, async: false, success: function(data){result=data;} });
         return result;
     },
+    
+    'set_name_and_description':function(id, name, description)
+    {
+        var result = 0;
+        $.ajax({ type: 'POST', url: path+"assessment/setnameanddescription.json", data: "id="+id+"&name="+name+"&description="+description, async: false, success: function(data){result=data;} });
+        return result;
+    },
 
     /*
     'getprojectdetails':function(project_id)
