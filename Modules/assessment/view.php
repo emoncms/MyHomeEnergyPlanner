@@ -24,7 +24,14 @@ global $reports;
     {
         opacity:0.3 !important;
     }
+    body .modal {
+        /* new custom width */
+        width: 560px;
+        /* must be half of the width, minus scrollbar on the left (30px) */
+        margin-left: -280px;
+    }
 </style>
+
 
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
@@ -105,7 +112,7 @@ global $reports;
     </div>
 </div>
 
-<div id="modal-edit-project-name-and-description" class="modal hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+<div id="modal-edit-project-name-and-description" class="modal modal-sm hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>Edit project name and description</h3>
@@ -125,6 +132,22 @@ global $reports;
         <button id="assessment-update-name-and-description" class="btn btn-primary">Done</button>
     </div>
 </div>
+
+<div id="modal-error-submitting-data" class="modal alert-danger hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <h3>Error!</h3>
+    </div>
+    <div class="modal-body">
+        <p>A problem has been occurred while submitting your data. Probably you have been logged out.</p>
+        <p>You will be redirected.</p>
+    </div>
+    <div class="modal-footer">
+        <button id="modal-error-submitting-data-done" class="btn btn-danger">Done</button>
+    </div>
+</div>
+
+</body>
+</html>                                		
 
 
 <script>
@@ -216,7 +239,12 @@ global $reports;
 
         $("." + scenario + "_sap_rating").html(project[scenario].SAP.rating.toFixed(0));
 
-        openbem.set(projectid, project);
+        openbem.set(projectid, project, function (result) {
+            if (result === false) {
+                $('#modal-error-submitting-data').show();
+                console.log("hostia")
+            }
+        });
     }
 
     $("#openbem").on("change", '[key]', function () {
@@ -290,11 +318,14 @@ global $reports;
     });
     $('#assessment-update-name-and-description').on('click', function () {
         p.name = $("#project-name-input").val();
-        p.description =$('#project-description-input').val();
+        p.description = $('#project-description-input').val();
         $("#project-title").html(p.name);
         $("#project-description").html(p.description);
         $("#modal-edit-project-name-and-description").modal("hide");
-        openbem.set_name_and_description(projectid, p.name,p.description);
+        openbem.set_name_and_description(projectid, p.name, p.description);
+    })
+    $("#modal-error-submitting-data-done").on('click',function(){
+        location.reload();
     })
 
     //-------------------------------------------------------------------

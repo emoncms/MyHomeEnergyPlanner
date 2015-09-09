@@ -20,7 +20,7 @@ var openbem = {
         return result;
     },
     
-    'set': function(id,project)
+    'set': function(id,project,callback)
     {
         var inputdata = {};
         for (z in project)
@@ -28,7 +28,7 @@ var openbem = {
             inputdata[z] = openbem.extract_inputdata(project[z]);
         }
         var result = {};
-        $.ajax({ type: 'POST', url: path+"assessment/setdata.json", data: "id="+parseInt(id)+"&data="+JSON.stringify(inputdata), async: true, success: function(data){} });
+        $.ajax({ type: 'POST', url: path+"assessment/setdata.json", data: "id="+parseInt(id)+"&data="+JSON.stringify(inputdata), async: true, success: function(data){callback(data)} });
     },
     
     'create':function(name,description)

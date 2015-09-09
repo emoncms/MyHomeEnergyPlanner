@@ -6,11 +6,22 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 function assessment_controller() {
     global $session, $route, $mysqli;
 
-    $result = false;
-
-    if (!isset($session['read']))
+    // -------------------------------------------------------------------------
+    // Check if session has been authenticated, if not redirect to login page (html) 
+    // or send back "false" (json)
+    // -------------------------------------------------------------------------
+    if (!$session['read']) {
+        if ($route->format == 'html')
+            $result = view("Modules/user/login_block.php", array());
+        else
+            $result = false;
         return array('content' => $result);
+    }
 
+    // -------------------------------------------------------------------------    
+    // Session is authenticated so we run the action
+    // -------------------------------------------------------------------------
+    $result = false;
     if ($route->format == 'html') {
         if ($route->action == "view" && $session['write'])
             $result = view("Modules/assessment/view.php", array());
