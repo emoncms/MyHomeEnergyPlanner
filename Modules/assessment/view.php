@@ -135,11 +135,11 @@ global $reports;
 
 <div id="modal-error-submitting-data" class="modal alert-danger hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
-        <h3>Error!</h3>
+        <h3>You have been logged out!</h3>
     </div>
     <div class="modal-body">
-        <p>A problem has been occurred while submitting your data. Probably you have been logged out.</p>
-        <p>You will be redirected.</p>
+        <p>The last change hasn't been saved.</p>
+        <p>You will be redirected to the login page.</p>
     </div>
     <div class="modal-footer">
         <button id="modal-error-submitting-data-done" class="btn btn-danger">Done</button>
@@ -242,7 +242,6 @@ global $reports;
         openbem.set(projectid, project, function (result) {
             if (result === false) {
                 $('#modal-error-submitting-data').show();
-                console.log("hostia")
             }
         });
     }

@@ -195,6 +195,8 @@ var openbem = {
 
         inputdata.fabric = {
             thermal_bridging_yvalue: data.fabric.thermal_bridging_yvalue,
+            global_TMP: data.fabric.global_TMP,
+            global_TMP_value: data.fabric.global_TMP_value,
             elements: []
         };
 
