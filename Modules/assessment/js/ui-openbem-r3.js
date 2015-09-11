@@ -16,18 +16,21 @@ function draw_openbem_graphics()
     var s3 = Math.sqrt(windowswk / uscale);
     var s4 = Math.sqrt(wallswk / uscale);
     var s5 = Math.sqrt(roofwk / uscale);
+    var s6 = Math.sqrt(thermalbridgewk / uscale);
     
-    $("#house-floor").attr("transform","translate(500,620) rotate(90) scale("+s1+")");
+    $("#house-floor").attr("transform","translate(460,620) rotate(90) scale("+s1+")");
     $("#house-ventilation").attr("transform","translate(260,535) rotate(180) scale("+s2+")");
     $("#house-windows").attr("transform","translate(260,345) rotate(180) scale("+s3+")");
-    $("#house-walls").attr("transform","translate(740,460) rotate(0) scale("+s4+")");
+    $("#house-walls").attr("transform","translate(730,535) rotate(0) scale("+s4+")");
     $("#house-roof").attr("transform","translate(630,175) rotate(-55) scale("+s5+")");
+    $("#house-thermalbridge").attr("transform","translate(730,345) rotate(0) scale("+s6+")");
     
     $("#house-floorwk").html(Math.round(floorwk)+" W/K");
     $("#house-ventilationwk").html(Math.round(ventilationwk)+" W/K");
     $("#house-windowswk").html(Math.round(windowswk)+" W/K");
     $("#house-wallswk").html(Math.round(wallswk)+" W/K");
     $("#house-roofwk").html(Math.round(roofwk)+" W/K");
+    $("#house-thermalbridgewk").html(Math.round(thermalbridgewk)+" W/K");
     $("#house-totalwk").html(Math.round(totalwk)+" W/K");
     
     // ---------------------------------------------------------------------------------
