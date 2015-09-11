@@ -252,7 +252,9 @@ global $reports;
         var input_type = $(this).attr('type');
         if (input_type == 'checkbox')
             val = $(this)[0].checked;
-
+        if (input_type == 'textarea')
+            val = $(this).html();
+            
         if (!isNaN(val) && val != "")
             val *= 1;
         var lastval = varset(key, val);
