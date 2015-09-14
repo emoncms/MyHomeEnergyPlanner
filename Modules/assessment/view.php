@@ -19,6 +19,8 @@
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/canvas-barchart/barchart.js"></script>
+
 <style>
     .modal-backdrop
     {
@@ -26,7 +28,7 @@
     }
 </style>
 
-<link rel="stylesheet" href="<?php echo $d; ?>/carbon.css">
+<link rel="stylesheet" href="<?php echo $d; ?>carbon.css">
 
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 

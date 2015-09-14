@@ -32,8 +32,10 @@
 			</div>
 			<div class="highlight-box pink-highlight">
 				<h4 class="top-border-title title-margin-bottom ">My Home Energy Planner Overview</h4>
-				<img src="../Modules/assessment/img-assets/images/bars-test.png" alt="" class="graph-placeholder">
+				<div class="bar-chart-container" id="barchart"></div>
 			</div>
+
+
 		</section>
 		<section>
 			<div class="section-title title-margin-top">
@@ -91,7 +93,7 @@
 			</div>
 			<div class="highlight-box pink-highlight">
 				<h4 class="top-border-title title-margin-bottom ">Fabric Energy Chart</h4>
-				<img class="graph-placeholder" src="../Modules/assessment/img-assets/images/graph-test.png" alt="">
+				<div class="bar-chart-container" id="barchart-2"></div>
 			</div>
 		</section>
 		<section>
@@ -101,7 +103,7 @@
 			</div>
 			<div class="highlight-box pink-highlight">
 				<h4 class="top-border-title title-margin-bottom">Primary Energy Use</h4>
-				<img class="graph-placeholder" src="../Modules/assessment/img-assets/images/graph-test-3.png" alt="">
+				<div class="bar-chart-container" id="barchart-3"></div>
 			</div>
 			<div class="highlight-box pink-highlight">
 				<h4 class="top-border-title title-margin-bottom">Carbon Dioxide Emissions</h4>
@@ -320,6 +322,9 @@
 
 		</section>
 	</div>
+	<div id="chart">
+	  <svg></svg>
+	</div>
 	<footer>
 		<div class="page-wrapper">
 			<div class="sponsor-wrapper">
@@ -335,3 +340,18 @@
 		</div>
 	</footer>
 </div>
+
+<style>
+.chart div {
+	font: 10px sans-serif;
+	background-color: steelblue;
+	text-align: right;
+	padding: 3px;
+	margin: 1px;
+	color: white;
+}
+.chart rect {
+	stroke: white;
+	fill: steelblue;
+}
+</style>
