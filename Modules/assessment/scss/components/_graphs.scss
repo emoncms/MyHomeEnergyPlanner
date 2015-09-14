@@ -2,3 +2,15 @@
 	width: 100%;
 	display: block;
 }
+
+.bar-chart-container canvas {
+	max-width: 80% !important;
+    margin: 0 auto;
+    display: block;
+}
+
+.bar-chart-container {
+    padding: 50px 0 !important;
+    max-width: 100%;
+    background-color: rgb(255, 255, 255);
+}
