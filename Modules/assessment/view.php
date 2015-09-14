@@ -242,7 +242,7 @@ global $reports;
         $("." + scenario + "_sap_rating").html(project[scenario].SAP.rating.toFixed(0));
 
         openbem.set(projectid, project, function (result) {
-            if (result === false) {
+            if (result === "Not logged") {
                 $('#modal-error-submitting-data').show();
             }
         });
@@ -324,26 +324,37 @@ global $reports;
         $("#project-description").html(p.description);
         $("#modal-edit-project-name-and-description").modal("hide");
         openbem.set_name_and_description(projectid, p.name, p.description);
-    })
+    });
     $("#modal-error-submitting-data-done").on('click', function () {
         location.reload();
-    })
+    });
+
+    $("#openbem").on('click', '[key="data.use_appliancePHPP"]', function () {
+        if(data.use_appliancePHPP===1)
+            data.use_appliancelist = false;
+        update();
+    });
+     $("#openbem").on('click', '[key="data.use_appliancelist"]', function () {
+        if(data.use_appliancelist===1)
+            data.use_appliancePHPP = false;
+        update();
+    });
 
     //-------------------------------------------------------------------
 
     $(".house_graphic").click(function () {
-        if ($(".house_graphic").html() == "Show house graphic") {
-            $("#topgraphic").show();
-            $("#rating").hide();
-            $(".house_graphic").html("Hide house graphic");
-        } else {
-            $("#topgraphic").hide();
-            $("#rating").show();
-            $(".house_graphic").html("Show house graphic");
+    if ($(".house_graphic").html() == "Show house graphic") {
+        $("#topgraphic").show();
+        $("#rating").hide();
+        $(".house_graphic").html("Hide house graphic");
+    } else {
+        $("#topgraphic").hide();
+        $("#rating").show();
+        $(".house_graphic").html("Show house graphic");
         }
-    });
-
-    $("#topgraphic").show();
+    }
+    );
+            $("#topgraphic").show();
     $("#rating").hide();
     $(".house_graphic").html("Hide house graphic");
 

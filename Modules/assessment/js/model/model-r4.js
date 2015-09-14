@@ -1247,16 +1247,16 @@ calc.appliancePHPP = function () {
     }
 
 
-    this.data.appliancePHPP.gains_W = this.data.appliancePHPP.primary_energy_total.total / 365 / 24; // we pass it from annual to hours
+    this.data.appliancePHPP.gains_W = 1000 * this.data.appliancePHPP.primary_energy_total.total; // we pass it from kWh to Wh
     this.data.appliancePHPP.gains_W_monthly = [];
     for (var m = 0; m < 12; m++)
-        this.data.appliancePHPP.gains_W_monthly[m] = this.data.appliancePHPP.gains_W;
+        this.data.appliancePHPP.gains_W_monthly[m] = this.data.appliancePHPP.gains_W * datasets.table_1a[m] / 365.0 ;
 
-    if (this.data.use_appliancePHPP) {
+    /*if (this.data.use_appliancePHPP) {
         this.data.gains_W["Appliances"] = this.data.appliancelist.gains_W_monthly;
         if (this.data.appliancePHPP.primary_energy_total.total > 0)
             this.data.energy_requirements.appliances = {name: "Appliances", quantity: this.data.appliancePHPP.primary_energy_total.total};
-    }
+    }*/
 };
 
 calc.appliancelist = function ()

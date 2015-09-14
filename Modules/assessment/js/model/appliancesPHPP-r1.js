@@ -2,7 +2,7 @@ var appliancesPHPP = {
     "Laundry": {
         "Clothes washing - hot feed": {
             "Norm demand": 1.1,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor": 1,
             "Frequency": 55,
             "Reference quantity": 3,
@@ -12,7 +12,7 @@ var appliancesPHPP = {
         },
         "Clothes washing - cold feed": {
             "Norm demand": 1.1,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor": 1,
             "Frequency": 55,
             "Reference quantity": 3,
@@ -22,7 +22,7 @@ var appliancesPHPP = {
         },
         "Clothes Drying - electric dryer": {
             "Norm demand": 4,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor": 0.88,
             "Frequency": 57,
             "Reference quantity": 3,
@@ -34,7 +34,7 @@ var appliancesPHPP = {
     "Food storage": {
         "Refrigerator": {
             "Norm demand": 0.65,
-            "Units": "kWh/d",
+            "Units": "kWh per day",
             "Utilisation factor": 1,
             "Frequency": 365,
             "Reference quantity": 1,
@@ -44,7 +44,7 @@ var appliancesPHPP = {
         },
         "Upright Freezer": {
             "Norm demand": 0.89,
-            "Units": "kWh/d",
+            "Units": "kWh per day",
             "Utilisation factor": 1,
             "Frequency": 365,
             "Reference quantity": 1,
@@ -54,7 +54,7 @@ var appliancesPHPP = {
         },
         "Chest Freezer": {
             "Norm demand": 1,
-            "Units": "kWh/d",
+            "Units": "kWh per day",
             "Utilisation factor": 1,
             "Frequency": 365,
             "Reference quantity": 1,
@@ -64,7 +64,7 @@ var appliancesPHPP = {
         },
         "Fridge/Freezer": {
             "Norm demand": 1.16,
-            "Units": "kWh/d",
+            "Units": "kWh per day",
             "Utilisation factor": 1,
             "Frequency": 365,
             "Reference quantity": 1,
@@ -76,7 +76,7 @@ var appliancesPHPP = {
     "Cooking": {
         "gas hob, gas oven": {
             "Norm demand": 0.25,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor": 1,
             "Frequency": 500,
             "Reference quantity": 3, 
@@ -86,7 +86,7 @@ var appliancesPHPP = {
         },
         "gas hob, electric oven": {
             "Norm demand": 0.25,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor": 1,
             "Frequency": 500,
             "Reference quantity": 3, 
@@ -96,7 +96,7 @@ var appliancesPHPP = {
         },
         "electric hob, electric oven (standard)": {
             "Norm demand": 0.22,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor": 1,
             "Frequency": 500,
             "Reference quantity": 3, 
@@ -106,7 +106,7 @@ var appliancesPHPP = {
         },
         "electric hob, electric oven (induction)": {
             "Norm demand": 0.2,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor":1 ,
             "Frequency": 500,
             "Reference quantity": 3, 
@@ -116,7 +116,7 @@ var appliancesPHPP = {
         },
         "range/aga - gas/oil": {
             "Norm demand": 425,
-            "Units": "KWh/week",
+            "Units": "KWh per week",
             "Utilisation factor":1 ,
             "Frequency": 52,
             "Reference quantity": 1,
@@ -126,7 +126,7 @@ var appliancesPHPP = {
         },
         "range/aga - electric ": {
             "Norm demand": 220,
-            "Units": "KWh/week",
+            "Units": "KWh per week",
             "Utilisation factor": 1,
             "Frequency": 52,
             "Reference quantity": 1,
@@ -158,7 +158,7 @@ var appliancesPHPP = {
     "Other kitchen / cleaning": {
         "Dishwasher - hot feed": {
             "Norm demand": 1.5,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor": 1,
             "Frequency": 65,
             "Reference quantity": 3,
@@ -168,7 +168,7 @@ var appliancesPHPP = {
         },
         "Dishwasher - cold feed": {
             "Norm demand": 1.5,
-            "Units": "kWh/use",
+            "Units": "kWh per use",
             "Utilisation factor": 1,
             "Frequency": 65,
             "Reference quantity": 3,
@@ -243,8 +243,8 @@ var appliancesPHPP = {
     },
     "Misc": {
         "Small Consumer Electronics ": {
-            "Norm demand": 80,
-            "Units": "W",
+            "Norm demand": 0.080,
+            "Units": "kW",
             "Utilisation factor": 1,
             "Frequency": 0.55,
             "Reference quantity": 3,
