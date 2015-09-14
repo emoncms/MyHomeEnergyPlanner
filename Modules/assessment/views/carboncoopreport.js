@@ -6,7 +6,7 @@ function carboncoopreport_initUI() {
 	console.log(project);
 
 
-
+	// Test Chart
 
 	var chart = new BarChart({
 		chartTitle: 'Primary Energy Use',
@@ -62,6 +62,8 @@ function carboncoopreport_initUI() {
 
 	chart.draw('barchart');
 
+	// Fabric Energy Chart
+
 	var otherchart = new BarChart({
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
@@ -91,6 +93,7 @@ function carboncoopreport_initUI() {
 
 	otherchart.draw('barchart-2');
 
+	// Primary Energy Use Chart
 
 	var AnotherChart = new BarChart({
 		yAxisLabel: 'kWh/m2.year',
@@ -113,6 +116,12 @@ function carboncoopreport_initUI() {
 			'Water heating': 'rgb(82,41,57)',
 			'Lighting': 'rgb(10,175,154)'
 		},
+		targets: [
+			{
+				target: 0,
+				color: 'rgb(0,0,0)'
+			}
+		],
 		data: [
 			{label: 'UK Average', value: [
 					{value: 200, label: 'Gas (total from bills)'},
@@ -133,5 +142,60 @@ function carboncoopreport_initUI() {
 	});
 
 	AnotherChart.draw('barchart-3');
+
+	// Carbon Dioxide Emissions Chart
+
+	var YetAnotherChart = new BarChart({
+		yAxisLabel: 'kWh/m2.year',
+		fontSize: 22,
+		chartLow: -1,
+		chartHigh: 139,
+		division: 20,
+		width: 1200,
+		chartHeight: 600,
+		barWidth: 110,
+		barGutter: 60,
+		defaultBarColor: 'rgb(157,213,203)',
+		barColors: {
+			'Space heating': 'rgb(157,213,203)',
+			'Pumps, fans, etc.': 'rgb(24,86,62)',
+			'Cooking': 'rgb(40,153,139)',
+		},
+		targets: [
+			{
+				target: 20,
+				color: 'rgb(0,0,0)'
+			},
+			{
+				target: 70,
+				color: 'rgb(231,37,57)'
+			},
+		],
+		ranges: [
+			{
+				high: 50,
+				low: 30,
+				color: 'rgb(254,204,204)'
+			},
+		],
+		data: [
+			{label: 'UK Average', value: 70},
+			{label: 'Your home now (model)', value: [
+					{value: 50, label: 'Space heating'},
+					{value: 10, label: 'Pumps, fans, etc.'}
+			]},
+			{label: 'Your home now (bills)', value: 56},
+			{label: 'Your 2050 home', value: [
+					{value: 10, label: 'Cooking'},
+					{value: 10, label: 'Pumps, fans, etc.'},
+			]},
+			{label: '2016 B Regs', value: [
+					{value: 20, label: 'Cooking'},
+			]},
+			{label: 'Carbon Coop 2050 Target', value: 40}
+		]
+	});
+
+	YetAnotherChart.draw('barchart-4');
 
 }
