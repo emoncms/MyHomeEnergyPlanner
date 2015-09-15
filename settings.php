@@ -14,10 +14,10 @@
 
     */
 
-    $username = "cagabi";
-    $password = "emonalcachofa";
-    $server   = "127.0.0.1";
-    $database = "MyHomeEnergyPlanner";
+    $username = "user";
+    $password = "pass";
+    $server   = "localhost";
+    $database = "db";
 
     $redis_enabled = true;
     
@@ -80,7 +80,7 @@
     $display_errors = TRUE;
 
     // Allow user register in emoncms
-    $allowusersregister = TRUE;
+    $allowusersregister = FALSE;
 
     // Enable remember me feature - needs more testing
     $enable_rememberme = TRUE;

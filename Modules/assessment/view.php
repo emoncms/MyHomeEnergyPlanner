@@ -13,6 +13,7 @@ global $reports;
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r5.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r5.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r4.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesPHPP-r1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
@@ -254,7 +255,9 @@ global $reports;
         var input_type = $(this).attr('type');
         if (input_type == 'checkbox')
             val = $(this)[0].checked;
-
+        if (input_type == 'textarea')
+            val = $(this).html();
+            
         if (!isNaN(val) && val != "")
             val *= 1;
         var lastval = varset(key, val);
