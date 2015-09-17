@@ -64,6 +64,27 @@
     font: bold 1.5rem/1.2 "Karla", sans-serif; }
   .carbon-report-wrapper h4 {
     font: bold 1rem/1.2 "Karla", sans-serif; }
+  .carbon-report-wrapper i {
+    font-style: italic;
+    color: #8c7e8b; }
+  .carbon-report-wrapper strong {
+    font-weight: bold;
+    color: #e41b3a; }
+  .carbon-report-wrapper .indented-list {
+    margin-left: 30px; }
+    .carbon-report-wrapper .indented-list li {
+      margin-bottom: 1.5em; }
+    .carbon-report-wrapper .indented-list p:first-child {
+      margin-left: 0; }
+    .carbon-report-wrapper .indented-list p {
+      margin-left: 30px; }
+    .carbon-report-wrapper .indented-list .indented-list {
+      margin-left: 30px; }
+      .carbon-report-wrapper .indented-list .indented-list li {
+        margin-bottom: 0;
+        margin-left: 30px; }
+      .carbon-report-wrapper .indented-list .indented-list p {
+        margin-bottom: 0.5em; }
   .carbon-report-wrapper p {
     font: 1rem/1.4 "Karla", sans-serif;
     color: #574d56;
@@ -308,8 +329,7 @@
   margin-bottom: 8rem;
   margin-top: 2rem; }
   .carbon-report-wrapper .right-align-item-list li {
-    width: 90%;
-    float: right;
+    margin-left: 30px;
     border-bottom: 1px dashed #e41b3a;
     margin-top: 1rem; }
   .carbon-report-wrapper .right-align-item-list:after {
