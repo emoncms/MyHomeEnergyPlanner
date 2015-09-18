@@ -42,44 +42,31 @@ function carboncoopreport_initUI() {
 		chartTitle: 'Energy Demand',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
-		chartLow: -129,
-		chartHigh: 619,
-		division: 80,
 		width: 1200,
 		chartHeight: 600,
 		barWidth: 110,
-		barGutter: 80,
+		barGutter: 120,
 		defaultBarColor: 'rgb(231,37,57)',
 		barColors: {
-			'Space heating': 'rgb(65,168,198)',
-			'Pumps, fans, etc.': 'rgb(24,86,62)',
-			'Cooking': 'rgb(147,162,147)',
-			'Gas (total from bills)': 'rgb(236,102,79)',
-			'Solid fuel (total from bills)': 'rgb(246,167,7)',
-			'Total primary energy': 'rgb(241,138,157)',
-			'Water heating': 'rgb(82,41,57)',
-			'Lighting': 'rgb(10,175,154)'
+			'Wood': 'rgb(24,86,62)',
+			'Solar': 'rgb(240,212,156)',
+			'Gas': 'rgb(236,102,79)',
+			'Solid fuel': 'rgb(246,167,7)',
 		},
-		targets: [
-			{
-				target: 0,
-				color: 'rgb(0,0,0)'
-			}
-		],
 		data: [
 			{label: 'UK Average', value: [
-					{value: 200, label: 'Gas (total from bills)'},
-					{value: 120, label: 'Space heating'},
-					{value: 65, label: 'Total primary energy'},
-					{value: 30, label: 'Solid fuel (total from bills)'}
+					{value: 2000, label: 'Gas'},
+					{value: 600, label: 'Wood'},
+					{value: 605, label: 'Solar'},
+					{value: 300, label: 'Solid fuel'}
 			]},
 			{label: '2000 B Regs Average', value: 60},
 			{label: 'Your home now', value: 180},
 			{label: 'UK Average', value: [
-					{value: -50, label: 'Gas (total from bills)'},
-					{value: 120, label: 'Space heating'},
-					{value: 65, label: 'Cooking'},
-					{value: 30, label: 'Solid fuel (total from bills)'}
+					{value: 2000, label: 'Gas'},
+					{value: 1200, label: 'Wood'},
+					{value: 750, label: 'Solar'},
+					{value: 300, label: 'Solid fuel'}
 			]},
 		]
 	});
@@ -131,7 +118,7 @@ function carboncoopreport_initUI() {
 
 	// Carbon Dioxide Emissions Chart Per Person
 
-	var CarbonDioxideEmissions = new BarChart({
+	var CarbonDioxideEmissionsPerPerson = new BarChart({
 		chartTitle: 'Carbon Dioxide Emissions Per Person',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
@@ -168,7 +155,7 @@ function carboncoopreport_initUI() {
 		]
 	});
 
-	CarbonDioxideEmissions.draw('carbon-dioxide-emissions-per-person');
+	CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
 
 
 	// Estimate Energy Costs Comparison 
