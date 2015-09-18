@@ -101,7 +101,7 @@ function carboncoopreport_initUI() {
 					{value: 300, label: 'Solid fuel'}
 			]},
 			{label: '2000 B Regs Average', value: 60},
-			{label: 'Your home now', value: 180},
+			{label: 'Your home now', value: project[scenario].primary_energy_use_m2},
 			{label: 'UK Average', value: [
 					{value: 2000, label: 'Gas'},
 					{value: 1200, label: 'Wood'},
@@ -116,12 +116,12 @@ function carboncoopreport_initUI() {
 
 	// Carbon Dioxide Emissions Chart
 
+
 	var CarbonDioxideEmissions = new BarChart({
 		chartTitle: 'Carbon Dioxide Emissions',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
-		chartLow: -1,
-		chartHigh: 134,
+		chartHigh: 120,
 		division: 15,
 		width: 1200,
 		chartHeight: 600,
@@ -147,7 +147,7 @@ function carboncoopreport_initUI() {
 		],
 		data: [
 			{label: 'UK Average', value: 100},
-			{label: 'Your home now (model)', value: 0},
+			{label: 'Your home now (model)', value: project[scenario].kgco2perm2},
 			{label: 'Your home now (bills)', value: 0},
 			{label: 'Your 2050 home', value: 0},
 		]
@@ -162,8 +162,7 @@ function carboncoopreport_initUI() {
 		chartTitle: 'Carbon Dioxide Emissions Per Person',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
-		chartLow: -1,
-		chartHigh: 134,
+		chartHigh: 120,
 		division: 15,
 		width: 1200,
 		chartHeight: 600,
@@ -177,19 +176,19 @@ function carboncoopreport_initUI() {
 		},
 		targets: [
 			{
-				label: '50kwH/m2.year',
-				target: 50,
+				label: 65 / project[scenario].occupancy + 'kwH/m2.year',
+				target: ( 65 / project[scenario].occupancy ),
 				color: 'rgb(231,37,57)'
 			},
 			{
-				label: '80kwH/m2.year',
-				target: 80,
+				label: 105 / project[scenario].occupancy + 'kwH/m2.year',
+				target: ( 105 / project[scenario].occupancy ),
 				color: 'rgb(231,37,57)'
 			},
 		],
 		data: [
-			{label: 'UK Average', value: 25},
-			{label: 'Your home now (model)', value: 0},
+			{label: 'UK Average', value: 50},
+			{label: 'Your home now (model)', value: (project[scenario].kgco2perm2 / project[scenario].occupancy)},
 			{label: 'Your home now (bills)', value: 0},
 			{label: 'Your 2050 home', value: 0},
 		]
@@ -204,25 +203,23 @@ function carboncoopreport_initUI() {
 		chartTitle: 'Estimate Energy Costs Comparison',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
-		chartLow: -1,
-		chartHigh: 169,
-		division: 10,
+		chartLow: 0,
+		division: 200,
 		width: 1200,
 		chartHeight: 600,
-		barWidth: 110,
-		barGutter: 80,
+		barGutter: 120,
 		defaultBarColor: 'rgb(231,37,57)',
 		ranges: [
 			{
-				low: 30,
-				high: 70,
+				low: 600,
+				high: 1000,
 				color: 'rgb(254,204,204)'
 			},
 		],
 		data: [
-			{label: 'UK Average', value: 140},
-			{label: '2000 B Regs Average', value: 56},
-			{label: 'Your home now', value: 0},
+			{label: 'UK Average', value: 1400},
+			{label: '2000 B Regs Average', value: 1900},
+			{label: 'Your home now', value: project[scenario].net_cost},
 			{label: 'Your 2050 home', value: 0},
 		]
 	});
