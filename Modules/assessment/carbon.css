@@ -164,6 +164,9 @@
   max-width: 100%;
   background-color: white; }
 
+.bar-chart-container.centered-house {
+  text-align: center; }
+
 .carbon-report-wrapper {
   /* 
   Max width before this PARTICULAR table gets nasty
@@ -441,6 +444,13 @@
     margin-bottom: 1em; }
     .carbon-report-wrapper .footer-sponsor img {
       max-width: 40%; } }
+
+.page-wrapper > section {
+  page-break-after: always;
+  page-break-inside: avoid; }
+
+:root {
+  -webkit-print-color-adjust: exact; }
 
 .carbon-report-wrapper .home-image {
   width: 100%;
