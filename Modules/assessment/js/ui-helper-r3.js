@@ -109,7 +109,6 @@ function UpdateUI(data)
             else if (target.is('input[type=number]')) { target.val(value); }
             else if (target.is('input[type=checkbox]')) { target.prop('checked', value); }            
             else if (target.is('input[type=hidden]')) { target.val(value); }
-            else if (target.is('input[type=checkbox]')) { target.prop('checked', value); }
             else if (target.is('textarea')) { target.html(value); }
             else if (target.is('select')) { target.val(value); }
             else if (target.is('td')) { target.html(value); }
