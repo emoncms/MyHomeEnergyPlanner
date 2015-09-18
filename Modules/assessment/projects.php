@@ -1,24 +1,24 @@
 <?php
-  global $path, $session;
-  $d = $path."Modules/assessment/";
+global $path, $session;
+$d = $path . "Modules/assessment/";
 ?>
 
 <style>
-.recent-activity-item {
-    padding:5px;
-    border-bottom: 1px solid #ccc;
-}
-.modal-backdrop
-{
-    opacity:0.3 !important;
-}
+    .recent-activity-item {
+        padding:5px;
+        border-bottom: 1px solid #ccc;
+    }
+    .modal-backdrop
+    {
+        opacity:0.3 !important;
+    }
 
-body .modal {
-    /* new custom width */
-    width: 560px;
-    /* must be half of the width, minus scrollbar on the left (30px) */
-    margin-left: -280px;
-}
+    body .modal {
+        /* new custom width */
+        width: 560px;
+        /* must be half of the width, minus scrollbar on the left (30px) */
+        margin-left: -280px;
+    }
 </style>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r3.js"></script>
@@ -28,18 +28,18 @@ body .modal {
     <div id="myview" class="side-block-2">
         <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>My Home Energy Planner</b></div>
         <div style="padding:10px">
-        Welcome <span class="username"></span>!
+            Welcome <span class="username"></span>!
         </div>
     </div>
-    
+
     <div id="organisation" class="side-block-2" style="display:none">
         <button id="back-myview" style="float:right; margin-top:5px; margin-right:5px" class="btn">Home</button>
         <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;">
-            
+
             <b>Organisation:</b>
             <span id="organisation-name"></span>
         </div>
-        
+
         <div style="padding:10px">
             <b>Members:</b><br>
             <div id="organisationmembers"></div>
@@ -50,12 +50,12 @@ body .modal {
             </div>
         </div>
     </div>
-    
+
     <div class="side-block-2">
         <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>My Organisations</b></div>
         <div style="padding:10px">
-        <div id="myorganisations"></div>
-        <br>
+            <div id="myorganisations"></div>
+            <br>
             <div class="input-append">
                 <input id="organisation-create-name" type="text" style="width:135px" />
                 <button id="organisation-create" class="btn">Create organisation</button>
@@ -81,30 +81,30 @@ body .modal {
 
 <div id="right-pane" class="assessments">
     <div style="padding-right:10px">
-    <div class="main-block">
-        <button id="new-assessment" style="float:right; margin-top:5px; margin-right:5px" class="btn">New</button>
-        <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b><span id="assessments-title"></span></b></div>
-        <div style="padding:20px">
-            <br>
-            <table class="table">
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Author</th>
-              <th>Status</th>
-              <th>Modified</th>
-              <th style="width:40px"></th>
-              <th style="width:30px"></th>
-              <th style="width:30px"></th>
-            </tr>
-            
-            <tbody id="projects"></tbody>
+        <div class="main-block">
+            <button id="new-assessment" style="float:right; margin-top:5px; margin-right:5px" class="btn">New</button>
+            <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b><span id="assessments-title"></span></b></div>
+            <div style="padding:20px">
+                <br>
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Author</th>
+                        <th>Status</th>
+                        <th>Modified</th>
+                        <th style="width:40px"></th>
+                        <th style="width:30px"></th>
+                        <th style="width:30px"></th>
+                    </tr>
 
-            </table>
-            
-            <div id="noprojects" class="alert alert-warning" style="display:none">No projects have been created yet, click create new project to get started</div>
+                    <tbody id="projects"></tbody>
+
+                </table>
+
+                <div id="noprojects" class="alert alert-warning" style="display:none">No projects have been created yet, click create new project to get started</div>
+            </div>
         </div>
-    </div>
     </div>
 </div>
 
@@ -150,13 +150,13 @@ body .modal {
         <h3 id="myModalLabel">Share assessment: </h3>
     </div>
     <div class="modal-body">
-    
-    <p>Shared with:</p>
-    <table class="table" id="shared-with-table">
-    </table>
-    
-    <p>Enter user, or organisation name to share this assessment with:</p>
-    <input id="sharename" type="text" style="width:420px"/>
+
+        <p>Shared with:</p>
+        <table class="table" id="shared-with-table">
+        </table>
+
+        <p>Enter user, or organisation name to share this assessment with:</p>
+        <input id="sharename" type="text" style="width:420px"/>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -166,298 +166,310 @@ body .modal {
 
 <script>
 
-var viewmode = "personal";
-var orgid = 0;
+    var viewmode = "personal";
+    var orgid = 0;
 
-var myusername = "<?php echo $session['username']; ?>";
-$(".username").html(myusername);
+    var myusername = "<?php echo $session['username']; ?>";
+    $(".username").html(myusername);
 
-var path = "<?php echo $path; ?>";
-var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var path = "<?php echo $path; ?>";
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-var now = (new Date()).getTime() * 0.001;
+    var now = (new Date()).getTime() * 0.001;
 
 // -----------------------------------------------------------------------------------
 // 1) Load project lists
 // -----------------------------------------------------------------------------------
 
-var projects = [];
-$.ajax({ url: path+"assessment/list.json", success: function(result){
-    projects = result;
-    draw_projects("#projects",projects);
-    $("#assessments-title").html("My Assessments");
-}});
+    var projects = [];
+    $.ajax({url: path + "assessment/list.json", success: function (result) {
+            projects = result;
+            draw_projects("#projects", projects);
+            $("#assessments-title").html("My Assessments");
+        }});
 
 // -----------------------------------------------------------------------------------
 // Create new assessment
 // -----------------------------------------------------------------------------------
 
-$("#new-assessment").click(function(){
-    $("#modal-assessment-create").modal("show");
-});
+    $("#new-assessment").click(function () {
+        $("#modal-assessment-create").modal("show");
+    });
 
-$("#assessment-create").click(function(){
-    
-    var name = $("#project-name-input").val();
-    var description = $("#project-description-input").val();
-    
-    if (name=="") {
-        alert("Please enter a project name");
-    } else {
-        var orgselector = "";
-        if (viewmode=="organisation" && orgid!=0) orgselector += "&org="+orgid;
-        $.ajax({ 
-            url: path+"assessment/create.json", 
-            data: "name="+name+"&description="+description + orgselector, 
-            success: function(project) {
-                projects.push(project);
-                draw_projects("#projects",projects); 
-                $("#noprojects").hide(); 
-            }
-        });
-        $("#project-name-input").val("");
-        $("#project-description-input").val("");
-        $("#modal-assessment-create").modal("hide");
-    }
-});
+    $("#assessment-create").click(function () {
+
+        var name = $("#project-name-input").val();
+        var description = $("#project-description-input").val();
+
+        if (name == "") {
+            alert("Please enter a project name");
+        } else {
+            var orgselector = "";
+            if (viewmode == "organisation" && orgid != 0)
+                orgselector += "&org=" + orgid;
+            $.ajax({
+                url: path + "assessment/create.json",
+                data: "name=" + name + "&description=" + description + orgselector,
+                success: function (project) {
+                    projects.push(project);
+                    draw_projects("#projects", projects);
+                    $("#noprojects").hide();
+                }
+            });
+            $("#project-name-input").val("");
+            $("#project-description-input").val("");
+            $("#modal-assessment-create").modal("hide");
+        }
+    });
 
 // -----------------------------------------------------------------------------------
 // Delete assessment
 // -----------------------------------------------------------------------------------
 
-$(".assessments").on('click','.delete-project', function() {
-    var projectid = $(this).attr('projectid');
-    var z = $(this).attr('z');
-    
-    $('#myModal').modal('show');
-    $('#myModal').attr('the_id',projectid);
-    $('#myModal').attr('the_row',z);
-});
+    $(".assessments").on('click', '.delete-project', function () {
+        var projectid = $(this).attr('projectid');
+        var z = $(this).attr('z');
 
-$("#confirmdelete").click(function() {
-    var projectid = $('#myModal').attr('the_id');
-    var z = $('#myModal').attr('the_row');
+        $('#myModal').modal('show');
+        $('#myModal').attr('the_id', projectid);
+        $('#myModal').attr('the_row', z);
+    });
 
-    if (openbem.delete(projectid)) {
-        projects.splice(z,1);
-        draw_projects("#projects",projects);
-    }
-    
-    $('#myModal').modal('hide');
-});
+    $("#confirmdelete").click(function () {
+        var projectid = $('#myModal').attr('the_id');
+        var z = $('#myModal').attr('the_row');
+
+        if (openbem.delete(projectid)) {
+            projects.splice(z, 1);
+            draw_projects("#projects", projects);
+        }
+
+        $('#myModal').modal('hide');
+    });
 
 // -----------------------------------------------------------------------------------
 // Share assessment
 // -----------------------------------------------------------------------------------
 
-$(".assessments").on('click','.share-project-openmodal', function() {
-    var projectid = $(this).attr('projectid');
-    var z = $(this).attr('z');
-    
-    $.ajax({ url: path+"assessment/getshared.json", data: "id="+projectid, success: function(shared){
-        var out = "";
-        for (var i in shared) {
-            if (myusername!=shared[i].username) out += "<tr><td>"+shared[i].username+"</td></tr>";
-        }
-        if (out=="") out = "<tr><td>This assessment is currently private</td></tr>";
-        $("#shared-with-table").html(out);
-    }});
+    $(".assessments").on('click', '.share-project-openmodal', function () {
+        var projectid = $(this).attr('projectid');
+        var z = $(this).attr('z');
 
-    $('#modal-share-project').modal('show');
-    $('#modal-share-project').attr('the_id',projectid);
-    $('#modal-share-project').attr('the_row',z);
-    console.log("Share project "+projectid);
-});
+        $.ajax({url: path + "assessment/getshared.json", data: "id=" + projectid, success: function (shared) {
+                var out = "";
+                for (var i in shared) {
+                    if (myusername != shared[i].username)
+                        out += "<tr><td>" + shared[i].username + "</td></tr>";
+                }
+                if (out == "")
+                    out = "<tr><td>This assessment is currently private</td></tr>";
+                $("#shared-with-table").html(out);
+            }});
 
-$("#share-project").click(function() {
-    var username = $("#sharename").val();
-    var projectid = $('#modal-share-project').attr('the_id');
-    $.ajax({ url: path+"assessment/share.json", data: "id="+projectid+"&username="+username, success: function(data){
-        console.log(data);
-        
-        $.ajax({ url: path+"assessment/getshared.json", data: "id="+projectid, success: function(shared){
-            var out = "";
-            for (var i in shared) {
-                if (myusername!=shared[i].username) out += "<tr><td>"+shared[i].username+"</td></tr>";
-            }
-            if (out=="") out = "<tr><td>This assessment is currently private</td></tr>";
-            $("#shared-with-table").html(out);
-        }});
-    }});
-});
+        $('#modal-share-project').modal('show');
+        $('#modal-share-project').attr('the_id', projectid);
+        $('#modal-share-project').attr('the_row', z);
+        console.log("Share project " + projectid);
+    });
+
+    $("#share-project").click(function () {
+        var username = $("#sharename").val();
+        var projectid = $('#modal-share-project').attr('the_id');
+        $.ajax({url: path + "assessment/share.json", data: "id=" + projectid + "&username=" + username, success: function (data) {
+                console.log(data);
+
+                $.ajax({url: path + "assessment/getshared.json", data: "id=" + projectid, success: function (shared) {
+                        var out = "";
+                        for (var i in shared) {
+                            if (myusername != shared[i].username)
+                                out += "<tr><td>" + shared[i].username + "</td></tr>";
+                        }
+                        if (out == "")
+                            out = "<tr><td>This assessment is currently private</td></tr>";
+                        $("#shared-with-table").html(out);
+                    }});
+            }});
+    });
 
 // -----------------------------------------------------------------------------------
 // Change assessment status
 // -----------------------------------------------------------------------------------
 
-$(".assessments").on('change','.project-status', function() {
-    var projectid = $(this).attr('projectid');
-    var z = $(this).attr('z');
-    var status = $(this).val();
-    openbem.set_status(projectid,status);
-    projects[z].status = status;
-    draw_projects("#projects",projects);
-});
+    $(".assessments").on('change', '.project-status', function () {
+        var projectid = $(this).attr('projectid');
+        var z = $(this).attr('z');
+        var status = $(this).val();
+        openbem.set_status(projectid, status);
+        projects[z].status = status;
+        draw_projects("#projects", projects);
+    });
 
 
 // -----------------------------------------------------------------------------------
 // Draw assessment list
 // -----------------------------------------------------------------------------------
 
-function draw_projects(element,projects)
-{
-    var status_options = ["Complete","In progress","Test"];
-    
-    var out = "";
-    for (s in status_options) {
-        // out += "<tr><th>"+status_options[s]+"</th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
-        for (z in projects)
-        {
-            if (status_options[s] == projects[z].status) {
-                out += "<tr>";
-                out += "<td>"+projects[z].name+"</td>";
-                out += "<td style='font-style:italic; color:#888'>"+projects[z].description+"</td>";
-                out += "<td>"+projects[z].author+"</td>";
+    function draw_projects(element, projects)
+    {
+        var status_options = ["Complete", "In progress", "Test"];
 
-                var color = "";
-                if (projects[z].status == "Complete") color = " alert-success";
-                if (projects[z].status == "In progress") color = " alert-info";
-                if (projects[z].status == "Test") color = " alert-error";
+        var out = "";
+        for (s in status_options) {
+            // out += "<tr><th>"+status_options[s]+"</th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
+            for (z in projects)
+            {
+                if (status_options[s] == projects[z].status) {
+                    out += "<tr>";
+                    out += "<td>" + projects[z].name + "</td>";
+                    out += "<td style='font-style:italic; color:#888'>" + projects[z].description + "</td>";
+                    out += "<td>" + projects[z].author + "</td>";
 
-                out += "<td><select class='project-status"+color+"' z="+z+" projectid="+projects[z].id+">";
-                for (o in status_options) {
-                    var selected = "";
-                    if (projects[z].status == status_options[o]) 
-                        selected = " selected"
-                    out += "<option "+selected+">"+status_options[o]+"</option>";
+                    var color = "";
+                    if (projects[z].status == "Complete")
+                        color = " alert-success";
+                    if (projects[z].status == "In progress")
+                        color = " alert-info";
+                    if (projects[z].status == "Test")
+                        color = " alert-error";
+
+                    out += "<td><select class='project-status" + color + "' z=" + z + " projectid=" + projects[z].id + ">";
+                    for (o in status_options) {
+                        var selected = "";
+                        if (projects[z].status == status_options[o])
+                            selected = " selected"
+                        out += "<option " + selected + ">" + status_options[o] + "</option>";
+                    }
+                    out += "</select></td>";
+
+                    var t = new Date();
+                    var d = new Date(projects[z].mdate * 1000);
+
+                    if (t.getYear() == d.getYear()) {
+                        var mins = d.getMinutes();
+                        if (mins < 10)
+                            mins = "0" + mins;
+                        out += "<td>" + d.getHours() + ":" + mins + " " + d.getDate() + " " + months[d.getMonth()] + "</td>";
+                    } else {
+                        out += "<td>" + d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + "</td>";
+                    }
+
+
+                    out += '<td><a href="' + path + 'assessment/view?id=' + projects[z].id + '"><span class="label label-info">Open <i class="icon-folder-open icon-white"></i></span></a></td>';
+                    out += '<td><span class="share-project-openmodal" projectid=' + projects[z].id + ' z=' + z + ' style="cursor:pointer"><span class="label label-info"><i class="icon-share icon-white"></i></span></td>';
+                    out += '<td><span class="delete-project" projectid=' + projects[z].id + ' z=' + z + ' style="cursor:pointer"><span class="label label-important"><i class="icon-trash icon-white"></i></span></td>';
+                    out += "</tr>";
                 }
-                out += "</select></td>";
-
-                var t = new Date();
-                var d = new Date(projects[z].mdate*1000);
-
-                if (t.getYear()==d.getYear()) {
-                var mins = d.getMinutes();
-                if (mins<10) mins = "0"+mins;
-                    out += "<td>"+d.getHours()+":"+mins+" "+d.getDate()+" "+months[d.getMonth()]+"</td>";
-                } else {
-                    out += "<td>"+d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()+"</td>";
-                }
-
-
-                out += '<td><a href="'+path+'assessment/view?id='+projects[z].id+'"><span class="label label-info">Open <i class="icon-folder-open icon-white"></i></span></a></td>';
-                out += '<td><span class="share-project-openmodal" projectid='+projects[z].id+' z='+z+' style="cursor:pointer"><span class="label label-info"><i class="icon-share icon-white"></i></span></td>';
-                out += '<td><span class="delete-project" projectid='+projects[z].id+' z='+z+' style="cursor:pointer"><span class="label label-important"><i class="icon-trash icon-white"></i></span></td>';
-                out += "</tr>";
             }
         }
-    }
 
-    $(element).html(out);
-    if (projects.length==0) $("#noprojects").show(); else $("#noprojects").hide();
-}
+        $(element).html(out);
+        if (projects.length == 0)
+            $("#noprojects").show();
+        else
+            $("#noprojects").hide();
+    }
 
 
 
 // ----------------------------------------------------------------------------
 // ORGANISATIONS
 // ----------------------------------------------------------------------------
-var myorganisations = {};
-$.ajax({ url: path+"assessment/getorganisations.json", success: function(result){
-    myorganisations = result;
-    
-    draw_organisation_list();
-    draw_organisation(8);
-}});
+    var myorganisations = {};
+    $.ajax({url: path + "assessment/getorganisations.json", success: function (result) {
+            myorganisations = result;
+
+            draw_organisation_list();
+            draw_organisation(8);
+        }});
 
 // -----------------------------------------------------------------------------------
 // Create organisation
 // -----------------------------------------------------------------------------------
 
-$("#organisation-create").click(function(){
-    var orgname = $("#organisation-create-name").val();
-    if (orgname=="") {
-        alert("Organisation name missing");
-    } else {
-        $.ajax({ url: path+"assessment/neworganisation.json", data: "orgname="+orgname, success: function(result){
-            if (result.success) {
-                myorganisations = result.myorganisations;
-                draw_organisation_list();
-            } else {
-                alert(result.message);
-            }
-        }});
+    $("#organisation-create").click(function () {
+        var orgname = $("#organisation-create-name").val();
+        if (orgname == "") {
+            alert("Organisation name missing");
+        } else {
+            $.ajax({url: path + "assessment/neworganisation.json", data: "orgname=" + orgname, success: function (result) {
+                    if (result.success) {
+                        myorganisations = result.myorganisations;
+                        draw_organisation_list();
+                    } else {
+                        alert(result.message);
+                    }
+                }});
+        }
+    });
+
+    $("#organisation-add-member").click(function () {
+        var membername = $("#organisation-add-member-name").val();
+        if (membername == "") {
+            alert("Member name missing");
+        } else {
+            $.ajax({url: path + "assessment/organisationaddmember.json", data: "orgid=" + orgid + "&membername=" + membername, success: function (result) {
+                    if (result.success) {
+                        myorganisations[orgid].members.push(result);
+                        draw_organisation(orgid);
+                    } else {
+                        alert(result.message);
+                    }
+                }});
+        }
+    });
+
+    $("body").on("click", ".org-item", function () {
+        orgid = $(this).attr("orgid");
+
+        draw_organisation(orgid);
+        $("#organisation").show();
+        viewmode = "organisation";
+
+        $.ajax({url: path + "assessment/list.json", data: "orgid=" + orgid, success: function (result) {
+                projects = result;
+                draw_projects("#projects", projects);
+                $("#assessments-title").html(myorganisations[orgid].name + " Assessments");
+                $("#myview").hide();
+            }});
+    });
+
+    function draw_organisation_list() {
+        var out = "";
+        for (var z in myorganisations) {
+            out += "<div class='org-item recent-activity-item' style='cursor:pointer' orgid=" + myorganisations[z].orgid + " >";
+            out += "<b>" + myorganisations[z].name + "</b><br>" + myorganisations[z].assessments + " Assessments";
+            out += "</div>";
+        }
+        $("#myorganisations").html(out);
     }
-});
 
-$("#organisation-add-member").click(function(){
-    var membername = $("#organisation-add-member-name").val();
-    if (membername=="") {
-        alert("Member name missing");
-    } else {
-        $.ajax({ url: path+"assessment/organisationaddmember.json", data: "orgid="+orgid+"&membername="+membername, success: function(result){
-            if (result.success) {
-                myorganisations[orgid].members.push(result);
-                draw_organisation(orgid);
-            } else {
-                alert(result.message);
-            }
-        }});
+    function draw_organisation(orgid) {
+        var out = "";
+        $("#organisation-name").html(myorganisations[orgid].name);
+
+        var members = myorganisations[orgid].members;
+
+        for (var z in members) {
+            out += "<div class='recent-activity-item' style='height:40px'>";
+            out += "<img src='<?php echo $path; ?>Modules/assessment/defaultuser.png' style='height:40px; float:left; padding-right:5px'/ >";
+            out += "<b>" + members[z].name + "</b><br>Last active: " + members[z].lastactive;
+            out += "</div>";
+        }
+        $("#organisationmembers").html(out);
     }
-});
 
-$("body").on("click",".org-item",function(){
-    orgid = $(this).attr("orgid");
-    
-    draw_organisation(orgid);
-    $("#organisation").show();
-    viewmode = "organisation";
-    
-    $.ajax({ url: path+"assessment/list.json", data: "orgid="+orgid, success: function(result){
-        projects = result;
-        draw_projects("#projects",projects);
-        $("#assessments-title").html(myorganisations[orgid].name+" Assessments");
-        $("#myview").hide();
-    }});
-});
+    $("#back-myview").click(function () {
+        var viewmode = "personal";
+        var orgid = 0;
+        $("#organisation").hide();
 
-function draw_organisation_list() {
-    var out = "";
-    for (var z in myorganisations) {
-        out += "<div class='org-item recent-activity-item' style='cursor:pointer' orgid="+myorganisations[z].orgid+" >";
-        out += "<b>"+myorganisations[z].name+"</b><br>"+myorganisations[z].assessments+" Assessments";
-        out += "</div>";
-    }
-    $("#myorganisations").html(out);
-}
-        
-function draw_organisation(orgid) {
-    var out = "";
-    $("#organisation-name").html(myorganisations[orgid].name);
-    
-    var members = myorganisations[orgid].members;
-    
-    for (var z in members) {
-        out += "<div class='recent-activity-item' style='height:40px'>";
-        out += "<img src='<?php echo $path; ?>Modules/assessment/defaultuser.png' style='height:40px; float:left; padding-right:5px'/ >";
-        out += "<b>"+members[z].name+"</b><br>Last active: "+members[z].lastactive;
-        out += "</div>";
-    }
-    $("#organisationmembers").html(out);
-}
+        $.ajax({url: path + "assessment/list.json", success: function (result) {
+                projects = result;
+                draw_projects("#projects", projects);
+                $("#assessments-title").html("My Assessments");
+                $("#myview").show();
+            }});
 
-$("#back-myview").click(function() {
-    var viewmode = "personal";
-    var orgid = 0;
-    $("#organisation").hide();
-
-    $.ajax({ url: path+"assessment/list.json", success: function(result){
-        projects = result;
-        draw_projects("#projects",projects);
-        $("#assessments-title").html("My Assessments");
-        $("#myview").show();
-    }});
-    
-});
+    });
 
 </script>

@@ -20,7 +20,7 @@ var openbem = {
         return result;
     },
     
-    'set': function(id,project)
+    'set': function(id,project,callback)
     {
         var inputdata = {};
         for (z in project)
@@ -28,7 +28,7 @@ var openbem = {
             inputdata[z] = openbem.extract_inputdata(project[z]);
         }
         var result = {};
-        $.ajax({ type: 'POST', url: path+"assessment/setdata.json", data: "id="+parseInt(id)+"&data="+JSON.stringify(inputdata), async: true, success: function(data){} });
+        $.ajax({ type: 'POST', url: path+"assessment/setdata.json", data: "id="+parseInt(id)+"&data="+JSON.stringify(inputdata), async: true, success: function(data){callback(data)} });
     },
     
     'create':function(name,description)
@@ -49,6 +49,13 @@ var openbem = {
     {
         var result = 0;
         $.ajax({ type: 'GET', url: path+"assessment/setstatus.json", data: "id="+id+"&status="+status, async: false, success: function(data){result=data;} });
+        return result;
+    },
+    
+    'set_name_and_description':function(id, name, description)
+    {
+        var result = 0;
+        $.ajax({ type: 'POST', url: path+"assessment/setnameanddescription.json", data: "id="+id+"&name="+name+"&description="+description, async: false, success: function(data){result=data;} });
         return result;
     },
 
@@ -188,6 +195,8 @@ var openbem = {
 
         inputdata.fabric = {
             thermal_bridging_yvalue: data.fabric.thermal_bridging_yvalue,
+            global_TMP: data.fabric.global_TMP,
+            global_TMP_value: data.fabric.global_TMP_value,
             elements: []
         };
 

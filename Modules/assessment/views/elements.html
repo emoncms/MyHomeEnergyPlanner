@@ -14,7 +14,22 @@
 
     <p><i>Note: If the element length and height is given it will automatically calculate and override the area calculation. Leave length and height blank and enter area for ceilings and floors and other elements where its easier to enter the area directly.</i></p>
     
+    
+    <h3> Thermal Mass Parameter (TMP)</h3>
     <hr>
+    <p><input type="checkbox" key="data.fabric.global_TMP" style="margin:0 15px"/>Use global TMP value (ignore the k value of individual elements)</p>
+    <div id="global_TMP_value" style="margin-left:40px">
+        <select key="data.fabric.global_TMP_value">
+            <option value="100">Low TMP</option>
+            <option value="250">Medium TMP</option>
+            <option value="450">High TMP</option>
+        </select>
+        
+    </div>
+    <br />
+    <hr>
+    
+    
     <h3>Walls</h3>
     <hr>
     <br>
