@@ -4,6 +4,45 @@ function carboncoopreport_initUI() {
 	console.log(project);
 
 
+	// Heat Balance Example
+
+	var HeatBalance = new BarChart({
+		chartTitle: 'Energy Demand',
+		yAxisLabel: 'kWh/m2.year',
+		fontSize: 22,
+		width: 1200,
+		chartHeight: 600,
+		barWidth: 110,
+		division: 'auto',
+		barGutter: 120,
+		barDivisionType: 'group',
+		defaultBarColor: 'rgb(231,37,57)',
+		barColors: {
+			'Gains': 'rgb(230,39,58)',
+			'Losses': 'rgb(64,169,199)',
+		},
+		data: [
+			{label: 'Scenario 1', value: [
+					{value: 200, label: 'Gains'},
+					{value: 300, label: 'Losses'},
+			]},
+			{label: 'Scenario 2', value: [
+					{value: 400, label: 'Gains'},
+					{value: 100, label: 'Losses'},
+			]},
+			{label: 'Scenario 3', value: [
+					{value: 500, label: 'Gains'},
+					{value: 250, label: 'Losses'},
+			]},
+			{label: 'Scenario 4', value: [
+					{value: 376, label: 'Gains'},
+					{value: 287, label: 'Losses'},
+			]},
+		]
+	});
+
+	HeatBalance.draw('heat-balance');
+
 	// Space Heating Demand
 
 	var SpaceHeatingDemand = new BarChart({
@@ -44,6 +83,7 @@ function carboncoopreport_initUI() {
 		fontSize: 22,
 		width: 1200,
 		chartHeight: 600,
+		division: 'auto',
 		barWidth: 110,
 		barGutter: 120,
 		defaultBarColor: 'rgb(231,37,57)',
@@ -137,18 +177,18 @@ function carboncoopreport_initUI() {
 		},
 		targets: [
 			{
-				label: '65kwH/m2.year',
-				target: 65,
+				label: '50kwH/m2.year',
+				target: 50,
 				color: 'rgb(231,37,57)'
 			},
 			{
-				label: '105kwH/m2.year',
-				target: 110,
+				label: '80kwH/m2.year',
+				target: 80,
 				color: 'rgb(231,37,57)'
 			},
 		],
 		data: [
-			{label: 'UK Average', value: 100},
+			{label: 'UK Average', value: 25},
 			{label: 'Your home now (model)', value: 0},
 			{label: 'Your home now (bills)', value: 0},
 			{label: 'Your 2050 home', value: 0},
