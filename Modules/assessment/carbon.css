@@ -70,21 +70,6 @@
   .carbon-report-wrapper strong {
     font-weight: bold;
     color: #e41b3a; }
-  .carbon-report-wrapper .indented-list {
-    margin-left: 30px; }
-    .carbon-report-wrapper .indented-list li {
-      margin-bottom: 1.5em; }
-    .carbon-report-wrapper .indented-list p:first-child {
-      margin-left: 0; }
-    .carbon-report-wrapper .indented-list p {
-      margin-left: 30px; }
-    .carbon-report-wrapper .indented-list .indented-list {
-      margin-left: 30px; }
-      .carbon-report-wrapper .indented-list .indented-list li {
-        margin-bottom: 0;
-        margin-left: 30px; }
-      .carbon-report-wrapper .indented-list .indented-list p {
-        margin-bottom: 0.5em; }
   .carbon-report-wrapper p {
     font: 1rem/1.4 "Karla", sans-serif;
     color: #574d56;
@@ -99,7 +84,8 @@
   .carbon-report-wrapper .title-margin-bottom {
     margin-bottom: 2rem; }
   .carbon-report-wrapper .section-title {
-    margin-bottom: 2em; }
+    margin-bottom: 1.75em;
+    margin-top: 3em; }
   .carbon-report-wrapper .section-title, .carbon-report-wrapper .doc-title {
     display: block;
     width: 100%;
@@ -326,7 +312,7 @@
       left: 0px; } }
 
 .carbon-report-wrapper .right-align-item-list {
-  margin-bottom: 8rem;
+  margin-bottom: 2rem;
   margin-top: 2rem; }
   .carbon-report-wrapper .right-align-item-list li {
     margin-left: 30px;
@@ -336,6 +322,19 @@
     content: '';
     display: block;
     clear: both; }
+.carbon-report-wrapper .indented-list {
+  margin-left: 30px; }
+  .carbon-report-wrapper .indented-list li {
+    margin-bottom: 1.5em; }
+  .carbon-report-wrapper .indented-list p:first-child {
+    margin-left: 0; }
+  .carbon-report-wrapper .indented-list .indented-list {
+    margin-left: 30px; }
+    .carbon-report-wrapper .indented-list .indented-list li {
+      margin-bottom: 0;
+      margin-left: 30px; }
+    .carbon-report-wrapper .indented-list .indented-list p {
+      margin-bottom: 0.5em; }
 @media screen and (max-width: 675px) {
   .carbon-report-wrapper .right-align-item-list li {
     width: 100%; }

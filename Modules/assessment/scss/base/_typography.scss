@@ -49,35 +49,6 @@
     color: $red;
   }
 
-  .indented-list {
-
-  	margin-left: 30px;
-
-    li {
-      margin-bottom: 1.5em;
-    }
-
-    p:first-child {
-      margin-left: 0;
-    }
-
-    p {
-      margin-left: 30px;
-    }
-
-    .indented-list {
-      margin-left: 30px;
-        li {
-			margin-bottom: 0;
-			margin-left: 30px;
-        }
-
-        p {
-        	margin-bottom: 0.5em;
-        }
-    }
-  }
-
   p {
     font: $body--normal;
     color: $grey;
@@ -102,7 +73,8 @@
   }
 
   .section-title {
-    margin-bottom: 2em;
+    margin-bottom: 1.75em;
+    margin-top: 3em;
   }
 
   .section-title, .doc-title {
