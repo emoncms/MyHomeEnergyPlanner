@@ -36,7 +36,7 @@ function carboncoopreport_initUI() {
 			]},
 			{label: 'Scenario 4', value: [
 					{value: 376, label: 'Gains'},
-					{value: 287, label: 'Losses'},
+					{value: 287, variance: 30, label: 'Losses'},
 			]},
 		]
 	});
@@ -95,18 +95,18 @@ function carboncoopreport_initUI() {
 		},
 		data: [
 			{label: 'UK Average', value: [
-					{value: 2000, label: 'Gas'},
+					{value: 2000, variance: 5, label: 'Gas'},
 					{value: 600, label: 'Wood'},
 					{value: 605, label: 'Solar'},
-					{value: 300, label: 'Solid fuel'}
+					{value: 300, variance: 10, label: 'Solid fuel'}
 			]},
-			{label: '2000 B Regs Average', value: 60},
-			{label: 'Your home now', value: project[scenario].primary_energy_use_m2},
+			{label: '2000 B Regs Average', variance: 30, value: 60},
+			{label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
 			{label: 'UK Average', value: [
-					{value: 2000, label: 'Gas'},
-					{value: 1200, label: 'Wood'},
-					{value: 750, label: 'Solar'},
-					{value: 300, label: 'Solid fuel'}
+					{value: 2000, variance: 5, label: 'Gas'},
+					{value: 1200, variance: 5, label: 'Wood'},
+					{value: 750, variance: 5, label: 'Solar'},
+					{value: 300, variance: 5, label: 'Solid fuel'}
 			]},
 		]
 	});
@@ -169,28 +169,17 @@ function carboncoopreport_initUI() {
 		barWidth: 110,
 		barGutter: 120,
 		defaultBarColor: 'rgb(157,213,203)',
+		defaultVarianceColor: 'rgb(231,37,57)',
 		barColors: {
 			'Space heating': 'rgb(157,213,203)',
 			'Pumps, fans, etc.': 'rgb(24,86,62)',
 			'Cooking': 'rgb(40,153,139)',
 		},
-		targets: [
-			{
-				label: 65 / project[scenario].occupancy + 'kwH/m2.year',
-				target: ( 65 / project[scenario].occupancy ),
-				color: 'rgb(231,37,57)'
-			},
-			{
-				label: 105 / project[scenario].occupancy + 'kwH/m2.year',
-				target: ( 105 / project[scenario].occupancy ),
-				color: 'rgb(231,37,57)'
-			},
-		],
 		data: [
 			{label: 'UK Average', value: 50},
 			{label: 'Your home now (model)', value: (project[scenario].kgco2perm2 / project[scenario].occupancy)},
-			{label: 'Your home now (bills)', value: 0},
-			{label: 'Your 2050 home', value: 0},
+			{label: 'Your home now (bills)', value: 59, variance: 40},
+			{label: 'Your 2050 home', value: 21, variance: 40},
 		]
 	});
 
@@ -217,10 +206,10 @@ function carboncoopreport_initUI() {
 			},
 		],
 		data: [
-			{label: 'UK Average', value: 1400},
-			{label: '2000 B Regs Average', value: 1900},
-			{label: 'Your home now', value: project[scenario].net_cost},
-			{label: 'Your 2050 home', value: 0},
+			{label: 'UK Average', value: 1400, variance: 30},
+			{label: '2000 B Regs Average', value: 1900, variance: 30},
+			{label: 'Your home now', value: project[scenario].net_cost, variance: 30},
+			{label: 'Your 2050 home', value: 0, variance: 30},
 		]
 	});
 
