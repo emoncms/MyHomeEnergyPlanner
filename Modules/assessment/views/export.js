@@ -3,7 +3,9 @@ $("#import-data").click(function(){
     project[scenario] = data;
     
     update();
-    openbem.set(projectid,project);
+    openbem.set(projectid,project, function (result) {
+            alertifnotlogged(result);
+        });
 });
 
 $("#input-data").click(function(){

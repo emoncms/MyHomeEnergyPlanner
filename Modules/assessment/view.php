@@ -242,9 +242,7 @@ global $reports;
         $("." + scenario + "_sap_rating").html(project[scenario].SAP.rating.toFixed(0));
 
         openbem.set(projectid, project, function (result) {
-            if (result === "Not logged") {
-                $('#modal-error-submitting-data').show();
-            }
+            alertifnotlogged(result);
         });
     }
 
