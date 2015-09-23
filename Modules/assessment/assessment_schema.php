@@ -8,7 +8,7 @@ $schema['assessment'] = array(
     'author' => array('type' => 'varchar(30)'),
     'mdate' => array('type' => 'int(11)'),
     'status' => array('type' => 'text'),
-    'data' => array('type' => 'text')
+    'data' => array('type' => 'mediumtext')
 );
 
 $schema['assessment_access'] = array(
