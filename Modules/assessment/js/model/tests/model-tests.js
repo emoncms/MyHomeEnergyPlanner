@@ -140,46 +140,6 @@ describe("The occupancy function", function() {
     }); // data.use_custom_occupancy & data.custom_occupancy -> data.occupancy
 });
 
-describe("The temperature function", function() {
-    // Module Inputs: data.temperature.responsiveness, data.temperature.target, data.temperature.living_area, data.temperature.control_type
-    // Global Inputs: data.TFA, data.TMP, data.losses_WK, data.gains_W, data.altitude, data.region
-    // Global Outputs: data.internal_temperature, data.external_temperature
-
-    it("sets the external temperature by region");
-    it("sets the living area temperature appropriately");
-    it("sets the rest-of-dwelling temperature appropriately");
-
-    it("uses the living area fraction to produce the monthly mean");
-});
-
-describe("The space heating function", function () {
-    it("exists");
-});
-
-describe("The energy systems function", function () {
-    it("exists");
-});
-
-describe("The lighting calculation", function () {
-    it("exists");
-});
-
-describe("Solar hot water", function () {
-    it("exists");
-});
-
-describe("Domestic hot water", function () {
-    it("exists");
-});
-
-describe("The appliances calculation", function () {
-    it("exists");
-});
-
-describe("Generation calculations", function () {
-    it("exists");
-});
-
 // Local Variables:
 // js2-additional-externs: ("calc" "describe" "it" "expect")
 // End:

@@ -144,8 +144,6 @@ describe("The fabric function", function() {
         var B = U5("north", "k4") * S + U5("north", "k5") * S + U5("north", "k6") * S;
         var C = U5("north", "k7") * S + U5("north", "k8") * S + U5("north", "k9") * S + 1;
 
-        console.log(A, B, C);
-
         var rad = month.map(function(ix) {
             var ins = regional_insol[ix];
             var dec = declination[ix];

@@ -80,7 +80,7 @@ describe("The ventilation function", function() {
 
         input.num_of_floors = 1 + 10 * (adjusted - 0.4); // reset by calc.start
         extend(misc, input);
-        console.log(misc, input);
+
         var o = calc.ventilation(input);
         var v = o.ventilation;
 
