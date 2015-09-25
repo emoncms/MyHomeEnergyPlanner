@@ -1,45 +1,45 @@
 These are emacs calculator formulae for working out some test results.
 
 
-H := 7
+H := 3
 
-G := 2
+G := 10
 
-Tt := 21
+Tt := 20
 
 Te := 10
 
-R := 0
+R := 1
 
-HLP := min(7, H) => 7
+HLP := min(6, H) => 3
 
-Th2 := Tt - HLP / 2 => 17.5
+Th2 := Tt => 20
 
-Ti := Th2 => 17.5
+Ti := Th2 => 20
 
 TMP := 1
 
-tau := TMP / (3.6 HLP) => 0.0396825396825
+tau := TMP / (3.6 HLP) => 0.0925925925926
 
-a := 1 + tau / 15 => 1.00264550265
+a := 1 + tau / 15 => 1.00617283951
 
-L := H*(Ti - Te) => 52.5
+L := H*(Ti - Te) => 30
 
-gam := G / L => 0.0380952380952
+gam := G / L => 0.333333333333
 
-nu := (1 - gam^a) / (1 - gam^(a + 1)) => 0.963619073889
+nu := (1 - gam^a) / (1 - gam^(a + 1)) => 0.751899255778
 
-tc := 4 + 0.25 tau => 4.00992063492
+tc := 4 + 0.25 tau => 4.02314814815
 
-Tsc := (1 - R) (Ti - 2) + R*(Te + nu G / H) => 15.5
+Tsc := (1 - R) (Ti - 2) + R*(Te + nu G / H) => 12.5063308526
 
-Ti - 2 => 15.5
+Ti - 2 => 18
 
-Te + nu G / H => 10.2753197354
+Te + nu G / H => 12.5063308526
 
 toff := 7
 
-u7 := toff > tc ? (Ti - Tsc) (toff - 0.5 tc) / 24 : 0.5 toff^2 (Ti - Tsc) / (24 tc) => 0.416253306878
+u7 := toff > tc ? (Ti - Tsc) (toff - 0.5 tc) / 24 : 0.5 toff^2 (Ti - Tsc) / (24 tc) => 1.5575672273
 
 toff := 0
 
@@ -47,16 +47,16 @@ u0 := toff > tc ? (Ti - Tsc) (toff - 0.5 tc) / 24 : 0.5 toff^2 (Ti - Tsc) / (24 
 
 toff := 8
 
-u8 := toff > tc ? (Ti - Tsc) (toff - 0.5 tc) / 24 : 0.5 toff^2 (Ti - Tsc) / (24 tc) => 0.499586640213
+u8 := toff > tc ? (Ti - Tsc) (toff - 0.5 tc) / 24 : 0.5 toff^2 (Ti - Tsc) / (24 tc) => 1.86980344178
 
 toff := 9
 
-u9 := toff > tc ? (Ti - Tsc) (toff - 0.5 tc) / 24 : 0.5 toff^2 (Ti - Tsc) / (24 tc) => 0.582919973546
+u9 := toff > tc ? (Ti - Tsc) (toff - 0.5 tc) / 24 : 0.5 toff^2 (Ti - Tsc) / (24 tc) => 2.18203965625
 
-weekt := Th2 - (u7 + u8) => 16.5841600529
+weekt := Th2 - (u7 + u8) => 16.5726293309
 
-weendt := Th2 - (u8 + u0) => 17.0004133598
+weendt := Th2 - (u8 + u0) => 18.1301965582
 
-t := (weekt 5 + weendt 2) / 7 => 16.7030895691
+t := (weekt 5 + weendt 2) / 7 => 17.0176485387
 
-t2 := Th2 - (u8 + u9) => 16.4174933862
+t2 := Th2 - (u8 + u9) => 15.948156902
