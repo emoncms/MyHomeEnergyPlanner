@@ -1,7 +1,5 @@
 var project = {
-
     "master": {
-
         "region": 0,
         "altitude": 0,
         "use_custom_occupancy": false,
@@ -479,9 +477,7 @@ var project = {
             }
         }
     },
-    
     "scenario1": {
-
         "region": 0,
         "altitude": 0,
         "use_custom_occupancy": false,
@@ -876,6 +872,12 @@ var project = {
             "pipework_insulated_fraction": 1
         },
         "SHW": {},
+        "use_appliancePHPP": false,
+        "appliancePHPP": {
+            "list": {"name": "LED Light",
+                    "power": 6,
+                    "hours": 12}
+        },
         "appliancelist": {
             "list": [
                 {

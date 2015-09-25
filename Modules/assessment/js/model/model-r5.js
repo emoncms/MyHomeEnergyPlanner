@@ -1,34 +1,35 @@
+
 /*
- 
+
  An open source building energy model based on SAP.
- 
+
  Studying the SAP model we see that the calculations can be broken down into sub
  calculation modules and that it could be possible to create a flexible model where
- you can include or exclude certain parts depending on the granularity or adherance 
+ you can include or exclude certain parts depending on the granularity or adherance
  to SAP that you would like.
- 
+
  Principles
- 
+
  - All variables that are accessed in the ui need to be available via the data object.
- 
- - Variables written to from one module and accessed from another need to be in the 
+
+ - Variables written to from one module and accessed from another need to be in the
  global name space.
- 
- - Variables used internally by a module that are also accessed in the ui should be 
+
+ - Variables used internally by a module that are also accessed in the ui should be
  defined within the module namespace.
- 
- - Variables used internally by a module that are not accessed by the ui should be 
+
+ - Variables used internally by a module that are not accessed by the ui should be
  defined as local variables within the module's calc function.
- 
+
  - variable naming: this_is_a_variable. _ between words. Abreviations can be in capitals
  otherwise lower case.
- 
+
  - if the module has a primary data object i.e floors call the module by the data object
  name.
- 
+
  - calc functions should be divided by task.
- 
- 
+
+
  */
 
 
@@ -47,6 +48,7 @@ calc.run = function (datain)
     calc.LAC(calc.data);
     calc.water_heating(calc.data);
     calc.SHW(calc.data);
+    calc.appliancePHPP(calc.data);
     calc.appliancelist(calc.data);
     calc.generation(calc.data);
     calc.currentenergy(calc.data);
@@ -436,7 +438,7 @@ calc.ventilation = function (data)
             for (var m = 0; m < 12; m++)
             {
                 // if (22b)m < 0.5 × (23b), then (24c) = (23b); otherwise (24c) = (22b) m + 0.5 × (23b)
-                // effective_air_change_rate[m] = 
+                // effective_air_change_rate[m] =
                 if (adjusted_infiltration[m] < 0.5 * data.ventilation.system_air_change_rate) {
                     effective_air_change_rate[m] = data.ventilation.system_air_change_rate;
                 } else {
@@ -531,7 +533,7 @@ calc.temperature = function (data)
 
     // See utilisationfactor.js for calculation
     // Calculation is described on page 159 of SAP document
-    // Would be interesting to understand how utilisation factor equation 
+    // Would be interesting to understand how utilisation factor equation
     // can be derived
 
     var utilisation_factor_A = [];
@@ -584,7 +586,7 @@ calc.temperature = function (data)
         var tmpHLP = HLP[m];
         if (tmpHLP > 6.0)
             tmpHLP = 6.0;
-        // TMP,HLP,H,Ti,Te,G  
+        // TMP,HLP,H,Ti,Te,G
         utilisation_factor_B[m] = calc_utilisation_factor(TMP, tmpHLP, H[m], Ti, Te[m], G[m]);
     }
 
@@ -894,17 +896,15 @@ calc.LAC = function (data)
                 GL_monthly[m] = 0.4 * EL_monthly[m];
         }
 
-        if (data.use_LAC) {
-            data.gains_W["Lighting"] = GL_monthly;
-            if (EL_sum > 0)
-                data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum};
-        }
+        data.gains_W["Lighting"] = GL_monthly;
+        if (EL_sum > 0)
+            data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum};
     }
 
     /*
-     
+
      Electrical appliances
-     
+
      */
 
     // The initial value of the annual energy use in kWh for electrical appliances is
@@ -927,18 +927,16 @@ calc.LAC = function (data)
     // The annual CO2 emissions in kg/m2/year associated with electrical appliances is
     var appliances_CO2 = (EA * 0.522) / data.TFA;
 
-    if (data.use_LAC) {
-        data.gains_W["Appliances"] = GA_monthly;
-        if (EA > 0)
-            data.energy_requirements.appliances = {name: "Appliances", quantity: EA};
-    }
+    data.gains_W["Appliances"] = GA_monthly;
+    if (EA > 0)
+        data.energy_requirements.appliances = {name: "Appliances", quantity: EA};
 
     data.LAC.EA = EA;
 
     /*
-     
+
      Cooking
-     
+
      */
 
     // Internal heat gains in watts from cooking
@@ -957,11 +955,11 @@ calc.LAC = function (data)
 
     data.LAC.EC = GC * 0.024 * 365;
 
-    if (data.use_LAC) {
-        data.gains_W["Cooking"] = GC_monthly;
-        if (GC > 0)
-            data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC};
-    }
+
+    data.gains_W["Cooking"] = GC_monthly;
+    if (GC > 0)
+        data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC};
+
 
     data.LAC.GC = data.LAC.EC;
 
@@ -1015,7 +1013,7 @@ calc.SHW = function (data)
     data.SHW.Qs = data.SHW.solar_energy_available * data.SHW.utilisation_factor * data.SHW.collector_performance_factor * data.SHW.f2;
 
 
-    // The solar input (in kWh) for month m is 
+    // The solar input (in kWh) for month m is
 
     var sum = 0;
     for (var m = 0; m < 12; m++)
@@ -1188,13 +1186,103 @@ calc.water_heating = function (data)
     return data;
 };
 
+calc.appliancePHPP = function (data) {
+    if (data.appliancePHPP == undefined)
+        data.appliancePHPP = {list: {}};
+
+    // "Constants" to be used in the calculations
+    var primary_energy_multiplier = {electricity: 3.07, DHW: 1.22, gas: 1.22};
+    var co2_multiplier = {electricity: 0.519, DHW: 0.216, gas: 0.216};
+
+    // Local variables to be used for the calculations
+    var appliance = {};
+    var electric_demand = 0;
+    var electric_demand_after_rating = 0;
+    var DHW_demand = 0;
+    var gas_demand = 0;
+
+    // Variables in the data object that hold the results
+    data.appliancePHPP.primary_energy_total = {appliances: 0, cooking: 0, total: 0};
+    data.appliancePHPP.primary_energy_m2 = {appliances: 0, cooking: 0, total: 0};
+    data.appliancePHPP.co2_total = {appliances: 0, cooking: 0, total: 0};
+    data.appliancePHPP.co2_m2 = {appliances: 0, cooking: 0, total: 0};
+    data.appliancePHPP.energy_demand = {
+        cooking: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0},
+        appliances: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0},
+        total: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0}
+    };
+
+    // We do the calculations for each appliance in the list
+    for (z in data.appliancePHPP.list) {
+        appliance = data.appliancePHPP.list[z];
+
+        if (data.appliancePHPP.list[z].primary_energy_total == undefined)
+            data.appliancePHPP.list[z].primary_energy_total = 0;
+
+        // Energy demand calculation
+        electric_demand = appliance.number_used * appliance.norm_demand * appliance.utilisation_factor * appliance.reference_quantity * appliance.frequency * appliance.electric_fraction;
+        electric_demand_after_rating = appliance.a_plus_rated === 1 ? 0.75 * electric_demand : electric_demand;
+        DHW_demand = appliance.number_used * appliance.norm_demand * appliance.utilisation_factor * appliance.frequency * appliance.reference_quantity * appliance.dhw_fraction;
+        gas_demand = appliance.number_used * appliance.norm_demand * appliance.utilisation_factor * appliance.frequency * appliance.reference_quantity * appliance.gas_fraction;
+
+        // Results for the appliance
+        appliance.primary_energy_total = primary_energy_multiplier.electricity * electric_demand_after_rating + primary_energy_multiplier.DHW * DHW_demand + primary_energy_multiplier.gas * gas_demand;
+        appliance.primary_energy_m2 = appliance.primary_energy_total / data.TFA;
+        appliance.co2_total = co2_multiplier.electricity * electric_demand_after_rating + co2_multiplier.DHW * DHW_demand + co2_multiplier.gas * gas_demand;
+        appliance.co2_m2 = appliance.co2_total / data.TFA;
+
+        // Results: totals from all the appliances
+        data.appliancePHPP.primary_energy_total.total += appliance.primary_energy_total;
+        data.appliancePHPP.primary_energy_m2.total += appliance.primary_energy_m2;
+        data.appliancePHPP.co2_total.total += appliance.co2_total;
+        data.appliancePHPP.co2_m2.total += appliance.co2_m2;
+        data.appliancePHPP.energy_demand.total.electricity += electric_demand;
+        data.appliancePHPP.energy_demand.total.electricity_after_rating += electric_demand_after_rating;
+        data.appliancePHPP.energy_demand.total.DHW += DHW_demand;
+        data.appliancePHPP.energy_demand.total.gas += gas_demand;
+
+        // Results: totals by category
+        if (appliance.category === "Cooking") {
+            data.appliancePHPP.primary_energy_total.cooking += appliance.primary_energy_total;
+            data.appliancePHPP.primary_energy_m2.cooking += appliance.primary_energy_m2;
+            data.appliancePHPP.co2_total.cooking += appliance.co2_total;
+            data.appliancePHPP.co2_m2.cooking += appliance.co2_m2;
+            data.appliancePHPP.energy_demand.cooking.electricity += electric_demand;
+            data.appliancePHPP.energy_demand.cooking.electricity_after_rating += electric_demand_after_rating;
+            data.appliancePHPP.energy_demand.cooking.DHW += DHW_demand;
+            data.appliancePHPP.energy_demand.cooking.gas += gas_demand;
+        }
+        else {
+            data.appliancePHPP.primary_energy_total.appliances += appliance.primary_energy_total;
+            data.appliancePHPP.primary_energy_m2.appliances += appliance.primary_energy_m2;
+            data.appliancePHPP.co2_total.appliances += appliance.co2_total;
+            data.appliancePHPP.co2_m2.appliances += appliance.co2_m2;
+            data.appliancePHPP.energy_demand.appliances.electricity += electric_demand;
+            data.appliancePHPP.energy_demand.appliances.electricity_after_rating += electric_demand_after_rating;
+            data.appliancePHPP.energy_demand.appliances.DHW += DHW_demand;
+            data.appliancePHPP.energy_demand.appliances.gas += gas_demand;
+        }
+    }
+
+
+    data.appliancePHPP.gains_W = 1000 * data.appliancePHPP.primary_energy_total.total; // we pass it from kWh to Wh
+    data.appliancePHPP.gains_W_monthly = [];
+    for (var m = 0; m < 12; m++)
+        data.appliancePHPP.gains_W_monthly[m] = data.appliancePHPP.gains_W * datasets.table_1a[m] / 365.0 ;
+
+    /*if (data.use_appliancePHPP) {
+        data.gains_W["Appliances"] = data.appliancelist.gains_W_monthly;
+        if (data.appliancePHPP.primary_energy_total.total > 0)
+            data.energy_requirements.appliances = {name: "Appliances", quantity: data.appliancePHPP.primary_energy_total.total};
+    }*/
+};;
+
+
 calc.appliancelist = function (data)
 {
     if (data.appliancelist == undefined)
         data.appliancelist = {list: [{name: "LED Light", power: 6, hours: 12}]};
 
-    data.appliancelist.totalwh = 0;
-    data.appliancelist.annualkwh = 0;
 
     for (z in data.appliancelist.list) {
         data.appliancelist.list[z].energy = data.appliancelist.list[z].power * data.appliancelist.list[z].hours;
@@ -1227,8 +1315,7 @@ calc.generation = function (data) {
             wind_annual_kwh: 0,
             wind_fraction_used_onsite: 0.5,
             wind_FIT: 0,
-            hydro_annual_kwh: 0,
-            hydro_fraction_used_onsite: 0.5,
+            hydro_annual_kwh: 0, hydro_fraction_used_onsite: 0.5,
             hydro_FIT: 0,
             solarpv_orientation: 4,
             solarpv_kwp_installed: 0,
@@ -1245,12 +1332,13 @@ calc.generation = function (data) {
     var p = data.generation.solarpv_inclination;
     var overshading_factor = data.generation.solarpv_overshading;
 
-    // annual_solar_radiation 
+    // annual_solar_radiation
     // U3.3 in Appendix U for the applicable climate and orientation and tilt of the PV
     // Z PV is the overshading factor from Table H2.
     // p: tilt
-    var annual_solar_radiation = annual_solar_rad(data.region, orient, p)
-    data.generation.solarpv_annual_kwh = 0.8 * kWp * annual_solar_radiation * overshading_factor;
+    var annual_solar_radiation = annual_solar_rad(this.data.region, orient, p);
+    this.data.generation.solarpv_annual_kwh = 0.8 * kWp * annual_solar_radiation * overshading_factor;
+
 
     // ----------
 
@@ -1302,14 +1390,11 @@ calc.currentenergy = function (data)
     var defaults = {
         'electric': {name: "Electricity", note: "",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
-        'electric-heating': {name: "Electricity for direct heating", note: "e.g: Storage Heaters",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
-        'electric-heatpump': {name: "Electricity for heatpump", note: "annual electricity input to the heatpump",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
+        'electric-heating': {name: "Electricity for direct heating", note: "e.g: Storage Heaters", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
+        'electric-heatpump': {name: "Electricity for heatpump", note: "annual electricity input to the heatpump", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
         'electric-waterheating': {name: "Electricity for water heating", note: "",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
-        'electric-car': {name: "Electric car", note: "",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
+        'electric-car': {name: "Electric car", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
         'electric-e7': {name: "Electricity (Economy 7)", note: "",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
         'electric-heating-e7': {name: "Electricity for direct heating (Economy 7)", note: "e.g: Storage Heaters",
@@ -1318,8 +1403,7 @@ calc.currentenergy = function (data)
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
         'electric-waterheating-e7': {name: "Electricity for water heating (Economy 7)", note: "",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
-        'electric-car-e7': {name: "Electric car (Economy 7)", note: "",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
+        'electric-car-e7': {name: "Electric car (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
         'gas': {name: "Mains gas", note: "",
             quantity: 0, units: "m3", kwh: 9.8, co2: 2.198, primaryenergy: 1.1, unitcost: 0.4214, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
         'gas-kwh': {name: "Mains gas in kWh", note: "",
@@ -1336,18 +1420,15 @@ calc.currentenergy = function (data)
             quantity: 0, units: "kg", kwh: 13.9, co2: 2.198, primaryenergy: 1.1, unitcost: 1.8, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
         //'electric-car-miles': { name: "Electric car (miles)", note: "miles not included in home electricty above, assuming 100% green electricity",
         //    quantity:0, units: "miles", kwh: 0.25, co2: 0.02, primaryenergy: 2.4, unitcost:0.00, standingcharge:0.00},
-
         'car1': {name: "Car 1", note: "",
             quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
         'car2': {name: "Car 2", note: "",
             quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
-        'car3': {name: "Car 3", note: "",
-            quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
+        'car3': {name: "Car 3", note: "", quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
         'motorbike': {name: "Motorbike", note: "",
             quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
         'bus': {name: "Bus", note: "",
-            quantity: 0, units: "miles", kwh: 0.53, co2: 0.176, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
-        'train': {name: "Train", note: "",
+            quantity: 0, units: "miles", kwh: 0.53, co2: 0.176, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"}, 'train': {name: "Train", note: "",
             quantity: 0, units: "miles", kwh: 0.096, co2: 0.096, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
         'boat': {name: "Boat", note: "",
             quantity: 0, units: "miles", kwh: 1.0, co2: 0.192, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
@@ -1457,16 +1538,13 @@ calc.currentenergy = function (data)
 };
 
 
-
 //---------------------------------------------------------------------------------------------
 // SEPERATED MODEL FUNCTIONS
 //---------------------------------------------------------------------------------------------
-
 // U3.2 Solar radiation on vertical and inclined surfaces
 function solar_rad(region, orient, p, m)
 {
-    var k = datasets.k;
-    // convert degrees into radians
+    var k = datasets.k;     // convert degrees into radians
     var radians = (p / 360.0) * 2.0 * Math.PI;
 
     var sinp = Math.sin(radians);
@@ -1512,9 +1590,7 @@ function calc_solar_gains_from_windows(windows, region)
         var overshading = windows[z]['overshading'];
         var g = windows[z]['g'];
         var ff = windows[z]['ff'];
-
-        // The gains for a given window are calculated for each month
-        // the result of which needs to be put in a bin for totals for jan, feb etc..
+        // The gains for a given window are calculated for each month         // the result of which needs to be put in a bin for totals for jan, feb etc..
         for (var month = 0; month < 12; month++)
         {
             // Access factor table: first dimention is shading factor, 2nd in winter, summer.
@@ -1527,7 +1603,7 @@ function calc_solar_gains_from_windows(windows, region)
                 summer = 1;
             var access_factor = table_6d[overshading][summer];
 
-            // Map orientation code from window to solar rad orientation codes.
+// Map orientation code from window to solar rad orientation codes.
             if (orientation == 5)
                 orientation = 3; // SE/SW
             if (orientation == 6)
@@ -1546,7 +1622,7 @@ function calc_solar_gains_from_windows(windows, region)
 
 function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
 {
-    /* 
+    /*
      Symbols and units
      H = heat transfer coefficient, (39)m (W/K)
      G = total gains, (84)m (W)
@@ -1562,7 +1638,7 @@ function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
     // Calculation of utilisation factor
 
     // TMP = thermal Mass / Total floor area
-    // HLP = heat transfer coefficient (H) / Total floor area
+// HLP = heat transfer coefficient (H) / Total floor area
 
     var tau = TMP / (3.6 * HLP);
     var a = 1.0 + tau / 15.0;
@@ -1570,12 +1646,10 @@ function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
     // calc losses
     var L = H * (Ti - Te);
 
-    // ratio of gains to losses
-    var y = G / L;
-
+    // ratio of gains to losses     var y = G / L;
     // Note: to avoid instability when γ is close to 1 round γ to 8 decimal places
     // y = y.toFixed(8);
-    y = Math.round(y * 100000000.0) / 100000000.0;
+    var y = Math.round(y * 100000000.0) / 100000000.0;
 
     var n = 0.0;
     if (y > 0.0 && y != 1.0)
@@ -1588,15 +1662,14 @@ function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
     return n;
 }
 
-function calc_temperature_reduction(TMP, HLP, H, Ti, Te, G, R, Th, toff)
-{
+function calc_temperature_reduction(TMP, HLP, H, Ti, Te, G, R, Th, toff) {
     // Calculation of utilisation factor
     var tau = TMP / (3.6 * HLP);
     var a = 1.0 + tau / 15.0;
     var L = H * (Ti - Te);
     var y = G / L;
 
-    // Note: to avoid instability when γ is close to 1 round γ to 8 decimal places
+// Note: to avoid instability when γ is close to 1 round γ to 8 decimal places
     // y = y.toFixed(8);
     y = Math.round(y * 100000000.0) / 100000000.0;
     var n = 0.0;
@@ -1620,5 +1693,3 @@ function calc_temperature_reduction(TMP, HLP, H, Ti, Te, G, R, Th, toff)
         u = 0;
     return u;
 }
-
-

@@ -14,7 +14,7 @@ function assessment_controller() {
         if ($route->format == 'html')
             $result = view("Modules/user/login_block.php", array());
         else
-            $result = false;
+            $result = "Not logged";
         return array('content' => $result);
     }
 
