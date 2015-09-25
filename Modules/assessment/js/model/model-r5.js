@@ -1646,7 +1646,8 @@ function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
     // calc losses
     var L = H * (Ti - Te);
 
-    // ratio of gains to losses     var y = G / L;
+    // ratio of gains to losses
+    var y = G / L;
     // Note: to avoid instability when γ is close to 1 round γ to 8 decimal places
     // y = y.toFixed(8);
     var y = Math.round(y * 100000000.0) / 100000000.0;
@@ -1659,6 +1660,7 @@ function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
 
     if (isNaN(n))
         n = 0;
+
     return n;
 }
 
