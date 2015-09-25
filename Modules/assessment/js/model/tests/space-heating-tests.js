@@ -68,7 +68,6 @@ describe("The space heating function", function() {
 
     it("calculates space cooling demand using newton's law of cooling", function() {
         // so we have a heat loss rate given 24 inside and X outside
-        fail();
 
         var data = calc.start({});
         extend(
@@ -76,9 +75,9 @@ describe("The space heating function", function() {
                 TFA: 1,
                 TMP: 1,
                 internal_temperature: ncopies(12, 10),
-                external_temperature: ncopies(12, 10),
-                losses_WK: {x: ncopies(12, 3)},
-                gains_W: {x: ncopies(12, 10)},
+                external_temperature: [0,0,0,0,0,10,10,10,0,0,0,0],
+                losses_WK: {x: ncopies(12, 1)},
+                gains_W: {x: ncopies(12, 15)},
                 space_heating: {
                     use_utilfactor_forgains: false
                 }
@@ -87,10 +86,25 @@ describe("The space heating function", function() {
 
         var result = calc.space_heating(data);
 
-        // heat loss rate is $14 3 => 42$ watts
-        // Utilisation factor is 0.751899255778
-        // we appear to be missing table 5 gains, which need to be excluded from the cooling gains
+        // heat loss rate is $loss := 0 W => 0$ watts
+        // Utilisation factor should be $ u := 1 => 1 $
 
+        // we appear to be missing table 5 gains, which need to be excluded from the cooling gains
+        // so I can't really check they are excluded as there is no way they could be incldued
+
+        // $ gains := 15 W => 15 W $
+        // $ cooling_req := gains - loss u => 15 W $
+        // monthly kWh = $ akw := as(cooling_req 30 day, kW hr) => 10.8 hr kW $ // ok maybe not 30 days, but there we go
+        // intermittency factor in table 10b is always 0.25 apparently, so we have
+        // cooling requirement is cooled fraction * intermittency * baseline
+
+        // it seems that in the model, we are taking cooling demand to be wherever the heat demand is negative
+        // not sure whether to test for this, as it is not what the SAP spec says but it is more sensible?
+        // wargh.
+
+        // let us presume a cooled fraction of 100%
+        // $ (1 0.25 akw / month) 3 month => 8.1 hr kW $
+        expect(result.space_heating.annual_cooling_demand).toBeCloseTo(8.1);
     });
 });
 
