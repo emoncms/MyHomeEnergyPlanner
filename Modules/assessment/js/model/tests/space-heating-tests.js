@@ -66,7 +66,7 @@ describe("The space heating function", function() {
         expect(result.space_heating.heat_demand[0]).toBeCloseTo(30 - 10 * factor);
     });
 
-    it("calculates space cooling demand using newton's law of cooling", function() {
+    it("calculates space cooling demand using SAP rules", function() {
         // so we have a heat loss rate given 24 inside and X outside
 
         var data = calc.start({});
@@ -100,11 +100,15 @@ describe("The space heating function", function() {
 
         // it seems that in the model, we are taking cooling demand to be wherever the heat demand is negative
         // not sure whether to test for this, as it is not what the SAP spec says but it is more sensible?
-        // wargh.
+
+        // SAP says we should have cooling in a certain 3 months, no matter what, and it should be worked out
+        // by multiplying by 1/4 and the cooled fraction.
 
         // let us presume a cooled fraction of 100%
         // $ (1 0.25 akw / month) 3 month => 8.1 hr kW $
         expect(result.space_heating.annual_cooling_demand).toBeCloseTo(8.1);
+
+        fail("table 5 gains should be represented somehow, so they can be ignored here");
     });
 });
 

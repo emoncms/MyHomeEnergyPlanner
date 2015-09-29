@@ -3,9 +3,9 @@ These are emacs calculator formulae for working out some test results.
 
 H := 3
 
-G := 10
+G := 15
 
-Tt := 20
+Tt := 10
 
 Te := 10
 
@@ -13,9 +13,9 @@ R := 1
 
 HLP := min(6, H) => 3
 
-Th2 := Tt => 20
+Th2 := Tt => 10
 
-Ti := Th2 => 20
+Ti := Th2 => 10
 
 TMP := 1
 
@@ -23,7 +23,7 @@ tau := TMP / (3.6 HLP) => 0.0925925925926
 
 a := 1 + tau / 15 => 1.00617283951
 
-L := H*(Ti - Te) => 30
+L := H*(Ti - Te) => 0
 
 gam := G / L => 0.333333333333
 

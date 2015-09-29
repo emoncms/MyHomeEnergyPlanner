@@ -139,10 +139,12 @@ describe("The fabric function", function() {
 
         var pangle = 90 * Math.PI / 180;
         var S = Math.sin(pangle / 2);
+        var S2 = S * S;
+        var S3 = S2 * S;
 
-        var A = U5("north", "k1") * S + U5("north", "k2") * S + U5("north", "k3") * S;
-        var B = U5("north", "k4") * S + U5("north", "k5") * S + U5("north", "k6") * S;
-        var C = U5("north", "k7") * S + U5("north", "k8") * S + U5("north", "k9") * S + 1;
+        var A = U5("north", "k1") * S3 + U5("north", "k2") * S2 + U5("north", "k3") * S;
+        var B = U5("north", "k4") * S3 + U5("north", "k5") * S2 + U5("north", "k6") * S;
+        var C = U5("north", "k7") * S3 + U5("north", "k8") * S2 + U5("north", "k9") * S + 1;
 
         var rad = month.map(function(ix) {
             var ins = regional_insol[ix];
@@ -154,7 +156,6 @@ describe("The fabric function", function() {
 
             return ins * factor * 0.9;
         });
-
 
         expect(data.gains_W.solar).toEqual(rad);
     });
