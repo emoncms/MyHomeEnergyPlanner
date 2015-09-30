@@ -96,4 +96,12 @@ describe("The hot water calculation", function() {
         expect(with_losses - without_losses).toBeCloseTo(primary_loss + distribution_loss);
         console.log(primary_loss, distribution_loss);
     });
+
+    it("calculates hot water cylinder losses using table 2", function() {
+        fail("I should write a test.");
+    });
+
+    it("uses defined cylinder losses if available", function() {
+        fail("I should write a test.");
+    });
 });
