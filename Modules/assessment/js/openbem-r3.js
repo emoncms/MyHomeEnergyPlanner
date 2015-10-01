@@ -1,26 +1,29 @@
 var openbem = {
-
     apikey: "",
-
-    'getlist':function()
+    'getlist': function ()
     {
         var result = [];
-        var apikeystr = ""; if (this.apikey!="") apikeystr = "?apikey="+this.apikey;
+        var apikeystr = "";
+        if (this.apikey != "")
+            apikeystr = "?apikey=" + this.apikey;
 
-        $.ajax({ url: path+"assessment/list.json"+apikeystr, dataType: 'json', async: false, success: function(data) {result = data;} });
+        $.ajax({url: path + "assessment/list.json" + apikeystr, dataType: 'json', async: false, success: function (data) {
+                result = data;
+            }});
 
-        if (result=="") result = [];
+        if (result == "")
+            result = [];
         return result;
     },
-    
-    'get': function(id)
+    'get': function (id)
     {
         var result = {};
-        $.ajax({url: path+"assessment/get.json?id="+parseInt(id), async: false, success: function(data){result = data;} });
+        $.ajax({url: path + "assessment/get.json?id=" + parseInt(id), async: false, success: function (data) {
+                result = data;
+            }});
         return result;
     },
-    
-    'set': function(id,project,callback)
+    'set': function (id, project, callback)
     {
         var inputdata = {};
         for (z in project)
@@ -28,157 +31,162 @@ var openbem = {
             inputdata[z] = openbem.extract_inputdata(project[z]);
         }
         var result = {};
-        $.ajax({ type: 'POST', url: path+"assessment/setdata.json", data: "id="+parseInt(id)+"&data="+JSON.stringify(inputdata), async: true, success: function(data){callback(data)} });
+        $.ajax({type: 'POST', url: path + "assessment/setdata.json", data: "id=" + parseInt(id) + "&data=" + JSON.stringify(inputdata), async: true, success: function (data) {
+                callback(data)
+            }});
     },
-    
-    'create':function(name,description)
+    'create': function (name, description)
     {
         var result = 0;
-        $.ajax({ type: 'GET', url: path+"assessment/create.json", data: "name="+name+"&description="+description, async: false, success: function(data){result=data;} });
+        $.ajax({type: 'GET', url: path + "assessment/create.json", data: "name=" + name + "&description=" + description, async: false, success: function (data) {
+                result = data;
+            }});
         return result;
     },
-    
-    'delete':function(id)
+    'delete': function (id)
     {
         var result = 0;
-        $.ajax({ type: 'GET', url: path+"assessment/delete.json", data: "id="+id, async: false, success: function(data){result=data;} });
+        $.ajax({type: 'GET', url: path + "assessment/delete.json", data: "id=" + id, async: false, success: function (data) {
+                result = data;
+            }});
         return result;
     },
-    
-    'set_status':function(id,status)
+    'set_status': function (id, status)
     {
         var result = 0;
-        $.ajax({ type: 'GET', url: path+"assessment/setstatus.json", data: "id="+id+"&status="+status, async: false, success: function(data){result=data;} });
+        $.ajax({type: 'GET', url: path + "assessment/setstatus.json", data: "id=" + id + "&status=" + status, async: false, success: function (data) {
+                result = data;
+            }});
         return result;
     },
-    
-    'set_name_and_description':function(id, name, description)
+    'set_name_and_description': function (id, name, description)
     {
         var result = 0;
-        $.ajax({ type: 'POST', url: path+"assessment/setnameanddescription.json", data: "id="+id+"&name="+name+"&description="+description, async: false, success: function(data){result=data;} });
+        $.ajax({type: 'POST', url: path + "assessment/setnameanddescription.json", data: "id=" + id + "&name=" + name + "&description=" + description, async: false, success: function (data) {
+                result = data;
+            }});
         return result;
     },
-
     /*
-    'getprojectdetails':function(project_id)
-    {
-        var result = {};
-        var apikeystr = ""; if (this.apikey!="") apikeystr = "?apikey="+this.apikey;
+     'getprojectdetails':function(project_id)
+     {
+     var result = {};
+     var apikeystr = ""; if (this.apikey!="") apikeystr = "?apikey="+this.apikey;
+     
+     $.ajax({ url: path+"openbem/getprojectdetails.json", data: "project_id="+project_id, dataType: 'json', async: false, success: function(data) {result = data;} });
+     
+     if (result=="") result = {};
+     return result;
+     },
+     
+     'addproject':function(name,description)
+     {
+     var result = 0;
+     $.ajax({ type: 'GET', url: path+"openbem/addproject.json", data: "name="+name+"&description="+description, async: false, success: function(data){result=data;} });
+     return result;
+     },
+     
+     'deleteproject':function(projectid)
+     {
+     var result = 0;
+     $.ajax({ type: 'GET', url: path+"openbem/deleteproject.json", data: "projectid="+projectid, async: false, success: function(data){result=data;} });
+     return result;
+     },
+     
+     
+     'get_scenarios':function(project_id)
+     {
+     var result = [];
+     var apikeystr = ""; if (this.apikey!="") apikeystr = "?apikey="+this.apikey;
+     
+     $.ajax({ url: path+"openbem/getscenarios.json"+apikeystr, data: "project_id="+project_id, dataType: 'json', async: false, success: function(data) {result = data;} });
+     
+     if (result=="") result = [];
+     return result;
+     },
+     
+     'add_scenario':function(project_id,meta)
+     {
+     var result = 0;
+     $.ajax({ type: 'GET', url: path+"openbem/addscenario.json", data: "project_id="+project_id+"&meta="+JSON.stringify(meta), async: false, success: function(data){result=data;} });
+     return result;
+     },
+     
+     'clone_scenario':function(project_id,scenario_id)
+     {
+     var result = 0;
+     $.ajax({ type: 'GET', url: path+"openbem/clonescenario.json", data: "project_id="+project_id+"&scenario_id="+scenario_id, async: false, success: function(data){result=data;} });
+     return result;
+     },
+     
+     
+     'delete_scenario':function(project_id,scenario_id)
+     {
+     var result = 0;
+     $.ajax({ type: 'GET', url: path+"openbem/deletescenario.json", data: "project_id="+project_id+"&scenario_id="+scenario_id, async: false, success: function(data){result=data;} });
+     return result;
+     },
+     
+     'get_scenario':function(scenario_id)
+     {
+     var result = {};
+     var apikeystr = ""; if (this.apikey!="") apikeystr = "?apikey="+this.apikey;
+     
+     $.ajax({ url: path+"openbem/getscenario.json"+apikeystr, data: "scenario_id="+scenario_id, dataType: 'json', async: false, success: function(data) {result = data;} });
+     
+     return result;
+     },  
+     
+     'save_scenario':function(scenario_id,data)
+     {
+     var inputdata = openbem.extract_inputdata(data);
+     var result = {};
+     $.ajax({ type: 'POST', url: path+"openbem/savescenario.json", data: "scenario_id="+scenario_id+"&data="+JSON.stringify(inputdata), async: true, success: function(data){} });
+     return result;
+     },
+     
+     'get':function(building)
+     {
+     var result = {};
+     $.ajax({ url: path+"openbem/getmonthly.json", dataType: 'json', data: "building="+building, async: false, success: function(data) {result = data;} });
+     return result;
+     },
+     
+     'save':function(building,data)
+     {
+     var result = {};
+     $.ajax({ type: 'POST', url: path+"openbem/savemonthly.json", data: "building="+building+"&data="+JSON.stringify(data), async: true, success: function(data){} });
+     return result;
+     },
+     
+     'list':function()
+     {
+     var result = {};
+     var apikeystr = ""; //if (feed.apikey!="") apikeystr = "?apikey="+feed.apikey;
+     
+     $.ajax({ url: path+"openbem/getlist.json"+apikeystr, dataType: 'json', async: false, success: function(data) {result = data;} });
+     return result;
+     },
+     
+     load: function()
+     {
+     var result = {};
+     $.ajax({url: path+"openbem/load.json", async: false, success: function(data){result = data;} });
+     return result;
+     },
+     
+     save: function(data)
+     {
+     var inputdata = openbem.extract_inputdata(data);
+     var result = {};
+     $.ajax({ type: 'POST', url: path+"openbem/save.json", data: "data="+JSON.stringify(inputdata), async: true, success: function(data){} });
+     },
+     */
 
-        $.ajax({ url: path+"openbem/getprojectdetails.json", data: "project_id="+project_id, dataType: 'json', async: false, success: function(data) {result = data;} });
-
-        if (result=="") result = {};
-        return result;
-    },
-
-    'addproject':function(name,description)
-    {
-        var result = 0;
-        $.ajax({ type: 'GET', url: path+"openbem/addproject.json", data: "name="+name+"&description="+description, async: false, success: function(data){result=data;} });
-        return result;
-    },
-
-    'deleteproject':function(projectid)
-    {
-        var result = 0;
-        $.ajax({ type: 'GET', url: path+"openbem/deleteproject.json", data: "projectid="+projectid, async: false, success: function(data){result=data;} });
-        return result;
-    },
-
-
-    'get_scenarios':function(project_id)
-    {
-        var result = [];
-        var apikeystr = ""; if (this.apikey!="") apikeystr = "?apikey="+this.apikey;
-
-        $.ajax({ url: path+"openbem/getscenarios.json"+apikeystr, data: "project_id="+project_id, dataType: 'json', async: false, success: function(data) {result = data;} });
-
-        if (result=="") result = [];
-        return result;
-    },
-
-    'add_scenario':function(project_id,meta)
-    {
-        var result = 0;
-        $.ajax({ type: 'GET', url: path+"openbem/addscenario.json", data: "project_id="+project_id+"&meta="+JSON.stringify(meta), async: false, success: function(data){result=data;} });
-        return result;
-    },
-
-    'clone_scenario':function(project_id,scenario_id)
-    {
-        var result = 0;
-        $.ajax({ type: 'GET', url: path+"openbem/clonescenario.json", data: "project_id="+project_id+"&scenario_id="+scenario_id, async: false, success: function(data){result=data;} });
-        return result;
-    },
-
-
-    'delete_scenario':function(project_id,scenario_id)
-    {
-        var result = 0;
-        $.ajax({ type: 'GET', url: path+"openbem/deletescenario.json", data: "project_id="+project_id+"&scenario_id="+scenario_id, async: false, success: function(data){result=data;} });
-        return result;
-    },
-
-    'get_scenario':function(scenario_id)
-    {
-        var result = {};
-        var apikeystr = ""; if (this.apikey!="") apikeystr = "?apikey="+this.apikey;
-
-        $.ajax({ url: path+"openbem/getscenario.json"+apikeystr, data: "scenario_id="+scenario_id, dataType: 'json', async: false, success: function(data) {result = data;} });
-
-        return result;
-    },  
-
-    'save_scenario':function(scenario_id,data)
-    {
-        var inputdata = openbem.extract_inputdata(data);
-        var result = {};
-        $.ajax({ type: 'POST', url: path+"openbem/savescenario.json", data: "scenario_id="+scenario_id+"&data="+JSON.stringify(inputdata), async: true, success: function(data){} });
-        return result;
-    },
-
-    'get':function(building)
-    {
-        var result = {};
-        $.ajax({ url: path+"openbem/getmonthly.json", dataType: 'json', data: "building="+building, async: false, success: function(data) {result = data;} });
-        return result;
-    },
-
-    'save':function(building,data)
-    {
-        var result = {};
-        $.ajax({ type: 'POST', url: path+"openbem/savemonthly.json", data: "building="+building+"&data="+JSON.stringify(data), async: true, success: function(data){} });
-        return result;
-    },
-
-    'list':function()
-    {
-        var result = {};
-        var apikeystr = ""; //if (feed.apikey!="") apikeystr = "?apikey="+feed.apikey;
-
-        $.ajax({ url: path+"openbem/getlist.json"+apikeystr, dataType: 'json', async: false, success: function(data) {result = data;} });
-        return result;
-    },
-
-    load: function()
-    {
-        var result = {};
-        $.ajax({url: path+"openbem/load.json", async: false, success: function(data){result = data;} });
-        return result;
-    },
-    
-    save: function(data)
-    {
-        var inputdata = openbem.extract_inputdata(data);
-        var result = {};
-        $.ajax({ type: 'POST', url: path+"openbem/save.json", data: "data="+JSON.stringify(inputdata), async: true, success: function(data){} });
-    },
-    */
-    
-    extract_inputdata: function(data)
+    extract_inputdata: function (data)
     {
         var inputdata = {};
-        
+
         inputdata.scenario_name = data.scenario_name;
 
         inputdata.household = data.household;
@@ -211,13 +219,20 @@ var openbem = {
                 area: data.fabric.elements[z].area,
                 uvalue: data.fabric.elements[z].uvalue,
             };
-            if (data.fabric.elements[z].description!=undefined) inputdata.fabric.elements[z].description = data.fabric.elements[z].description;
-            if (data.fabric.elements[z].kvalue!=undefined) inputdata.fabric.elements[z].kvalue = data.fabric.elements[z].kvalue;
-            if (data.fabric.elements[z].orientation!=undefined) inputdata.fabric.elements[z].orientation = data.fabric.elements[z].orientation;
-            if (data.fabric.elements[z].overshading!=undefined) inputdata.fabric.elements[z].overshading = data.fabric.elements[z].overshading;
-            if (data.fabric.elements[z].g!=undefined) inputdata.fabric.elements[z].g = data.fabric.elements[z].g;
-            if (data.fabric.elements[z].gL!=undefined) inputdata.fabric.elements[z].gL = data.fabric.elements[z].gL;
-            if (data.fabric.elements[z].ff!=undefined) inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
+            if (data.fabric.elements[z].description != undefined)
+                inputdata.fabric.elements[z].description = data.fabric.elements[z].description;
+            if (data.fabric.elements[z].kvalue != undefined)
+                inputdata.fabric.elements[z].kvalue = data.fabric.elements[z].kvalue;
+            if (data.fabric.elements[z].orientation != undefined)
+                inputdata.fabric.elements[z].orientation = data.fabric.elements[z].orientation;
+            if (data.fabric.elements[z].overshading != undefined)
+                inputdata.fabric.elements[z].overshading = data.fabric.elements[z].overshading;
+            if (data.fabric.elements[z].g != undefined)
+                inputdata.fabric.elements[z].g = data.fabric.elements[z].g;
+            if (data.fabric.elements[z].gL != undefined)
+                inputdata.fabric.elements[z].gL = data.fabric.elements[z].gL;
+            if (data.fabric.elements[z].ff != undefined)
+                inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
         }
 
         // Ventilation
@@ -227,10 +242,8 @@ var openbem = {
             number_of_intermittentfans: data.ventilation.number_of_intermittentfans,
             number_of_passivevents: data.ventilation.number_of_passivevents,
             number_of_fluelessgasfires: data.ventilation.number_of_fluelessgasfires,
-            
             air_permeability_test: data.ventilation.air_permeability_test,
             air_permeability_value: data.ventilation.air_permeability_value,
-            
             dwelling_construction: data.ventilation.dwelling_construction,
             suspended_wooden_floor: data.ventilation.suspended_wooden_floor,
             draught_lobby: data.ventilation.draught_lobby,
@@ -240,24 +253,24 @@ var openbem = {
             system_air_change_rate: data.ventilation.system_air_change_rate,
             balanced_heat_recovery_efficiency: data.ventilation.balanced_heat_recovery_efficiency
         };
-        
-        
+
+
         // LAC
-        inputdata.use_LAC = data.use_LAC;
+        //inputdata.use_LAC = data.use_LAC;
         inputdata.LAC = {
             LLE: data.LAC.LLE,
             L: data.LAC.L,
             reduced_internal_heat_gains: data.LAC.reduced_internal_heat_gains
         };
-        
+
         inputdata.use_generation = data.use_generation;
         inputdata.generation = data.generation;
-        
+
         inputdata.currentenergy = {
             energyitems: data.currentenergy.energyitems,
             greenenergy: data.currentenergy.greenenergy
         };
-        
+
         // Waterheating
         inputdata.use_water_heating = data.use_water_heating;
         inputdata.water_heating = {
@@ -277,7 +290,7 @@ var openbem = {
             contains_dedicated_solar_storage_or_WWHRS: data.water_heating.contains_dedicated_solar_storage_or_WWHRS,
             hot_water_control_type: data.water_heating.hot_water_control_type
         };
-        
+
         inputdata.use_SHW = data.use_SHW;
         inputdata.SHW = {
             A: data.SHW.A,
@@ -290,15 +303,40 @@ var openbem = {
             Vs: data.SHW.Vs,
             combined_cylinder_volume: data.SHW.combined_cylinder_volume
         };
-        
+
+        // Detailed Appliaces List
         inputdata.use_appliancelist = data.use_appliancelist;
-        inputdata.appliancelist = {list:[]};
+        inputdata.appliancelist = {list: []};
         for (z in data.appliancelist.list) {
             inputdata.appliancelist.list[z] = {
                 name: data.appliancelist.list[z].name,
                 power: data.appliancelist.list[z].power,
                 hours: data.appliancelist.list[z].hours
             }
+        }
+
+        // Apliances PHPP
+        inputdata.use_appliancePHPP = data.use_appliancePHPP;
+        inputdata.appliancePHPP = {list: []};
+        for (z in data.appliancePHPP.list) {
+            inputdata.appliancePHPP.list[z] = {
+                category:data.appliancePHPP.list[z].category,
+                name: data.appliancePHPP.list[z].name,
+                number_used: data.appliancePHPP.list[z].number_used,
+                a_plus_rated: data.appliancePHPP.list[z].a_plus_rated,
+                norm_demand: data.appliancePHPP.list[z].norm_demand,
+                units: data.appliancePHPP.list[z].units,
+                utilisation_factor: data.appliancePHPP.list[z].utilisation_factor,
+                frequency: data.appliancePHPP.list[z].frequency,
+                reference_quantity: data.appliancePHPP.list[z].reference_quantity,
+                electric_fraction: data.appliancePHPP.list[z].electric_fraction,
+                dhw_fraction: data.appliancePHPP.list[z].dhw_fraction,
+                gas_fraction: data.appliancePHPP.list[z].gas_fraction
+                        /*primary_energy_total: data.appliancePHPP.list[z].primary_energy_total,
+                         primary_energy_m2: data.appliancePHPP.list[z].primary_energy_m2,
+                         co2_total: data.appliancePHPP.list[z].co2_total,
+                         co2_m2: data.appliancePHPP.list[z].co2_m2*/
+            };
         }
         
         // Temperature
@@ -308,7 +346,7 @@ var openbem = {
             control_type: data.temperature.control_type,
             living_area: data.temperature.living_area
         };
-        
+
         // Space heating
         inputdata.space_heating = {
             use_utilfactor_forgains: data.space_heating.use_utilfactor_forgains
@@ -319,7 +357,7 @@ var openbem = {
         inputdata.energy_systems = {}
         for (z in data.energy_systems) {
             inputdata.energy_systems[z] = [];
-            
+
             for (i in data.energy_systems[z])
             {
                 inputdata.energy_systems[z].push({
@@ -329,12 +367,12 @@ var openbem = {
                     efficiency: data.energy_systems[z][i].efficiency
                 });
             }
-            
+
         }
-        
+
         // Fuels
         inputdata.fuels = data.fuels;
-    
+
         return inputdata;
     }
 }

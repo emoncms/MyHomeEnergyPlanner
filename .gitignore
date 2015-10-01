@@ -1,4 +1,4 @@
-settings.php
+/settings.php
 emoncms.log
 Modules/input
 Modules/feed
@@ -11,3 +11,4 @@ Modules/assessment/views/householdquestionnaire.html
 background.jpg
 /nbproject
 .DS_Store
+nbproject/
