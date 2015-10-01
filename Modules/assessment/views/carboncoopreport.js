@@ -1,7 +1,7 @@
 
 function carboncoopreport_initUI() {
 
-	console.log(project);
+	console.log(project[scenario].floors);
 
 
 	// Heat Balance Example
@@ -22,22 +22,22 @@ function carboncoopreport_initUI() {
 			'Losses': 'rgb(64,169,199)',
 		},
 		data: [
-			{label: 'Scenario 1', value: [
-					{value: 200, label: 'Gains'},
-					{value: 300, label: 'Losses'},
+			{label: project[scenario].floors[0].name, value: [
+					{value: project[scenario].floors[0].area, label: "Gains"},
+					{value: project[scenario].floors[0].volume, label: "Losses"},
 			]},
-			{label: 'Scenario 2', value: [
-					{value: 400, label: 'Gains'},
-					{value: 100, label: 'Losses'},
+			{label: project[scenario].floors[1].name, value: [
+					{value: project[scenario].floors[1].area, label: 'Gains'},
+					{value: project[scenario].floors[1].volume, label: 'Losses'},
 			]},
-			{label: 'Scenario 3', value: [
-					{value: 500, label: 'Gains'},
-					{value: 250, label: 'Losses'},
+			{label: project[scenario].floors[2].name, value: [
+					{value: project[scenario].floors[2].area, label: 'Gains'},
+					{value: project[scenario].floors[2].volume, label: 'Losses'},
 			]},
-			{label: 'Scenario 4', value: [
-					{value: 376, label: 'Gains'},
-					{value: 287, variance: 30, label: 'Losses'},
-			]},
+			// {label: 'Scenario 4', value: [
+			// 		{value: 376, label: 'Gains'},
+			// 		{value: 287, variance: 30, label: 'Losses'},
+			// ]},
 		]
 	});
 
@@ -72,7 +72,8 @@ function carboncoopreport_initUI() {
 		]
 	});
 
-	SpaceHeatingDemand.draw('space-heating-demand');
+	// uncommenting this breaks top graphic
+	// SpaceHeatingDemand.draw('space-heating-demand');
 
 
 	// Energy Demand
@@ -213,6 +214,40 @@ function carboncoopreport_initUI() {
 		]
 	});
 
-	EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
+	// uncommenting this breaks top graphi
+	// EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
+
+	$("#space-heating-demand").css({
+		"background": "white",
+		"width": "100%"
+	});
+	var height = 60;
+	var width = 1000;
+	var spaceHeatingDemandMax = 1000;
+	var spaceHeatingDemand = 400;
+	var spaceHeatingDemandRetrofit = 100;
+	var spaceHeatingDemandUKAverage = 800;
+
+	// map the raw values to values usable on the graph
+	spaceHeatingDemand = width * (spaceHeatingDemand / spaceHeatingDemandMax);
+	spaceHeatingDemandRetrofit = width * (spaceHeatingDemandRetrofit / spaceHeatingDemandMax);
+	spaceHeatingDemandUKAverage = width * (spaceHeatingDemandUKAverage / spaceHeatingDemandMax);
+
+	var ctx = document.getElementById("space-heating-demand").getContext("2d");
+	ctx.fillStyle = 'rgb(217, 58, 71)';
+	ctx.fillRect(0,0,spaceHeatingDemand, height);
+
+	ctx.setLineDash([2,2]);
+	ctx.strokeStyle = 'white';
+	ctx.beginPath();
+	ctx.moveTo(spaceHeatingDemandRetrofit, 0);
+	ctx.lineTo(spaceHeatingDemandRetrofit, height);
+	ctx.stroke();
+
+	ctx.strokeStyle = 'black';
+	ctx.beginPath();
+	ctx.moveTo(spaceHeatingDemandUKAverage, 0);
+	ctx.lineTo(spaceHeatingDemandUKAverage, height);
+	ctx.stroke();
 
 }
