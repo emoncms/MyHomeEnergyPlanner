@@ -76,7 +76,7 @@ $('#modal-delete-image').on('click', '#delete-file-confirm', function () {
 function delete_image_callback(result) {
     for (image_name in result) {
         $('#delete_result').append("<p>" + image_name + " - " + result[image_name] + "</p>"); // Display the result message of the deletion
-        if (true)/*(result[image_name] === "Deleted")*/ {
+        if (result[image_name] === "Deleted") {
             // Find the image in the data object and remove it
             for (z in data.imagegallery) {
                 if (image_name === data.imagegallery[z]) {
