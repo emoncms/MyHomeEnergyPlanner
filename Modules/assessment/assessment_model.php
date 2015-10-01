@@ -178,7 +178,7 @@ class Assessment {
         $description = preg_replace('/[^\w\s-.",:{}\[\]]/', '', $description);
 
         $mdate = time();
-        
+
         $stmt = $this->mysqli->prepare("UPDATE " . $this->tablename . " SET `name` = ?, `description` = ?,`mdate` = ? WHERE `id` = ?");
         $stmt->bind_param("sssi", $name, $description, $mdate, $id);
         $stmt->execute();
@@ -434,6 +434,70 @@ class Assessment {
             $users[] = array('orgid' => $row->orgid, 'userid' => $row->userid, 'username' => $username);
         }
         return $users;
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    // IMAGE GALLERY
+    // ------------------------------------------------------------------------------------------------
+
+    public function saveimages($userid, $id, $images) {
+
+        // Check if user has access to this assesment      
+        if (!$this->has_access($userid, $id))
+            return "User has no access to the assesment";
+
+        // Check if there is a already a directory for this assesment
+        if (!is_dir(__DIR__ . "/images/" . $id)) {
+            error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
+            if (!mkdir(__DIR__ . "/images/" . $id))
+                return "There has been a problem creating the directory for these images, check permissions!";
+        }
+
+        //Handle the image: check format, it is not empty, name of file is valid, file name not too long if it exists and move it
+        $result = [];
+        foreach ($images as $image) {
+            $allowedExts = array("gif", "jpeg", "jpg", "png");
+            $temp = explode(".", $image["name"]);
+            $extension = end($temp);
+            if ((($image["type"] != "image/gif") && ($image["type"] != "image/jpeg") && ($image["type"] != "image/jpg") && ($image["type"] != "image/pjpeg") && ($image["type"] != "image/x-png") && ($image["type"] != "image/png")) || !in_array($extension, $allowedExts))
+                $message = "Invalid file";
+            else if (getimagesize($image["tmp_name"])["mime"] != $image["type"])
+                $message = "The mime type of the file is not the one expected";
+            else if ($image["error"] > 0)
+                $message = "Error uploading file: " . $image["error"];
+            else if ($image["size"] === 0)
+                $message = "File is empty";
+            else if (preg_match("`^[-0-9A-Z_\.]+$`i", $image["name"]) === 0)
+                $message = "The name of this file is not valid";
+            else if (mb_strlen($image["name"], "UTF-8") > 225)
+                $message = "File name too long";
+            else if ($image["size"] > 1000000) // max file size 1 B
+                $message = "File cannot be bigger than 1MB";
+            else {
+                $filename = $image["name"];
+                if (file_exists(__DIR__ . "/images/" . $id . "/" . $filename)) {
+                    $message = "File already exists";
+                } else {
+                    // Move file
+                    $message = move_uploaded_file($image["tmp_name"], __DIR__ . "/images/" . $id . "/" . $filename);
+                    $message = $message === true ? "Uploaded" : "File couldn't be moved in the server, check permissions!!" . $message;
+                }
+            }
+
+            $result[$image["name"]] = $message;
+        }
+        return $result;
+    }
+
+    public function deleteimage($userid, $projectid, $filename) {
+        // Check if user has access to this assesment      
+        if (!$this->has_access($userid, $projectid))
+            return "User has no access to the assesment";
+        $result = [];
+        error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
+        $message = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
+        $message = $message === true ? "Deleted" : "File couldn't be deleted";
+        return [$filename => $message];
     }
 
 }

@@ -156,6 +156,16 @@ function assessment_controller() {
         if ($route->action == 'getsharedlibrary' && $session['write'])
             $result = $assessment->getsharedlibrary($session['userid'], get('id'));
 
+        // -------------------------------------------------------------------------------------------------------------
+        // Image gallery
+        // -------------------------------------------------------------------------------------------------------------
+        if ($route->action == 'uploadimages' && $session['write'])
+            $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
+
+        if ($route->action == 'deleteimage' && $session['write'])
+            $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
+
+
         // Upgrade (temporary)    
         /*
           if ($route->action == "upgrade" && $session['admin'])

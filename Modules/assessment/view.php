@@ -7,7 +7,7 @@ $projectid = (int) $_GET['id'];
 global $reports;
 ?>        
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
 
@@ -21,6 +21,8 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/canvas-barchart/barchart.js"></script>
+<link rel="stylesheet" href="<?php echo $d; ?>js/magnific-popup/magnific-popup.css">
+<script src="<?php echo $d; ?>js/magnific-popup/jquery.magnific-popup.min.js"></script>
 
 <style>
     .modal-backdrop
@@ -66,6 +68,7 @@ global $reports;
                     <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
                     <div class="scenario-nav-heading">Extended input</a></div>
                     <div class="scenario-nav"><a href="#template/householdquestionnaire">Household Questionnaire</a></div>
+                    <div class="scenario-nav"><a href="#template/imagegallery">Image gallery</a></div>
                     <div class="scenario-nav"><a href="#template/currentenergy">Current Energy</a></div>
                     <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
                     <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
@@ -244,9 +247,7 @@ global $reports;
         $("." + scenario + "_sap_rating").html(project[scenario].SAP.rating.toFixed(0));
 
         openbem.set(projectid, project, function (result) {
-            if (result === "Not logged") {
-                $('#modal-error-submitting-data').show();
-            }
+            alertifnotlogged(result);
         });
     }
 
@@ -258,7 +259,7 @@ global $reports;
             val = $(this)[0].checked;
         if (input_type == 'textarea')
             val = $(this).html();
-            
+
         if (!isNaN(val) && val != "")
             val *= 1;
         var lastval = varset(key, val);
@@ -334,12 +335,12 @@ global $reports;
     });
 
     $("#openbem").on('click', '[key="data.use_appliancePHPP"]', function () {
-        if(data.use_appliancePHPP===1)
+        if (data.use_appliancePHPP === 1)
             data.use_appliancelist = false;
         update();
     });
-     $("#openbem").on('click', '[key="data.use_appliancelist"]', function () {
-        if(data.use_appliancelist===1)
+    $("#openbem").on('click', '[key="data.use_appliancelist"]', function () {
+        if (data.use_appliancelist === 1)
             data.use_appliancePHPP = false;
         update();
     });
@@ -347,18 +348,18 @@ global $reports;
     //-------------------------------------------------------------------
 
     $(".house_graphic").click(function () {
-    if ($(".house_graphic").html() == "Show house graphic") {
-        $("#topgraphic").show();
-        $("#rating").hide();
-        $(".house_graphic").html("Hide house graphic");
-    } else {
-        $("#topgraphic").hide();
-        $("#rating").show();
-        $(".house_graphic").html("Show house graphic");
+        if ($(".house_graphic").html() == "Show house graphic") {
+            $("#topgraphic").show();
+            $("#rating").hide();
+            $(".house_graphic").html("Hide house graphic");
+        } else {
+            $("#topgraphic").hide();
+            $("#rating").show();
+            $(".house_graphic").html("Show house graphic");
         }
     }
     );
-            $("#topgraphic").show();
+    $("#topgraphic").show();
     $("#rating").hide();
     $(".house_graphic").html("Hide house graphic");
 

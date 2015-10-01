@@ -6,11 +6,9 @@ var openbem = {
         var apikeystr = "";
         if (this.apikey != "")
             apikeystr = "?apikey=" + this.apikey;
-
         $.ajax({url: path + "assessment/list.json" + apikeystr, dataType: 'json', async: false, success: function (data) {
                 result = data;
             }});
-
         if (result == "")
             result = [];
         return result;
@@ -34,6 +32,7 @@ var openbem = {
         $.ajax({type: 'POST', url: path + "assessment/setdata.json", data: "id=" + parseInt(id) + "&data=" + JSON.stringify(inputdata), async: true, success: function (data) {
                 callback(data)
             }});
+        //console.log(JSON.stringify(inputdata));
     },
     'create': function (name, description)
     {
@@ -66,6 +65,21 @@ var openbem = {
                 result = data;
             }});
         return result;
+    },
+    'upload_images': function (id, form_data, callback)
+    {
+        var result = false;
+        form_data.append("id", id);
+        $.ajax({type: 'POST', url: path + "assessment/uploadimages.json", data: form_data, processData: false, contentType: false, async: false, success: function (data) {
+                callback(data)
+            }});
+    },
+    'delete_image': function (id, filename, callback)
+    {
+        var result = false;
+        $.ajax({type: 'POST', url: path + "assessment/deleteimage.json", data: "id=" + id + "&filename=" + filename, async: false, success: function (data) {
+                callback(data);
+            }});
     },
     /*
      'getprojectdetails':function(project_id)
@@ -186,16 +200,12 @@ var openbem = {
     extract_inputdata: function (data)
     {
         var inputdata = {};
-
         inputdata.scenario_name = data.scenario_name;
-
         inputdata.household = data.household;
-
         inputdata.region = data.region;
         inputdata.altitude = data.altitude
         inputdata.use_custom_occupancy = data.use_custom_occupancy;
         inputdata.custom_occupancy = data.custom_occupancy;
-
         inputdata.floors = [];
         for (z in data.floors) {
             inputdata.floors[z] = {name: data.floors[z].name, area: data.floors[z].area, height: data.floors[z].height};
@@ -207,7 +217,6 @@ var openbem = {
             global_TMP_value: data.fabric.global_TMP_value,
             elements: []
         };
-
         for (z in data.fabric.elements) {
             inputdata.fabric.elements[z] = {
                 type: data.fabric.elements[z].type,
@@ -235,7 +244,7 @@ var openbem = {
                 inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
         }
 
-        // Ventilation
+// Ventilation
         inputdata.ventilation = {
             number_of_chimneys: data.ventilation.number_of_chimneys,
             number_of_openflues: data.ventilation.number_of_openflues,
@@ -253,8 +262,6 @@ var openbem = {
             system_air_change_rate: data.ventilation.system_air_change_rate,
             balanced_heat_recovery_efficiency: data.ventilation.balanced_heat_recovery_efficiency
         };
-
-
         // LAC
         //inputdata.use_LAC = data.use_LAC;
         inputdata.LAC = {
@@ -262,15 +269,12 @@ var openbem = {
             L: data.LAC.L,
             reduced_internal_heat_gains: data.LAC.reduced_internal_heat_gains
         };
-
         inputdata.use_generation = data.use_generation;
         inputdata.generation = data.generation;
-
         inputdata.currentenergy = {
             energyitems: data.currentenergy.energyitems,
             greenenergy: data.currentenergy.greenenergy
         };
-
         // Waterheating
         inputdata.use_water_heating = data.use_water_heating;
         inputdata.water_heating = {
@@ -290,7 +294,6 @@ var openbem = {
             contains_dedicated_solar_storage_or_WWHRS: data.water_heating.contains_dedicated_solar_storage_or_WWHRS,
             hot_water_control_type: data.water_heating.hot_water_control_type
         };
-
         inputdata.use_SHW = data.use_SHW;
         inputdata.SHW = {
             A: data.SHW.A,
@@ -303,7 +306,6 @@ var openbem = {
             Vs: data.SHW.Vs,
             combined_cylinder_volume: data.SHW.combined_cylinder_volume
         };
-
         // Detailed Appliaces List
         inputdata.use_appliancelist = data.use_appliancelist;
         inputdata.appliancelist = {list: []};
@@ -315,12 +317,12 @@ var openbem = {
             }
         }
 
-        // Apliances PHPP
+// Apliances PHPP
         inputdata.use_appliancePHPP = data.use_appliancePHPP;
         inputdata.appliancePHPP = {list: []};
         for (z in data.appliancePHPP.list) {
             inputdata.appliancePHPP.list[z] = {
-                category:data.appliancePHPP.list[z].category,
+                category: data.appliancePHPP.list[z].category,
                 name: data.appliancePHPP.list[z].name,
                 number_used: data.appliancePHPP.list[z].number_used,
                 a_plus_rated: data.appliancePHPP.list[z].a_plus_rated,
@@ -338,26 +340,24 @@ var openbem = {
                          co2_m2: data.appliancePHPP.list[z].co2_m2*/
             };
         }
-        
-        // Temperature
+
+// Temperature
         inputdata.temperature = {
             responsiveness: data.temperature.responsiveness,
             target: data.temperature.target,
             control_type: data.temperature.control_type,
             living_area: data.temperature.living_area
         };
-
         // Space heating
         inputdata.space_heating = {
             use_utilfactor_forgains: data.space_heating.use_utilfactor_forgains
         }
 
-        // Energy systems
+// Energy systems
         inputdata.systemlibrary = data.systemlibrary;
         inputdata.energy_systems = {}
         for (z in data.energy_systems) {
             inputdata.energy_systems[z] = [];
-
             for (i in data.energy_systems[z])
             {
                 inputdata.energy_systems[z].push({
@@ -372,7 +372,8 @@ var openbem = {
 
         // Fuels
         inputdata.fuels = data.fuels;
-
+        //Images
+        inputdata.imagegallery = data.imagegallery;
         return inputdata;
     }
 }
