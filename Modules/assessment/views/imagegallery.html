@@ -1,0 +1,58 @@
+<h3>Image gallery</h3>
+
+<h4>Upload images</h4>
+<form style="margin-bottom:5px" action="#" id="upload_form" method="post" enctype="multipart/form-data" >
+    <input type="file" multiple id="files_to_upload">
+    <input type="submit" value="Upload" />
+</form>
+<p>Max. size: 1MB</p>
+
+<div id="upload_result" style="margin: 0 0 25px 25px">
+
+</div>
+
+<div id="gallery">
+    <h4 style="margin: 15px 0 0 0">Gallery</h4>
+    <div id="delete_result" style="margin: 0 0 25px 25px"></div>
+</div>
+
+<div id="modal-delete-image" class="modal modal-sm hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Delete image</h3>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you want to delete <span id="file-to-delete"/></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="delete-file-confirm" index="" class="btn btn-primary">Yes</button>
+    </div>
+</div>
+
+<!--
+<form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+    <label>Select a file:</label><br>
+    <input type="file" name="file" required />
+    <input type="submit" value="Upload" />
+</form>
+
+<script type="text/javascript">
+    function submitForm() {
+        console.log("submit event");
+        var fd = new FormData(document.getElementById("fileinfo"));
+        fd.append("label", "WEBUPLOAD");
+        $.ajax({
+            url: path + "assessment/uploadimage.json",
+            type: "POST",
+            data: fd,
+            enctype: 'multipart/form-data',
+            processData: false, // tell jQuery not to process the data
+            contentType: false   // tell jQuery not to set contentType
+        }).done(function (data) {
+            console.log("PHP Output:");
+            console.log(data);
+        });
+        return false;
+    }
+</script>
