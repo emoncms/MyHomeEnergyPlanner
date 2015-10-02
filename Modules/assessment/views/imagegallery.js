@@ -43,7 +43,8 @@ function upload_images_callback(result) {
     else {
         for (image in result) {
             $('#upload_result').append("<p>" + image + " - " + result[image] + "</p>"); // Display the result message of the upload
-            if (result[image] === "Uploaded") {
+            console.log(result[image]);
+            if (result[image].indexOf("Uploaded") > -1) {
                 data.imagegallery.push(image);
                 add_image(data.imagegallery.length - 1); // Add the image to the view       
             }

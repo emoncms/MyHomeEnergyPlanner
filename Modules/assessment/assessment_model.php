@@ -448,7 +448,7 @@ class Assessment {
 
         // Check if there is a already a directory for this assesment
         if (!is_dir(__DIR__ . "/images/" . $id)) {
-            error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
+            ini_set('display_errors', 0); // We don't display errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
             if (!mkdir(__DIR__ . "/images/" . $id))
                 return "There has been a problem creating the directory for these images, check permissions!";
         }
@@ -456,6 +456,7 @@ class Assessment {
         //Handle the image: check format, it is not empty, name of file is valid, file name not too long if it exists and move it
         $result = [];
         foreach ($images as $image) {
+            $message = '';
             $allowedExts = array("gif", "jpeg", "jpg", "png");
             $temp = explode(".", $image["name"]);
             $extension = end($temp);
@@ -467,24 +468,26 @@ class Assessment {
                 $message = "Error uploading file: " . $image["error"];
             else if ($image["size"] === 0)
                 $message = "File is empty";
-            else if (preg_match("`^[-0-9A-Z_\.]+$`i", $image["name"]) === 0)
-                $message = "The name of this file is not valid";
             else if (mb_strlen($image["name"], "UTF-8") > 225)
                 $message = "File name too long";
             else if ($image["size"] > 1000000) // max file size 1 B
                 $message = "File cannot be bigger than 1MB";
             else {
                 $filename = $image["name"];
+                if (preg_match("`^[-0-9A-Z_\.]+$`i", $image["name"]) === 0) { // File name not valid
+                    $filename = preg_replace("([^-0-9A-Za-z_\.])", "_", $image["name"]);
+                    $message = "File name has been modified  --  ";
+                }
                 if (file_exists(__DIR__ . "/images/" . $id . "/" . $filename)) {
                     $message = "File already exists";
                 } else {
                     // Move file
-                    $message = move_uploaded_file($image["tmp_name"], __DIR__ . "/images/" . $id . "/" . $filename);
-                    $message = $message === true ? "Uploaded" : "File couldn't be moved in the server, check permissions!!" . $message;
+                    ini_set('display_errors', 0); // We don't display errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
+                    $move_result = move_uploaded_file($image["tmp_name"], __DIR__ . "/images/" . $id . "/" . $filename);
+                    $message .= $move_result === true ? "Uploaded" : "File couldn't be moved in the server, check permissions!!" . $message;
                 }
             }
-
-            $result[$image["name"]] = $message;
+            $result[$filename] = $message;
         }
         return $result;
     }
