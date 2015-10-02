@@ -49,7 +49,7 @@ function targetbarCarboncoop(element, options)
         ctx.stroke();
         
         ctx.textAlign = "left";
-        ctx.fillStyle = "rgba(99,86,71,0.8)";
+        ctx.fillStyle = "rgb(255,255,255)";
         ctx.fillText(options.targets[z]+" "+options.units,xpos+5,barheight-18);
         ctx.fillStyle = "rgba(99,86,71,1.0)";
         ctx.fillText(z,xpos+5,barheight-8);
