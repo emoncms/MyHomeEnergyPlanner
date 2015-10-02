@@ -220,37 +220,83 @@ function carboncoopreport_initUI() {
 	// uncommenting this breaks top graphi
 	// EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
 
-	$("#space-heating-demand").css({
-		"background": "white",
-		"width": "100%"
-	});
-	var height = 60;
-	var width = 1000;
-	var spaceHeatingDemandMax = 1000;
-	var spaceHeatingDemand = 400;
-	var spaceHeatingDemandRetrofit = 100;
-	var spaceHeatingDemandUKAverage = 800;
+	// $("#space-heating-demand").css({
+	// 	"background": "white",
+	// 	"width": "100%"
+	// });
+	// var height = 60;
+	// var width = 1000;
+	// var spaceHeatingDemandMax = 1000;
+	// var spaceHeatingDemand = 400;
+	// var spaceHeatingDemandRetrofit = 100;
+	// var spaceHeatingDemandUKAverage = 800;
 
-	// map the raw values to values usable on the graph
-	spaceHeatingDemand = width * (spaceHeatingDemand / spaceHeatingDemandMax);
-	spaceHeatingDemandRetrofit = width * (spaceHeatingDemandRetrofit / spaceHeatingDemandMax);
-	spaceHeatingDemandUKAverage = width * (spaceHeatingDemandUKAverage / spaceHeatingDemandMax);
+	// // map the raw values to values usable on the graph
+	// spaceHeatingDemand = width * (spaceHeatingDemand / spaceHeatingDemandMax);
+	// spaceHeatingDemandRetrofit = width * (spaceHeatingDemandRetrofit / spaceHeatingDemandMax);
+	// spaceHeatingDemandUKAverage = width * (spaceHeatingDemandUKAverage / spaceHeatingDemandMax);
 
-	var ctx = document.getElementById("space-heating-demand").getContext("2d");
-	ctx.fillStyle = 'rgb(217, 58, 71)';
-	ctx.fillRect(0,0,spaceHeatingDemand, height);
+	// var ctx = document.getElementById("space-heating-demand").getContext("2d");
+	// ctx.fillStyle = 'rgb(217, 58, 71)';
+	// ctx.fillRect(0,0,spaceHeatingDemand, height);
 
-	ctx.setLineDash([2,2]);
-	ctx.strokeStyle = 'white';
-	ctx.beginPath();
-	ctx.moveTo(spaceHeatingDemandRetrofit, 0);
-	ctx.lineTo(spaceHeatingDemandRetrofit, height);
-	ctx.stroke();
+	// ctx.setLineDash([2,2]);
+	// ctx.strokeStyle = 'white';
+	// ctx.beginPath();
+	// ctx.moveTo(spaceHeatingDemandRetrofit, 0);
+	// ctx.lineTo(spaceHeatingDemandRetrofit, height);
+	// ctx.stroke();
 
-	ctx.strokeStyle = 'black';
-	ctx.beginPath();
-	ctx.moveTo(spaceHeatingDemandUKAverage, 0);
-	ctx.lineTo(spaceHeatingDemandUKAverage, height);
-	ctx.stroke();
+	// ctx.strokeStyle = 'black';
+	// ctx.beginPath();
+	// ctx.moveTo(spaceHeatingDemandUKAverage, 0);
+	// ctx.lineTo(spaceHeatingDemandUKAverage, height);
+	// ctx.stroke();
+
+	 var options = {
+        name: "Space heating demand",
+        value: Math.round(data.fabric_energy_efficiency),
+        units: "kWh/m2",
+        targets: {
+            //"Passivhaus": 15,
+            "Passivhaus retrofit": 25,
+            "UK Average": 145
+        }
+    };
+    targetbarCarboncoop("space-heating-demand", options);
+
+        // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Primary energy demand",
+        value: Math.round(data.primary_energy_use_m2),
+        units: "kWh/m2",
+        targets: {
+            "Passivhaus": 120,
+            "UK Average": 350
+        }
+    };
+    targetbarCarboncoop("primary-energy", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "CO2 Emission rate",
+        value: Math.round(data.kgco2perm2),
+        units: "kgCO2/m2",
+        targets: {
+            "80% by 2050": 17,
+            "UK Average": 85
+        }
+    };
+    targetbarCarboncoop("co2-emission-rate", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Per person energy use",
+        value: data.kwhdpp.toFixed(1),
+        units: "kWh/day",
+        targets: {
+            "70% heating saving": 8.6,
+            "UK Average": 19.6
+        }
+    };
+    targetbarCarboncoop("energy-use-per-person", options);
 
 }
