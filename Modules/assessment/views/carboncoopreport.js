@@ -3,45 +3,47 @@ function carboncoopreport_initUI() {
 
 	console.log(project[scenario].floors);
 
+	$(".home-image").attr("src", project[scenario].household.houseimage);
+
 
 	// Heat Balance Example
 
-	var HeatBalance = new BarChart({
-		chartTitle: 'Energy Demand',
-		yAxisLabel: 'kWh/m2.year',
-		fontSize: 22,
-		width: 1200,
-		chartHeight: 600,
-		barWidth: 110,
-		division: 'auto',
-		barGutter: 120,
-		barDivisionType: 'group',
-		defaultBarColor: 'rgb(231,37,57)',
-		barColors: {
-			'Gains': 'rgb(230,39,58)',
-			'Losses': 'rgb(64,169,199)',
-		},
-		data: [
-			{label: project[scenario].floors[0].name, value: [
-					{value: project[scenario].floors[0].area, label: "Gains"},
-					{value: project[scenario].floors[0].volume, label: "Losses"},
-			]},
-			{label: project[scenario].floors[1].name, value: [
-					{value: project[scenario].floors[1].area, label: 'Gains'},
-					{value: project[scenario].floors[1].volume, label: 'Losses'},
-			]},
-			{label: project[scenario].floors[2].name, value: [
-					{value: project[scenario].floors[2].area, label: 'Gains'},
-					{value: project[scenario].floors[2].volume, label: 'Losses'},
-			]},
-			// {label: 'Scenario 4', value: [
-			// 		{value: 376, label: 'Gains'},
-			// 		{value: 287, variance: 30, label: 'Losses'},
-			// ]},
-		]
-	});
+	// var HeatBalance = new BarChart({
+	// 	chartTitle: 'Energy Demand',
+	// 	yAxisLabel: 'kWh/m2.year',
+	// 	fontSize: 22,
+	// 	width: 1200,
+	// 	chartHeight: 600,
+	// 	barWidth: 110,
+	// 	division: 'auto',
+	// 	barGutter: 120,
+	// 	barDivisionType: 'group',
+	// 	defaultBarColor: 'rgb(231,37,57)',
+	// 	barColors: {
+	// 		'Gains': 'rgb(230,39,58)',
+	// 		'Losses': 'rgb(64,169,199)',
+	// 	},
+	// 	data: [
+	// 		{label: project[scenario].floors[0].name, value: [
+	// 				{value: project[scenario].floors[0].area, label: "Gains"},
+	// 				{value: project[scenario].floors[0].volume, label: "Losses"},
+	// 		]},
+	// 		{label: project[scenario].floors[1].name, value: [
+	// 				{value: project[scenario].floors[1].area, label: 'Gains'},
+	// 				{value: project[scenario].floors[1].volume, label: 'Losses'},
+	// 		]},
+	// 		{label: project[scenario].floors[2].name, value: [
+	// 				{value: project[scenario].floors[2].area, label: 'Gains'},
+	// 				{value: project[scenario].floors[2].volume, label: 'Losses'},
+	// 		]},
+	// 		// {label: 'Scenario 4', value: [
+	// 		// 		{value: 376, label: 'Gains'},
+	// 		// 		{value: 287, variance: 30, label: 'Losses'},
+	// 		// ]},
+	// 	]
+	// });
 
-	HeatBalance.draw('heat-balance');
+	// HeatBalance.draw('heat-balance');
 
 	// Space Heating Demand
 
@@ -148,9 +150,10 @@ function carboncoopreport_initUI() {
 		],
 		data: [
 			{label: 'UK Average', value: 100},
-			{label: 'Your home now (model)', value: project[scenario].kgco2perm2},
-			{label: 'Your home now (bills)', value: 0},
-			{label: 'Your 2050 home', value: 0},
+			{label: 'Your home now (model)', value: project["master"].kgco2perm2},
+			{label: 'Your home now (bills)', value: project["master"].currentenergy.total_co2m2},
+			{label: 'Your home (small changes)', value: project["scenario1"].kgco2perm2},
+			{label: 'Your 2050 home', value: project["scenario2"].kgco2perm2},
 		]
 	});
 
@@ -178,7 +181,7 @@ function carboncoopreport_initUI() {
 		},
 		data: [
 			{label: 'UK Average', value: 50},
-			{label: 'Your home now (model)', value: (project[scenario].kgco2perm2 / project[scenario].occupancy)},
+			{label: 'Your home now (model)', value: (project[scenario].annualco2 / project[scenario].occupancy)}, //do same kind of thing as above for other columns
 			{label: 'Your home now (bills)', value: 59, variance: 40},
 			{label: 'Your 2050 home', value: 21, variance: 40},
 		]
