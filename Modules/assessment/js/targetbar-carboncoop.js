@@ -3,10 +3,11 @@ function targetbarCarboncoop(element, options)
     var width = $("#"+element).width();
     var height = $("#"+element).height();
     
-    $("#"+element).html("<div style='padding-bottom:5px; font-size:16px; color:rgba(99,86,71,0.8);'>"+options.name+": <b style='float:right'>"+options.value+" "+options.units+"</b></div>");
+    // $("#"+element).html("<div style='padding-bottom:5px; font-size:16px; color:rgba(99,86,71,0.8);'>"+options.name+": <b style='float:right'>"+options.value+" "+options.units+"</b></div>");
+    $("#"+element).html("<div style='padding-bottom:5px; font-size:16px; color:rgba(99,86,71,0.8);'>"+options.name+"</div>");
     var titleheight = $("#"+element+" div").height();
     var barheight = height - titleheight - 5;    
-    var barheight = 60;    
+    var barheight = 100;    
     $("#"+element).append('<canvas id="'+element+'-canvas" width="'+width+'" height="'+barheight+'" style="max-width:100%"></canvas>');
 
     var c = document.getElementById(element+"-canvas");  
@@ -34,8 +35,19 @@ function targetbarCarboncoop(element, options)
     ctx.fillStyle = "rgba(99,86,71,0.8)";
     ctx.fillText(options.value+" "+options.units,width,10);        
     */
-    ctx.fillStyle = "rgb(217, 58, 71)";
-    ctx.fillRect(1,1,(options.value*xscale)-2,barheight-2);
+    if (typeof options["values"] != "undefined"){
+        var subBarHeightFraction = 1 / options["values"].length;
+        for (var i = 0 ; i < options["values"].length ; i++){
+            ctx.fillStyle = "rgba(217, 58, 71, "+subBarHeightFraction*(i+1)+")";
+            var y = 1 + subBarHeightFraction*barheight*i;
+            ctx.fillRect(1,y ,(options.values[i]*xscale)-2,subBarHeightFraction*barheight);
+            ctx.fillStyle = "rgb(128,128,128)";
+            ctx.fillText(options.values[i]+" "+options.units, (options.value*xscale)-2, y + 20);
+        }
+    } else {
+        ctx.fillStyle = "rgb(217, 58, 71)";
+        ctx.fillRect(1,1,(options.value*xscale)-2,barheight-2);
+    }
     ctx.font="10px Ubuntu";
     ctx.setLineDash([4, 4]);
     

@@ -11,7 +11,7 @@ function carboncoopreport_initUI() {
 	/* Figure 1: Retrofit Priorities
     //  Shows retrofit priorities - in order - identifying whether interested in retrofit for cost, comfort or carbon reasons etc.
     */
-    
+
     var priorities = {};
     var household = project["master"].household;
 
@@ -68,81 +68,176 @@ function carboncoopreport_initUI() {
     }
     
 
+	/* Figure 2: Performance Summary
+    // Quick overview/summary - Benchmarking Bar Charts. Need to ensure that all scenarios displayed, not just one as on current graph.
+    // Space Heating Demand (kWh/m2.a)
+    // Primary Energy Demand (kWh/m2.a)
+    // CO2 emission rate (kgCO2/m2.a)
+    // CO2 emission rate - per person (kgCO2/m2.a)
+    */
+
+	var options = {
+        name: "Space heating demand",
+        value: Math.round(data.fabric_energy_efficiency),
+        values: [
+	        Math.round(project["master"].fabric_energy_efficiency),
+	        Math.round(project["scenario1"].fabric_energy_efficiency),
+	        Math.round(project["scenario2"].fabric_energy_efficiency),
+	        Math.round(project["scenario3"].fabric_energy_efficiency)
+	    ],
+	    // project["master"]
+        units: "kWh/m2",
+        targets: {
+            //"Passivhaus": 15,
+            "Passivhaus retrofit": 25,
+            "UK Average": 145
+        }
+    };
+    targetbarCarboncoop("space-heating-demand", options);
+
+        // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Primary energy demand",
+        value: Math.round(data.primary_energy_use_m2),
+        values: [
+	        Math.round(project["master"].primary_energy_use_m2),
+	        Math.round(project["scenario1"].primary_energy_use_m2),
+	        Math.round(project["scenario2"].primary_energy_use_m2),
+	        Math.round(project["scenario3"].primary_energy_use_m2)
+	    ],
+        units: "kWh/m2",
+        targets: {
+            "Passivhaus": 120,
+            "UK Average": 350
+        }
+    };
+    targetbarCarboncoop("primary-energy", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "CO2 Emission rate",
+        value: Math.round(data.kgco2perm2),
+        values: [
+	        Math.round(project["master"].kgco2perm2),
+	        Math.round(project["scenario1"].kgco2perm2),
+	        Math.round(project["scenario2"].kgco2perm2),
+	        Math.round(project["scenario3"].kgco2perm2)
+	    ],
+        units: "kgCO2/m2",
+        targets: {
+            "80% by 2050": 17,
+            "UK Average": 85
+        }
+    };
+    targetbarCarboncoop("co2-emission-rate", options);
+    // ---------------------------------------------------------------------------------
+    var options = {
+        name: "Per person energy use",
+        value: data.kwhdpp.toFixed(1),
+        values: [
+	        Math.round(project["master"].kwhdpp.toFixed(1)),
+	        Math.round(project["scenario1"].kwhdpp.toFixed(1)),
+	        Math.round(project["scenario2"].kwhdpp.toFixed(1)),
+	        Math.round(project["scenario3"].kwhdpp.toFixed(1))
+	    ],
+        units: "kWh/day",
+        targets: {
+            "70% heating saving": 8.6,
+            "UK Average": 19.6
+        }
+    };
+    targetbarCarboncoop("energy-use-per-person", options);
+
+    /* Figure 3: How does my home lose heat?
+    // TODO: Show house graphic with heat loss for the four scenarios.
+    */
 
 
 
 
+    /* Figure 4: Your home’s heat balance
+    // Heat transfer per year by element. The gains and losses here need to balance.
+    // Trystan is working on separating the data out so we can show it on a stacked bar chart.
+    // TODO: Stacked bar charts don't appear to be working properly with negative values
+    */
 
-	// Heat Balance Example
-
-	var HeatBalance = new BarChart({
-		chartTitle: 'Energy Demand',
+	var EnergyDemand = new BarChart({
+		chartTitle: 'Heat Balance',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
 		width: 1200,
 		chartHeight: 600,
-		barWidth: 110,
 		division: 'auto',
+		barWidth: 110,
 		barGutter: 120,
-		barDivisionType: 'group',
 		defaultBarColor: 'rgb(231,37,57)',
 		barColors: {
-			'Gains': 'rgb(230,39,58)',
-			'Losses': 'rgb(64,169,199)',
+			'Wood': 'rgb(24,86,62)',
+			'Solar': 'rgb(240,212,156)',
+			'Gas': 'rgb(236,102,79)',
+			'Solid fuel': 'rgb(246,167,7)',
 		},
 		data: [
-			{label: project[scenario].floors[0].name, value: [
-					{value: 200, label: "Gains"},
-					{value: 200, label: "Losses"},
+			{label: 'UK Average', value: [
+					{value: -200, variance: 5, label: 'Gas'},
+					{value: -400, label: 'Wood'},
+					{value: 300, label: 'Solar'},
+					{value: 300, variance: 10, label: 'Solid fuel'}
 			]},
-			{label: project[scenario].floors[1].name, value: [
-					{value: 150, label: 'Gains'},
-					{value: 150, label: 'Losses'},
-			]},
-			{label: project[scenario].floors[2].name, value: [
-					{value: 100, label: 'Gains'},
-					{value: 100, label: 'Losses'},
-			]},
-			{label: 'Scenario 4', value: [
-					{value: 50, label: 'Gains'},
-					{value: 50, variance: 30, label: 'Losses'},
+			{label: '2000 B Regs Average', variance: 30, value: 60},
+			// {label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
+			{label: 'Your home now', variance: 30, value: 100},
+			{label: 'UK Average', value: [
+					{value: -100, variance: 5, label: 'Gas'},
+					{value: -100, variance: 5, label: 'Wood'},
+					{value: 150, variance: 5, label: 'Solar'},
+					{value: 50, variance: 5, label: 'Solid fuel'}
 			]},
 		]
 	});
 
-	HeatBalance.draw('heat-balance');
+	EnergyDemand.draw('heat-balance');
 
-	// Space Heating Demand
+
+	/* Figure 5: Space Heating Demand
+	// 
+	*/
 
 	var SpaceHeatingDemand = new BarChart({
-		chartTitle: 'Space Heating Demand',
+		chartTitle: 'Carbon Dioxide Emissions',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
-		chartLow: -1,
-		chartHigh: 169,
-		division: 10,
+		division: 15,
 		width: 1200,
 		chartHeight: 600,
 		barWidth: 110,
-		barGutter: 80,
-		defaultBarColor: 'rgb(231,37,57)',
-		ranges: [
+		barGutter: 60,
+		defaultBarColor: 'rgb(157,213,203)',
+		// barColors: {
+		// 	'Space heating': 'rgb(157,213,203)',
+		// 	'Pumps, fans, etc.': 'rgb(24,86,62)',
+		// 	'Cooking': 'rgb(40,153,139)',
+		// },
+		targets: [
 			{
-				low: 30,
-				high: 70,
-				color: 'rgb(254,204,204)'
+				label: '30 kWh/m2.a',
+				target: 30,
+				color: 'rgb(231,37,57)'
+			},
+			{
+				label: '70 kWh/m2.a',
+				target: 70,
+				color: 'rgb(231,37,57)'
 			},
 		],
 		data: [
-			{label: 'UK Average', value: 140},
-			{label: '2000 B Regs Average', value: 56},
-			{label: 'Your home now', value: 0},
-			{label: 'Your 2050 home', value: 0},
+			{label: 'Your home now ', value: project["master"].fabric_energy_efficiency},
+			{label: 'Your home now (small changes)', value: project["scenario1"].fabric_energy_efficiency},
+			{label: 'Your home (moderate changes)', value: project["scenario2"].fabric_energy_efficiency},
+			{label: 'Your 2050 home', value: project["scenario3"].fabric_energy_efficiency},
 		]
 	});
 
-	// uncommenting this breaks top graphic
-	// SpaceHeatingDemand.draw('space-heating-demand');
+	SpaceHeatingDemand.draw('fig-5-space-heating-demand');
 
 
 	// Energy Demand
@@ -166,7 +261,7 @@ function carboncoopreport_initUI() {
 		data: [
 			{label: 'UK Average', value: [
 					{value: 2000, variance: 5, label: 'Gas'},
-					{value: 600, label: 'Wood'},
+					{value: -600, label: 'Wood'},
 					{value: 605, label: 'Solar'},
 					{value: 300, variance: 10, label: 'Solid fuel'}
 			]},
@@ -286,139 +381,54 @@ function carboncoopreport_initUI() {
 	// uncommenting this breaks top graphi
 	// EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
 
-	// $("#space-heating-demand").css({
-	// 	"background": "white",
-	// 	"width": "100%"
-	// });
-	// var height = 60;
-	// var width = 1000;
-	// var spaceHeatingDemandMax = 1000;
-	// var spaceHeatingDemand = 400;
-	// var spaceHeatingDemandRetrofit = 100;
-	// var spaceHeatingDemandUKAverage = 800;
-
-	// // map the raw values to values usable on the graph
-	// spaceHeatingDemand = width * (spaceHeatingDemand / spaceHeatingDemandMax);
-	// spaceHeatingDemandRetrofit = width * (spaceHeatingDemandRetrofit / spaceHeatingDemandMax);
-	// spaceHeatingDemandUKAverage = width * (spaceHeatingDemandUKAverage / spaceHeatingDemandMax);
-
-	// var ctx = document.getElementById("space-heating-demand").getContext("2d");
-	// ctx.fillStyle = 'rgb(217, 58, 71)';
-	// ctx.fillRect(0,0,spaceHeatingDemand, height);
-
-	// ctx.setLineDash([2,2]);
-	// ctx.strokeStyle = 'white';
-	// ctx.beginPath();
-	// ctx.moveTo(spaceHeatingDemandRetrofit, 0);
-	// ctx.lineTo(spaceHeatingDemandRetrofit, height);
-	// ctx.stroke();
-
-	// ctx.strokeStyle = 'black';
-	// ctx.beginPath();
-	// ctx.moveTo(spaceHeatingDemandUKAverage, 0);
-	// ctx.lineTo(spaceHeatingDemandUKAverage, height);
-	// ctx.stroke();
-
-	 var options = {
-        name: "Space heating demand",
-        value: Math.round(data.fabric_energy_efficiency),
-        units: "kWh/m2",
-        targets: {
-            //"Passivhaus": 15,
-            "Passivhaus retrofit": 25,
-            "UK Average": 145
-        }
-    };
-    targetbarCarboncoop("space-heating-demand", options);
-
-        // ---------------------------------------------------------------------------------
-    var options = {
-        name: "Primary energy demand",
-        value: Math.round(data.primary_energy_use_m2),
-        units: "kWh/m2",
-        targets: {
-            "Passivhaus": 120,
-            "UK Average": 350
-        }
-    };
-    targetbarCarboncoop("primary-energy", options);
-    // ---------------------------------------------------------------------------------
-    var options = {
-        name: "CO2 Emission rate",
-        value: Math.round(data.kgco2perm2),
-        units: "kgCO2/m2",
-        targets: {
-            "80% by 2050": 17,
-            "UK Average": 85
-        }
-    };
-    targetbarCarboncoop("co2-emission-rate", options);
-    // ---------------------------------------------------------------------------------
-    var options = {
-        name: "Per person energy use",
-        value: data.kwhdpp.toFixed(1),
-        units: "kWh/day",
-        targets: {
-            "70% heating saving": 8.6,
-            "UK Average": 19.6
-        }
-    };
-    targetbarCarboncoop("energy-use-per-person", options);
-
-    
-
-
-
-
-
 
     // Figure 5
-	 var options = {
-        name: "Space heating demand Master",
-        value: Math.round(project["master"].fabric_energy_efficiency),
-        units: "kWh/m2",
-        targets: {
-            //"Passivhaus": 15,
-            "Passivhaus retrofit": 25,
-            "UK Average": 145
-        }
-    };
-    targetbarCarboncoop("space-heating-demand-1", options);
+	 // var options = {
+  //       name: "Space heating demand Master",
+  //       value: Math.round(project["master"].fabric_energy_efficiency),
+  //       units: "kWh/m2",
+  //       targets: {
+  //           //"Passivhaus": 15,
+  //           "Passivhaus retrofit": 25,
+  //           "UK Average": 145
+  //       }
+  //   };
+  //   targetbarCarboncoop("space-heating-demand-1", options);
 
-    	 var options = {
-        name: "Space heating demand Master",
-        value: Math.round(project["scenario1"].fabric_energy_efficiency),
-        units: "kWh/m2",
-        targets: {
-            //"Passivhaus": 15,
-            "Passivhaus retrofit": 25,
-            "UK Average": 145
-        }
-    };
-    targetbarCarboncoop("space-heating-demand-2", options);
+  //   	 var options = {
+  //       name: "Space heating demand Master",
+  //       value: Math.round(project["scenario1"].fabric_energy_efficiency),
+  //       units: "kWh/m2",
+  //       targets: {
+  //           //"Passivhaus": 15,
+  //           "Passivhaus retrofit": 25,
+  //           "UK Average": 145
+  //       }
+  //   };
+  //   targetbarCarboncoop("space-heating-demand-2", options);
 
-    	 var options = {
-        name: "Space heating demand Master",
-        value: Math.round(project["scenario2"].fabric_energy_efficiency),
-        units: "kWh/m2",
-        targets: {
-            //"Passivhaus": 15,
-            "Passivhaus retrofit": 25,
-            "UK Average": 145
-        }
-    };
-    targetbarCarboncoop("space-heating-demand-3", options);
+  //   	 var options = {
+  //       name: "Space heating demand Master",
+  //       value: Math.round(project["scenario2"].fabric_energy_efficiency),
+  //       units: "kWh/m2",
+  //       targets: {
+  //           //"Passivhaus": 15,
+  //           "Passivhaus retrofit": 25,
+  //           "UK Average": 145
+  //       }
+  //   };
+  //   targetbarCarboncoop("space-heating-demand-3", options);
 
-    	 var options = {
-        name: "Space heating demand Master",
-        value: Math.round(project["scenario3"].fabric_energy_efficiency),
-        units: "kWh/m2",
-        targets: {
-            //"Passivhaus": 15,
-            "Passivhaus retrofit": 25,
-            "UK Average": 145
-        }
-    };
-    targetbarCarboncoop("space-heating-demand-4", options);
+  //   	 var options = {
+  //       name: "Space heating demand Master",
+  //       value: Math.round(project["scenario3"].fabric_energy_efficiency),
+  //       units: "kWh/m2",
+  //       targets: {
+  //           //"Passivhaus": 15,
+  //           "Passivhaus retrofit": 25,
+  //           "UK Average": 145
+  //       }
+  //   };
+  //   targetbarCarboncoop("space-heating-demand-4", options);
 
 }
