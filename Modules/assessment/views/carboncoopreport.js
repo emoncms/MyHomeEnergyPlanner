@@ -1,9 +1,76 @@
 
 function carboncoopreport_initUI() {
 
-	console.log(project[scenario].floors);
+	// console.log(project);
 
 	$(".home-image").attr("src", project[scenario].household.houseimage);
+
+
+
+
+	/* Figure 1: Retrofit Priorities
+    //  Shows retrofit priorities - in order - identifying whether interested in retrofit for cost, comfort or carbon reasons etc.
+    */
+    
+    var priorities = {};
+    var household = project["master"].household;
+
+	if (typeof household['7b_carbon'] != "undefined"){
+    	priorities.carbon = {
+    		title: "Save carbon",
+    		order: household['7b_carbon']
+    	}
+    }
+
+    if (typeof household['7b_money'] != "undefined"){
+    	priorities.money = {
+    		title: "Save money",
+    		order: household['7b_money'],
+    	}
+    }
+
+    if (typeof household['7b_comfort'] != "undefined"){
+    	priorities.comfort = {
+    		title: "Improve comfort",
+    		order: household['7b_comfort'],
+    	}
+    }
+
+    if (typeof household['7b_airquality'] != "undefined"){
+    	priorities.airquality = {
+			title: "Improve indoor air quality",
+    		order: household['7b_airquality']
+    	}
+    }
+
+    if (typeof household['7b_modernisation'] != "undefined"){
+    	priorities.modernisation = {
+    		title: "General modernisation",
+    		order: household['7b_modernisation'],
+    	}
+    }
+
+    if (typeof household['7b_health'] != "undefined"){
+    	priorities.health = {
+    		title: "Improve health",
+    		order: household['7b_health'],
+    	}
+    }
+
+    var sortedPriorities = [];
+    for (var priority in priorities){
+		sortedPriorities.push([priority, priorities[priority]['order'], priorities[priority]['title']])
+    }
+	sortedPriorities.sort(function(a, b) {return parseInt(a[1]) - parseInt(b[1])})
+
+    for (var i = 0 ; i < sortedPriorities.length ; i++){
+    	$("#retrofit-priorities").append("<li>"+sortedPriorities[i][2]+"</li>");
+    }
+    
+
+
+
+
 
 
 	// Heat Balance Example
@@ -297,6 +364,9 @@ function carboncoopreport_initUI() {
         }
     };
     targetbarCarboncoop("energy-use-per-person", options);
+
+    
+
 
 
 
