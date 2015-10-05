@@ -124,12 +124,11 @@ function carboncoopreport_initUI() {
 		chartTitle: 'Carbon Dioxide Emissions',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
-		chartHigh: 120,
 		division: 15,
 		width: 1200,
 		chartHeight: 600,
 		barWidth: 110,
-		barGutter: 120,
+		barGutter: 60,
 		defaultBarColor: 'rgb(157,213,203)',
 		barColors: {
 			'Space heating': 'rgb(157,213,203)',
@@ -166,12 +165,11 @@ function carboncoopreport_initUI() {
 		chartTitle: 'Carbon Dioxide Emissions Per Person',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
-		chartHigh: 120,
 		division: 15,
 		width: 1200,
 		chartHeight: 600,
 		barWidth: 110,
-		barGutter: 120,
+		barGutter: 60,
 		defaultBarColor: 'rgb(157,213,203)',
 		defaultVarianceColor: 'rgb(231,37,57)',
 		barColors: {
@@ -181,10 +179,10 @@ function carboncoopreport_initUI() {
 		},
 		data: [
 			{label: 'UK Average', value: 50},
-			{label: 'Your home now (model)', value: (project['master'].annualco2 / project[scenario].occupancy)}, 
-			{label: 'Your home now (bills)', value: (project['master'].annualco2 / project[scenario].occupancy)},
-			{label: 'Your home (small changes)', value: (project['scenario1'].annualco2 / project[scenario].occupancy)},
-			{label: 'Your 2050 home', value: (project['scenario3'].annualco2 / project[scenario].occupancy)},
+			{label: 'Your home now (model)', value: 1/*(project['master'].annualco2 / project[scenario].occupancy)*/}, 
+			{label: 'Your home now (bills)', value: 2/*(project['master'].annualco2 / project[scenario].occupancy)*/},
+			{label: 'Your home (small changes)', value: 3/*(project['scenario1'].annualco2 / project[scenario].occupancy)*/},
+			{label: 'Your 2050 home', value: 4/*(project['scenario3'].annualco2 / project[scenario].occupancy)*/},
 		]
 	});
 
