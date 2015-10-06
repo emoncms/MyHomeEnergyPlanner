@@ -495,63 +495,48 @@
 					</p>
 
 					<p>
-						
+						Temperature in summer:<span key='data.household.6a_temperature_summer'></span><br />
+						Air in summer: <span key='data.household.6a_airquality_summer'></span><br />
+					</p>
+
+					<p>
+						Draughts: <span key='data.household.6a_draughts_comment'></span>
+					</p>
+
+					<p>
+						Amount of daylight: <span key='data.household.6b_daylightamount'></span>
+						Amount of artificial light: <span key='data.household.6b_artificiallightamount'></span>
 					</p>
 				</div>
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 14: RH data</h4>
-					<div class="bar-chart-container" id="barchart-2">
-						<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (graph ?) Trystan to add data source</span>
-					</div>
+					<p>
+						When we visited the relative humidity was
+						<span key='data.household.reading_humidity1'></span> - <span key='data.household.reading_humidity1'></span> %. (The ideal range is 40-60%).
+					</p>
 				</div>
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 15: Temperature data</h4>
-					<div class="bar-chart-container" id="barchart-2">
-						<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (graph ?) Trystan to add data source</span>
-					</div>
+					<p>
+						When we visited your living room temperature was
+						<span key='data.household.reading_temp1'></span> - <span key='data.household.reading_temp2'></span>°C.
+					</p>
 				</div>
 
-				<div class="table-wrapper">
+				<div class="highlight-box pink-highlight">
+
 					<h4 class="top-border-title title-margin-bottom ">Figure 16: You also told us</h4>
-					<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (table)</span>
-					<table class="three-col-table">
-						<thead>
-							<tr>
-								<th class="half-width"></th>
-								<th>Typical Home (SAP)</th>
-								<th>Your Home</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th class="half-width">Number of Occupants</th>
-								<td>2.9 people 9 hours</td>
-								<td>2.5 people</td>
-							</tr>
-							<tr>
-								<th class="half-width">Average hours of heating</th>
-								<td>21</td>
-								<td>9 hours</td>
-							</tr>
-							<tr>
-								<th class="half-width">Living room thermostat temperature</th>
-								<td>21°C</td>
-								<td>21°C</td>
-							</tr>
-							<tr>
-								<th class="half-width">number of habitable rooms not heated</th>
-								<td>0 room(s)</td>
-								<td>0 room(s)</td>
-							</tr>
-							<tr>
-								<th class="half-width">estimated current appliance energy use*</th>
-								<td>3880 kWh per year</td>
-								<td>2129 kWh per year</td>
-							</tr>
-						</tbody>
-					</table>
+					<p>Noise: <span key='data.household.6c_noise_comment'></span></p>
+					<p>Daylighting: ??</p>
+					<p>Comfort/Draughts: ??</p>
+					<p>
+						Rooms: Loved - <span key='data.household.6d_favourite_room'></span>
+						Unloved: <span key='data.household.6d_unloved_rooms'></span>
+					</p>
+					<p>Laundry: </p>
+					
 				</div>
 			</section>
 		</section>
@@ -569,9 +554,9 @@
 			<h3 class="top-border-title title-margin-top title-margin-bottom">2.1 Scenarios</h3>
 			<p>Figures 17, 18 and 19 on the following pages give our recommendations for planning retrofit works in your home. We have mapped out three scenarios:</p>
 			<ul class="right-align-item-list">
-				<li><p>Scenario 1: DIY and Simple Measures</p></li>
-				<li><p>Scenario 2: More Advanced Measures</p></li>
-				<li><p>Scenario 3: Further Measures – Your 2050 Home</p></li>
+				<li><p>Scenario 1: <span id='output-scenario1-name'></span></p></li>
+				<li><p>Scenario 2: <span id='output-scenario2-name'></span></p></li>
+				<li><p>Scenario 3: <span id='output-scenario3-name'></span></p></li>
 			</ul>
 			<p>Following these scenarios, we have also included a commentary that gives more specific guidance based on the assessment we’ve carried out on your home.</p>
 			<p>We focus first on quick wins and the things you told us are most important to you. We take a whole house approach, rather than considering single measures in isolation.</p> 
@@ -626,7 +611,7 @@
 			</ol>
 
 
-				<h3 class="top-border-title title-extra-margin-top title-margin-bottom ">Figure 17 Scenario 1: DIY and Simple Measures</h4>
+				<h3 class="top-border-title title-extra-margin-top title-margin-bottom ">Figure 17 Scenario 1: <span id='output-scenario1-name'></span></h4>
 
 				<div class="five-col-table-wrapper">
 					<table class="five-col-table">
@@ -742,7 +727,7 @@
 						</tbody>
 					</table>
 				</div>
-				<h3 class="top-border-title title-margin-bottom ">Figure 18 Scenario 2: More Advanced Measures</h4>
+				<h3 class="top-border-title title-margin-bottom ">Figure 18 Scenario 2: <span id='output-scenario2-name'></span></h4>
 				<div class="five-col-table-wrapper">
 					<table class="five-col-table">
 						<thead>
@@ -857,7 +842,7 @@
 						</tbody>
 					</table>
 				</div>
-				<h3 class="top-border-title title-margin-bottom ">Figure 19 Scenario 3: Further Measures – Your 2050 Home</h4>
+				<h3 class="top-border-title title-margin-bottom ">Figure 19 Scenario 3: <span id='output-scenario3-name'></span></h4>
 				<div class="five-col-table-wrapper">
 					<table class="five-col-table">
 						<thead>
@@ -975,9 +960,7 @@
 
 			<h3 class="top-border-title title-margin-top title-margin-bottom">2.3 Commentary</h3>
 
-			<p>Dynamic Text goes in this area, so for now lets just use some lorem ipsum!</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, pariatur, asperiores! Perspiciatis sint ipsa mollitia sapiente omnis tempore, et natus aliquam rem esse id hic tempora doloremque odio aperiam fugiat!</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum eveniet veritatis natus aut officia veniam provident, iure quod unde rem corporis, blanditiis perspiciatis iste accusamus eligendi facere quisquam cum ut ex. Facere nihil in, tempora, reprehenderit, molestiae facilis voluptatibus voluptatum voluptas hic quos eius, quia accusamus nesciunt culpa necessitatibus sint.</p>
+			<p>This needs to be hooked up to data</p>
 
 		</section>
 	
@@ -1036,8 +1019,8 @@
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 20: Time Cost Quality</h4>
 
-					<span style="font-weight: bold; color:blue; font-size: 30px; display: block;">Placeholder for the ven diagram</span>
-					<img src="http://placehold.it/400x400" alt="">
+					<img src="../Modules/assessment/img-assets/images/venn-diagram.png" alt="">
+					
 				</div>
 
 				<p>We understand that this thinking and planning time may feel frustrating, but it is very important and will be worth it. Time spent in planning and preparing usually saves time, money and worry later on. As with any other construction process, “measure twice, cut once”.</p>
@@ -1079,7 +1062,7 @@
 				</ol>
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 21: Your home now >>> Your 2050 Home</h4>
-					<div class="bar-chart-container" id="barchart-2"></div>
+					<img src="../Modules/assessment/img-assets/images/transforming_your_home_now_to_2050_home.png" alt="">
 				</div>
 			</section>
 

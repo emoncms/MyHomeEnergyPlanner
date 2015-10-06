@@ -333,13 +333,49 @@ function carboncoopreport_initUI() {
 
 	*/
 
-	/* Figure 12: TODO
+	/* Figure 12: TODO - Code up a SAP chart
 	//
 	*/
 
-	/* Figure 13: Comfort Tables
+	/* Figure 13: Comfort Tables.
+	// No JS needed currently
+	*/
+
+	/* Figure 14: Humidity Data
+	// No JS needed currently
+	*/
+
+	/* Figure 15: Temperature Data
+	// No JS needed currently
+	*/
+
+	/* Figure 16: You also told us...
+	// No JS needed currently
+	*/
+
+	/* Code to get names of Scenarios for Section 2.1
 	//
 	*/
+
+	$("#output-scenario1-name").html(project["scenario1"]["scenario_name"]);
+	$("#output-scenario2-name").html(project["scenario2"]["scenario_name"]);
+	$("#output-scenario3-name").html(project["scenario3"]["scenario_name"]);
+
+	/* Figure 17: Scenario 1 Measures
+	// Waiting on Trystan
+	*/
+
+	/* Figure 18: Scenario 2 Measures
+	// Waiting on Trystan
+	*/
+
+	/* Figure 19: Scenario 3 Measures
+	// Waiting on Trystan
+	*/
+
+
+
+
 
 
 	// Energy Demand
