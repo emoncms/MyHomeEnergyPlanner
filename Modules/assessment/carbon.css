@@ -175,6 +175,14 @@
   This query will take effect for any screen smaller than 760px
   and also iPads specifically.
   */ }
+  .carbon-report-wrapper .sap-table {
+    border: solid 1px #e41b3a;
+    text-align: center; }
+  .carbon-report-wrapper .sap-table thead {
+    background: #e41b3a;
+    color: white; }
+  .carbon-report-wrapper .sap-table th {
+    padding: 10px 15px; }
   .carbon-report-wrapper .three-col-table {
     margin-bottom: 1em;
     width: 100%;

@@ -337,6 +337,40 @@ function carboncoopreport_initUI() {
 	//
 	*/
 
+	// console.log(project["master"]["SAP"]["rating"]);
+
+	function calculateSapRatingFromScore(score){
+
+		var sapRatings = {
+			"90": "A",
+			"80": "B",
+			"70": "C",
+			"60": "D",
+			"50": "E",
+			"40": "F",
+			"30": "G",
+		}
+		var scoreFlooredToNearestTen = Math.floor(score / 10) * 10;
+
+		//Lowest band goes all the way to zero, but push up to 30 in order to draw graph
+		if (scoreFlooredToNearestTen < 30){
+			scoreFlooredToNearestTen = 30;
+		}
+
+		return sapRatings[scoreFlooredToNearestTen];
+
+	}
+
+
+	var sapNow = Math.round(project["master"]["SAP"]["rating"]);
+	var sapAverage = 84;
+	var sap2050 = Math.round(project["scenario3"]["SAP"]["rating"]);
+
+	$("tr[data-sap-rating='"+calculateSapRatingFromScore(sapNow)+"'] .cell-sap-now").html(sapNow);
+	$("tr[data-sap-rating='"+calculateSapRatingFromScore(sapAverage)+"'] .cell-sap-average").html(sapAverage);
+	$("tr[data-sap-rating='"+calculateSapRatingFromScore(sap2050)+"'] .cell-sap-future").html(sap2050);
+	
+
 	/* Figure 13: Comfort Tables.
 	// No JS needed currently
 	*/
@@ -360,6 +394,8 @@ function carboncoopreport_initUI() {
 	$("#output-scenario1-name").html(project["scenario1"]["scenario_name"]);
 	$("#output-scenario2-name").html(project["scenario2"]["scenario_name"]);
 	$("#output-scenario3-name").html(project["scenario3"]["scenario_name"]);
+
+	project["master"]["ed_test"] = "hello world";
 
 	/* Figure 17: Scenario 1 Measures
 	// Waiting on Trystan

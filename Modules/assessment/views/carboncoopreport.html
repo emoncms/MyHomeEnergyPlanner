@@ -431,7 +431,7 @@
 								<th class="half-width">Number of Occupants</th>
 								<td>2.9 people</td>
 								<td><span key='data.occupancy'></span> people</td>
-								<td>Higher/Lower</td>
+								<td><span key='data.ed_test'></span></td>
 							</tr>
 							<tr>
 								<th class="half-width">Average hours of heating</th>
@@ -474,6 +474,60 @@
 				<div class="table-wrapper">
 					<h4 class="top-border-title title-margin-bottom ">Figure 12: SAP results table</h4>
 					<img src="../Modules/assessment/img-assets/images/sap-test.jpg" alt="">
+					<table class="sap-table">
+						<thead>
+							<tr>
+								<th>SAP Rating</th>
+								<th>Your Home Now</th>
+								<th>Your 2050 Home</th>
+								<th>UK Average</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-sap-rating='A'>
+								<td>A</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='B'>
+								<td>B</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='C'>
+								<td>C</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='D'>
+								<td>D</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='E'>
+								<td>E</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='F'>
+								<td>F</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='G'>
+								<td>G</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 
 				<p><i><strong>Please note:</strong> though based on the same calculations, this is not an accredited SAP assessment. If you need an official SAP rating for funding purposes, you will need to commission this separately.</i></p>
@@ -529,8 +583,9 @@
 
 					<h4 class="top-border-title title-margin-bottom ">Figure 16: You also told us</h4>
 					<p>Noise: <span key='data.household.6c_noise_comment'></span></p>
-					<p>Daylighting: ??</p>
-					<p>Comfort/Draughts: ??</p>
+					<p>Daylighting: <span key='data.household.6b_problem_locations'></span></p>
+					<p>Comfort:</p>
+					<span key="data.household.6a_draughts_comment"></span>
 					<p>
 						Rooms: Loved - <span key='data.household.6d_favourite_room'></span>
 						Unloved: <span key='data.household.6d_unloved_rooms'></span>
