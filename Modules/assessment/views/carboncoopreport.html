@@ -417,20 +417,6 @@
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 11: Your home compared with the assumed average home</h4>
-					<div class="bar-chart-container" id="barchart-2"></div>
-				</div>
-			</section>
-
-			<section>
-				<h3 class="top-border-title title-margin-top title-margin-bottom">1.7 SAP rating</h3>
-				<p>SAP is the Standard Assessment Procedure used to assess energy use in UK homes. The UK government devised SAP as a way to compare homes and test them against Building Regulations. SAP forms the basis of the energy model used in this report.</p> 
-				<p>SAP makes assumptions about the number of people living in a home and how it is heated and used, based on averages for the UK. You may not be ‘average’ and may use your home in different ways. So, SAP is not an exact predictive tool.</p> 
-				<p>The final SAP rating is influenced by predicted energy use, carbon emissions and fuel costs. This means that the SAP rating is influenced by levels of insulation, how efficient your heating system and other services are, the type of fuel you use to heat and light your home, and whether you have any renewables. SAP does not cover appliances or cooking.</p> 
-				<p>SAP is not a perfect system. A home with a poor building fabric could still get a good rating because it has lots of renewables or energy costs are cheap. This is unhelpful if energy conservation or comfort is your biggest concern.</p>
-				<p>This is why we’ve given SAP a lower level of priority within this report. The table below shows the SAP rating we’ve calculated for your home now, and in the various scenarios mapped out in this report.</p>
-				
-				<div class="table-wrapper">
-					<h4 class="top-border-title title-margin-bottom ">Figure 12: SAP results table</h4>
 					<table class="three-col-table">
 						<thead>
 							<tr>
@@ -444,35 +430,50 @@
 							<tr>
 								<th class="half-width">Number of Occupants</th>
 								<td>2.9 people</td>
-								<td>3.1 people</td>
-								<td>Higher</td>
+								<td><span key='data.occupancy'></span> people</td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
 								<th class="half-width">Average hours of heating</th>
-								<td>21 hours</td>
 								<td>9 hours</td>
-								<td>Lower</td>
+								<td><span key='data.occupancy'></span> hours</td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
 								<th class="half-width">Living room thermostat temperature</th>
 								<td>21°C</td>
-								<td>23°C</td>
-								<td>Higher</td>
+								<td><span key='data.household.3a_roomthermostat'></span>°C</td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
 								<th class="half-width">number of habitable rooms not heated</th>
-								<td>2 room(s)</td>
+								<td>0 room(s)</td>
 								<td>1 room(s)</td>
-								<td>Lower</td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
-								<th class="half-width">estimated current appliance energy use*</th>
+								<th class="half-width">Estimated current appliance energy use*</th>
 								<td>3880 kWh per year</td>
 								<td>4129 kWh per year</td>
-								<td>Higher</td>
+								<td>Higher/Lower</td>
 							</tr>
 						</tbody>
 					</table>
+					
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.7 SAP rating</h3>
+				<p>SAP is the Standard Assessment Procedure used to assess energy use in UK homes. The UK government devised SAP as a way to compare homes and test them against Building Regulations. SAP forms the basis of the energy model used in this report.</p> 
+				<p>SAP makes assumptions about the number of people living in a home and how it is heated and used, based on averages for the UK. You may not be ‘average’ and may use your home in different ways. So, SAP is not an exact predictive tool.</p> 
+				<p>The final SAP rating is influenced by predicted energy use, carbon emissions and fuel costs. This means that the SAP rating is influenced by levels of insulation, how efficient your heating system and other services are, the type of fuel you use to heat and light your home, and whether you have any renewables. SAP does not cover appliances or cooking.</p> 
+				<p>SAP is not a perfect system. A home with a poor building fabric could still get a good rating because it has lots of renewables or energy costs are cheap. This is unhelpful if energy conservation or comfort is your biggest concern.</p>
+				<p>This is why we’ve given SAP a lower level of priority within this report. The table below shows the SAP rating we’ve calculated for your home now, and in the various scenarios mapped out in this report.</p>
+				
+				<div class="table-wrapper">
+					<h4 class="top-border-title title-margin-bottom ">Figure 12: SAP results table</h4>
+					<img src="../Modules/assessment/img-assets/images/sap-test.jpg" alt="">
 				</div>
 
 				<p><i><strong>Please note:</strong> though based on the same calculations, this is not an accredited SAP assessment. If you need an official SAP rating for funding purposes, you will need to commission this separately.</i></p>
@@ -485,48 +486,17 @@
 				<p>When calculating heating demand, SAP assumes a temperature of 21°C in your living area for a set number of hours. In reality, your living area may be warmer or cooler than this (for longer or shorter periods) because we all have different perceptions of what is comfortable as well as different occupancy patterns. This will also be affected by the efficiency of the building fabric and your heating system.</p>
 				<p>This is why we collect information about you as householders. Understanding your perceptions of comfort, as well as how you use the spaces within your home, allows us to tailor the recommendations with your comfort and health in mind.</p>
 				
-				<div class="table-wrapper">
+				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 13: Comfort tables based on what you told us</h4>
 					<!-- <span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (table)</span> -->
-					<table class="three-col-table">
-						<thead>
-							<tr>
-								<th class="half-width"></th>
-								<th>Example Graph</th>
-								<th>Your Home</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th class="half-width">Number of Occupants</th>
-								<td>2.9 people</td>
-								<td>3.1 people</td>
-							</tr>
-							<tr>
-								<th class="half-width">Average hours of heating</th>
-								<td>21 hours</td>
-								<td>9 hours</td>
-							</tr>
-							<tr>
-								<th class="half-width">Living room thermostat temperature</th>
-								<td>21°C</td>
-								<td>23°C</td>
-								<td>Higher</td>
-							</tr>
-							<tr>
-								<th class="half-width">number of habitable rooms not heated</th>
-								<td>2 room(s)</td>
-								<td>1 room(s)</td>
-								<td>Lower</td>
-							</tr>
-							<tr>
-								<th class="half-width">estimated current appliance energy use*</th>
-								<td>3880 kWh per year</td>
-								<td>4129 kWh per year</td>
-								<td>Higher</td>
-							</tr>
-						</tbody>
-					</table>
+					<p>
+						Temperature in winter:<span key='data.household.6a_temperature_winter'></span><br />
+						Air in winter: <span key='data.household.6a_airquality_winter'></span><br />
+					</p>
+
+					<p>
+						
+					</p>
 				</div>
 
 				<div class="highlight-box pink-highlight">

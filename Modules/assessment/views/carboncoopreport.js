@@ -1,7 +1,7 @@
 
 function carboncoopreport_initUI() {
 
-	// console.log(project);
+	console.log(project);
 
 	$(".home-image").attr("src", project[scenario].household.houseimage);
 
@@ -239,48 +239,17 @@ function carboncoopreport_initUI() {
 
 	SpaceHeatingDemand.draw('fig-5-space-heating-demand');
 
+	/* Figure 6: TODO Trystan working on data for stacks
+	//
+	*/
 
-	// Energy Demand
+	/* Figure 7: TODO Trystan working on data for stacks
+	//
+	*/
 
-	var EnergyDemand = new BarChart({
-		chartTitle: 'Energy Demand',
-		yAxisLabel: 'kWh/m2.year',
-		fontSize: 22,
-		width: 1200,
-		chartHeight: 600,
-		division: 'auto',
-		barWidth: 110,
-		barGutter: 120,
-		defaultBarColor: 'rgb(231,37,57)',
-		barColors: {
-			'Wood': 'rgb(24,86,62)',
-			'Solar': 'rgb(240,212,156)',
-			'Gas': 'rgb(236,102,79)',
-			'Solid fuel': 'rgb(246,167,7)',
-		},
-		data: [
-			{label: 'UK Average', value: [
-					{value: 2000, variance: 5, label: 'Gas'},
-					{value: -600, label: 'Wood'},
-					{value: 605, label: 'Solar'},
-					{value: 300, variance: 10, label: 'Solid fuel'}
-			]},
-			{label: '2000 B Regs Average', variance: 30, value: 60},
-			{label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
-			{label: 'UK Average', value: [
-					{value: 2000, variance: 5, label: 'Gas'},
-					{value: 1200, variance: 5, label: 'Wood'},
-					{value: 750, variance: 5, label: 'Solar'},
-					{value: 300, variance: 5, label: 'Solid fuel'}
-			]},
-		]
-	});
-
-	EnergyDemand.draw('energy-demand');
-
-
-	// Carbon Dioxide Emissions Chart
-
+	/* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
+	//
+	*/
 
 	var CarbonDioxideEmissions = new BarChart({
 		chartTitle: 'Carbon Dioxide Emissions',
@@ -321,34 +290,100 @@ function carboncoopreport_initUI() {
 	CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
 
 
-	// Carbon Dioxide Emissions Chart Per Person
+	/* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
+	//
+	*/
 
 	var CarbonDioxideEmissionsPerPerson = new BarChart({
 		chartTitle: 'Carbon Dioxide Emissions Per Person',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
-		division: 15,
+		division: 1000,
 		width: 1200,
 		chartHeight: 600,
 		barWidth: 110,
 		barGutter: 60,
 		defaultBarColor: 'rgb(157,213,203)',
 		defaultVarianceColor: 'rgb(231,37,57)',
-		barColors: {
-			'Space heating': 'rgb(157,213,203)',
-			'Pumps, fans, etc.': 'rgb(24,86,62)',
-			'Cooking': 'rgb(40,153,139)',
-		},
+		// barColors: {
+		// 	'Space heating': 'rgb(157,213,203)',
+		// 	'Pumps, fans, etc.': 'rgb(24,86,62)',
+		// 	'Cooking': 'rgb(40,153,139)',
+		// },
 		data: [
-			{label: 'UK Average', value: 50},
-			{label: 'Your home now (model)', value: 1/*(project['master'].annualco2 / project[scenario].occupancy)*/}, 
-			{label: 'Your home now (bills)', value: 2/*(project['master'].annualco2 / project[scenario].occupancy)*/},
-			{label: 'Your home (small changes)', value: 3/*(project['scenario1'].annualco2 / project[scenario].occupancy)*/},
-			{label: 'Your 2050 home', value: 4/*(project['scenario3'].annualco2 / project[scenario].occupancy)*/},
+			// {label: 'UK Average', value: 50},
+			{label: 'Your home now ', value:(project['master'].annualco2 / project["master"].occupancy)}, 
+			{label: 'Your home (small changes)', value: (project['scenario1'].annualco2 / project["scenario1"].occupancy)},
+			{label: 'Your home (medium changes)', value: (project['scenario2'].annualco2 / project['scenario2'].occupancy)},
+			{label: 'Your 2050 home', value: (project['scenario3'].annualco2 / project['scenario3'].occupancy)},
 		]
 	});
 
 	CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
+
+
+	/* Figure 10: Estimated Energy cost comparison 
+	// Bar chart showing annual fuel cost. Waiting on Trystan for data
+	*/
+
+	/* Figure 11: Your home compared with the average home.
+	// Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
+	// Would be useful to have total hours of heating (currently only given times heating is on - see question 3a)
+	// Where is data for number of rooms not heated? Appliance Q?
+
+	*/
+
+	/* Figure 12: TODO
+	//
+	*/
+
+	/* Figure 13: Comfort Tables
+	//
+	*/
+
+
+	// Energy Demand
+
+	var EnergyDemand = new BarChart({
+		chartTitle: 'Energy Demand',
+		yAxisLabel: 'kWh/m2.year',
+		fontSize: 22,
+		width: 1200,
+		chartHeight: 600,
+		division: 'auto',
+		barWidth: 110,
+		barGutter: 120,
+		defaultBarColor: 'rgb(231,37,57)',
+		barColors: {
+			'Wood': 'rgb(24,86,62)',
+			'Solar': 'rgb(240,212,156)',
+			'Gas': 'rgb(236,102,79)',
+			'Solid fuel': 'rgb(246,167,7)',
+		},
+		data: [
+			{label: 'UK Average', value: [
+					{value: 2000, variance: 5, label: 'Gas'},
+					{value: -600, label: 'Wood'},
+					{value: 605, label: 'Solar'},
+					{value: 300, variance: 10, label: 'Solid fuel'}
+			]},
+			{label: '2000 B Regs Average', variance: 30, value: 60},
+			{label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
+			{label: 'UK Average', value: [
+					{value: 2000, variance: 5, label: 'Gas'},
+					{value: 1200, variance: 5, label: 'Wood'},
+					{value: 750, variance: 5, label: 'Solar'},
+					{value: 300, variance: 5, label: 'Solid fuel'}
+			]},
+		]
+	});
+
+	EnergyDemand.draw('energy-demand');
+
+
+
+
+
 
 
 	// Estimate Energy Costs Comparison 
