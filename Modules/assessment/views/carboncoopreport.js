@@ -3,9 +3,9 @@ function carboncoopreport_initUI() {
 
 	console.log(project);
 
-	$(".home-image").attr("src", project[scenario].household.houseimage);
-
-
+	// $(".home-image").attr("src", project[scenario].household.houseimage);
+	$(".home-image").attr("src", path + "Modules/assessment/images/" + projectid + "/" + data.featuredimage);
+	
 
 
 	/* Figure 1: Retrofit Priorities
