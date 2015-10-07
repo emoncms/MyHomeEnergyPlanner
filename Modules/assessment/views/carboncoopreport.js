@@ -337,7 +337,6 @@ function carboncoopreport_initUI() {
 	//
 	*/
 
-	// console.log(project["master"]["SAP"]["rating"]);
 
 	function calculateSapRatingFromScore(score){
 
@@ -369,7 +368,7 @@ function carboncoopreport_initUI() {
 	$("tr[data-sap-rating='"+calculateSapRatingFromScore(sapNow)+"'] .cell-sap-now").html(sapNow);
 	$("tr[data-sap-rating='"+calculateSapRatingFromScore(sapAverage)+"'] .cell-sap-average").html(sapAverage);
 	$("tr[data-sap-rating='"+calculateSapRatingFromScore(sap2050)+"'] .cell-sap-future").html(sap2050);
-	
+
 
 	/* Figure 13: Comfort Tables.
 	// No JS needed currently
