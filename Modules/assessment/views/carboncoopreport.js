@@ -5,7 +5,7 @@ function carboncoopreport_initUI() {
 
 	// $(".home-image").attr("src", project[scenario].household.houseimage);
 	$(".home-image").attr("src", path + "Modules/assessment/images/" + projectid + "/" + data.featuredimage);
-	
+
 
 
 	/* Figure 1: Retrofit Priorities
@@ -169,6 +169,7 @@ function carboncoopreport_initUI() {
 		division: 'auto',
 		barWidth: 110,
 		barGutter: 120,
+		division: 100,
 		defaultBarColor: 'rgb(231,37,57)',
 		barColors: {
 			'Wood': 'rgb(24,86,62)',
@@ -394,8 +395,6 @@ function carboncoopreport_initUI() {
 	$("#output-scenario2-name").html(project["scenario2"]["scenario_name"]);
 	$("#output-scenario3-name").html(project["scenario3"]["scenario_name"]);
 
-	project["master"]["ed_test"] = "hello world";
-
 	/* Figure 17: Scenario 1 Measures
 	// Waiting on Trystan
 	*/
@@ -407,10 +406,6 @@ function carboncoopreport_initUI() {
 	/* Figure 19: Scenario 3 Measures
 	// Waiting on Trystan
 	*/
-
-
-
-
 
 
 	// Energy Demand

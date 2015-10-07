@@ -111,8 +111,7 @@
 				<p>You told us that the following things are most important to you in considering energy efficiency retrofit options for your home: </p>
 			</div>
 			<div class="highlight-box pink-highlight">
-				<h4 class="top-border-title title-margin-bottom ">Retrofit Priorities</h4>
-				<p>Figure 1: Retrofit Priorities</p>
+				<h4 class="top-border-title title-margin-bottom ">Figure 1: Retrofit Priorities</h4>
 				<ul id='retrofit-priorities'>
 					
 				</ul>
@@ -405,7 +404,6 @@
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 10: Estimated energy cost comparison</h4>
-					<span style="font-weight: bold; color:blue; font-size: 30px">Add error bars</span>
 					<div class="bar-chart-container" id="estimated-energy-cost-comparison"></div>
 				</div>
 				
@@ -431,7 +429,7 @@
 								<th class="half-width">Number of Occupants</th>
 								<td>2.9 people</td>
 								<td><span key='data.occupancy'></span> people</td>
-								<td><span key='data.ed_test'></span></td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
 								<th class="half-width">Average hours of heating</th>
@@ -471,9 +469,11 @@
 				<p>SAP is not a perfect system. A home with a poor building fabric could still get a good rating because it has lots of renewables or energy costs are cheap. This is unhelpful if energy conservation or comfort is your biggest concern.</p>
 				<p>This is why we’ve given SAP a lower level of priority within this report. The table below shows the SAP rating we’ve calculated for your home now, and in the various scenarios mapped out in this report.</p>
 				
+				<div class="highlight-box pink-highlight">
+
 				<div class="table-wrapper">
 					<h4 class="top-border-title title-margin-bottom ">Figure 12: SAP results table</h4>
-					<img src="../Modules/assessment/img-assets/images/sap-test.jpg" alt="">
+					<!-- <img src="../Modules/assessment/img-assets/images/sap-test.jpg" alt=""> -->
 					<table class="sap-table">
 						<thead>
 							<tr>
@@ -530,6 +530,8 @@
 					</table>
 				</div>
 
+				</div>
+
 				<p><i><strong>Please note:</strong> though based on the same calculations, this is not an accredited SAP assessment. If you need an official SAP rating for funding purposes, you will need to commission this separately.</i></p>
 				<p><i>For existing buildings, the calculation tool used to generate Energy Performance Certificates (EPCs) is based on a reduced data entry version of SAP (rdSAP), which makes a greater number of assumptions. This means it may differ widely from the rating given above – especially if your home has had significant energy efficiency improvements.</i></p>
 			</section>
@@ -544,12 +546,12 @@
 					<h4 class="top-border-title title-margin-bottom ">Figure 13: Comfort tables based on what you told us</h4>
 					<!-- <span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (table)</span> -->
 					<p>
-						Temperature in winter:<span key='data.household.6a_temperature_winter'></span><br />
+						Temperature in winter: <span key='data.household.6a_temperature_winter'></span><br />
 						Air in winter: <span key='data.household.6a_airquality_winter'></span><br />
 					</p>
 
 					<p>
-						Temperature in summer:<span key='data.household.6a_temperature_summer'></span><br />
+						Temperature in summer: <span key='data.household.6a_temperature_summer'></span><br />
 						Air in summer: <span key='data.household.6a_airquality_summer'></span><br />
 					</p>
 
@@ -566,7 +568,7 @@
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 14: RH data</h4>
 					<p>
-						When we visited the relative humidity was
+						When we visited, the relative humidity was
 						<span key='data.household.reading_humidity1'></span> - <span key='data.household.reading_humidity1'></span> %. (The ideal range is 40-60%).
 					</p>
 				</div>
@@ -574,7 +576,7 @@
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 15: Temperature data</h4>
 					<p>
-						When we visited your living room temperature was
+						When we visited, your living room temperature was
 						<span key='data.household.reading_temp1'></span> - <span key='data.household.reading_temp2'></span>°C.
 					</p>
 				</div>
@@ -584,8 +586,7 @@
 					<h4 class="top-border-title title-margin-bottom ">Figure 16: You also told us</h4>
 					<p>Noise: <span key='data.household.6c_noise_comment'></span></p>
 					<p>Daylighting: <span key='data.household.6b_problem_locations'></span></p>
-					<p>Comfort:</p>
-					<span key="data.household.6a_draughts_comment"></span>
+					<p>Comfort: <span key="data.household.6a_draughts_comment"></span></p>
 					<p>
 						Rooms: Loved - <span key='data.household.6d_favourite_room'></span>
 						Unloved: <span key='data.household.6d_unloved_rooms'></span>
@@ -1261,18 +1262,7 @@
 				<p>Based on the survey we completed of your home, and the results generated using My Home Energy Planner, here we provide comparisons across fabric condition; heating and hot water systems; ventilation; lighting; appliances and cooking; and renewables.</p> 
 				
 				<div class="highlight-box pink-highlight">
-					<h4 class="top-border-title title-margin-bottom ">Figure 21: Your home now >>> Your 2050 Home</h4>
-					<div class="bar-chart-container">
-						<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder</span>
-						<ul>
-							<li>Figure 22 Fabric Condition Comparison (across scenarios)</li>
-							<li>Figure 23 Heating and Hot Water System Comparison (across scenarios)</li>
-							<li>Figure 24 Ventilation Comparison (across scenarios)</li>
-							<li>Figure 25 Lighting Comparison (across scenarios)</li>
-							<li>Figure 26 Appliances and Cooking Comparison (across scenarios)</li>
-							<li>Figure 27 Renewables Comparison (across scenarios)</li>
-						</ul>
-					</div>
+					<h4 class="top-border-title title-margin-bottom ">Figure 22: Scenario Comparison Table</h4>
 				</div>
 			</section>
 
@@ -1280,13 +1270,7 @@
 				<h3 class="top-border-title title-margin-bottom ">Appendix B: About you</h4>
 				<p>The things you told us about you and your home, taken from the questionnaire we completed with you</p>
 				<div class="highlight-box pink-highlight">
-					<h4 class="top-border-title title-margin-bottom ">Figure 21: Your home now >>> Your 2050 Home</h4>
-					<div class="bar-chart-container">
-						<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder</span>
-						<ul>
-							<li>Figure 28: Table taken directly from Householder Questionnaire </li>
-						</ul>
-					</div>
+					<h4 class="top-border-title title-margin-bottom ">Figure 23: About You</h4>
 				</div>
 			</section>
 
