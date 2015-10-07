@@ -240,9 +240,45 @@ function carboncoopreport_initUI() {
 
 	SpaceHeatingDemand.draw('fig-5-space-heating-demand');
 
-	/* Figure 6: TODO Trystan working on data for stacks
+	/* Figure 6: Energy Demand, Trystan working on providing real data
 	//
 	*/
+
+	var EnergyDemand = new BarChart({
+		chartTitle: 'Energy Demand',
+		yAxisLabel: 'kWh/m2.year',
+		fontSize: 22,
+		width: 1200,
+		chartHeight: 600,
+		division: 'auto',
+		barWidth: 110,
+		barGutter: 120,
+		defaultBarColor: 'rgb(231,37,57)',
+		barColors: {
+			'Wood': 'rgb(24,86,62)',
+			'Solar': 'rgb(240,212,156)',
+			'Gas': 'rgb(236,102,79)',
+			'Solid fuel': 'rgb(246,167,7)',
+		},
+		data: [
+			{label: 'UK Average', value: [
+					{value: 2000, variance: 5, label: 'Gas'},
+					{value: -600, label: 'Wood'},
+					{value: 605, label: 'Solar'},
+					{value: 300, variance: 10, label: 'Solid fuel'}
+			]},
+			{label: '2000 B Regs Average', variance: 30, value: 60},
+			{label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
+			{label: 'UK Average', value: [
+					{value: 2000, variance: 5, label: 'Gas'},
+					{value: 1200, variance: 5, label: 'Wood'},
+					{value: 750, variance: 5, label: 'Solar'},
+					{value: 300, variance: 5, label: 'Solid fuel'}
+			]},
+		]
+	});
+
+	EnergyDemand.draw('energy-demand');
 
 	/* Figure 7: TODO Trystan working on data for stacks
 	//
@@ -327,17 +363,42 @@ function carboncoopreport_initUI() {
 	// Bar chart showing annual fuel cost. Waiting on Trystan for data
 	*/
 
+	var EstimatedEnergyCosts = new BarChart({
+		chartTitle: 'Estimate Energy Costs Comparison',
+		yAxisLabel: 'kWh/m2.year',
+		fontSize: 22,
+		chartLow: 0,
+		division: 200,
+		width: 1200,
+		chartHeight: 600,
+		barGutter: 120,
+		defaultBarColor: 'rgb(231,37,57)',
+		ranges: [
+			{
+				low: 600,
+				high: 1000,
+				color: 'rgb(254,204,204)'
+			},
+		],
+		data: [
+			{label: 'UK Average', value: 1400, variance: 30},
+			{label: '2000 B Regs Average', value: 1900, variance: 30},
+			{label: 'Your home now', value: project[scenario].net_cost, variance: 30},
+			{label: 'Your 2050 home', value: 0, variance: 30},
+		]
+	});
+
+	EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
+
 	/* Figure 11: Your home compared with the average home.
 	// Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
 	// Would be useful to have total hours of heating (currently only given times heating is on - see question 3a)
 	// Where is data for number of rooms not heated? Appliance Q?
-
 	*/
 
-	/* Figure 12: TODO - Code up a SAP chart
+	/* Figure 12: SAP chart
 	//
 	*/
-
 
 	function calculateSapRatingFromScore(score){
 
@@ -408,79 +469,11 @@ function carboncoopreport_initUI() {
 	*/
 
 
-	// Energy Demand
-
-	var EnergyDemand = new BarChart({
-		chartTitle: 'Energy Demand',
-		yAxisLabel: 'kWh/m2.year',
-		fontSize: 22,
-		width: 1200,
-		chartHeight: 600,
-		division: 'auto',
-		barWidth: 110,
-		barGutter: 120,
-		defaultBarColor: 'rgb(231,37,57)',
-		barColors: {
-			'Wood': 'rgb(24,86,62)',
-			'Solar': 'rgb(240,212,156)',
-			'Gas': 'rgb(236,102,79)',
-			'Solid fuel': 'rgb(246,167,7)',
-		},
-		data: [
-			{label: 'UK Average', value: [
-					{value: 2000, variance: 5, label: 'Gas'},
-					{value: -600, label: 'Wood'},
-					{value: 605, label: 'Solar'},
-					{value: 300, variance: 10, label: 'Solid fuel'}
-			]},
-			{label: '2000 B Regs Average', variance: 30, value: 60},
-			{label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
-			{label: 'UK Average', value: [
-					{value: 2000, variance: 5, label: 'Gas'},
-					{value: 1200, variance: 5, label: 'Wood'},
-					{value: 750, variance: 5, label: 'Solar'},
-					{value: 300, variance: 5, label: 'Solid fuel'}
-			]},
-		]
-	});
-
-	EnergyDemand.draw('energy-demand');
 
 
 
 
 
-
-
-	// Estimate Energy Costs Comparison 
-
-	var EstimatedEnergyCosts = new BarChart({
-		chartTitle: 'Estimate Energy Costs Comparison',
-		yAxisLabel: 'kWh/m2.year',
-		fontSize: 22,
-		chartLow: 0,
-		division: 200,
-		width: 1200,
-		chartHeight: 600,
-		barGutter: 120,
-		defaultBarColor: 'rgb(231,37,57)',
-		ranges: [
-			{
-				low: 600,
-				high: 1000,
-				color: 'rgb(254,204,204)'
-			},
-		],
-		data: [
-			{label: 'UK Average', value: 1400, variance: 30},
-			{label: '2000 B Regs Average', value: 1900, variance: 30},
-			{label: 'Your home now', value: project[scenario].net_cost, variance: 30},
-			{label: 'Your 2050 home', value: 0, variance: 30},
-		]
-	});
-
-	// uncommenting this breaks top graphi
-	// EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
 
 
     // Figure 5
