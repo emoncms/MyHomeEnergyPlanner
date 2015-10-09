@@ -1,4 +1,4 @@
-var appliancesPHPP = {
+var appliancesCarbonCoop = {
     "Laundry": {
         "Clothes washing - hot feed": {
             "Norm demand": 1.1,
