@@ -872,8 +872,8 @@ var project = {
             "pipework_insulated_fraction": 1
         },
         "SHW": {},
-        "use_appliancePHPP": false,
-        "appliancePHPP": {
+        "use_applianceCarbonCoop": false,
+        "applianceCarbonCoop": {
             "list": {"name": "LED Light",
                     "power": 6,
                     "hours": 12}
