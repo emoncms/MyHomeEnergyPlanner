@@ -48,7 +48,7 @@ calc.run = function (datain)
     calc.LAC();
     calc.water_heating();
     calc.SHW();
-    calc.appliancePHPP();
+    calc.applianceCarbonCoop();
     calc.appliancelist();
     calc.generation();
     calc.currentenergy();
@@ -1168,9 +1168,9 @@ calc.water_heating = function ()
     }
 };
 
-calc.appliancePHPP = function () {
-    if (this.data.appliancePHPP == undefined)
-        this.data.appliancePHPP = {list: {}};
+calc.applianceCarbonCoop = function () {
+    if (this.data.applianceCarbonCoop == undefined)
+        this.data.applianceCarbonCoop = {list: {}};
 
     // "Constants" to be used in the calculations
     var primary_energy_multiplier = {electricity: 3.07, DHW: 1.22, gas: 1.22};
@@ -1184,22 +1184,22 @@ calc.appliancePHPP = function () {
     var gas_demand = 0;
 
     // Variables in the data object that hold the results
-    this.data.appliancePHPP.primary_energy_total = {appliances: 0, cooking: 0, total: 0};
-    this.data.appliancePHPP.primary_energy_m2 = {appliances: 0, cooking: 0, total: 0};
-    this.data.appliancePHPP.co2_total = {appliances: 0, cooking: 0, total: 0};
-    this.data.appliancePHPP.co2_m2 = {appliances: 0, cooking: 0, total: 0};
-    this.data.appliancePHPP.energy_demand = {
+    this.data.applianceCarbonCoop.primary_energy_total = {appliances: 0, cooking: 0, total: 0};
+    this.data.applianceCarbonCoop.primary_energy_m2 = {appliances: 0, cooking: 0, total: 0};
+    this.data.applianceCarbonCoop.co2_total = {appliances: 0, cooking: 0, total: 0};
+    this.data.applianceCarbonCoop.co2_m2 = {appliances: 0, cooking: 0, total: 0};
+    this.data.applianceCarbonCoop.energy_demand = {
         cooking: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0},
         appliances: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0},
         total: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0}
     };
 
     // We do the calculations for each appliance in the list
-    for (z in this.data.appliancePHPP.list) {
-        appliance = this.data.appliancePHPP.list[z];
+    for (z in this.data.applianceCarbonCoop.list) {
+        appliance = this.data.applianceCarbonCoop.list[z];
 
-        if (this.data.appliancePHPP.list[z].primary_energy_total == undefined)
-            this.data.appliancePHPP.list[z].primary_energy_total = 0;
+        if (this.data.applianceCarbonCoop.list[z].primary_energy_total == undefined)
+            this.data.applianceCarbonCoop.list[z].primary_energy_total = 0;
 
         // Energy demand calculation
         electric_demand = appliance.number_used * appliance.norm_demand * appliance.utilisation_factor * appliance.reference_quantity * appliance.frequency * appliance.electric_fraction;
@@ -1214,48 +1214,48 @@ calc.appliancePHPP = function () {
         appliance.co2_m2 = appliance.co2_total / this.data.TFA;
 
         // Results: totals from all the appliances
-        this.data.appliancePHPP.primary_energy_total.total += appliance.primary_energy_total;
-        this.data.appliancePHPP.primary_energy_m2.total += appliance.primary_energy_m2;
-        this.data.appliancePHPP.co2_total.total += appliance.co2_total;
-        this.data.appliancePHPP.co2_m2.total += appliance.co2_m2;
-        this.data.appliancePHPP.energy_demand.total.electricity += electric_demand;
-        this.data.appliancePHPP.energy_demand.total.electricity_after_rating += electric_demand_after_rating;
-        this.data.appliancePHPP.energy_demand.total.DHW += DHW_demand;
-        this.data.appliancePHPP.energy_demand.total.gas += gas_demand;
+        this.data.applianceCarbonCoop.primary_energy_total.total += appliance.primary_energy_total;
+        this.data.applianceCarbonCoop.primary_energy_m2.total += appliance.primary_energy_m2;
+        this.data.applianceCarbonCoop.co2_total.total += appliance.co2_total;
+        this.data.applianceCarbonCoop.co2_m2.total += appliance.co2_m2;
+        this.data.applianceCarbonCoop.energy_demand.total.electricity += electric_demand;
+        this.data.applianceCarbonCoop.energy_demand.total.electricity_after_rating += electric_demand_after_rating;
+        this.data.applianceCarbonCoop.energy_demand.total.DHW += DHW_demand;
+        this.data.applianceCarbonCoop.energy_demand.total.gas += gas_demand;
 
         // Results: totals by category
         if (appliance.category === "Cooking") {
-            this.data.appliancePHPP.primary_energy_total.cooking += appliance.primary_energy_total;
-            this.data.appliancePHPP.primary_energy_m2.cooking += appliance.primary_energy_m2;
-            this.data.appliancePHPP.co2_total.cooking += appliance.co2_total;
-            this.data.appliancePHPP.co2_m2.cooking += appliance.co2_m2;
-            this.data.appliancePHPP.energy_demand.cooking.electricity += electric_demand;
-            this.data.appliancePHPP.energy_demand.cooking.electricity_after_rating += electric_demand_after_rating;
-            this.data.appliancePHPP.energy_demand.cooking.DHW += DHW_demand;
-            this.data.appliancePHPP.energy_demand.cooking.gas += gas_demand;
+            this.data.applianceCarbonCoop.primary_energy_total.cooking += appliance.primary_energy_total;
+            this.data.applianceCarbonCoop.primary_energy_m2.cooking += appliance.primary_energy_m2;
+            this.data.applianceCarbonCoop.co2_total.cooking += appliance.co2_total;
+            this.data.applianceCarbonCoop.co2_m2.cooking += appliance.co2_m2;
+            this.data.applianceCarbonCoop.energy_demand.cooking.electricity += electric_demand;
+            this.data.applianceCarbonCoop.energy_demand.cooking.electricity_after_rating += electric_demand_after_rating;
+            this.data.applianceCarbonCoop.energy_demand.cooking.DHW += DHW_demand;
+            this.data.applianceCarbonCoop.energy_demand.cooking.gas += gas_demand;
         }
         else {
-            this.data.appliancePHPP.primary_energy_total.appliances += appliance.primary_energy_total;
-            this.data.appliancePHPP.primary_energy_m2.appliances += appliance.primary_energy_m2;
-            this.data.appliancePHPP.co2_total.appliances += appliance.co2_total;
-            this.data.appliancePHPP.co2_m2.appliances += appliance.co2_m2;
-            this.data.appliancePHPP.energy_demand.appliances.electricity += electric_demand;
-            this.data.appliancePHPP.energy_demand.appliances.electricity_after_rating += electric_demand_after_rating;
-            this.data.appliancePHPP.energy_demand.appliances.DHW += DHW_demand;
-            this.data.appliancePHPP.energy_demand.appliances.gas += gas_demand;
+            this.data.applianceCarbonCoop.primary_energy_total.appliances += appliance.primary_energy_total;
+            this.data.applianceCarbonCoop.primary_energy_m2.appliances += appliance.primary_energy_m2;
+            this.data.applianceCarbonCoop.co2_total.appliances += appliance.co2_total;
+            this.data.applianceCarbonCoop.co2_m2.appliances += appliance.co2_m2;
+            this.data.applianceCarbonCoop.energy_demand.appliances.electricity += electric_demand;
+            this.data.applianceCarbonCoop.energy_demand.appliances.electricity_after_rating += electric_demand_after_rating;
+            this.data.applianceCarbonCoop.energy_demand.appliances.DHW += DHW_demand;
+            this.data.applianceCarbonCoop.energy_demand.appliances.gas += gas_demand;
         }
     }
 
 
-    this.data.appliancePHPP.gains_W = 1000 * this.data.appliancePHPP.primary_energy_total.total; // we pass it from kWh to Wh
-    this.data.appliancePHPP.gains_W_monthly = [];
+    this.data.applianceCarbonCoop.gains_W = 1000 * this.data.applianceCarbonCoop.primary_energy_total.total; // we pass it from kWh to Wh
+    this.data.applianceCarbonCoop.gains_W_monthly = [];
     for (var m = 0; m < 12; m++)
-        this.data.appliancePHPP.gains_W_monthly[m] = this.data.appliancePHPP.gains_W * datasets.table_1a[m] / 365.0 ;
+        this.data.applianceCarbonCoop.gains_W_monthly[m] = this.data.applianceCarbonCoop.gains_W * datasets.table_1a[m] / 365.0 ;
 
-    /*if (this.data.use_appliancePHPP) {
+    /*if (this.data.use_applianceCarbonCoop) {
         this.data.gains_W["Appliances"] = this.data.appliancelist.gains_W_monthly;
-        if (this.data.appliancePHPP.primary_energy_total.total > 0)
-            this.data.energy_requirements.appliances = {name: "Appliances", quantity: this.data.appliancePHPP.primary_energy_total.total};
+        if (this.data.applianceCarbonCoop.primary_energy_total.total > 0)
+            this.data.energy_requirements.appliances = {name: "Appliances", quantity: this.data.applianceCarbonCoop.primary_energy_total.total};
     }*/
 };
 
