@@ -14,7 +14,7 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r5.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r5.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesPHPP-r1.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesCarbonCoop-r1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
@@ -71,7 +71,7 @@ global $reports;
                     <div class="scenario-nav"><a href="#template/currentenergy">Current Energy</a></div>
                     <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
                     <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_appliancePHPP"/> <a href="#template/appliancePHPP">Appliances PHPP calculation</a></div>
+                    <div class="scenario-nav"><input type="checkbox" key="data.use_applianceCarbonCoop"/> <a href="#template/applianceCarbonCoop">Appliances CarbonCoop calculation</a></div>
                     <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/> <a href="#template/appliancelist">Detailed Appliance List</a></div>
                     <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
                     <div class="scenario-nav-heading">Reporting</a></div>
@@ -333,14 +333,14 @@ global $reports;
         location.reload();
     });
 
-    $("#openbem").on('click', '[key="data.use_appliancePHPP"]', function () {
-        if (data.use_appliancePHPP === 1)
+    $("#openbem").on('click', '[key="data.use_applianceCarbonCoop"]', function () {
+        if (data.use_applianceCarbonCoop === 1)
             data.use_appliancelist = false;
         update();
     });
     $("#openbem").on('click', '[key="data.use_appliancelist"]', function () {
         if (data.use_appliancelist === 1)
-            data.use_appliancePHPP = false;
+            data.use_applianceCarbonCoop = false;
         update();
     });
 
