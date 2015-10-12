@@ -96,6 +96,7 @@ calc.start = function ()
     this.data.kgco2perm2 = 0;
     this.data.primary_energy_use_bills = 0;
     this.data.fabric_energy_efficiency = 0;
+    this.data.primary_energy_use_by_fuels = {};
 
     this.data.totalWK = 0;
 }
@@ -640,7 +641,7 @@ calc.space_heating = function ()
 
     var annual_heating_demand = 0;
     var annual_cooling_demand = 0;
-    
+
     for (m = 0; m < 12; m++)
     {
         // DeltaT (Difference between Internal and External temperature)
@@ -671,7 +672,7 @@ calc.space_heating = function ()
 
         //Annual useful gains. Units: kwh/m2/year
         var gains_source = "";
-        for (z in this.data.gains[z][m]) {
+        for (z in this.data.gains_W) {
             if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating")
                 gains_source = "Internal";
             if (z === "solar")
@@ -680,9 +681,9 @@ calc.space_heating = function ()
 
             // Apply utilisation factor if chosen:
             if (this.data.space_heating.use_utilfactor_forgains) {
-                annual_useful_gains_kW_m2[gains_source] += utilisation_factor[m] * this.data.gains_W[z][m] / 1000 / TFA;
+                annual_useful_gains_kW_m2[gains_source] += utilisation_factor[m] * this.data.gains_W[z][m] / 1000 / this.data.TFA;
             } else {
-                annual_useful_gains_kW_m2[gains_source] += this.data.gains_W[z][m] / 1000 / TFA;
+                annual_useful_gains_kW_m2[gains_source] += this.data.gains_W[z][m] / 1000 / this.data.TFA;
             }
         }
 
@@ -710,7 +711,7 @@ calc.space_heating = function ()
     this.data.space_heating.total_gains = total_gains;
     this.data.space_heating.utilisation_factor = utilisation_factor;
     this.data.space_heating.useful_gains = useful_gains;
-    this.data.space_heating.annual_useful_gains = annual_useful_gains;
+    this.data.space_heating.annual_useful_gains = annual_useful_gains_kW_m2;
 
     this.data.space_heating.heat_demand = heat_demand;
     this.data.space_heating.cooling_demand = cooling_demand;
@@ -1213,6 +1214,8 @@ calc.applianceCarbonCoop = function () {
         appliances: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0},
         total: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0}
     };
+    this.data.applianceCarbonCoop.gains_W = [];
+    this.data.applianceCarbonCoop.gains_W_monthly = {};
 
     // We do the calculations for each appliance in the list
     for (z in this.data.applianceCarbonCoop.list) {
@@ -1267,15 +1270,22 @@ calc.applianceCarbonCoop = function () {
     }
 
 
-    this.data.applianceCarbonCoop.gains_W = 1000 * this.data.applianceCarbonCoop.primary_energy_total.total; // we pass it from kWh to Wh
-    this.data.applianceCarbonCoop.gains_W_monthly = [];
-    for (var m = 0; m < 12; m++)
-        this.data.applianceCarbonCoop.gains_W_monthly[m] = this.data.applianceCarbonCoop.gains_W * datasets.table_1a[m] / 365.0;
+    this.data.applianceCarbonCoop.gains_W['Appliances'] = this.data.applianceCarbonCoop.primary_energy_total.appliances; 
+    this.data.applianceCarbonCoop.gains_W['Cooking'] = this.data.applianceCarbonCoop.primary_energy_total.cooking; 
+    this.data.applianceCarbonCoop.gains_W_monthly['Appliances'] = [];
+    this.data.applianceCarbonCoop.gains_W_monthly['Cooking'] = [];
+    for (var m = 0; m < 12; m++) {
+        this.data.applianceCarbonCoop.gains_W_monthly['Appliances'][m] = this.data.applianceCarbonCoop.gains_W['Appliances'] * datasets.table_1a[m] / 365.0;
+        this.data.applianceCarbonCoop.gains_W_monthly['Cooking'][m] = this.data.applianceCarbonCoop.gains_W['Cooking'] * datasets.table_1a[m] / 365.0;
+    }
 
     if (this.data.use_applianceCarbonCoop) {
-        this.data.gains_W["Appliances"] = this.data.appliancelist.gains_W_monthly;
-        if (this.data.applianceCarbonCoop.primary_energy_total.total > 0)
-            this.data.energy_requirements.appliances = {name: "Appliances", quantity: this.data.applianceCarbonCoop.primary_energy_total.total};
+        this.data.gains_W["Appliances"] = this.data.applianceCarbonCoop.gains_W_monthly['Appliances'];
+        this.data.gains_W["Cooking"] = this.data.applianceCarbonCoop.gains_W_monthly['Cooking'];
+        if (this.data.applianceCarbonCoop.primary_energy_total.appliances > 0)
+            this.data.energy_requirements.appliances = {name: "Appliances", quantity: this.data.applianceCarbonCoop.primary_energy_total.appliances};
+        if (this.data.applianceCarbonCoop.primary_energy_total.cooking > 0)
+            this.data.energy_requirements.cooking = {name: "Cooking", quantity: this.data.applianceCarbonCoop.primary_energy_total.cooking};
     }
 };
 
