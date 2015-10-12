@@ -631,6 +631,7 @@ calc.space_heating = function ()
     var total_gains = [];
     var utilisation_factor = [];
     var useful_gains = [];
+    var annual_useful_gains_kW_m2 = {"Internal": 0, "Solar": 0, "Space heating": 0}; //  Units: kwh/m2/year
 
     var heat_demand = [];
     var cooling_demand = [];
@@ -639,7 +640,7 @@ calc.space_heating = function ()
 
     var annual_heating_demand = 0;
     var annual_cooling_demand = 0;
-
+    
     for (m = 0; m < 12; m++)
     {
         // DeltaT (Difference between Internal and External temperature)
@@ -668,6 +669,24 @@ calc.space_heating = function ()
             useful_gains[m] = total_gains[m];
         }
 
+        //Annual useful gains. Units: kwh/m2/year
+        var gains_source = "";
+        for (z in this.data.gains[z][m]) {
+            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating")
+                gains_source = "Internal";
+            if (z === "solar")
+                gains_source = "Solar";
+            //  WHERE DO WE GET THE SPACE HEATING GAINS FROM??????
+
+            // Apply utilisation factor if chosen:
+            if (this.data.space_heating.use_utilfactor_forgains) {
+                annual_useful_gains_kW_m2[gains_source] += utilisation_factor[m] * this.data.gains_W[z][m] / 1000 / TFA;
+            } else {
+                annual_useful_gains_kW_m2[gains_source] += this.data.gains_W[z][m] / 1000 / TFA;
+            }
+        }
+
+
         // Space heating demand is simply the difference between the heat loss rate
         // for our target internal temperature and the gains.
         heat_demand[m] = total_losses[m] - useful_gains[m];
@@ -691,6 +710,7 @@ calc.space_heating = function ()
     this.data.space_heating.total_gains = total_gains;
     this.data.space_heating.utilisation_factor = utilisation_factor;
     this.data.space_heating.useful_gains = useful_gains;
+    this.data.space_heating.annual_useful_gains = annual_useful_gains;
 
     this.data.space_heating.heat_demand = heat_demand;
     this.data.space_heating.cooling_demand = cooling_demand;
@@ -1250,7 +1270,7 @@ calc.applianceCarbonCoop = function () {
     this.data.applianceCarbonCoop.gains_W = 1000 * this.data.applianceCarbonCoop.primary_energy_total.total; // we pass it from kWh to Wh
     this.data.applianceCarbonCoop.gains_W_monthly = [];
     for (var m = 0; m < 12; m++)
-        this.data.applianceCarbonCoop.gains_W_monthly[m] = this.data.applianceCarbonCoop.gains_W * datasets.table_1a[m] / 365.0 ;
+        this.data.applianceCarbonCoop.gains_W_monthly[m] = this.data.applianceCarbonCoop.gains_W * datasets.table_1a[m] / 365.0;
 
     if (this.data.use_applianceCarbonCoop) {
         this.data.gains_W["Appliances"] = this.data.appliancelist.gains_W_monthly;
