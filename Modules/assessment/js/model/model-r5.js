@@ -1252,11 +1252,11 @@ calc.applianceCarbonCoop = function () {
     for (var m = 0; m < 12; m++)
         this.data.applianceCarbonCoop.gains_W_monthly[m] = this.data.applianceCarbonCoop.gains_W * datasets.table_1a[m] / 365.0 ;
 
-    /*if (this.data.use_applianceCarbonCoop) {
+    if (this.data.use_applianceCarbonCoop) {
         this.data.gains_W["Appliances"] = this.data.appliancelist.gains_W_monthly;
         if (this.data.applianceCarbonCoop.primary_energy_total.total > 0)
             this.data.energy_requirements.appliances = {name: "Appliances", quantity: this.data.applianceCarbonCoop.primary_energy_total.total};
-    }*/
+    }
 };
 
 calc.appliancelist = function ()
