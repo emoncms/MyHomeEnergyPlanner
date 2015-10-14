@@ -681,24 +681,6 @@ calc.space_heating = function (data)
             useful_gains[m] = total_gains[m];
         }
 
-        //Annual useful gains. Units: kwh/m2/year
-        var gains_source = "";
-        for (z in data.gains_W) {
-            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating")
-                gains_source = "Internal";
-            if (z === "solar")
-                gains_source = "Solar";
-            //  WHERE DO WE GET THE SPACE HEATING GAINS FROM??????
-
-            // Apply utilisation factor if chosen:
-            if (data.space_heating.use_utilfactor_forgains) {
-                annual_useful_gains_kW_m2[gains_source] += utilisation_factor[m] * data.gains_W[z][m] / 1000 / data.TFA;
-            } else {
-                annual_useful_gains_kW_m2[gains_source] += data.gains_W[z][m] / 1000 / data.TFA;
-            }
-        }
-
-
         // Space heating demand is simply the difference between the heat loss rate
         // for our target internal temperature and the gains.
         heat_demand[m] = total_losses[m] - useful_gains[m];
@@ -715,6 +697,25 @@ calc.space_heating = function (data)
 
         annual_heating_demand += heat_demand_kwh[m];
         annual_cooling_demand += cooling_demand_kwh[m];
+        
+        
+        //Annual useful gains. Units: kwh/m2/year
+        var gains_source = "";
+        for (z in data.gains_W) {
+            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating")
+                gains_source = "Internal";
+            if (z === "solar")
+                gains_source = "Solar";
+            //  WHERE DO WE GET THE SPACE HEATING GAINS FROM??????
+
+            // Apply utilisation factor if chosen:
+            if (data.space_heating.use_utilfactor_forgains) {
+                annual_useful_gains_kW_m2[gains_source] += utilisation_factor[m] * data.gains_W[z][m] / 1000 / data.TFA;
+            } else {
+                annual_useful_gains_kW_m2[gains_source] += data.gains_W[z][m] / 1000 / data.TFA;
+            }
+        }
+        annual_useful_gains_kW_m2['Space heating'] += heat_demand_kwh[m] / data.TFA;
     }
 
     data.space_heating.delta_T = delta_T;
