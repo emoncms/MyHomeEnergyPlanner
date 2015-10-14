@@ -2,6 +2,9 @@ function imagegallery_initUI() {
     if (data.imagegallery == undefined) // Normally this is done in model-rX.js. The model is intended for calculations so i prefer to initialize data.imagegallery here
         data.imagegallery = [];
 
+    if (data.featuredimage == undefined)
+        data.featuredimage = '';
+
     $(document).ready(function () {
         $('#gallery').magnificPopup({
             delegate: 'a', // child items selector, by clicking on it popup will open
@@ -56,7 +59,22 @@ function upload_images_callback(result) {
 
 function add_image(z) {
     var url = path + "Modules/assessment/images/" + projectid + "/" + data.imagegallery[z];
-    $('#gallery').append("<a class='image-in-gallery' key='data.imagegallery." + z + "' href='" + url + "'><img src='" + url + "' width='200' /></a><i class='icon-trash' style='vertical-align:top;cursor:pointer' index='" + z + "'></i>");
+    var html = "<a class='image-in-gallery' key='data.imagegallery.";
+    html += z;
+    html += "' href='";
+    html += url;
+    html += "'><img src='";
+    html += url;
+    html += "' width='200' /></a><i class='icon-trash' index='";
+    html += z;
+    html += "'></i><i class='icon-star";
+    if (data.imagegallery[z] != data.featuredimage){
+        html += "-empty";
+    }
+    html += "' index='"
+    html += z;
+    html += "' title='Feature this image'></i>";
+    $('#gallery').append(html);
     //$('#gallery').append("<img class='image-in-gallery' key='data.imagegallery." + z + "' src='" + url + "' width='200' />");
 }
 
@@ -67,6 +85,13 @@ $('#gallery').on('click', '.icon-trash', function () {
     $("#file-to-delete").html(data.imagegallery[$(this).attr('index')]);
     $('#delete-file-confirm').attr('index', $(this).attr('index'));
     $("#modal-delete-image").modal("show");
+});
+
+$('#gallery').on('click', '.icon-star-empty', function () {
+    data.featuredimage = data.imagegallery[$(this).attr('index')];
+    $('#gallery .icon-star').removeClass(".icon-star").addClass("icon-star-empty");
+    $(this).removeClass("icon-star-empty").addClass("icon-star");
+    update();
 });
 
 $('#modal-delete-image').on('click', '#delete-file-confirm', function () {

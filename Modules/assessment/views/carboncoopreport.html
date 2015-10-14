@@ -1,0 +1,1625 @@
+<div class="carbon-report-wrapper">
+	<div class="page-wrapper">
+		<section>
+			<div class="doc-title-wrapper">
+				<h1 class="doc-title">Carbon Co-op</h1>
+				<span class="doc-sub-title">My Home Energy Planner</span>
+			</div>
+			<div class="grid grid-margin-bottom">
+				<div class="col-2">
+					<div class="client-info">
+						<span class="top-border-title bolded">Name</span>
+						<p><span key='data.household.1a_householdername'></span></p>
+						<span class="top-border-title bolded">Address</span>
+						<p>
+							<span key='data.household.1a_addressline1'></span>
+							<br>
+							Manchester
+						</p>
+						<span class="top-border-title bolded">Post Code</span>
+						<p><span key='data.household.1a_postcode'></span></p>
+						<span class="top-border-title bolded">Date (Survey)</span>
+						<p><span key='data.household.assessment_date'></span></p>
+						<span class="top-border-title bolded">Date (Report)</span>
+						<p>27 May 2015</p>
+						<span class="top-border-title bolded">Local Authority Area</span>
+						<p><span key='data.household.1a_localauthority'></span></p>
+						
+					</div>
+				</div>
+				<div class="col-2">
+					<img class="home-image" src="../Modules/assessment/img-assets/images/house.png">
+				</div>
+			</div>
+
+
+		</section>
+
+<!-- 		<section>			
+
+			<div class="highlight-box pink-highlight">
+				<h4 class="top-border-title title-margin-bottom ">Estimated Energy Cost Comparison</h4>	
+
+			</div>
+
+		</section> -->
+		
+		<!-- CONTENTS -->
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>Contents</h2>
+			</div>
+			<ol class="indented-list">
+				<li>
+					<p><strong class="top-border-title bolded">Welcome to My Home Energy Assessment</strong><p>
+					<p>Figure 1: Retrofit Priorities<p>
+					<p>Figure 2. Performance Summary<p>
+				</li>
+				<li>
+					<p><strong class="top-border-title bolded">Section 1.0 How does your home perform?</strong></p>
+					<p>Figure 3: How does my home lose heat?</p>
+					<p>Figure 4: Your home’s heat balance</p>
+					<p>Figure 5 Space heating demand – how your home compares</p>
+					<p>Figure 6: Total amount of energy used in your home in kilowatt-hours per year and by fuel type</p>
+					<p>Figure 7: Primary energy use in kilowatt-hours per square metre per year</p>
+					<p>Figure 8: Carbon dioxide emissions in kilograms per square metres per year)</p>
+					<p>Figure 9: Carbon dioxide emissions in kilograms per person per year (your personal carbon footprint)</p>
+					<p>Figure 10: Estimated energy cost comparison</p>
+					<p>Figure 11: Your home compared with the assumed average home</p>
+					<p>Figure 12: SAP results table</p>
+					<p>Figure 13: Comfort tables based on what you told us (too hot/cold/ stuffy etc. based on Householder Questionnaire).</p>
+					<p>Figure 14: RH data (where available)</p>
+					<p>Figure 15: Temperature data (where available)</p>
+					<p>Figure 16: You also told us</p>
+				</li>
+				<li>
+					<p><strong class="top-border-title bolded">Section 2.0 How could your home perform better?</strong></p>
+					<p>Figure 17 Scenario 1: DIY and Simple Measures</p>
+					<p>Figure 18 Scenario 2: More Advanced Measures</p>
+					<p>Figure 19 Scenario 3: Further Measures – Your 2050 Home</p>
+				</li>
+				<li>
+					<p><strong class="top-border-title bolded">Section 3.0 Routes to Retrofit</strong></p>
+					<p>Figure 20: Time Cost Quality</p>
+					<p>Figure 21: Your home now >>> Your 2050 Home</p>
+				</li>
+				<li>
+					<p><strong class="top-border-title bolded">Section 4.0 How can Carbon Co-op help?</strong></p>
+				</li>
+				<li>
+					<p><strong class="top-border-title bolded">Appendices</strong></p>
+					<p>Figure 22 Fabric Condition Comparison (across scenarios)</p>
+					<p>Figure 23 Heating and Hot Water System Comparison (across scenarios)</p>
+					<p>Figure 24 Ventilation Comparison (across scenarios)</p>
+					<p>Figure 25 Lighting Comparison (across scenarios)</p>
+					<p>Figure 26 Appliances and Cooking Comparison (across scenarios)</p>
+					<p>Figure 27 Renewables Comparison (across scenarios)</p>
+					<p>Figure 28: Table taken directly from Householder Questionnaire</p>
+				</li>
+			</ol>
+		</section>
+	
+		<!-- Welcome -->
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>Welcome to My Home Energy Assessment</h2>
+			</div>
+			<div class="two-col-text">
+				<p>This report is unique to your home. It is based on what you told us, and the survey we carried out, fed through My Home Energy Planner (http://myhome.carbon.coop). This is an online tool where the data about your home is stored and processed. You can speak to Carbon Co-op about accessing this tool and it may be useful for you to log and track improvements you make over time or to test out alternatives.</p>
+				<p>We show the current performance of your home and what may be possible to improve its energy performance, comfort and carbon emissions. We show you where most energy is being lost, which improvements would have the biggest effect, and highlight what to do first. </p>
+				<p>Our advice is specific and relevant to your home. We have taken your household, lifestyle and priorities into consideration. </p>
+				<p>You told us that the following things are most important to you in considering energy efficiency retrofit options for your home: </p>
+			</div>
+			<div class="highlight-box pink-highlight">
+				<h4 class="top-border-title title-margin-bottom ">Figure 1: Retrofit Priorities</h4>
+				<ul id='retrofit-priorities'>
+					
+				</ul>
+			</div>
+			<p>Your report is made up of four sections: </p>
+			<h3 class="top-border-title title-margin-top title-margin-bottom">Section 1.0 How does your home perform?</h3>
+			<div class="two-col-text">
+				<p>In this section we measure the current performance of your home and model this against the UK average. </p>
+				<p>We have taken a rigorous approach in preparing this report, using a detailed model of energy use, the full Standard Assessment Procedure (SAP) rather than the reduced data version (rdSAP) that is used for Energy Performance Certificates (EPCs). </p>
+				<p>We consider all the energy uses in your home, including heating, lighting, hot water, cooking and using appliances. </p>
+				<p>We employ various measures comprising: heat loss and heat gain; space heating demand; energy demand; primary energy use; carbon dioxide emissions; energy costs; SAP rating; comfort and health.</p>
+				<p>We also show how your home could perform if you adopt the proposed measures for retrofit that we explore further in Section 2.0. </p>
+				<p>Your headline results are: </p>
+			</div>
+			<div class="highlight-box pink-highlight">
+				<h4 class="top-border-title title-margin-bottom ">Figure 2. Performance Summary</h4>
+				<div id="space-heating-demand" width='1000px' height='100px'></div>
+				<div id="primary-energy" width='1000px' height='100px'></div>
+				<div id="co2-emission-rate" width='1000px' height='100px'></div>
+				<div id="energy-use-per-person" width='1000px' height='100px'></div>
+			</div>
+			</div>
+
+
+			<h3 class="top-border-title title-margin-top title-margin-bottom">Section 2.0 How could your home perform better?</h3>
+			<div class="two-col-text">
+				<p>In this section we give recommendations for planning retrofit works in your home. We show you a full range of possibilities for your home, from simple DIY measures through to Your 2050 Home – an exemplar model of significant energy saving and carbon reduction. </p>
+				<p>We show three scenarios including descriptions of proposed measures, approximate quantities and budget costs.</p>
+				<p>We also give a detailed commentary that provides more specific guidance. We focus first on quick wins and the things you told us are most important to you. We take a whole house approach, rather than considering single measures in isolation. </p>
+				<p>We consider factors other than energy use and finances that may be important to you. For example, comfort, ventilation and indoor air quality. We also consider the level of disruption involved in carrying out various building works in accordance with what you told us would be acceptable. </p>
+				<p>We consider the embodied environmental impact of the materials and systems we recommend, choosing lower impact materials where possible. </p>
+				<p>These recommendations show a pathway for you to achieve a 2050 emissions reduction and energy use target by using technologies and techniques that are currently available. </p>
+			</div>
+
+			<h3 class="top-border-title title-margin-top title-margin-bottom">Section 3.0 Routes to Retrofit</h3>
+			<div class="two-col-text">
+				<p>We understand that this report is only a starting point. To take things forwards, you will need to develop your own detailed proposals, with help from others should you need it.</p> 
+				<p>In this section, we provide advice on developing your project brief; packaging works; regulations and approvals; assembling your team; selection process and contracts.</p>
+			</div>
+
+			<h3 class="top-border-title title-margin-top title-margin-bottom">Section 4.0 How can Carbon Co-op help?</h3>
+			<p>However you decide to tackle things, there are a number of ways you can access information and advice from Carbon Co-op. This section gives you more details on how we can help.</p>
+			<p>We’ve also included five appendices:</p>
+			<p><strong>Appendix A What is the current condition of your home?</strong></p>
+			<p>Based on the survey we completed of your home, and results generated using My Home Energy Planner, we provide comparisons across fabric condition; heating and hot water systems; ventilation; lighting; appliances and cooking; and renewables. </p>
+			<p><strong>Appendix B About you</strong></p>
+			<p>The things you told us about you and your house, taken from the questionnaire we completed with you. </p>
+			<p><strong>Appendix C About us</strong></p>
+			<p>A bit more information about Carbon Co-op and URBED.</p> 
+			<p><strong>Appendix D Glossary</strong></p>
+			<p>There may be words and phrases in this report that you are unfamiliar with. This short glossary provides definitions and explanations. </p>
+			<p><strong>Appendix E About our methodology</strong></p>
+			<p>A bit more information about the model we used to produce this report.</p>
+
+			<p>This report was prepared by one of our experienced and expert assessors.</p>
+			<p>Your assessor is: (name) </p>
+			<p>(brief biog)</p>
+
+			<p>If you’ve got any questions about this report, please contact: info@carbon.coop or 0161 448 6492</p>
+
+		</section>
+	
+		<!-- Section 1.0 -->
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>How does your home perform?</h2>
+				<h3 class="section-sub-title">Section 1.0</h3>
+			</div>
+
+			<p>The charts in this section are designed to help you understand how your home’s current energy use compares with UK averages and targets. We also show the extent to which your home could be improved to meet the UK 2050 80% carbon reduction target, reduce your fuel bills and improve comfort. </p>
+			<p>We’ve modelled your home as it is now in SAP (Standard Assessment Procedure). We’ve modelled it again to show the effect of the measures proposed in Section 2.0 of this report.</p>
+			<p>Where provided, we’ve also compared this with information from your utility bills. The SAP model makes a set of assumptions, based on averages, about climate, heating patterns, hot water and appliance use. If your energy bill data is from a particularly mild or cold year, of if your household habits are different from the UK average, the model may produce a predicted energy use that is different from your actual energy use. </p>
+			<p>Through the way you live in your home, or changes you’ve already made, you may already be some way towards the 2050 target. For example, you may use your space heating a lot less than is assumed in the model, or have your thermostat at the lowest setting. </p>
+			<p>However, if you are significantly under-heating your home, you may have noticed other problems such as excessive condensation or poor indoor air quality. This may affect your comfort and health - and is something you might want to tackle through energy efficiency retrofit work. </p>
+			<p>Alternatively, you may find that you are using far more energy than predicted in the SAP model, and that a few simple steps could help reduce this significantly. Likewise, if you continue to use a lot of electricity – with lots of high demand electrical appliances such as tumble driers or plasma TVs – then you are likely to still use more energy after retrofit than suggested by the SAP model.</p>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.1 Heat losses and gains</h3>
+				<p>In the UK, most homes use the majority of energy to keep warm during the cooler months of winter, spring and autumn. When it is colder outside, your home continuously loses heat from the warmer inside through its building fabric. The building fabric is made up of walls, floor, roof and windows. The better insulated your home the slower this heat loss happens. </p>
+				<p>Your home also loses heat through draughts and ventilation losses. This is when warm air leaves your home unintentionally through gaps in the building fabric – or intentionally through windows or fans. This rate of heat loss depends on how draughty your home is and the ways you choose to ventilate your home. </p>
+				<p>Figure 3 shows how your home loses heat, modelled against the various scenarios given in this report.</p>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 3. Performance Summary</h4>
+				        <div class="bar-chart-container centered-house">
+					        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+					            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+					            
+					            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            
+					            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+					                <text x="580" y="648" style="font-weight:bold">Floor</text>
+					                <text id="house-floorwk" x="580" y="680">50 W/K</text>
+					                
+					                <text x="720" y="180" style="font-weight:bold">Roof</text>
+					                <text id="house-roofwk" x="720" y="215">50 W/K</text>
+					                
+					                <text x="740" y="320" style="font-weight:bold">Walls</text>
+					                <text id="house-wallswk" x="740" y="355">50 W/K</text>
+					                
+					                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
+					                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
+					                
+					                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
+					                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
+					                
+					                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+					                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+					            </g>
+					        </svg>
+				        </div>
+				        <div class="bar-chart-container centered-house">
+					        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+					            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+					            
+					            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            
+					            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+					                <text x="580" y="648" style="font-weight:bold">Floor</text>
+					                <text id="house-floorwk" x="580" y="680">50 W/K</text>
+					                
+					                <text x="720" y="180" style="font-weight:bold">Roof</text>
+					                <text id="house-roofwk" x="720" y="215">50 W/K</text>
+					                
+					                <text x="740" y="320" style="font-weight:bold">Walls</text>
+					                <text id="house-wallswk" x="740" y="355">50 W/K</text>
+					                
+					                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
+					                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
+					                
+					                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
+					                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
+					                
+					                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+					                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+					            </g>
+					        </svg>
+				        </div>
+				        <div class="bar-chart-container centered-house">
+					        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+					            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+					            
+					            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            
+					            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+					                <text x="580" y="648" style="font-weight:bold">Floor</text>
+					                <text id="house-floorwk" x="580" y="680">50 W/K</text>
+					                
+					                <text x="720" y="180" style="font-weight:bold">Roof</text>
+					                <text id="house-roofwk" x="720" y="215">50 W/K</text>
+					                
+					                <text x="740" y="320" style="font-weight:bold">Walls</text>
+					                <text id="house-wallswk" x="740" y="355">50 W/K</text>
+					                
+					                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
+					                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
+					                
+					                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
+					                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
+					                
+					                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+					                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+					            </g>
+					        </svg>
+				        </div>
+				        <div class="bar-chart-container centered-house">
+					        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+					            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+					            
+					            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            
+					            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+					                <text x="580" y="648" style="font-weight:bold">Floor</text>
+					                <text id="house-floorwk" x="580" y="680">50 W/K</text>
+					                
+					                <text x="720" y="180" style="font-weight:bold">Roof</text>
+					                <text id="house-roofwk" x="720" y="215">50 W/K</text>
+					                
+					                <text x="740" y="320" style="font-weight:bold">Walls</text>
+					                <text id="house-wallswk" x="740" y="355">50 W/K</text>
+					                
+					                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
+					                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
+					                
+					                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
+					                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
+					                
+					                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+					                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+					            </g>
+					        </svg>
+				        </div>
+				</div>
+
+				<p>It’s not all bad news though. These heat losses are balanced by the heat generated by you and activities in your home, such as cooking. Heat is also provided by sunlight entering your home – this is known as passive solar gain.</p>
+				<p>Figure 4 shows this balance for your home in each of the scenarios mapped out in this report. </p>
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 4. Your home’s heat balance </h4>
+					<div class="bar-chart-container" id="heat-balance"></div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.2 Space heating demand</h3>
+				<p>To keep your home warm, the gap between heat losses and heat gains in your home needs to be topped up by your heating system. The amount of energy needed to do this is known as space heating demand. </p>
+				<p>Space heating demand is measured in kilowatt-hours per square metre per year, so that different sizes of building can be compared directly. Space heating demand takes into account all the heat loss and heat gain factors described in 1.1 above. </p>
+				<p>Space heating demand does not cover any other energy uses, such as lighting, hot water or electricity use for fans, pumps and appliances. It does take into account the type of controls used by your heating system, and how advanced they are. It is a good way of understanding the performance of the fabric of your home, and how energy efficient it is. </p>
+				<p>If your home is uncomfortably cold or you have problems with condensation and damp, the most important thing you can do is reduce space heating demand by improving the efficiency of your building fabric. This will also improve the comfort and health of your home. </p>
+				<p>Figure 5 shows the space heating demand for your home. The graph shows several different comparisons including: </p>
+				<ul class="right-align-item-list">
+					<li><p>Your home now compared to the current UK average; </p></li>
+					<li><p>Your home now compared to the target range for significantly improved comfort and meeting carbon reduction standards; </p></li>
+					<li><p>Scenarios related to the Proposed Measures given in Section 2.0 of this report including Your 2050 home – an exemplar model of how your home could perform if all the improvements recommended in this report are carried out. </p></li>
+				</ul>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 5.  Space heating demand – how your home compares</h4>
+					<div class="bar-chart-container" id="fig-5-space-heating-demand"></div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.3 Energy demand</h3>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 6.  Total amount of energy used in your home in kilowatt-hours per year and by fuel type</h4>
+					<div class="bar-chart-container" id="energy-demand"></div>
+				</div>
+
+				<p>Figure 6 shows the total amount of energy used in your home, in kilowatt-hours per year and by fuel type. This is a total figure specific to your home, and is not benchmarked against any other buildings or targets. It is intended to help you understand how much energy you use in total and how much this could be reduced if you carry out retrofit works.</p> 
+				<p>Figure 6 includes error bars with a 30% positive and negative range. These error bars are included because the model is only ever an approximation of reality. Your actual energy use is affected by factors such as the external climate and the way you use energy in your home – so it will change over time.</p>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.4 Primary energy use</h3>
+				<p>Primary energy is the total amount of energy used by your home, from the power station to your lightbulb. Primary energy is measured in kilowatt-hours per square metre per year.</p> 
+				<p>The level of insulation in your home, the efficiency of services such as heating and lighting, and the type of fuel used all affect your primary energy use.</p> 
+				<p>The same task, such as boiling a kettle, will take different amounts of primary energy depending on the fuel used. This is because of efficiency differences in the way various fuels are generated and distributed. Primary energy includes an allowance for the efficiency of the national electricity grid and fuel transport.</p>
+				<p>Figure 7 shows the primary energy use for your home now, both as modelled in SAP and using any utility bill data you gave us. It also shows Your 2050 Home as modelled in SAP and against the Carbon Co-op target of 120kWh/m2.year (which it may not be feasible for all homes to meet), and the different scenarios modelled to reach the 2050 target.</p>  
+				<p>Where possible this is also broken down by use. Where renewable technologies have been proposed, the primary energy they displace is shown as a negative quantity to your total (gross) energy use, and then subtracted from this total to show the net energy use for Your 2050 Home.</p>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 7: Primary energy use in kilowatt-hours per square metre per year</h4>
+					<div class="bar-chart-container" id="barchart-2"></div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.5 Carbon dioxide emissions</h3>
+				<p>The carbon dioxide emissions from your home are measured in kilograms per square metre per year. Carbon dioxide emissions are affected by the level of insulation, the efficiency of services such as heating and lighting, and by the type of fuel used for each of the services in your home.</p> 
+				<p>For example, with the current make up of the national grid, 1 kilowatt hour of mains electricity produces more carbon dioxide than 1 kilowatt hour of mains gas.</p> 
+				<p>Figure 8 shows your home now, and the scenarios we’ve looked at including Your 2050 Home, modelled in SAP against your current bill data (if provided). We’ve also benchmarked this against the current UK average and the Carbon Co-op 2050 target.</p>
+				<p>Figure 9 demonstrates your personal carbon footprint, showing carbon dioxide emissions in kilograms per person per year, based on the actual number of people living in your home rather than the average number that SAP assumes.</p>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 8: Carbon dioxide emissions in kilograms per square metres per year</h4>
+					<div class="bar-chart-container" id="carbon-dioxide-emissions"></div>
+				</div>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 9: Carbon dioxide emissions in kilograms per person per year (your personal carbon footprint)</h4>
+					<div class="bar-chart-container" id="carbon-dioxide-emissions-per-person"></div>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.6 Energy costs</h3>
+				<p>Figure 10 shows the estimated annual cost of fuel for your home now and your retrofitted home modelled in SAP. For comparison, Figure 10 also shows your current annual energy use from bill data, if you provided this. </p>
+				<p>The fuel costs for your home will be affected by the level of insulation, the efficiency of services and lighting, the type of fuel used and the fuel tariff you have with your supplier. To make things clearer and easier to compare, Figure 10 uses the standard fuel costs from SAP, so this may be slightly different from your actual costs.</p> 
+				<p>In most retrofits, it is possible to significantly reduce the cost of heating, hot water, lighting and ventilation through improvements in building fabric and services – or at least to improve comfort, whilst not increasing costs.</p> 
+				<p>However, the costs of unregulated energy uses such as cooking and using appliances, are much more dependent on individual behaviour. So, alongside physical retrofit measures, you can maximise savings by being more aware of how you use energy in your home.</p> 
+				<p>Figure 10 includes error bars with a 30% positive and negative range. These error bars are included because the model is only ever an approximation of reality. Your actual energy costs may vary, depending on the different factors described above.</p> 
+				<p>However, this also shows that the deeper your retrofit, the smaller the error range, and the more certainty you can have around costs and other outcomes, as the absolute figure reduces.</p>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 10: Estimated energy cost comparison</h4>
+					<div class="bar-chart-container" id="estimated-energy-cost-comparison"></div>
+				</div>
+				
+				
+				<p><i><strong>Please note:</strong> models work on assumptions and there are several reasons why your actual current and future energy use may be different.</i></p>
+				<p><i>The model makes assumptions about average regional climate that may not hold true in a given year. Maybe we get a mild winter and you don’t put the heating on as much. Or, the summer is cold and wet and you use your heating system a lot more than usual.</i></p> 
+				<p><i>There are other things that affect energy use, and Figure 11 shows how your household may differ from the averages assumed for a typical, similar home.</i></p>
+
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 11: Your home compared with the assumed average home</h4>
+					<table class="three-col-table">
+						<thead>
+							<tr>
+								<th class="half-width"></th>
+								<th>Typical Home (SAP)</th>
+								<th>Your Home</th>
+								<th>Results</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th class="half-width">Number of Occupants</th>
+								<td>2.9 people</td>
+								<td><span key='data.occupancy'></span> people</td>
+								<td>Higher/Lower</td>
+							</tr>
+							<tr>
+								<th class="half-width">Average hours of heating</th>
+								<td>9 hours</td>
+								<td><span key='data.occupancy'></span> hours</td>
+								<td>Higher/Lower</td>
+							</tr>
+							<tr>
+								<th class="half-width">Living room thermostat temperature</th>
+								<td>21°C</td>
+								<td><span key='data.household.3a_roomthermostat'></span>°C</td>
+								<td>Higher/Lower</td>
+							</tr>
+							<tr>
+								<th class="half-width">number of habitable rooms not heated</th>
+								<td>0 room(s)</td>
+								<td>1 room(s)</td>
+								<td>Higher/Lower</td>
+							</tr>
+							<tr>
+								<th class="half-width">Estimated current appliance energy use*</th>
+								<td>3880 kWh per year</td>
+								<td>4129 kWh per year</td>
+								<td>Higher/Lower</td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.7 SAP rating</h3>
+				<p>SAP is the Standard Assessment Procedure used to assess energy use in UK homes. The UK government devised SAP as a way to compare homes and test them against Building Regulations. SAP forms the basis of the energy model used in this report.</p> 
+				<p>SAP makes assumptions about the number of people living in a home and how it is heated and used, based on averages for the UK. You may not be ‘average’ and may use your home in different ways. So, SAP is not an exact predictive tool.</p> 
+				<p>The final SAP rating is influenced by predicted energy use, carbon emissions and fuel costs. This means that the SAP rating is influenced by levels of insulation, how efficient your heating system and other services are, the type of fuel you use to heat and light your home, and whether you have any renewables. SAP does not cover appliances or cooking.</p> 
+				<p>SAP is not a perfect system. A home with a poor building fabric could still get a good rating because it has lots of renewables or energy costs are cheap. This is unhelpful if energy conservation or comfort is your biggest concern.</p>
+				<p>This is why we’ve given SAP a lower level of priority within this report. The table below shows the SAP rating we’ve calculated for your home now, and in the various scenarios mapped out in this report.</p>
+				
+				<div class="highlight-box pink-highlight">
+
+				<div class="table-wrapper">
+					<h4 class="top-border-title title-margin-bottom ">Figure 12: SAP results table</h4>
+					<!-- <img src="../Modules/assessment/img-assets/images/sap-test.jpg" alt=""> -->
+					<table class="sap-table">
+						<thead>
+							<tr>
+								<th>SAP Rating</th>
+								<th>Your Home Now</th>
+								<th>Your 2050 Home</th>
+								<th>UK Average</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-sap-rating='A'>
+								<td>A</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='B'>
+								<td>B</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='C'>
+								<td>C</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='D'>
+								<td>D</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='E'>
+								<td>E</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='F'>
+								<td>F</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='G'>
+								<td>G</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				</div>
+
+				<p><i><strong>Please note:</strong> though based on the same calculations, this is not an accredited SAP assessment. If you need an official SAP rating for funding purposes, you will need to commission this separately.</i></p>
+				<p><i>For existing buildings, the calculation tool used to generate Energy Performance Certificates (EPCs) is based on a reduced data entry version of SAP (rdSAP), which makes a greater number of assumptions. This means it may differ widely from the rating given above – especially if your home has had significant energy efficiency improvements.</i></p>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.8 Comfort and Health</h3>
+				<p>The link between the built environment, our comfort and health is well established. Living in a home that is too cold, hot, damp, dry or draughty can affect your physical and mental wellbeing. This may trigger or worsen respiratory and cardiovascular problems, skin conditions, trips and falls, anxiety and depression.</p> 
+				<p>When calculating heating demand, SAP assumes a temperature of 21°C in your living area for a set number of hours. In reality, your living area may be warmer or cooler than this (for longer or shorter periods) because we all have different perceptions of what is comfortable as well as different occupancy patterns. This will also be affected by the efficiency of the building fabric and your heating system.</p>
+				<p>This is why we collect information about you as householders. Understanding your perceptions of comfort, as well as how you use the spaces within your home, allows us to tailor the recommendations with your comfort and health in mind.</p>
+				
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 13: Comfort tables based on what you told us</h4>
+					<!-- <span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (table)</span> -->
+					<p>
+						Temperature in winter: <span key='data.household.6a_temperature_winter'></span><br />
+						Air in winter: <span key='data.household.6a_airquality_winter'></span><br />
+					</p>
+
+					<p>
+						Temperature in summer: <span key='data.household.6a_temperature_summer'></span><br />
+						Air in summer: <span key='data.household.6a_airquality_summer'></span><br />
+					</p>
+
+					<p>
+						Draughts: <span key='data.household.6a_draughts_comment'></span>
+					</p>
+
+					<p>
+						Amount of daylight: <span key='data.household.6b_daylightamount'></span>
+						Amount of artificial light: <span key='data.household.6b_artificiallightamount'></span>
+					</p>
+				</div>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 14: RH data</h4>
+					<p>
+						When we visited, the relative humidity was
+						<span key='data.household.reading_humidity1'></span> - <span key='data.household.reading_humidity1'></span> %. (The ideal range is 40-60%).
+					</p>
+				</div>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 15: Temperature data</h4>
+					<p>
+						When we visited, your living room temperature was
+						<span key='data.household.reading_temp1'></span> - <span key='data.household.reading_temp2'></span>°C.
+					</p>
+				</div>
+
+				<div class="highlight-box pink-highlight">
+
+					<h4 class="top-border-title title-margin-bottom ">Figure 16: You also told us</h4>
+					<p>Noise: <span key='data.household.6c_noise_comment'></span></p>
+					<p>Daylighting: <span key='data.household.6b_problem_locations'></span></p>
+					<p>Comfort: <span key="data.household.6a_draughts_comment"></span></p>
+					<p>
+						Rooms: Loved - <span key='data.household.6d_favourite_room'></span>
+						Unloved: <span key='data.household.6d_unloved_rooms'></span>
+					</p>
+					<p>Laundry: </p>
+					
+				</div>
+			</section>
+		</section>
+		
+		<!-- Section 2.0 -->
+
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>How could your home perform better?</h2>
+				<h3 class="section-sub-title">Section 2.0</h3>
+			</div>
+			
+			<p>In this section we give recommendations for planning retrofit works in your home. We show you a full range of possibilities for your home, from simple DIY measures through to Your 2050 Home – an exemplar model in line with 2050 80% carbon reduction targets.</p>
+			
+			<h3 class="top-border-title title-margin-top title-margin-bottom">2.1 Scenarios</h3>
+			<p>Figures 17, 18 and 19 on the following pages give our recommendations for planning retrofit works in your home. We have mapped out three scenarios:</p>
+			<ul class="right-align-item-list">
+				<li><p>Scenario 1: <span id='output-scenario1-name'></span></p></li>
+				<li><p>Scenario 2: <span id='output-scenario2-name'></span></p></li>
+				<li><p>Scenario 3: <span id='output-scenario3-name'></span></p></li>
+			</ul>
+			<p>Following these scenarios, we have also included a commentary that gives more specific guidance based on the assessment we’ve carried out on your home.</p>
+			<p>We focus first on quick wins and the things you told us are most important to you. We take a whole house approach, rather than considering single measures in isolation.</p> 
+			<p>We consider factors other than energy use and finances that may be important to you. For example, comfort, ventilation and indoor air quality. We also consider the level of disruption involved in carrying out various building works.</p> 
+			<p>We consider the embodied environmental impact of the materials and systems we recommend, choosing lower impact materials where possible.</p> 
+			<p>We do not necessarily expect you to do all these works at once! These recommendations simply show a pathway for you to achieve a 2050 emissions reduction and energy use target by using technologies and techniques that are currently available.</p>
+
+			<h3 class="top-border-title title-margin-top title-margin-bottom">2.2 Table headings</h3>
+			<p>In addition to listing and describing proposed measures, we use the following table headings to guide you through our recommendations:</p>
+			<ol class="indented-list">
+				<li>
+					<h4 class="top-border-title title-margin-top">Performance target:</h4>
+					<p>This is the standard a measure needs to achieve to match the assumptions made in the model. For a wall, floor, window or roof this is usually a measure of its thermal performance and insulation value, for a boiler it will be its efficiency. It is important to reference this when looking at detailed specifications – if this report assumes 200mm high quality insulation, the same effect won’t be achieved with 100mm of lower quality insulation.</p> 
+				</li> 
+
+				<li>
+					<h4 class="top-border-title title-margin-top">Benefits:</h4>
+					<p>We understand that you may wish to carry out retrofit works for reasons other than simple energy and cost savings – such as comfort improvements, improved indoor air quality or carbon emissions reductions. It’s important that in planning the work you understand and communicate your priorities to any professionals or builders you’re working with. Carbon Co-op can help you understand and explore these issues – please see Section 4.0 of this report for more details of how we can help.</p>
+
+					<p>The relative impact of each measure will vary depending on the order you do them in. For example, if you change your boiler before installing insulation, the absolute savings from the insulation work will be less than if you had done the insulation work first.</p>
+				</li>
+				<li>
+					<h4 class="top-border-title title-margin-top">How much?</h4>
+					<p>We have based the costs given on generic cost information to provide an overall idea of the budget you will need to complete the recommended measures. This is just an approximation so that you can plan a budget.</p> 
+
+					<p>Before you begin most work on your home, you will need to undertake a detailed cost plan following further specialist investigation, and obtain quotes from a range of suppliers.</p> 
+				
+					<p><i><strong>Please note:</strong> costs do not include any contingency, fees, costs for relocation (if you want to move out while works are undertaken) or redecoration costs. In a building contract, approximately 10% of the construction cost is a standard amount to allow for contingency and may be higher depending on how complex the work is and the nature of the contractor. Other costs will vary over time and be dependent on your detailed specification and how they are being procured. These should be investigated and itemised on a project by project basis.</i></p> 
+
+					<p>For more significant building works you will also need to allow for preliminary costs. These are the management and other costs associated with carrying out building work – for example, paying for scaffolding and the services of a site manager. </p>
+
+					<p>You may also need to account for professional fees required for gaining permissions and preparing detailed construction information. Again, 10% is a sensible budget cost, but this will vary significantly dependent on the scale and complexity of the works. You may also need to pay for statutory fees, such as for Planning and Building Control.</p> 
+
+					<p>The VAT rate may vary depending on government policy and the way that you procure the works. Discount VAT rates may be available for some works – both self-build and energy efficiency. When you are preparing your works budget, you should consult HMRC to take account of this.</p> 
+				</li>
+				<li>
+					<h4 class="top-border-title title-margin-top">Who by?</h4>
+					<p>We’ve provided a guide to who might carry out each measure. This is subjective and dependent on context.</p> 
+				</li>
+				<li>
+					<h4 class="top-border-title title-margin-top">Disruption:</h4>
+					<p>We’ve given a guide as to the level of disruption. Again, this is subjective and dependent on context.</p>
+				</li>
+				<li>
+					<h4 class="top-border-title title-margin-top">Associated work:</h4>
+					<p>These are works that may make sense to include as part of a package alongside the measure highlighted.</p> 
+				</li>
+				<li>
+					<h4 class="top-border-title title-margin-top">Special and other considerations:</h4>
+					<p>We have highlighted some of the risks and things you need to think about in planning each measure.</p> 
+				</li>
+			</ol>
+
+
+				<h3 class="top-border-title title-extra-margin-top title-margin-bottom ">Figure 17 Scenario 1: <span id='output-scenario1-name'></span></h4>
+
+				<div class="five-col-table-wrapper">
+					<table class="five-col-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Benefits (in order)</th>
+								<th>Cost</th>
+								<th>Completed By</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<h3 class="top-border-title title-margin-bottom ">Figure 18 Scenario 2: <span id='output-scenario2-name'></span></h4>
+				<div class="five-col-table-wrapper">
+					<table class="five-col-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Benefits (in order)</th>
+								<th>Cost</th>
+								<th>Completed By</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<h3 class="top-border-title title-margin-bottom ">Figure 19 Scenario 3: <span id='output-scenario3-name'></span></h4>
+				<div class="five-col-table-wrapper">
+					<table class="five-col-table">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Benefits (in order)</th>
+								<th>Cost</th>
+								<th>Completed By</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Overall</td>
+								<td>
+									<div class="text-width-limiter">
+										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£300</td>
+								<td>DIY/ Small Contractor</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Timber Floors</td>
+								<td>
+									<div class="text-width-limiter">
+										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£585</td>
+								<td>DIY/ General Contractor (Joiner)</td>
+							</tr>
+							<tr>
+								<td class="highlighted-col">Exposed Floor</td>
+								<td>
+									<div class="text-width-limiter">
+										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+									</div>
+									</td>
+								<td>Comfort + Carbon Emissions + Fuel Bills</td>
+								<td class="cost">£86.25</td>
+								<td>Small Contractor</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			<h3 class="top-border-title title-margin-top title-margin-bottom">2.3 Commentary</h3>
+
+			<span key='data.household.commentary'></span>
+
+		</section>
+	
+		<!-- Section 3.0 -->
+
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>Routes to Retrofit</h2>
+				<h3 class="section-sub-title">Section 3.0</h3>
+			</div>
+
+			<p>This report is only a starting point. To take things forwards you will need to develop your own detailed proposals, with help from others should you need it.</p>
+			<p>In this section, we provide advice on developing your project brief; packaging works; regulations and approvals; assembling your team; selection process and contracts.</p>
+			
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">3.1 Project brief</h3>
+				<p>The first step is for you to develop your own project brief. This might be something fairly simple, such as: top up loft insulation, draught-proof windows, fit new boiler.</p>
+
+				<p>For more extensive and complicated works, it is worth taking the time to develop a more detailed brief. Writing this yourself will help you get your thoughts in order. You can then use the project brief to communicate your needs to any professionals you work with.</p> 
+
+				<p>Your project brief should include:</p> 
+				
+				<ol class="indented-list">
+					<li>
+						<h4 class="top-border-title title-margin-top">Your aims:</h4>
+						<p>why you’re doing the work and your priorities in terms of comfort, bill savings and carbon emissions reduction. Also consider how the project fits in with other planned works, e.g. loft extensions, kitchen refurbishments, etc.</p>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">The scope of works:</h4>
+						<p>what you want to do and how much work is involved</p>
+					</li> 
+					<li>
+						<h4 class="top-border-title title-margin-top">Quality expectations:</h4>
+						<p>what standard you expect work to be completed to, giving examples if needed (i.e. fully finished and decorated, or part DIY and critical elements for energy performance)</p>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Your budget:</h4>
+						<p>if you have a fixed pot of money it is best to be explicit about this up front though you may want to explore your options further before you set a budget</p>
+					</li>  
+					<li>
+						<h4 class="top-border-title title-margin-top">Your programme:</h4>
+						<p>when you want to do the works, whether you have any fixed deadlines, and whether you want to do everything all at once or staged over time.</p>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Your priorities:</h4>
+						<p>in all building projects there is a balance between risks around time, cost and quality. It’s best to be clear about which of these is most important to you, as it’s unlikely you’ll be able to achieve highly in all three areas. Please see Figure 20 below.</p>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Your contingencies:</h4>
+						<p>what is your backup if things don’t go completely to plan? For example, what is essential and what could you remove if things go over budget. Can the work be staged?</p>
+					</li>
+				</ol>
+
+				<p>Your project brief is a living document that will change as the process develops. Any consultant you work with will understand this and should be able to help you.</p>
+
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 20: Time Cost Quality</h4>
+
+					<img src="../Modules/assessment/img-assets/images/venn-diagram.png" alt="">
+					
+				</div>
+
+				<p>We understand that this thinking and planning time may feel frustrating, but it is very important and will be worth it. Time spent in planning and preparing usually saves time, money and worry later on. As with any other construction process, “measure twice, cut once”.</p>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">3.2 Packaging works</h3>
+				<p>If you are carrying out the works in phases, it will be important to decide the order that will work best for you and also achieve the maximum benefits from each of the measures.</p> 
+
+				<p>You may wish to focus on those measures that have the greatest impact on your priorities, or those that are partly funded under current grant regimes or subsidies. Do consider how the impact of some measures are dependent on the order in which they are done. There are a few simple rules to keep in mind when considering how you package the works:</p>
+				
+				<ol class="indented-list">
+					<li>
+						<h4 class="top-border-title title-margin-top">Reduce demand before adding supply:</h4>
+						<p>Environmentally and economically, it is often better to reduce overall energy demand before considering energy supply measures. For example, before you invest several thousand pounds in photo-voltaic panels, make sure you’ve: </p>
+						<ol class="indented-list">
+							<li><p>Insulated everywhere you can; </p></li>
+							<li><p>Draught-proofed your home;</p></li>
+							<li><p>Fitted low-energy lightbulbs and appliances;</p></li>
+							<li><p>Got an up-to-date and efficient boiler with good controls that minimise energy use;</p></li>
+							<li><p>Installed low-flow hot water fittings and use the most efficient means of heating your hot water available in your home.</p></li>
+						</ol>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Keep fabric improvements together:</h4>
+						<p>If you’re considering fabric improvements, such as external wall insulation and new windows, try to make sure they’re done at the same time. This will minimise thermal bridging to reduce heat losses and maximise the effectiveness of fabric improvements. Thermal bridging is when a gap in the insulation layer happens at the junction between two different building elements. The same goes for internal wall insulation and floor insulation.</p> 
+						<p>Carrying out these measures at the same time will also reduce the overall amount of disruption caused to your home. The calculations in this report assume thermal bridging is reduced, to maximise savings.</p>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Consider health and comfort:</h4>
+						<p>Retrofit is not just about saving energy, money or carbon. It is also about improving the health and comfort of your home. If you currently suffer from cold and damp, then improving the insulation of your building fabric may be a priority for you. By doing this you will make your home more comfortable and save carbon.</p> 
+						<p>If you improve the air-tightness of your home through retrofit works, or if you currently have problems with build up of condensation and poor indoor air-quality, then you should prioritise improvements to the way your home is ventilated and / or make better, energy efficient provision for things like drying laundry.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Consider maintenance needs and general upgrades:</h4>
+						<p>It’s likely that some of the works we’ve suggested for your property will need to be done in some form anyway, as part of future maintenance.</p> 
+						<p>For example, you may need to upgrade old doors and windows that are coming to the end of their useful life and are broken or rotten. When doing this, one of your criteria for choosing replacements should be their energy performance. If you’re already going to the trouble of having things replaced or upgraded, this can make a lot of sense as the additional cost or hassle of significant energy improvements can be minimal.</p>
+					</li>
+				</ol>
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 21: Your home now >>> Your 2050 Home</h4>
+					<img src="../Modules/assessment/img-assets/images/transforming_your_home_now_to_2050_home.png" alt="">
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">3.3 Regulations and approvals</h3>
+				<p>Building works on your home will often require formal and statutory approvals. It is important to make sure you follow the rules here because not doing so may cause problems later – for example when you come to sell your home but don’t have the proper approvals in place for any works done.</p>
+				<ol class="indented-list">
+					<li>
+						<h4 class="top-border-title title-margin-top">Planning permission:</h4>
+						<p>Any measures that change the external appearance, size or shape of your home may require planning permission. You may also need Listed Building consent or Conservation Area approval. You should seek further advice from your Local Planning Authority.</p>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Building Regulations:</h4>
+						<p>These are mostly concerned with Health and Safety and structural integrity. Work that affects the energy performance of your home, electrical installations and structural alterations or fire planning will require Building Regulations approval.</p>
+						<p>In some cases, such as with windows and boiler installations, it is possible to bypass this by using recognised certification schemes and approved installers (for example Gas Safe for boilers and FENSA for windows). You should seek further advice from Local Authority Building Control.</p> 
+						<p><i>More information on both planning and Building Control is available on the Planning Portal website: <a href="http://www.planningportal.gov.uk" target="_blank">www.planningportal.gov.uk</a></i></p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Party Wall consent:</h4>
+						<p>If you are carrying out work on a wall or structure that forms the boundary between your property and a neighbouring property then you need to make sure that the work doesn’t adversely affect your neighbour. This is important for you to be able to maintain a good relationship with your neighbour.</p>
+						<p><i>The processes around Party Wall consent cover this. You can find out more about this here: <a href="https://www.gov.uk/guidance/party-wall-etc-act-1996-guidance" target="_blank">www.gov.uk/guidance/party-wall-etc-act-1996-guidance</a></i></p>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Mortgage lenders and building insurance:</h4>
+						<p>If you are carrying out works on your home then it’s important that you inform both your mortgage lender and your building insurance company. They may have specific standards that they require you to meet, or particular measures they need you to take. For example, you may need to take specific measures around security to ensure your insurance remains valid.</p>
+					</li>
+				</ol>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">3.4 Assembling your team</h3>
+				<p>For your retrofit to be a success, it is important that you’re able to bring together the right team of people. This will help you get what you want and get good value out of the process. Your team could include the following:</p>
+				<ol class="indented-list">
+					<li>
+						<h4 class="top-border-title title-margin-top">Specialists and consultants:</h4>
+						<p>Before carrying out some of the more extensive building works outlined above, detailed drawings and technical specifications should be prepared and agreed.</p> 
+						<p>This is especially important when major changes are being made to the fabric of your home or its services. For example, insulation and air-tightness works should consider moisture movement, thermal bridges in the fabric and indoor air quality. This should avoid problems with condensation and damp and reduce the risk of poor air quality affecting your health.</p> 
+						<p>Often this will be achieved by commissioning a consultant or specialist to develop the designs, providing independent advice that is backed up by professional experience and accreditations. These professionals may go on to oversee the implementation of these works, or they may stop before this and simply provide design information.</p>  
+						<p>Professionals involved in your project may include architects, building surveyors, clerks of works, energy advisors, services/mechanical and electrical engineers. Consider who will bring the most value to your project, so that the costs of professional fees are worthwhile. For example, a good services engineer can advise on complex heating and renewable systems, which may save money in installation and running costs, but you probably wouldn’t need to appoint them to specify a new standard gas boiler.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Builders and contractors:</h4>
+						<p>There are some works that you can probably do without a contractor, for example installing draught proofing, new lightbulbs or water-saving fittings. </p>
+						<p>However, other works may require the services of a professional builder. There are some specialist items that can only be installed by properly approved and accredited contractors.</p> 
+						<p>Not all builders are the same. They range from micro-builders, who perform simple multi-trade works from the back of a van, to huge publicly listed companies. It is important to get the right contractor for your job, who can do the work you want to the right standard.</p> 
+						<p>Some builders and contractors also provide design services, so to some degree they could take the place of the consultants listed above. However, it is important to consider whether this is the kind of service you want and to understand that their advice may not be fully independent.</p> 
+					</li>
+				</ol>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">3.5 Selection process and contracts</h3>
+				<p>There are various formal means for selecting consultants and contractors. The same basic rules apply to all:</p>
+				<ul class="right-align-item-list">
+					<li><p>Work out what you need and list out the services you require from each party – making sure there are no gaps.</p>
+					<li><p>Get quotes from more than one source wherever possible, so that you can make comparisons.</p>
+					<li><p>Take up references, talk to past clients and visit past projects wherever possible.</p>
+					<li><p>Check they have the appropriate insurances – professional indemnity for consultants, public liability and contracts insurance for contractors.</p>
+					<li><p>Meet them and show them around your home – make sure you feel comfortable about working with them and can communicate well with them. </p>
+					<li><p>Remember your brief and priorities, and make sure your proposed team understands them – you’re not obliged to take the lowest bidder! </p>
+					<li><p>If you’re not sure, re-tender and find someone else!</p>
+				</ul>
+
+				<p>In all instances, once you’ve chosen your consultant or contractor, make sure you get a formal agreement in writing. This makes sure that you’re both clear on what they are expected to do.</p> 
+
+				<p>You can get standard forms for both consultant appointments and building contracts from various professional and construction industry bodies. Any professionals that you appoint should be able to advise you on this.</p> 
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">3.6 Summary</h3>
+				<p>There are four key points to remember when procuring your works:</p>
+				<ul class="right-align-item-list">
+					<li><p>Write a good clear brief for your project – outline what you want and what your expectations are before work starts.</p></li> 
+					<li><p>In your project brief, include a clear understanding of your priorities and your backup plans – where you can compromise and where you cannot, what your contingencies are if things don’t go to plan.</p></li> 
+					<li><p>Be clear about roles and responsibilities and who is doing what within your team – and don’t interfere too much. Once you’ve appointed them and told them what you want, let the professionals get on with it.</p></li>
+					<li><p>Spend time and effort planning the works and putting together the right team. Don’t get too frustrated by time spent on this – it will all be worth it in the end!</p></li>
+				</ul>
+			</section>
+
+		</section>
+
+		<!-- Section 4.0 -->
+
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>How can Carbon Co-op help?</h2>
+				<h3 class="section-sub-title">Section 4.0</h3>
+			</div>		
+				
+			<p>Carbon Co-op is a community benefit society made up of like-minded members, individuals taking practical action to reduce their use of home energy. We can assist you by providing information or by facilitating the sharing of knowledge and expertise between householders. Some services are accessible to all; others are exclusive to members – as described below.</p>
+			<p>In taking things forward it is important to realise there are no one-size-fits-all solutions. Some people employ professionals to oversee their improvements; others carry out the work on a DIY basis. Some achieve everything at once in a 'big bang’; others work in stages, incrementally over years.</p>
+			<p>However you decide to tackle things, there are a number of ways you can access information and advice from Carbon Co-op. </p>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">4.1 Available to all</h3>
+				<p><strong>Seminars:</strong> We host retrofit seminars and events, ranging from introductory sessions to more advanced workshops. Led by industry professionals, our seminars provide specialist information and enable householders to access trusted, independent expertise.</p> 
+				<p><strong>Green Open Homes weekends:</strong> Householders who have carried out improvements regularly open their homes to the general public over a weekend – and we co-ordinate visits and bus tours. Open homes are a great way to understand just what is involved in a whole house retrofit, exchange contacts and to become aware of some of the common pitfalls to avoid.</p> 
+				<p>Keep an eye on the Carbon Co-op website for details of upcoming events.</p> 
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">4.2 Carbon Co-op member services</h3>
+				<p>Membership of Carbon Co-op is open to anyone for an annual subscription. As a member you become a co-owner of the organisation, you can attend general meetings and stand for the governing committee. Members also get access to a range of exclusive services including:</p> 
+
+				<p><strong>Factsheets and case studies:</strong> available through our website, factsheets and case studies give key information about a particular area of expertise within retrofit.</p> 
+
+				<p><strong>Webinars:</strong> We host regular webinars through our website and members can access additional back up video resources from workshops and seminars. These cover a range of topics, from open source energy monitors to interviews with retrofit experts.</p> 
+
+				<p><strong>Members' forum:</strong> The members' area on our website includes a forum for householders to exchange advice on suppliers, installers and contractors - and ask for advice on particular questions.</p> 
+
+				<p><strong>Socials:</strong> We host socials, opportunities for members to meet, network and swap experiences. These events, often held in a cafe or pub, feature short presentations or skill-share sessions from members, followed by informal networking with food and drink laid on.</p> 
+
+				<p><strong>Bulk discount offers:</strong> Our members benefit from collective purchasing power. Where a common need can be identified, Carbon Co-op can negotiate a bulk discount scheme with suppliers or installers. Past deals include energy monitors, triple glazed windows, car share schemes and LED lightbulbs.</p>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">4.3 Recommendations?</h3>
+				<p>We are often asked to recommend specific, trusted contractors that householders can use to carry out retrofit works. At present, for a number of reasons, we do not make recommendations.</p> 
+				<p>Firstly, the retrofit sector is new and developing – there isn’t currently a large range of experienced contractors available to carry out works and very few have a track record.</p> 
+				<p>Secondly, a recommendation from Carbon Co-op on such high value works confers a high level of trust. To offer this we would need to monitor and evaluate ongoing contractor performance - an intensive process.</p>
+				<p>Instead of recommendations, we offer training and advice to householders, providing them with the tools to procure high quality, appropriate contractors, installers and consultants. Through events, socials and our forum we also offer a platform for householders to exchange contacts and provide feedback on their experiences.</p>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">4.4 Keep in touch</h3>
+				<p>In addition to these specific services we're always happy to answer questions and signpost help where we can. Drop us a line at info@carbon.coop or give us a call on 0161 448 6492.</p>
+			</section>
+
+		</section>
+	
+		<!-- Section 5.0 (Appendices) -->
+
+		<section>
+
+			<div class="section-title title-margin-top">
+				<h2>Appendices</h2>
+			</div>
+				
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">Appendix A: What is the current condition of your home?</h3>
+				<p>Based on the survey we completed of your home, and the results generated using My Home Energy Planner, here we provide comparisons across fabric condition; heating and hot water systems; ventilation; lighting; appliances and cooking; and renewables.</p> 
+				
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 22: Scenario Comparison Table</h4>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-bottom ">Appendix B: About you</h4>
+				<p>The things you told us about you and your home, taken from the questionnaire we completed with you</p>
+				<div class="highlight-box pink-highlight">
+					<h4 class="top-border-title title-margin-bottom ">Figure 23: About You</h4>
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-bottom ">Appendix C: About us</h4>
+				<p>My Home Energy Planner and My Home Energy Assessment are delivered by URBED on behalf of Carbon Co-op.</p>
+
+				<p><strong>About Carbon Co-op:</strong></p>
+				<p>Established in 2011, Carbon Co-op is a Community Benefit Society, a membership organisation for householders to take practical and significant action on climate change and reclaim control of their energy, homes, warmth and power.</p>
+				<p>Based in Greater Manchester, the co-operative was established to help people transform their draughty old properties into smart, efficient, low-carbon homes of the future. Owned by our members, we work together to pool expertise, reduce costs and access cheaper finance.</p>
+				<p>Using cutting edge research and technologies, we collaborate with architects, suppliers and professionals to implement innovative energy efficiency and carbon reduction solutions. We offer a variety of products and services and regularly pilot new, innovative low carbon projects, disseminating the learning to members and the wider Community Energy sector.</p>
+				<p>A co-operative is a democratically controlled means for people to work together for mutual benefit. To become involved and access more of our services visit: www.carbon.coop</p> 
+
+				<p><strong>About URBED:</strong></p>
+				<p>URBED (Urbanism, Environment and Design) Ltd does what our name suggests. We specialise in urban design and sustainability in an urban context. We work across the UK from our base in Manchester for public and private sector clients.</p> 
+				<p>Our team includes architects with specialisms in low energy design, planners, urban designers, economists and sustainability specialists. Our work is united by our core values of urbanism, community, environmental sustainability and good design.</p> 
+				<p>We have a developed specialism in domestic retrofit, an area that covers some of our key concerns around both environmental sustainability and the involvement of building users in design. We’ve developed this expertise through a number of hands on and policy-led projects including:</p> 
+			
+				<ul class="right-align-item-list">
+					<li><p>A low-cost TSB (now Innovate UK) Retrofit for the Future pilot covering 10 properties that were some of the best performing in the programme; </p></li>
+					<li><p>Devising retrofit standards for the Sustainable Housing Action Partnership (SHAP) in the West Midlands; </p></li>
+					<li><p>Drafting the Greater Manchester Domestic Retrofit Strategy; </p></li>
+					<li><p>Working as designers on the Carbon Co-op Community Green Deal pilot.</p></li>
+				</ul>
+				<p>We continue to work closely with Carbon Co-op as technical advisers on their dissemination and education programmes around retrofit, and worked with them to develop the My Home Energy Planner tool and My Home Energy Assessment service.</p> 
+				<p>URBED (Urbanism, Environment and Design) Ltd is an employee-owned co-operative. You can find out more about us on our website: <a href="http://www.urbed.coop" target="_blank">www.urbed.coop</a></p>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-bottom ">Appendix D: Glossary</h4>
+				<p>Retrofit and building efficiency have a language all of their own. In this report there may be words and concepts that are unfamiliar to you. If there is anything you don’t understand, please ask us – either in person, through one of the regular Carbon Co-op webinars, or on the member forum.</p> 
+				<p>We believe in using the correct terminology wherever possible, so that when you speak to professionals and tradespeople involved in retrofit you are familiar with the terms. To help your understanding we have provided this short glossary of common words and phrases:</p> 
+				<ol class="indented-list">
+					<li>
+						<h4 class="top-border-title title-margin-top">Air changes per hour (ACH):</h4>
+						<p>is usually used as a measure of ventilation but when natural ventilation is deployed the air-tightness contributes to the total.</p>
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Air tightness:</h4> 
+						<p>A draughty house allows heat to be lost around the insulation you have installed. Air tightness is usually measured as the volume of air that moves through a square metre of outside surface in an hour at a given difference in pressure between inside and outside – metres3/hour/metre2 at 50 Pascals, shorthand – q50.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Kilowatt-hour (kWh):</h4> 
+						<p>This is a unit of energy – a measure of the total amount of work done over a period of time. 1 kilowatt-hour would be used by a 1kW rated electric fire left on for one hour. A 100W bulb left on for one hour would use 0.1kWh.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Regulated emissions:</h4> 
+						<p>These are the energy uses and resulting carbon dioxide emissions that are covered by Building Regulations in the SAP rating (see below). These include the energy used to heat, light and ventilate your home and provide hot water.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Retrofit:</h4> 
+						<p>New houses can be built to a very high level of energy efficiency. Older houses, built when our expectations of comfort were much lower and when energy was cheaper, tend to perform very poorly in terms of energy efficiency, carbon emissions and comfort. These homes therefore need to be augmented with energy saving measures – both in fabric and services - or renewable energy generating measures, to bring them up to a more acceptable standard. This process is known as retrofit, i.e. ‘retrospectively fitting’ measures to an existing property.</p>   
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">SAP:</h4> 
+						<p>SAP is the Standard Assessment Procedure used to assess energy use in UK homes. The UK government devised SAP as a way to compare homes and test them against Building Regulations. SAP forms the basis of the energy model used in this report.</p> 
+						<p>SAP makes assumptions about the number of people living in a home and how it is heated and used, based on averages for the UK. You may not be ‘average’ and may use your home in different ways. So, SAP is not an exact predictive tool.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">SAP model:</h4> 
+						<p>The SAP model is the tool used to calculate the energy and carbon performance of a home and produce its SAP rating. It uses a standard set of calculations, set out in publicly available documents.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">SAP rating:</h4> 
+						<p>Domestic buildings are given a SAP rating in the Building Regulations approval process for new-build homes. Energy Performance Certificates (EPCs) for sales and lettings of existing homes also include a SAP rating. The higher the SAP rating, the better the building is in terms of energy efficiency, carbon dioxide emissions and fuel costs.</p> 
+						<p>The SAP rating is influenced by predicted energy use, carbon emissions and fuel costs. This means that the SAP rating is influenced by levels of insulation, how efficient your heating system and other services are, the type of fuel you use to heat and light your home, and whether you have any renewables. However, the SAP rating only covers regulated emissions. SAP does not cover appliances or cooking.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Unregulated emissions:</h4> 
+						<p>These are the energy uses and resulting carbon dioxide emissions that are not covered by Building Regulations. They are less directly related to the building fabric and include cooking and electrical appliance use. Appliance use covers laundry washing and drying, fridges and freezers, and consumer electricals such as TVs and computers.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">U-value:</h4> 
+						<p>This is a measure of the thermal performance of a building element. U-value is measured in watts per square metre per degree of temperature difference (measured in Kelvin). So, if a wall has a U-value of 1 W/m2. K, it loses 1 watt per square metre of wall area per degree of difference between inside and outside. So, if it is 0oC outside and 20 oC inside and the wall is 10 square metres, it would lose 200 watts of heat – equivalent to the power used by a set of hair-straighteners.</p> 
+					</li>
+					<li>
+						<h4 class="top-border-title title-margin-top">Watt:</h4>
+						<p>This is a unit of power – that is the rate at which work is done or energy is used. 1 watt is equivalent to 1 joule per second. A 100-watt lightbulb uses 100 joules per second. 1 kilowatt (kW) = 1000W.</p> 
+					</li>	
+				</ol>
+
+			</section>
+			
+			<section>
+				<h3 class="top-border-title title-margin-bottom ">Appendix E. About our methodology</h4>
+				<p>This report is based on a survey of the condition of your home at a fixed point in time (or as noted otherwise if you have planned works). </p>
+				<p>The information we gathered from this survey was entered into an energy model based on the UK’s National Calculation Methodology – SAP version 9.92.</p> 
+				<p>However, this model is only a representation that allows different approaches to be compared – it does not produce guaranteed absolute predictions. Whilst changing the physical properties of your home as suggested in this report should make a positive contribution towards energy saving, the actual amount of energy saved depends on how you use and interact with your home.</p> 
+				<p>We have evidence from previous retrofits that these measures work – but they will produce different outcomes for different households. Different types of construction will also not always perform in accordance with the models (for example solid walls may actually perform better than predicted in standard heat loss calculations).</p> 
+				<p>We are confident that the levels of insulation we propose will have a significant impact on energy use and comfort. However, services measures are more difficult to predict, and the use of electrical appliances, hot water and cooking varies significantly between households.</p> 
+				<p>Before making a final decision about retrofit works, you should carefully consider what your aims are, how they can best be achieved, and how you compare to the modelled average. Carbon Co-op can also help with advice on simple changes to how you use your home to save energy without altering the fabric.</p> 
+
+				<p><strong>Disclaimer:</strong></p> 
+				<p>We take reasonable care to ensure that the information contained within this report is of a level of accuracy and completeness sufficient for the purposes of an outline energy model of your home, and suggesting potential improvements. However, the measurements and information taken during our short survey are not suitable for use as construction information, and should be verified by others on site before carrying out any detailed design and construction work.</p> 
+				<p>It should also be noted that we do not carry out invasive surveys as part of this report, and we will not access areas where to do so would cause undue risk to the assessor. We will therefore have made a number of assumptions about the construction of your home that may need to be verified by further investigation and detailed condition surveys of your home before detailed design and construction work is undertaken.</p> 
+				<p>Whilst we will notify you if we see something in your home that concerns us as to its safety or condition, this is not a full building inspection and condition survey, and should not be used as such. We strongly recommend that before undertaking any major works – particularly where the structural condition of your home may be affected – you seek advice from an appropriately qualified professional.</p> 
+
+				<p><strong>Thank you for using My Home Energy Assessment.</strong></p>
+			</section>
+
+		</section>
+
+<!-- 
+		
+		// ============================================= //
+		 DO NOT REMOVE - THIS HAS EXAMPLE CODE FOR VARIOUS 
+		 LAYOUTS THAT ARE NOT IN USE IN THE MAIN DOCUMENT
+		 BUT MAY BE NEEDED AT SOME POINT
+		// ============================================= //
+
+
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>My Performance Comparison</h2>
+				<h3 class="section-sub-title">Energy Cost</h3>
+			</div>
+			<div class="highlight-box pink-highlight">
+				<h4 class="top-border-title title-margin-bottom">Primary Energy Use</h4>
+				<div class="bar-chart-container" id="barchart-3"></div>
+			</div>
+			<div class="highlight-box pink-highlight">
+				<h4 class="top-border-title title-margin-bottom">Carbon Dioxide Emissions</h4>
+				<p>The estimated annual cost of fuel for your home now and your 2050 home modelled in SAP is shown here.</p>
+				<p>For comparison, this also shows your current annual energy usage from bill data if you provided us with this. The fuel costs for your home will be affected by the level of insulation, the efficiency of services and lighting, the type of fuel used and your fuel tariff with your supplier. For clarity and ease of comparison, the graph here uses the standard fuel costs from SAP - and so may differ slightly from your actual costs.</p>
+				<p>In most retrofits, it is possible to significantly reduce the cost of heating, hot water, lighting and ventilation by improvements in building fabric and services - or at least to improve comfort, whilst not increasing costs. However, the costs of ‘unregulated’ energy uses such as cooking and appliance use are much more dependent on user behaviour - so as well as physical retrofit measures, being conscious of your energy use patterns is important to maximise your savings.</p>
+				<div class="bar-chart-container" id="barchart-4"></div>
+			</div>
+			<h3 class="top-border-title title-margin-top title-margin-bottom">Why you might differ from the model</h3>
+			<div class="two-col-text">
+				<p>There are several reasons why your actual current and future energy use may differ from that in the model.</p>
+				<p>The model makes assumptions about average regional climate that may not hold true in a given year. For example, there may be a mild winter, which means your heating system is used much less - or a very cloudy and cold year, which means a greater requirement for heating.</p>
+				<p>In addition to this, the table below outlines how your household may differ from the assumed average for a typical similar home in ways that affect energy use:</p>
+			</div>
+			<table class="three-col-table">
+				<thead>
+					<tr>
+						<th class="half-width"></th>
+						<th>Typical Home (SAP)</th>
+						<th>Your Home</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th class="half-width">Number of Occupants</th>
+						<td>2.9 people 9 hours</td>
+						<td>2.5 people</td>
+					</tr>
+					<tr>
+						<th class="half-width">Average hours of heating</th>
+						<td>21</td>
+						<td>9 hours</td>
+					</tr>
+					<tr>
+						<th class="half-width">Living room thermostat temperature</th>
+						<td>21°C</td>
+						<td>21°C</td>
+					</tr>
+					<tr>
+						<th class="half-width">number of habitable rooms not heated</th>
+						<td>0 room(s)</td>
+						<td>0 room(s)</td>
+					</tr>
+					<tr>
+						<th class="half-width">estimated current appliance energy use*</th>
+						<td>3880 kWh per year</td>
+						<td>2129 kWh per year</td>
+					</tr>
+				</tbody>
+			</table>
+			<span class="disclaimer">
+				*the figure for your home is based on a more detailed model which includes the actual appliances present in your home. It is however still a model, so may not match actual use as it makes some assumptions about frequency of use and the performance of these appliances.
+			</span>
+		</section>
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>Proposed Measures</h2>
+			</div>
+			<p>The tables on the following pages set out our recommendations for improving your home to achieve or even surpass the 2050 target Carbon Co-op target of 120 kWh/m2.year primary energy and 17kgCO2/m2.year. We do not necessarily expect you to do all these works at once. They are intended to show a pathway for you to achieve a 2050 emissions reduction and energy use target using technologies and techniques that are available now.</p>
+			<div class="grid">
+				<div class="col-2">
+					<h3 class="top-border-title">Benefits</h3>
+					<p>We recognise that you may wish to carry out retrofit works for reasons other than simple energy and cost savings - such as comfort improvements, improved indoor air quality, or carbon emissions reductions. It’s important that in planning the work you understand and communicate your priorities to any professionals or builders you’re working with. The Carbon Co-op can help you to understand and explore these issues.</p>
+					<h3 class="top-border-title">Order of work</h3>
+					<p>The relative impact of each measure will vary depending on the order you do them in. So, for example, if you change your boiler before installing insulation, the absolute savings from the insulation work will be less than if you had done the insulation work first.</p>
+					<h3 class="top-border-title">Budget cost accuracy</h3>
+					<p>The costs given are based on generic information and provide only an approximate understanding of the budget that may be required to undertake the measures outlined in this report. Costs do not include any contingency, fees, costs for relocation (if you want to move out while works are undertaken) or costs of redecoration. Carbon Co-op would always advise that a detailed cost plan be undertaken following further specialist investigation, with quotes obtained from a range of suppliers, prior to any work being carried out in your home.</p>
+				</div>
+				<div class="col-2">
+					<h3 class="top-border-title">Disruption</h3>
+					<p>We’ve given a guide as to the level of disruption, but this is obviously subjective!</p>
+					<h3 class="top-border-title">Priorities</h3>
+					<p>It’s important that in planning the work you understand and communicate your priorities to any professionals or builders you’re working with. The Carbon Co-op can help you to understand and explore these issues.</p>
+				</div>
+			</div>
+
+		</section>
+		<section>
+			<div class="section-title title-margin-top">
+				<h2>Package 1</h2>
+			</div>
+			<p>Cras mattis consectetur purus sit amet fermentum. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum. Curabitur blandit tempus porttitor. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+			<div class="five-col-table-wrapper">
+				<table class="five-col-table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Benefits (in order)</th>
+							<th>Cost</th>
+							<th>Completed By</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="highlighted-col">Overall</td>
+							<td>
+								<div class="text-width-limiter">
+									DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£300</td>
+							<td>DIY/ Small Contractor</td>
+						</tr>
+						<tr>
+							<td class="highlighted-col">Timber Floors</td>
+							<td>
+								<div class="text-width-limiter">
+									Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£585</td>
+							<td>DIY/ General Contractor (Joiner)</td>
+						</tr>
+						<tr>
+							<td class="highlighted-col">Exposed Floor</td>
+							<td>
+								<div class="text-width-limiter">
+									Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£86.25</td>
+							<td>Small Contractor</td>
+						</tr>
+						<tr>
+							<td class="highlighted-col">Overall</td>
+							<td>
+								<div class="text-width-limiter">
+									DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£300</td>
+							<td>DIY/ Small Contractor</td>
+						</tr>
+						<tr>
+							<td class="highlighted-col">Timber Floors</td>
+							<td>
+								<div class="text-width-limiter">
+									Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£585</td>
+							<td>DIY/ General Contractor (Joiner)</td>
+						</tr>
+						<tr>
+							<td class="highlighted-col">Exposed Floor</td>
+							<td>
+								<div class="text-width-limiter">
+									Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£86.25</td>
+							<td>Small Contractor</td>
+						</tr>
+						<tr>
+							<td class="highlighted-col">Overall</td>
+							<td>
+								<div class="text-width-limiter">
+									DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£300</td>
+							<td>DIY/ Small Contractor</td>
+						</tr>
+						<tr>
+							<td class="highlighted-col">Timber Floors</td>
+							<td>
+								<div class="text-width-limiter">
+									Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£585</td>
+							<td>DIY/ General Contractor (Joiner)</td>
+						</tr>
+						<tr>
+							<td class="highlighted-col">Exposed Floor</td>
+							<td>
+								<div class="text-width-limiter">
+									Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
+								</div>
+								</td>
+							<td>Comfort + Carbon Emissions + Fuel Bills</td>
+							<td class="cost">£86.25</td>
+							<td>Small Contractor</td>
+						</tr>
+					</tbody>
+				</table>
+
+			
+
+
+				<div class="grid">
+					<div class="col-2">
+						<a class="view-more-button" href="#">View more detailed table <span class="right-hand-image-block"><img src="../Modules/assessment/img-assets/arrow-right.png" alt=""></span></a>
+					</div>
+					<div class="col-2">
+						<div class="table-sub-total">
+							<span class="red-highlight bolded">
+								Sub-total
+							</span>
+							<span class="sub-total">
+								£2,786
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</section>
+	</div>
+	<footer>
+		<div class="page-wrapper">
+			<div class="sponsor-wrapper">
+				<div class="footer-sponsor">
+					<p>This report was prepared by:</p>
+					<img src="../Modules/assessment/img-assets/images/urbed-logo.png" alt="">
+				</div>
+				<div class="footer-sponsor carbon-coop-logo">
+					<p>On behalf of:</p>
+					<img src="../Modules/assessment/img-assets/images/carbon-coop-logo.png" alt="">
+				</div>
+			</div>
+		</div>
+	</footer>
+</div> -->

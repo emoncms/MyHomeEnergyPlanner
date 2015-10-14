@@ -374,6 +374,7 @@ var openbem = {
         inputdata.fuels = data.fuels;
         //Images
         inputdata.imagegallery = data.imagegallery;
+        inputdata.featuredimage = data.featuredimage;
         return inputdata;
     }
 }

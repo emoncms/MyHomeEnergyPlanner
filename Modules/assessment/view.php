@@ -20,6 +20,8 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/canvas-barchart/barchart.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-carboncoop.js"></script>
 <link rel="stylesheet" href="<?php echo $d; ?>js/magnific-popup/magnific-popup.css">
 <script src="<?php echo $d; ?>js/magnific-popup/jquery.magnific-popup.min.js"></script>
 
@@ -36,7 +38,7 @@ global $reports;
     }
 </style>
 
-
+<link rel="stylesheet" href="<?php echo $d; ?>carbon.css">
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
 

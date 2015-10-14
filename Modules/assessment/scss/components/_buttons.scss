@@ -1,0 +1,34 @@
+.carbon-report-wrapper {
+	.view-more-button {
+		width: 100%;
+		display: block;
+		padding: 0.5em 1em;
+		background: $pink--light;
+		font-weight: bold;
+		text-decoration: none;
+		color: $red;
+		font-size: 1.2em;
+		position: relative;
+		padding-right: 70px;
+
+		.right-hand-image-block {
+			display: block;
+			height: 100%;
+			width: 55px;
+			position: absolute;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			background: $red;
+
+			img {
+				width: 20%;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				@include vendor(transform, translate(-50%,-50%));
+				display: block;
+			}
+		}
+	}
+}

@@ -1,0 +1,29 @@
+$pink--light: rgb(254,242,239);
+$red: rgb(228,27,58);
+
+
+$white: rgb(255,255,255);
+$grey--x-light: rgb(236,236,236);
+$grey--light: rgb(157,157,156);
+$grey: rgb(87,77,86);
+$black: rgb(0,0,0);
+
+//Typography
+$typeface--heading: "Karla", sans-serif;
+$typeface--body: "Karla", sans-serif;
+
+// $heading--xx-large: 80px/80px $typeface--heading;
+// $heading--x-large: 70px/70px $typeface--heading;
+$heading--x-large: bold 2.75rem/1.1 $typeface--heading;
+$heading--large: bold 2.25rem/1.1 $typeface--heading;
+$heading--normal: bold 1.75rem/1.2 $typeface--heading;
+$heading--small: bold 1.5rem/1.2 $typeface--heading;
+$heading--x-small: bold 1rem/1.2 $typeface--heading;
+
+
+// $body--large: 24px/28px $typeface--body;
+$body--normal: 1rem/1.4 $typeface--body;
+// $body--small: 16px/21px $typeface--body;
+// $body--x-small: 14px/18px $typeface--body;
+// $body--x-small--bold: bold 14px/18px $typeface--body;
+
