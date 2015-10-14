@@ -1,20 +1,24 @@
 <style>
-.librow {
-    /*cursor:pointer;*/
-    
-}
+    .librow {
+        /*cursor:pointer;*/
 
-.librow:hover {
-    background-color: #eee;
-} 
+    }
 
+    .librow:hover {
+        background-color: #eee;
+    } 
+
+    #myModal{
+        width:auto;
+    }
+    .apply-measure td{
+        max-width: 200px;
+    }
 </style>
 
 <div class="page">
 
-    <p><i>Note: If the element length and height is given it will automatically calculate and override the area calculation. Leave length and height blank and enter area for ceilings and floors and other elements where its easier to enter the area directly.</i></p>
-    
-    
+
     <h3> Thermal Mass Parameter (TMP)</h3>
     <hr>
     <p><input type="checkbox" key="data.fabric.global_TMP" style="margin:0 15px"/>Use global TMP value (ignore the k value of individual elements)</p>
@@ -24,19 +28,20 @@
             <option value="250">Medium TMP</option>
             <option value="450">High TMP</option>
         </select>
-        
+
     </div>
     <br />
     <hr>
-    
-    
+
+
     <h3>Walls</h3>
+    <p><i>Note: If the element length and height is given it will automatically calculate and override the area calculation. Leave length and height blank and enter area for ceilings and floors and other elements where its easier to enter the area directly.</i></p>
     <hr>
     <br>
 
-    
+
     <table class="table">
-    
+
         <tr>
             <th style="text-align:left">Element Name</th>
             <th>Lib</th>
@@ -51,7 +56,7 @@
             <th></th>
 
         </tr>
-        
+
         <tbody id="element-template" style="display:none">
             <tr>
                 <td style="text-align:left"><input style="text-align:left; width:150px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
@@ -61,7 +66,7 @@
                 <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
                 <td><span key="data.fabric.elements.template.windowarea" dp=1>0.0</span>m<sup>2</sup></td>
                 <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
-                
+
                 <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:40px" /></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.kvalue" style="width:40px" /></td>
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
@@ -71,7 +76,7 @@
 
             </tr>
         </tbody>
-        
+
         <tbody id="elements"></tbody>
 
         <tr>
@@ -85,17 +90,17 @@
             <td></td>
             <td></td>
         </tr>
-        
+
     </table>
-    
+
     <p>Total wall area: <span key="data.fabric.total_wall_area" dp=1></span> m2</p>
-    
+
     <hr>
     <h3>Floors</h3>
     <hr>
-    
+
     <table class="table">
-        
+
         <tbody id="floors"></tbody>
 
         <tr>
@@ -109,17 +114,17 @@
             <td></td>
             <td></td>
         </tr>
-        
+
     </table>
-    
+
     <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m2</p>
-    
+
     <hr>
     <h3>Roofs</h3>
     <hr>
-    
+
     <table class="table">
-        
+
         <tbody id="roofs"></tbody>
 
         <tr>
@@ -133,154 +138,154 @@
             <td></td>
             <td></td>
         </tr>
-        
+
     </table>
-    
+
     <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m2</p>
-    
+
     <hr>
     <h3>Windows, doors and roof-lights</h3>
     <hr>
-    
-    <p>
-        <div style="float:left"><b>Key:</b></div>
-        <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#fff; float:left"></div>
-        <div style="float:left">Windows</div>
-        <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#aaffaa; float:left"></div>
-        <div style="float:left">Roof-lights</div>
-        <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#ffcccc; float:left"></div>
-        <div style="float:left">Doors</div>
-    </p><br><br>
-    
-    <table class="table">
-    
-        <tr>
-            <!--<th>Type</th>-->
-            <th style="text-align:left; width:100px">Window<br>Name</th>
-            <th style="text-align:left">Description</th>
-            <th>subtract<br>from:</th>
-            <th>Width<br>(m)</th>
-            <th>Height<br>(m)</th>
-            <th>Area<br>(m<sup>2</sup>)</th>
-            <th>Orient<br>-ation</th>
-            <th>Over<br>shading</th>
-            <th>g</th>
-            <th>gL</th>
-            <th>ff</th>
-            <th>U-value<br>(W/K.m2)</th>
-            <th>Gain</th>
-            <th>W/K</th>
-            <th></th>
-        </tr>
-        
-        <tbody id="window-template" style="display:none">
-            <tr>
-                <!--
-                <td>
-                    <select key="data.fabric.elements.template.openingtype" style="width:50px">
-                        <option>Window</option>
-                        <option>Roof-light</option>
-                        <option>Door</option>
-                    </select>
-                </td>
-                -->
-                <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
-                <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.description"></td>
-                <td>
-                    <select key="data.fabric.elements.template.subtractfrom" style="width:100px">
-                    
-                    </select>
-                </td>
-                
-                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
-                
-                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
-                
-                <td>
-                    <select key="data.fabric.elements.template.orientation" style="width:80px">
-                        <option value=0 >North</option>
-                        <option value=1 >NE/NW</option>
-                        <option value=2 >East/West</option>
-                        <option value=3 >SE/SW</option>
-                        <option value=4 >South</option>
-                    </select>
-                
-                </td>
-                <td>
-                    <select key="data.fabric.elements.template.overshading" style="width:85px">
-                        <option value=0 >Heavy > 80%</option>
-                        <option value=1 >More than average > 60%-80%</option>
-                        <option value=2 >Average or unknown 20-60%</option>
-                        <option value=3 >Very little < 20% </option>
-                    </select>
-                </td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.g" style="width:30px" /></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.gL" style="width:30px" /></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.ff" style="width:30px" /></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:30px" /></td>
-                <td><span key="data.fabric.elements.template.gain" dp=0>0</span>W</td>
-                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
-                <td><button class="apply-measure-list" row="template">Apply Measure</button></td>
-                <td><span class="delete-element" row="template" style="cursor:pointer"><i class="icon-trash"></i></span></td>
-                
-            </tr>
-        </tbody>
-        
-        <tbody id="windows"></tbody>
 
+    <p>
+    <div style="float:left"><b>Key:</b></div>
+    <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#fff; float:left"></div>
+    <div style="float:left">Windows</div>
+    <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#aaffaa; float:left"></div>
+    <div style="float:left">Roof-lights</div>
+    <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#ffcccc; float:left"></div>
+    <div style="float:left">Doors</div>
+</p><br><br>
+
+<table class="table">
+
+    <tr>
+        <!--<th>Type</th>-->
+        <th style="text-align:left; width:100px">Window<br>Name</th>
+        <th style="text-align:left">Description</th>
+        <th>subtract<br>from:</th>
+        <th>Width<br>(m)</th>
+        <th>Height<br>(m)</th>
+        <th>Area<br>(m<sup>2</sup>)</th>
+        <th>Orient<br>-ation</th>
+        <th>Over<br>shading</th>
+        <th>g</th>
+        <th>gL</th>
+        <th>ff</th>
+        <th>U-value<br>(W/K.m2)</th>
+        <th>Gain</th>
+        <th>W/K</th>
+        <th></th>
+    </tr>
+
+    <tbody id="window-template" style="display:none">
         <tr>
-            <td style="text-align:left">
-                <button class="add-element btn" type="window">Add new window</button>
-                
+            <!--
+            <td>
+                <select key="data.fabric.elements.template.openingtype" style="width:50px">
+                    <option>Window</option>
+                    <option>Roof-light</option>
+                    <option>Door</option>
+                </select>
             </td>
-            <td><button class="btn add-element-from-lib" tags="Window">from library</button></th>
-            <td></td>
+            -->
+            <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
+            <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.description"></td>
+            <td>
+                <select key="data.fabric.elements.template.subtractfrom" style="width:100px">
+
+                </select>
+            </td>
+
+            <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
+            <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+
+            <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+
+            <td>
+                <select key="data.fabric.elements.template.orientation" style="width:80px">
+                    <option value=0 >North</option>
+                    <option value=1 >NE/NW</option>
+                    <option value=2 >East/West</option>
+                    <option value=3 >SE/SW</option>
+                    <option value=4 >South</option>
+                </select>
+
+            </td>
+            <td>
+                <select key="data.fabric.elements.template.overshading" style="width:85px">
+                    <option value=0 >Heavy > 80%</option>
+                    <option value=1 >More than average > 60%-80%</option>
+                    <option value=2 >Average or unknown 20-60%</option>
+                    <option value=3 >Very little < 20% </option>
+                </select>
+            </td>
+            <td><input type="text" value="0" key="data.fabric.elements.template.g" style="width:30px" /></td>
+            <td><input type="text" value="0" key="data.fabric.elements.template.gL" style="width:30px" /></td>
+            <td><input type="text" value="0" key="data.fabric.elements.template.ff" style="width:30px" /></td>
+            <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:30px" /></td>
+            <td><span key="data.fabric.elements.template.gain" dp=0>0</span>W</td>
+            <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
+            <td><button class="apply-measure-list" row="template">Apply Measure</button></td>
+            <td><span class="delete-element" row="template" style="cursor:pointer"><i class="icon-trash"></i></span></td>
+
         </tr>
-        
-    </table>
-    
-    <p>Total window area: <span key="data.fabric.total_window_area" dp=1></span> m2</p>
-    
-    <hr>
-    <h3>Thermal Bridging</h3><hr>
-    <table class="table">
-        <tr><td>Total External Area: </td><td><span key="data.fabric.total_external_area" dp=1></span> m2</td></tr>
-        <tr><td>Thermal bridging heat loss factor (y)</td><td><input type="text" value="0.15" key="data.fabric.thermal_bridging_yvalue" style="width:60px" /> W/m<sup>2</sup>.K</td></tr>
-        <tr><td>Thermal bridging heat loss: </td><td><span key="data.fabric.thermal_bridging_heat_loss" dp=1></span> W/K</td></tr>
-    </table>
-    
-    <hr><h3>Totals</h3><hr>
-    <table class="table">
+    </tbody>
+
+    <tbody id="windows"></tbody>
+
+    <tr>
+        <td style="text-align:left">
+            <button class="add-element btn" type="window">Add new window</button>
+
+        </td>
+        <td><button class="btn add-element-from-lib" tags="Window">from library</button></th>
+        <td></td>
+    </tr>
+
+</table>
+
+<p>Total window area: <span key="data.fabric.total_window_area" dp=1></span> m2</p>
+
+<hr>
+<h3>Thermal Bridging</h3><hr>
+<table class="table">
+    <tr><td>Total External Area: </td><td><span key="data.fabric.total_external_area" dp=1></span> m2</td></tr>
+    <tr><td>Thermal bridging heat loss factor (y)</td><td><input type="text" value="0.15" key="data.fabric.thermal_bridging_yvalue" style="width:60px" /> W/m<sup>2</sup>.K</td></tr>
+    <tr><td>Thermal bridging heat loss: </td><td><span key="data.fabric.thermal_bridging_heat_loss" dp=1></span> W/K</td></tr>
+</table>
+
+<hr><h3>Totals</h3><hr>
+<table class="table">
     <tr><td>Total fabric heat loss:</td><td><span key="data.fabric.total_heat_loss_WK" dp=0>0</span> W/K</td></tr>
     <tr><td>Ventilation heat loss:</td><td><span key="data.ventilation.average_WK" dp=0>0</span> W/K</td></tr>
     <tr><td>Total W/K heat loss:</td><td><span key="data.totalWK" dp=0>0</span> W/K</td></tr>
 
-    
+
     <tr><td>Total fabric thermal capacity:</td><td><span key="data.fabric.total_thermal_capacity" dp=0>0</span> kJ/K.m3</td></tr>
     <tr><td>Annual solar gains:</td><td><span key="data.fabric.annual_solar_gain" dp=0>0</span> W (<span key="data.fabric.annual_solar_gain_kwh" dp=0>0</span> kWh)</td></tr>
-    
 
-    </table>    
+
+</table>    
 </div>
 
 
 <div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Element Library</h3>
-        <p>Click on an element from the library to add:</p>
+        <h3 id="myModalLabel">Element/measure Library</h3>
+        <p>Click on an element/measure:</p>
     </div>
     <div class="modal-body" style="height:500px">
-        
+
         <div class="input-prepend library-select-view">
             <span class="add-on">Select library:</span>
             <select id="library-select"></select>
         </div>
-        
+
         Share library: 
         <i id="open-share-library" class="icon-share"></i>
-        
+
         <div class="new-library-view" style="display:none;">
             <div class="input-append input-prepend">
                 <span class="add-on">Enter name for new library</span>
@@ -289,11 +294,11 @@
                 <button id="cancelnewlibrary" class="btn">Cancel</button>
             </div>
         </div>
-        
-    
+
+
         <table id="element_library" class="table">
         </table>
-        
+
     </div>
     <div class="modal-footer">
         <button class="btn" id="create-element">Create new element</button>
@@ -308,18 +313,18 @@
     </div>
     <div class="modal-body" style="height:500px">
         <p>
-            <div class="input-prepend" style="float:right">
-                <span class="add-on">Type</span>
-                <select id="create-element-type">
-                    <option>Wall</option>
-                    <option>Floor</option>
-                    <option>Roof</option>
-                    <option>Window</option>
-                </select>
-            </div>
-            Enter details of new element or measure to be created.
+        <div class="input-prepend" style="float:right">
+            <span class="add-on">Type</span>
+            <select id="create-element-type">
+                <option>Wall</option>
+                <option>Floor</option>
+                <option>Roof</option>
+                <option>Window</option>
+            </select>
+        </div>
+        Enter details of new element or measure to be created.
         </p>
-        
+
         <table class="table">
             <tr><td>Tag</td><td><input type="text" id="create-element-tag" /></td></tr>
             <tr><td>Name</td><td><input type="text" id="create-element-name" /></td></tr>
@@ -331,11 +336,24 @@
                 <tr><td>gL</td><td><input type="text" id="create-element-gL" /></td></tr>
                 <tr><td>Frame factor (ff)</td><td><input type="text" id="create-element-ff" /></td></tr>
             </tbody>
-            <tr><td>Criteria to be measure (comma seperated element tags)</td><td><input type="text" id="create-element-criteria" /></td></tr>
+            <tbody class="create-element-measure-options" style="display:none">
+                <tr><td>Criteria to be measure (comma seperated element tags)</td><td><input type="text" id="create-element-criteria" /></td></tr>
+                <tr><td>Code</td><td><select id="create-element-code"><option>Wall</option><option>Floor</option><option>Roof</option><option>Window</option></select></td></tr>
+                <tr><td>Description</td><td><input type="text" id="create-element-description" /></td></tr>
+                <tr><td>Performance</td><td><input type="text" id="create-element-performance" /></td></tr>
+                <tr><td>Benefits</td><td><input type="text" id="create-element-benefits" /></td></tr>
+                <tr><td>Cost</td><td><input type="text" id="create-element-cost" /></td></tr>
+                <tr><td>Who by</td><td><input type="text" id="create-element-who_by" /></td></tr>
+                <tr><td>Disruption</td><td><input type="text" id="create-element-disruption" /></td></tr>
+                <tr><td>Associated work</td><td><input type="text" id="create-element-associated_work" /></td></tr>
+                <tr><td>Key risks</td><td><input type="text" id="create-element-key_risks" /></td></tr>
+                <tr><td>Notes</td><td><input type="text" id="create-element-notes" /></td></tr>
+                <tr><td>Maintenance</td><td><input type="text" id="create-element-maintenance" /></td></tr>
+            </tbody>
         </table>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn" id="create-element-cancel" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button class="btn" id="create-element-save">Save</button>
     </div>
 </div>
@@ -346,13 +364,13 @@
         <h3 id="myModalLabel">Share library: </h3>
     </div>
     <div class="modal-body">
-    
-    <p>Shared with:</p>
-    <table class="table" id="shared-with-table">
-    </table>
-    
-    <p>Enter user, or organisation name to share this library with:</p>
-    <input id="sharename" type="text" style="width:420px"/>
+
+        <p>Shared with:</p>
+        <table class="table" id="shared-with-table">
+        </table>
+
+        <p>Enter user, or organisation name to share this library with:</p>
+        <input id="sharename" type="text" style="width:420px"/>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
