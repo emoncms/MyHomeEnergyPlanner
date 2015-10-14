@@ -9,5 +9,7 @@ Modules/assessment/views/ccreport.js
 Modules/assessment/.sass-cache
 Modules/assessment/views/householdquestionnaire.html
 background.jpg
+/nbproject
+.DS_Store
 nbproject/
 Modules/assessment/images

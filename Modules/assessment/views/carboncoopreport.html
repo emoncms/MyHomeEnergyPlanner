@@ -9,20 +9,21 @@
 				<div class="col-2">
 					<div class="client-info">
 						<span class="top-border-title bolded">Name</span>
-						<p>Helene Rudlin</p>
+						<p><span key='data.household.1a_householdername'></span></p>
 						<span class="top-border-title bolded">Address</span>
 						<p>
-							109 Dudley Road<br>
+							<span key='data.household.1a_addressline1'></span>
+							<br>
 							Manchester
 						</p>
 						<span class="top-border-title bolded">Post Code</span>
-						<p>M16 8BW</p>
+						<p><span key='data.household.1a_postcode'></span></p>
 						<span class="top-border-title bolded">Date (Survey)</span>
-						<p>30 Mar 2015</p>
+						<p><span key='data.household.assessment_date'></span></p>
 						<span class="top-border-title bolded">Date (Report)</span>
 						<p>27 May 2015</p>
 						<span class="top-border-title bolded">Local Authority Area</span>
-						<p>Manchester</p>
+						<p><span key='data.household.1a_localauthority'></span></p>
 						
 					</div>
 				</div>
@@ -32,17 +33,10 @@
 			</div>
 
 
-
 		</section>
-<!-- 
-		<section>			
-			<div class="section-title title-margin-top">
-				<h2 class="title-margin-bottom">Graphs Testing</h2>
-			</div>
-			<div class="highlight-box pink-highlight">
-				<h4 class="top-border-title title-margin-bottom ">My Home Energy Planner Overview</h4>	
-				<div class="bar-chart-container" id="barchart"></div>
-			</div>
+
+<!-- 		<section>			
+
 			<div class="highlight-box pink-highlight">
 				<h4 class="top-border-title title-margin-bottom ">Estimated Energy Cost Comparison</h4>	
 
@@ -117,8 +111,10 @@
 				<p>You told us that the following things are most important to you in considering energy efficiency retrofit options for your home: </p>
 			</div>
 			<div class="highlight-box pink-highlight">
-				<h4 class="top-border-title title-margin-bottom ">Retrofit Priorities</h4>
-				<p>Figure 1: Retrofit Priorities</p>
+				<h4 class="top-border-title title-margin-bottom ">Figure 1: Retrofit Priorities</h4>
+				<ul id='retrofit-priorities'>
+					
+				</ul>
 			</div>
 			<p>Your report is made up of four sections: </p>
 			<h3 class="top-border-title title-margin-top title-margin-bottom">Section 1.0 How does your home perform?</h3>
@@ -132,7 +128,11 @@
 			</div>
 			<div class="highlight-box pink-highlight">
 				<h4 class="top-border-title title-margin-bottom ">Figure 2. Performance Summary</h4>
-				<div class="bar-chart-container" id="barchart-2"></div>
+				<div id="space-heating-demand" width='1000px' height='100px'></div>
+				<div id="primary-energy" width='1000px' height='100px'></div>
+				<div id="co2-emission-rate" width='1000px' height='100px'></div>
+				<div id="energy-use-per-person" width='1000px' height='100px'></div>
+			</div>
 			</div>
 
 
@@ -227,6 +227,99 @@
 					            </g>
 					        </svg>
 				        </div>
+				        <div class="bar-chart-container centered-house">
+					        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+					            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+					            
+					            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            
+					            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+					                <text x="580" y="648" style="font-weight:bold">Floor</text>
+					                <text id="house-floorwk" x="580" y="680">50 W/K</text>
+					                
+					                <text x="720" y="180" style="font-weight:bold">Roof</text>
+					                <text id="house-roofwk" x="720" y="215">50 W/K</text>
+					                
+					                <text x="740" y="320" style="font-weight:bold">Walls</text>
+					                <text id="house-wallswk" x="740" y="355">50 W/K</text>
+					                
+					                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
+					                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
+					                
+					                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
+					                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
+					                
+					                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+					                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+					            </g>
+					        </svg>
+				        </div>
+				        <div class="bar-chart-container centered-house">
+					        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+					            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+					            
+					            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            
+					            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+					                <text x="580" y="648" style="font-weight:bold">Floor</text>
+					                <text id="house-floorwk" x="580" y="680">50 W/K</text>
+					                
+					                <text x="720" y="180" style="font-weight:bold">Roof</text>
+					                <text id="house-roofwk" x="720" y="215">50 W/K</text>
+					                
+					                <text x="740" y="320" style="font-weight:bold">Walls</text>
+					                <text id="house-wallswk" x="740" y="355">50 W/K</text>
+					                
+					                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
+					                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
+					                
+					                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
+					                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
+					                
+					                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+					                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+					            </g>
+					        </svg>
+				        </div>
+				        <div class="bar-chart-container centered-house">
+					        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+					            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+					            
+					            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+					            
+					            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+					                <text x="580" y="648" style="font-weight:bold">Floor</text>
+					                <text id="house-floorwk" x="580" y="680">50 W/K</text>
+					                
+					                <text x="720" y="180" style="font-weight:bold">Roof</text>
+					                <text id="house-roofwk" x="720" y="215">50 W/K</text>
+					                
+					                <text x="740" y="320" style="font-weight:bold">Walls</text>
+					                <text id="house-wallswk" x="740" y="355">50 W/K</text>
+					                
+					                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
+					                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
+					                
+					                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
+					                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
+					                
+					                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+					                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+					            </g>
+					        </svg>
+				        </div>
 				</div>
 
 				<p>It’s not all bad news though. These heat losses are balanced by the heat generated by you and activities in your home, such as cooking. Heat is also provided by sunlight entering your home – this is known as passive solar gain.</p>
@@ -252,7 +345,7 @@
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 5.  Space heating demand – how your home compares</h4>
-					<div class="bar-chart-container" id="space-heating-demand"></div>
+					<div class="bar-chart-container" id="fig-5-space-heating-demand"></div>
 				</div>
 			</section>
 
@@ -278,7 +371,7 @@
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 7: Primary energy use in kilowatt-hours per square metre per year</h4>
-<!-- 					<div class="bar-chart-container" id="barchart-2"></div> -->
+					<div class="bar-chart-container" id="barchart-2"></div>
 				</div>
 			</section>
 
@@ -311,7 +404,6 @@
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 10: Estimated energy cost comparison</h4>
-					<span style="font-weight: bold; color:blue; font-size: 30px">Add error bars</span>
 					<div class="bar-chart-container" id="estimated-energy-cost-comparison"></div>
 				</div>
 				
@@ -323,20 +415,6 @@
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 11: Your home compared with the assumed average home</h4>
-					<div class="bar-chart-container" id="barchart-2"></div>
-				</div>
-			</section>
-
-			<section>
-				<h3 class="top-border-title title-margin-top title-margin-bottom">1.7 SAP rating</h3>
-				<p>SAP is the Standard Assessment Procedure used to assess energy use in UK homes. The UK government devised SAP as a way to compare homes and test them against Building Regulations. SAP forms the basis of the energy model used in this report.</p> 
-				<p>SAP makes assumptions about the number of people living in a home and how it is heated and used, based on averages for the UK. You may not be ‘average’ and may use your home in different ways. So, SAP is not an exact predictive tool.</p> 
-				<p>The final SAP rating is influenced by predicted energy use, carbon emissions and fuel costs. This means that the SAP rating is influenced by levels of insulation, how efficient your heating system and other services are, the type of fuel you use to heat and light your home, and whether you have any renewables. SAP does not cover appliances or cooking.</p> 
-				<p>SAP is not a perfect system. A home with a poor building fabric could still get a good rating because it has lots of renewables or energy costs are cheap. This is unhelpful if energy conservation or comfort is your biggest concern.</p>
-				<p>This is why we’ve given SAP a lower level of priority within this report. The table below shows the SAP rating we’ve calculated for your home now, and in the various scenarios mapped out in this report.</p>
-				
-				<div class="table-wrapper">
-					<h4 class="top-border-title title-margin-bottom ">Figure 12: SAP results table</h4>
 					<table class="three-col-table">
 						<thead>
 							<tr>
@@ -350,35 +428,108 @@
 							<tr>
 								<th class="half-width">Number of Occupants</th>
 								<td>2.9 people</td>
-								<td>3.1 people</td>
-								<td>Higher</td>
+								<td><span key='data.occupancy'></span> people</td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
 								<th class="half-width">Average hours of heating</th>
-								<td>21 hours</td>
 								<td>9 hours</td>
-								<td>Lower</td>
+								<td><span key='data.occupancy'></span> hours</td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
 								<th class="half-width">Living room thermostat temperature</th>
 								<td>21°C</td>
-								<td>23°C</td>
-								<td>Higher</td>
+								<td><span key='data.household.3a_roomthermostat'></span>°C</td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
 								<th class="half-width">number of habitable rooms not heated</th>
-								<td>2 room(s)</td>
+								<td>0 room(s)</td>
 								<td>1 room(s)</td>
-								<td>Lower</td>
+								<td>Higher/Lower</td>
 							</tr>
 							<tr>
-								<th class="half-width">estimated current appliance energy use*</th>
+								<th class="half-width">Estimated current appliance energy use*</th>
 								<td>3880 kWh per year</td>
 								<td>4129 kWh per year</td>
-								<td>Higher</td>
+								<td>Higher/Lower</td>
 							</tr>
 						</tbody>
 					</table>
+					
+				</div>
+			</section>
+
+			<section>
+				<h3 class="top-border-title title-margin-top title-margin-bottom">1.7 SAP rating</h3>
+				<p>SAP is the Standard Assessment Procedure used to assess energy use in UK homes. The UK government devised SAP as a way to compare homes and test them against Building Regulations. SAP forms the basis of the energy model used in this report.</p> 
+				<p>SAP makes assumptions about the number of people living in a home and how it is heated and used, based on averages for the UK. You may not be ‘average’ and may use your home in different ways. So, SAP is not an exact predictive tool.</p> 
+				<p>The final SAP rating is influenced by predicted energy use, carbon emissions and fuel costs. This means that the SAP rating is influenced by levels of insulation, how efficient your heating system and other services are, the type of fuel you use to heat and light your home, and whether you have any renewables. SAP does not cover appliances or cooking.</p> 
+				<p>SAP is not a perfect system. A home with a poor building fabric could still get a good rating because it has lots of renewables or energy costs are cheap. This is unhelpful if energy conservation or comfort is your biggest concern.</p>
+				<p>This is why we’ve given SAP a lower level of priority within this report. The table below shows the SAP rating we’ve calculated for your home now, and in the various scenarios mapped out in this report.</p>
+				
+				<div class="highlight-box pink-highlight">
+
+				<div class="table-wrapper">
+					<h4 class="top-border-title title-margin-bottom ">Figure 12: SAP results table</h4>
+					<!-- <img src="../Modules/assessment/img-assets/images/sap-test.jpg" alt=""> -->
+					<table class="sap-table">
+						<thead>
+							<tr>
+								<th>SAP Rating</th>
+								<th>Your Home Now</th>
+								<th>Your 2050 Home</th>
+								<th>UK Average</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-sap-rating='A'>
+								<td>A</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='B'>
+								<td>B</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='C'>
+								<td>C</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='D'>
+								<td>D</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='E'>
+								<td>E</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='F'>
+								<td>F</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+							<tr data-sap-rating='G'>
+								<td>G</td>
+								<td class='cell-sap-now'></td>
+								<td class='cell-sap-average'></td>
+								<td class='cell-sap-future'></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
 				</div>
 
 				<p><i><strong>Please note:</strong> though based on the same calculations, this is not an accredited SAP assessment. If you need an official SAP rating for funding purposes, you will need to commission this separately.</i></p>
@@ -391,103 +542,57 @@
 				<p>When calculating heating demand, SAP assumes a temperature of 21°C in your living area for a set number of hours. In reality, your living area may be warmer or cooler than this (for longer or shorter periods) because we all have different perceptions of what is comfortable as well as different occupancy patterns. This will also be affected by the efficiency of the building fabric and your heating system.</p>
 				<p>This is why we collect information about you as householders. Understanding your perceptions of comfort, as well as how you use the spaces within your home, allows us to tailor the recommendations with your comfort and health in mind.</p>
 				
-				<div class="table-wrapper">
+				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 13: Comfort tables based on what you told us</h4>
-					<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (table)</span>
-					<table class="three-col-table">
-						<thead>
-							<tr>
-								<th class="half-width"></th>
-								<th>Example Graph</th>
-								<th>Your Home</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th class="half-width">Number of Occupants</th>
-								<td>2.9 people</td>
-								<td>3.1 people</td>
-							</tr>
-							<tr>
-								<th class="half-width">Average hours of heating</th>
-								<td>21 hours</td>
-								<td>9 hours</td>
-							</tr>
-							<tr>
-								<th class="half-width">Living room thermostat temperature</th>
-								<td>21°C</td>
-								<td>23°C</td>
-								<td>Higher</td>
-							</tr>
-							<tr>
-								<th class="half-width">number of habitable rooms not heated</th>
-								<td>2 room(s)</td>
-								<td>1 room(s)</td>
-								<td>Lower</td>
-							</tr>
-							<tr>
-								<th class="half-width">estimated current appliance energy use*</th>
-								<td>3880 kWh per year</td>
-								<td>4129 kWh per year</td>
-								<td>Higher</td>
-							</tr>
-						</tbody>
-					</table>
+					<!-- <span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (table)</span> -->
+					<p>
+						Temperature in winter: <span key='data.household.6a_temperature_winter'></span><br />
+						Air in winter: <span key='data.household.6a_airquality_winter'></span><br />
+					</p>
+
+					<p>
+						Temperature in summer: <span key='data.household.6a_temperature_summer'></span><br />
+						Air in summer: <span key='data.household.6a_airquality_summer'></span><br />
+					</p>
+
+					<p>
+						Draughts: <span key='data.household.6a_draughts_comment'></span>
+					</p>
+
+					<p>
+						Amount of daylight: <span key='data.household.6b_daylightamount'></span>
+						Amount of artificial light: <span key='data.household.6b_artificiallightamount'></span>
+					</p>
 				</div>
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 14: RH data</h4>
-					<div class="bar-chart-container" id="barchart-2">
-						<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (graph ?) Trystan to add data source</span>
-					</div>
+					<p>
+						When we visited, the relative humidity was
+						<span key='data.household.reading_humidity1'></span> - <span key='data.household.reading_humidity1'></span> %. (The ideal range is 40-60%).
+					</p>
 				</div>
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 15: Temperature data</h4>
-					<div class="bar-chart-container" id="barchart-2">
-						<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (graph ?) Trystan to add data source</span>
-					</div>
+					<p>
+						When we visited, your living room temperature was
+						<span key='data.household.reading_temp1'></span> - <span key='data.household.reading_temp2'></span>°C.
+					</p>
 				</div>
 
-				<div class="table-wrapper">
+				<div class="highlight-box pink-highlight">
+
 					<h4 class="top-border-title title-margin-bottom ">Figure 16: You also told us</h4>
-					<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (table)</span>
-					<table class="three-col-table">
-						<thead>
-							<tr>
-								<th class="half-width"></th>
-								<th>Typical Home (SAP)</th>
-								<th>Your Home</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th class="half-width">Number of Occupants</th>
-								<td>2.9 people 9 hours</td>
-								<td>2.5 people</td>
-							</tr>
-							<tr>
-								<th class="half-width">Average hours of heating</th>
-								<td>21</td>
-								<td>9 hours</td>
-							</tr>
-							<tr>
-								<th class="half-width">Living room thermostat temperature</th>
-								<td>21°C</td>
-								<td>21°C</td>
-							</tr>
-							<tr>
-								<th class="half-width">number of habitable rooms not heated</th>
-								<td>0 room(s)</td>
-								<td>0 room(s)</td>
-							</tr>
-							<tr>
-								<th class="half-width">estimated current appliance energy use*</th>
-								<td>3880 kWh per year</td>
-								<td>2129 kWh per year</td>
-							</tr>
-						</tbody>
-					</table>
+					<p>Noise: <span key='data.household.6c_noise_comment'></span></p>
+					<p>Daylighting: <span key='data.household.6b_problem_locations'></span></p>
+					<p>Comfort: <span key="data.household.6a_draughts_comment"></span></p>
+					<p>
+						Rooms: Loved - <span key='data.household.6d_favourite_room'></span>
+						Unloved: <span key='data.household.6d_unloved_rooms'></span>
+					</p>
+					<p>Laundry: </p>
+					
 				</div>
 			</section>
 		</section>
@@ -505,9 +610,9 @@
 			<h3 class="top-border-title title-margin-top title-margin-bottom">2.1 Scenarios</h3>
 			<p>Figures 17, 18 and 19 on the following pages give our recommendations for planning retrofit works in your home. We have mapped out three scenarios:</p>
 			<ul class="right-align-item-list">
-				<li><p>Scenario 1: DIY and Simple Measures</p></li>
-				<li><p>Scenario 2: More Advanced Measures</p></li>
-				<li><p>Scenario 3: Further Measures – Your 2050 Home</p></li>
+				<li><p>Scenario 1: <span id='output-scenario1-name'></span></p></li>
+				<li><p>Scenario 2: <span id='output-scenario2-name'></span></p></li>
+				<li><p>Scenario 3: <span id='output-scenario3-name'></span></p></li>
 			</ul>
 			<p>Following these scenarios, we have also included a commentary that gives more specific guidance based on the assessment we’ve carried out on your home.</p>
 			<p>We focus first on quick wins and the things you told us are most important to you. We take a whole house approach, rather than considering single measures in isolation.</p> 
@@ -562,7 +667,7 @@
 			</ol>
 
 
-				<h3 class="top-border-title title-extra-margin-top title-margin-bottom ">Figure 17 Scenario 1: DIY and Simple Measures</h4>
+				<h3 class="top-border-title title-extra-margin-top title-margin-bottom ">Figure 17 Scenario 1: <span id='output-scenario1-name'></span></h4>
 
 				<div class="five-col-table-wrapper">
 					<table class="five-col-table">
@@ -678,7 +783,7 @@
 						</tbody>
 					</table>
 				</div>
-				<h3 class="top-border-title title-margin-bottom ">Figure 18 Scenario 2: More Advanced Measures</h4>
+				<h3 class="top-border-title title-margin-bottom ">Figure 18 Scenario 2: <span id='output-scenario2-name'></span></h4>
 				<div class="five-col-table-wrapper">
 					<table class="five-col-table">
 						<thead>
@@ -793,7 +898,7 @@
 						</tbody>
 					</table>
 				</div>
-				<h3 class="top-border-title title-margin-bottom ">Figure 19 Scenario 3: Further Measures – Your 2050 Home</h4>
+				<h3 class="top-border-title title-margin-bottom ">Figure 19 Scenario 3: <span id='output-scenario3-name'></span></h4>
 				<div class="five-col-table-wrapper">
 					<table class="five-col-table">
 						<thead>
@@ -911,9 +1016,7 @@
 
 			<h3 class="top-border-title title-margin-top title-margin-bottom">2.3 Commentary</h3>
 
-			<p>Dynamic Text goes in this area, so for now lets just use some lorem ipsum!</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, pariatur, asperiores! Perspiciatis sint ipsa mollitia sapiente omnis tempore, et natus aliquam rem esse id hic tempora doloremque odio aperiam fugiat!</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum eveniet veritatis natus aut officia veniam provident, iure quod unde rem corporis, blanditiis perspiciatis iste accusamus eligendi facere quisquam cum ut ex. Facere nihil in, tempora, reprehenderit, molestiae facilis voluptatibus voluptatum voluptas hic quos eius, quia accusamus nesciunt culpa necessitatibus sint.</p>
+			<span key='data.household.commentary'></span>
 
 		</section>
 	
@@ -972,8 +1075,8 @@
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 20: Time Cost Quality</h4>
 
-					<span style="font-weight: bold; color:blue; font-size: 30px; display: block;">Placeholder for the ven diagram</span>
-					<img src="http://placehold.it/400x400" alt="">
+					<img src="../Modules/assessment/img-assets/images/venn-diagram.png" alt="">
+					
 				</div>
 
 				<p>We understand that this thinking and planning time may feel frustrating, but it is very important and will be worth it. Time spent in planning and preparing usually saves time, money and worry later on. As with any other construction process, “measure twice, cut once”.</p>
@@ -1015,7 +1118,7 @@
 				</ol>
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 21: Your home now >>> Your 2050 Home</h4>
-					<div class="bar-chart-container" id="barchart-2"></div>
+					<img src="../Modules/assessment/img-assets/images/transforming_your_home_now_to_2050_home.png" alt="">
 				</div>
 			</section>
 
@@ -1159,18 +1262,7 @@
 				<p>Based on the survey we completed of your home, and the results generated using My Home Energy Planner, here we provide comparisons across fabric condition; heating and hot water systems; ventilation; lighting; appliances and cooking; and renewables.</p> 
 				
 				<div class="highlight-box pink-highlight">
-					<h4 class="top-border-title title-margin-bottom ">Figure 21: Your home now >>> Your 2050 Home</h4>
-					<div class="bar-chart-container">
-						<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder</span>
-						<ul>
-							<li>Figure 22 Fabric Condition Comparison (across scenarios)</li>
-							<li>Figure 23 Heating and Hot Water System Comparison (across scenarios)</li>
-							<li>Figure 24 Ventilation Comparison (across scenarios)</li>
-							<li>Figure 25 Lighting Comparison (across scenarios)</li>
-							<li>Figure 26 Appliances and Cooking Comparison (across scenarios)</li>
-							<li>Figure 27 Renewables Comparison (across scenarios)</li>
-						</ul>
-					</div>
+					<h4 class="top-border-title title-margin-bottom ">Figure 22: Scenario Comparison Table</h4>
 				</div>
 			</section>
 
@@ -1178,13 +1270,7 @@
 				<h3 class="top-border-title title-margin-bottom ">Appendix B: About you</h4>
 				<p>The things you told us about you and your home, taken from the questionnaire we completed with you</p>
 				<div class="highlight-box pink-highlight">
-					<h4 class="top-border-title title-margin-bottom ">Figure 21: Your home now >>> Your 2050 Home</h4>
-					<div class="bar-chart-container">
-						<span style="font-weight: bold; color:blue; font-size: 30px">Placeholder</span>
-						<ul>
-							<li>Figure 28: Table taken directly from Householder Questionnaire </li>
-						</ul>
-					</div>
+					<h4 class="top-border-title title-margin-bottom ">Figure 23: About You</h4>
 				</div>
 			</section>
 

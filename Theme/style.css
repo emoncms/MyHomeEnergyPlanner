@@ -181,6 +181,12 @@ body .modal {
 .modal-body {
     max-height: 800px;
 }
+
+#gallery i{
+    vertical-align:top;
+    cursor:pointer;
+}
+
 @media (min-width: 768px) and (max-width: 979px) {
     #topspacer {
         margin-top:-20px;

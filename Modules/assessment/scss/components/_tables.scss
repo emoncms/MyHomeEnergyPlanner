@@ -1,4 +1,18 @@
-.carbon-report-wrapper { 
+.carbon-report-wrapper {
+
+	.sap-table{
+		border:solid 1px $red;
+		text-align:center;
+	}
+
+	.sap-table thead{
+		background: $red;
+		color:$white;
+	}
+
+	.sap-table th{
+		padding: 10px 15px; 
+	}
 
 	.three-col-table {
 		// Temp
