@@ -204,6 +204,7 @@ global $reports;
     var keys = {};
 
     for (s in project) {
+        // QUESTION: do you really want to do calc.run twice here?
         project[s] = calc.run(calc.run(project[s]));
         $("." + s + "_sap_rating").html(project[s].SAP.rating.toFixed(0));
     }
