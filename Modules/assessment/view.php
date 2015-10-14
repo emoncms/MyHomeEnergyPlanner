@@ -22,6 +22,8 @@ global $reports;
 
 <link rel="stylesheet" href="<?php echo $d; ?>js/magnific-popup/magnific-popup.css">
 <script src="<?php echo $d; ?>js/magnific-popup/jquery.magnific-popup.min.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/canvas-barchart/barchart.js"></script>
+
 
 <style>
     .modal-backdrop
@@ -36,7 +38,7 @@ global $reports;
     }
 </style>
 
-
+<link rel="stylesheet" href="<?php echo $d; ?>carbon.css">
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
 

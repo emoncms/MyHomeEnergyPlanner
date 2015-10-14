@@ -1,0 +1,53 @@
+.carbon-report-wrapper {
+	.right-align-item-list {
+		margin-bottom: 2rem;
+		margin-top: 2rem;
+
+		li {
+			margin-left: 30px;
+			border-bottom: 1px dashed $red;
+			margin-top: 1rem;
+		}
+
+		&:after {
+			content: '';
+			display: block;
+			clear: both;
+		}	
+	}
+
+	.indented-list {
+	  	margin-left: 30px;
+
+	    li {
+	      margin-bottom: 1.5em;
+	    }
+
+	    p:first-child {
+	      margin-left: 0;
+	    }
+
+
+	    .indented-list {
+	      margin-left: 30px;
+	        li {
+				margin-bottom: 0;
+				margin-left: 30px;
+	        }
+
+	        p {
+	        	margin-bottom: 0.5em;
+	        }
+	    }
+  	}
+
+	@media screen and (max-width: 675px) {
+		.right-align-item-list li {
+			width: 100%;
+		}
+
+		.right-align-item-list {
+			margin-bottom: 0rem;
+		}
+}
+}

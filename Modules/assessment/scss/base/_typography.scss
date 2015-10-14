@@ -1,0 +1,154 @@
+.carbon-report-wrapper {
+  font: $body--normal;
+  -webkit-font-smoothing: antialiased;
+  font-size: 18px;
+
+  .top-border-title {
+    display: block;
+    width: 100%;
+    padding-top: 0.1em;
+    margin-bottom: 0.5em;
+    border-top: 1px dashed $red;
+    color: $red;
+  }
+  .doc-title {
+    margin-top: 1.5em;
+  }
+
+  .doc-title, .section-title, .red-highlight {
+    color: $red;
+  }
+
+  h1, .doc-title, .doc-sub-title {
+    font: $heading--x-large;
+  }
+
+  .section-title, .section-title > *{
+    font: $heading--large;
+  }
+
+  h2 {
+    font: $heading--normal;
+  }
+
+  h3 {
+    font: $heading--small;
+  }
+
+  h4 {
+    font: $heading--x-small;
+  }
+
+  i {
+    font-style: italic;
+    color: lighten( $grey, 20% )
+  }
+
+  strong {
+    font-weight: bold;
+    color: $red;
+  }
+
+  p {
+    font: $body--normal;
+    color: $grey;
+    margin-bottom: 1em;
+  }
+
+  .section-sub-title {
+    font-weight: normal;
+    color: $grey;
+  }
+
+  .bolded {
+    font-weight: bold;
+  }
+
+  .title-margin-top {
+    margin-top: 3rem;
+  }
+
+  .title-extra-margin-top {
+    margin-top: 4rem;
+  }
+
+  .title-margin-bottom {
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    margin-bottom: 1.75em;
+    margin-top: 3em;
+  }
+
+  .section-title, .doc-title {
+    display: block;
+    width: 100%;
+    padding-top: 0.2em;
+    border-top: 2px solid red;
+  }
+
+  .disclaimer {
+    display: block;
+    font-style: italic;
+    color: $grey--light;
+    margin-bottom: 1em;
+  }
+
+  .no-orphans p {
+    orphans: 20;
+    widows: 20;
+  }
+
+  .two-col-text {
+    p {
+      orphans: 4;
+      widows: 4;
+    }
+
+    margin-bottom: 1em;
+    @include vendor(column-count, 2);
+    @include vendor(column-gap, 2rem);
+    @include vendor(column-width, 300px);
+  }
+
+
+}
+
+@media screen and (max-width: 700px) {
+  .carbon-report-wrapper {
+    h1, .doc-title, .doc-sub-title {
+      font: $heading--large;
+    }
+
+    .section-title, .section-title > *{
+      font: $heading--normal;
+    }
+
+    h2 {
+      font: $heading--small;
+    }
+
+    h4, h3 {
+      font: $heading--x-small;
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .carbon-report-wrapper {
+    h1, .doc-title, .doc-sub-title {
+      font: $heading--normal;
+    }
+
+    .section-title, .section-title > *, h2 {
+      font: $heading--small;
+    }
+
+    h4, h3{
+      font: $heading--x-small;
+    }
+  }
+}
+
+
