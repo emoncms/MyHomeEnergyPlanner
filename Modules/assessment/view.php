@@ -36,7 +36,7 @@ global $reports;
         /* must be half of the width, minus scrollbar on the left (30px) */
         margin-left: -280px;
     }
-    
+
     #create-new {
         cursor:pointer;
     }
@@ -55,20 +55,20 @@ global $reports;
 
         <div class="side-block-2">
             <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
-            
+
             <div style="padding:10px">
-            
-            <p style="font-size:14px">Description: <span id="project-description"></span></p>
-            <p style="font-size:14px">Author: <span id="project-author"></span></p>
-            <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
-            <br><br>
-            
-            <div class="scenario-nav-heading">Project</a></div>
-            <div class="scenario-nav"><a href="#master/carboncoopreport">Carbon Coop Report</a></div>
-            <div class="scenario-nav"><a href="#master/householdquestionnaire">Household Questionnaire</a></div>
-            <div class="scenario-nav"><a href="#master/currentenergy">Current Energy</a></div>
-            <div class="scenario-nav"><a href="#master/export">Import/Export</a></div>
-            <div class="scenario-nav"><a href="#master/imagegallery">Image gallery</a></div>
+
+                <p style="font-size:14px">Description: <span id="project-description"></span></p>
+                <p style="font-size:14px">Author: <span id="project-author"></span></p>
+                <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
+                <br><br>
+
+                <div class="scenario-nav-heading">Project</a></div>
+                <div class="scenario-nav"><a href="#master/carboncoopreport">Carbon Coop Report</a></div>
+                <div class="scenario-nav"><a href="#master/householdquestionnaire">Household Questionnaire</a></div>
+                <div class="scenario-nav"><a href="#master/currentenergy">Current Energy</a></div>
+                <div class="scenario-nav"><a href="#master/export">Import/Export</a></div>
+                <div class="scenario-nav"><a href="#master/imagegallery">Image gallery</a></div>
 
             </div>
         </div>
@@ -81,26 +81,26 @@ global $reports;
 
                 <div class="menu-content">
                     <div style="padding:10px">
-                    <div class="scenario-nav-heading">Core input</a></div>
-                    <div class="scenario-nav"><a href="#template/context">Floors</a></div>
-                    <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
-                    <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
-                    <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
-                    <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
-                    <div class="scenario-nav-heading">Extended input</a></div>
-                    
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_applianceCarbonCoop"/> <a href="#template/applianceCarbonCoop">Appliances CarbonCoop calculation</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/> <a href="#template/appliancelist">Detailed Appliance List</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
-                    <div class="scenario-nav-heading">Other</a></div>
-                    <div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
-                    <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
-                    <!--<div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>-->
-                    <br>
-                    <div class="scenario-nav delete-scenario-launch">Delete scenario <i class="icon-trash"></i></div>
-                    
+                        <div class="scenario-nav-heading">Core input</a></div>
+                        <div class="scenario-nav"><a href="#template/context">Floors</a></div>
+                        <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
+                        <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
+                        <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
+                        <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
+                        <div class="scenario-nav-heading">Extended input</a></div>
+
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_applianceCarbonCoop"/> <a href="#template/applianceCarbonCoop">Appliances CarbonCoop calculation</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/> <a href="#template/appliancelist">Detailed Appliance List</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
+                        <div class="scenario-nav-heading">Other</a></div>
+                        <div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
+                        <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
+                        <!--<div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>-->
+                        <br>
+                        <div class="scenario-nav delete-scenario-launch">Delete scenario <i class="icon-trash"></i></div>
+
                     </div>
 
                 </div>
@@ -175,13 +175,29 @@ global $reports;
         <h3>Delete scenario</h3>
     </div>
     <div class="modal-body">
-    Are you sure you want to delete this scenario?
+        Are you sure you want to delete this scenario?
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo _('Cancel'); ?></button>
         <button id="delete-scenario-confirm" class="btn btn-primary"><?php echo _('Delete'); ?></button>
     </div>
 </div>
+
+
+<div id="modal-create-scenario" class="modal modal-sm hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Select from the list below the scenario you want to duplicate</h3>
+    </div>
+    <div class="modal-body">
+        <select id="select-scenario"></select>        
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="modal-create-scenario-done" class="btn btn-primary">Done</button>
+    </div>
+</div>
+
 
 </body>
 </html>                                		
@@ -259,15 +275,15 @@ global $reports;
         var tmp = (window.location.hash).substring(1).split('/');
         page = tmp[1]; //scenario = tmp[0];
         scenario = tmp[0];
-        
+
         if (!scenario)
             scenario = "master";
         if (!page)
             page = "context";
-            
+
         if (project[scenario] == undefined)
             scenario = 'master';
-            
+
         data = project[scenario];
 
         load_view("#content", page);
@@ -326,15 +342,25 @@ global $reports;
         }
     });
 
-    $("#create-new").click(function () {
+    $("#openbem").on('click',"#create-new",function () {
+        // Reset select
+        $('#select-scenario').html("");
+        
+        // Fill up the select
+        for (z in project)
+            $('#select-scenario').append("<option value='" + z + "'>" + z + "</option>");
 
+         $('#modal-create-scenario').modal('show');
+    });
+
+    $("#modal-create-scenario").on('click','#modal-create-scenario-done',function () {
         var n = 0;
         for (z in project)
             n++;
         var s = "scenario" + n;
 
-        project[s] = JSON.parse(JSON.stringify(project.master));
-        
+        project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
+
         // dont make a copy of the household questionaire and imagegallery
         project[s].household = {};
         project[s].imagegallery = [];
@@ -345,6 +371,7 @@ global $reports;
 
         $(".menu-content").hide();
         $("#scenario-list").append(tmp);
+        $('#modal-create-scenario').modal('hide');
 
         scenario = s;
         update();
@@ -352,19 +379,19 @@ global $reports;
 
     $("#openbem").on('click', ".delete-scenario-launch", function () {
         var s = $(this).parent().parent().attr('scenario');
-        if (s!="master") {
+        if (s != "master") {
             $("#modal-delete-scenario").modal("show");
-            $("#modal-delete-scenario").attr("scenario",s);
+            $("#modal-delete-scenario").attr("scenario", s);
         }
     });
-    
+
     $("#delete-scenario-confirm").click(function () {
         var s = $("#modal-delete-scenario").attr('scenario');
-        
+
         if (s != "master")
             delete project[s];
-            $(".scenario-block[scenario=" + s + "]").hide();
-            
+        $(".scenario-block[scenario=" + s + "]").hide();
+
         scenario = "master";
         $(".scenario-block[scenario=master]").find(".menu-content").show();
 
