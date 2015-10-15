@@ -242,6 +242,7 @@ global $reports;
         $("#scenario-list").append(tmp);
     }
     $(".menu-content").hide();
+    $(".scenario-block[scenario=master]").find(".delete-scenario-launch").hide();
     $(".scenario-block[scenario=master]").find(".menu-content").show();
 
 
@@ -378,7 +379,7 @@ global $reports;
     });
 
     $("#openbem").on('click', ".delete-scenario-launch", function () {
-        var s = $(this).parent().parent().attr('scenario');
+        var s = $(this).parent().parent().parent().attr('scenario');
         if (s != "master") {
             $("#modal-delete-scenario").modal("show");
             $("#modal-delete-scenario").attr("scenario", s);
