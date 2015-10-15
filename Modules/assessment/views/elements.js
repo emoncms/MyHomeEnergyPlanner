@@ -53,7 +53,9 @@ $("#openbem").on("click", '.delete-element', function () {
 });
 
 $("#create-element").click(function () {
-
+    // Empty "tag" so that it has nothing, we leave the other inputs as it can be handy for the user
+    $('#create-element-tag').val("");
+    
     $("#myModalcreateelement").modal('show');
     $('#myModal').modal('hide');
 });
@@ -65,10 +67,6 @@ $("#create-element-type").change(function () {
     } else {
         $(".create-element-window-options").hide();
     }
-});
-
-$("#create-element-cancel").click(function () {
-    $(".create-element-measure-options").hide();
 });
 
 $("#create-element-save").click(function () {
@@ -95,7 +93,6 @@ $("#create-element-save").click(function () {
             element_library[tag].criteria = $("#create-element-criteria").val().split(",");
 
     // Measures
-    element_library[tag].code = $("#create-element-code").val();
     if ($('#create-element-name').val() !== "")
         element_library[tag].name = $("#create-element-name").val();
     if ($('#create-element-description').val() !== "")
@@ -124,7 +121,6 @@ $("#create-element-save").click(function () {
         }});
 
     $("#myModalcreateelement").modal('hide');
-    $(".create-element-measure-options").hide();
     //} else {
     //    alert("Element or measure already exists");
     //}
@@ -249,7 +245,6 @@ function elements_UpdateUI()
             $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', color);
 
         }
-
     }
 }
 
@@ -368,10 +363,10 @@ $("#openbem").on("click", '.apply-measure-list', function () {
 
     // The rest of the table
     for (z in element_library) {
-        for (i in measure_options) {
-            if (element_library[z][i] === undefined)
-                element_library[z][measure_options[i]] = "";
-        }
+        /* for (i in measure_options) {
+         if (element_library[z][i] === undefined)
+         element_library[z][measure_options[i]] = "";
+         }*/
         if (element_library[z].criteria.indexOf(element.lib) != -1) {
             out += "<tr class='librow apply-measure' lib='" + z + "' row='" + row + "'>";
             out += "<td>" + z + "</td>";
@@ -408,7 +403,6 @@ $("#openbem").on("click", '.apply-measure-list', function () {
     }
 
     $('#myModal').modal('show');
-    $('.create-element-measure-options').show(); // this is a tbody in myModalcreateelement, ideally we would "show" when cliking in "Create new element" but in that case we don't know if we are creating a measure or an element
 });
 
 $("#openbem").on("click", '.apply-measure', function () {
