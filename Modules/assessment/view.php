@@ -20,6 +20,8 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/canvas-barchart/barchart.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-carboncoop.js"></script>
 <link rel="stylesheet" href="<?php echo $d; ?>js/magnific-popup/magnific-popup.css">
 <script src="<?php echo $d; ?>js/magnific-popup/jquery.magnific-popup.min.js"></script>
 
@@ -44,15 +46,18 @@ global $reports;
     }
 </style>
 
-
+<link rel="stylesheet" href="<?php echo $d; ?>carbon.css">
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
 
 <div id="openbem">
     <div id="left-pane">
 
-        <div class="side-block">
-            <h3>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></h3>
+        <div class="side-block-2">
+            <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
+            
+            <div style="padding:10px">
+            
             <p style="font-size:14px">Description: <span id="project-description"></span></p>
             <p style="font-size:14px">Author: <span id="project-author"></span></p>
             <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
@@ -65,16 +70,17 @@ global $reports;
             <div class="scenario-nav"><a href="#master/export">Import/Export</a></div>
             <div class="scenario-nav"><a href="#master/imagegallery">Image gallery</a></div>
 
+            </div>
         </div>
 
         <div id="scenario-menu-template" style="display:none">
 
-            <div class="side-block scenario-block" scenario="template" style="cursor:pointer">
+            <div class="side-block-2 scenario-block" scenario="template" style="cursor:pointer">
 
-                <h3>title scenarioname (<span class="template_sap_rating"></span>)</h3>
-
+                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>title<span style="float:right">scenarioname (<span class="template_sap_rating"></span>)</span></b></div>
 
                 <div class="menu-content">
+                    <div style="padding:10px">
                     <div class="scenario-nav-heading">Core input</a></div>
                     <div class="scenario-nav"><a href="#template/context">Floors</a></div>
                     <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
@@ -94,6 +100,8 @@ global $reports;
                     <!--<div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>-->
                     <br>
                     <div class="scenario-nav delete-scenario-launch">Delete scenario <i class="icon-trash"></i></div>
+                    
+                    </div>
 
                 </div>
             </div>
@@ -214,7 +222,7 @@ global $reports;
         var name = "";
         if (project[s].scenario_name != undefined)
             name = project[s].scenario_name;
-        tmp = tmp.replace("scenarioname", ": " + name.charAt(0).toUpperCase() + name.slice(1));
+        tmp = tmp.replace("scenarioname", " " + name.charAt(0).toUpperCase() + name.slice(1));
         $("#scenario-list").append(tmp);
     }
     $(".menu-content").hide();
