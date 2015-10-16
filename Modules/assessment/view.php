@@ -55,6 +55,7 @@ global $reports;
 
         <div class="side-block-2">
             <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
+<<<<<<< HEAD
 
             <div style="padding:10px">
 
@@ -69,6 +70,22 @@ global $reports;
                 <div class="scenario-nav"><a href="#master/currentenergy">Current Energy</a></div>
                 <div class="scenario-nav"><a href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a href="#master/imagegallery">Image gallery</a></div>
+=======
+            
+            <div style="padding:10px">
+            
+            <p style="font-size:14px">Description: <span id="project-description"></span></p>
+            <p style="font-size:14px">Author: <span id="project-author"></span></p>
+            <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
+            <br><br>
+            
+            <div class="scenario-nav-heading">Project</a></div>
+            <div class="scenario-nav"><a href="#master/carboncoopreport">Carbon Coop Report</a></div>
+            <div class="scenario-nav"><a href="#master/householdquestionnaire">Household Questionnaire</a></div>
+            <div class="scenario-nav"><a href="#master/currentenergy">Current Energy</a></div>
+            <div class="scenario-nav"><a href="#master/export">Import/Export</a></div>
+            <div class="scenario-nav"><a href="#master/imagegallery">Image gallery</a></div>
+>>>>>>> b75c97040ce8f22aeb27207074091dd686ad585c
 
             </div>
         </div>
@@ -100,7 +117,6 @@ global $reports;
                         <!--<div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>-->
                         <br>
                         <div class="scenario-nav delete-scenario-launch">Delete scenario <i class="icon-trash"></i></div>
-
                     </div>
 
                 </div>
