@@ -317,27 +317,27 @@ var openbem = {
             }
         }
 
-// Apliances PHPP
-        inputdata.use_appliancePHPP = data.use_appliancePHPP;
-        inputdata.appliancePHPP = {list: []};
-        for (z in data.appliancePHPP.list) {
-            inputdata.appliancePHPP.list[z] = {
-                category: data.appliancePHPP.list[z].category,
-                name: data.appliancePHPP.list[z].name,
-                number_used: data.appliancePHPP.list[z].number_used,
-                a_plus_rated: data.appliancePHPP.list[z].a_plus_rated,
-                norm_demand: data.appliancePHPP.list[z].norm_demand,
-                units: data.appliancePHPP.list[z].units,
-                utilisation_factor: data.appliancePHPP.list[z].utilisation_factor,
-                frequency: data.appliancePHPP.list[z].frequency,
-                reference_quantity: data.appliancePHPP.list[z].reference_quantity,
-                electric_fraction: data.appliancePHPP.list[z].electric_fraction,
-                dhw_fraction: data.appliancePHPP.list[z].dhw_fraction,
-                gas_fraction: data.appliancePHPP.list[z].gas_fraction
-                        /*primary_energy_total: data.appliancePHPP.list[z].primary_energy_total,
-                         primary_energy_m2: data.appliancePHPP.list[z].primary_energy_m2,
-                         co2_total: data.appliancePHPP.list[z].co2_total,
-                         co2_m2: data.appliancePHPP.list[z].co2_m2*/
+// Apliances CarbonCoop
+        inputdata.use_applianceCarbonCoop = data.use_applianceCarbonCoop;
+        inputdata.applianceCarbonCoop = {list: []};
+        for (z in data.applianceCarbonCoop.list) {
+            inputdata.applianceCarbonCoop.list[z] = {
+                category: data.applianceCarbonCoop.list[z].category,
+                name: data.applianceCarbonCoop.list[z].name,
+                number_used: data.applianceCarbonCoop.list[z].number_used,
+                a_plus_rated: data.applianceCarbonCoop.list[z].a_plus_rated,
+                norm_demand: data.applianceCarbonCoop.list[z].norm_demand,
+                units: data.applianceCarbonCoop.list[z].units,
+                utilisation_factor: data.applianceCarbonCoop.list[z].utilisation_factor,
+                frequency: data.applianceCarbonCoop.list[z].frequency,
+                reference_quantity: data.applianceCarbonCoop.list[z].reference_quantity,
+                electric_fraction: data.applianceCarbonCoop.list[z].electric_fraction,
+                dhw_fraction: data.applianceCarbonCoop.list[z].dhw_fraction,
+                gas_fraction: data.applianceCarbonCoop.list[z].gas_fraction
+                        /*primary_energy_total: data.applianceCarbonCoop.list[z].primary_energy_total,
+                         primary_energy_m2: data.applianceCarbonCoop.list[z].primary_energy_m2,
+                         co2_total: data.applianceCarbonCoop.list[z].co2_total,
+                         co2_m2: data.applianceCarbonCoop.list[z].co2_m2*/
             };
         }
 

@@ -53,7 +53,9 @@ $("#openbem").on("click", '.delete-element', function () {
 });
 
 $("#create-element").click(function () {
-    //
+    // Empty "tag" so that it has nothing, we leave the other inputs as it can be handy for the user
+    $('#create-element-tag').val("");
+    
     $("#myModalcreateelement").modal('show');
     $('#myModal').modal('hide');
 });
@@ -90,6 +92,30 @@ $("#create-element-save").click(function () {
     element_library[tag].tags = [type],
             element_library[tag].criteria = $("#create-element-criteria").val().split(",");
 
+    // Measures
+    if ($('#create-element-name').val() !== "")
+        element_library[tag].name = $("#create-element-name").val();
+    if ($('#create-element-description').val() !== "")
+        element_library[tag].description = $("#create-element-description").val();
+    if ($('#create-element-performance').val() !== "")
+        element_library[tag].performance = $("#create-element-performance").val();
+    if ($('#create-element-benefits').val() !== "")
+        element_library[tag].benefits = $("#create-element-benefits").val();
+    if ($('#create-element-cost').val() !== "")
+        element_library[tag].cost = $("#create-element-cost").val();
+    if ($('#create-element-who_by').val() !== "")
+        element_library[tag]["who_by"] = $("#create-element-who_by").val();
+    if ($('#create-element-disruption').val() !== "")
+        element_library[tag].disruption = $("#create-element-disruption").val();
+    if ($('#create-element-associated_work').val() !== "")
+        element_library[tag]["associated_work"] = $("#create-element-associated_work").val();
+    if ($('#create-element-key_risks').val() !== "")
+        element_library[tag]["key_risks"] = $("#create-element-key_risks").val();
+    if ($('#create-element-notes').val() !== "")
+        element_library[tag].notes = $("#create-element-notes").val();
+    if ($('#create-element-maintenance').val() !== "")
+        element_library[tag].maintenance = $("#create-element-maintenance").val();
+
     $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library + "&data=" + JSON.stringify(element_library), success: function (result) {
             console.log("save library result: " + result);
         }});
@@ -100,12 +126,12 @@ $("#create-element-save").click(function () {
     //}
 });
 
-$("[key='data.fabric.global_TMP']").change(function(){
+$("[key='data.fabric.global_TMP']").change(function () {
     value = $("[key='data.fabric.global_TMP']").is(":checked");
     if (value === true)
         $("[key='data.fabric.global_TMP_value']").prop('disabled', false);
     else
-       $("[key='data.fabric.global_TMP_value']").prop('disabled', true);
+        $("[key='data.fabric.global_TMP_value']").prop('disabled', true);
 });
 
 
@@ -219,7 +245,6 @@ function elements_UpdateUI()
             $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', color);
 
         }
-
     }
 }
 
@@ -293,9 +318,9 @@ function draw_library(tag)
     for (z in element_library) {
         if (element_library[z].tags.indexOf(tag) != -1) {
             out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
-            out += "<td>" + z + "</td>";
+            out += "<td style='width:20px;'>" + z + "</td>";
 
-            out += "<td>" + element_library[z].name;
+            out += "<td style='width:200px;'>" + element_library[z].name;
             out += "<br><span style='font-size:13px'><b>Source:</b> " + element_library[z].source + "</span>";
             if (element_library[z].criteria.length)
                 out += "<br><span style='font-size:13px'><b>Measure criteria:</b> " + element_library[z].criteria.join(", ") + "</span>";
@@ -320,16 +345,28 @@ function draw_library(tag)
         }
     }
     $("#element_library").html(out);
+    $('#myModal').css({left: '50%'});
     $('#myModal').modal('show');
 
 }
 
 $("#openbem").on("click", '.apply-measure-list', function () {
     var row = $(this).attr('row');
+    console.log("hola");
     var element = data.fabric.elements[row];
+    var measure_options = ["code", "description", "performance", "benefits", "cost", "who_by", "disruption", "associated_work", "key_risks", "notes", "maintenance"];
 
-    var out = "";
+    // The header of the table
+    var out = '<tr class="librow apply-measure"><th>Tag</th><th>Name</th><th>Source</th><th>U-value</th><th>K-value</th>';
+    out += '<th class="element-window-option">g</th><th class="element-window-option">gL</th><th class="element-window-option">Frame factor (ff)</th>';
+    out += '<th>Code</th><th>Description</th><th>Performance</th><th>Benefits</th><th>Cost</th><th>Who by</th><th>Disruption</th><th>Associated work</th><th>Key risks</th><th>Notes</th><th>Maintenance</th></tr>';
+
+    // The rest of the table
     for (z in element_library) {
+        /* for (i in measure_options) {
+         if (element_library[z][i] === undefined)
+         element_library[z][measure_options[i]] = "";
+         }*/
         if (element_library[z].criteria.indexOf(element.lib) != -1) {
             out += "<tr class='librow apply-measure' lib='" + z + "' row='" + row + "'>";
             out += "<td>" + z + "</td>";
@@ -337,11 +374,34 @@ $("#openbem").on("click", '.apply-measure-list', function () {
             out += "<td>" + element_library[z].source + "</td>";
             out += "<td>" + element_library[z].uvalue + " W/K.m2</td>";
             out += "<td>" + element_library[z].kvalue + " kJ/K.m2</td>";
+            out += "<td class='element-window-option'>" + element_library[z].g + " kJ/K.m2</td>";
+            out += "<td class='element-window-option'>" + element_library[z].gL + " kJ/K.m2</td>";
+            out += "<td class='element-window-option'>" + element_library[z].ff + " kJ/K.m2</td>";
+            out += "<td>" + element_library[z].code + " </td>";
+            out += "<td>" + element_library[z].description + "</td>";
+            out += "<td>" + element_library[z].performance + "</td>";
+            out += "<td>" + element_library[z].benefits + "</td>";
+            out += "<td>" + element_library[z].cost + "</td>";
+            out += "<td>" + element_library[z].who_by + "</td>";
+            out += "<td>" + element_library[z].disruption + "</td>";
+            out += "<td>" + element_library[z].associated_work + "</td>";
+            out += "<td>" + element_library[z].key_risks + "</td>";
+            out += "<td>" + element_library[z].notes + "</td>";
+            out += "<td>" + element_library[z].maintenance + "</td>";
             // out += "<td>"+element_library[z].criteria.join(",")+"</td>";
             out += "</tr>";
         }
     }
     $("#element_library").html(out);
+    if (element.type == "window") {
+        $('.element-window-option').show();
+        $('#myModal').css({left: 450});
+    }
+    else {
+        $('.element-window-option').hide();
+        $('#myModal').css({left: 650});
+    }
+
     $('#myModal').modal('show');
 });
 
@@ -377,6 +437,8 @@ $("#openbem").on("click", ".edit-element", function () {
         $("#create-element-ff").val(element_library[lib].ff);
         $(".create-element-window-options").show();
     }
+    else
+        $(".create-element-window-options").hide();
 
     $("#myModalcreateelement").modal('show');
     $('#myModal').modal('hide');

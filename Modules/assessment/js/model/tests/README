@@ -1,0 +1,154 @@
+ _____         _       
+|_   _|__  ___| |_ ___ 
+  | |/ _ \/ __| __/ __|
+  | |  __/\__ \ |_\__ \
+  |_|\___||___/\__|___/
+  =====================
+
+This directory contains tests for the SAP calculation. They aren't comprehensive
+yet, but they are (I hope) going in the right direction.
+
+The tests are written to depend on Jasmine [1], which is checked into lib/. The
+test code is in several files:
+
+  - appliance-tests.js
+  - fabric-tests.js
+  - lighting-tests.js
+  - model-tests.js
+  - space-heating-tests.js
+  - temperature-tests.js
+  - ventilation-tests.js
+  - water-heating-tests.js
+
+    These files contain the tests for different parts of the calculation.
+
+  - util.js
+
+    This contains a couple of helper functions which the tests use.
+
+  - lib
+
+    Contains jasmine code.
+
+  - notes
+
+    Some notes about parts of the calculation
+
+  - README
+
+    This readme file
+
+  - SpecRunner.html
+
+    The jasmine test runner page. Opening this in your browser will run the tests
+    and show their current status as a list.
+
+To read the tests, I suggest having a look at the Jasmine introduction, as it is
+easy to follow. However, here is a quick summary:
+
+   - Each test file contains a call to 'describe', which is the function Jasmine
+     provides to define a set of tests. Describe's first argument is the thing
+     being described, and the second is a function Jasmine will run for you to
+     test it, so something like:
+
+     describe("The widget maximizer", function() {
+         ...
+     });
+
+     Is saying that 'The widget maximizer' should meet the obligations defined by
+     the code in the function() block.
+
+   - Each description contains a series of requirements for the thing being
+     described. These requirements are specified using the 'it' function, so for
+     example you might write:
+
+     describe("The widget maximizer", function() {
+         it("produces the maximium number of widgets", function() {
+            ...
+         });
+     });
+
+     The string in the 'it' should go with the one in 'describe' to form a
+     sentence which makes a claim that you could check in some way. The content of
+     the function is what performs the check, so here you would want a function
+     which verifies that 'the wiget maximizer produces the maximum number of
+     widgets'.
+
+   - The verification is computed by using 'expectations'. These are mostly
+     written as something like:
+
+     expect(a_value_computed).toEqual(102);
+
+     or
+
+     expect(the_object).toBeDefined();
+
+     or similar
+
+     When jasmine runs your tests, it will produce output a bit like this:
+
+     - The widget maximizer
+       - produces the maxmimum number of widgets [failed]
+         - Expected 100 to be 80
+
+     So any expectation which is not true will invalidate the test it is
+     inside. Most of the tests I have written have expectations that look like
+     this:
+
+     var input = calc.start({});
+     extend({ ... }, input);
+
+     var result = calc.<function being tested>(input);
+
+     // some calculations
+     var some_expected_value = ...;
+
+     expect(result.some_output_value).toBeCloseTo(some_expected_value);
+
+     These tests are typically using calc.start to setup sensible defaults, then
+     using 'extend' (defined in util.js), which overrides particular values
+     contained within input. This lets us create a particular input without having
+     to reverse-engineer all the functions required to get to that point from the
+     main function.
+
+     Then we run the relevant function on the constructed input, and check the results.
+
+     I have changed most of the calc.xyz functions so that they return the
+     modified data which they are supplied as a parameter, as this makes the tests
+     easier to reason about. Without making this change, one test might
+     accidentally affect another through the global calc.data object.
+
+
+To add more tests, you will either want to add more 'it' blocks to an existing
+description, or add an entirely new description. You can put descriptions in the
+existing test files, or add a new file. To get a new test file to run, you have to
+include it in the <head> tag in SpecRunner.html, like:
+
+        <script src="appliance-tests.js"></script>
+
+or similar. Some people would say that it is a good idea to write the tests for
+code before you write the code; I am agnostic on this, but it does help ensure
+that the functions you define have input/output characteristics which are easy to
+test, something which often leads to a good design. Some of the tests I have
+written are quite cumbersome to read and were hard to write, because they are
+testing behaviour which is deep 'inside' one of the main functions. This might
+indicate that splitting the calculation into smaller parts would be a good idea;
+it would certainly make the parts easier to test and reason about.
+
+
+You can also run the tests from the shell on unixy systems, outside your browser,
+with node.js and grunt (one of the many, many tiresome Javascript toolchain things
+which is in fashion; anyway). This depends on the 'Gruntfile' contained above the
+tests directory. If you have nodejs and npm installed, you can run
+
+       npm install grunt-contrib-jasmine grunt-cli
+
+in MyHomeEnergyPlanner/Modules/assessment/js/model, which will create a
+node_modules directory with the dependencies in. You can then run
+
+       ./node_modules/grunt-cli/bin/grunt
+
+To see the tests run and their output in your terminal. You can even add this to a
+git pre-commit hook to run the tests before you commit.
+
+[1] http://jasmine.github.io/2.3/introduction.html

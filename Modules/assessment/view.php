@@ -14,7 +14,7 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r5.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r5.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesPHPP-r1.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesCarbonCoop-r1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
@@ -36,6 +36,14 @@ global $reports;
         /* must be half of the width, minus scrollbar on the left (30px) */
         margin-left: -280px;
     }
+
+    #create-new {
+        cursor:pointer;
+    }
+
+    #create-new:hover {
+        background-color:rgb(220,220,220);
+    }
 </style>
 
 <link rel="stylesheet" href="<?php echo $d; ?>carbon.css">
@@ -45,47 +53,55 @@ global $reports;
 <div id="openbem">
     <div id="left-pane">
 
-        <div class="side-block">
-            <h3>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></h3>
-            <p style="font-size:14px">Description: <span id="project-description"></span></p>
-            <p style="font-size:14px">Author: <span id="project-author"></span></p>
-            <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
+        <div class="side-block-2">
+            <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
 
+            <div style="padding:10px">
+
+                <p style="font-size:14px">Description: <span id="project-description"></span></p>
+                <p style="font-size:14px">Author: <span id="project-author"></span></p>
+                <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
+                <br><br>
+
+                <div class="scenario-nav-heading">Project</a></div>
+                <div class="scenario-nav"><a href="#master/carboncoopreport">Carbon Coop Report</a></div>
+                <div class="scenario-nav"><a href="#master/householdquestionnaire">Household Questionnaire</a></div>
+                <div class="scenario-nav"><a href="#master/currentenergy">Current Energy</a></div>
+                <div class="scenario-nav"><a href="#master/export">Import/Export</a></div>
+                <div class="scenario-nav"><a href="#master/imagegallery">Image gallery</a></div>
+
+            </div>
         </div>
 
         <div id="scenario-menu-template" style="display:none">
 
-            <div class="side-block scenario-block" scenario="template" style="cursor:pointer">
+            <div class="side-block-2 scenario-block" scenario="template" style="cursor:pointer">
 
-                <h3>title scenarioname (<span class="template_sap_rating"></span>)</h3>
-
+                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>title<span style="float:right">scenarioname (<span class="template_sap_rating"></span>)</span></b></div>
 
                 <div class="menu-content">
-                    <div class="scenario-nav-heading">Core input</a></div>
-                    <div class="scenario-nav"><a href="#template/context">Floors</a></div>
-                    <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
-                    <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
-                    <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
-                    <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
-                    <div class="scenario-nav-heading">Extended input</a></div>
-                    <div class="scenario-nav"><a href="#template/householdquestionnaire">Household Questionnaire</a></div>
-                    <div class="scenario-nav"><a href="#template/imagegallery">Image gallery</a></div>
-                    <div class="scenario-nav"><a href="#template/currentenergy">Current Energy</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_appliancePHPP"/> <a href="#template/appliancePHPP">Appliances PHPP calculation</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/> <a href="#template/appliancelist">Detailed Appliance List</a></div>
-                    <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
-                    <div class="scenario-nav-heading">Reporting</a></div>
-                    <div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
-                    <?php foreach ($reports as $report) { ?>
-                        <div class="scenario-nav"><a href="#template/<?php echo $report['docname']; ?>"><?php echo $report['fullname']; ?></a></div>
-                    <?php } ?>
-                    <div class="scenario-nav"><a href="#template/export">Import/Export</a></div>
-                    <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
-                    <div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>
-                    <br>
-                    <!--<div class="scenario-nav delete-scenario">Delete scenario <i class="icon-trash"></i></div>-->
+                    <div style="padding:10px">
+                        <div class="scenario-nav-heading">Core input</a></div>
+                        <div class="scenario-nav"><a href="#template/context">Floors</a></div>
+                        <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
+                        <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
+                        <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
+                        <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
+                        <div class="scenario-nav-heading">Extended input</a></div>
+
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_applianceCarbonCoop"/> <a href="#template/applianceCarbonCoop">Appliances CarbonCoop calculation</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/> <a href="#template/appliancelist">Detailed Appliance List</a></div>
+                        <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
+                        <div class="scenario-nav-heading">Other</a></div>
+                        <div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
+                        <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
+                        <!--<div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>-->
+                        <br>
+                        <div class="scenario-nav delete-scenario-launch">Delete scenario <i class="icon-trash"></i></div>
+
+                    </div>
 
                 </div>
             </div>
@@ -154,6 +170,35 @@ global $reports;
     </div>
 </div>
 
+<div id="modal-delete-scenario" class="modal alert-danger hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <h3>Delete scenario</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete this scenario?
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo _('Cancel'); ?></button>
+        <button id="delete-scenario-confirm" class="btn btn-primary"><?php echo _('Delete'); ?></button>
+    </div>
+</div>
+
+
+<div id="modal-create-scenario" class="modal modal-sm hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Select from the list below the scenario you want to duplicate</h3>
+    </div>
+    <div class="modal-body">
+        <select id="select-scenario"></select>        
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="modal-create-scenario-done" class="btn btn-primary">Done</button>
+    </div>
+</div>
+
+
 </body>
 </html>                                		
 
@@ -194,10 +239,11 @@ global $reports;
         var name = "";
         if (project[s].scenario_name != undefined)
             name = project[s].scenario_name;
-        tmp = tmp.replace("scenarioname", ": " + name.charAt(0).toUpperCase() + name.slice(1));
+        tmp = tmp.replace("scenarioname", " " + name.charAt(0).toUpperCase() + name.slice(1));
         $("#scenario-list").append(tmp);
     }
     $(".menu-content").hide();
+    $(".scenario-block[scenario=master]").find(".delete-scenario-launch").hide();
     $(".scenario-block[scenario=master]").find(".menu-content").show();
 
 
@@ -205,6 +251,7 @@ global $reports;
     var keys = {};
 
     for (s in project) {
+        // QUESTION: do you really want to do calc.run twice here?
         project[s] = calc.run(calc.run(project[s]));
         $("." + s + "_sap_rating").html(project[s].SAP.rating.toFixed(0));
     }
@@ -229,6 +276,15 @@ global $reports;
     $(window).on('hashchange', function () {
         var tmp = (window.location.hash).substring(1).split('/');
         page = tmp[1]; //scenario = tmp[0];
+        scenario = tmp[0];
+
+        if (!scenario)
+            scenario = "master";
+        if (!page)
+            page = "context";
+
+        if (project[scenario] == undefined)
+            scenario = 'master';
 
         data = project[scenario];
 
@@ -288,34 +344,61 @@ global $reports;
         }
     });
 
-    $("#create-new").click(function () {
+    $("#openbem").on('click',"#create-new",function () {
+        // Reset select
+        $('#select-scenario').html("");
+        
+        // Fill up the select
+        for (z in project)
+            $('#select-scenario').append("<option value='" + z + "'>" + z + "</option>");
 
+         $('#modal-create-scenario').modal('show');
+    });
+
+    $("#modal-create-scenario").on('click','#modal-create-scenario-done',function () {
         var n = 0;
         for (z in project)
             n++;
         var s = "scenario" + n;
 
-        project[s] = JSON.parse(JSON.stringify(project.master));
+        project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
+
+        // dont make a copy of the household questionaire and imagegallery
+        project[s].household = {};
+        project[s].imagegallery = [];
+        project[s].currentenergy = {};
 
         var tmp = mastermenu.replace(/template/g, s);
         tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
 
         $(".menu-content").hide();
         $("#scenario-list").append(tmp);
+        $('#modal-create-scenario').modal('hide');
 
         scenario = s;
         update();
     });
 
-    $("#openbem").on('click', ".delete-scenario", function () {
-        var s = $(this).parent().parent().attr('scenario');
+    $("#openbem").on('click', ".delete-scenario-launch", function () {
+        var s = $(this).parent().parent().parent().attr('scenario');
+        if (s != "master") {
+            $("#modal-delete-scenario").modal("show");
+            $("#modal-delete-scenario").attr("scenario", s);
+        }
+    });
+
+    $("#delete-scenario-confirm").click(function () {
+        var s = $("#modal-delete-scenario").attr('scenario');
 
         if (s != "master")
             delete project[s];
-        scenario = "master";
         $(".scenario-block[scenario=" + s + "]").hide();
 
+        scenario = "master";
+        $(".scenario-block[scenario=master]").find(".menu-content").show();
+
         update();
+        $("#modal-delete-scenario").modal("hide");
     });
 
 
@@ -336,14 +419,14 @@ global $reports;
         location.reload();
     });
 
-    $("#openbem").on('click', '[key="data.use_appliancePHPP"]', function () {
-        if (data.use_appliancePHPP === 1)
+    $("#openbem").on('click', '[key="data.use_applianceCarbonCoop"]', function () {
+        if (data.use_applianceCarbonCoop === 1)
             data.use_appliancelist = false;
         update();
     });
     $("#openbem").on('click', '[key="data.use_appliancelist"]', function () {
         if (data.use_appliancelist === 1)
-            data.use_appliancePHPP = false;
+            data.use_applianceCarbonCoop = false;
         update();
     });
 
