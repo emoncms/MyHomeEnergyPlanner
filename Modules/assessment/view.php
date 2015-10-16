@@ -163,6 +163,7 @@ global $reports;
     var changelog = "";
     var selected_library = -1;
     var selected_library_tag = "Wall";
+    var printmode = false;
 
     $("#openbem").css("background-color", "#eee");
 
