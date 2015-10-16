@@ -151,7 +151,32 @@ function carboncoopreport_initUI() {
     // TODO: Show house graphic with heat loss for the four scenarios.
     */
 
+    function heatlossData(scenario){
+    	return {
+		    floorwk: project[scenario].fabric.total_floor_WK,
+		    ventilationwk: project[scenario].ventilation.average_WK,
+		    windowswk: project[scenario].fabric.total_window_WK,
+		    wallswk: project[scenario].fabric.total_wall_WK,
+		    roofwk: project[scenario].fabric.total_roof_WK,
+		    thermalbridgewk: project[scenario].fabric.thermal_bridging_heat_loss,
+		    totalwk: project[scenario].fabric.total_floor_WK + project[scenario].ventilation.average_WK + project[scenario].fabric.total_window_WK + project[scenario].fabric.total_wall_WK + project[scenario].fabric.total_roof_WK + project[scenario].fabric.thermal_bridging_heat_loss	
+    	}
+    }
 
+    /* Master */
+    heatlossDataMaster = heatlossData("master");
+    // console.log(heatlossDataMaster);
+
+    /* Scenario 1 */
+	heatlossDataScenario1 = heatlossData("scenario1");
+    // console.log(heatlossDataScenario1);
+
+    if (printmode != true){
+    	console.log("print mode");
+    	$("#house-heatloss-diagram-scenario1, #house-heatloss-diagram-scenario2, #house-heatloss-diagram-scenario3").css({
+    		"display": "none"
+    	});
+    }
 
 
     /* Figure 4: Your home’s heat balance
@@ -179,10 +204,10 @@ function carboncoopreport_initUI() {
 		},
 		data: [
 			{label: 'UK Average', value: [
-					{value: -200, variance: 5, label: 'Gas'},
-					{value: -400, label: 'Wood'},
-					{value: 300, label: 'Solar'},
-					{value: 300, variance: 10, label: 'Solid fuel'}
+					{value: -20, variance: 5, label: 'Gas'},
+					{value: -40, label: 'Wood'},
+					{value: 30, label: 'Solar'},
+					{value: 30, variance: 10, label: 'Solid fuel'}
 			]},
 			{label: '2000 B Regs Average', variance: 30, value: 60},
 			// {label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
@@ -472,7 +497,7 @@ function carboncoopreport_initUI() {
 
 
 
-
+	//if (printmode)
 
 
 
