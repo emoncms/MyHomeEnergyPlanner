@@ -163,16 +163,23 @@ function carboncoopreport_initUI() {
     	}
     }
 
+    $("body").on("click", ".js-house-heatloss-diagram-picker span", function(e){
+		var scenario = $(this).data("scenario");
+		console.log(scenario);
+		$(".js-house-heatloss-diagrams-wrapper .centered-house").css({
+			"display": "none"
+		});
+		$("div[data-scenario-diagram='"+scenario+"']").css("display", "block");
+    });
+
     /* Master */
     heatlossDataMaster = heatlossData("master");
     // console.log(heatlossDataMaster);
 
     /* Scenario 1 */
 	heatlossDataScenario1 = heatlossData("scenario1");
-    // console.log(heatlossDataScenario1);
 
     if (printmode != true){
-    	console.log("print mode");
     	$("#house-heatloss-diagram-scenario1, #house-heatloss-diagram-scenario2, #house-heatloss-diagram-scenario3").css({
     		"display": "none"
     	});
