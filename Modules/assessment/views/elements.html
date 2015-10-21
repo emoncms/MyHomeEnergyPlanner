@@ -43,15 +43,12 @@
     <table class="table">
 
         <tr>
-            <th style="text-align:left">Element Name</th>
-            <th>Lib</th>
+            <th style="text-align:left">Element</th>
             <th>Length<br>(m)</th>
             <th>Height<br>(m)</th>
             <th>Area<br>(m<sup>2</sup>)</th>
             <th>Window<br>Area<br>(m<sup>2</sup>)</th>
             <th>Net<br>Area<br>(m<sup>2</sup>)</th>
-            <th>U-value<br>(W/K.m2)</th>
-            <th>k-value<br>(kJ/K.m2)</th>
             <th>W/K</th>
             <th></th>
 
@@ -59,16 +56,13 @@
 
         <tbody id="element-template" style="display:none">
             <tr>
-                <td style="text-align:left"><input style="text-align:left; width:150px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
-                <td><span key="data.fabric.elements.template.lib" style="width:60px"></span></td>
+                <td style="text-align:left"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span>: <span key="data.fabric.elements.template.name" ></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m2</span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m2</span></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
                 <td><span key="data.fabric.elements.template.windowarea" dp=1>0.0</span>m<sup>2</sup></td>
                 <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
 
-                <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:40px" /></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.kvalue" style="width:40px" /></td>
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
                 <td><button class="apply-measure-list" row="template">Apply Measure</button></td>
                 <td><span class="delete-element" row="template" style="cursor:pointer"><a><i class="icon-trash"></i></a></span></td>
@@ -81,8 +75,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="add-element btn" type="wall">Add new wall</button>
-                <button class="btn add-element-from-lib" tags="Wall">from library</button>
+                <button class="btn add-element-from-lib" tags="Wall">Add wall from library</button>
             </td>
             <td></th>
             <td></td>
@@ -105,8 +98,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="add-element btn" type="floor">Add new floor</button>
-                <button class="btn add-element-from-lib" tags="Floor">from library</button>
+                <button class="btn add-element-from-lib" tags="Floor">Add floor from library</button>
             </td>
             <td></th>
             <td></td>
@@ -129,8 +121,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="add-element btn" type="roof">Add new roof</button>
-                <button class="btn add-element-from-lib" tags="Roof">from library</button>
+                <button class="btn add-element-from-lib" tags="Roof">Add roof from library</button>
             </td>
             <td></th>
             <td></td>
@@ -235,11 +226,7 @@
     <tbody id="windows"></tbody>
 
     <tr>
-        <td style="text-align:left">
-            <button class="add-element btn" type="window">Add new window</button>
-
-        </td>
-        <td><button class="btn add-element-from-lib" tags="Window">from library</button></th>
+        <td><button class="btn add-element-from-lib" tags="Window">Add window from library</button></td>
         <td></td>
     </tr>
 
