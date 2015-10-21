@@ -367,7 +367,7 @@ calc.ventilation = function (data)
     total += data.ventilation.number_of_openflues * 20;
     total += data.ventilation.number_of_intermittentfans * 10;
     total += data.ventilation.number_of_passivevents * 10;
-    total += data.ventilation.number_of_fluelessgasfires * 10;
+    total += data.ventilation.number_of_fluelessgasfires * 40;
 
     var infiltration = 0;
     if (data.volume != 0) {
@@ -379,7 +379,7 @@ calc.ventilation = function (data)
         infiltration += (data.num_of_floors - 1) * 0.1;
 
         if (data.ventilation.dwelling_construction == 'timberframe')
-            infiltration += 0.2;
+            infiltration += 0.25;
         if (data.ventilation.dwelling_construction == 'masonry')
             infiltration += 0.35;
 
