@@ -1,35 +1,35 @@
 
 /*
-
+ 
  An open source building energy model based on SAP.
-
+ 
  Studying the SAP model we see that the calculations can be broken down into sub
  calculation modules and that it could be possible to create a flexible model where
  you can include or exclude certain parts depending on the granularity or adherance
  to SAP that you would like.
-
+ 
  Principles
-
+ 
  - All variables that are accessed in the ui need to be available via the data object.
-
+ 
  - Variables written to from one module and accessed from another need to be in the
  global name space.
-
+ 
  - Variables used internally by a module that are also accessed in the ui should be
  defined within the module namespace.
-
+ 
  - Variables used internally by a module that are not accessed by the ui should be
  defined as local variables within the module's calc function.
-
+ 
  - variable naming: this_is_a_variable. _ between words. Abreviations can be in capitals
  otherwise lower case.
-
+ 
  - if the module has a primary data object i.e floors call the module by the data object
  name.
-
+ 
  - calc functions should be divided by task.
-
-
+ 
+ 
  */
 
 
@@ -88,6 +88,8 @@ calc.start = function (data)
     data.external_temperature = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10];
     data.losses_WK = {};
     data.gains_W = {};
+    data.annual_useful_gains_kWh_m2 = {};
+    data.annual_losses_kWh_m2 = {};
 
     data.energy_requirements = {};
     data.total_cost = 0;
@@ -99,7 +101,7 @@ calc.start = function (data)
     data.primary_energy_use_by_fuels = {};
 
     data.totalWK = 0;
-    
+
     return data;
 }
 
@@ -324,7 +326,7 @@ calc.fabric = function (data)
     data.GL = sum / data.TFA;
 
     return data;
-}
+};
 
 //---------------------------------------------------------------------------------------------
 // VENTILATION
@@ -625,7 +627,7 @@ calc.temperature = function (data)
 // Calculates space heating and cooling demand.
 // Module Inputs: data.space_heating.use_utilfactor_forgains
 // Global Inputs: data.TFA, data.internal_temperature, data.external_temperature, data.losses_WK, data.gains_W
-// Global Outputs: data.energy_requirements.space_heating, data.energy_requirements.space_cooling
+// Global Outputs: data.energy_requirements.space_heating, data.energy_requirements.space_cooling, data.annual_useful_gains_kWh_m2, data.annual_losses_kWh_m2
 // Uses external function: calc_utilisation_factor
 // Datasets: datasets.table_1a
 //---------------------------------------------------------------------------------------------
@@ -643,7 +645,8 @@ calc.space_heating = function (data)
     var total_gains = [];
     var utilisation_factor = [];
     var useful_gains = [];
-    var annual_useful_gains_kW_m2 = {"Internal": 0, "Solar": 0, "Space heating": 0}; //  Units: kwh/m2/year
+    var annual_useful_gains_kWh_m2 = {"Internal": 0, "Solar": 0, "Space heating": 0}; //  Units: kwh/m2/year
+    var annual_losses_kWh_m2 = [];
 
     var heat_demand = [];
     var cooling_demand = [];
@@ -697,8 +700,8 @@ calc.space_heating = function (data)
 
         annual_heating_demand += heat_demand_kwh[m];
         annual_cooling_demand += cooling_demand_kwh[m];
-        
-        
+
+
         //Annual useful gains. Units: kwh/m2/year
         var gains_source = "";
         for (z in data.gains_W) {
@@ -706,16 +709,23 @@ calc.space_heating = function (data)
                 gains_source = "Internal";
             if (z === "solar")
                 gains_source = "Solar";
-            //  WHERE DO WE GET THE SPACE HEATING GAINS FROM??????
 
             // Apply utilisation factor if chosen:
             if (data.space_heating.use_utilfactor_forgains) {
-                annual_useful_gains_kW_m2[gains_source] += utilisation_factor[m] * data.gains_W[z][m] / 1000 / data.TFA;
+                annual_useful_gains_kWh_m2[gains_source] += utilisation_factor[m] * data.gains_W[z][m] * 0.024 / data.TFA;
             } else {
-                annual_useful_gains_kW_m2[gains_source] += data.gains_W[z][m] / 1000 / data.TFA;
+                annual_useful_gains_kWh_m2[gains_source] += data.gains_W[z][m] * 0.024 / data.TFA;
             }
         }
-        annual_useful_gains_kW_m2['Space heating'] += heat_demand_kwh[m] / data.TFA;
+        annual_useful_gains_kWh_m2['Space heating'] += heat_demand_kwh[m] / data.TFA;
+
+        // Annual losses. Units: kwh/m2/year
+        for (z in data.losses_WK) {
+            if(annual_losses_kWh_m2[z] == undefined)
+                annual_losses_kWh_m2[z] = 0
+            annual_losses_kWh_m2[z] += data.losses_WK[z][m] * 0.024 * delta_T[m] / data.TFA;
+        }
+
     }
 
     data.space_heating.delta_T = delta_T;
@@ -723,7 +733,8 @@ calc.space_heating = function (data)
     data.space_heating.total_gains = total_gains;
     data.space_heating.utilisation_factor = utilisation_factor;
     data.space_heating.useful_gains = useful_gains;
-    data.space_heating.annual_useful_gains = annual_useful_gains_kW_m2;
+    data.annual_useful_gains_kWh_m2 = annual_useful_gains_kWh_m2;
+    data.annual_losses_kWh_m2 = annual_losses_kWh_m2;
 
     data.space_heating.heat_demand = heat_demand;
     data.space_heating.cooling_demand = cooling_demand;
@@ -741,7 +752,7 @@ calc.space_heating = function (data)
     data.fabric_energy_efficiency = (annual_heating_demand + annual_cooling_demand) / data.TFA;
 
     return data;
-}
+};
 
 //---------------------------------------------------------------------------------------------
 // ENERGY SYSTEMS, FUEL COSTS
@@ -923,9 +934,9 @@ calc.LAC = function (data)
     }
 
     /*
-
+     
      Electrical appliances
-
+     
      */
 
     // The initial value of the annual energy use in kWh for electrical appliances is
@@ -955,9 +966,9 @@ calc.LAC = function (data)
     data.LAC.EA = EA;
 
     /*
-
+     
      Cooking
-
+     
      */
 
     // Internal heat gains in watts from cooking
@@ -1286,8 +1297,8 @@ calc.applianceCarbonCoop = function (data) {
         }
     }
 
-    data.applianceCarbonCoop.gains_W['Appliances'] = data.applianceCarbonCoop.primary_energy_total.appliances; 
-    data.applianceCarbonCoop.gains_W['Cooking'] = data.applianceCarbonCoop.primary_energy_total.cooking; 
+    data.applianceCarbonCoop.gains_W['Appliances'] = data.applianceCarbonCoop.primary_energy_total.appliances;
+    data.applianceCarbonCoop.gains_W['Cooking'] = data.applianceCarbonCoop.primary_energy_total.cooking;
     data.applianceCarbonCoop.gains_W_monthly['Appliances'] = [];
     data.applianceCarbonCoop.gains_W_monthly['Cooking'] = [];
     for (var m = 0; m < 12; m++) {

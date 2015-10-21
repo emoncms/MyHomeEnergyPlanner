@@ -151,13 +151,46 @@ function carboncoopreport_initUI() {
     // TODO: Show house graphic with heat loss for the four scenarios.
     */
 
+    function heatlossData(scenario){
+    	return {
+		    floorwk: project[scenario].fabric.total_floor_WK,
+		    ventilationwk: project[scenario].ventilation.average_WK,
+		    windowswk: project[scenario].fabric.total_window_WK,
+		    wallswk: project[scenario].fabric.total_wall_WK,
+		    roofwk: project[scenario].fabric.total_roof_WK,
+		    thermalbridgewk: project[scenario].fabric.thermal_bridging_heat_loss,
+		    totalwk: project[scenario].fabric.total_floor_WK + project[scenario].ventilation.average_WK + project[scenario].fabric.total_window_WK + project[scenario].fabric.total_wall_WK + project[scenario].fabric.total_roof_WK + project[scenario].fabric.thermal_bridging_heat_loss	
+    	}
+    }
 
+    $("body").on("click", ".js-house-heatloss-diagram-picker span", function(e){
+		var scenario = $(this).data("scenario");
+		console.log(scenario);
+		$(".js-house-heatloss-diagrams-wrapper .centered-house").css({
+			"display": "none"
+		});
+		$("div[data-scenario-diagram='"+scenario+"']").css("display", "block");
+    });
+
+    /* Master */
+    heatlossDataMaster = heatlossData("master");
+    // console.log(heatlossDataMaster);
+
+    /* Scenario 1 */
+	heatlossDataScenario1 = heatlossData("scenario1");
+
+    if (printmode != true){
+    	$("#house-heatloss-diagram-scenario1, #house-heatloss-diagram-scenario2, #house-heatloss-diagram-scenario3").css({
+    		"display": "none"
+    	});
+    }
 
 
     /* Figure 4: Your home’s heat balance
     // Heat transfer per year by element. The gains and losses here need to balance.
     // Trystan is working on separating the data out so we can show it on a stacked bar chart.
     // TODO: Stacked bar charts don't appear to be working properly with negative values
+    // data.annual_losses_kWh_m2 appears to be empty, so there are currently no negative stacks on this chart
     */
 
 	var EnergyDemand = new BarChart({
@@ -172,26 +205,28 @@ function carboncoopreport_initUI() {
 		division: 100,
 		defaultBarColor: 'rgb(231,37,57)',
 		barColors: {
-			'Wood': 'rgb(24,86,62)',
+			'Internal': 'rgb(24,86,62)',
 			'Solar': 'rgb(240,212,156)',
-			'Gas': 'rgb(236,102,79)',
-			'Solid fuel': 'rgb(246,167,7)',
+			'Space heating': 'rgb(236,102,79)',
+			// 'Solid fuel': 'rgb(246,167,7)',
 		},
 		data: [
-			{label: 'UK Average', value: [
-					{value: -200, variance: 5, label: 'Gas'},
-					{value: -400, label: 'Wood'},
-					{value: 300, label: 'Solar'},
-					{value: 300, variance: 10, label: 'Solid fuel'}
-			]},
-			{label: '2000 B Regs Average', variance: 30, value: 60},
-			// {label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
-			{label: 'Your home now', variance: 30, value: 100},
-			{label: 'UK Average', value: [
-					{value: -100, variance: 5, label: 'Gas'},
-					{value: -100, variance: 5, label: 'Wood'},
-					{value: 150, variance: 5, label: 'Solar'},
-					{value: 50, variance: 5, label: 'Solid fuel'}
+			{label: 'Your Home Now', value: [
+				{value: project["master"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
+				{value: project["master"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
+				{value: project["master"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
+			]},{label: 'Scenario 1', value: [
+				{value: project["scenario1"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
+				{value: project["scenario1"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
+				{value: project["scenario1"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
+			]},{label: 'Scenario 2', value: [
+				{value: project["scenario2"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
+				{value: project["scenario2"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
+				{value: project["scenario2"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
+			]},{label: 'Scenario 3', value: [
+				{value: project["scenario3"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
+				{value: project["scenario3"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
+				{value: project["scenario3"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
 			]},
 		]
 	});
@@ -240,7 +275,7 @@ function carboncoopreport_initUI() {
 
 	SpaceHeatingDemand.draw('fig-5-space-heating-demand');
 
-	/* Figure 6: Energy Demand, Trystan working on providing real data
+	/* Figure 6: Energy Demand
 	//
 	*/
 
@@ -255,34 +290,92 @@ function carboncoopreport_initUI() {
 		barGutter: 120,
 		defaultBarColor: 'rgb(231,37,57)',
 		barColors: {
-			'Wood': 'rgb(24,86,62)',
-			'Solar': 'rgb(240,212,156)',
 			'Gas': 'rgb(236,102,79)',
-			'Solid fuel': 'rgb(246,167,7)',
+			'Electric': 'rgb(240,212,156)',
+			'Wood': 'rgb(24,86,62)',
 		},
 		data: [
-			{label: 'UK Average', value: [
-					{value: 2000, variance: 5, label: 'Gas'},
-					{value: -600, label: 'Wood'},
-					{value: 605, label: 'Solar'},
-					{value: 300, variance: 10, label: 'Solid fuel'}
+			{label: 'Your Home Now', value: [
+				{value: project["master"].fuel_totals['gas'].quantity, label: 'Gas'},
+				{value: project["master"].fuel_totals['electric'].quantity, label: 'Electric'},
+				{value: project["master"].fuel_totals['wood'].quantity, label: 'Wood'},
 			]},
-			{label: '2000 B Regs Average', variance: 30, value: 60},
-			{label: 'Your home now', variance: 30, value: project[scenario].primary_energy_use_m2},
-			{label: 'UK Average', value: [
-					{value: 2000, variance: 5, label: 'Gas'},
-					{value: 1200, variance: 5, label: 'Wood'},
-					{value: 750, variance: 5, label: 'Solar'},
-					{value: 300, variance: 5, label: 'Solid fuel'}
+			{label: 'Scenario 1', value: [
+				{value: project["scenario1"].fuel_totals['gas'].quantity, label: 'Gas'},
+				{value: project["scenario1"].fuel_totals['electric'].quantity, label: 'Electric'},
+				{value: project["scenario1"].fuel_totals['wood'].quantity, label: 'Wood'},
+			]},
+			{label: 'Scenario 2', value: [
+				{value: project["scenario2"].fuel_totals['gas'].quantity, label: 'Gas'},
+				{value: project["scenario2"].fuel_totals['electric'].quantity, label: 'Electric'},
+				{value: project["scenario2"].fuel_totals['wood'].quantity, label: 'Wood'},
+			]},
+			{label: 'Scenario 3', value: [
+				{value: project["scenario3"].fuel_totals['gas'].quantity, label: 'Gas'},
+				{value: project["scenario3"].fuel_totals['electric'].quantity, label: 'Electric'},
+				{value: project["scenario3"].fuel_totals['wood'].quantity, label: 'Wood'},
 			]},
 		]
 	});
 
 	EnergyDemand.draw('energy-demand');
 
-	/* Figure 7: TODO Trystan working on data for stacks
+	/* Figure 7:
 	//
 	*/
+
+
+	var primaryEneryUse = new BarChart({
+		chartTitle: 'Primary Energy Use',
+		yAxisLabel: 'kWh/m2.year',
+		fontSize: 22,
+		width: 1200,
+		chartHeight: 600,
+		division: 'auto',
+		barWidth: 110,
+		barGutter: 120,
+		defaultBarColor: 'rgb(231,37,57)',
+		barColors: {
+			'Lighting': 'rgb(236,102,79)',
+			'Appliances': 'rgb(240,212,156)',
+			'Cooking': 'rgb(24,86,62)',
+			'Water Heating': 'rgb(157,213,203)',
+			'Space Heating' : 'rgb(231,37,57)',
+		},
+		data: [
+			{label: 'Your Home Now', value: [
+				{value: project["master"].energy_requirements['lighting'].quantity, label: 'Lighting'},
+				{value: project["master"].energy_requirements['appliances'].quantity, label: 'Appliances'},
+				{value: project["master"].energy_requirements['cooking'].quantity, label: 'Cooking'},
+				{value: project["master"].energy_requirements['waterheating'].quantity, label: 'Water heating'},
+				{value: project["master"].energy_requirements['space_heating'].quantity, label: 'Space heating'},
+			]},
+			{label: 'Scenario 1', value: [
+				{value: project["scenario1"].energy_requirements['lighting'].quantity, label: 'Lighting'},
+				{value: project["scenario1"].energy_requirements['appliances'].quantity, label: 'Appliances'},
+				{value: project["scenario1"].energy_requirements['cooking'].quantity, label: 'Cooking'},
+				{value: project["scenario1"].energy_requirements['waterheating'].quantity, label: 'Water heating'},
+				{value: project["scenario1"].energy_requirements['space_heating'].quantity, label: 'Space heating'},
+			]},
+			{label: 'Scenario 2', value: [
+				{value: project["scenario2"].energy_requirements['lighting'].quantity, label: 'Lighting'},
+				{value: project["scenario2"].energy_requirements['appliances'].quantity, label: 'Appliances'},
+				{value: project["scenario2"].energy_requirements['cooking'].quantity, label: 'Cooking'},
+				{value: project["scenario2"].energy_requirements['waterheating'].quantity, label: 'Water heating'},
+				{value: project["scenario2"].energy_requirements['space_heating'].quantity, label: 'Space heating'},
+			]},
+			{label: 'Scenario 3', value: [
+				{value: project["scenario3"].energy_requirements['lighting'].quantity, label: 'Lighting'},
+				{value: project["scenario3"].energy_requirements['appliances'].quantity, label: 'Appliances'},
+				{value: project["scenario3"].energy_requirements['cooking'].quantity, label: 'Cooking'},
+				{value: project["scenario3"].energy_requirements['waterheating'].quantity, label: 'Water heating'},
+				{value: project["scenario3"].energy_requirements['space_heating'].quantity, label: 'Space heating'},
+			]},
+		]
+	});
+
+	primaryEneryUse.draw('primary-energy-use');
+
 
 	/* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
 	//
@@ -472,7 +565,7 @@ function carboncoopreport_initUI() {
 
 
 
-
+	//if (printmode)
 
 
 

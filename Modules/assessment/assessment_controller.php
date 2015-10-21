@@ -25,6 +25,8 @@ function assessment_controller() {
     if ($route->format == 'html') {
         if ($route->action == "view" && $session['write'])
             $result = view("Modules/assessment/view.php", array());
+        if ($route->action == "print" && $session['write'])
+            $result = view("Modules/assessment/print.php", array());
 
         if ($route->action == "list" && $session['write'])
             $result = view("Modules/assessment/projects.php", array());
