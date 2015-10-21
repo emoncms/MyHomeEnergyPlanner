@@ -1700,7 +1700,7 @@ function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
     var n = 0.0;
     
     if (y > 0.0 && y != 1.0)
-        n = (1.0 - Math.pow(y, -a)) / (1.0 - Math.pow(y, -(a + 1.0)));
+        n = (1.0 - Math.pow(y, a)) / (1.0 - Math.pow(y, a + 1.0));
         
     if (y == 1.0)
         n = a / (a + 1.0);
