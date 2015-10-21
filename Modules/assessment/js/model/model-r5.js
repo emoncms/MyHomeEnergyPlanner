@@ -563,17 +563,23 @@ calc.temperature = function (data)
         var Tweekend = Th - (u1b + u2);
         Ti_livingarea[m] = (5 * Tweekday + 2 * Tweekend) / 7;
     }
+    
+    
 
     // rest of dwelling
     var Th2 = [];
     for (var m = 0; m < 12; m++) {
+    
+        var tmpHLP = HLP[m];
+        if (tmpHLP>6.0) tmpHLP = 6.0;
+        
         // see table 9 page 159
         if (data.temperature.control_type == 1)
-            Th2[m] = Th - 0.5 * HLP[m];
+            Th2[m] = Th - 0.5 * tmpHLP;
         if (data.temperature.control_type == 2)
-            Th2[m] = Th - HLP[m] + (Math.pow(HLP[m], 2) / 12);
+            Th2[m] = Th - tmpHLP + (Math.pow(tmpHLP, 2) / 12);
         if (data.temperature.control_type == 3)
-            Th2[m] = Th - HLP[m] + (Math.pow(HLP[m], 2) / 12);
+            Th2[m] = Th - tmpHLP + (Math.pow(tmpHLP, 2) / 12);
         //Th2[m] = i.Th - i.HLP[m] + 0.085 *Math.pow(i.HLP[m],2);
 
         if (isNaN(Th2[m]))
@@ -1695,10 +1701,15 @@ function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
     y = Math.round(y * 100000000.0) / 100000000.0;
 
     var n = 0.0;
+    
     if (y > 0.0 && y != 1.0)
         n = (1.0 - Math.pow(y, a)) / (1.0 - Math.pow(y, a + 1.0));
+        
     if (y == 1.0)
         n = a / (a + 1.0);
+        
+    if (y <= 0.0)
+        n = 1.0;
 
     if (isNaN(n))
         n = 0;
