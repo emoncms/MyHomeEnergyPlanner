@@ -1,4 +1,3 @@
-
 /*
  
  An open source building energy model based on SAP.
@@ -721,7 +720,7 @@ calc.space_heating = function (data)
 
         // Annual losses. Units: kwh/m2/year
         for (z in data.losses_WK) {
-            if(annual_losses_kWh_m2[z] == undefined)
+            if (annual_losses_kWh_m2[z] == undefined)
                 annual_losses_kWh_m2[z] = 0
             annual_losses_kWh_m2[z] += data.losses_WK[z][m] * 0.024 * delta_T[m] / data.TFA;
         }
@@ -897,8 +896,12 @@ calc.LAC = function (data)
         data.LAC.LLE = 1;
     if (data.LAC.L == undefined)
         data.LAC.L = 1;
-    if (data.LAC.reduced_internal_heat_gains == undefined)
-        data.LAC.reduced_internal_heat_gains = false;
+    if (data.LAC.energy_efficient_cooking == undefined)
+        data.LAC.energy_efficient_cooking = false;
+    if (data.LAC.energy_efficient_appliances == undefined) 
+        data.LAC.energy_efficient_appliances = false;
+    if (data.LAC.reduced_heat_gains_lighting == undefined) 
+        data.LAC.reduced_heat_gains_lighting = false;
 
     // average annual energy consumption for lighting if no low-energy lighting is used is:
     data.LAC.EB = 59.73 * Math.pow((data.TFA * data.occupancy), 0.4714);
@@ -924,8 +927,8 @@ calc.LAC = function (data)
             EL_sum += EL_monthly[m];
 
             GL_monthly[m] = EL_monthly[m] * 0.85 * 1000 / (24 * datasets.table_1a[m]);
-            if (data.LAC.reduced_internal_heat_gains)
-                GL_monthly[m] = 0.4 * EL_monthly[m];
+            if (data.LAC.reduced_heat_gains_lighting)
+                GL_monthly[m] = 0.4 * GL_monthly[m];
         }
 
         data.gains_W["Lighting"] = GL_monthly;
@@ -949,11 +952,14 @@ calc.LAC = function (data)
     {
         // The appliances energy use in kWh in month m (January = 1 to December = 12) is
         EA_monthly[m] = EA_initial * (1.0 + (0.157 * Math.cos((2 * Math.PI * (m - 1.78)) / 12.0))) * datasets.table_1a[m] / 365.0;
-        EA += EA_monthly[m];
-
         GA_monthly[m] = EA_monthly[m] * 1000 / (24 * datasets.table_1a[m]);
-        if (data.LAC.reduced_internal_heat_gains)
+
+        if (data.LAC.energy_efficient_appliances) {
             GA_monthly[m] = 0.67 * GA_monthly[m];
+            EA += 0.9 * EA_monthly[m];
+        }
+        else
+            EA += EA_monthly[m];
     }
 
     // The annual CO2 emissions in kg/m2/year associated with electrical appliances is
@@ -975,7 +981,7 @@ calc.LAC = function (data)
     var GC = 35 + 7 * data.occupancy;
 
     // When lower internal heat gains are assumed for the calculation
-    if (data.LAC.reduced_internal_heat_gains)
+    if (data.LAC.energy_efficient_cooking)
         GC = 23 + 5 * data.occupancy;
 
     var GC_monthly = [];
@@ -987,13 +993,10 @@ calc.LAC = function (data)
 
     data.LAC.EC = GC * 0.024 * 365;
 
-
     data.gains_W["Cooking"] = GC_monthly;
-    if (GC > 0)
+    if (data.LAC.EC > 0)
         data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC};
-
-
-    data.LAC.GC = data.LAC.EC;
+    //data.LAC.GC = data.LAC.EC;
 
     return data;
 };

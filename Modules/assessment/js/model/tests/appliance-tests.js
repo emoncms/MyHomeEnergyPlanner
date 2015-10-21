@@ -32,7 +32,7 @@ describe("The appliances calculation", function() {
             TFA: tfa,
             occupancy: occ,
             LAC:{
-                reduced_internal_heat_gains: reduced
+                energy_efficient_cooking: reduced
             }
         }, data);
         return calc.LAC(data);
