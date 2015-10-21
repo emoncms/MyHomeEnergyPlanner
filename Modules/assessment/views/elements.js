@@ -1,4 +1,4 @@
-
+console.log('debug elements.js');
 
 $("#openbem").on("click", '.add-element', function () {
 

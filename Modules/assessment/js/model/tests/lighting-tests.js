@@ -55,7 +55,7 @@ describe("The lighting calculation", function() {
                 LAC: {
                     LLE: LLE,
                     L: L,
-                    reduced_internal_heat_gains: reduced
+                    energy_efficient_cooking: reduced
                 }
             },
             data

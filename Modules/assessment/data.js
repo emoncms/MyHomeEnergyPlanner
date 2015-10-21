@@ -344,7 +344,8 @@ var project = {
         "LAC": {
             "LLE": 0,
             "L": 12,
-            "reduced_internal_heat_gains": false
+            energy_efficient_appliances: false,
+            "energy_efficient_cooking": false
         },
         "use_generation": 0,
         "generation": {
@@ -822,7 +823,7 @@ var project = {
         "LAC": {
             "LLE": 12,
             "L": 12,
-            "reduced_internal_heat_gains": false
+            "energy_efficient_cooking": false
         },
         "use_generation": 0,
         "generation": {

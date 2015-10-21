@@ -267,7 +267,9 @@ var openbem = {
         inputdata.LAC = {
             LLE: data.LAC.LLE,
             L: data.LAC.L,
-            reduced_internal_heat_gains: data.LAC.reduced_internal_heat_gains
+            energy_efficient_appliances:data.LAC.energy_efficient_appliances,
+            energy_efficient_cooking: data.LAC.energy_efficient_cooking,
+            reduced_heat_gains_lighting:data.LAC.reduced_heat_gains_lighting
         };
         inputdata.use_generation = data.use_generation;
         inputdata.generation = data.generation;
