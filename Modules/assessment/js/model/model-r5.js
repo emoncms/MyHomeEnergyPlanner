@@ -1110,7 +1110,7 @@ calc.water_heating = function (data)
 
     for (var m = 0; m < 12; m++) {
         Vd_m[m] = datasets.table_1c[m] * data.water_heating.Vd_average;
-        monthly_energy_content[m] = (4.190 * Vd_m[m] * datasets.table_1a[m] * datasets.table_1d[m]) / 3600;
+        monthly_energy_content[m] = (4.180 * Vd_m[m] * datasets.table_1a[m] * datasets.table_1d[m]) / 3600;
         data.water_heating.annual_energy_content += monthly_energy_content[m];
     }
 
