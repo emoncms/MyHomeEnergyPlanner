@@ -33,6 +33,20 @@ function draw_openbem_graphics()
     $("#house-thermalbridgewk").html(Math.round(thermalbridgewk)+" W/K");
     $("#house-totalwk").html(Math.round(totalwk)+" W/K");
     
+    var targetbarwidth = $("#targetbars").width();
+    
+    $("#spaceheating").css("width",targetbarwidth);
+    $("#primaryenergy").css("width",targetbarwidth);
+    $("#co2").css("width",targetbarwidth);
+    $("#perperson").css("width",targetbarwidth);
+
+    var targetbarheight =60;// 0.13 * targetbarwidth;
+    if (targetbarheight<60) targetbarheight = 60;
+    $("#spaceheating").css("height",targetbarheight);
+    $("#primaryenergy").css("height",targetbarheight);
+    $("#co2").css("height",targetbarheight);
+    $("#perperson").css("height",targetbarheight); 
+   
     // ---------------------------------------------------------------------------------
     var options = {
         name: "Space heating demand",
