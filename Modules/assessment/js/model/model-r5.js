@@ -1586,7 +1586,7 @@ function solar_rad(region, orient, p, m)
     var k = datasets.k;     // convert degrees into radians
     var radians = (p / 360.0) * 2.0 * Math.PI;
 
-    var sinp = Math.sin(radians);
+    var sinp = Math.sin(radians/2.0); // sinp = sin(p/2)
     var sin2p = sinp * sinp;
     var sin3p = sinp * sinp * sinp;
 
@@ -1594,7 +1594,7 @@ function solar_rad(region, orient, p, m)
     var B = k[4][orient] * sin3p + k[5][orient] * sin2p + k[6][orient] * sinp;
     var C = k[7][orient] * sin3p + k[8][orient] * sin2p + k[9][orient] * sinp + 1;
 
-    var latitude = (datasets.table_u4[region] / 360) * 2 * Math.PI; // get latitude in degrees and convert to radians
+    var latitude = (datasets.table_u4[region][0] / 360) * 2 * Math.PI; // get latitude in degrees and convert to radians
     var sol_dec = (datasets.solar_declination[m] / 360) * 2 * Math.PI; // get solar_declination in degrees and convert to radians
     var cos1 = Math.cos(latitude - sol_dec);
     var cos2 = cos1 * cos1;
