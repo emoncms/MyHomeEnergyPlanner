@@ -215,7 +215,8 @@ var openbem = {
             thermal_bridging_yvalue: data.fabric.thermal_bridging_yvalue,
             global_TMP: data.fabric.global_TMP,
             global_TMP_value: data.fabric.global_TMP_value,
-            elements: []
+            elements: [],
+            measures: data.fabric.measures
         };
         for (z in data.fabric.elements) {
             inputdata.fabric.elements[z] = {
@@ -227,6 +228,7 @@ var openbem = {
                 h: data.fabric.elements[z].h,
                 area: data.fabric.elements[z].area,
                 uvalue: data.fabric.elements[z].uvalue,
+                id: data.fabric.elements[z].id
             };
             if (data.fabric.elements[z].description != undefined)
                 inputdata.fabric.elements[z].description = data.fabric.elements[z].description;
@@ -267,9 +269,9 @@ var openbem = {
         inputdata.LAC = {
             LLE: data.LAC.LLE,
             L: data.LAC.L,
-            energy_efficient_appliances:data.LAC.energy_efficient_appliances,
+            energy_efficient_appliances: data.LAC.energy_efficient_appliances,
             energy_efficient_cooking: data.LAC.energy_efficient_cooking,
-            reduced_heat_gains_lighting:data.LAC.reduced_heat_gains_lighting
+            reduced_heat_gains_lighting: data.LAC.reduced_heat_gains_lighting
         };
         inputdata.use_generation = data.use_generation;
         inputdata.generation = data.generation;

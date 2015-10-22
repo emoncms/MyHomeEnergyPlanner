@@ -64,7 +64,7 @@
                 <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
 
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
-                <td><button class="apply-measure-list" row="template">Apply Measure</button></td>
+                <td><button class="apply-measure-list" row="template" element_id="template">Apply Measure</button></td>
                 <td><span class="delete-element" row="template" style="cursor:pointer"><a><i class="icon-trash"></i></a></span></td>
                 <td><input type="checkbox" /></td>
 
@@ -152,21 +152,16 @@
 
     <tr>
         <!--<th>Type</th>-->
-        <th style="text-align:left; width:100px">Window<br>Name</th>
-        <th style="text-align:left">Description</th>
+        <th style="text-align:left; ">&nbsp;</th>
+        <th>Description</th>
         <th>subtract<br>from:</th>
         <th>Width<br>(m)</th>
         <th>Height<br>(m)</th>
         <th>Area<br>(m<sup>2</sup>)</th>
         <th>Orient<br>-ation</th>
         <th>Over<br>shading</th>
-        <th>g</th>
-        <th>gL</th>
-        <th>ff</th>
-        <th>U-value<br>(W/K.m2)</th>
         <th>Gain</th>
         <th>W/K</th>
-        <th></th>
     </tr>
 
     <tbody id="window-template" style="display:none">
@@ -180,8 +175,12 @@
                 </select>
             </td>
             -->
-            <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.name" value="Element"></td>
-            <td style="text-align:left"><input style="text-align:left; width:80px" type="text" key="data.fabric.elements.template.description"></td>
+
+            <td style="text-align:left">
+                <b><span key="data.fabric.elements.template.lib"></span>: <span key="data.fabric.elements.template.name"></span></b> <br />
+                g:<span key="data.fabric.elements.template.g"> </span>, gL:<span key="data.fabric.elements.template.gL"></span>, ff:<span key="data.fabric.elements.template.ff"></span>, U-value: <span key="data.fabric.elements.template.uvalue"></span>
+            </td>
+            <td><input type="text" value="0"  key="data.fabric.elements.template.description" /></td>
             <td>
                 <select key="data.fabric.elements.template.subtractfrom" style="width:100px">
 
@@ -211,10 +210,7 @@
                     <option value=3 >Very little < 20% </option>
                 </select>
             </td>
-            <td><input type="text" value="0" key="data.fabric.elements.template.g" style="width:30px" /></td>
-            <td><input type="text" value="0" key="data.fabric.elements.template.gL" style="width:30px" /></td>
-            <td><input type="text" value="0" key="data.fabric.elements.template.ff" style="width:30px" /></td>
-            <td><input type="text" value="0" key="data.fabric.elements.template.uvalue" style="width:30px" /></td>
+
             <td><span key="data.fabric.elements.template.gain" dp=0>0</span>W</td>
             <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
             <td><button class="apply-measure-list" row="template">Apply Measure</button></td>
@@ -323,7 +319,7 @@
                 <tr><td>gL</td><td><input type="text" id="create-element-gL" /></td></tr>
                 <tr><td>Frame factor (ff)</td><td><input type="text" id="create-element-ff" /></td></tr>
             </tbody>
-            <tr><td>Criteria to be measure (comma seperated element tags)</td><td><input type="text" id="create-element-criteria" /></td></tr>
+            <!--<tr><td>Criteria to be measure (comma seperated element tags)</td><td><input type="text" id="create-element-criteria" /></td></tr>-->
             <tr><td>Description</td><td><input type="text" id="create-element-description" /></td></tr>
             <tr><td>Performance</td><td><input type="text" id="create-element-performance" /></td></tr>
             <tr><td>Benefits</td><td><input type="text" id="create-element-benefits" /></td></tr>
