@@ -267,6 +267,9 @@ var openbem = {
         // LAC
         //inputdata.use_LAC = data.use_LAC;
         inputdata.LAC = {
+            use_SAP_lighting: data.LAC.use_SAP_lighting,
+            use_SAP_appliances: data.LAC.use_SAP_appliances,
+            use_SAP_cooking: data.LAC.use_SAP_cooking,
             LLE: data.LAC.LLE,
             L: data.LAC.L,
             energy_efficient_appliances: data.LAC.energy_efficient_appliances,

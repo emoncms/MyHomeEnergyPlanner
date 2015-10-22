@@ -243,8 +243,6 @@ global $reports;
     $(".scenario-block[scenario=master]").find(".delete-scenario-launch").hide();
     $(".scenario-block[scenario=master]").find(".menu-content").show();
 
-
-
     var keys = {};
 
     for (s in project) {
@@ -317,8 +315,13 @@ global $reports;
 
         if (!isNaN(val) && val != "")
             val *= 1;
+        
+        if (key=="data.use_appliancelist" || key=="data.use_applianceCarbonCoop" || key=="data.LAC.use_SAP_appliances") {
+            data.use_appliancelist = false; data.use_applianceCarbonCoop = false; data.LAC.use_SAP_appliances = false;
+        }
+            
         var lastval = varset(key, val);
-
+        
         $("#openbem").trigger("onKeyChange", {key: key, value: val});
         update();
 
@@ -417,16 +420,6 @@ global $reports;
         location.reload();
     });
 
-    $("#openbem").on('click', '[key="data.use_applianceCarbonCoop"]', function () {
-        if (data.use_applianceCarbonCoop === 1)
-            data.use_appliancelist = false;
-        update();
-    });
-    $("#openbem").on('click', '[key="data.use_appliancelist"]', function () {
-        if (data.use_appliancelist === 1)
-            data.use_applianceCarbonCoop = false;
-        update();
-    });
 
     //-------------------------------------------------------------------
 
