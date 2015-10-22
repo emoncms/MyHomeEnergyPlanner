@@ -363,10 +363,11 @@ global $reports;
 
         project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
 
-        // dont make a copy of the household questionaire and imagegallery
+        // dont make a copy of the following properties
         project[s].household = {};
         project[s].imagegallery = [];
         project[s].currentenergy = {};
+        project[s].fabric.measures = {};
 
         var tmp = mastermenu.replace(/template/g, s);
         tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));

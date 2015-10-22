@@ -32,7 +32,7 @@ function compare_initUI() {
     ["<b>Lighting, Appliances & Cooking:</b> Number of low energy light fittings",'LAC.LLE'],
     ["<b>Lighting, Appliances & Cooking:</b> Number of light fittings",'LAC.L'],
     
-    ["<b>Lighting, Appliances & Cooking:</b> reduced internal heat gains",'LAC.reduced_internal_heat_gains'],
+    ["<b>Lighting, Appliances & Cooking:</b> reduced internal heat gains",'LAC.energy_efficient_cooking'],
     
     
     ["<b>Water Heating:</b> Low water use design","water_heating.low_water_use_design"],
