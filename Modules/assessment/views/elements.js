@@ -3,8 +3,9 @@ $("#openbem").on("click", '.add-element', function () {
 
     var lib = $(this).attr("lib");
     var type = $(this).attr("type").toLowerCase();
+    var element_id = get_elements_max_id() + 1;
     // Create default element
-    var element = {type: type, name: type, lib: lib, l: 0, h: 0, area: 0, uvalue: 0, kvalue: 0, wk: 0};
+    var element = {type: type, name: type, lib: lib, l: 0, h: 0, area: 0, uvalue: 0, kvalue: 0, wk: 0, id: element_id};
     // If library is defined replace defaults with parameters from library
     if (lib != undefined) {
         for (z in element_library[lib])
@@ -39,8 +40,18 @@ $("#openbem").on("click", '.add-element', function () {
 });
 $("#openbem").on("click", '.delete-element', function () {
     var row = $(this).attr('row');
+    var element_id = 1.0 * $(this).attr('element_id');
+
     $(this).closest('tr').remove();
     data.fabric.elements.splice(row, 1);
+
+    // Deleting an element is considered a measure
+    if (data.fabric.measures[element_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
+        data.fabric.measures[element_id] = {};
+        data.fabric.measures[element_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[row]));
+    }
+    data.fabric.measures[element_id].measure = "Element deleted";
+
     elements_initUI();
     update();
 });
@@ -162,6 +173,7 @@ function add_window(z)
     }
 
     $("#windows [row='template']").attr('row', z);
+    $("#windows [element_id='template']").attr('element_id', data.fabric.elements[z].id);
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
         if (data.fabric.elements[i].type != 'window' && data.fabric.elements[i].type != 'floor')
@@ -402,7 +414,6 @@ $("#openbem").on("click", '.apply-measure-list', function () {
     $('#myModal').modal('show');
 });
 $("#openbem").on("click", '.apply-measure', function () {
-    console.log(data.fabric.measures);
     var lib = $(this).attr('lib');
     var row = $(this).attr('row');
     var element_id = $(this).attr('element_id');
@@ -419,10 +430,8 @@ $("#openbem").on("click", '.apply-measure', function () {
     }
 
     data.fabric.measures[element_id].measure = data.fabric.elements[row];
-
     update();
     $('#myModal').modal('hide');
-    console.log(data.fabric.measures);
 });
 
 function get_element_value(element) {
