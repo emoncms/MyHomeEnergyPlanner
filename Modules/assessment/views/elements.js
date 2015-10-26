@@ -3,8 +3,9 @@ $("#openbem").on("click", '.add-element', function () {
 
     var lib = $(this).attr("lib");
     var type = $(this).attr("type").toLowerCase();
+    var element_id = get_elements_max_id() + 1;
     // Create default element
-    var element = {type: type, name: type, lib: lib, l: 0, h: 0, area: 0, uvalue: 0, kvalue: 0, wk: 0};
+    var element = {type: type, name: type, lib: lib, l: 0, h: 0, area: 0, uvalue: 0, kvalue: 0, wk: 0, id: element_id};
     // If library is defined replace defaults with parameters from library
     if (lib != undefined) {
         for (z in element_library[lib])
@@ -39,8 +40,18 @@ $("#openbem").on("click", '.add-element', function () {
 });
 $("#openbem").on("click", '.delete-element', function () {
     var row = $(this).attr('row');
+    var element_id = 1.0 * $(this).attr('element_id');
+
     $(this).closest('tr').remove();
     data.fabric.elements.splice(row, 1);
+
+    // Deleting an element is considered a measure
+    if (data.fabric.measures[element_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
+        data.fabric.measures[element_id] = {};
+        data.fabric.measures[element_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[row]));
+    }
+    data.fabric.measures[element_id].measure = "Element deleted";
+
     elements_initUI();
     update();
 });
@@ -162,6 +173,7 @@ function add_window(z)
     }
 
     $("#windows [row='template']").attr('row', z);
+    $("#windows [element_id='template']").attr('element_id', data.fabric.elements[z].id);
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
         if (data.fabric.elements[i].type != 'window' && data.fabric.elements[i].type != 'floor')
@@ -189,6 +201,38 @@ function elements_initUI()
         }
     }
     // End backwards compatibility for "ids"
+
+    /**************************************************************************
+     /* FOR BACKWARDS COMPATIBILITY
+     * We have just added "description","performance","benefits","cost","who_by",
+     * "who_by","disruption","associated_work","key_risks","notes" and "maintenance" 
+     * to the elements. We initialize them if they are empty (elements that were 
+     * created before the addition)
+     ***************************************************************************/
+    for (z in data.fabric.elements) {
+        if (data.fabric.elements[z].description == undefined)
+            data.fabric.elements[z].description = '--';
+        if (data.fabric.elements[z].performance == undefined)
+            data.fabric.elements[z].performance = '--';
+        if (data.fabric.elements[z].benefits == undefined)
+            data.fabric.elements[z].benefits = '--';
+        if (data.fabric.elements[z].cost == undefined)
+            data.fabric.elements[z].cost = '--';
+        if (data.fabric.elements[z].who_by == undefined)
+            data.fabric.elements[z].who_by = '--';
+        if (data.fabric.elements[z].disruption == undefined)
+            data.fabric.elements[z].disruption = '--';
+        if (data.fabric.elements[z].associated_work == undefined)
+            data.fabric.elements[z].associated_work = '--';
+        if (data.fabric.elements[z].key_risks == undefined)
+            data.fabric.elements[z].key_risks = '--';
+        if (data.fabric.elements[z].notes == undefined)
+            data.fabric.elements[z].notes = '--';
+        if (data.fabric.elements[z].maintenance == undefined)
+            data.fabric.elements[z].maintenance = '--';
+    }
+    // End backwards compatibility for "description","performance","benefits","cost","who_by",
+     //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
 
     $("#elements").html("");
     $("#roofs").html("");
@@ -246,6 +290,10 @@ function get_elements_max_id() {
     for (z in data.fabric.elements) {
         if (data.fabric.elements[z].id != undefined && data.fabric.elements[z].id > max_id)
             max_id = data.fabric.elements[z].id;
+    }    
+    for (z in data.fabric.measures){
+        if (data.fabric.measures[z].id != undefined && data.fabric.measures[z].original_element.id > max_id)
+            max_id = data.fabric.measures[z].id;
     }
     return max_id;
 }
@@ -402,7 +450,6 @@ $("#openbem").on("click", '.apply-measure-list', function () {
     $('#myModal').modal('show');
 });
 $("#openbem").on("click", '.apply-measure', function () {
-    console.log(data.fabric.measures);
     var lib = $(this).attr('lib');
     var row = $(this).attr('row');
     var element_id = $(this).attr('element_id');
@@ -419,10 +466,8 @@ $("#openbem").on("click", '.apply-measure', function () {
     }
 
     data.fabric.measures[element_id].measure = data.fabric.elements[row];
-
     update();
     $('#myModal').modal('hide');
-    console.log(data.fabric.measures);
 });
 
 function get_element_value(element) {
