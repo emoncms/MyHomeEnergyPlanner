@@ -202,6 +202,38 @@ function elements_initUI()
     }
     // End backwards compatibility for "ids"
 
+    /**************************************************************************
+     /* FOR BACKWARDS COMPATIBILITY
+     * We have just added "description","performance","benefits","cost","who_by",
+     * "who_by","disruption","associated_work","key_risks","notes" and "maintenance" 
+     * to the elements. We initialize them if they are empty (elements that were 
+     * created before the addition)
+     ***************************************************************************/
+    for (z in data.fabric.elements) {
+        if (data.fabric.elements[z].description == undefined)
+            data.fabric.elements[z].description = '--';
+        if (data.fabric.elements[z].performance == undefined)
+            data.fabric.elements[z].performance = '--';
+        if (data.fabric.elements[z].benefits == undefined)
+            data.fabric.elements[z].benefits = '--';
+        if (data.fabric.elements[z].cost == undefined)
+            data.fabric.elements[z].cost = '--';
+        if (data.fabric.elements[z].who_by == undefined)
+            data.fabric.elements[z].who_by = '--';
+        if (data.fabric.elements[z].disruption == undefined)
+            data.fabric.elements[z].disruption = '--';
+        if (data.fabric.elements[z].associated_work == undefined)
+            data.fabric.elements[z].associated_work = '--';
+        if (data.fabric.elements[z].key_risks == undefined)
+            data.fabric.elements[z].key_risks = '--';
+        if (data.fabric.elements[z].notes == undefined)
+            data.fabric.elements[z].notes = '--';
+        if (data.fabric.elements[z].maintenance == undefined)
+            data.fabric.elements[z].maintenance = '--';
+    }
+    // End backwards compatibility for "description","performance","benefits","cost","who_by",
+     //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
+
     $("#elements").html("");
     $("#roofs").html("");
     $("#floors").html("");
