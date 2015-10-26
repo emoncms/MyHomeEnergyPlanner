@@ -292,7 +292,7 @@ function get_elements_max_id() {
             max_id = data.fabric.elements[z].id;
     }    
     for (z in data.fabric.measures){
-        if (data.fabric.measures[z].original_element.id > max_id)
+        if (data.fabric.measures[z].id != undefined && data.fabric.measures[z].original_element.id > max_id)
             max_id = data.fabric.measures[z].id;
     }
     return max_id;
