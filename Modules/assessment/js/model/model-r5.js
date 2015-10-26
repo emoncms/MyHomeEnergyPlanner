@@ -1,4 +1,3 @@
-
 /*
  
  An open source building energy model based on SAP.
@@ -369,7 +368,7 @@ calc.ventilation = function (data)
     total += data.ventilation.number_of_openflues * 20;
     total += data.ventilation.number_of_intermittentfans * 10;
     total += data.ventilation.number_of_passivevents * 10;
-    total += data.ventilation.number_of_fluelessgasfires * 10;
+    total += data.ventilation.number_of_fluelessgasfires * 40;
 
     var infiltration = 0;
     if (data.volume != 0) {
@@ -381,7 +380,7 @@ calc.ventilation = function (data)
         infiltration += (data.num_of_floors - 1) * 0.1;
 
         if (data.ventilation.dwelling_construction == 'timberframe')
-            infiltration += 0.2;
+            infiltration += 0.25;
         if (data.ventilation.dwelling_construction == 'masonry')
             infiltration += 0.35;
 
@@ -565,16 +564,23 @@ calc.temperature = function (data)
         Ti_livingarea[m] = (5 * Tweekday + 2 * Tweekend) / 7;
     }
 
+
+
     // rest of dwelling
     var Th2 = [];
     for (var m = 0; m < 12; m++) {
+
+        var tmpHLP = HLP[m];
+        if (tmpHLP > 6.0)
+            tmpHLP = 6.0;
+
         // see table 9 page 159
         if (data.temperature.control_type == 1)
-            Th2[m] = Th - 0.5 * HLP[m];
+            Th2[m] = Th - 0.5 * tmpHLP;
         if (data.temperature.control_type == 2)
-            Th2[m] = Th - HLP[m] + (Math.pow(HLP[m], 2) / 12);
+            Th2[m] = Th - tmpHLP + (Math.pow(tmpHLP, 2) / 12);
         if (data.temperature.control_type == 3)
-            Th2[m] = Th - HLP[m] + (Math.pow(HLP[m], 2) / 12);
+            Th2[m] = Th - tmpHLP + (Math.pow(tmpHLP, 2) / 12);
         //Th2[m] = i.Th - i.HLP[m] + 0.085 *Math.pow(i.HLP[m],2);
 
         if (isNaN(Th2[m]))
@@ -646,7 +652,7 @@ calc.space_heating = function (data)
     var utilisation_factor = [];
     var useful_gains = [];
     var annual_useful_gains_kWh_m2 = {"Internal": 0, "Solar": 0, "Space heating": 0}; //  Units: kwh/m2/year
-    var annual_losses_kWh_m2 = [];
+    var annual_losses_kWh_m2 = {};
 
     var heat_demand = [];
     var cooling_demand = [];
@@ -712,7 +718,7 @@ calc.space_heating = function (data)
 
             // Apply utilisation factor if chosen:
             if (data.space_heating.use_utilfactor_forgains) {
-                annual_useful_gains_kWh_m2[gains_source] += utilisation_factor[m] * data.gains_W[z][m] * 0.024 / data.TFA;
+                annual_useful_gains_kWh_m2[gains_source] += (utilisation_factor[m] * data.gains_W[z][m] * 0.024 * datasets.table_1a[m]) / data.TFA;
             } else {
                 annual_useful_gains_kWh_m2[gains_source] += data.gains_W[z][m] * 0.024 / data.TFA;
             }
@@ -721,11 +727,10 @@ calc.space_heating = function (data)
 
         // Annual losses. Units: kwh/m2/year
         for (z in data.losses_WK) {
-            if(annual_losses_kWh_m2[z] == undefined)
-                annual_losses_kWh_m2[z] = 0
-            annual_losses_kWh_m2[z] += data.losses_WK[z][m] * 0.024 * delta_T[m] / data.TFA;
+            if (annual_losses_kWh_m2[z] == undefined)
+                annual_losses_kWh_m2[z] = 0;
+            annual_losses_kWh_m2[z] += (data.losses_WK[z][m] * 0.024 * delta_T[m] * datasets.table_1a[m]) / data.TFA;
         }
-
     }
 
     data.space_heating.delta_T = delta_T;
@@ -897,8 +902,19 @@ calc.LAC = function (data)
         data.LAC.LLE = 1;
     if (data.LAC.L == undefined)
         data.LAC.L = 1;
-    if (data.LAC.reduced_internal_heat_gains == undefined)
-        data.LAC.reduced_internal_heat_gains = false;
+
+    if (data.LAC.energy_efficient_cooking == undefined)
+        data.LAC.energy_efficient_cooking = false;
+    if (data.LAC.energy_efficient_appliances == undefined)
+        data.LAC.energy_efficient_appliances = false;
+    if (data.LAC.reduced_heat_gains_lighting == undefined)
+        data.LAC.reduced_heat_gains_lighting = false;
+    if (data.LAC.use_SAP_lighting == undefined)
+        data.LAC.use_SAP_lighting = 1;
+    if (data.LAC.use_SAP_appliances == undefined)
+        data.LAC.use_SAP_appliances = 1;
+    if (data.LAC.use_SAP_cooking == undefined)
+        data.LAC.use_SAP_cooking = 1;
 
     // average annual energy consumption for lighting if no low-energy lighting is used is:
     data.LAC.EB = 59.73 * Math.pow((data.TFA * data.occupancy), 0.4714);
@@ -924,13 +940,14 @@ calc.LAC = function (data)
             EL_sum += EL_monthly[m];
 
             GL_monthly[m] = EL_monthly[m] * 0.85 * 1000 / (24 * datasets.table_1a[m]);
-            if (data.LAC.reduced_internal_heat_gains)
-                GL_monthly[m] = 0.4 * EL_monthly[m];
+            if (data.LAC.reduced_heat_gains_lighting)
+                GL_monthly[m] = 0.4 * GL_monthly[m];
         }
 
-        data.gains_W["Lighting"] = GL_monthly;
-        if (EL_sum > 0)
+        if (EL_sum > 0 && data.LAC.use_SAP_lighting) {
+            data.gains_W["Lighting"] = GL_monthly;
             data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum};
+        }
     }
 
     /*
@@ -949,19 +966,23 @@ calc.LAC = function (data)
     {
         // The appliances energy use in kWh in month m (January = 1 to December = 12) is
         EA_monthly[m] = EA_initial * (1.0 + (0.157 * Math.cos((2 * Math.PI * (m - 1.78)) / 12.0))) * datasets.table_1a[m] / 365.0;
-        EA += EA_monthly[m];
-
         GA_monthly[m] = EA_monthly[m] * 1000 / (24 * datasets.table_1a[m]);
-        if (data.LAC.reduced_internal_heat_gains)
+
+        if (data.LAC.energy_efficient_appliances) {
             GA_monthly[m] = 0.67 * GA_monthly[m];
+            EA += 0.9 * EA_monthly[m];
+        }
+        else
+            EA += EA_monthly[m];
     }
 
     // The annual CO2 emissions in kg/m2/year associated with electrical appliances is
     var appliances_CO2 = (EA * 0.522) / data.TFA;
 
-    data.gains_W["Appliances"] = GA_monthly;
-    if (EA > 0)
+    if (EA > 0 && data.LAC.use_SAP_appliances) {
+        data.gains_W["Appliances"] = GA_monthly;
         data.energy_requirements.appliances = {name: "Appliances", quantity: EA};
+    }
 
     data.LAC.EA = EA;
 
@@ -975,7 +996,7 @@ calc.LAC = function (data)
     var GC = 35 + 7 * data.occupancy;
 
     // When lower internal heat gains are assumed for the calculation
-    if (data.LAC.reduced_internal_heat_gains)
+    if (data.LAC.energy_efficient_cooking)
         GC = 23 + 5 * data.occupancy;
 
     var GC_monthly = [];
@@ -987,11 +1008,10 @@ calc.LAC = function (data)
 
     data.LAC.EC = GC * 0.024 * 365;
 
-
-    data.gains_W["Cooking"] = GC_monthly;
-    if (GC > 0)
+    if (GC > 0 && data.LAC.use_SAP_cooking) {
+        data.gains_W["Cooking"] = GC_monthly;
         data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC};
-
+    }
 
     data.LAC.GC = data.LAC.EC;
 
@@ -1104,7 +1124,7 @@ calc.water_heating = function (data)
 
     for (var m = 0; m < 12; m++) {
         Vd_m[m] = datasets.table_1c[m] * data.water_heating.Vd_average;
-        monthly_energy_content[m] = (4.190 * Vd_m[m] * datasets.table_1a[m] * datasets.table_1d[m]) / 3600;
+        monthly_energy_content[m] = (4.180 * Vd_m[m] * datasets.table_1a[m] * datasets.table_1d[m]) / 3600;
         data.water_heating.annual_energy_content += monthly_energy_content[m];
     }
 
@@ -1307,12 +1327,16 @@ calc.applianceCarbonCoop = function (data) {
     }
 
     if (data.use_applianceCarbonCoop) {
-        data.gains_W["Appliances"] = data.applianceCarbonCoop.gains_W_monthly['Appliances'];
-        data.gains_W["Cooking"] = data.applianceCarbonCoop.gains_W_monthly['Cooking'];
-        if (data.applianceCarbonCoop.primary_energy_total.appliances > 0)
+
+        if (data.applianceCarbonCoop.primary_energy_total.appliances > 0) {
             data.energy_requirements.appliances = {name: "Appliances", quantity: data.applianceCarbonCoop.primary_energy_total.appliances};
-        if (data.applianceCarbonCoop.primary_energy_total.cooking > 0)
+            data.gains_W["Appliances"] = data.applianceCarbonCoop.gains_W_monthly['Appliances'];
+        }
+
+        if (data.applianceCarbonCoop.primary_energy_total.cooking > 0) {
             data.energy_requirements.cooking = {name: "Cooking", quantity: data.applianceCarbonCoop.primary_energy_total.cooking};
+            data.gains_W["Cooking"] = data.applianceCarbonCoop.gains_W_monthly['Cooking'];
+        }
     }
 };
 
@@ -1322,6 +1346,7 @@ calc.appliancelist = function (data)
     if (data.appliancelist == undefined)
         data.appliancelist = {list: [{name: "LED Light", power: 6, hours: 12}]};
 
+    data.appliancelist.totalwh = 0;
 
     for (z in data.appliancelist.list) {
         data.appliancelist.list[z].energy = data.appliancelist.list[z].power * data.appliancelist.list[z].hours;
@@ -1586,7 +1611,7 @@ function solar_rad(region, orient, p, m)
     var k = datasets.k;     // convert degrees into radians
     var radians = (p / 360.0) * 2.0 * Math.PI;
 
-    var sinp = Math.sin(radians);
+    var sinp = Math.sin(radians / 2.0); // sinp = sin(p/2)
     var sin2p = sinp * sinp;
     var sin3p = sinp * sinp * sinp;
 
@@ -1594,7 +1619,7 @@ function solar_rad(region, orient, p, m)
     var B = k[4][orient] * sin3p + k[5][orient] * sin2p + k[6][orient] * sinp;
     var C = k[7][orient] * sin3p + k[8][orient] * sin2p + k[9][orient] * sinp + 1;
 
-    var latitude = (datasets.table_u4[region] / 360) * 2 * Math.PI; // get latitude in degrees and convert to radians
+    var latitude = (datasets.table_u4[region][0] / 360) * 2 * Math.PI; // get latitude in degrees and convert to radians
     var sol_dec = (datasets.solar_declination[m] / 360) * 2 * Math.PI; // get solar_declination in degrees and convert to radians
     var cos1 = Math.cos(latitude - sol_dec);
     var cos2 = cos1 * cos1;
@@ -1692,10 +1717,15 @@ function calc_utilisation_factor(TMP, HLP, H, Ti, Te, G)
     y = Math.round(y * 100000000.0) / 100000000.0;
 
     var n = 0.0;
+
     if (y > 0.0 && y != 1.0)
         n = (1.0 - Math.pow(y, a)) / (1.0 - Math.pow(y, a + 1.0));
+
     if (y == 1.0)
         n = a / (a + 1.0);
+
+    if (y <= 0.0)
+        n = 1.0;
 
     if (isNaN(n))
         n = 0;
