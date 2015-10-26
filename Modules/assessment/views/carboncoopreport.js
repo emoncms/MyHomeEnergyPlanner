@@ -457,8 +457,8 @@ function carboncoopreport_initUI() {
 	*/
 
 	var EstimatedEnergyCosts = new BarChart({
-		chartTitle: 'Estimate Energy Costs Comparison',
-		yAxisLabel: 'kWh/m2.year',
+		chartTitle: 'Estimate Energy Costs (Net) Comparison',
+		yAxisLabel: '£/year',
 		fontSize: 22,
 		chartLow: 0,
 		division: 200,
@@ -466,18 +466,11 @@ function carboncoopreport_initUI() {
 		chartHeight: 600,
 		barGutter: 120,
 		defaultBarColor: 'rgb(231,37,57)',
-		ranges: [
-			{
-				low: 600,
-				high: 1000,
-				color: 'rgb(254,204,204)'
-			},
-		],
 		data: [
-			{label: 'UK Average', value: 1400, variance: 30},
-			{label: '2000 B Regs Average', value: 1900, variance: 30},
-			{label: 'Your home now', value: project[scenario].net_cost, variance: 30},
-			{label: 'Your 2050 home', value: 0, variance: 30},
+			{label: 'Your home now', value: project["master"].net_cost},
+			{label: 'Your home (small changes)', value: project["scenario1"].net_cost},
+			{label: 'Your home (medium changes)', value: project["scenario2"].net_cost},
+			{label: 'Your 2050 home', value: project["scenario3"].net_cost},
 		]
 	});
 
