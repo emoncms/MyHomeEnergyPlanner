@@ -502,8 +502,8 @@ function carboncoopreport_initUI() {
 		var time2Array = time2.split(":");
 		// use a constant date (e.g. 2000-01-01) and the desired time to initialize two dates
 
-		var date1 = new Date(2000, 0, 1,  time1Array[0], time1Array[1]); // 9:00 AM
-		var date2 = new Date(2000, 0, 1, time2Array[0], time2Array[1]); // 5:00 PM
+		var date1 = new Date(2000, 0, 1,  time1Array[0], time1Array[1]); 
+		var date2 = new Date(2000, 0, 1, time2Array[0], time2Array[1]);
 
 		// the following is to handle cases where the times are on the opposite side of
 		// midnight e.g. when you want to get the difference between 9:00 PM and 5:00 AM
