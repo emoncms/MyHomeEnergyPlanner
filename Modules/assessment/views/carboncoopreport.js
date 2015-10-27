@@ -484,8 +484,9 @@ function carboncoopreport_initUI() {
 
 	$(".js-occupancy-comparison").html(compare(2.9, data.occupancy));
 	
-
-	var totalHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on1"], data.household["3a_heatinghours_normal_off1"]) + getTimeDifference(data.household["3a_heatinghours_normal_on2"], data.household["3a_heatinghours_normal_off2"])
+	var normalDayHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on1"], data.household["3a_heatinghours_normal_off1"]);
+	var altDayHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on2"], data.household["3a_heatinghours_normal_off2"]);
+	var totalHeatingHours = normalDayHeatingHours + altDayHeatingHours;
 
 	function compare(num1, num2){
 		if (num1 > num2){
@@ -598,6 +599,12 @@ function carboncoopreport_initUI() {
 	// Waiting on Trystan
 	*/
 
+
+	/* Figure 23: Appendix B - data from household questionnaire
+	//
+	*/
+	$(".js-heating-hours-normal").html(normalDayHeatingHours);
+	$(".js-heating-hours-alt").html(altDayHeatingHours);
 
 
 
