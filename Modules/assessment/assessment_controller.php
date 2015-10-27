@@ -6,6 +6,31 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 function assessment_controller() {
     global $session, $route, $mysqli;
 
+    /* --------------------------------------------------------------------------
+      // Backwards compatibility:
+      // During development, i am finding many situations when we need to do something
+      // make what is implemented compatible with the previous version. This section
+      // is here fot his pourpose and will be deleted when the final realease is made
+      //---------------------------------------------------------------------------- */
+
+    // Rename standard libraries to include users name (important to identify libraries after sharing
+    /* $libresult = $mysqli->query("SELECT id,name,userid FROM element_library");
+      foreach ($libresult as $row) {
+      if ($row['name'] === "StandardLibrary") {
+      $user_name = $mysqli->query("SELECT username FROM users WHERE id = " . $row['userid']);
+      $user_name = $user_name->fetch_object();
+      $user_name = $user_name->username;
+      $req = $mysqli->prepare('UPDATE element_library SET `name` = ? WHERE `id` = ?  ');
+      $new_name = "StandardLibrary - " . $user_name;
+      $req->bind_param("si", $new_name, $row['id']);
+      $req->execute();
+      }
+      }
+     */
+
+    /* End backwards compatibility section */
+
+
     // -------------------------------------------------------------------------
     // Check if session has been authenticated, if not redirect to login page (html) 
     // or send back "false" (json)

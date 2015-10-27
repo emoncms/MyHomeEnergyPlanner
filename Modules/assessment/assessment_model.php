@@ -326,7 +326,7 @@ class Assessment {
 
     public function newlibrary($userid, $name) {
         $userid = (int) $userid;
-        $name = preg_replace('/[^\w\s]/', '', $name);
+        $name = preg_replace('/[^\w\s-]/', '', $name);
 
         $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`) VALUES ('$userid','$name','{}')");
         $id = $this->mysqli->insert_id;

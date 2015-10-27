@@ -232,7 +232,7 @@ function elements_initUI()
             data.fabric.elements[z].maintenance = '--';
     }
     // End backwards compatibility for "description","performance","benefits","cost","who_by",
-     //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
+    //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
 
     $("#elements").html("");
     $("#roofs").html("");
@@ -290,8 +290,8 @@ function get_elements_max_id() {
     for (z in data.fabric.elements) {
         if (data.fabric.elements[z].id != undefined && data.fabric.elements[z].id > max_id)
             max_id = data.fabric.elements[z].id;
-    }    
-    for (z in data.fabric.measures){
+    }
+    for (z in data.fabric.measures) {
         if (data.fabric.measures[z].id != undefined && data.fabric.measures[z].original_element.id > max_id)
             max_id = data.fabric.measures[z].id;
     }
@@ -310,16 +310,17 @@ function loadlibrarylist(callback) {
 
             var standardlibcreated = false;
             for (z in mylibraries) {
-                if (mylibraries[z].name == "StandardLibrary")
+                if (mylibraries[z].name.indexOf("StandardLibrary") > -1)
                     standardlibcreated = true;
             }
 
             if (!standardlibcreated)
             {
-                $.ajax({url: path + "assessment/newlibrary.json", data: "name=StandardLibrary", datatype: "json", async: false, success: function (result) {
+                var library_name = "StandardLibrary - " + p.author
+                $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name, datatype: "json", async: false, success: function (result) {
                         selected_library = result;
                         element_library = standard_element_library;
-                        mylibraries[0] = {id: selected_library, name: "StandardLibrary"};
+                        mylibraries[0] = {id: selected_library, name: library_name};
                         $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library + "&data=" + JSON.stringify(element_library), success: function (result) {
                                 console.log("save library result: " + result);
                             }});
