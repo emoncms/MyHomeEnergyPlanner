@@ -482,6 +482,50 @@ function carboncoopreport_initUI() {
 	// Where is data for number of rooms not heated? Appliance Q?
 	*/
 
+	$(".js-occupancy-comparison").html(compare(2.9, data.occupancy));
+	
+
+	var totalHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on1"], data.household["3a_heatinghours_normal_off1"]) + getTimeDifference(data.household["3a_heatinghours_normal_on2"], data.household["3a_heatinghours_normal_off2"])
+
+	function compare(num1, num2){
+		if (num1 > num2){
+			return "Lower";
+		} else {
+			return "Higher";
+		}
+	}
+
+	// time format is "11:30" or "15:00" etc
+	function getTimeDifference(time1, time2){
+		// thanks to http://stackoverflow.com/questions/1787939/check-time-difference-in-javascript
+		var time1Array = time1.split(":");
+		var time2Array = time2.split(":");
+		// use a constant date (e.g. 2000-01-01) and the desired time to initialize two dates
+
+		var date1 = new Date(2000, 0, 1,  time1Array[0], time1Array[1]); // 9:00 AM
+		var date2 = new Date(2000, 0, 1, time2Array[0], time2Array[1]); // 5:00 PM
+
+		// the following is to handle cases where the times are on the opposite side of
+		// midnight e.g. when you want to get the difference between 9:00 PM and 5:00 AM
+
+		if (date2 < date1) {
+		    date2.setDate(date2.getDate() + 1);
+		}
+
+		var diff = date2 - date1;
+
+		// diff is in miliseconds so convert to hours
+		return diff / (1000 * 60 * 60);
+	}
+
+	$(".js-average-heating-hours").html(totalHeatingHours);
+	$(".js-average-heating-hours-comparison").html(compare(9, totalHeatingHours));
+	$(".js-thermostat-comparison").html(compare(21, parseFloat(data.household["3a_roomthermostat"])));
+	$(".js-unheated-rooms-comparison").html(compare(0,data.household["3a_habitable_not_heated_rooms"]));
+	$(".js-appliance-energy-use").html(Math.round(data.LAC.EA));
+	$(".js-appliance-energy-use-comparison").html(compare(3880, Math.round(data.LAC.EA)));
+	
+
 	/* Figure 12: SAP chart
 	//
 	*/
