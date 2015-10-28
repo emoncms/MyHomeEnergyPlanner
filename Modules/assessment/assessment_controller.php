@@ -14,19 +14,19 @@ function assessment_controller() {
       //---------------------------------------------------------------------------- */
 
     // Rename standard libraries to include users name (important to identify libraries after sharing
-    /* $libresult = $mysqli->query("SELECT id,name,userid FROM element_library");
-      foreach ($libresult as $row) {
-      if ($row['name'] === "StandardLibrary") {
-      $user_name = $mysqli->query("SELECT username FROM users WHERE id = " . $row['userid']);
-      $user_name = $user_name->fetch_object();
-      $user_name = $user_name->username;
-      $req = $mysqli->prepare('UPDATE element_library SET `name` = ? WHERE `id` = ?  ');
-      $new_name = "StandardLibrary - " . $user_name;
-      $req->bind_param("si", $new_name, $row['id']);
-      $req->execute();
-      }
-      }
-     */
+    $libresult = $mysqli->query("SELECT id,name,userid FROM element_library");
+    foreach ($libresult as $row) {
+        if ($row['name'] === "StandardLibrary") {
+            $user_name = $mysqli->query("SELECT username FROM users WHERE id = " . $row['userid']);
+            $user_name = $user_name->fetch_object();
+            $user_name = $user_name->username;
+            $req = $mysqli->prepare('UPDATE element_library SET `name` = ? WHERE `id` = ?  ');
+            $new_name = "StandardLibrary - " . $user_name;
+            $req->bind_param("si", $new_name, $row['id']);
+            $req->execute();
+        }
+    }
+
 
     /* End backwards compatibility section */
 
