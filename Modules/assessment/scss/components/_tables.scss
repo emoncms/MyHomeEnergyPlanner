@@ -250,4 +250,32 @@
 			}
 		}
 	}
+
+	.data-table {
+		border-collapse:collapse;
+		border-spacing:0;
+	}
+
+	.data-table td {
+		font-size:14px;
+		padding:10px 5px;
+		border-style:solid;
+		border-width:1px;
+		overflow:hidden;
+		word-break:normal;
+	}
+	.data-table th, .data-table .th {
+		font-size:14px;
+		font-weight:normal;
+		font-weight: bold;
+		padding:10px 5px;
+		border-style:solid;
+		border-width:1px;
+		overflow:hidden;
+		word-break:normal;
+		background:$pink--light;
+		color:$red;
+		vertical-align:top;
+	}
+
 }

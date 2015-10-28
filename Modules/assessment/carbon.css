@@ -324,6 +324,28 @@
       padding-top: 50px; }
     .carbon-report-wrapper .five-col-table td:before {
       left: 0px; } }
+  .carbon-report-wrapper .data-table {
+    border-collapse: collapse;
+    border-spacing: 0; }
+  .carbon-report-wrapper .data-table td {
+    font-size: 14px;
+    padding: 10px 5px;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal; }
+  .carbon-report-wrapper .data-table th, .carbon-report-wrapper .data-table .th {
+    font-size: 14px;
+    font-weight: normal;
+    font-weight: bold;
+    padding: 10px 5px;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal;
+    background: #fef2ef;
+    color: #e41b3a;
+    vertical-align: top; }
 
 .carbon-report-wrapper .right-align-item-list {
   margin-bottom: 2rem;

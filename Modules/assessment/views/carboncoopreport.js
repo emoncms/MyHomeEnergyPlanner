@@ -14,6 +14,14 @@ function carboncoopreport_initUI() {
 
     var priorities = {};
     var household = project["master"].household;
+    var prioritiesPossibilities = [
+    	"7b_carbon",
+    	"7b_money",
+    	"7b_comfort",
+    	"7b_airquality",
+    	"7b_modernisation",
+    	"7b_health",
+    ]
 
 	if (typeof household['7b_carbon'] != "undefined"){
     	priorities.carbon = {
@@ -64,7 +72,7 @@ function carboncoopreport_initUI() {
 	sortedPriorities.sort(function(a, b) {return parseInt(a[1]) - parseInt(b[1])})
 
     for (var i = 0 ; i < sortedPriorities.length ; i++){
-    	$("#retrofit-priorities").append("<li>"+sortedPriorities[i][2]+"</li>");
+    	$("#retrofit-priorities").append("<li>"+sortedPriorities[i][1] + ". " + sortedPriorities[i][2]+"</li>");
     }
     
 
@@ -239,7 +247,7 @@ function carboncoopreport_initUI() {
 	*/
 
 	var SpaceHeatingDemand = new BarChart({
-		chartTitle: 'Carbon Dioxide Emissions',
+		chartTitle: 'Space Heating Demand',
 		yAxisLabel: 'kWh/m2.year',
 		fontSize: 22,
 		division: 15,
@@ -264,12 +272,17 @@ function carboncoopreport_initUI() {
 				target: 70,
 				color: 'rgb(231,37,57)'
 			},
+			{
+				label: 'UK Average 140 kWh/m2.a',
+				target: 140,
+				color: 'rgb(231,37,57)'
+			},
 		],
 		data: [
 			{label: 'Your home now ', value: project["master"].fabric_energy_efficiency},
-			{label: 'Your home now (small changes)', value: project["scenario1"].fabric_energy_efficiency},
-			{label: 'Your home (moderate changes)', value: project["scenario2"].fabric_energy_efficiency},
-			{label: 'Your 2050 home', value: project["scenario3"].fabric_energy_efficiency},
+			{label: 'Scenario 1', value: project["scenario1"].fabric_energy_efficiency},
+			{label: 'Scenario 2', value: project["scenario2"].fabric_energy_efficiency},
+			{label: 'Scenario 3', value: project["scenario3"].fabric_energy_efficiency},
 		]
 	});
 
@@ -588,15 +601,83 @@ function carboncoopreport_initUI() {
 	$("#output-scenario3-name").html(project["scenario3"]["scenario_name"]);
 
 	/* Figure 17: Scenario 1 Measures
-	// Waiting on Trystan
+	//
 	*/
 
+	var measuresTableColumns = [
+		"name",
+		"description",
+		"performance",
+		"performance_units",
+		"benefits",
+		"cost",
+		"cost_units",
+		"who_by_quantity",
+		"who_by_total",
+		"who_by",
+		"disruption",
+		"associated_work",
+		"notes",
+	];
+
+	
+
+	function populateMeasuresTable(scenario, tableSelector){
+		for (var measureID in project[scenario].fabric.measures){
+			var measure = project[scenario].fabric.measures[measureID];
+			var html = "<tr>";
+			var row = $('<tr></tr>');
+			for (var i = 0 ; i < measuresTableColumns.length ; i++){
+				var cell = $('<td></td>');
+				cell.html(measure.measure[measuresTableColumns[i]]);
+				row.append(cell);
+			}
+			$(tableSelector).append(row);
+		}
+	}
+
+	function initialiseMeasuresTable(tableSelector){
+		var html =  '<tr>\
+					    <th class="tg-yw4l" rowspan="2">Measure</th>\
+					    <th class="tg-yw4l" rowspan="2">Description</th>\
+					    <th class="tg-yw4l" colspan="2">Performance Target</th>\
+					    <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
+					    <th class="tg-yw4l" colspan="4">How Much?</th>\
+					    <th class="tg-yw4l" rowspan="2">Who by?</th>\
+					    <th class="tg-yw4l" rowspan="2">Dirt and disruption?</th>\
+					    <th class="tg-yw4l" rowspan="2">Associated work?</th>\
+					    <th class="tg-yw4l" rowspan="2">Special and other considerations</th>\
+					  </tr>\
+					  <tr>\
+					    <td class="th">Value</td>\
+					    <td class="th">Unit</td>\
+					    <td class="th">Rate</td>\
+					    <td class="th">Unit</td>\
+					    <td class="th">Quantity</td>\
+					    <td class="th">Total</td>\
+					  </tr>';
+
+		return $(tableSelector).append(html);
+
+	}
+
+	function createMeasuresTable(scenario, tableSelector){
+		initialiseMeasuresTable(tableSelector);		
+		populateMeasuresTable(scenario, tableSelector);	
+	}
+
+	
+	createMeasuresTable("master", "#scenario1-measures");
+	createMeasuresTable("master", "#scenario2-measures");
+	createMeasuresTable("master", "#scenario3-measures");
+
+
 	/* Figure 18: Scenario 2 Measures
-	// Waiting on Trystan
+	//
 	*/
 
 	/* Figure 19: Scenario 3 Measures
-	// Waiting on Trystan
+	//
 	*/
 
 
