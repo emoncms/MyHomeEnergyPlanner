@@ -29,16 +29,23 @@ function assessment_controller() {
 
     // Add "type" to element library table in database (if it doesn't exist), and for all the libraries set the type to elements (this were the original type so we can be sure that at the moment of adding the column all the libraries are type "element"
     $columns_in_table = $mysqli->query("DESCRIBE element_library");
-    //print_r($columns_in_table);
     $field_found = false;
-   
-    foreach ($columns_in_table as $column){
-        if($column['Field'] === 'type')
+    foreach ($columns_in_table as $column) {
+        if ($column['Field'] === 'type')
             $field_found = true;
     }
-    if($field_found === false)
+    if ($field_found === false)
         $mysqli->query("ALTER TABLE  `element_library` ADD  `type` VARCHAR( 255 ) NOT NULL DEFAULT  'elements' AFTER  `name`");
 
+    // Grant all the users write permissions for their own library
+    $libresult = $mysqli->query("SELECT * FROM `element_library`");
+    foreach($libresult as $row){
+        $req=$mysqli->prepare("UPDATE `element_library_access` SET `write`='1' WHERE `userid`=? AND `id`=?");
+        $req->bind_param('ii',$row['userid'],$row['id']);
+        $req->execute();
+    }
+    
+    
     /* End backwards compatibility section */
 
 
@@ -189,7 +196,7 @@ function assessment_controller() {
             $result = $assessment->loadlibrary($session['userid'], get('id'));
 
         if ($route->action == 'sharelibrary' && $session['write'])
-            $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'));
+            $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'), get('write_permissions'));
 
         if ($route->action == 'getsharedlibrary' && $session['write'])
             $result = $assessment->getsharedlibrary($session['userid'], get('id'));

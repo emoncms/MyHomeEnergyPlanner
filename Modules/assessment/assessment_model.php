@@ -208,7 +208,7 @@ class Assessment {
         $userid = (int) $userid;
         $username = preg_replace('/[^\w\s]/', '', $username);
 
-        if (!$this->has_access($userid, $id))
+        if (!$this->has_write_access($userid, $id))
             return false;
 
         global $user;
@@ -331,14 +331,14 @@ class Assessment {
         $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`) VALUES ('$userid','$name','{}')");
         $id = $this->mysqli->insert_id;
 
-        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`) VALUES ('$id','$userid','0')");
+        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
         return $id;
     }
 
     public function savelibrary($userid, $id, $data) {
         $userid = (int) $userid;
         $id = (int) $id;
-        if (!$this->has_access_library($userid, $id))
+        if (!$this->has_write_access_library($userid, $id))
             return false;
 
         $data = json_encode(json_decode($data));
@@ -373,14 +373,32 @@ class Assessment {
         }
     }
 
-    public function sharelibrary($userid, $id, $username) {
+    public function has_write_access_library($userid, $id) {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        // Check if user has direct or shared access
+        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid' AND `id`='$id' AND `write`='1'");
+        if ($result->num_rows == 1)
+            return true;
+
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
+        while ($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid' AND `id`='$id' AND `write`='1'");
+            if ($result2->num_rows == 1)
+                return true;
+        }
+    }
+
+    public function sharelibrary($userid, $id, $username, $write_permissions = false) {
         global $user;
         $id = (int) $id;
         $userid = (int) $userid;
         $username = preg_replace('/[^\w\s]/', '', $username);
+        $write_permissions = $write_permissions === 'true' ? 1 : 0;
 
-        if (!$this->has_access_library($userid, $id))
-            return false;
+        if (!$this->has_write_access_library($userid, $id))
+            return "You haven't got enough permssions";
 
         // 1. Check if user exists
         $userid = $user->get_id($username);
@@ -392,23 +410,38 @@ class Assessment {
                 $orgid = $row->id;
 
                 $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id' AND `orgid`='$orgid'");
-                if ($result->num_rows == 1)
-                    return "Already shared";
+                if ($result->num_rows == 1) {
+                    // 1.1. Library already shared with this organisation, check if we have to update write permissions
+                    $row = $result->fetch_object();
+                    if ($row->write != $write_permissions) {
+                        $result = $this->mysqli->query("UPDATE `element_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `orgid`='$orgid'");
+                        return "Already shared, write permissions updated";
+                    } else
+                        return "Already shared";
+                }
 
                 // $this->org_access($id,$orgid,1);
-                $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '1'");
-                return "Assessment shared";
+                $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '$write_permissions'");
+                return "Library shared";
             }
         } else {
             // 2. Check if already shared with user
             $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id' AND `userid`='$userid'");
-            if ($result->num_rows == 1)
-                return "Already shared";
+            if ($result->num_rows == 1) {
+                // 2.1. Library already shared with this user, check if we have to update write permissions
+                $row = $result->fetch_object();
+                if ($row->write != $write_permissions) {
+                    $result = $this->mysqli->query("UPDATE `element_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `userid`='$userid'");
+                    return "Already shared, write permissions updated";
+                } else
+                    return "Already shared";
+            }
 
             // 3. Register share
-            $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '1'");
-            return "Assessment shared";
+            $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '$write_permissions'");
+            return "Library shared";
         }
+        return 'User or organisation not found';
     }
 
     // Get shared
@@ -431,7 +464,7 @@ class Assessment {
                 $orgrow = $orgresult->fetch_object();
                 $username = $orgrow->name;
             }
-            $users[] = array('orgid' => $row->orgid, 'userid' => $row->userid, 'username' => $username);
+            $users[] = array('orgid' => $row->orgid, 'userid' => $row->userid, 'username' => $username, 'write' => $row->write);
         }
         return $users;
     }

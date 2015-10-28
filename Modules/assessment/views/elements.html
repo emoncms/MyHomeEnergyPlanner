@@ -344,13 +344,12 @@
         <h3 id="myModalLabel">Share library: </h3>
     </div>
     <div class="modal-body">
-
-        <p>Shared with:</p>
+        <p>Enter user, or organisation name to share this library with: </p>
+            <input id="sharename" type="text" style="margin:10px;width:120px"/>
+            <input type="checkbox" id="write_permissions">  Grant write persmisions
+            <p id="return-message" style="margin-bottom:25px"></p>
         <table class="table" id="shared-with-table">
         </table>
-
-        <p>Enter user, or organisation name to share this library with:</p>
-        <input id="sharename" type="text" style="width:420px"/>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>

@@ -529,32 +529,39 @@ $("#open-share-library").click(function () {
     $("#modal-share-library").modal('show');
     $('#myModal').modal('hide');
     $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + selected_library, success: function (shared) {
-            var out = "";
+            var out = "<tr><th>Shared with:</th><th>Has write persmissions</th></tr>";
+            var write = "";
             for (var i in shared) {
+                write = shared[i].write == 1 ? 'Yes' : 'No';
                 // if (myusername!=shared[i].username) 
-                out += "<tr><td>" + shared[i].username + "</td></tr>";
+                out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td></tr>";
             }
-            if (out == "")
-                out = "<tr><td>This library is currently private</td></tr>";
+            if (out == "<tr><th>Shared with:</th><th>Has write persmissions</th></tr>")
+                out = "<tr><td colspan='2'>This library is currently private</td></tr>";
             $("#shared-with-table").html(out);
         }});
 });
 $("#share-library").click(function () {
+    $('#return-message').html('');
     var username = $("#sharename").val();
+    var write_permissions = $('#write_permissions').is(":checked");
+
     if (selected_library != -1) {
         $.ajax({
             url: path + "assessment/sharelibrary.json",
-            data: "id=" + selected_library + "&name=" + username,
+            data: "id=" + selected_library + "&name=" + username + "&write_permissions=" + write_permissions,
             success: function (data) {
-
+                $('#return-message').html(data);
                 $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + selected_library, success: function (shared) {
-                        var out = "";
+                        var out = "<tr><th>Shared with:</th><th>Has write persmissions</th></tr>";
+                        var write = "";
                         for (var i in shared) {
+                            write = shared[i].write == 1 ? 'Yes' : 'No';
                             // if (myusername!=shared[i].username) 
-                            out += "<tr><td>" + shared[i].username + "</td></tr>";
+                            out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td></tr>";
                         }
                         if (out == "")
-                            out = "<tr><td>This library is currently private</td></tr>";
+                            out = "<tr><td colspan='2'>This library is currently private</td></tr>";
                         $("#shared-with-table").html(out);
                     }});
             }});
