@@ -4,7 +4,7 @@
  * http://cssreset.com
  * ( Only applies to the wrapper and removed some rarer elements)
  */
-@import url(https://fonts.googleapis.com/css?family=Karla:400,700);
+@import url(https://fonts.googleapis.com/css?family=Karla:400,400italic,700);
 .carbon-report-wrapper {
   /* HTML5 display-role reset for older browsers */ }
   .carbon-report-wrapper div, .carbon-report-wrapper span, .carbon-report-wrapper object, .carbon-report-wrapper iframe,
