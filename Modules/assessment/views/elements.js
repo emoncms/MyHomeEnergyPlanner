@@ -1,4 +1,5 @@
 console.log('debug elements.js');
+console.log(data.fabric.measures);
 $("#openbem").on("click", '.add-element', function () {
 
     var lib = $(this).attr("lib");
@@ -95,10 +96,18 @@ $("#create-element-save").click(function () {
         element_library[tag].description = $("#create-element-description").val();
     if ($('#create-element-performance').val() !== "")
         element_library[tag].performance = $("#create-element-performance").val();
+    if ($('#create-element-performance-units').val() !== "")
+        element_library[tag].performance_units = $("#create-element-performance-units").val();
     if ($('#create-element-benefits').val() !== "")
         element_library[tag].benefits = $("#create-element-benefits").val();
     if ($('#create-element-cost').val() !== "")
         element_library[tag].cost = $("#create-element-cost").val();
+    if ($('#create-element-cost-units').val() !== "")
+        element_library[tag].cost_units = $("#create-element-cost-units").val();
+    if ($('#create-element-cost-quantity').val() !== "")
+        element_library[tag].cost_quantity = $("#create-element-cost-quantity").val();
+    if ($('#create-element-cost-total').val() !== "")
+        element_library[tag].cost_total = $("#create-element-cost-total").val();
     if ($('#create-element-who_by').val() !== "")
         element_library[tag]["who_by"] = $("#create-element-who_by").val();
     if ($('#create-element-disruption').val() !== "")
@@ -206,30 +215,11 @@ function elements_initUI()
      /* FOR BACKWARDS COMPATIBILITY
      * We have just added "description","performance","benefits","cost","who_by",
      * "who_by","disruption","associated_work","key_risks","notes" and "maintenance" 
-     * to the elements. We initialize them if they are empty (elements that were 
-     * created before the addition)
+     * to the measures. We initialize them if they are empty (measures that were 
+     * applied before the addition)
      ***************************************************************************/
-    for (z in data.fabric.elements) {
-        if (data.fabric.elements[z].description == undefined)
-            data.fabric.elements[z].description = '--';
-        if (data.fabric.elements[z].performance == undefined)
-            data.fabric.elements[z].performance = '--';
-        if (data.fabric.elements[z].benefits == undefined)
-            data.fabric.elements[z].benefits = '--';
-        if (data.fabric.elements[z].cost == undefined)
-            data.fabric.elements[z].cost = '--';
-        if (data.fabric.elements[z].who_by == undefined)
-            data.fabric.elements[z].who_by = '--';
-        if (data.fabric.elements[z].disruption == undefined)
-            data.fabric.elements[z].disruption = '--';
-        if (data.fabric.elements[z].associated_work == undefined)
-            data.fabric.elements[z].associated_work = '--';
-        if (data.fabric.elements[z].key_risks == undefined)
-            data.fabric.elements[z].key_risks = '--';
-        if (data.fabric.elements[z].notes == undefined)
-            data.fabric.elements[z].notes = '--';
-        if (data.fabric.elements[z].maintenance == undefined)
-            data.fabric.elements[z].maintenance = '--';
+    for (z in data.fabric.measures) {
+        check_and_add_measure_fields(data.fabric.measures[z].measure);
     }
     // End backwards compatibility for "description","performance","benefits","cost","who_by",
      //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
@@ -398,78 +388,6 @@ function draw_library(tag)
     $('#myModal').modal('show');
 }
 
-$("#openbem").on("click", '.apply-measure-list', function () {
-    var row = $(this).attr('row');
-    var element = data.fabric.elements[row];
-    var measure_options = ["description", "performance", "benefits", "cost", "who_by", "disruption", "associated_work", "key_risks", "notes", "maintenance"];
-    // The header of the table
-    var out = '<tr class="librow apply-measure"><th>Tag</th><th>Name</th><th>Source</th><th>U-value</th><th>K-value</th>';
-    out += '<th class="element-window-option">g</th><th class="element-window-option">gL</th><th class="element-window-option">Frame factor (ff)</th>';
-    out += '<th>Code</th><th>Description</th><th>Performance</th><th>Benefits</th><th>Cost</th><th>Who by</th><th>Disruption</th><th>Associated work</th><th>Key risks</th><th>Notes</th><th>Maintenance</th></tr>';
-    // The rest of the table
-    for (z in element_library) {
-        /* for (i in measure_options) {
-         if (element_library[z][i] === undefined)
-         element_library[z][measure_options[i]] = "";
-         }*/
-//if (element_library[z].criteria.indexOf(element.lib) != -1) {
-        if (element_library[z].tags[0].toLowerCase() == element.type) {
-            out += "<tr class='librow apply-measure' lib='" + z + "' row='" + row + "' element_id='" + element.id + "' style='cursor:pointer'>";
-            out += "<td>" + z + "</td>";
-            out += "<td>" + element_library[z].name + "</td>";
-            out += "<td>" + element_library[z].source + "</td>";
-            out += "<td>" + element_library[z].uvalue + " W/K.m2</td>";
-            out += "<td>" + element_library[z].kvalue + " kJ/K.m2</td>";
-            out += "<td class='element-window-option'>" + element_library[z].g + " kJ/K.m2</td>";
-            out += "<td class='element-window-option'>" + element_library[z].gL + " kJ/K.m2</td>";
-            out += "<td class='element-window-option'>" + element_library[z].ff + " kJ/K.m2</td>";
-            out += "<td>" + element_library[z].description + "</td>";
-            out += "<td>" + element_library[z].performance + "</td>";
-            out += "<td>" + element_library[z].benefits + "</td>";
-            out += "<td>" + element_library[z].cost + "</td>";
-            out += "<td>" + element_library[z].who_by + "</td>";
-            out += "<td>" + element_library[z].disruption + "</td>";
-            out += "<td>" + element_library[z].associated_work + "</td>";
-            out += "<td>" + element_library[z].key_risks + "</td>";
-            out += "<td>" + element_library[z].notes + "</td>";
-            out += "<td>" + element_library[z].maintenance + "</td>";
-            // out += "<td>"+element_library[z].criteria.join(",")+"</td>";
-            out += "</tr>";
-        }
-    }
-    $("#element_library").html(out);
-    if (element.type == "window") {
-        $('.element-window-option').show();
-        $('#myModal').css({left: 450});
-    }
-    else {
-        $('.element-window-option').hide();
-        $('#myModal').css({left: 650});
-    }
-
-    $('#myModal').modal('show');
-});
-$("#openbem").on("click", '.apply-measure', function () {
-    var lib = $(this).attr('lib');
-    var row = $(this).attr('row');
-    var element_id = $(this).attr('element_id');
-
-    if (data.fabric.measures[element_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
-        data.fabric.measures[element_id] = {};
-        data.fabric.measures[element_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[row]));
-    }
-
-    if (lib != undefined) {
-        for (z in element_library[lib])
-            data.fabric.elements[row][z] = element_library[lib][z];
-        data.fabric.elements[row].lib = lib;
-    }
-
-    data.fabric.measures[element_id].measure = data.fabric.elements[row];
-    update();
-    $('#myModal').modal('hide');
-});
-
 function get_element_value(element) {
     return element;
 }
@@ -559,3 +477,115 @@ $("#share-library").click(function () {
             }});
     }
 });
+
+
+//------------------------------------------------------------------------------
+// Measures
+//------------------------------------------------------------------------------
+
+$("#openbem").on("click", '.apply-measure-list', function () {
+    var row = $(this).attr('row');
+    var element = data.fabric.elements[row];
+    var measure_options = ["description", "performance", "benefits", "cost", "who_by", "disruption", "associated_work", "key_risks", "notes", "maintenance"];
+    // The header of the table
+    var out = '<tr class="librow apply-measure"><th>Tag</th><th>Name</th><th>Source</th><th>U-value</th><th>K-value</th>';
+    out += '<th class="element-window-option">g</th><th class="element-window-option">gL</th><th class="element-window-option">Frame factor (ff)</th>';
+    out += '<th>Code</th><th>Description</th><th>Performance</th><th>Benefits</th><th>Cost</th><th>Who by</th><th>Disruption</th><th>Associated work</th><th>Key risks</th><th>Notes</th><th>Maintenance</th></tr>';
+    // The rest of the table
+    for (z in element_library) {
+        /* for (i in measure_options) {
+         if (element_library[z][i] === undefined)
+         element_library[z][measure_options[i]] = "";
+         }*/
+//if (element_library[z].criteria.indexOf(element.lib) != -1) {
+        if (element_library[z].tags[0].toLowerCase() == element.type) {
+            out += "<tr class='librow apply-measure' lib='" + z + "' row='" + row + "' element_id='" + element.id + "' style='cursor:pointer'>";
+            out += "<td>" + z + "</td>";
+            out += "<td>" + element_library[z].name + "</td>";
+            out += "<td>" + element_library[z].source + "</td>";
+            out += "<td>" + element_library[z].uvalue + " W/K.m2</td>";
+            out += "<td>" + element_library[z].kvalue + " kJ/K.m2</td>";
+            out += "<td class='element-window-option'>" + element_library[z].g + " kJ/K.m2</td>";
+            out += "<td class='element-window-option'>" + element_library[z].gL + " kJ/K.m2</td>";
+            out += "<td class='element-window-option'>" + element_library[z].ff + " kJ/K.m2</td>";
+            out += "<td>" + element_library[z].description + "</td>";
+            out += "<td>" + element_library[z].performance + "</td>";
+            out += "<td>" + element_library[z].benefits + "</td>";
+            out += "<td>" + element_library[z].cost + "</td>";
+            out += "<td>" + element_library[z].who_by + "</td>";
+            out += "<td>" + element_library[z].disruption + "</td>";
+            out += "<td>" + element_library[z].associated_work + "</td>";
+            out += "<td>" + element_library[z].key_risks + "</td>";
+            out += "<td>" + element_library[z].notes + "</td>";
+            out += "<td>" + element_library[z].maintenance + "</td>";
+            // out += "<td>"+element_library[z].criteria.join(",")+"</td>";
+            out += "</tr>";
+        }
+    }
+    $("#element_library").html(out);
+    if (element.type == "window") {
+        $('.element-window-option').show();
+        $('#myModal').css({left: 450});
+    }
+    else {
+        $('.element-window-option').hide();
+        $('#myModal').css({left: 650});
+    }
+
+    $('#myModal').modal('show');
+});
+$("#openbem").on("click", '.apply-measure', function () {
+    var lib = $(this).attr('lib');
+    var row = $(this).attr('row');
+    var element_id = $(this).attr('element_id');
+
+    if (data.fabric.measures[element_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
+        data.fabric.measures[element_id] = {};
+        data.fabric.measures[element_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[row]));
+    }
+
+    if (lib != undefined) {
+        for (z in element_library[lib])
+            data.fabric.elements[row][z] = element_library[lib][z];
+        check_and_add_measure_fields(data.fabric.elements[row]); // If the element in the library was not created as a measure, the specific measure fields (description, performance, cost...) will be missing
+        data.fabric.elements[row].lib = lib;
+    }
+
+    data.fabric.measures[element_id].measure = data.fabric.elements[row];
+    update();
+    console.log(data.fabric.measures);
+    $('#myModal').modal('hide');
+});
+
+function check_and_add_measure_fields(element) {
+    if (element.description == undefined || element.description == '')
+        element.description = '--';
+    if (element.performance == undefined || element.performance == '')
+        element.performance = '--';
+    if (element.performance_units == undefined || element.performance_units == '')
+        element.performance_units = '--';
+    if (element.benefits == undefined || element.benefits == '')
+        element.benefits = '--';
+    if (element.cost == undefined || element.cost == '')
+        element.cost = '--';
+    if (element.cost_units == undefined || element.cost_units == '')
+        element.cost_units = '--';
+    if (element.who_by == undefined || element.who_by == '')
+        element.who_by = '--';
+    if (element.who_by_units == undefined || element.who_by_units == '')
+        element.who_by_units = '--';
+    if (element.who_by_quantity == undefined || element.who_by_quantity == '')
+        element.who_by_quantity = '--';
+    if (element.who_by_total == undefined || element.who_by_total == '')
+        element.who_by_total = '--';
+    if (element.disruption == undefined || element.disruption == '')
+        element.disruption = '--';
+    if (element.associated_work == undefined || element.associated_work == '')
+        element.associated_work = '--';
+    if (element.key_risks == undefined || element.key_risks == '')
+        element.key_risks = '--';
+    if (element.notes == undefined || element.notes == '')
+        element.notes = '--';
+    if (element.maintenance == undefined || element.maintenance == '')
+        element.maintenance = '--';
+}
