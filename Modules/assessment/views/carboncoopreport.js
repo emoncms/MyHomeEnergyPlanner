@@ -633,9 +633,12 @@ function carboncoopreport_initUI() {
 		var sapAverage = 84;
 		var sap2050 = Math.round(project["scenario3"]["SAP"]["rating"]);
 
-		$("tr[data-sap-rating='"+calculateSapRatingFromScore(sapNow)+"'] .cell-sap-now").html(sapNow);
-		$("tr[data-sap-rating='"+calculateSapRatingFromScore(sapAverage)+"'] .cell-sap-average").html(sapAverage);
-		$("tr[data-sap-rating='"+calculateSapRatingFromScore(sap2050)+"'] .cell-sap-future").html(sap2050);
+		$(".js-sap-score-now").html(sapNow);
+		$(".js-sap-rating-now").html(calculateSapRatingFromScore(sapNow));
+		$(".js-sap-score-2050").html(sap2050);
+		$(".js-sap-rating-2050").html(calculateSapRatingFromScore(sap2050));
+		$(".js-sap-score-average").html(sapAverage);
+		$(".js-sap-rating-average").html(calculateSapRatingFromScore(sapAverage));
 
 
 		/* Figure 13: Comfort Tables.

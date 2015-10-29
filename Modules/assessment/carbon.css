@@ -185,8 +185,11 @@
   .carbon-report-wrapper .sap-table thead {
     background: #e41b3a;
     color: white; }
-  .carbon-report-wrapper .sap-table th {
-    padding: 10px 15px; }
+  .carbon-report-wrapper .sap-table th, .carbon-report-wrapper .sap-table td {
+    padding: 10px 15px;
+    text-align: left; }
+  .carbon-report-wrapper .sap-table td {
+    background: white; }
   .carbon-report-wrapper .three-col-table {
     margin-bottom: 1em;
     width: 100%;

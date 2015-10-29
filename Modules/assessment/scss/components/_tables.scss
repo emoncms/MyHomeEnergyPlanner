@@ -10,8 +10,13 @@
 		color:$white;
 	}
 
-	.sap-table th{
-		padding: 10px 15px; 
+	.sap-table th, .sap-table td{
+		padding: 10px 15px;
+		text-align:left; 
+	}
+
+	.sap-table td{
+		background:$white;
 	}
 
 	.three-col-table {
