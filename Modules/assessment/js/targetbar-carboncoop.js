@@ -17,6 +17,8 @@ function targetbarCarboncoop(element, options)
     ctx.strokeStyle = "rgba(99,86,71,0.8)";
     ctx.fillRect(1,1,width-2,barheight-2);
     ctx.strokeRect(1,1,width-2,barheight-2);
+    ctx.font="10px Ubuntu";
+
     
     var maxval = options.value;
     for (z in options.targets) {
@@ -25,30 +27,28 @@ function targetbarCarboncoop(element, options)
     maxval *= 1.2; // Always 20% larger than max target or value
     
     var xscale = width / maxval;
-    /*
-    ctx.font="12px Ubuntu";
-    ctx.textAlign = "left";
-    ctx.fillStyle = "rgba(99,86,71,0.8)";
-    ctx.fillText(options.name,1,10);
+    var colors = [
+        "rgba(217, 58, 71, 0.5)",
+        "rgba(73, 167, 196, 0.5)",
+        "rgba(113, 218, 212, 0.5)",
+        "rgba(246, 169, 23, 0.5)",
+    ];
 
-    ctx.textAlign = "right";
-    ctx.fillStyle = "rgba(99,86,71,0.8)";
-    ctx.fillText(options.value+" "+options.units,width,10);        
-    */
+
     if (typeof options["values"] != "undefined"){
         var subBarHeightFraction = 1 / options["values"].length;
         for (var i = 0 ; i < options["values"].length ; i++){
-            ctx.fillStyle = "rgba(217, 58, 71, "+subBarHeightFraction*(i+1)+")";
+            ctx.fillStyle = colors[i];
             var y = 1 + subBarHeightFraction*barheight*i;
             ctx.fillRect(1,y ,(options.values[i]*xscale)-2,subBarHeightFraction*barheight);
-            ctx.fillStyle = "rgb(128,128,128)";
+            ctx.fillStyle = "rgba(99,86,71,1.0)";
             ctx.fillText(options.values[i]+" "+options.units, (options.value*xscale)-2, y + 20);
         }
     } else {
         ctx.fillStyle = "rgb(217, 58, 71)";
         ctx.fillRect(1,1,(options.value*xscale)-2,barheight-2);
     }
-    ctx.font="10px Ubuntu";
+    ctx.font="10px Karla";
     ctx.setLineDash([4, 4]);
     
     for (z in options.targets) {
@@ -61,9 +61,8 @@ function targetbarCarboncoop(element, options)
         ctx.stroke();
         
         ctx.textAlign = "left";
-        ctx.fillStyle = "rgb(255,255,255)";
-        ctx.fillText(options.targets[z]+" "+options.units,xpos+5,barheight-18);
         ctx.fillStyle = "rgba(99,86,71,1.0)";
+        ctx.fillText(options.targets[z]+" "+options.units,xpos+5,barheight-18);
         ctx.fillText(z,xpos+5,barheight-8);
     }
     
