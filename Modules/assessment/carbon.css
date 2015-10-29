@@ -149,6 +149,9 @@
   background: #fef2ef; }
 .carbon-report-wrapper .highlight-box + .highlight-box {
   margin-top: 3em; }
+.carbon-report-wrapper .image-figure {
+  margin: 20px auto;
+  display: block; }
 @media screen and (max-width: 700px) {
   .carbon-report-wrapper .highlight-box {
     padding: 15px; } }
