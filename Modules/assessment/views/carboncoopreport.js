@@ -3,6 +3,49 @@ function carboncoopreport_initUI() {
 
 	console.log(project);
 
+	var scenarios = ["master", "scenario1", "scenario2", "scenario3"];
+
+	// add empty objects for missing data
+	for (var i = 0 ; i < scenarios.length ; i++){
+		var scenarioName = scenarios[i];
+		console.log(scenarioName);
+		var scenarioObject = project[scenarioName];
+		if (typeof scenarioObject === "undefined"){
+			project[scenarioName] = {};
+		}
+
+		if (typeof project[scenarioName].kwhdpp === "undefined"){
+			project[scenarioName].kwhdpp = 0;
+		}
+
+		if (typeof project[scenarioName].ventilation === "undefined"){
+			project[scenarioName].ventilation = {
+				average_WK:0
+			};
+		}
+
+		if (typeof project[scenarioName].fabric === "undefined"){
+			project[scenarioName].fabric = {
+				total_floor_WK: 0,
+				total_window_WK:0,
+				total_wall_WK:0,
+				total_roof_WK:0,
+				thermal_bridging_heat_loss:0,
+				totalwk:0
+			};
+		}
+
+		if (typeof project[scenarioName].annual_useful_gains_kWh_m2 === "undefined"){
+			project[scenarioName].annual_useful_gains_kWh_m2 = {
+				"Internal":0,
+				"Space heating":0,
+				"Solar": 0
+			}
+		}
+	}
+
+	
+
 	// need to wait until page has loaded so we can use the webfont in our charts.
 	$(window).load(function(){
 
@@ -88,6 +131,12 @@ function carboncoopreport_initUI() {
 	    // CO2 emission rate (kgCO2/m2.a)
 	    // CO2 emission rate - per person (kgCO2/m2.a)
 	    */
+
+	    var values = [];
+
+	   	for (var scenario in project){
+			scenarios.push(scenario);
+		}
 
 		var options = {
 	        name: "Space heating demand",
