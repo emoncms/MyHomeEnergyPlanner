@@ -687,7 +687,7 @@ function carboncoopreport_initUI() {
 
 		
 
-		function populateMeasuresTable(scenario, tableSelector){
+		function populateMeasuresTable(scenario, tableSelector, summaryTableSelector){
 			for (var measureID in project[scenario].fabric.measures){
 				var measure = project[scenario].fabric.measures[measureID];
 				var html = "<tr>";
@@ -698,6 +698,8 @@ function carboncoopreport_initUI() {
 					row.append(cell);
 				}
 				$(tableSelector).append(row);
+
+				addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description, measure.measure.benefits, measure.measure.cost, measure.measure.who_by, measure.measure.disruption);
 			}
 		}
 
@@ -726,15 +728,50 @@ function carboncoopreport_initUI() {
 
 		}
 
-		function createMeasuresTable(scenario, tableSelector){
+		function createMeasuresTable(scenario, tableSelector, summaryTableSelector){
 			initialiseMeasuresTable(tableSelector);		
-			populateMeasuresTable(scenario, tableSelector);	
+			initiliaseMeasuresSummaryTable(summaryTableSelector);		
+			populateMeasuresTable(scenario, tableSelector, summaryTableSelector);	
 		}
 
+		function initiliaseMeasuresSummaryTable(summaryTableSelector){
+			var html = "<thead>\
+				<tr>\
+					<th>Name</th>\
+					<th>Description</th>\
+					<th>Benefits (in order)</th>\
+					<th>Cost</th>\
+					<th>Completed By</th>\
+					<th>Disruption</th>\
+				</tr>\
+			</thead>\
+			<tbody>\
+			</tbody>";
+
+			return $(summaryTableSelector).append(html);
+
+		}
+
+
+		function addRowToSummaryTable(tableSelector, name, description, benefits, cost, who_by, disruption){
+			var html = '<tr><td class="highlighted-col">' + name + '</td>';
+			html +=	'<td><div class="text-width-limiter">' + description + '</div>';
+			html += '</td>';
+			html +=	'<td>' + benefits + '</td>';
+			html +=	'<td class="cost">' + cost + '</td>';
+			html +=	'<td>' + who_by + '</td>';
+			html +=	'<td>' + disruption + '</td>';
+			html += '</tr>';
+
+			$(tableSelector + " tbody").append($(html));
+		}
+
+
+
 		
-		createMeasuresTable("master", "#scenario1-measures");
-		createMeasuresTable("master", "#scenario2-measures");
-		createMeasuresTable("master", "#scenario3-measures");
+		createMeasuresTable("master", "#scenario1-measures", ".js-measures1-summary");
+		createMeasuresTable("master", "#scenario2-measures", ".js-measures2-summary");
+		createMeasuresTable("master", "#scenario3-measures", ".js-measures3-summary");
 
 
 		/* Figure 18: Scenario 2 Measures
