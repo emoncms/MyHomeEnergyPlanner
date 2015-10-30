@@ -152,6 +152,12 @@
 .carbon-report-wrapper .image-figure {
   margin: 20px auto;
   display: block; }
+.carbon-report-wrapper .comfort-tables {
+  overflow: hidden; }
+.carbon-report-wrapper .comfort-table-wrapper {
+  margin-bottom: 40px;
+  float: left;
+  width: 50%; }
 @media screen and (max-width: 700px) {
   .carbon-report-wrapper .highlight-box {
     padding: 15px; } }
@@ -352,6 +358,16 @@
     background: #fef2ef;
     color: #e41b3a;
     vertical-align: top; }
+  .carbon-report-wrapper .comfort-table-option {
+    border: solid 1px #e41b3a;
+    width: 30px;
+    height: 30px; }
+  .carbon-report-wrapper .extreme-left, .carbon-report-wrapper .extreme-right {
+    width: 100px;
+    padding: 5px;
+    font-size: 14px; }
+  .carbon-report-wrapper .extreme-left {
+    text-align: right; }
 
 .carbon-report-wrapper .right-align-item-list {
   margin-bottom: 2rem;

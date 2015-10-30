@@ -283,4 +283,20 @@
 		vertical-align:top;
 	}
 
+	.comfort-table-option { 
+		border: solid 1px $red;
+		width:30px;
+		height:30px;
+	}
+
+	.extreme-left,.extreme-right{
+		width:100px;
+		padding:5px;
+		font-size:14px;
+	}
+
+	.extreme-left{
+		text-align:right;
+	}
+
 }

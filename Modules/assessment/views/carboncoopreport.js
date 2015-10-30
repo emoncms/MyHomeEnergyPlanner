@@ -660,8 +660,123 @@ function carboncoopreport_initUI() {
 
 
 		/* Figure 13: Comfort Tables.
-		// No JS needed currently
+		//	
 		*/
+		function createComforTable(options, tableID, chosenValue){
+
+			for (var i = options.length-1 ;i >= 0 ; i--){
+				
+				if (options[i].title == chosenValue){
+					var background = options[i].color;
+				} else {
+					var background = 'transparent';
+				}
+				$("#" + tableID + " .extreme-left").after($("<td class='comfort-table-option "+ i+ "'  style='background:"+background+"'></td>"));
+			}
+
+		}
+
+		var red = "rgb(228, 27, 58)";
+		var green = "rgb(149, 211, 95)";
+
+		// Temperature in Winter
+		var options = [
+			{
+				title: "Too cold",
+				color: red,
+			},{
+				title: "Just right",
+				color: green,
+			},{
+				title: "Too hot",
+				color: red
+			}
+		];
+
+		createComforTable(options, "comfort-table-winter-temp", data.household["6a_temperature_winter"]);
+
+		// Air quality in winter
+
+		var options = [
+			{
+				title: "Too dry",
+				color: red,
+			},{
+				title: "Just right",
+				color: green,
+			},{
+				title: "Too stuffy",
+				color: red
+			}
+		];
+
+		createComforTable(options, "comfort-table-winter-air", data.household["6a_airquality_winter"]);
+
+		// Temperature in Summer
+
+		var options = [
+			{
+				title: "Too cold",
+				color: red,
+			},{
+				title: "Just right",
+				color: green,
+			},{
+				title: "Too hot",
+				color: red
+			}
+		];
+
+		createComforTable(options, "comfort-table-summer-temp", data.household["6a_temperature_summer"]);
+
+		// Air quality in Summer
+
+		var options = [
+			{
+				title: "Too dry",
+				color: red,
+			},{
+				title: "Just right",
+				color: green,
+			},{
+				title: "Too stuffy",
+				color: red
+			}
+		];
+
+		createComforTable(options, "comfort-table-summer-air", data.household["6a_airquality_summer"]);
+
+		var options = [
+			{
+				title: "Too little",
+				color: red,
+			},{
+				title: "Just right",
+				color: green,
+			},{
+				title: "Too much",
+				color: red
+			}
+		];
+
+		createComforTable(options, "comfort-table-daylight-amount", data.household["6b_daylightamount"]);
+
+		var options = [
+			{
+				title: "Too little",
+				color: red,
+			},{
+				title: "Just right",
+				color: green,
+			},{
+				title: "Too much",
+				color: red
+			}
+		];
+
+		createComforTable(options, "comfort-table-artificial-light-amount", data.household["6b_artificallightamount"]);
+
+
 
 		/* Figure 14: Humidity Data
 		// No JS needed currently

@@ -22,6 +22,16 @@
 		display: block;
 	}
 
+	.comfort-tables{
+		overflow:hidden;
+	}
+
+	.comfort-table-wrapper{
+		margin-bottom:40px;
+		float:left;
+		width:50%;
+	}
+
 	@media screen and (max-width: 700px) {
 		.highlight-box {
 			padding: 15px;
