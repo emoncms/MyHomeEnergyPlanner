@@ -138,9 +138,17 @@ function carboncoopreport_initUI() {
 			scenarios.push(scenario);
 		}
 
+		colors = [
+	        "rgb(236, 157, 163)",
+			"rgb(164, 211, 226)",
+			"rgb(184, 237, 234)",
+			"rgb(251, 212, 139)"
+	    ]
+
 		var options = {
 	        name: "Space heating demand",
 	        font: "Karla",
+	        colors: colors,
 	        value: Math.round(data.fabric_energy_efficiency),
 	        values: [
 		        Math.round(project["master"].fabric_energy_efficiency),
@@ -162,6 +170,7 @@ function carboncoopreport_initUI() {
 	    var options = {
 	        name: "Primary energy demand",
 	        value: Math.round(data.primary_energy_use_m2),
+	        colors: colors,
 	        values: [
 		        Math.round(project["master"].primary_energy_use_m2),
 		        Math.round(project["scenario1"].primary_energy_use_m2),
@@ -179,6 +188,7 @@ function carboncoopreport_initUI() {
 	    var options = {
 	        name: "CO2 Emission rate",
 	        value: Math.round(data.kgco2perm2),
+	        colors: colors,
 	        values: [
 		        Math.round(project["master"].kgco2perm2),
 		        Math.round(project["scenario1"].kgco2perm2),
@@ -196,6 +206,7 @@ function carboncoopreport_initUI() {
 	    var options = {
 	        name: "Per person energy use",
 	        value: data.kwhdpp.toFixed(1),
+	        colors: colors,
 	        values: [
 		        Math.round(project["master"].kwhdpp.toFixed(1)),
 		        Math.round(project["scenario1"].kwhdpp.toFixed(1)),
@@ -209,6 +220,13 @@ function carboncoopreport_initUI() {
 	        }
 	    };
 	    targetbarCarboncoop("energy-use-per-person", options);
+
+	    $(".key-square--master").css("background",    colors[0]);
+	    $(".key-square--scenario1").css("background", colors[1]);
+	    $(".key-square--scenario2").css("background", colors[2]);
+	    $(".key-square--scenario3").css("background", colors[3]);
+
+
 
 	    /* Figure 3: How does my home lose heat?
 	    // TODO: Show house graphic with heat loss for the four scenarios.

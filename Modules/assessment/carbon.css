@@ -498,5 +498,26 @@
   margin-bottom: 0.8em; }
 .carbon-report-wrapper .client-info span {
   margin-bottom: 0; }
+.carbon-report-wrapper .performance-summary-wrapper {
+  background: white;
+  padding: 40px; }
+.carbon-report-wrapper .performace-summary-target-bar {
+  margin-bottom: 40px; }
+.carbon-report-wrapper #performace-summary-key {
+  margin-bottom: 40px;
+  border-top: 1px dashed #e41b3a;
+  padding-top: 5px; }
+.carbon-report-wrapper #performace-summary-key li {
+  float: left;
+  width: 25%;
+  padding: 10px 0 20px; }
+.carbon-report-wrapper .key-square {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  background: grey;
+  position: relative;
+  top: 3px; }
 
 /*# sourceMappingURL=carbon.css.map */

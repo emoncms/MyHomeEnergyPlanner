@@ -7,19 +7,13 @@ function targetbarCarboncoop(element, options)
     $("#"+element).html("<div style='padding-bottom:5px; font-size:16px; color:rgba(99,86,71,0.8);'>"+options.name+"</div>");
     var titleheight = $("#"+element+" div").height();
     var barheight = height - titleheight - 5;    
-    var barheight = 100;    
+    var barheight = 90;    
     $("#"+element).append('<canvas id="'+element+'-canvas" width="'+width+'" height="'+barheight+'" style="max-width:100%"></canvas>');
 
     var c = document.getElementById(element+"-canvas");  
     var ctx = c.getContext("2d");
     
-    ctx.fillStyle = "white";
-    ctx.strokeStyle = "rgba(99,86,71,0.8)";
-    ctx.fillRect(1,1,width-2,barheight-2);
-    ctx.strokeRect(1,1,width-2,barheight-2);
-    ctx.font="10px Ubuntu";
-
-    
+   
     var maxval = options.value;
     for (z in options.targets) {
         if (options.targets[z]>maxval) maxval = options.targets[z];
@@ -27,12 +21,10 @@ function targetbarCarboncoop(element, options)
     maxval *= 1.2; // Always 20% larger than max target or value
     
     var xscale = width / maxval;
-    var colors = [
-        "rgba(217, 58, 71, 0.5)",
-        "rgba(73, 167, 196, 0.5)",
-        "rgba(113, 218, 212, 0.5)",
-        "rgba(246, 169, 23, 0.5)",
-    ];
+    var colors = options.colors;
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(1,1,width-2,barheight-2);
 
 
     if (typeof options["values"] != "undefined"){
@@ -42,7 +34,7 @@ function targetbarCarboncoop(element, options)
             var y = 1 + subBarHeightFraction*barheight*i;
             ctx.fillRect(1,y ,(options.values[i]*xscale)-2,subBarHeightFraction*barheight);
             ctx.fillStyle = "rgba(99,86,71,1.0)";
-            ctx.fillText(options.values[i]+" "+options.units, (options.value*xscale)-2, y + 20);
+            ctx.fillText(options.values[i]+" "+options.units, (options.value*xscale)-2, y + 16);
         }
     } else {
         ctx.fillStyle = "rgb(217, 58, 71)";
@@ -65,5 +57,10 @@ function targetbarCarboncoop(element, options)
         ctx.fillText(options.targets[z]+" "+options.units,xpos+5,barheight-18);
         ctx.fillText(z,xpos+5,barheight-8);
     }
+
+    ctx.setLineDash([]);
+    ctx.strokeStyle = "rgba(99,86,71,0.8)";
+    ctx.strokeRect(1,1,width-2,barheight-2);
+    ctx.font="10px Ubuntu";
     
 }
