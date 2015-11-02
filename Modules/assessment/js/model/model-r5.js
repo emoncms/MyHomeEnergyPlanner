@@ -936,7 +936,7 @@ calc.LAC = function (data)
 
         var EL_sum = 0;
         for (var m = 0; m < 12; m++) {
-            EL_monthly[m] = data.LAC.EL * (1.0 + (0.5 * Math.cos((2 * Math.PI * (m - 0.2)) / 12.0))) * datasets.table_1a[m] / 365.0;
+            EL_monthly[m] = data.LAC.EL * (1.0 + (0.5 * Math.cos((2 * Math.PI * ((m+1) - 0.2)) / 12.0))) * datasets.table_1a[m] / 365.0;
             EL_sum += EL_monthly[m];
 
             GL_monthly[m] = EL_monthly[m] * 0.85 * 1000 / (24 * datasets.table_1a[m]);
@@ -965,7 +965,7 @@ calc.LAC = function (data)
     for (var m = 0; m < 12; m++)
     {
         // The appliances energy use in kWh in month m (January = 1 to December = 12) is
-        EA_monthly[m] = EA_initial * (1.0 + (0.157 * Math.cos((2 * Math.PI * (m - 1.78)) / 12.0))) * datasets.table_1a[m] / 365.0;
+        EA_monthly[m] = EA_initial * (1.0 + (0.157 * Math.cos((2 * Math.PI * ((m+1) - 1.78)) / 12.0))) * datasets.table_1a[m] / 365.0;
         GA_monthly[m] = EA_monthly[m] * 1000 / (24 * datasets.table_1a[m]);
 
         if (data.LAC.energy_efficient_appliances) {
