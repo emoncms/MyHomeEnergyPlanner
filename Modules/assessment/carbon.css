@@ -158,6 +158,10 @@
   margin-bottom: 40px;
   float: left;
   width: 50%; }
+.carbon-report-wrapper .house-heatloss-diagram-picker li {
+  cursor: pointer; }
+.carbon-report-wrapper .house-heatloss-diagram-picker .selected {
+  color: #e41b3a; }
 @media screen and (max-width: 700px) {
   .carbon-report-wrapper .highlight-box {
     padding: 15px; } }

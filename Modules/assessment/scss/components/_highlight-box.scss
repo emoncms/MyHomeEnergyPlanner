@@ -32,6 +32,14 @@
 		width:50%;
 	}
 
+	.house-heatloss-diagram-picker  li {
+		cursor: pointer;
+	}
+
+	.house-heatloss-diagram-picker .selected{
+		color:$red;
+	}
+
 	@media screen and (max-width: 700px) {
 		.highlight-box {
 			padding: 15px;
