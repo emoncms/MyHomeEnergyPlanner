@@ -715,13 +715,18 @@ function carboncoopreport_initUI() {
 		function compare(num1, num2){
 			if (num1 > num2){
 				return "Lower";
-			} else {
+			} else if (num1 < num2){
 				return "Higher";
+			} else {
+				return "N/A";
 			}
 		}
 
 		// time format is "11:30" or "15:00" etc
 		function getTimeDifference(time1, time2){
+			if (time1 == null || time2 == null){
+				return false;
+			}
 			// thanks to http://stackoverflow.com/questions/1787939/check-time-difference-in-javascript
 			var time1Array = time1.split(":");
 			var time2Array = time2.split(":");
@@ -757,6 +762,10 @@ function carboncoopreport_initUI() {
 
 		function calculateSapRatingFromScore(score){
 
+			if (!score){
+				return false;
+			}
+
 			var sapRatings = {
 				"90": "A",
 				"80": "B",
@@ -778,9 +787,20 @@ function carboncoopreport_initUI() {
 		}
 
 
-		var sapNow = Math.round(project["master"]["SAP"]["rating"]);
+		if (typeof project["master"]["SAP"] !== "undefined"){
+			var sapNow = Math.round(project["master"]["SAP"]["rating"]);
+		} else {
+			var sapNow = false;
+		}
+
+		if (typeof project["scenario3"]["SAP"] !== "undefined"){
+			var sap2050 = Math.round(project["master"]["SAP"]["rating"]);
+		} else {
+			var sap2050 = false;
+		}
+
 		var sapAverage = 84;
-		var sap2050 = Math.round(project["scenario3"]["SAP"]["rating"]);
+		// var sap2050 = Math.round(project["scenario3"]["SAP"]["rating"]);
 
 		$(".js-sap-score-now").html(sapNow);
 		$(".js-sap-rating-now").html(calculateSapRatingFromScore(sapNow));
