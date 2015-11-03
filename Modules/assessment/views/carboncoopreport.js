@@ -24,6 +24,10 @@ function carboncoopreport_initUI() {
 			};
 		}
 
+		if (typeof project[scenarioName].fabric_energy_efficiency === "undefined"){
+			project[scenarioName].fabric_energy_efficiency = 0;
+		}
+
 		if (typeof project[scenarioName].fabric === "undefined"){
 			project[scenarioName].fabric = {
 				total_floor_WK: 0,
@@ -40,6 +44,21 @@ function carboncoopreport_initUI() {
 				"Internal":0,
 				"Space heating":0,
 				"Solar": 0
+			}
+		}
+
+		if (typeof project[scenarioName].fuel_totals === "undefined"){
+			project[scenarioName].fuel_totals = {
+				"gas":{
+					"quantity": 0,
+				},
+				"electric":{
+					"quantity": 0,
+				},
+				"wood":{
+					"quantity": 0,
+
+				}
 			}
 		}
 	}
@@ -438,6 +457,29 @@ function carboncoopreport_initUI() {
 		//
 		*/
 
+		function getEnergyDemandData(){
+			var data = {};
+			for (var i = 0 ; i < scenarios.length ; i++){
+				data[scenarios[i]] = [];
+				if (typeof project[scenarios[i]].fuel_totals !== "undefined"){
+					if (typeof project[scenarios[i]].fuel_totals['gas'] !== "undefined"){
+						data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['gas'].quantity, label: 'Gas'});
+					}
+					if (typeof project[scenarios[i]].fuel_totals['electric'] !== "undefined"){
+						data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['electric'].quantity, label: 'Electric'});
+					}
+					if (typeof project[scenarios[i]].fuel_totals['wood'] !== "undefined"){
+						data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['wood'].quantity, label: 'Wood'});
+					}
+				}
+
+			}
+
+			return data;	
+		}
+
+		var energyDemandData = getEnergyDemandData();
+
 		var EnergyDemand = new BarChart({
 			chartTitle: 'Energy Demand',
 			yAxisLabel: 'kWh/m2.year',
@@ -455,26 +497,10 @@ function carboncoopreport_initUI() {
 				'Wood': 'rgb(24,86,62)',
 			},
 			data: [
-				{label: 'Your Home Now', value: [
-					{value: project["master"].fuel_totals['gas'].quantity, label: 'Gas'},
-					{value: project["master"].fuel_totals['electric'].quantity, label: 'Electric'},
-					{value: project["master"].fuel_totals['wood'].quantity, label: 'Wood'},
-				]},
-				{label: 'Scenario 1', value: [
-					{value: project["scenario1"].fuel_totals['gas'].quantity, label: 'Gas'},
-					{value: project["scenario1"].fuel_totals['electric'].quantity, label: 'Electric'},
-					{value: project["scenario1"].fuel_totals['wood'].quantity, label: 'Wood'},
-				]},
-				{label: 'Scenario 2', value: [
-					{value: project["scenario2"].fuel_totals['gas'].quantity, label: 'Gas'},
-					{value: project["scenario2"].fuel_totals['electric'].quantity, label: 'Electric'},
-					{value: project["scenario2"].fuel_totals['wood'].quantity, label: 'Wood'},
-				]},
-				{label: 'Scenario 3', value: [
-					{value: project["scenario3"].fuel_totals['gas'].quantity, label: 'Gas'},
-					{value: project["scenario3"].fuel_totals['electric'].quantity, label: 'Electric'},
-					{value: project["scenario3"].fuel_totals['wood'].quantity, label: 'Wood'},
-				]},
+				{label: 'Your Home Now', value: energyDemandData.master},
+				{label: 'Scenario 1', value: energyDemandData.scenario1},
+				{label: 'Scenario 2', value: energyDemandData.scenario2},
+				{label: 'Scenario 3', value: energyDemandData.scenario3},
 			]
 		});
 
@@ -483,6 +509,39 @@ function carboncoopreport_initUI() {
 		/* Figure 7:
 		//
 		*/
+
+		function getPrimaryEnergyUseData(){
+			var data = {};
+			for (var i = 0 ; i < scenarios.length ; i++){
+				data[scenarios[i]] = [];
+				if (typeof project[scenarios[i]].energy_requirements !== "undefined"){
+					if (typeof project[scenarios[i]].energy_requirements['lighting'] !== "undefined"){
+						data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['lighting'].quantity, label: 'Lighting'});
+					}
+
+					if (typeof project[scenarios[i]].energy_requirements['appliances'] !== "undefined"){
+						data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['appliances'].quantity, label: 'Appliances'});
+					}
+
+					if (typeof project[scenarios[i]].energy_requirements['cooking'] !== "undefined"){
+						data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['cooking'].quantity, label: 'Cooking'});
+					}
+
+					if (typeof project[scenarios[i]].energy_requirements['waterheating'] !== "undefined"){
+						data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['waterheating'].quantity, label: 'Water Heating'});
+					}
+
+					if (typeof project[scenarios[i]].energy_requirements['space_heating'] !== "undefined"){
+						data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['space_heating'].quantity, label: 'Space Heating'});
+					}
+
+				}
+			}
+
+			return data;	
+		}
+
+		var primaryEnergyUseData = getPrimaryEnergyUseData();
 
 
 		var primaryEneryUse = new BarChart({
@@ -504,34 +563,10 @@ function carboncoopreport_initUI() {
 				'Space Heating' : 'rgb(231,37,57)',
 			},
 			data: [
-				{label: 'Your Home Now', value: [
-					{value: project["master"].energy_requirements['lighting'].quantity, label: 'Lighting'},
-					{value: project["master"].energy_requirements['appliances'].quantity, label: 'Appliances'},
-					{value: project["master"].energy_requirements['cooking'].quantity, label: 'Cooking'},
-					{value: project["master"].energy_requirements['waterheating'].quantity, label: 'Water heating'},
-					{value: project["master"].energy_requirements['space_heating'].quantity, label: 'Space heating'},
-				]},
-				{label: 'Scenario 1', value: [
-					{value: project["scenario1"].energy_requirements['lighting'].quantity, label: 'Lighting'},
-					{value: project["scenario1"].energy_requirements['appliances'].quantity, label: 'Appliances'},
-					{value: project["scenario1"].energy_requirements['cooking'].quantity, label: 'Cooking'},
-					{value: project["scenario1"].energy_requirements['waterheating'].quantity, label: 'Water heating'},
-					{value: project["scenario1"].energy_requirements['space_heating'].quantity, label: 'Space heating'},
-				]},
-				{label: 'Scenario 2', value: [
-					{value: project["scenario2"].energy_requirements['lighting'].quantity, label: 'Lighting'},
-					{value: project["scenario2"].energy_requirements['appliances'].quantity, label: 'Appliances'},
-					{value: project["scenario2"].energy_requirements['cooking'].quantity, label: 'Cooking'},
-					{value: project["scenario2"].energy_requirements['waterheating'].quantity, label: 'Water heating'},
-					{value: project["scenario2"].energy_requirements['space_heating'].quantity, label: 'Space heating'},
-				]},
-				{label: 'Scenario 3', value: [
-					{value: project["scenario3"].energy_requirements['lighting'].quantity, label: 'Lighting'},
-					{value: project["scenario3"].energy_requirements['appliances'].quantity, label: 'Appliances'},
-					{value: project["scenario3"].energy_requirements['cooking'].quantity, label: 'Cooking'},
-					{value: project["scenario3"].energy_requirements['waterheating'].quantity, label: 'Water heating'},
-					{value: project["scenario3"].energy_requirements['space_heating'].quantity, label: 'Space heating'},
-				]},
+				{label: 'Your Home Now', value: primaryEnergyUseData.master},
+				{label: 'Scenario 1', value: primaryEnergyUseData.scenario1},
+				{label: 'Scenario 2', value: primaryEnergyUseData.scenario2},
+				{label: 'Scenario 3', value: primaryEnergyUseData.scenario3},
 			]
 		});
 
@@ -541,6 +576,20 @@ function carboncoopreport_initUI() {
 		/* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
 		//
 		*/
+
+		var carbonDioxideEmissionsData = [{label: 'UK Average', value: 100}];
+		if (typeof project["master"].kgco2perm2 !== "undefined"){
+			carbonDioxideEmissionsData.push({label: "Master", value: project["master"].kgco2perm2});
+		}
+		if (typeof project["scenario1"].kgco2perm2 !== "undefined"){
+			carbonDioxideEmissionsData.push({label: "Scenario 1", value: project["scenario1"].kgco2perm2});
+		}
+		if (typeof project["scenario2"].kgco2perm2 !== "undefined"){
+			carbonDioxideEmissionsData.push({label: "Scenario 2", value: project["scenario2"].kgco2perm2});
+		}
+		if (typeof project["scenario3"].kgco2perm2 !== "undefined"){
+			carbonDioxideEmissionsData.push({label: "Scenario 3", value: project["scenario3"].kgco2perm2});
+		}
 
 		var CarbonDioxideEmissions = new BarChart({
 			chartTitle: 'Carbon Dioxide Emissions',
@@ -570,13 +619,7 @@ function carboncoopreport_initUI() {
 					color: 'rgb(231,37,57)'
 				},
 			],
-			data: [
-				{label: 'UK Average', value: 100},
-				{label: 'Your home now (model)', value: project["master"].kgco2perm2},
-				{label: 'Your home now (bills)', value: project["master"].currentenergy.total_co2m2},
-				{label: 'Your home (small changes)', value: project["scenario1"].kgco2perm2},
-				{label: 'Your 2050 home', value: project["scenario3"].kgco2perm2},
-			]
+			data: carbonDioxideEmissionsData,
 		});
 
 		CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
@@ -585,6 +628,20 @@ function carboncoopreport_initUI() {
 		/* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
 		//
 		*/
+
+		var carbonDioxideEmissionsPerPersonData = [];
+		if (typeof project["master"].annualco2 !== "undefined" && typeof project["master"].occupancy !== "undefined"){
+			carbonDioxideEmissionsPerPersonData.push({label: "Master", value: project["master"].annualco2 / project["master"].occupancy});
+		}
+		if (typeof project["scenario1"].annualco2 !== "undefined" && typeof project["scenario1"].occupancy !== "undefined"){
+			carbonDioxideEmissionsPerPersonData.push({label: "Scenario 1", value: project["scenario1"].annualco2 / project["scenario1"].occupancy});
+		}
+		if (typeof project["scenario2"].annualco2 !== "undefined" && typeof project["scenario2"].occupancy !== "undefined"){
+			carbonDioxideEmissionsPerPersonData.push({label: "Scenario 2", value: project["scenario2"].annualco2 / project["scenario2"].occupancy});
+		}
+		if (typeof project["scenario3"].annualco2 !== "undefined" && typeof project["scenario3"].occupancy !== "undefined"){
+			carbonDioxideEmissionsPerPersonData.push({label: "Scenario 3", value: project["scenario3"].annualco2 / project["scenario3"].occupancy});
+		}
 
 		var CarbonDioxideEmissionsPerPerson = new BarChart({
 			chartTitle: 'Carbon Dioxide Emissions Per Person',
@@ -603,13 +660,7 @@ function carboncoopreport_initUI() {
 			// 	'Pumps, fans, etc.': 'rgb(24,86,62)',
 			// 	'Cooking': 'rgb(40,153,139)',
 			// },
-			data: [
-				// {label: 'UK Average', value: 50},
-				{label: 'Your home now ', value:(project['master'].annualco2 / project["master"].occupancy)}, 
-				{label: 'Your home (small changes)', value: (project['scenario1'].annualco2 / project["scenario1"].occupancy)},
-				{label: 'Your home (medium changes)', value: (project['scenario2'].annualco2 / project['scenario2'].occupancy)},
-				{label: 'Your 2050 home', value: (project['scenario3'].annualco2 / project['scenario3'].occupancy)},
-			]
+			data: carbonDioxideEmissionsPerPersonData
 		});
 
 		CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
@@ -618,6 +669,20 @@ function carboncoopreport_initUI() {
 		/* Figure 10: Estimated Energy cost comparison 
 		// Bar chart showing annual fuel cost. Waiting on Trystan for data
 		*/
+
+		var estimatedEnergyCostsData = [];
+		if (typeof project["master"].net_cost !== "undefined"){
+			estimatedEnergyCostsData.push({label: "Master", value: project["master"].net_cost});
+		}
+		if (typeof project["scenario1"].net_cost !== "undefined"){
+			estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].net_cost});
+		}
+		if (typeof project["scenario2"].net_cost !== "undefined"){
+			estimatedEnergyCostsData.push({label: "Scenario 2", value: project["scenario2"].net_cost});
+		}
+		if (typeof project["scenario3"].net_cost !== "undefined"){
+			estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].net_cost});
+		}
 
 		var EstimatedEnergyCosts = new BarChart({
 			chartTitle: 'Estimate Energy Costs (Net) Comparison',
@@ -630,12 +695,7 @@ function carboncoopreport_initUI() {
 			chartHeight: 600,
 			barGutter: 120,
 			defaultBarColor: 'rgb(231,37,57)',
-			data: [
-				{label: 'Your home now', value: project["master"].net_cost},
-				{label: 'Your home (small changes)', value: project["scenario1"].net_cost},
-				{label: 'Your home (medium changes)', value: project["scenario2"].net_cost},
-				{label: 'Your 2050 home', value: project["scenario3"].net_cost},
-			]
+			data: estimatedEnergyCostsData
 		});
 
 		EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
