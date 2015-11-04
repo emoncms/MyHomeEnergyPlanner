@@ -529,15 +529,16 @@ $("#open-share-library").click(function () {
     $("#modal-share-library").modal('show');
     $('#myModal').modal('hide');
     $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + selected_library, success: function (shared) {
-            var out = "<tr><th>Shared with:</th><th>Has write persmissions</th></tr>";
+            var out = "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>";
             var write = "";
             for (var i in shared) {
+                console.log(shared);
                 write = shared[i].write == 1 ? 'Yes' : 'No';
                 // if (myusername!=shared[i].username) 
-                out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td></tr>";
+                out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' userid='" + shared[i].userid + "'></i></td></tr>";
             }
-            if (out == "<tr><th>Shared with:</th><th>Has write persmissions</th></tr>")
-                out = "<tr><td colspan='2'>This library is currently private</td></tr>";
+            if (out == "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>")
+                out = "<tr><td colspan='3'>This library is currently private</td></tr>";
             $("#shared-with-table").html(out);
         }});
 });

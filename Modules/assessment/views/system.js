@@ -1,3 +1,5 @@
+var library_helper = new libraryHelper('systems', $('#systems'));
+
 $("#openbem").on("click", '.add-system', function () {
     var system = $(this).attr('system');
     var eid = $(this).attr('eid');

@@ -1,0 +1,56 @@
+<div id="show-library-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Element/measure Library</h3>
+        <p>Click on an element/measure:</p>
+    </div>
+    <div class="modal-body" style="height:500px">
+
+        <div class="input-prepend library-select-view">
+            <span class="add-on">Select library:</span>
+            <select id="library-select"></select>
+        </div>
+
+        <span class="if-write">Share library: 
+            <i id="open-share-library" class="icon-share"></i>
+        </span>
+
+        <div class="new-library-view" style="display:none;">
+            <div class="input-append input-prepend">
+                <span class="add-on">Enter name for new library</span>
+                <input type="text" id="newlibrary-name" />
+                <button id="newlibrary" class="btn">Create</button>
+                <button id="cancelnewlibrary" class="btn">Cancel</button>
+            </div>
+        </div>
+
+
+        <table id="element_library" class="table">
+        </table>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn" id="create-element">Create new element</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+
+
+<div id="modal-share-library" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Share library: </h3>
+    </div>
+    <div class="modal-body">
+        <p>Enter user, or organisation name to share this library with: </p>
+        <input id="sharename" type="text" style="margin:10px;width:120px"/>
+        <input type="checkbox" id="write_permissions">  Grant write persmisions
+        <p id="return-message" style="margin-bottom:25px"></p>
+        <table class="table" id="shared-with-table">
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="share-library" class="btn btn-primary">Share / Update permissions</button>
+    </div>
+</div>

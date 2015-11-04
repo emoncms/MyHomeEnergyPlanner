@@ -283,7 +283,7 @@ class Assessment {
         $libraries = array();
         while ($row = $result->fetch_object()) {
             $id = $row->id;
-            $libresult = $this->mysqli->query("SELECT id,name FROM element_library WHERE `id`='$id'");
+            $libresult = $this->mysqli->query("SELECT id,name,type FROM element_library WHERE `id`='$id'");
             $librow = $libresult->fetch_object();
             if (!in_array($id, $loadedlibs))
                 $libraries[] = $librow;
@@ -297,7 +297,41 @@ class Assessment {
             $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");     // get list of libraries that belong to org
             while ($row2 = $result2->fetch_object()) {
                 $id = $row2->id;
-                $libresult = $this->mysqli->query("SELECT id,name FROM element_library WHERE `id`='$id'");      // get library id and name
+                $libresult = $this->mysqli->query("SELECT id,name,type FROM element_library WHERE `id`='$id'");      // get library id and name
+                $librow = $libresult->fetch_object();
+                if (!in_array($id, $loadedlibs))
+                    $libraries[] = $librow;
+                $loadedlibs[] = $id;
+            }
+        }
+
+        return $libraries;
+    }
+
+    public function loaduserlibraries($userid) {
+        $userid = (int) $userid;
+        $result = $this->mysqli->query("SELECT id FROM element_library_access WHERE `userid`='$userid'");
+
+        $loadedlibs = array();
+
+        $libraries = array();
+        while ($row = $result->fetch_object()) {
+            $id = $row->id;
+            $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");
+            $librow = $libresult->fetch_object();
+            if (!in_array($id, $loadedlibs))
+                $libraries[] = $librow;
+            $loadedlibs[] = $id;
+        }
+
+        // Load organisation libraries
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");   // get list of org that user belongs to
+        while ($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");     // get list of libraries that belong to org
+            while ($row2 = $result2->fetch_object()) {
+                $id = $row2->id;
+                $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");      // get library id and name
                 $librow = $libresult->fetch_object();
                 if (!in_array($id, $loadedlibs))
                     $libraries[] = $librow;
@@ -324,11 +358,12 @@ class Assessment {
         }
     }
 
-    public function newlibrary($userid, $name) {
+    public function newlibrary($userid, $name, $type='elements') {
         $userid = (int) $userid;
         $name = preg_replace('/[^\w\s-]/', '', $name);
+        $type = preg_replace('/[^\w\s-]/', '', $type);
 
-        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`) VALUES ('$userid','$name','{}')");
+        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`,`type`) VALUES ('$userid','$name','{}','$type')");
         $id = $this->mysqli->insert_id;
 
         $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
@@ -444,8 +479,6 @@ class Assessment {
         return 'User or organisation not found';
     }
 
-    // Get shared
-
     public function getsharedlibrary($userid, $id) {
         $id = (int) $id;
         $userid = (int) $userid;
@@ -467,6 +500,27 @@ class Assessment {
             $users[] = array('orgid' => $row->orgid, 'userid' => $row->userid, 'username' => $username, 'write' => $row->write);
         }
         return $users;
+    }
+
+    public function getuserpermissions($userid) {
+        $userid = (int) $userid;
+        $user_permisions = [];
+
+        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid'");
+        while ($row = $result->fetch_object()) {
+            $user_permisions[$row->id] = array('write' => $row->write);
+        }
+
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
+        while ($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");
+            while ($row = $result2->fetch_object()) {
+                $user_permisions[$row->id] = array('write' => $row->write);
+            }
+        }
+
+        return $user_permisions;
     }
 
     // ------------------------------------------------------------------------------------------------

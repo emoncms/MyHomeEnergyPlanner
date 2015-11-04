@@ -39,13 +39,13 @@ function assessment_controller() {
 
     // Grant all the users write permissions for their own library
     $libresult = $mysqli->query("SELECT * FROM `element_library`");
-    foreach($libresult as $row){
-        $req=$mysqli->prepare("UPDATE `element_library_access` SET `write`='1' WHERE `userid`=? AND `id`=?");
-        $req->bind_param('ii',$row['userid'],$row['id']);
+    foreach ($libresult as $row) {
+        $req = $mysqli->prepare("UPDATE `element_library_access` SET `write`='1' WHERE `userid`=? AND `id`=?");
+        $req->bind_param('ii', $row['userid'], $row['id']);
         $req->execute();
     }
-    
-    
+
+
     /* End backwards compatibility section */
 
 
@@ -185,7 +185,7 @@ function assessment_controller() {
         if ($route->action == 'listlibrary' && $session['write'])
             $result = $assessment->listlibrary($session['userid']);
         if ($route->action == 'newlibrary' && $session['write'])
-            $result = $assessment->newlibrary($session['userid'], get('name'));
+            $result = $assessment->newlibrary($session['userid'], get('name'),get('type'));
 
         // Save library
         if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
@@ -195,11 +195,18 @@ function assessment_controller() {
         if ($route->action == 'loadlibrary' && $session['write'])
             $result = $assessment->loadlibrary($session['userid'], get('id'));
 
+        if ($route->action == 'loaduserlibraries' && $session['write'])
+            $result = $assessment->loaduserlibraries($session['userid']);
+
         if ($route->action == 'sharelibrary' && $session['write'])
             $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'), get('write_permissions'));
 
         if ($route->action == 'getsharedlibrary' && $session['write'])
             $result = $assessment->getsharedlibrary($session['userid'], get('id'));
+
+        if ($route->action == 'getuserpermissions' && $session['write'])
+            $result = $assessment->getuserpermissions($session['userid']);
+
 
         // -------------------------------------------------------------------------------------------------------------
         // Image gallery
