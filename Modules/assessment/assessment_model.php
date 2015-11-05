@@ -358,7 +358,7 @@ class Assessment {
         }
     }
 
-    public function newlibrary($userid, $name, $type='elements') {
+    public function newlibrary($userid, $name, $type = 'elements') {
         $userid = (int) $userid;
         $name = preg_replace('/[^\w\s-]/', '', $name);
         $type = preg_replace('/[^\w\s-]/', '', $type);
@@ -433,7 +433,7 @@ class Assessment {
         $write_permissions = $write_permissions === 'true' ? 1 : 0;
 
         if (!$this->has_write_access_library($userid, $id))
-            return "You haven't got enough permssions";
+            return "You haven't got enough permissions";
 
         // 1. Check if user exists
         $userid = $user->get_id($username);
@@ -521,6 +521,39 @@ class Assessment {
         }
 
         return $user_permisions;
+    }
+
+    public function removeuserfromsharedlibrary($userid, $selected_library, $user_to_remove) {
+        global $user;
+        $userid = (int) $userid;
+        $selected_library = (int) $selected_library;
+        $user_to_remove = preg_replace('/[^\w\s]/', '', $user_to_remove);
+
+        if (!$this->has_write_access_library($userid, $selected_library))
+            return "You haven't got enough permissions";
+
+        // 1. Check if user_to_remove is a user or an organisation
+        $user_to_remove_id = $user->get_id($user_to_remove);
+
+        if ($user_to_remove_id == false) {
+            $result = $this->mysqli->query("SELECT * FROM organisations WHERE `name`='$user_to_remove'");
+            if ($result->num_rows == 1) { //user_to_remove is an organisation                
+                $row = $result->fetch_object();
+                $orgid = $row->id;
+
+                $result = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$selected_library' AND `orgid`='$orgid'");
+                $result = $result == true ? 'Organisation removed' : 'Organisation could not be removed';
+                return $result;
+            }
+        } else { // $user_to_remove is a user
+            if ($userid == $user_to_remove_id)
+                return "You cannot remove yourself";
+            $result = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$selected_library' AND `userid`='$user_to_remove_id'");
+            $result = $result == true ? 'User removed' : 'User could not be removed';
+            return $result;
+        }
+
+        return 'User or organisation not found';
     }
 
     // ------------------------------------------------------------------------------------------------

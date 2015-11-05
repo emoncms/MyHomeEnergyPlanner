@@ -10,6 +10,9 @@ function libraryHelper(type, container) {
     this.append_modals();
     this.add_events();
 
+
+    //$('#modal-share-library').modal('show');
+
 }
 
 
@@ -25,13 +28,16 @@ libraryHelper.prototype.init = function () {
 libraryHelper.prototype.add_events = function () {
     var myself = this;
     this.container.on('click', '.add-element-from-lib', function () {
-        myself.onAddElementFromLib()
+        myself.onAddElementFromLib();
     });
     this.container.on('click', '#open-share-library', function () {
-        myself.onOpenShareLib()
+        myself.onOpenShareLib();
     });
     this.container.on('click', "#share-library", function () {
-        myself.onShareLib()
+        myself.onShareLib();
+    });
+    this.container.on('click', '.remove-user', function () {
+        myself.onRemoveUserFromSharedLib($(this).attr('username'));
     });
 
 };
@@ -76,7 +82,7 @@ libraryHelper.prototype.onAddElementFromLib = function () {
 
     // Hide/show "share" option according to the permissions
     var id = $('#library-select').val();
-    if(this.library_permissions[id].write == 0)
+    if (this.library_permissions[id].write == 0)
         $('.if-write').hide();
     else
         $('.if-write').show();
@@ -90,19 +96,7 @@ libraryHelper.prototype.onAddElementFromLib = function () {
 
 libraryHelper.prototype.onOpenShareLib = function () {
     var selected_library = $('#library-select').val();
-    $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + selected_library, success: function (shared) {
-            var out = "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>";
-            var write = "";
-            for (var i in shared) {
-                console.log(shared);
-                write = shared[i].write == 1 ? 'Yes' : 'No';
-                // if (myusername!=shared[i].username) 
-                out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' userid='" + shared[i].userid + "'></i></td></tr>";
-            }
-            if (out == "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>")
-                out = "<tr><td colspan='3'>This library is currently private</td></tr>";
-            $("#shared-with-table").html(out);
-        }});
+    this.display_library_users(selected_library);
 
     $('.modal').modal('hide');
     $('#modal-share-library').modal('show');
@@ -113,6 +107,7 @@ libraryHelper.prototype.onShareLib = function () {
     var username = $("#sharename").val();
     var write_permissions = $('#write_permissions').is(":checked");
     var selected_library = $('#library-select').val();
+    var myself = this;
 
     if (selected_library != -1) {
         $.ajax({
@@ -120,21 +115,22 @@ libraryHelper.prototype.onShareLib = function () {
             data: "id=" + selected_library + "&name=" + username + "&write_permissions=" + write_permissions,
             success: function (data) {
                 $('#return-message').html(data);
-                $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + selected_library, success: function (shared) {
-                        var out = "<tr><th>Shared with:</th><th>Has write persmissions</th></tr>";
-                        var write = "";
-                        for (var i in shared) {
-                            write = shared[i].write == 1 ? 'Yes' : 'No';
-                            // if (myusername!=shared[i].username) 
-                            out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td></tr>";
-                        }
-                        if (out == "")
-                            out = "<tr><td colspan='2'>This library is currently private</td></tr>";
-                        $("#shared-with-table").html(out);
-                    }});
+                myself.display_library_users(selected_library);
             }});
     }
 };
+
+libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove) {
+    $('#return-message').html('');
+    var selected_library = $('#library-select').val();
+    var myself = this;
+
+    $.ajax({url: path + "assessment/removeuserfromsharedlibrary.json", data: 'library_id=' + selected_library + '&user_to_remove=' + user_to_remove, success: function (result) {
+            $('#return-message').html(result);
+            myself.display_library_users(selected_library);
+        }});
+};
+
 
 /***************************************************
  * Other methods
@@ -164,5 +160,22 @@ libraryHelper.prototype.get_library_permissions = function (callback) {
             myself.library_permissions = result;
         }});
     //return mypermissions;
+};
+
+libraryHelper.prototype.display_library_users = function (library_id) {
+    $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + library_id, success: function (shared) {
+            var out = "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>";
+            var write = "";
+            for (var i in shared) {
+                write = shared[i].write == 1 ? 'Yes' : 'No';
+                if (shared[i].username != p.author)
+                    out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' username='" + shared[i].username + "'></i></td></tr>";
+                else
+                    out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td>&nbsp;</td></tr>";
+            }
+            if (out == "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>")
+                out = "<tr><td colspan='3'>This library is currently private</td></tr>";
+            $("#shared-with-table").html(out);
+        }});
 };
 

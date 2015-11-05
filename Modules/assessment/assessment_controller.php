@@ -185,9 +185,11 @@ function assessment_controller() {
         if ($route->action == 'listlibrary' && $session['write'])
             $result = $assessment->listlibrary($session['userid']);
         if ($route->action == 'newlibrary' && $session['write'])
-            $result = $assessment->newlibrary($session['userid'], get('name'),get('type'));
+            $result = $assessment->newlibrary($session['userid'], get('name'), get('type'));
 
-        // Save library
+        // -------------------------------------------------------------------------------------------------------------
+        // Library
+        // -------------------------------------------------------------------------------------------------------------        
         if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
             $result = $assessment->savelibrary($session['userid'], post('id'), $_POST['data']);
         }
@@ -207,6 +209,8 @@ function assessment_controller() {
         if ($route->action == 'getuserpermissions' && $session['write'])
             $result = $assessment->getuserpermissions($session['userid']);
 
+        if ($route->action == 'removeuserfromsharedlibrary' && $session['write'])
+            $result = $assessment->removeuserfromsharedlibrary($session['userid'], get('library_id'), get('user_to_remove'));
 
         // -------------------------------------------------------------------------------------------------------------
         // Image gallery
