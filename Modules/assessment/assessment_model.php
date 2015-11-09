@@ -363,7 +363,40 @@ class Assessment {
         $name = preg_replace('/[^\w\s-]/', '', $name);
         $type = preg_replace('/[^\w\s-]/', '', $type);
 
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `name`='$name' AND `type`='$type'");
+        if ($result->num_rows == 1) {
+            return "Name already exists";
+        }
+
         $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`,`type`) VALUES ('$userid','$name','{}','$type')");
+        $id = $this->mysqli->insert_id;
+
+        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
+        return $id;
+    }
+
+    public function copylibrary($userid, $name, $type = 'elements', $id) {
+        $userid = (int) $userid;
+        $name = preg_replace('/[^\w\s-]/', '', $name);
+        $type = preg_replace('/[^\w\s-]/', '', $type);
+        $id = (int) $id;
+
+        if (!$this->has_access_library($userid, $id))
+            return "You have not got access to that library";
+
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `name`='$name' AND `type`='$type'");
+        if ($result->num_rows == 1) {
+            return "Name already exists";
+        }
+
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id`='$id'");
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_object();
+        } else {
+            return "Library not found";
+        }
+
+        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`,`type`) VALUES ('$userid','$name','$row->data','$type')");
         $id = $this->mysqli->insert_id;
 
         $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");

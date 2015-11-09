@@ -44,7 +44,13 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('change', '#library-select', function () {
         myself.onSelectingLibraryToShow();
     });
-};
+    this.container.on('change', "[name='empty_or_copy_library']", function () {
+        myself.onChangeEmptyOrCopyLibrary();
+    });
+    this.container.on('click', '#newlibrary', function () {
+        myself.onCreateNewLibrary();
+    })
+}
 
 libraryHelper.prototype.append_modals = function () {
     var html;
@@ -69,11 +75,11 @@ libraryHelper.prototype.onAddElementFromLib = function () {
         $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + myself.type, datatype: "json", async: false, success: function (result) {
                 library_id = result;
                 myself.library_list[myself.type] = [{id: library_id, name: library_name, type: myself.type, data: standard_library[myself.type]}];
+                myself.library_permissions[library_id] = {write: 1};
                 $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + JSON.stringify(standard_library[myself.type]), success: function (result) {
                         console.log("save library result: " + result);
                     }});
             }});
-
     }
 
     // Populate the select to choose library to display
@@ -141,22 +147,73 @@ libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove) {
 };
 
 libraryHelper.prototype.onSelectingLibraryToShow = function () {
-    // Draw the library
-    if (id == -1) {
-        this.create_new_library();
-    } else {
+    var id = $('#library-select').val();
+    if (id == -1)  // id is -1 when choosing "Create new"
+        this.onNewLibraryOption();
+    else {
         $('#library_table').html('');
         out = this.get_library_html();
         $("#library_table").html(out);
+
         // Hide/show "share" option according to the permissions
-        var id = $('#library-select').val();
         if (this.library_permissions[id].write == 0)
             $('.if-write').hide();
         else
             $('.if-write').show();
     }
-
 };
+
+libraryHelper.prototype.onNewLibraryOption = function () {
+    // Populate the select to choose library to copy
+    var out = '';
+    this.library_list[this.type].forEach(function (library) {
+        out += "<option value=" + library.id + ">" + library.name + "</option>";
+    });
+    $("#library-to-copy-select").html(out);
+
+    $(".modal").modal('hide');
+    $("#new-library-modal").modal('show');
+};
+
+libraryHelper.prototype.onChangeEmptyOrCopyLibrary = function () {
+    if ($("input[name=empty_or_copy_library]:checked").val() == 'empty')
+        $('#library-to-copy').hide();
+    else
+        $('#library-to-copy').show();
+};
+
+libraryHelper.prototype.onCreateNewLibrary = function () {
+    $("#create-library-message").html('');
+    var callback = function (resultado) {
+        if (resultado == '0')
+            $("#create-library-message").html('Library could not be created');
+        if (typeof resultado == 'number'){
+            $("#create-library-message").html('Library created');
+            $('#cancelnewlibrary').hide();
+            $('#newlibrary').hide();
+            $('#finishcreatelibrary').show();
+        }
+        else
+            $("#create-library-message").html(resultado)
+    };
+
+    var name = $("#new-library-name").val();
+    if (name === '')
+        $("#create-library-message").html('User name cannot be empty');
+    else {
+        console.log("newlibrary:" + name);
+        if ($("input[name=empty_or_copy_library]:checked").val() == 'copy') {
+            var id = $('#library-to-copy-select').val();
+            $.ajax({url: path + "assessment/copylibrary.json", data: "name=" + name + "&id=" + id + "&type=" + this.type, datatype: "json", success: function (result) {
+                    callback(result);
+                }});
+        } else {
+            $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + name + "&type=" + this.type, datatype: "json", success: function (result) {
+                     callback(result);
+                }});
+        }
+    }
+}
 
 /**********************************************
  * Libraries html
@@ -245,7 +302,7 @@ libraryHelper.prototype.display_library_users = function (library_id) {
 
 libraryHelper.prototype.get_library_by_id = function (id) {
     for (z in this.library_list[this.type]) {
-        if (this.library_list[this.type][z].id = id)
+        if (this.library_list[this.type][z].id == id)
             return this.library_list[this.type][z];
     }
 };

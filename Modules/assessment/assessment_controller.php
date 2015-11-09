@@ -184,8 +184,12 @@ function assessment_controller() {
 
         if ($route->action == 'listlibrary' && $session['write'])
             $result = $assessment->listlibrary($session['userid']);
+        
         if ($route->action == 'newlibrary' && $session['write'])
             $result = $assessment->newlibrary($session['userid'], get('name'), get('type'));
+        
+        if ($route->action == 'copylibrary' && $session['write'])
+            $result = $assessment->copylibrary($session['userid'], get('name'), get('type'),get('id'));
 
         // -------------------------------------------------------------------------------------------------------------
         // Library
