@@ -5,6 +5,7 @@ function libraryHelper(type, container) {
     this.container = container;
     this.library_list = {};
     this.library_permissions = {};
+    //this.library_html_strings ={};
 
     this.init();
     this.append_modals();
@@ -22,7 +23,8 @@ function libraryHelper(type, container) {
 
 libraryHelper.prototype.init = function () {
     this.load_user_libraries(); // Populates this.library_list
-    this.get_library_permissions();
+    this.get_library_permissions(); // Populates this.library_permissions
+    //this.get_html_strings(); // Populates this.library_html_strings
 };
 
 libraryHelper.prototype.add_events = function () {
@@ -39,13 +41,15 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '.remove-user', function () {
         myself.onRemoveUserFromSharedLib($(this).attr('username'));
     });
-
+    this.container.on('change', '#library-select', function () {
+        myself.onSelectingLibraryToShow();
+    });
 };
 
 libraryHelper.prototype.append_modals = function () {
     var html;
     var myself = this;
-    $.ajax({url: path + "Modules/assessment/js/library-helper/library-modals.html", datatype: "json", success: function (result) {
+    $.ajax({url: path + "Modules/assessment/js/library-helper/library-helper.html", datatype: "json", success: function (result) {
             html = result;
             myself.container.append(html);
         }});
@@ -80,15 +84,20 @@ libraryHelper.prototype.onAddElementFromLib = function () {
     out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
     $("#library-select").html(out);
 
+    // Heading of the modal
+    $('#show-library-modal .modal-header h3').html(page[0].toUpperCase() + page.slice(1) + ' library');
+
+    // Draw the library
+    $('#library_table').html('');
+    out = this.get_library_html();
+    $("#library_table").html(out);
+
     // Hide/show "share" option according to the permissions
     var id = $('#library-select').val();
     if (this.library_permissions[id].write == 0)
         $('.if-write').hide();
     else
         $('.if-write').show();
-
-    // Draw the library
-    // ToDo
 
     // Show the modal
     $("#show-library-modal").modal('show');
@@ -131,6 +140,60 @@ libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove) {
         }});
 };
 
+libraryHelper.prototype.onSelectingLibraryToShow = function () {
+    // Draw the library
+    if (id == -1) {
+        this.create_new_library();
+    } else {
+        $('#library_table').html('');
+        out = this.get_library_html();
+        $("#library_table").html(out);
+        // Hide/show "share" option according to the permissions
+        var id = $('#library-select').val();
+        if (this.library_permissions[id].write == 0)
+            $('.if-write').hide();
+        else
+            $('.if-write').show();
+    }
+
+};
+
+/**********************************************
+ * Libraries html
+ **********************************************/
+
+libraryHelper.prototype.get_library_html = function () {
+    switch (page) {
+        case 'system':
+            out = this.system_library_to_html();
+    }
+
+    return out;
+};
+
+libraryHelper.prototype.system_library_to_html = function () {
+    var eid = $(this).attr('eid');
+    var selected_library = this.get_library_by_id($('#library-select').val());
+
+    var out = "";
+    for (z in selected_library.data) {
+        out += "<tr><td>" + selected_library.data[z].name + "<br>";
+        out += "<span style='font-size:80%'>";
+        out += "<b>Efficiency:</b> " + Math.round(selected_library.data[z].efficiency * 100) + "%, ";
+        out += "<b>Winter:</b> " + Math.round(selected_library.data[z].winter * 100) + "%, ";
+        out += "<b>Summer:</b> " + Math.round(selected_library.data[z].summer * 100) + "%, ";
+        out += "<b>Fuel:</b> " + selected_library.data[z].fuel;
+        out += "</span></td>";
+
+        out += "<td></td>";
+        out += "<td style='text-align:right'>";
+        out += "<button eid='" + eid + "' system='" + z + "' class='btn if-write edit-system'>Edit</button>";
+        out += "<button eid='" + eid + "' system='" + z + "' class='btn add-system'>Use</button>";
+        out += "</td>";
+        out += "</tr>";
+    }
+    return out;
+};
 
 /***************************************************
  * Other methods
@@ -143,6 +206,7 @@ libraryHelper.prototype.load_user_libraries = function (callback) {
             for (library in result) {
                 if (mylibraries[result[library].type] === undefined)
                     mylibraries[result[library].type] = [];
+                result[library].data = JSON.parse(result[library].data);
                 mylibraries[result[library].type].push(result[library]);
             }
             if (callback !== undefined)
@@ -178,4 +242,22 @@ libraryHelper.prototype.display_library_users = function (library_id) {
             $("#shared-with-table").html(out);
         }});
 };
+
+libraryHelper.prototype.get_library_by_id = function (id) {
+    for (z in this.library_list[this.type]) {
+        if (this.library_list[this.type][z].id = id)
+            return this.library_list[this.type][z];
+    }
+};
+
+/*libraryHelper.prototype.get_html_strings = function(){
+ this.library_html_strings = {
+ elements:{
+ 
+ },
+ systems:{
+ 
+ }
+ }
+ }*/
 

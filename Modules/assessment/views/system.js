@@ -57,6 +57,7 @@ $("#openbem").on("click", '.modal-add-system', function () {
     var eid = $(this).attr('eid');
 
     var out = "";
+    console.log(data.systemlibrary);
     for (z in data.systemlibrary) {
         out += "<tr><td>" + data.systemlibrary[z].name + "<br>";
         out += "<span style='font-size:80%'>";
