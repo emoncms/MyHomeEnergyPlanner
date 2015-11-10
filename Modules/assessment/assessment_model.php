@@ -32,6 +32,23 @@ class Assessment {
                 return true;
         }
     }
+    
+    public function has_write_access($userid, $id) {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        // Check if user has direct or shared access
+        $result = $this->mysqli->query("SELECT * FROM assessment_access WHERE `userid`='$userid' AND `id`='$id' AND `write` = '1'");
+        if ($result->num_rows == 1)
+            return true;
+
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
+        while ($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM assessment_access WHERE `orgid`='$orgid' AND `id`='$id' AND `write = '1'");
+            if ($result2->num_rows == 1)
+                return true;
+        }
+    }
 
     public function get_org_list($orgid) {
         $orgid = (int) $orgid;

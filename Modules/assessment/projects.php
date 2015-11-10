@@ -21,7 +21,7 @@ $d = $path . "Modules/assessment/";
     }
 </style>
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
 
 <div id="left-pane">
 
