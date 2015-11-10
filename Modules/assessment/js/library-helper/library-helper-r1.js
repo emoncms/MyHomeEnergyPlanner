@@ -29,8 +29,8 @@ libraryHelper.prototype.init = function () {
 
 libraryHelper.prototype.add_events = function () {
     var myself = this;
-    this.container.on('click', '.add-element-from-lib', function () {
-        myself.onAddElementFromLib();
+    this.container.on('click', '.add-from-lib', function () {
+        myself.onAddElementFromLib($(this));
     });
     this.container.on('click', '#open-share-library', function () {
         myself.onOpenShareLib();
@@ -49,8 +49,11 @@ libraryHelper.prototype.add_events = function () {
     });
     this.container.on('click', '#newlibrary', function () {
         myself.onCreateNewLibrary();
-    })
-}
+    });
+    this.container.on('click','.use-from-lib',function(){
+       $('.modal').modal('hide') ;
+    });
+};
 
 libraryHelper.prototype.append_modals = function () {
     var html;
@@ -65,7 +68,7 @@ libraryHelper.prototype.append_modals = function () {
 /************************************
  * Events methods
  *************************************/
-libraryHelper.prototype.onAddElementFromLib = function () {
+libraryHelper.prototype.onAddElementFromLib = function (origin) {
     // Check if the user has a library of this type and if not create it
     if (this.library_list[this.type] === undefined) {
         this.library_list[this.type] = [];
@@ -95,7 +98,7 @@ libraryHelper.prototype.onAddElementFromLib = function () {
 
     // Draw the library
     $('#library_table').html('');
-    out = this.get_library_html();
+    out = this.get_library_html(origin);
     $("#library_table").html(out);
 
     // Hide/show "share" option according to the permissions
@@ -187,7 +190,7 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
     var callback = function (resultado) {
         if (resultado == '0')
             $("#create-library-message").html('Library could not be created');
-        if (typeof resultado == 'number'){
+        if (typeof resultado == 'number') {
             $("#create-library-message").html('Library created');
             $('#cancelnewlibrary').hide();
             $('#newlibrary').hide();
@@ -209,27 +212,31 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
                 }});
         } else {
             $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + name + "&type=" + this.type, datatype: "json", success: function (result) {
-                     callback(result);
+                    callback(result);
                 }});
         }
     }
-}
+};
+
+libraryHelper.prototype.onUseFromLibrary = function () {
+
+};
 
 /**********************************************
  * Libraries html
  **********************************************/
 
-libraryHelper.prototype.get_library_html = function () {
+libraryHelper.prototype.get_library_html = function (origin) {
     switch (page) {
         case 'system':
-            out = this.system_library_to_html();
+            out = this.system_library_to_html(origin);
     }
 
     return out;
 };
 
-libraryHelper.prototype.system_library_to_html = function () {
-    var eid = $(this).attr('eid');
+libraryHelper.prototype.system_library_to_html = function (origin) {
+    var eid = $(origin).attr('eid');
     var selected_library = this.get_library_by_id($('#library-select').val());
 
     var out = "";
@@ -245,7 +252,7 @@ libraryHelper.prototype.system_library_to_html = function () {
         out += "<td></td>";
         out += "<td style='text-align:right'>";
         out += "<button eid='" + eid + "' system='" + z + "' class='btn if-write edit-system'>Edit</button>";
-        out += "<button eid='" + eid + "' system='" + z + "' class='btn add-system'>Use</button>";
+        out += "<button eid='" + eid + "' system='" + z + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
