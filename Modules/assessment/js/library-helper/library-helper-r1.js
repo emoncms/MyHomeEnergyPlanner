@@ -14,6 +14,7 @@ function libraryHelper(type, container) {
 
     //$('#modal-share-library').modal('show');
 
+
 }
 
 
@@ -30,7 +31,7 @@ libraryHelper.prototype.init = function () {
 libraryHelper.prototype.add_events = function () {
     var myself = this;
     this.container.on('click', '.add-from-lib', function () {
-        myself.onAddElementFromLib($(this));
+        myself.onAddItemFromLib($(this));
     });
     this.container.on('click', '#open-share-library', function () {
         myself.onOpenShareLib();
@@ -50,8 +51,29 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '#newlibrary', function () {
         myself.onCreateNewLibrary();
     });
-    this.container.on('click','.use-from-lib',function(){
-       $('.modal').modal('hide') ;
+    this.container.on('click', '.use-from-lib', function () {
+        $('.modal').modal('hide');
+    });
+    this.container.on('click', '#create-in-library', function () {
+        myself.onCreateInLibrary();
+    });
+    this.container.on('click', '#create-in-library-ok', function () {
+        myself.onCreateInLibraryOk();
+    });
+    this.container.on('change', "[name=empty_or_copy_item]", function () {
+        myself.onChangeEmptyOrCopyItem();
+    });
+    this.container.on('change', "#origin-library-select", function () {
+        myself.onChangeOriginLibrarySelect();
+    });
+    this.container.on('change', '#item-to-copy-select', function () {
+        myself.onChangeItemToCopySelect();
+    });
+    this.container.on('click', '.edit-library-item', function () {
+        myself.onEditLibraryItem($(this));
+    });
+    this.container.on('click', '#edit-item-ok', function () {
+        myself.onEditItemOk();
     });
 };
 
@@ -68,7 +90,7 @@ libraryHelper.prototype.append_modals = function () {
 /************************************
  * Events methods
  *************************************/
-libraryHelper.prototype.onAddElementFromLib = function (origin) {
+libraryHelper.prototype.onAddItemFromLib = function (origin) {
     // Check if the user has a library of this type and if not create it
     if (this.library_list[this.type] === undefined) {
         this.library_list[this.type] = [];
@@ -98,7 +120,8 @@ libraryHelper.prototype.onAddElementFromLib = function (origin) {
 
     // Draw the library
     $('#library_table').html('');
-    out = this.get_library_html(origin);
+    var function_name = this.type + '_library_to_html';
+    out = this[function_name]();
     $("#library_table").html(out);
 
     // Hide/show "share" option according to the permissions
@@ -155,7 +178,8 @@ libraryHelper.prototype.onSelectingLibraryToShow = function () {
         this.onNewLibraryOption();
     else {
         $('#library_table').html('');
-        out = this.get_library_html();
+        var function_name = this.type + '_library_to_html';
+        out = this[function_name]();
         $("#library_table").html(out);
 
         // Hide/show "share" option according to the permissions
@@ -218,24 +242,167 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
     }
 };
 
-libraryHelper.prototype.onUseFromLibrary = function () {
+libraryHelper.prototype.onCreateInLibrary = function () {
+    $('#modal-create-in-library .modal-header h3').html('Create ' + page);
 
+    // Populate the select to choose library to copy from
+    var out = '';
+    this.library_list[this.type].forEach(function (library) {
+        out += "<option value=" + library.id + ">" + library.name + "</option>";
+    });
+    $("#origin-library-select").html(out);
+
+    // Populate the select to choose item to copy from
+    out = '';
+    var selected_library = this.get_library_by_id($('#origin-library-select').val());
+    for (item in selected_library.data) {
+        out += "<option value=" + item + ">" + item + "</option>";
+    }
+    $("#item-to-copy-select").html(out);
+
+    // Item fields
+    // Call to specific function for the type
+    var function_name = this.type + '_item_to_html';
+    out = this[function_name]();
+    $('.new-item-in-library').html(out);
+
+    $('.modal').modal('hide');
+    $('#modal-create-in-library').modal('show');
 };
 
-/**********************************************
- * Libraries html
- **********************************************/
+libraryHelper.prototype.onCreateInLibraryOk = function () {
+    $("#create-in-library-message").html('');
 
-libraryHelper.prototype.get_library_html = function (origin) {
-    switch (page) {
-        case 'system':
-            out = this.system_library_to_html(origin);
+    var selected_library = this.get_library_by_id($('#library-select').val());
+    var item = {};
+
+    // Call to specific function for the type
+    var function_name = this.type + '_get_item_to_save';
+    item = this[function_name]();
+
+    // Add item to library and save it
+    for (tag in item) {
+        if (selected_library.data[tag] != undefined)
+            $("#create-in-library-message").html("Tag already exist, choose another one");
+        else {
+            selected_library.data[tag] = item[tag];
+            $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library.id + "&data=" + JSON.stringify(selected_library.data), success: function (result) {
+                    if (result == true) {
+                        $("#create-in-library-message").html("Item added to the library");
+                        $('#modal-create-in-library button').hide();
+                        $('#create-in-library-finish').show();
+                    }
+                    else
+                        $("#create-in-library-message").html("There were problems saving the library");
+                }});
+        }
     }
 
-    return out;
+
 };
 
-libraryHelper.prototype.system_library_to_html = function (origin) {
+libraryHelper.prototype.onChangeEmptyOrCopyItem = function () {
+    var out;
+    if ($('[name=empty_or_copy_item]:checked').val() == 'empty') {
+        var function_name = this.type + '_item_to_html';
+        out = this[function_name]();
+        $('.new-item-in-library').html(out);
+        $('#copy-item-from').hide();
+    }
+    else {
+        $('#copy-item-from').show();
+        // Display the item
+        var selected_library = this.get_library_by_id($('#origin-library-select').val());
+        var selected_item = selected_library.data[$('#item-to-copy-select').val()];
+        var function_name = this.type + '_item_to_html';
+        out = this[function_name](selected_item);
+        $('.new-item-in-library').html(out);
+    }
+};
+
+libraryHelper.prototype.onChangeOriginLibrarySelect = function () {
+    // Populate the select to choose item to copy from
+    var out = '';
+    var selected_library = this.get_library_by_id($('#origin-library-select').val());
+    for (item in selected_library.data) {
+        out += "<option value=" + item + ">" + item + "</option>";
+    }
+    $("#item-to-copy-select").html(out);
+
+    // Display the item
+    var selected_item = selected_library.data[$('#item-to-copy-select').val()];
+    var function_name = this.type + '_item_to_html';
+    out = this[function_name](selected_item);
+    $('.new-item-in-library').html(out);
+};
+
+libraryHelper.prototype.onChangeItemToCopySelect = function () {
+    var out;
+    // Display the item
+    var selected_library = this.get_library_by_id($('#origin-library-select').val());
+    var selected_item = selected_library.data[$('#item-to-copy-select').val()];
+    var function_name = this.type + '_item_to_html';
+    out = this[function_name](selected_item);
+    $('.new-item-in-library').html(out);
+}
+
+libraryHelper.prototype.onEditLibraryItem = function (origin) {
+    var selected_library = this.get_library_by_id($('#library-select').val());
+    var library_name = selected_library.name;
+    $('#library-to-edit-item').html(library_name);
+
+    var tag = origin.attr('tag');
+    var item = selected_library.data[tag];
+
+    // Call to specific function for the type
+    var function_name = this.type + '_item_to_html';
+    out = this[function_name](item);
+    $('.edit-item-in-library').html(out);
+
+    //Rewrite tag as it was "new tag" in "out"
+    $('.edit-item-in-library .edit-system-tag').val(tag);
+    $('.edit-item-in-library .edit-system-tag').attr('disabled', 'true');
+
+    $("#edit-item-message").html('');
+    $('#modal-edit-item button').show();
+    $('#edit-item-finish').hide();
+
+
+    $('.modal').modal('hide');
+    $('#modal-edit-item').modal('show');
+};
+
+libraryHelper.prototype.onEditItemOk = function () {
+    $("#edit-item-message").html('');
+
+    var selected_library = this.get_library_by_id($('#library-select').val());
+    var item = {};
+
+    // Call to specific function for the type
+    var function_name = this.type + '_get_item_to_save';
+    item = this[function_name]();
+
+    // Edit item in library and save it
+    for (tag in item) {
+        selected_library.data[tag] = item[tag];
+        $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library.id + "&data=" + JSON.stringify(selected_library.data), success: function (result) {
+                if (result == true) {
+                    $("#edit-item-message").html("Item edited and library saved");
+                    $('#modal-edit-item button').hide();
+                    $('#edit-item-finish').show();
+                }
+                else
+                    $("#create-in-library-message").html("There were problems saving the library");
+            }});
+    }
+};
+
+
+/**********************************************
+ * Libraries to html
+ **********************************************/
+
+libraryHelper.prototype.systems_library_to_html = function (origin) {
     var eid = $(origin).attr('eid');
     var selected_library = this.get_library_by_id($('#library-select').val());
 
@@ -251,13 +418,60 @@ libraryHelper.prototype.system_library_to_html = function (origin) {
 
         out += "<td></td>";
         out += "<td style='text-align:right'>";
-        out += "<button eid='" + eid + "' system='" + z + "' class='btn if-write edit-system'>Edit</button>";
+        out += "<button eid='" + eid + "' system='" + z + "' tag='" + z + "' class='btn if-write edit-library-item'>Edit</button>";
         out += "<button eid='" + eid + "' system='" + z + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
     return out;
 };
+
+
+/**********************************************
+ * Items to html
+ **********************************************/
+
+libraryHelper.prototype.systems_item_to_html = function (item) {
+    if (item == undefined)
+        item = {name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'};
+    item.tag = 'new tag';
+
+    var out = '<tbody>';
+    out += '<tr><td>System tag</td><td><input type="text" class="edit-system-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="edit-system-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Default efficiency</td><td><input type="text" class="edit-system-efficiency" value="' + item.efficiency + '" /></td></tr>';
+    out += '<tr><td>Winter efficiency</td><td><input type="text" class="edit-system-winter" value="' + item.winter + '" /></td></tr>';
+    out += '<tr><td>Summer efficiency</td><td><input type="text" class="edit-system-summer" value="' + item.summer + '" /></td></tr>';
+    out += '<tr><td>Fuel</td><td><select class="edit-system-fuel" default="' + item.fuel + '">';
+    for (fuel in datasets.fuels) {
+        if (fuel == item.fuel)
+            out += '<option value="' + fuel + '" selected>' + fuel + '</option>';
+        else
+            out += '<option value="' + fuel + '">' + fuel + '</option>';
+    }
+    out += '</select></td></tr>';
+    out += '</tbody>'
+    return out;
+};
+
+
+/*******************************************************
+ * Get item to save in library (when creating new item)
+ ******************************************************/
+
+libraryHelper.prototype.systems_get_item_to_save = function () {
+    var item = {};
+    var system = $(".edit-system-tag").val();
+    item[system] = {
+        name: $(".edit-system-name").val(),
+        efficiency: $(".edit-system-efficiency").val(),
+        winter: $(".edit-system-winter").val(),
+        summer: $(".edit-system-summer").val(),
+        fuel: $(".edit-system-fuel").val(),
+    };
+    return item;
+};
+
 
 /***************************************************
  * Other methods
@@ -314,14 +528,5 @@ libraryHelper.prototype.get_library_by_id = function (id) {
     }
 };
 
-/*libraryHelper.prototype.get_html_strings = function(){
- this.library_html_strings = {
- elements:{
- 
- },
- systems:{
- 
- }
- }
- }*/
+
 
