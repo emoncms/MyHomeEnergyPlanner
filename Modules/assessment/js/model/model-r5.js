@@ -773,9 +773,9 @@ calc.energy_systems = function (data)
         data.energy_systems = {};
     if (data.fuels == undefined)
         data.fuels = {};
-    if (data.systemlibrary == undefined) {
-        data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
-    }
+    //if (data.systemlibrary == undefined) {
+    //  data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
+    //}
 
     // Copy dataset over to user data without overwritting user changed properties
     var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
@@ -800,11 +800,11 @@ calc.energy_systems = function (data)
         {
             data.energy_systems[z][x].demand = quantity * data.energy_systems[z][x].fraction;
 
-            var system = data.energy_systems[z][x].system;
-            if (data.systemlibrary[system] != undefined) {
-                data.energy_systems[z][x].name = data.systemlibrary[system].name;
-                data.energy_systems[z][x].efficiency = data.systemlibrary[system].efficiency;
-            }
+            /*var system = data.energy_systems[z][x].system;
+             if (data.systemlibrary[system] != undefined) {
+             data.energy_systems[z][x].name = data.systemlibrary[system].name;
+             data.energy_systems[z][x].efficiency = data.systemlibrary[system].efficiency;
+             }*/
         }
     }
 
@@ -821,8 +821,10 @@ calc.energy_systems = function (data)
                 var Q_water = data.energy_systems["waterheating"][a].demand;
                 var Q_space = data.energy_systems["space_heating"][b].demand;
 
-                var n_winter = data.systemlibrary[system_water].winter;
-                var n_summer = data.systemlibrary[system_water].summer;
+                //var n_winter = data.systemlibrary[system_water].winter;
+                //var n_summer = data.data.energy_systems[eid][system_water].summer;
+                var n_winter = data.energy_systems["waterheating"][a].winter;
+                var n_summer = data.energy_systems["waterheating"][a].summer;
                 var n = (Q_water + Q_space) / ((Q_space / n_winter) + (Q_water / n_summer));
 
                 data.energy_systems["waterheating"][a].efficiency = n;
@@ -838,12 +840,16 @@ calc.energy_systems = function (data)
 
             var system = data.energy_systems[z][x].system;
 
-            if (data.systemlibrary[system] != undefined) {
-                var fuel = data.systemlibrary[system].fuel;
-                if (data.fuel_totals[fuel] == undefined)
-                    data.fuel_totals[fuel] = {name: fuel, quantity: 0};
-                data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
-            }
+            /*if (data.systemlibrary[system] != undefined) {
+             var fuel = data.systemlibrary[system].fuel;
+             if (data.fuel_totals[fuel] == undefined)
+             data.fuel_totals[fuel] = {name: fuel, quantity: 0};
+             data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
+             }*/
+            var fuel = data.energy_systems[z][x].fuel;
+            if (data.fuel_totals[fuel] == undefined)
+                data.fuel_totals[fuel] = {name: fuel, quantity: 0};
+            data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
         }
     }
 

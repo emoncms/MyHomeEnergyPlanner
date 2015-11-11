@@ -371,7 +371,11 @@ var openbem = {
                     system: data.energy_systems[z][i].system,
                     description: data.energy_systems[z][i].description,
                     fraction: data.energy_systems[z][i].fraction,
-                    efficiency: data.energy_systems[z][i].efficiency
+                    efficiency: data.energy_systems[z][i].efficiency,
+                    name: data.energy_systems[z][i].name,
+                    summer: data.energy_systems[z][i].summer,
+                    winter: data.energy_systems[z][i].winter,
+                    fuel: data.energy_systems[z][i].fuel
                 });
             }
 

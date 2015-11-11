@@ -121,7 +121,7 @@ libraryHelper.prototype.onAddItemFromLib = function (origin) {
     // Draw the library
     $('#library_table').html('');
     var function_name = this.type + '_library_to_html';
-    out = this[function_name]();
+    out = this[function_name](origin);
     $("#library_table").html(out);
 
     // Hide/show "share" option according to the permissions
@@ -418,8 +418,8 @@ libraryHelper.prototype.systems_library_to_html = function (origin) {
 
         out += "<td></td>";
         out += "<td style='text-align:right'>";
-        out += "<button eid='" + eid + "' system='" + z + "' tag='" + z + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button eid='" + eid + "' system='" + z + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+        out += "<button eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+        out += "<button eid='" + eid + "' system='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }

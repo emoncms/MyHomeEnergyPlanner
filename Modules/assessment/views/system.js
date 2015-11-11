@@ -1,13 +1,23 @@
+console.log("debug systems.js");
+
 var library_helper = new libraryHelper('systems', $('#systems'));
 
 $("#openbem").on("click", '.add-system', function () {
     var system = $(this).attr('system');
     var eid = $(this).attr('eid');
-    data.energy_systems[eid].push({system: system, fraction: 1.0});
+    var library = library_helper.get_library_by_id($(this).attr('library'));
+
+    var system_to_add = library.data[system];
+    system_to_add.system = system;
+    system_to_add.fraction = 1.0;
+
+    //data.energy_systems[eid].push({system: system, fraction: 1.0});
+    data.energy_systems[eid].push(system_to_add);
+    console.log(data.energy_systems[eid]);
     $("#modal-system-library").modal("hide");
     update();
 });
-
+/*
 $("#openbem").on("click", '.save-system', function () {
 
     var system = $(".edit-system-tag").val();
@@ -21,7 +31,9 @@ $("#openbem").on("click", '.save-system', function () {
     $("#modal-system-library").modal("hide");
     update();
 });
+*/
 
+/*
 $("#openbem").on("click", '.edit-system', function () {
     var system = $(this).attr('system');
 
@@ -37,7 +49,9 @@ $("#openbem").on("click", '.edit-system', function () {
 
     $(".save-system").show();
 });
+*/
 
+/*
 $("#openbem").on("click", '.create-system', function () {
     console.log("create system");
     $(".edit-system-tag").val("");
@@ -52,7 +66,9 @@ $("#openbem").on("click", '.create-system', function () {
 
     $(".save-system").show();
 });
+*/
 
+/*
 $("#openbem").on("click", '.modal-add-system', function () {
     var eid = $(this).attr('eid');
 
@@ -81,6 +97,7 @@ $("#openbem").on("click", '.modal-add-system', function () {
     $("#modal-system-library").modal("show");
     $(".save-system").hide();
 });
+*/
 
 $("#openbem").on("click", '.delete-system', function () {
     var sid = $(this).attr('sid');
@@ -149,13 +166,16 @@ function add_energy_system(z, x)
 
 function system_initUI()
 {
-   // Add different types of fuel to the Add/edit system modal 
-    for (z in data.fuels) {
+    // Add different types of fuel to the Add/edit system modal 
+    /*
+     for (z in data.fuels) {
         $(".edit-system-fuel").append($('<option>', {
             value: z,
             text: z
         }));
     }
+    */
+   
     //var out = "";
     //for (z in datasets.energysystems) out += "<option value='"+z+"'>"+datasets.energysystems[z].name+"</option>";
     //$(".heating_system_selector").html(out);

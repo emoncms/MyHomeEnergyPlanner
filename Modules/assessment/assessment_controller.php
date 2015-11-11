@@ -44,8 +44,7 @@ function assessment_controller() {
         $req->bind_param('ii', $row['userid'], $row['id']);
         $req->execute();
     }
-
-
+    
     /* End backwards compatibility section */
 
 
@@ -53,13 +52,13 @@ function assessment_controller() {
     // Check if session has been authenticated, if not redirect to login page (html) 
     // or send back "false" (json)
     // -------------------------------------------------------------------------
-    if (!$session['read']) {
-        if ($route->format == 'html')
-            $result = view("Modules/user/login_block.php", array());
-        else
-            $result = "Not logged";
-        return array('content' => $result);
-    }
+        if (!$session['read']) {
+            if ($route->format == 'html')
+                $result = view("Modules/user/login_block.php", array());
+            else
+                $result = "Not logged";
+            return array('content' => $result);
+        }
 
     // -------------------------------------------------------------------------    
     // Session is authenticated so we run the action
@@ -184,12 +183,12 @@ function assessment_controller() {
 
         if ($route->action == 'listlibrary' && $session['write'])
             $result = $assessment->listlibrary($session['userid']);
-        
+
         if ($route->action == 'newlibrary' && $session['write'])
             $result = $assessment->newlibrary($session['userid'], get('name'), get('type'));
-        
+
         if ($route->action == 'copylibrary' && $session['write'])
-            $result = $assessment->copylibrary($session['userid'], get('name'), get('type'),get('id'));
+            $result = $assessment->copylibrary($session['userid'], get('name'), get('type'), get('id'));
 
         // -------------------------------------------------------------------------------------------------------------
         // Library
