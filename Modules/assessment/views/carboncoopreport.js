@@ -3,6 +3,18 @@ function carboncoopreport_initUI() {
 
 	console.log(project);
 
+	WebFontConfig = {
+	    google: { families: [ 'Karla:400,400italic,700:latin' ] }
+	  };
+	  (function() {
+	    var wf = document.createElement('script');
+	    wf.src = '../Lib/webfont.js';
+	    wf.type = 'text/javascript';
+	    wf.async = 'true';
+	    var s = document.getElementsByTagName('script')[0];
+	    s.parentNode.insertBefore(wf, s);
+	  })();
+
 	var scenarios = ["master", "scenario1", "scenario2", "scenario3"];
 
 	// add empty objects for missing data
@@ -66,7 +78,8 @@ function carboncoopreport_initUI() {
 	
 
 	// need to wait until page has loaded so we can use the webfont in our charts.
-	$(window).load(function(){
+	// $(window).load(function(){
+	WebFontConfig.active = function(){
 
 
 
@@ -1128,5 +1141,5 @@ function carboncoopreport_initUI() {
 	  //       }
 	  //   };
 	  //   targetbarCarboncoop("space-heating-demand-4", options);
-	});
+	};
 }
