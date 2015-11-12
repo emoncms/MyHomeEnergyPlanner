@@ -13,7 +13,6 @@ $("#openbem").on("click", '.add-system', function () {
 
     //data.energy_systems[eid].push({system: system, fraction: 1.0});
     data.energy_systems[eid].push(system_to_add);
-    console.log(data.energy_systems[eid]);
     $("#modal-system-library").modal("hide");
     update();
 });

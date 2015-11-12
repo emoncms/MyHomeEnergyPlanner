@@ -96,7 +96,7 @@
             </div>
         </div>
         <p style='margin-top: 25px'>New item to create</p>
-        <table class="table new-item-in-library" style='margin:15px 0 0 25px'></table>
+        <div class="new-item-in-library"></div>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -120,4 +120,42 @@
         <button id="edit-item-ok" class="btn btn-primary">Edit</button>
         <button id="edit-item-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
     </div>
+</div>
+
+<div id="create-element-template" style="height:500px">
+    <p>Enter details of new element or measure to be created.</p>
+    <div class="input-prepend">
+        <span class="add-on">Type</span>
+        <select id="create-element-type">
+            <option>Wall</option>
+            <option>Floor</option>
+            <option>Roof</option>
+            <option>Window</option>
+        </select>
+    </div>
+
+    <table class="table">
+        <tr><td>Tag</td><td><input type="text" id="create-element-tag" class="item-tag" /></td></tr>
+        <tr><td>Name</td><td><input type="text" id="create-element-name" /></td></tr>
+        <tr><td>Source</td><td><input type="text" id="create-element-source" /></td></tr>
+        <tr><td>U-value</td><td><input type="text" id="create-element-uvalue" /></td></tr>
+        <tr><td>K-value</td><td><input type="text" id="create-element-kvalue" /></td></tr>
+        <tbody class="create-element-window-options" style="display:none">
+            <tr><td>g</td><td><input type="text" id="create-element-g" /></td></tr>
+            <tr><td>gL</td><td><input type="text" id="create-element-gL" /></td></tr>
+            <tr><td>Frame factor (ff)</td><td><input type="text" id="create-element-ff" /></td></tr>
+        </tbody>
+        <tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>
+        <!--<tr><td>Criteria to be measure (comma seperated element tags)</td><td><input type="text" id="create-element-criteria" /></td></tr>-->
+        <tr><td>Description</td><td><input type="text" id="create-element-description" /></td></tr>
+        <tr><td>Performance</td><td><input type="text" id="create-element-performance" /></td></tr>
+        <tr><td>Benefits</td><td><input type="text" id="create-element-benefits" /></td></tr>
+        <tr><td>Cost</td><td><input type="text" id="create-element-cost" /></td></tr>
+        <tr><td>Who by</td><td><input type="text" id="create-element-who_by" /></td></tr>
+        <tr><td>Disruption</td><td><input type="text" id="create-element-disruption" /></td></tr>
+        <tr><td>Associated work</td><td><input type="text" id="create-element-associated_work" /></td></tr>
+        <tr><td>Key risks</td><td><input type="text" id="create-element-key_risks" /></td></tr>
+        <tr><td>Notes</td><td><input type="text" id="create-element-notes" /></td></tr>
+        <tr><td>Maintenance</td><td><input type="text" id="create-element-maintenance" /></td></tr>
+    </table>
 </div>

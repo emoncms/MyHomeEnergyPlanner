@@ -16,7 +16,7 @@
     }
 </style>
 
-<div class="page">
+<div id="elements-container" class="page">
 
 
     <h3> Thermal Mass Parameter (TMP)</h3>
@@ -75,7 +75,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="btn add-element-from-lib" tags="Wall">Add wall from library</button>
+                <button class="btn add-from-lib" tags="Wall">Add wall from library</button>
             </td>
             <td></th>
             <td></td>
@@ -98,7 +98,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="btn add-element-from-lib" tags="Floor">Add floor from library</button>
+                <button class="btn add-from-lib" tags="Floor">Add floor from library</button>
             </td>
             <td></th>
             <td></td>
@@ -121,7 +121,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="btn add-element-from-lib" tags="Roof">Add roof from library</button>
+                <button class="btn add-from-lib" tags="Roof">Add roof from library</button>
             </td>
             <td></th>
             <td></td>
@@ -222,7 +222,7 @@
     <tbody id="windows"></tbody>
 
     <tr>
-        <td><button class="btn add-element-from-lib" tags="Window">Add window from library</button></td>
+        <td><button class="btn add-from-lib" tags="Window">Add window from library</button></td>
         <td></td>
     </tr>
 
@@ -345,9 +345,9 @@
     </div>
     <div class="modal-body">
         <p>Enter user, or organisation name to share this library with: </p>
-            <input id="sharename" type="text" style="margin:10px;width:120px"/>
-            <input type="checkbox" id="write_permissions">  Grant write persmisions
-            <p id="return-message" style="margin-bottom:25px"></p>
+        <input id="sharename" type="text" style="margin:10px;width:120px"/>
+        <input type="checkbox" id="write_permissions">  Grant write persmisions
+        <p id="return-message" style="margin-bottom:25px"></p>
         <table class="table" id="shared-with-table">
         </table>
     </div>

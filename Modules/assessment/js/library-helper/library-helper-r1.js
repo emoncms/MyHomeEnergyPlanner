@@ -1,5 +1,3 @@
-console.log('debug library-helper-r1.js');
-
 function libraryHelper(type, container) {
     this.type = type;
     this.container = container;
@@ -211,10 +209,13 @@ libraryHelper.prototype.onChangeEmptyOrCopyLibrary = function () {
 
 libraryHelper.prototype.onCreateNewLibrary = function () {
     $("#create-library-message").html('');
+    var myself = this;
+
     var callback = function (resultado) {
         if (resultado == '0')
             $("#create-library-message").html('Library could not be created');
         if (typeof resultado == 'number') {
+            myself.load_user_libraries()
             $("#create-library-message").html('Library created');
             $('#cancelnewlibrary').hide();
             $('#newlibrary').hide();
@@ -244,6 +245,8 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
 
 libraryHelper.prototype.onCreateInLibrary = function () {
     $('#modal-create-in-library .modal-header h3').html('Create ' + page);
+    $('#modal-create-in-library .btn').show();
+    $('#modal-create-in-library #create-in-library-finish').hide();
 
     // Populate the select to choose library to copy from
     var out = '';
@@ -265,6 +268,9 @@ libraryHelper.prototype.onCreateInLibrary = function () {
     var function_name = this.type + '_item_to_html';
     out = this[function_name]();
     $('.new-item-in-library').html(out);
+
+    // Ensure the tag input is editable
+    $('.item-tag').removeAttr("disabled");
 
     $('.modal').modal('hide');
     $('#modal-create-in-library').modal('show');
@@ -356,12 +362,11 @@ libraryHelper.prototype.onEditLibraryItem = function (origin) {
 
     // Call to specific function for the type
     var function_name = this.type + '_item_to_html';
-    out = this[function_name](item);
+    out = this[function_name](item, tag);
     $('.edit-item-in-library').html(out);
 
-    //Rewrite tag as it was "new tag" in "out"
-    $('.edit-item-in-library .edit-system-tag').val(tag);
-    $('.edit-item-in-library .edit-system-tag').attr('disabled', 'true');
+    // Disable the tag input
+    $('.item-tag').attr('disabled', 'true');
 
     $("#edit-item-message").html('');
     $('#modal-edit-item button').show();
@@ -426,18 +431,56 @@ libraryHelper.prototype.systems_library_to_html = function (origin) {
     return out;
 };
 
+libraryHelper.prototype.elements_library_to_html = function (origin) {
+    var tag = $(origin).attr('tags');
+    var library_id = $('#library-select').val();
+    var element_library = this.get_library_by_id(library_id).data;
+
+    var out = "";
+    for (z in element_library) {
+        if (element_library[z].tags.indexOf(tag) != -1) {
+            out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
+            out += "<td style='width:20px;'>" + z + "</td>";
+
+            out += "<td style='width:200px;'>" + element_library[z].name;
+            out += "<br><span style='font-size:13px'><b>Source:</b> " + element_library[z].source + "</span>";
+            /*if (element_library[z].criteria.length)
+             out += "<br><span style='font-size:13px'><b>Measure criteria:</b> " + element_library[z].criteria.join(", ") + "</span>";
+             */
+            out += "</td>";
+            out += "<td style='width:200px; font-size:13px'>";
+            out += "<b>U-value:</b> " + element_library[z].uvalue + " W/K.m2";
+            out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/K.m2";
+            if (element_library[z].tags[0] == "Window") {
+                out += "<br><b>g:</b> " + element_library[z].g + ", ";
+                out += "<b>gL:</b> " + element_library[z].gL + ", ";
+                out += "<b>ff:</b> " + element_library[z].ff;
+            }
+            out += "</td>";
+            out += "<td style='width:120px' >";
+            out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' library='" + library_id + "' lib='" + z + "' type='" + tag + "' tag='" + z + "'></i>";
+            // out += "<i class='icon-trash' style='margin-left:20px'></i>";
+            out += "<button class='add-element use-from-lib btn' style='margin-left:20px' library='" + library_id + "' lib='" + z + "' type='" + tag + "'>use</button</i>";
+            out += "</td>";
+            out += "</tr>";
+        }
+    }
+    return out;
+};
+
 
 /**********************************************
  * Items to html
  **********************************************/
 
-libraryHelper.prototype.systems_item_to_html = function (item) {
+libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'};
-    item.tag = 'new tag';
+    else
+        item.tag = tag;
 
-    var out = '<tbody>';
-    out += '<tr><td>System tag</td><td><input type="text" class="edit-system-tag" required value="' + item.tag + '"/></td></tr>';
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>System tag</td><td><input type="text" class="edit-system-tag item-tag" required value="' + item.tag + '"/></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="edit-system-name" value="' + item.name + '" /></td></tr>';
     out += '<tr><td>Default efficiency</td><td><input type="text" class="edit-system-efficiency" value="' + item.efficiency + '" /></td></tr>';
     out += '<tr><td>Winter efficiency</td><td><input type="text" class="edit-system-winter" value="' + item.winter + '" /></td></tr>';
@@ -450,7 +493,46 @@ libraryHelper.prototype.systems_item_to_html = function (item) {
             out += '<option value="' + fuel + '">' + fuel + '</option>';
     }
     out += '</select></td></tr>';
-    out += '</tbody>'
+    out += '</tbody></table>'
+    return out;
+};
+
+libraryHelper.prototype.elements_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: 'new tag', name: 'New name', uvalue: 1.0, kvalue: 1.0, tags: ['Wall']};
+    else
+        item.tag = tag;
+
+    var type = item.tags[0]
+
+    // Populate required fields
+    $('#create-element-type').val(type);
+    $('#create-element-tag').val(item.tag);
+    $('#create-element-name').val(item.name);
+    $('#create-element-uvalue').val(item.uvalue);
+    $('#create-element-kvalue').val(item.kvalue);
+
+    if (type == "Window") {
+        $("#create-element-g").val(item.g);
+        $("#create-element-gL").val(item.gL);
+        $("#create-element-ff").val(item.ff);
+        $(".create-element-window-options").show();
+    }
+    else
+        $(".create-element-window-options").hide();
+
+    // Add events    
+    $("#create-element-type").change(function () {
+        var type = $(this).val();
+        if (type == "Window") {
+            $(".create-element-window-options").show();
+        } else {
+            $(".create-element-window-options").hide();
+        }
+    });
+
+    var out = $('#create-element-template');
+
     return out;
 };
 
@@ -467,11 +549,56 @@ libraryHelper.prototype.systems_get_item_to_save = function () {
         efficiency: $(".edit-system-efficiency").val(),
         winter: $(".edit-system-winter").val(),
         summer: $(".edit-system-summer").val(),
-        fuel: $(".edit-system-fuel").val(),
+        fuel: $(".edit-system-fuel").val()
     };
     return item;
 };
 
+libraryHelper.prototype.elements_get_item_to_save = function () {
+    var item = {};
+    var type = $("#create-element-type").val();
+    var tag = $("#create-element-tag").val();
+
+    item[tag] = {};
+    item[tag].name = $("#create-element-name").val();
+    item[tag].source = $("#create-element-source").val();
+    item[tag].uvalue = 1.0 * $("#create-element-uvalue").val();
+    item[tag].kvalue = 1.0 * $("#create-element-kvalue").val();
+    if (type == "Window")
+        item[tag].g = $("#create-element-g").val();
+    if (type == "Window")
+        item[tag].gL = $("#create-element-gL").val();
+    if (type == "Window")
+        item[tag].ff = $("#create-element-ff").val();
+    item[tag].tags = [type];
+    //item[tag].criteria = $("#create-element-criteria").val().split(",");
+
+    // Measures
+    if ($('#create-element-name').val() !== "")
+        item[tag].name = $("#create-element-name").val();
+    if ($('#create-element-description').val() !== "")
+        item[tag].description = $("#create-element-description").val();
+    if ($('#create-element-performance').val() !== "")
+        item[tag].performance = $("#create-element-performance").val();
+    if ($('#create-element-benefits').val() !== "")
+        item[tag].benefits = $("#create-element-benefits").val();
+    if ($('#create-element-cost').val() !== "")
+        item[tag].cost = $("#create-element-cost").val();
+    if ($('#create-element-who_by').val() !== "")
+        item[tag]["who_by"] = $("#create-element-who_by").val();
+    if ($('#create-element-disruption').val() !== "")
+        item[tag].disruption = $("#create-element-disruption").val();
+    if ($('#create-element-associated_work').val() !== "")
+        item[tag]["associated_work"] = $("#create-element-associated_work").val();
+    if ($('#create-element-key_risks').val() !== "")
+        item[tag]["key_risks"] = $("#create-element-key_risks").val();
+    if ($('#create-element-notes').val() !== "")
+        item[tag].notes = $("#create-element-notes").val();
+    if ($('#create-element-maintenance').val() !== "")
+        item[tag].maintenance = $("#create-element-maintenance").val();
+
+    return item;
+};
 
 /***************************************************
  * Other methods

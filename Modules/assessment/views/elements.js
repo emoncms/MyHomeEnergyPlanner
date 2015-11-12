@@ -1,15 +1,21 @@
 console.log('debug elements.js');
+
+var library_helper = new libraryHelper('elements', $('#elements-container'));
+
 $("#openbem").on("click", '.add-element', function () {
 
     var lib = $(this).attr("lib");
     var type = $(this).attr("type").toLowerCase();
     var element_id = get_elements_max_id() + 1;
+    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    
     // Create default element
     var element = {type: type, name: type, lib: lib, l: 0, h: 0, area: 0, uvalue: 0, kvalue: 0, wk: 0, id: element_id};
+    
     // If library is defined replace defaults with parameters from library
     if (lib != undefined) {
-        for (z in element_library[lib])
-            element[z] = element_library[lib][z];
+        for (z in library[lib])
+            element[z] = library[lib][z];
     }
 
     if (type == "window") {
@@ -42,15 +48,15 @@ $("#openbem").on("click", '.delete-element', function () {
     var row = $(this).attr('row');
     var element_id = 1.0 * $(this).attr('element_id');
 
-    $(this).closest('tr').remove();
-    data.fabric.elements.splice(row, 1);
-
     // Deleting an element is considered a measure
     if (data.fabric.measures[element_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
         data.fabric.measures[element_id] = {};
         data.fabric.measures[element_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[row]));
     }
     data.fabric.measures[element_id].measure = "Element deleted";
+
+    $(this).closest('tr').remove();
+    data.fabric.elements.splice(row, 1);
 
     elements_initUI();
     update();
@@ -61,7 +67,7 @@ $("#create-element").click(function () {
     $("#myModalcreateelement").modal('show');
     $('#myModal').modal('hide');
 });
-$("#create-element-type").change(function () {
+/*$("#create-element-type").change(function () {
     var type = $(this).val();
     if (type == "Window") {
         $(".create-element-window-options").show();
@@ -69,6 +75,7 @@ $("#create-element-type").change(function () {
         $(".create-element-window-options").hide();
     }
 });
+*/
 $("#create-element-save").click(function () {
 
     var type = $("#create-element-type").val();

@@ -388,7 +388,7 @@ class Assessment {
         $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`,`type`) VALUES ('$userid','$name','{}','$type')");
         $id = $this->mysqli->insert_id;
 
-        $result = $this->mysavelibrarysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
+        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
         return $id;
     }
 
