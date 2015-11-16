@@ -608,36 +608,36 @@ function carboncoopreport_initUI() {
 		*/
 
 		function getPrimaryEnergyUseData(){
-			var data = {};
+			var primaryEnergyUseData = {};
 			for (var i = 0 ; i < scenarios.length ; i++){
-				data[scenarios[i]] = [];
+				primaryEnergyUseData[scenarios[i]] = [];
 				if (typeof project[scenarios[i]] !== "undefined"){
 					if (typeof project[scenarios[i]].energy_requirements !== "undefined"){
 						if (typeof project[scenarios[i]].energy_requirements['lighting'] !== "undefined"){
-							data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['lighting'].quantity, label: 'Lighting'});
+							primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['lighting'].quantity/data.TFA, label: 'Lighting'});
 						}
 
 						if (typeof project[scenarios[i]].energy_requirements['appliances'] !== "undefined"){
-							data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['appliances'].quantity, label: 'Appliances'});
+							primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['appliances'].quantity/data.TFA, label: 'Appliances'});
 						}
 
 						if (typeof project[scenarios[i]].energy_requirements['cooking'] !== "undefined"){
-							data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['cooking'].quantity, label: 'Cooking'});
+							primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['cooking'].quantity/data.TFA, label: 'Cooking'});
 						}
 
 						if (typeof project[scenarios[i]].energy_requirements['waterheating'] !== "undefined"){
-							data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['waterheating'].quantity, label: 'Water Heating'});
+							primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['waterheating'].quantity/data.TFA, label: 'Water Heating'});
 						}
 
 						if (typeof project[scenarios[i]].energy_requirements['space_heating'] !== "undefined"){
-							data[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['space_heating'].quantity, label: 'Space Heating'});
+							primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['space_heating'].quantity/data.TFA, label: 'Space Heating'});
 						}
 
 					}
 				}
 			}
 
-			return data;	
+			return primaryEnergyUseData;	
 		}
 
 		var primaryEnergyUseData = getPrimaryEnergyUseData();
@@ -650,6 +650,7 @@ function carboncoopreport_initUI() {
 			font: "Karla",
 			width: 1200,
 			chartHeight: 600,
+			chartHigh: 400,
 			division: 'auto',
 			barWidth: 110,
 			barGutter: 120,
@@ -666,7 +667,19 @@ function carboncoopreport_initUI() {
 				{label: 'Scenario 1', value: primaryEnergyUseData.scenario1},
 				{label: 'Scenario 2', value: primaryEnergyUseData.scenario2},
 				{label: 'Scenario 3', value: primaryEnergyUseData.scenario3},
-			]
+			],
+			targets: [
+				{
+					label: 'UK Average 360 kWh/m2.a',
+					target: 360,
+					color: 'rgb(231,37,57)'
+				},
+				{
+					label: 'Carbon Coop Target 120 kWh/m2.a',
+					target: 120,
+					color: 'rgb(231,37,57)'
+				}
+			],
 		});
 
 		primaryEneryUse.draw('primary-energy-use');
@@ -676,10 +689,13 @@ function carboncoopreport_initUI() {
 		//
 		*/
 
-		var carbonDioxideEmissionsData = [{label: 'UK Average', value: 100}];
+		var carbonDioxideEmissionsData = [];
 		if (typeof project["master"] !== "undefined" && typeof project["master"].kgco2perm2 !== "undefined"){
-			carbonDioxideEmissionsData.push({label: "Master", value: project["master"].kgco2perm2});
+			carbonDioxideEmissionsData.push({label: "Your home now", value: project["master"].kgco2perm2});
 		}
+
+		carbonDioxideEmissionsData.push({label: "Bills data", value: project["master"].currentenergy.total_co2m2});
+
 		if (typeof project["scenario1"] !== "undefined" && typeof project["scenario1"].kgco2perm2 !== "undefined"){
 			carbonDioxideEmissionsData.push({label: "Scenario 1", value: project["scenario1"].kgco2perm2});
 		}
@@ -692,7 +708,7 @@ function carboncoopreport_initUI() {
 
 		var CarbonDioxideEmissions = new BarChart({
 			chartTitle: 'Carbon Dioxide Emissions',
-			yAxisLabel: 'kWh/m2.year',
+			yAxisLabel: 'kgCO2/m2.year',
 			fontSize: 22,
 			font: "Karla",
 			division: 'auto',
@@ -700,25 +716,21 @@ function carboncoopreport_initUI() {
 			chartHeight: 600,
 			barWidth: 110,
 			barGutter: 60,
+			chartHigh: 100,
 			defaultBarColor: 'rgb(157,213,203)',
-			barColors: {
-				'Space heating': 'rgb(157,213,203)',
-				'Pumps, fans, etc.': 'rgb(24,86,62)',
-				'Cooking': 'rgb(40,153,139)',
-			},
+			data: carbonDioxideEmissionsData,
 			targets: [
 				{
-					label: '65kwH/m2.year',
-					target: 65,
+					label: 'Carbon Coop Target',
+					target: 20,
 					color: 'rgb(231,37,57)'
 				},
 				{
-					label: '105kwH/m2.year',
-					target: 110,
+					label: 'UK Average',
+					target: 70,
 					color: 'rgb(231,37,57)'
 				},
 			],
-			data: carbonDioxideEmissionsData,
 		});
 
 		CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
@@ -730,8 +742,11 @@ function carboncoopreport_initUI() {
 
 		var carbonDioxideEmissionsPerPersonData = [];
 		if (typeof project["master"] != "undefined" && typeof project["master"].annualco2 !== "undefined" && typeof project["master"].occupancy !== "undefined"){
-			carbonDioxideEmissionsPerPersonData.push({label: "Master", value: project["master"].annualco2 / project["master"].occupancy});
+			carbonDioxideEmissionsPerPersonData.push({label: "Your home now", value: project["master"].annualco2 / project["master"].occupancy});
 		}
+
+		carbonDioxideEmissionsPerPersonData.push({label: "Bills data", value: project["master"].TFA * project["master"].currentenergy.total_co2m2 / project["scenario1"].occupancy});
+
 		if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].annualco2 !== "undefined" && typeof project["scenario1"].occupancy !== "undefined"){
 			carbonDioxideEmissionsPerPersonData.push({label: "Scenario 1", value: project["scenario1"].annualco2 / project["scenario1"].occupancy});
 		}
@@ -744,7 +759,7 @@ function carboncoopreport_initUI() {
 
 		var CarbonDioxideEmissionsPerPerson = new BarChart({
 			chartTitle: 'Carbon Dioxide Emissions Per Person',
-			yAxisLabel: 'kWh/m2.year',
+			yAxisLabel: 'kgCO2/year',
 			fontSize: 22,
 			font: "Karla",
 			division: 1000,
@@ -771,8 +786,11 @@ function carboncoopreport_initUI() {
 
 		var estimatedEnergyCostsData = [];
 		if (typeof project["master"] != "undefined" && typeof project["master"].net_cost !== "undefined"){
-			estimatedEnergyCostsData.push({label: "Master", value: project["master"].net_cost});
+			estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost});
 		}
+
+		estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost});
+
 		if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].net_cost !== "undefined"){
 			estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].net_cost});
 		}
@@ -816,6 +834,8 @@ function carboncoopreport_initUI() {
 				return "Lower";
 			} else if (num1 < num2){
 				return "Higher";
+			} else if (num1 == num2){
+				return "Same";
 			} else {
 				return "N/A";
 			}
@@ -892,6 +912,18 @@ function carboncoopreport_initUI() {
 			var sapNow = false;
 		}
 
+		if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"]["SAP"] !== "undefined"){
+			var sapScenario1 = Math.round(project["scenario1"]["SAP"]["rating"]);
+		} else {
+			var sapScenario1 = false;
+		}
+
+		if (typeof project["scenario2"] != "undefined" && typeof project["scenario2"]["SAP"] !== "undefined"){
+			var sapScenario2 = Math.round(project["scenario2"]["SAP"]["rating"]);
+		} else {
+			var sapScenario2 = false;
+		}
+
 		if (typeof project["scenario3"] != "undefined" && typeof project["scenario3"]["SAP"] !== "undefined"){
 			var sap2050 = Math.round(project["scenario3"]["SAP"]["rating"]);
 		} else {
@@ -903,6 +935,10 @@ function carboncoopreport_initUI() {
 
 		$(".js-sap-score-now").html(sapNow);
 		$(".js-sap-rating-now").html(calculateSapRatingFromScore(sapNow));
+		$(".js-sap-score-scenario1").html(sapScenario1);
+		$(".js-sap-rating-scenario1").html(calculateSapRatingFromScore(sapScenario1));
+		$(".js-sap-score-scenario2").html(sapScenario2);
+		$(".js-sap-rating-scenario2").html(calculateSapRatingFromScore(sapScenario2));
 		$(".js-sap-score-2050").html(sap2050);
 		$(".js-sap-rating-2050").html(calculateSapRatingFromScore(sap2050));
 		$(".js-sap-score-average").html(sapAverage);
