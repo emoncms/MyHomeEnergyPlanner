@@ -410,15 +410,6 @@ function carboncoopreport_initUI() {
     	}
 
     	var dataFig4 = [];
-    	// var dataFig4 = [{
-    	// 	label: 'Your Home Now'
-    	// },{
-    	// 	label: 'Scenario 1'
-    	// },{
-    	// 	label: 'Scenario 2'
-    	// },{
-    	// 	label: 'Scenario 3'
-    	// }];
 
     	if (typeof project['master'] != "undefined" && typeof project["master"].annual_useful_gains_kWh_m2 != "undefined"){
     		dataFig4.push({
@@ -427,6 +418,8 @@ function carboncoopreport_initUI() {
 					{value: project["master"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
 					{value: project["master"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
 					{value: project["master"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
+					{value: -project["master"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
+					{value: -project["master"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
 				]
     		});
     	}
@@ -438,6 +431,8 @@ function carboncoopreport_initUI() {
 					{value: project["scenario1"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
 					{value: project["scenario1"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
 					{value: project["scenario1"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
+					{value: -project["scenario1"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
+					{value: -project["scenario1"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
 				]
     		});
     	}
@@ -449,6 +444,8 @@ function carboncoopreport_initUI() {
 					{value: project["scenario2"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
 					{value: project["scenario2"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
 					{value: project["scenario2"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
+					{value: -project["scenario2"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
+					{value: -project["scenario2"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
 				]
     		});
     	}
@@ -460,6 +457,8 @@ function carboncoopreport_initUI() {
 					{value: project["scenario3"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
 					{value: project["scenario3"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
 					{value: project["scenario3"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
+					{value: -project["scenario3"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
+					{value: -project["scenario3"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
 				]
     		});
     	}
@@ -470,17 +469,17 @@ function carboncoopreport_initUI() {
 			fontSize: 22,
 			width: 1200,
 			chartHeight: 600,
-			division: 'auto',
+			division: 25,
 			barWidth: 110,
 			barGutter: 120,
-			division: 100,
 			font: "Karla",
 			defaultBarColor: 'rgb(231,37,57)',
 			barColors: {
 				'Internal': 'rgb(24,86,62)',
 				'Solar': 'rgb(240,212,156)',
 				'Space heating': 'rgb(236,102,79)',
-				// 'Solid fuel': 'rgb(246,167,7)',
+				'Fabric': 'rgb(246,167,7)',
+				'Ventilation': 'rgb(157, 213, 203)',
 			},
 			data: dataFig4,
 		});
@@ -560,9 +559,14 @@ function carboncoopreport_initUI() {
 						if (typeof project[scenarios[i]].fuel_totals['electric'] !== "undefined"){
 							data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['electric'].quantity, label: 'Electric'});
 						}
-						if (typeof project[scenarios[i]].fuel_totals['wood'] !== "undefined"){
-							data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['wood'].quantity, label: 'Wood'});
+						// other fuel types
+						var otherTotal = 0;
+						for (var fuelType in project[scenarios[i]].fuel_totals){
+							if (fuelType != "gas" && fuelType != "electric"){
+								otherTotal += project[scenarios[i]].fuel_totals[fuelType].quantity;
+							}
 						}
+						data[scenarios[i]].push({value: otherTotal, label: 'Other'});
 					}
 				}
 
@@ -575,7 +579,7 @@ function carboncoopreport_initUI() {
 
 		var EnergyDemand = new BarChart({
 			chartTitle: 'Energy Demand',
-			yAxisLabel: 'kWh/m2.year',
+			yAxisLabel: 'kWh/year',
 			fontSize: 22,
 			font: "Karla",
 			width: 1200,
@@ -587,7 +591,7 @@ function carboncoopreport_initUI() {
 			barColors: {
 				'Gas': 'rgb(236,102,79)',
 				'Electric': 'rgb(240,212,156)',
-				'Wood': 'rgb(24,86,62)',
+				'Other': 'rgb(24,86,62)',
 			},
 			data: [
 				{label: 'Your Home Now', value: energyDemandData.master},
