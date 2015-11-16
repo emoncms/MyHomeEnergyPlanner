@@ -186,11 +186,10 @@ function carboncoopreport_initUI() {
 	        value: Math.round(data.fabric_energy_efficiency),
 	        values: values,
 		    // project["master"]
-	        units: "kWh/m2",
+	        units: "kWh/m2.a",
 	        targets: {
-	            //"Passivhaus": 15,
-	            "Passivhaus retrofit": 25,
-	            "UK Average": 145
+	            "Target Range (lower bound)": 20,
+	            "Target Range (upper bound)": 70
 	        }
 	    };
 	    targetbarCarboncoop("space-heating-demand", options);
@@ -210,10 +209,11 @@ function carboncoopreport_initUI() {
 	        value: Math.round(data.primary_energy_use_m2),
 	        colors: colors,
 	        values: values,
-	        units: "kWh/m2",
+	        units: "kWh/m2.a",
 	        targets: {
-	            "Passivhaus": 120,
-	            "UK Average": 350
+	            // "Passivhaus": 120,
+	            "Carbon Coop 2050 target (inc. renewables)": 120,
+	            "UK Average": 360
 	        }
 	    };
 	    targetbarCarboncoop("primary-energy", options);
@@ -234,37 +234,37 @@ function carboncoopreport_initUI() {
 	        value: Math.round(data.kgco2perm2),
 	        colors: colors,
 	        values: values,
-	        units: "kgCO2/m2",
+	        units: "kgCO2/m2.a",
 	        targets: {
-	            "80% by 2050": 17,
-	            "UK Average": 85
+	            "Carbon Coop 2050 target": 20,
+	            "UK Average": 100
 	        }
 	    };
 	    targetbarCarboncoop("co2-emission-rate", options);
 
 	    // ---------------------------------------------------------------------------------
 
-        var values = [];
-    	for (var i = 0 ; i < scenarios.length ; i++){
-    		if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].kwhdpp != "undefined"){
-    			values[i] =  Math.round(project[scenarios[i]].kwhdpp.toFixed(1));
-    		} else {
-    			values[i] = 0;
-    		}
-    	}
+     //    var values = [];
+    	// for (var i = 0 ; i < scenarios.length ; i++){
+    	// 	if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].kwhdpp != "undefined"){
+    	// 		values[i] =  Math.round(project[scenarios[i]].kwhdpp.toFixed(1));
+    	// 	} else {
+    	// 		values[i] = 0;
+    	// 	}
+    	// }
 
-	    var options = {
-	        name: "Per person energy use",
-	        value: data.kwhdpp.toFixed(1),
-	        colors: colors,
-	        values: values,
-	        units: "kWh/day",
-	        targets: {
-	            "70% heating saving": 8.6,
-	            "UK Average": 19.6
-	        }
-	    };
-	    targetbarCarboncoop("energy-use-per-person", options);
+	    // var options = {
+	    //     name: "Per person energy use",
+	    //     value: data.kwhdpp.toFixed(1),
+	    //     colors: colors,
+	    //     values: values,
+	    //     units: "kWh/day",
+	    //     targets: {
+	    //         "70% heating saving": 8.6,
+	    //         "UK Average": 19.6
+	    //     }
+	    // };
+	    // targetbarCarboncoop("energy-use-per-person", options);
 
 	    $(".key-square--master").css("background",    colors[0]);
 	    $(".key-square--scenario1").css("background", colors[1]);
@@ -889,12 +889,12 @@ function carboncoopreport_initUI() {
 		}
 
 		if (typeof project["scenario3"] != "undefined" && typeof project["scenario3"]["SAP"] !== "undefined"){
-			var sap2050 = Math.round(project["master"]["SAP"]["rating"]);
+			var sap2050 = Math.round(project["scenario3"]["SAP"]["rating"]);
 		} else {
 			var sap2050 = false;
 		}
 
-		var sapAverage = 84;
+		var sapAverage = 59;
 		// var sap2050 = Math.round(project["scenario3"]["SAP"]["rating"]);
 
 		$(".js-sap-score-now").html(sapNow);
