@@ -222,7 +222,7 @@ function elements_initUI()
         check_and_add_measure_fields(data.fabric.measures[z].measure);
     }
     // End backwards compatibility for "description","performance","benefits","cost","who_by",
-     //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
+    //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
 
     $("#elements").html("");
     $("#roofs").html("");
@@ -277,13 +277,15 @@ function elements_UpdateUI()
 function get_elements_max_id() {
     var max_id = 0;
     // Find the max id
-    for (z in data.fabric.elements) {
-        if (data.fabric.elements[z].id != undefined && data.fabric.elements[z].id > max_id)
-            max_id = data.fabric.elements[z].id;
-    }    
-    for (z in data.fabric.measures){
-        if (data.fabric.measures[z].id != undefined && data.fabric.measures[z].original_element.id > max_id)
-            max_id = data.fabric.measures[z].id;
+    if (data.fabric.elements.length > 0) {
+        for (z in data.fabric.elements) {
+            if (data.fabric.elements[z].id != undefined && data.fabric.elements[z].id > max_id)
+                max_id = data.fabric.elements[z].id;
+        }
+        for (z in data.fabric.measures) {
+            if (data.fabric.measures[z].id != undefined && data.fabric.measures[z].original_element.id > max_id)
+                max_id = data.fabric.measures[z].id;
+        }
     }
     return max_id;
 }
