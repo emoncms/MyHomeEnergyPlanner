@@ -85,6 +85,12 @@ function carboncoopreport_initUI() {
 		// $(".home-image").attr("src", project[scenario].household.houseimage);
 		$(".home-image").attr("src", path + "Modules/assessment/images/" + projectid + "/" + data.featuredimage);
 
+		if (printmode == true){
+			$(".js-printer-friendly-link").css("display", "none");
+		} else {
+			$(".js-printer-friendly-link").attr("href", "/assessment/print?id="+projectid+"#master/carboncoopreport");
+		}
+
 
 
 		/* Figure 1: Retrofit Priorities
