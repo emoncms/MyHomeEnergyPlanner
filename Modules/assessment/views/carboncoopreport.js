@@ -185,12 +185,12 @@ function carboncoopreport_initUI() {
 	        colors: colors,
 	        value: Math.round(data.fabric_energy_efficiency),
 	        values: values,
-		    // project["master"]
 	        units: "kWh/m2.a",
 	        targets: {
 	            "Target Range (lower bound)": 20,
 	            "Target Range (upper bound)": 70
-	        }
+	        },
+	        targetRange: [20,70]
 	    };
 	    targetbarCarboncoop("space-heating-demand", options);
 
@@ -469,9 +469,11 @@ function carboncoopreport_initUI() {
 			fontSize: 22,
 			width: 1200,
 			chartHeight: 600,
-			division: 25,
+			division: 50,
 			barWidth: 110,
 			barGutter: 120,
+			chartHigh: 400,
+			chartLow: -400,
 			font: "Karla",
 			defaultBarColor: 'rgb(231,37,57)',
 			barColors: {
@@ -518,18 +520,28 @@ function carboncoopreport_initUI() {
 			// },
 			targets: [
 				{
-					label: '30 kWh/m2.a',
-					target: 30,
+					target: 20,
 					color: 'rgb(231,37,57)'
 				},
 				{
-					label: '70 kWh/m2.a',
 					target: 70,
 					color: 'rgb(231,37,57)'
 				},
 				{
 					label: 'UK Average 140 kWh/m2.a',
 					target: 140,
+					color: 'rgb(231,37,57)'
+				},
+			],
+			targetRange: [
+				{
+					label: '20 kWh/m2.a',
+					target: 20,
+					color: 'rgb(231,37,57)'
+				},
+				{
+					label: '70 kWh/m2.a',
+					target: 70,
 					color: 'rgb(231,37,57)'
 				},
 			],
@@ -554,10 +566,10 @@ function carboncoopreport_initUI() {
 				if (typeof project[scenarios[i]] !== "undefined"){
 					if (typeof project[scenarios[i]].fuel_totals !== "undefined"){
 						if (typeof project[scenarios[i]].fuel_totals['gas'] !== "undefined"){
-							data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['gas'].quantity, label: 'Gas'});
+							data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['gas'].quantity, label: 'Gas', variance: project[scenarios[i]].fuel_totals['gas'].quantity * 0.3});
 						}
 						if (typeof project[scenarios[i]].fuel_totals['electric'] !== "undefined"){
-							data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['electric'].quantity, label: 'Electric'});
+							data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['electric'].quantity, label: 'Electric', variance: project[scenarios[i]].fuel_totals['electric'].quantity * 0.3});
 						}
 						// other fuel types
 						var otherTotal = 0;
@@ -566,7 +578,7 @@ function carboncoopreport_initUI() {
 								otherTotal += project[scenarios[i]].fuel_totals[fuelType].quantity;
 							}
 						}
-						data[scenarios[i]].push({value: otherTotal, label: 'Other'});
+						data[scenarios[i]].push({value: otherTotal, label: 'Other', variance: otherTotal * 0.3});
 					}
 				}
 
@@ -1065,16 +1077,52 @@ function carboncoopreport_initUI() {
 
 
 		/* Figure 14: Humidity Data
-		// No JS needed currently
+		// 
 		*/
+
+		var averageHumidity = 0.5 * (data.household.reading_humidity1 + data.household.reading_humidity2);
+		$(".js-average-humidity").html(averageHumidity);
 
 		/* Figure 15: Temperature Data
-		// No JS needed currently
+		// 
 		*/
 
+		var averageTemperature = 0.5 * (data.household.reading_temp1 + data.household.reading_temp2);
+		$(".js-average-temp").html(averageTemperature);
+
 		/* Figure 16: You also told us...
-		// No JS needed currently
+		// 
 		*/
+
+		var laundryHabits = "";
+		if (typeof data.household["4b_drying_outdoorline"] != "undefined" && data.household["4b_drying_outdoorline"]){
+			laundryHabits += "outdoor clothes line, ";
+		}
+		if (typeof data.household["4b_drying_indoorrack"] != "undefined" && data.household["4b_drying_indoorrack"]){
+			laundryHabits += "indoor clothes racks, ";	
+		}
+		if (typeof data.household["4b_drying_airingcupboard"] != "undefined" && data.household["4b_drying_airingcupboard"]){
+			laundryHabits += "airing cupboard, ";	
+		}
+		if (typeof data.household["4b_drying_tumbledryer"] != "undefined" && data.household["4b_drying_tumbledryer"]){
+			laundryHabits += "tumble dryer, ";
+		}
+		if (typeof data.household["4b_drying_washerdryer"] != "undefined" && data.household["4b_drying_washerdryer"]){
+			laundryHabits += "washer/dryer, ";
+		}
+		if (typeof data.household["4b_drying_radiators"] != "undefined" && data.household["4b_drying_radiators"]){
+			laundryHabits += "radiators, ";
+		}
+		if (typeof data.household["4b_drying_electricmaiden"] != "undefined" && data.household["4b_drying_electricmaiden"]){
+			laundryHabits += "electric maiden, ";
+		}
+
+		var laundryHabits = laundryHabits.slice(0, - 2);
+
+		$(".js-laundry-habits").html(laundryHabits);
+		
+		
+
 
 
 		

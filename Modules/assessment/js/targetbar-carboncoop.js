@@ -58,6 +58,12 @@ function targetbarCarboncoop(element, options)
         ctx.fillText(z,xpos+5,barheight-8);
     }
 
+    // draw target range
+    if (typeof options.targetRange != "undefined"){
+        ctx.fillStyle = "rgba(0,0,0,0.2)";
+        ctx.fillRect(options.targetRange[0]*xscale, 1, xscale * (options.targetRange[1] - options.targetRange[0]), barheight);
+    }
+
     ctx.setLineDash([]);
     ctx.strokeStyle = "rgba(99,86,71,0.8)";
     ctx.strokeRect(1,1,width-2,barheight-2);
