@@ -517,7 +517,7 @@ function carboncoopreport_initUI() {
 			width: 1200,
 			chartHeight: 600,
 			barWidth: 110,
-			barGutter: 60,
+			barGutter: 80,
 			defaultBarColor: 'rgb(157,213,203)',
 			// barColors: {
 			// 	'Space heating': 'rgb(157,213,203)',
@@ -619,7 +619,7 @@ function carboncoopreport_initUI() {
 			chartHeight: 600,
 			division: 'auto',
 			barWidth: 110,
-			barGutter: 120,
+			barGutter: 80,
 			defaultBarColor: 'rgb(231,37,57)',
 			barColors: {
 				'Gas': 'rgb(236,102,79)',
@@ -694,7 +694,7 @@ function carboncoopreport_initUI() {
 			chartHigh: 400,
 			division: 'auto',
 			barWidth: 110,
-			barGutter: 120,
+			barGutter: 80,
 			defaultBarColor: 'rgb(231,37,57)',
 			barColors: {
 				'Lighting': 'rgb(236,102,79)',
@@ -758,7 +758,7 @@ function carboncoopreport_initUI() {
 			width: 1200,
 			chartHeight: 600,
 			barWidth: 110,
-			barGutter: 60,
+			barGutter: 80,
 			chartHigh: 100,
 			defaultBarColor: 'rgb(157,213,203)',
 			data: carbonDioxideEmissionsData,
@@ -809,7 +809,7 @@ function carboncoopreport_initUI() {
 			width: 1200,
 			chartHeight: 600,
 			barWidth: 110,
-			barGutter: 120,
+			barGutter: 80,
 			defaultBarColor: 'rgb(157,213,203)',
 			defaultVarianceColor: 'rgb(231,37,57)',
 			// barColors: {
@@ -829,19 +829,19 @@ function carboncoopreport_initUI() {
 
 		var estimatedEnergyCostsData = [];
 		if (typeof project["master"] != "undefined" && typeof project["master"].net_cost !== "undefined"){
-			estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost});
+			estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost, variance: project["master"].net_cost * 0.3});
 		}
 
-		estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost});
+		estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost, variance: project["master"].currentenergy.total_cost * 0.3});
 
 		if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].net_cost !== "undefined"){
-			estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].net_cost});
+			estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].net_cost, variance: project["scenario1"].net_cost * 0.3});
 		}
 		if (typeof project["scenario2"] != "undefined" && typeof project["scenario2"].net_cost !== "undefined"){
-			estimatedEnergyCostsData.push({label: "Scenario 2", value: project["scenario2"].net_cost});
+			estimatedEnergyCostsData.push({label: "Scenario 2", value: project["scenario2"].net_cost, variance: project["scenario2"].net_cost * 0.3});
 		}
 		if (typeof project["scenario3"] != "undefined" && typeof project["scenario3"].net_cost !== "undefined"){
-			estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].net_cost});
+			estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].net_cost, variance: project["scenario3"].net_cost * 0.3});
 		}
 
 		var EstimatedEnergyCosts = new BarChart({
@@ -853,8 +853,8 @@ function carboncoopreport_initUI() {
 			division: 'auto',
 			width: 1200,
 			chartHeight: 600,
-			barGutter: 120,
-			defaultBarColor: 'rgb(231,37,57)',
+			barGutter: 80,
+			defaultBarColor: 'rgb(157,213,203)',
 			data: estimatedEnergyCostsData
 		});
 
