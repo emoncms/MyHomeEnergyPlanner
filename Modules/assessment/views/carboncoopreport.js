@@ -590,6 +590,21 @@ function carboncoopreport_initUI() {
 
 			}
 
+			data.bills = [
+				{
+					value:project['master'].currentenergy.energyitems["gas-kwh"].annual_kwh,
+					label: 'Gas',	
+				},
+				{
+					value:project['master'].currentenergy.energyitems.electric.annual_kwh,
+					label: 'Electric',
+				},
+				{
+					value: project['master'].currentenergy.primaryenergy_annual_kwh - project['master'].currentenergy.energyitems.electric.annual_kwh - project['master'].currentenergy.energyitems["gas-kwh"].annual_kwh,
+					label: "Other"
+				}
+			]
+
 			return data;	
 		}
 
@@ -613,6 +628,7 @@ function carboncoopreport_initUI() {
 			},
 			data: [
 				{label: 'Your Home Now', value: energyDemandData.master},
+				{label: 'Bills data', value: energyDemandData.bills},
 				{label: 'Scenario 1', value: energyDemandData.scenario1},
 				{label: 'Scenario 2', value: energyDemandData.scenario2},
 				{label: 'Scenario 3', value: energyDemandData.scenario3},
@@ -655,6 +671,13 @@ function carboncoopreport_initUI() {
 				}
 			}
 
+			primaryEnergyUseData.bills = [
+				{
+					value: data.currentenergy.primaryenergy_annual_kwhm2,
+					label: "Total"
+				}
+			]
+
 			return primaryEnergyUseData;	
 		}
 
@@ -679,9 +702,11 @@ function carboncoopreport_initUI() {
 				'Cooking': 'rgb(24,86,62)',
 				'Water Heating': 'rgb(157,213,203)',
 				'Space Heating' : 'rgb(231,37,57)',
+				'Total' : 'rgb(131, 51, 47)',
 			},
 			data: [
 				{label: 'Your Home Now', value: primaryEnergyUseData.master},
+				{label: 'Bills data', value: primaryEnergyUseData.bills},
 				{label: 'Scenario 1', value: primaryEnergyUseData.scenario1},
 				{label: 'Scenario 2', value: primaryEnergyUseData.scenario2},
 				{label: 'Scenario 3', value: primaryEnergyUseData.scenario3},
