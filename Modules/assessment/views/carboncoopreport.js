@@ -83,7 +83,10 @@ function carboncoopreport_initUI() {
 
 
 		// $(".home-image").attr("src", project[scenario].household.houseimage);
-		$(".home-image").attr("src", path + "Modules/assessment/images/" + projectid + "/" + data.featuredimage);
+		if (data.featuredimage){
+			var img = $('<img class="home-image">').attr("src", path + "Modules/assessment/images/" + projectid + "/" + data.featuredimage)
+			img.appendTo(".js-home-image-wrapper");
+		}
 
 		if (printmode == true){
 			$(".js-printer-friendly-link").css("display", "none");
