@@ -1006,7 +1006,7 @@ calc.LAC = function (data)
     // CO2 emissions in kg/m2/year associated with cooking
     var cooking_CO2 = (119 + 24 * data.occupancy) / data.TFA;
 
-    data.LAC.EC = cooking_CO2 / datasets.electric.co2factor; // We stimate the clculation of annual energy use from the emissions
+    data.LAC.EC = cooking_CO2 * data.TFA / 0.519; // We stimate the clculation of annual energy use from the emissions
 
     if (GC > 0 && data.LAC.use_SAP_cooking) {
         data.gains_W["Cooking"] = GC_monthly;
