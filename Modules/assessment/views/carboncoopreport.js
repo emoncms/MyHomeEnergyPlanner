@@ -89,6 +89,7 @@ function carboncoopreport_initUI() {
 		}
 
 		if (printmode == true){
+			$("#bound").css("width", "1200px"); // set to width to optimum to avoid antialiasing
 			$(".js-printer-friendly-link").css("display", "none");
 		} else {
 			$(".js-printer-friendly-link").attr("href", "/assessment/print?id="+projectid+"#master/carboncoopreport");
