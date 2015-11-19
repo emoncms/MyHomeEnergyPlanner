@@ -30,7 +30,7 @@ function currentenergy_initUI() {
                 out += "<td></td>";
             }
             out += "<td><span type='text' key='data.currentenergy.energyitems."+z+".kwhd' dp=1/> kWh/d</td>";
-            out += "<td><span type='text' key='data.currentenergy.energyitems."+z+".annual_co2' dp=0/> kg</td>";
+            out += "<td><span type='text' key='data.currentenergy.energyitems."+z+".annual_co2' dp=2/> kg</td>";
             out += "<td><input type='text' style='width:50px' key='data.currentenergy.energyitems."+z+".unitcost' dp=2 /> £/"+E[z].units+"</td>";
             out += "<td><input type='text' style='width:50px' key='data.currentenergy.energyitems."+z+".standingcharge' dp=2 /></td>";
             out += "<td>£<span type='text' key='data.currentenergy.energyitems."+z+".annual_cost' dp=2/></td>";
