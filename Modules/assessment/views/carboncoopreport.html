@@ -4,7 +4,9 @@
 			<div class="doc-title-wrapper">
 				<h1 class="doc-title">Carbon Co-op</h1>
 				<span class="doc-sub-title">My Home Energy Planner</span>
-				<a href="" class='js-printer-friendly-link'>View printer friendly version</a>
+				<!-- <p>
+					<a href="" class='js-printer-friendly-link'>View printer friendly version</a>
+				</p> -->
 			</div>
 			<div class="grid grid-margin-bottom">
 				<div class="col-2">
@@ -207,24 +209,36 @@
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 3. Performance Summary</h4>
-					<ul class='js-house-heatloss-diagram-picker house-heatloss-diagram-picker'>
-						<li><span class='selected' data-scenario='master'>Your home now</span></li>
-						<li><span data-scenario='scenario1'>Scenario 1</span></li>
-						<li><span data-scenario='scenario2'>Scenario 2</span></li>
-						<li><span data-scenario='scenario3'>Scenario 3</span></li>
-					</ul>
-						<div class='js-house-heatloss-diagrams-wrapper'>	
+						<div class='house-heatloss-diagrams-wrapper js-house-heatloss-diagrams-wrapper'>	
+							<ul class='js-house-heatloss-diagram-picker house-heatloss-diagram-picker'>
+								<li><span class='selected' data-scenario='master'>Your home now</span></li>
+								<li><span data-scenario='scenario1'>Scenario 1</span></li>
+								<li><span data-scenario='scenario2'>Scenario 2</span></li>
+								<li><span data-scenario='scenario3'>Scenario 3</span></li>
+							</ul>
 					        <div class="bar-chart-container centered-house" id='house-heatloss-diagram-master' data-scenario-diagram='master'>
-
+						        <p>
+						        	Your home now
+						        </p>
+						        <div class="js-svg"></div>
 					        </div>
 					        <div class="bar-chart-container centered-house" id='house-heatloss-diagram-scenario1' data-scenario-diagram='scenario1'>
-						        
+						        <p>
+						        	Scenario 1
+						        </p>
+						        <div class="js-svg"></div>
 					        </div>
 					        <div class="bar-chart-container centered-house" id='house-heatloss-diagram-scenario2' data-scenario-diagram='scenario2'>
-						        
+						        <p>
+						        	Scenario 2
+						        </p>
+						        <div class="js-svg"></div>
 					        </div>
 					        <div class="bar-chart-container centered-house" id='house-heatloss-diagram-scenario3' data-scenario-diagram='scenario3'>
-						       
+								<p>
+									Scenario 3
+								</p>
+								<div class="js-svg"></div>
 					        </div>
 				        </div>
 				</div>

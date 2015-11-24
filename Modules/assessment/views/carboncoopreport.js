@@ -1,7 +1,7 @@
 
 function carboncoopreport_initUI() {
 
-	console.log(project);
+	// console.log(project);
 
 	WebFontConfig = {
 	    google: { families: [ 'Karla:400,400italic,700:latin' ] }
@@ -296,7 +296,7 @@ function carboncoopreport_initUI() {
 				    wallswk: Math.round(project[scenario].fabric.total_wall_WK),
 				    roofwk: Math.round(project[scenario].fabric.total_roof_WK),
 				    thermalbridgewk: Math.round(project[scenario].fabric.thermal_bridging_heat_loss),
-				    totalwk: project[scenario].fabric.total_floor_WK + project[scenario].ventilation.average_WK + project[scenario].fabric.total_window_WK + project[scenario].fabric.total_wall_WK + project[scenario].fabric.total_roof_WK + project[scenario].fabric.thermal_bridging_heat_loss	
+				    totalwk: Math.round(project[scenario].fabric.total_floor_WK + project[scenario].ventilation.average_WK + project[scenario].fabric.total_window_WK + project[scenario].fabric.total_wall_WK + project[scenario].fabric.total_roof_WK + project[scenario].fabric.thermal_bridging_heat_loss)	
 		    	}
 	    	} else {
 	    		return {
@@ -327,11 +327,13 @@ function carboncoopreport_initUI() {
 		heatlossDataScenario2 = heatlossData("scenario2");
 		heatlossDataScenario3 = heatlossData("scenario3");
 
-	    if (printmode != true){
-	    	$("#house-heatloss-diagram-scenario1, #house-heatloss-diagram-scenario2, #house-heatloss-diagram-scenario3").css({
-	    		"display": "none"
-	    	});
-	    }
+	    // if (printmode != true){
+	    // 	$("#house-heatloss-diagram-scenario1, #house-heatloss-diagram-scenario2, #house-heatloss-diagram-scenario3, .js-house-heatloss-diagrams-wrapper p").css({
+	    // 		"display": "none"
+	    // 	});
+	    // } else {
+	    // 	$(".js-house-heatloss-diagram-picker").css("display", "none");
+	    // }
 
 	    function calculateRedShade(value, calibrateMax){
 	    	var calibrateMax = 292;
@@ -340,69 +342,63 @@ function carboncoopreport_initUI() {
 
 	    function generateHouseMarkup(heatlossData){
 
-	    	var red = "rgba()"
-	    	var html = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 469 337" preserveAspectRatio="xMinYMin" xml:space="preserve">\
-	    					<image x="0" y="0" width="469" height="337" xlink:href="../Modules/assessment/views/house-carboncoop-v3.svg"/>\
-							<g transform="translate(105,30)">\
-					           	<path id="thermal-bridging" fill="'+calculateRedShade(heatlossData.thermalbridgewk)+'" d="M229.9,113.1c2.4,0,4.4,2,4.4,4.4l0.1,28.6c0,5.9,4.8,10.6,10.6,10.6\
-										c5.8,0,10.6-4.8,10.6-10.6l0.1-28.6c0-2.4,2-4.4,4.4-4.4c2.4,0,4.4,2,4.4,4.4l0.1,28.6c0,5.9,4.8,10.6,10.6,10.6\
-										s10.6-4.8,10.6-10.6l0.1-11.8c0-2.4,1.9-4.4,4.3-4.4v0h7.6v2.9l11.3-5.6c0.3-0.1,0.3-0.6,0-0.7l-11.3-5.6v2.9h-7.5v0\
-										c-5.8,0-10.6,4.8-10.6,10.6l-0.1,11.8c0,2.4-2,4.4-4.4,4.4s-4.4-2-4.4-4.4l-0.1-28.6c0-5.8-4.7-10.6-10.6-10.6v0c0,0,0,0,0,0\
-										c0,0,0,0,0,0v0c-5.8,0-10.6,4.8-10.6,10.6l-0.1,28.6c0,2.4-2,4.4-4.4,4.4c-2.4,0-4.4-2-4.4-4.4l-0.1-28.6c0-5.8-4.7-10.6-10.6-10.6\
-										v0c0,0,0,0,0,0s0,0,0,0v0L229.9,113.1z"/>\
-								<path id="roof" fill="'+calculateRedShade(heatlossData.roofwk)+'" d="M172.8,38.8c1.4-2,4.2-2.4,6.2-1l23.3,16.5c4.8,3.4,11.4,2.3,14.8-2.5s2.3-11.4-2.5-14.8\
-										l-23.2-16.7c-2-1.4-2.4-4.2-1-6.2c1.4-2,4.2-2.4,6.2-1L220,29.7c4.8,3.4,11.4,2.3,14.8-2.5s2.3-11.4-2.5-14.8l-9.5-7\
-										c-2-1.4-2.4-4.1-1.1-6.1l0,0l4.4-6.2l2.4,1.7l1.9-12.4c0.1-0.3-0.3-0.6-0.6-0.4l-11.1,5.9l2.4,1.7l-4.4,6.1l0,0\
-										c-3.4,4.8-2.3,11.4,2.5,14.8l9.5,7c2,1.4,2.5,4.2,1,6.2c-1.4,2-4.2,2.4-6.2,1L200.2,8.1c-4.7-3.4-11.4-2.3-14.8,2.4l0,0\
-										c0,0,0,0,0,0c0,0,0,0,0,0l0,0c-3.4,4.8-2.3,11.4,2.5,14.8l23.2,16.7c2,1.4,2.5,4.2,1,6.2c-1.4,2-4.2,2.4-6.2,1l-23.3-16.5\
-										c-4.7-3.4-11.4-2.3-14.8,2.4l0,0c0,0,0,0,0,0c0,0,0,0,0,0l0,0L172.8,38.8z"/>\
-								<path id="walls" fill="'+calculateRedShade(heatlossData.wallswk)+'" d="M229.9,193.3c2.4,0,4.4,2,4.4,4.4l0.1,28.6c0,5.9,4.8,10.6,10.6,10.6\
-										c5.8,0,10.6-4.8,10.6-10.6l0.1-28.6c0-2.4,2-4.4,4.4-4.4c2.4,0,4.4,2,4.4,4.4l0.1,28.6c0,5.9,4.8,10.6,10.6,10.6\
-										s10.6-4.8,10.6-10.6l0.1-11.8c0-2.4,1.9-4.4,4.3-4.4v0h7.6v2.9l11.3-5.6c0.3-0.1,0.3-0.6,0-0.7L298,201v2.9h-7.5v0\
-										c-5.8,0-10.6,4.8-10.6,10.6l-0.1,11.8c0,2.4-2,4.4-4.4,4.4s-4.4-2-4.4-4.4l-0.1-28.6c0-5.8-4.7-10.6-10.6-10.6v0c0,0,0,0,0,0\
-										c0,0,0,0,0,0v0c-5.8,0-10.6,4.8-10.6,10.6l-0.1,28.6c0,2.4-2,4.4-4.4,4.4c-2.4,0-4.4-2-4.4-4.4l-0.1-28.6c0-5.8-4.7-10.6-10.6-10.6\
-										v0c0,0,0,0,0,0s0,0,0,0v0L229.9,193.3z"/>\
-								<path id="windows" fill="'+calculateRedShade(heatlossData.windowswk)+'" d="M11.5,113.1c-2.4,0-4.4,2-4.4,4.4l-0.1,28.6c0,5.9-4.8,10.6-10.6,10.6s-10.6-4.8-10.6-10.6\
-										l-0.1-28.6c0-2.4-2-4.4-4.4-4.4c-2.4,0-4.4,2-4.4,4.4l-0.1,28.6c0,5.9-4.8,10.6-10.6,10.6s-10.6-4.8-10.6-10.6l-0.1-11.8\
-										c0-2.4-1.9-4.4-4.3-4.4v0h-7.6v2.9l-11.3-5.6c-0.3-0.1-0.3-0.6,0-0.7l11.3-5.6v2.9h7.5v0c5.8,0,10.6,4.8,10.6,10.6l0.1,11.8\
-										c0,2.4,2,4.4,4.4,4.4c2.4,0,4.4-2,4.4-4.4l0.1-28.6c0-5.8,4.7-10.6,10.6-10.6v0c0,0,0,0,0,0c0,0,0,0,0,0v0\
-										c5.8,0,10.6,4.8,10.6,10.6l0.1,28.6c0,2.4,2,4.4,4.4,4.4s4.4-2,4.4-4.4l0.1-28.6c0-5.8,4.7-10.6,10.6-10.6v0c0,0,0,0,0,0\
-										c0,0,0,0,0,0v0L11.5,113.1z"/>\
-								<path id="ventilation" fill="'+calculateRedShade(heatlossData.ventilationwk)+'" d="M11.5,193.3c-2.4,0-4.4,2-4.4,4.4l-0.1,28.6c0,5.9-4.8,10.6-10.6,10.6s-10.6-4.8-10.6-10.6\
-										l-0.1-28.6c0-2.4-2-4.4-4.4-4.4c-2.4,0-4.4,2-4.4,4.4l-0.1,28.6c0,5.9-4.8,10.6-10.6,10.6s-10.6-4.8-10.6-10.6l-0.1-11.8\
-										c0-2.4-1.9-4.4-4.3-4.4v0h-7.6v2.9l-11.3-5.6c-0.3-0.1-0.3-0.6,0-0.7l11.3-5.6v2.9h7.5v0c5.8,0,10.6,4.8,10.6,10.6l0.1,11.8\
-										c0,2.4,2,4.4,4.4,4.4c2.4,0,4.4-2,4.4-4.4l0.1-28.6c0-5.8,4.7-10.6,10.6-10.6v0c0,0,0,0,0,0c0,0,0,0,0,0v0\
-										c5.8,0,10.6,4.8,10.6,10.6l0.1,28.6c0,2.4,2,4.4,4.4,4.4s4.4-2,4.4-4.4l0.1-28.6c0-5.8,4.7-10.6,10.6-10.6v0c0,0,0,0,0,0\
-										c0,0,0,0,0,0v0L11.5,193.3z"/>\
-								<path id="floor" fill="'+calculateRedShade(heatlossData.floorwk)+'" d="M129.5,240.7c0,2.4-2,4.4-4.4,4.4l-9.6,0.1c-5.9,0-10.6,4.8-10.6,10.6\
-										c0,5.8,4.8,10.6,10.6,10.6l7.8,0.1c2.4,0,4.4,1.9,4.4,4.3h0v7.6h-2.9l5.6,11.3c0.1,0.3,0.6,0.3,0.7,0l5.6-11.3h-2.9V271h0\
-										c0-5.8-4.8-10.6-10.6-10.6l-7.8-0.1c-2.4,0-4.4-2-4.4-4.4s2-4.4,4.4-4.4l9.6-0.1c5.8,0,10.6-4.7,10.6-10.6h0c0,0,0,0,0,0s0,0,0,0h0\
-										L129.5,240.7z"/>\
-							</g>\
-				            <g style="font-size:12px; fill:rgba(99,86,71,0.8)">\
-				                <text x="160" y="300" style="font-weight:bold">Floor</text>\
-				                <text id="house-floorwk" x="160" y="315">'+heatlossData.floorwk+' W/K</text>\
-				                <text x="350" y="50" style="font-weight:bold">Roof</text>\
-				                <text id="house-roofwk" x="350" y="65">'+heatlossData.roofwk+' W/K</text>\
-				                <text x="360" y="110" style="font-weight:bold">Thermal Bridging</text>\
-				                <text id="house-thermalbridging" x="360" y="125">'+heatlossData.thermalbridgewk+' W/K</text>\
-				                <text x="400" y="205" style="font-weight:bold">Walls</text>\
-				                <text id="house-wallswk" x="400" y="220">'+heatlossData.wallswk+' W/K</text>\
-				                <text x="70" y="205" style="font-weight:bold;" text-anchor="end">Ventilation</text>\
-				                <text id="house-ventilationwk" x="70" y="220" text-anchor="end">'+heatlossData.ventilationwk+' W/K</text>\
-				                <text x="70" y="110" style="font-weight:bold;" text-anchor="end">Windows</text>\
-				                <text id="house-windowswk" x="70" y="125" text-anchor="end">'+heatlossData.windowswk+' W/K</text>\
-				                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>\
-				                <text id="house-totalwk" x="500" y="435" text-anchor="middle">'+heatlossData.total+' W/K</text>\
-				            </g>\
-				        </svg>';
+	    	var uscale = 30;
+
+	    	var sFloor = Math.sqrt(heatlossData.floorwk / uscale);
+	    	var sVentilation = Math.sqrt(heatlossData.ventilationwk / uscale);
+	    	var sWindows = Math.sqrt(heatlossData.windowswk / uscale);
+	    	var sWalls = Math.sqrt(heatlossData.wallswk / uscale);
+	    	var sRoof = Math.sqrt(heatlossData.roofwk / uscale);
+	    	var sThermal = Math.sqrt(heatlossData.thermalbridgewk / uscale);
+	    	
+	    	var html = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"\
+				width="444px" height="330.5px" viewBox="0 0 444 330.5" enable-background="new 0 0 444 330.5" xml:space="preserve">\
+				<path fill="none" stroke="#F0533C" stroke-width="6" stroke-miterlimit="10" d="M106.8,108.1"/>\
+				<polyline fill="none" stroke="#F0533C" stroke-width="8" stroke-miterlimit="10" points="316.6,108.1 316.6,263.4 106.8,263.4 \
+				106.8,230.9 "/>\
+				<polyline fill="none" stroke="#F0533C" stroke-width="11" stroke-miterlimit="10" points="95.7,119.5 211.7,33.5 327.6,119.5 "/>\
+				<path fill="none" stroke="#F0533C" stroke-width="6" stroke-miterlimit="10" d="M57.8,240.6"/>\
+				<line fill="none" stroke="#F0533C" stroke-width="8" stroke-miterlimit="10" x1="106.5" y1="195.6" x2="106.5" y2="160.7"/>\
+				<line opacity="0.4" fill="none" stroke="#F0533C" stroke-width="8" stroke-miterlimit="10" x1="106.5" y1="160.7" x2="106.5" y2="125.8"/>\
+				<line fill="none" stroke="#F0533C" stroke-width="8" stroke-miterlimit="10" x1="106.8" y1="125.8" x2="106.8" y2="107.8"/>\
+				<polygon id="roof" fill="#F0533C" transform="translate(270,60) scale('+sRoof+')" points="6.9,-23.6 -6.9,-5.4 7.7,5.6 21.5,-12.7 28.5,-7.4 24.9,-32.3 -0.1,-28.9 "/>\
+				<polygon id="windows" transform="translate(92,144) scale(-'+sWindows+')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
+				<polygon id="ventilation" transform="translate(92,235) scale(-'+sVentilation+')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
+				<polygon id="wall" transform="translate(330,242) scale('+sWalls+')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
+				<polygon id="thermal-bridging" transform="translate(330,144) scale('+sThermal+')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
+				<polygon id="floor" transform="translate(213,278) scale('+sFloor+')" fill="#F0533C" points="9.1,22.9 9.1,0 -9.1,0 -9.1,22.9 -17.9,22.9 0,40.6 17.9,22.9 "/>\
+				<text transform="matrix(1 0 0 1 191.0084 172.7823)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="14">TOTAL </tspan><tspan x="-5.4" y="16.8" fill="#F0533C" font-size="14">'+heatlossData.totalwk+' W/K</tspan></text>\
+				<text transform="matrix(1 0 0 1 328.5163 95)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Thermal Bridging</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">'+heatlossData.thermalbridgewk+' W/K</tspan></text>\
+				<text transform="matrix(1 0 0 1 230.624 21.1785)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Roof</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">'+heatlossData.roofwk+' W/K</tspan></text>\
+				<text transform="matrix(1 0 0 1 330.5875 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Walls</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">'+heatlossData.wallswk+' W/K</tspan></text>\
+				<text transform="matrix(1 0 0 1 53.3572 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Ventilation</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">'+heatlossData.ventilationwk+' W/K</tspan></text>\
+				<text transform="matrix(1 0 0 1 48.0902 90.1215)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Windows</tspan><tspan x="11.2" y="12" fill="#F0533C" font-size="11">'+heatlossData.windowswk+' W/K</tspan></text>\
+				<text transform="matrix(1 0 0 1 248.466 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Floor</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">'+heatlossData.floorwk+' W/K</tspan></text>\
+				<g opacity="0.4">\
+				<polygon fill="#F0533C" points="110.1,133.2 102.8,128.8 102.8,129.9 110.1,134.3 	"/>\
+				<polygon fill="#F0533C" points="110.1,141.5 102.8,137.1 102.8,138.2 110.1,142.6 	"/>\
+				<polygon fill="#F0533C" points="110.1,149.8 102.8,145.4 102.8,146.4 110.1,150.8 	"/>\
+				<polygon fill="#F0533C" points="110.1,158 102.8,153.6 102.8,154.7 110.1,159.1 	"/>\
+				</g>\
+				<line opacity="0.4" fill="none" stroke="#F0533C" stroke-width="8" stroke-miterlimit="10" x1="106.5" y1="230.7" x2="106.5" y2="195.8"/>\
+				<g opacity="0.4">\
+				<polygon fill="#F0533C" points="110.1,203.2 102.8,198.8 102.8,199.9 110.1,204.3 	"/>\
+				<polygon fill="#F0533C" points="110.1,211.5 102.8,207.1 102.8,208.2 110.1,212.6 	"/>\
+				<polygon fill="#F0533C" points="110.1,219.8 102.8,215.4 102.8,216.4 110.1,220.8 	"/>\
+				<polygon fill="#F0533C" points="110.1,228 102.8,223.6 102.8,224.7 110.1,229.1 	"/>\
+				</g>\
+				</svg>'
 			return html;
 	    }
 
-	    $("#house-heatloss-diagram-master").html($(generateHouseMarkup(heatlossDataMaster)));
-	    $("#house-heatloss-diagram-scenario1").html($(generateHouseMarkup(heatlossDataScenario1)));
-	    $("#house-heatloss-diagram-scenario2").html($(generateHouseMarkup(heatlossDataScenario2)));
-	    $("#house-heatloss-diagram-scenario3").html($(generateHouseMarkup(heatlossDataScenario3)));
+
+	    $("#house-heatloss-diagram-master .js-svg").html($(generateHouseMarkup(heatlossDataMaster)));
+	    $("#house-heatloss-diagram-scenario1 .js-svg").html($(generateHouseMarkup(heatlossDataScenario1)));
+	    $("#house-heatloss-diagram-scenario2 .js-svg").html($(generateHouseMarkup(heatlossDataScenario2)));
+	    $("#house-heatloss-diagram-scenario3 .js-svg").html($(generateHouseMarkup(heatlossDataScenario3)));
+
+
+	    // termal bridging right pointing arrow: <polygon opacity="0.5" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>
 
 
 	    /* Figure 4: Your home’s heat balance
