@@ -875,7 +875,7 @@ calc.energy_systems = function (data)
     data.net_cost = data.total_cost - data.total_income;
 
     return data;
-}
+};
 
 //---------------------------------------------------------------------------------------------
 // SAP

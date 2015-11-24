@@ -244,6 +244,24 @@ var openbem = {
                 inputdata.fabric.elements[z].gL = data.fabric.elements[z].gL;
             if (data.fabric.elements[z].ff != undefined)
                 inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
+            if (data.fabric.elements[z].performance != undefined)
+                inputdata.fabric.elements[z].performance = data.fabric.elements[z].performance;
+            if (data.fabric.elements[z].benefits != undefined)
+                inputdata.fabric.elements[z].benefits = data.fabric.elements[z].benefits;
+            if (data.fabric.elements[z].cost != undefined)
+                inputdata.fabric.elements[z].cost = data.fabric.elements[z].cost;
+            if (data.fabric.elements[z].ff != undefined)
+                inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
+            if (data.fabric.elements[z].who_by != undefined)
+                inputdata.fabric.elements[z].who_by = data.fabric.elements[z].who_by;
+            if (data.fabric.elements[z].disruption != undefined)
+                inputdata.fabric.elements[z].disruption = data.fabric.elements[z].disruption;
+            if (data.fabric.elements[z].associated_work != undefined)
+                inputdata.fabric.elements[z].associated_work = data.fabric.elements[z].associated_work;
+            if (data.fabric.elements[z].notes != undefined)
+                inputdata.fabric.elements[z].notes = data.fabric.elements[z].notes;
+            if (data.fabric.elements[z].maintenance != undefined)
+                inputdata.fabric.elements[z].maintenance = data.fabric.elements[z].maintenance;
         }
 
 // Ventilation

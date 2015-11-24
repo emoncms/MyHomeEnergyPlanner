@@ -73,7 +73,7 @@
     </div>
 </div>
 
-<div id="modal-create-in-library" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+<div id="modal-create-in-library" style="position:absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel"> </h3>
@@ -105,7 +105,9 @@
     </div>
 </div>
 
-<div id="modal-edit-item" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+
+
+<div id="modal-edit-item" style="position:absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Edit item</h3>
@@ -122,7 +124,37 @@
     </div>
 </div>
 
-<div id="create-element-template" style="height:500px">
+
+<div id="apply-measure-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Apply measure</h3>
+    </div>
+    <div class="modal-body">
+        <p id="apply-measure-message" style="font-weight: bold"></p>
+        <p>What do you want to do?</p>
+        <p style="margin-left:25px"><input type="radio" name="radio-type-of-measure" value="remove" /> Remove item</p>
+        <p style="margin-left:25px"><input type="radio" name="radio-type-of-measure" value="edit" /> Edit manually</p>
+        <p style="margin-left:25px"><input type="radio" name="radio-type-of-measure" value="replace" /> Replace with another one from library</p>
+        <div id="apply-measure-replace"  style="margin: 40px 0 0 25px;display:none">
+            <select id="replace-from-lib"></select>
+            <select id="replace-from-lib-items"></select>
+        </div>
+        <div id="apply-measure-item-fields" style="display:none;margin-left:25px"></div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="apply-measure-ok" tag="" library="" row="" element_id="" class="btn btn-primary">Apply measure</button>
+        <button id="apply-measure-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+    </div>
+</div>
+
+
+
+
+
+
+<div id="create-element-template" style="height:500px; display:none">
     <p>Enter details of new element or measure to be created.</p>
     <div class="input-prepend">
         <span class="add-on">Type</span>

@@ -32,7 +32,7 @@ class Assessment {
                 return true;
         }
     }
-    
+
     public function has_write_access($userid, $id) {
         $id = (int) $id;
         $userid = (int) $userid;
@@ -554,7 +554,7 @@ class Assessment {
 
     public function getuserpermissions($userid) {
         $userid = (int) $userid;
-        $user_permisions = [];
+        $user_permisions = array();
 
         $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid'");
         while ($row = $result->fetch_object()) {
@@ -624,15 +624,16 @@ class Assessment {
         }
 
         //Handle the image: check format, it is not empty, name of file is valid, file name not too long if it exists and move it
-        $result = [];
+        $result = array();
         foreach ($images as $image) {
             $message = '';
             $allowedExts = array("gif", "jpeg", "jpg", "png");
             $temp = explode(".", $image["name"]);
             $extension = end($temp);
+            $image_info = getimagesize($image["tmp_name"]);
             if ((($image["type"] != "image/gif") && ($image["type"] != "image/jpeg") && ($image["type"] != "image/jpg") && ($image["type"] != "image/pjpeg") && ($image["type"] != "image/x-png") && ($image["type"] != "image/png")) || !in_array($extension, $allowedExts))
                 $message = "Invalid file";
-            else if (getimagesize($image["tmp_name"])["mime"] != $image["type"])
+            else if ($image_info["mime"] != $image["type"])
                 $message = "The mime type of the file is not the one expected";
             else if ($image["error"] > 0)
                 $message = "Error uploading file: " . $image["error"];
@@ -666,11 +667,13 @@ class Assessment {
         // Check if user has access to this assesment      
         if (!$this->has_access($userid, $projectid))
             return "User has no access to the assesment";
-        $result = [];
+        $result = array();
         error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
         $message = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
         $message = $message === true ? "Deleted" : "File couldn't be deleted";
-        return [$filename => $message];
+        $to_return = array();
+        $to_return[$filename] = $message;
+        return $to_return;
     }
 
 }

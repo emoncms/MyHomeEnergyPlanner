@@ -379,7 +379,7 @@ $d = $path . "Modules/assessment/";
             myorganisations = result;
 
             draw_organisation_list();
-            draw_organisation(8);
+            //draw_organisation(8);
         }});
 
 // -----------------------------------------------------------------------------------
