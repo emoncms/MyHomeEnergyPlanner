@@ -266,6 +266,9 @@ global $reports;
         scenario = 'master';
     data = project[scenario];
 
+    if (data.measures == undefined)
+        data.measures = {};
+
     load_view("#content", page);
     InitUI();
     UpdateUI(data);

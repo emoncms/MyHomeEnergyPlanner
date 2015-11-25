@@ -204,7 +204,7 @@ calc.fabric = function (data)
         }
         data.fabric.elements[z].netarea = data.fabric.elements[z].area;
 
-        if (data.fabric.elements[z].type != 'window') {
+        if (data.fabric.elements[z].type != 'window' && data.fabric.elements[z].type != 'Window') {
             data.fabric.elements[z].windowarea = 0;
         }
 
@@ -212,7 +212,7 @@ calc.fabric = function (data)
 
         for (w in data.fabric.elements)
         {
-            if (data.fabric.elements[w].type == 'window')
+            if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window')
             {
                 if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
                 {
@@ -233,24 +233,27 @@ calc.fabric = function (data)
         data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
 
         // By checking that the u-value is not 0 = internal walls we can calculate total external area
+        //if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].netarea != undefined) {
         if (data.fabric.elements[z].uvalue != 0) {
+            if (data.fabric.elements[z].netarea == undefined)
+                data.fabric.elements[z].netarea = 0;
             data.fabric.total_external_area += data.fabric.elements[z].netarea;
         }
 
 
-        if (data.fabric.elements[z].type == 'floor') {
+        if (data.fabric.elements[z].type == 'floor' || data.fabric.elements[z].type == 'Floor') {
             data.fabric.total_floor_WK += data.fabric.elements[z].wk;
             data.fabric.total_floor_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'wall') {
+        if (data.fabric.elements[z].type == 'wall' || data.fabric.elements[z].type == 'Wall') {
             data.fabric.total_wall_WK += data.fabric.elements[z].wk;
             data.fabric.total_wall_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'roof') {
+        if (data.fabric.elements[z].type == 'roof' || data.fabric.elements[z].type == 'Roof') {
             data.fabric.total_roof_WK += data.fabric.elements[z].wk;
             data.fabric.total_roof_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'window') {
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window') {
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
@@ -260,7 +263,7 @@ calc.fabric = function (data)
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;
         }
 
-        if (data.fabric.elements[z].type == 'window')
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window')
         {
             var orientation = data.fabric.elements[z]['orientation'];
             var area = data.fabric.elements[z]['area'];

@@ -266,6 +266,7 @@ libraryHelper.prototype.onCreateInLibrary = function () {
     $('.new-item-in-library').html(out);
     // Ensure the tag input is editable
     $('.item-tag').removeAttr("disabled");
+    $('.editable-field').removeAttr("disabled");
     $('.modal').modal('hide');
     $('#modal-create-in-library').modal('show');
 };
@@ -348,10 +349,12 @@ libraryHelper.prototype.onEditLibraryItem = function (origin) {
     var item = selected_library.data[tag];
     // Call to specific function for the type
     var function_name = this.type + '_item_to_html';
-    out = this[function_name](item, tag);
+    var out = this[function_name](item, tag);
+    $('#library-to-edit-item').parent().show();
     $('.edit-item-in-library').html(out);
-    $('#edit-item-ok').attr('class', "btn edit-library-item-ok")
-    $('.item-tag').attr('disabled', 'true');
+    $('#edit-item-ok').attr('class', "btn edit-library-item-ok");
+    $('.item-tag').attr('disabled', 'true');    
+    $('.editable-field').removeAttr("disabled");
     $("#edit-item-message").html('');
     $('#modal-edit-item button').show();
     $('#edit-item-finish').hide();
@@ -381,26 +384,18 @@ libraryHelper.prototype.onEditLibraryItemOk = function () {
 };
 libraryHelper.prototype.onEditItem = function (origin) {
     var item = JSON.parse(origin.attr('item'));
-    var lib = item.lib;
+    var tag = origin.attr('tag');
     // Call to specific function for the type
     var function_name = this.type + '_item_to_html';
-    out = this[function_name](item, lib);
+    var out = this[function_name](item, tag);
     $('.edit-item-in-library').html(out);
+    $('#library-to-edit-item').parent().hide();
+    $('.item-tag').attr('disabled', 'true'); 
+    $('.editable-field').attr('disabled', 'true');
     $('#edit-item-ok').attr('class', "btn edit-item-ok");
     $("#edit-item-message").html('');
-    switch (this.type) {
-        case 'elements':
-            $('#edit-item-ok').attr('row', origin.attr('row'));
-            $('.create-element-uvalue').attr('disabled', 'true');
-            $('.create-element-kvalue').attr('disabled', 'true');
-            if (item.tags[0] == "Window") {
-                $('.create-element-g').attr('disabled', 'true');
-                $('.create-element-gL').attr('disabled', 'true');
-                $('.create-element-ff').attr('disabled', 'true');
-            }
-            break;
-    }
-
+    $('#edit-item-ok').attr('row', origin.attr('row'));
+    $('#edit-item-ok').attr('type-of-item', origin.attr('type-of-item'));
     $('#modal-edit-item button').show();
     $('#edit-item-finish').hide();
     $('.modal').modal('hide');
@@ -408,17 +403,12 @@ libraryHelper.prototype.onEditItem = function (origin) {
 };
 libraryHelper.prototype.onEditItemOk = function () {
     $("#edit-item-message").html('');
-    var item = {};
-    var index = 0;
     // Call to specific function for the type
     var function_name = this.type + '_get_item_to_save';
-    item = this[function_name]();
-    switch (this.type) {
-        case 'elements':
-            index = $('#edit-item-ok').attr('row');
-            break;
-    }
-    edit_item(item, index); // This function is declared in the view
+    var item = this[function_name]();
+    var index = $('#edit-item-ok').attr('row');
+    var item_subsystem = $('#edit-item-ok').attr('type-of-item');
+    edit_item(item, index,item_subsystem); // This function is declared in the view
     $('.modal').modal('hide');
 };
 
@@ -427,8 +417,9 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-ok').attr('library', origin.attr('library'));
     $('#apply-measure-ok').attr('tag', origin.attr('tag'));
     $('#apply-measure-ok').attr('row', origin.attr('row'));
-    $('#apply-measure-ok').attr('element_id', origin.attr('element_id'));
+    $('#apply-measure-ok').attr('item_id', origin.attr('item_id'));
     $('#apply-measure-ok').attr('item', origin.attr('item'));
+    $('#apply-measure-ok').attr('type-of-item', origin.attr('type-of-item')); // Used for energy_systems
     // Populate the selects library to choose a liibrary and an item (used when replace the item with onee from library)
     var out = '';
     this.library_list[this.type].forEach(function (library) {
@@ -445,8 +436,9 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
 libraryHelper.prototype.onApplyMeasureOk = function (origin) {
     var measure = {
         row: origin.attr('row'),
-        element_id: origin.attr('element_id'),
-        type: $('[name=radio-type-of-measure]:checked').val()
+        item_id: origin.attr('item_id'),
+        type: $('[name=radio-type-of-measure]:checked').val(),
+        requirement: origin.attr('type-of-item') // Used for energy_systems
     };
     switch (measure.type) {
         case 'remove':
@@ -475,9 +467,10 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             break;
         case 'edit':
             var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
+            var tag = $('#apply-measure-ok').attr('tag');
             $('#apply-measure-item-fields').html('');
             var function_name = this.type + "_item_to_html";
-            var out = this[function_name](original_item, original_item.lib);
+            var out = this[function_name](original_item, tag);
             $('#apply-measure-item-fields').html(out);
             $('#apply-measure-replace').hide();
             $('#apply-measure-item-fields').show();
@@ -504,6 +497,7 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function () {
 libraryHelper.prototype.systems_library_to_html = function (origin) {
     var eid = $(origin).attr('eid');
     var selected_library = this.get_library_by_id($('#library-select').val());
+    $('#library-select').attr('eid', eid);
     var out = "";
     for (z in selected_library.data) {
         out += "<tr><td>" + selected_library.data[z].name + "<br>";
@@ -569,10 +563,10 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
     out += '<tr><td>System tag</td><td><input type="text" class="edit-system-tag item-tag" required value="' + item.tag + '"/></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="edit-system-name" value="' + item.name + '" /></td></tr>';
-    out += '<tr><td>Default efficiency</td><td><input type="text" class="edit-system-efficiency" value="' + item.efficiency + '" /></td></tr>';
-    out += '<tr><td>Winter efficiency</td><td><input type="text" class="edit-system-winter" value="' + item.winter + '" /></td></tr>';
-    out += '<tr><td>Summer efficiency</td><td><input type="text" class="edit-system-summer" value="' + item.summer + '" /></td></tr>';
-    out += '<tr><td>Fuel</td><td><select class="edit-system-fuel" default="' + item.fuel + '">';
+    out += '<tr><td>Default efficiency</td><td><input type="text" class="edit-system-efficiency editable-field" value="' + item.efficiency + '" /></td></tr>';
+    out += '<tr><td>Winter efficiency</td><td><input type="text" class="edit-system-winter editable-field" value="' + item.winter + '" /></td></tr>';
+    out += '<tr><td>Summer efficiency</td><td><input type="text" class="edit-system-summer editable-field" value="' + item.summer + '" /></td></tr>';
+    out += '<tr><td>Fuel</td><td><select class="edit-system-fuel editable-field" default="' + item.fuel + '">';
     for (fuel in datasets.fuels) {
         if (fuel == item.fuel)
             out += '<option value="' + fuel + '" selected>' + fuel + '</option>';
@@ -616,11 +610,11 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option > ';
     out += '</select></div>';
     out += '<table class="table">';
-    out += '<tr><td>Tag</td><td><input type="text" class="create-element-tag" value="' + item.tag + '" /></td></tr>';
+    out += '<tr><td>Tag</td><td><input type="text" class="create-element-tag item-tag" value="' + item.tag + '" /></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="create-element-name" value="' + item.name + '" /></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="create-element-source" value="' + item.source + '" /></td></tr>';
-    out += '<tr><td>U-value</td><td><input type="text" class="create-element-uvalue" value="' + item.uvalue + '" /></td></tr>';
-    out += '<tr><td>K-value</td><td><input type="text" class="create-element-kvalue" value="' + item.kvalue + '" /></td></tr>';
+    out += '<tr><td>U-value</td><td><input type="text" class="create-element-uvalue editable-field" value="' + item.uvalue + '" /></td></tr>';
+    out += '<tr><td>K-value</td><td><input type="text" class="create-element-kvalue editable-field" value="' + item.kvalue + '" /></td></tr>';
     if (type == 'Window') {
         out += '<tr><td>g</td><td><input type="text" class="create-element-g window-element" value="' + item.g + '" /></td></tr>';
         out += '<tr><td>gL</td><td><input type="text" class="create-element-gL window-element" value="' + item.gL + '" /></td></tr>';

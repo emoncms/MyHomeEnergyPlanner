@@ -227,8 +227,8 @@ var openbem = {
                 l: data.fabric.elements[z].l,
                 h: data.fabric.elements[z].h,
                 area: data.fabric.elements[z].area,
-                uvalue: data.fabric.elements[z].uvalue,
-                id: data.fabric.elements[z].id
+                uvalue: 1.0 * data.fabric.elements[z].uvalue,
+                id: 1.0 * data.fabric.elements[z].id
             };
             if (data.fabric.elements[z].description != undefined)
                 inputdata.fabric.elements[z].description = data.fabric.elements[z].description;
@@ -393,7 +393,8 @@ var openbem = {
                     name: data.energy_systems[z][i].name,
                     summer: data.energy_systems[z][i].summer,
                     winter: data.energy_systems[z][i].winter,
-                    fuel: data.energy_systems[z][i].fuel
+                    fuel: data.energy_systems[z][i].fuel,
+                    id: 1.0 * data.energy_systems[z][i].id
                 });
             }
 
@@ -401,9 +402,15 @@ var openbem = {
 
         // Fuels
         inputdata.fuels = data.fuels;
+
         //Images
         inputdata.imagegallery = data.imagegallery;
         inputdata.featuredimage = data.featuredimage;
+
+        //Measures
+        inputdata.measures = data.measures;
+
         return inputdata;
+
     }
 }

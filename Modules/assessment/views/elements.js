@@ -7,11 +7,11 @@ $("#openbem").on("click", '.add-element', function () {
     var lib = $(this).attr("lib");
     var type = $(this).attr("type");
     type = type.charAt(0).toUpperCase() + type.slice(1); // Ensure first letter is capital
-    var element_id = get_elements_max_id() + 1;
+    var item_id = 1 + get_elements_max_id();
     var library = library_helper.get_library_by_id($(this).attr('library')).data;
 
     // Create default element
-    var element = {type: type, name: type, lib: lib, l: 0, h: 0, area: 0, uvalue: 0, kvalue: 0, wk: 0, id: element_id};
+    var element = {type: type, name: type, lib: lib, l: 0, h: 0, area: 0, uvalue: 0, kvalue: 0, wk: 0, id: item_id};
 
     // If library is defined replace defaults with parameters from library
     if (lib != undefined) {
@@ -47,7 +47,7 @@ $("#openbem").on("click", '.add-element', function () {
 });
 $("#openbem").on("click", '.delete-element', function () {
     var row = $(this).attr('row');
-    var element_id = 1.0 * $(this).attr('element_id');
+    var item_id = 1.0 * $(this).attr('item_id');
 
     $(this).closest('tr').remove();
     data.fabric.elements.splice(row, 1);
@@ -150,9 +150,10 @@ function add_element(id, z)
     $(id + " [key='data.fabric.elements.template.kvalue']").attr('key', 'data.fabric.elements.' + z + '.kvalue');
     $(id + " [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
     $(id + " [row='template']").attr('row', z);
-    $(id + " [element_id='template']").attr('element_id', data.fabric.elements[z].id);
+    $(id + " [item_id='template']").attr('item_id', data.fabric.elements[z].id);
     $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
     $(id + " [title='fabric-template-title']").attr('title', title);
+    $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
 }
 
 function add_window(z)
@@ -181,6 +182,7 @@ function add_window(z)
     $("#windows [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
     $("#windows [key='data.fabric.elements.template.gain']").attr('key', 'data.fabric.elements.' + z + '.gain');
     $("#windows [title='fabric-template-title']").attr('title', title);
+    $("#windows [tag='template']").attr('tag', data.fabric.elements[z].lib);
     var name = data.fabric.elements[z].name;
     name = name.toLowerCase();
     if (name.indexOf("door") != -1) {
@@ -192,7 +194,7 @@ function add_window(z)
     }
 
     $("#windows [row='template']").attr('row', z);
-    $("#windows [element_id='template']").attr('element_id', data.fabric.elements[z].id);
+    $("#windows [item_id='template']").attr('item_id', data.fabric.elements[z].id);
     $("#windows [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
@@ -210,7 +212,7 @@ function elements_initUI()
     /**************************************************************************
      /* FOR BACKWARDS COMPATIBILITY
      * We have just added "id" to the elements so 
-     * that we can track measures apply to the one specific element the following 
+     * that we can track measures applied to a specific element. The following 
      * code will allow us create id for elements that were in the data object 
      ***************************************************************************/
     var max_id = get_elements_max_id();
@@ -263,13 +265,13 @@ function elements_initUI()
     for (z in data.fabric.elements) {
         var type = data.fabric.elements[z].type;
         //type = type.charAt(0).toUpperCase() + type.slice(1); // Ensure first letter is capital
-        if (type == 'Wall') {
+        if (type == 'Wall' || type == 'wall') {
             add_element("#elements", z);
-        } else if (type == 'Floor') {
+        } else if (type == 'Floor' || type == 'floor') {
             add_element("#floors", z);
-        } else if (type == 'Roof') {
+        } else if (type == 'Roof' || type == 'roof') {
             add_element("#roofs", z);
-        } else if (type == 'Window') {
+        } else if (type == 'Window' || type == 'window') {
             add_window(z);
         }
     }
@@ -314,8 +316,8 @@ function get_elements_max_id() {
             max_id = data.fabric.elements[z].id;
     }
     for (z in data.fabric.measures) {
-        if (data.fabric.measures[z].id != undefined && data.fabric.measures[z].original_element.id > max_id)
-            max_id = data.fabric.measures[z].id;
+        if (z > max_id)
+            max_id = z;
     }
     return max_id;
 }
@@ -323,9 +325,9 @@ function get_elements_max_id() {
 
 function apply_measure(measure) {
     // The first time we apply a measure to an element we record its original stage
-    if (data.fabric.measures[measure.element_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
-        data.fabric.measures[measure.element_id] = {};
-        data.fabric.measures[measure.element_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[measure.row]));
+    if (data.fabric.measures[measure.item_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
+        data.fabric.measures[measure.item_id] = {};
+        data.fabric.measures[measure.item_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[measure.row]));
     }
 
     switch (measure.type) {
@@ -333,7 +335,7 @@ function apply_measure(measure) {
             var selector = '[row="' + measure.row + '"]'
             $(selector).closest('tr').remove();
             data.fabric.elements.splice(measure.row, 1);
-            data.fabric.measures[measure.element_id].measure = "Element deleted";
+            data.fabric.measures[measure.item_id].measure = "Element deleted";
             break;
         case 'replace':
         case 'edit':
@@ -345,9 +347,9 @@ function apply_measure(measure) {
                 if (measure.item[lib][z] == undefined)
                     measure.item[lib][z] = data.fabric.elements[measure.row][z];
             }
-            console.log(data.fabric.elements[measure.row]);
-            data.fabric.measures[measure.element_id].measure = measure.item[lib];
-            data.fabric.elements[measure.row] = measure.item[lib];
+            //console.log(data.fabric.elements[measure.row]);
+            data.fabric.measures[measure.item_id].measure = measure.item[lib];
+            //data.fabric.elements[measure.row] = measure.item[lib];
             console.log(data.fabric.elements[measure.row]);
             break;
     }
@@ -367,8 +369,14 @@ function edit_item(element, row) {
     }
     if (element[lib].type == undefined)
         element[lib].type = element[lib].tags[0];
+
+    for (z in data.fabric.elements[row]) { // We copy over all the properties that are not asked when editting an element, this are the ones that the user inputed like "length" and "height"
+        if (element[lib][z] == undefined)
+            element[lib][z] = data.fabric.elements[row][z];
+    }
+
     data.fabric.elements[row] = element[lib];
-    
+
     elements_initUI();
     update();
 }
@@ -490,7 +498,7 @@ function edit_item(element, row) {
  }*/
 //if (element_library[z].criteria.indexOf(element.lib) != -1) {
 /*if (element_library[z].tags[0].toLowerCase() == element.type) {
- out += "<tr class='librow apply-measure' lib='" + z + "' row='" + row + "' element_id='" + element.id + "' style='cursor:pointer'>";
+ out += "<tr class='librow apply-measure' lib='" + z + "' row='" + row + "' item_id='" + element.id + "' style='cursor:pointer'>";
  out += "<td>" + z + "</td>";
  out += "<td>" + element_library[z].name + "</td>";
  out += "<td>" + element_library[z].source + "</td>";
@@ -529,11 +537,11 @@ function edit_item(element, row) {
 /*$("#openbem").on("click", '.changed-apply-measure', function () {
  var lib = $(this).attr('lib');
  var row = $(this).attr('row');
- var element_id = $(this).attr('element_id');
+ var item_id = $(this).attr('item_id');
  
- if (data.fabric.measures[element_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
- data.fabric.measures[element_id] = {};
- data.fabric.measures[element_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[row]));
+ if (data.fabric.measures[item_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
+ data.fabric.measures[item_id] = {};
+ data.fabric.measures[item_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[row]));
  }
  
  if (lib != undefined) {
@@ -542,7 +550,7 @@ function edit_item(element, row) {
  data.fabric.elements[row].lib = lib;
  }
  
- data.fabric.measures[element_id].measure = data.fabric.elements[row];
+ data.fabric.measures[item_id].measure = data.fabric.elements[row];
  update();
  $('#myModal').modal('hide');
  });*/
