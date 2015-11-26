@@ -33,6 +33,23 @@ class Assessment {
         }
     }
 
+    public function has_write_access($userid, $id) {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        // Check if user has direct or shared access
+        $result = $this->mysqli->query("SELECT * FROM assessment_access WHERE `userid`='$userid' AND `id`='$id' AND `write` = '1'");
+        if ($result->num_rows == 1)
+            return true;
+
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
+        while ($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM assessment_access WHERE `orgid`='$orgid' AND `id`='$id' AND `write = '1'");
+            if ($result2->num_rows == 1)
+                return true;
+        }
+    }
+
     public function get_org_list($orgid) {
         $orgid = (int) $orgid;
 
@@ -208,7 +225,7 @@ class Assessment {
         $userid = (int) $userid;
         $username = preg_replace('/[^\w\s]/', '', $username);
 
-        if (!$this->has_access($userid, $id))
+        if (!$this->has_write_access($userid, $id))
             return false;
 
         global $user;
@@ -283,7 +300,7 @@ class Assessment {
         $libraries = array();
         while ($row = $result->fetch_object()) {
             $id = $row->id;
-            $libresult = $this->mysqli->query("SELECT id,name FROM element_library WHERE `id`='$id'");
+            $libresult = $this->mysqli->query("SELECT id,name,type FROM element_library WHERE `id`='$id'");
             $librow = $libresult->fetch_object();
             if (!in_array($id, $loadedlibs))
                 $libraries[] = $librow;
@@ -297,7 +314,41 @@ class Assessment {
             $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");     // get list of libraries that belong to org
             while ($row2 = $result2->fetch_object()) {
                 $id = $row2->id;
-                $libresult = $this->mysqli->query("SELECT id,name FROM element_library WHERE `id`='$id'");      // get library id and name
+                $libresult = $this->mysqli->query("SELECT id,name,type FROM element_library WHERE `id`='$id'");      // get library id and name
+                $librow = $libresult->fetch_object();
+                if (!in_array($id, $loadedlibs))
+                    $libraries[] = $librow;
+                $loadedlibs[] = $id;
+            }
+        }
+
+        return $libraries;
+    }
+
+    public function loaduserlibraries($userid) {
+        $userid = (int) $userid;
+        $result = $this->mysqli->query("SELECT id FROM element_library_access WHERE `userid`='$userid'");
+
+        $loadedlibs = array();
+
+        $libraries = array();
+        while ($row = $result->fetch_object()) {
+            $id = $row->id;
+            $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");
+            $librow = $libresult->fetch_object();
+            if (!in_array($id, $loadedlibs))
+                $libraries[] = $librow;
+            $loadedlibs[] = $id;
+        }
+
+        // Load organisation libraries
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");   // get list of org that user belongs to
+        while ($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");     // get list of libraries that belong to org
+            while ($row2 = $result2->fetch_object()) {
+                $id = $row2->id;
+                $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");      // get library id and name
                 $librow = $libresult->fetch_object();
                 if (!in_array($id, $loadedlibs))
                     $libraries[] = $librow;
@@ -324,21 +375,55 @@ class Assessment {
         }
     }
 
-    public function newlibrary($userid, $name) {
+    public function newlibrary($userid, $name, $type = 'elements') {
         $userid = (int) $userid;
-        $name = preg_replace('/[^\w\s]/', '', $name);
+        $name = preg_replace('/[^\w\s-]/', '', $name);
+        $type = preg_replace('/[^\w\s-]/', '', $type);
 
-        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`) VALUES ('$userid','$name','{}')");
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `name`='$name' AND `type`='$type'");
+        if ($result->num_rows == 1) {
+            return "Name already exists";
+        }
+
+        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`,`type`) VALUES ('$userid','$name','{}','$type')");
         $id = $this->mysqli->insert_id;
 
-        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`) VALUES ('$id','$userid','0')");
+        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
+        return $id;
+    }
+
+    public function copylibrary($userid, $name, $type = 'elements', $id) {
+        $userid = (int) $userid;
+        $name = preg_replace('/[^\w\s-]/', '', $name);
+        $type = preg_replace('/[^\w\s-]/', '', $type);
+        $id = (int) $id;
+
+        if (!$this->has_access_library($userid, $id))
+            return "You have not got access to that library";
+
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `name`='$name' AND `type`='$type'");
+        if ($result->num_rows == 1) {
+            return "Name already exists";
+        }
+
+        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id`='$id'");
+        if ($result->num_rows == 1) {
+            $row = $result->fetch_object();
+        } else {
+            return "Library not found";
+        }
+
+        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`,`type`) VALUES ('$userid','$name','$row->data','$type')");
+        $id = $this->mysqli->insert_id;
+
+        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
         return $id;
     }
 
     public function savelibrary($userid, $id, $data) {
         $userid = (int) $userid;
         $id = (int) $id;
-        if (!$this->has_access_library($userid, $id))
+        if (!$this->has_write_access_library($userid, $id))
             return false;
 
         $data = json_encode(json_decode($data));
@@ -373,14 +458,32 @@ class Assessment {
         }
     }
 
-    public function sharelibrary($userid, $id, $username) {
+    public function has_write_access_library($userid, $id) {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        // Check if user has direct or shared access
+        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid' AND `id`='$id' AND `write`='1'");
+        if ($result->num_rows == 1)
+            return true;
+
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
+        while ($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid' AND `id`='$id' AND `write`='1'");
+            if ($result2->num_rows == 1)
+                return true;
+        }
+    }
+
+    public function sharelibrary($userid, $id, $username, $write_permissions = false) {
         global $user;
         $id = (int) $id;
         $userid = (int) $userid;
         $username = preg_replace('/[^\w\s]/', '', $username);
+        $write_permissions = $write_permissions === 'true' ? 1 : 0;
 
-        if (!$this->has_access_library($userid, $id))
-            return false;
+        if (!$this->has_write_access_library($userid, $id))
+            return "You haven't got enough permissions";
 
         // 1. Check if user exists
         $userid = $user->get_id($username);
@@ -392,26 +495,39 @@ class Assessment {
                 $orgid = $row->id;
 
                 $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id' AND `orgid`='$orgid'");
-                if ($result->num_rows == 1)
-                    return "Already shared";
+                if ($result->num_rows == 1) {
+                    // 1.1. Library already shared with this organisation, check if we have to update write permissions
+                    $row = $result->fetch_object();
+                    if ($row->write != $write_permissions) {
+                        $result = $this->mysqli->query("UPDATE `element_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `orgid`='$orgid'");
+                        return "Already shared, write permissions updated";
+                    } else
+                        return "Already shared";
+                }
 
                 // $this->org_access($id,$orgid,1);
-                $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '1'");
-                return "Assessment shared";
+                $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '$write_permissions'");
+                return "Library shared";
             }
         } else {
             // 2. Check if already shared with user
             $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id' AND `userid`='$userid'");
-            if ($result->num_rows == 1)
-                return "Already shared";
+            if ($result->num_rows == 1) {
+                // 2.1. Library already shared with this user, check if we have to update write permissions
+                $row = $result->fetch_object();
+                if ($row->write != $write_permissions) {
+                    $result = $this->mysqli->query("UPDATE `element_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `userid`='$userid'");
+                    return "Already shared, write permissions updated";
+                } else
+                    return "Already shared";
+            }
 
             // 3. Register share
-            $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '1'");
-            return "Assessment shared";
+            $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '$write_permissions'");
+            return "Library shared";
         }
+        return 'User or organisation not found';
     }
-
-    // Get shared
 
     public function getsharedlibrary($userid, $id) {
         $id = (int) $id;
@@ -431,9 +547,63 @@ class Assessment {
                 $orgrow = $orgresult->fetch_object();
                 $username = $orgrow->name;
             }
-            $users[] = array('orgid' => $row->orgid, 'userid' => $row->userid, 'username' => $username);
+            $users[] = array('orgid' => $row->orgid, 'userid' => $row->userid, 'username' => $username, 'write' => $row->write);
         }
         return $users;
+    }
+
+    public function getuserpermissions($userid) {
+        $userid = (int) $userid;
+        $user_permisions = array();
+
+        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid'");
+        while ($row = $result->fetch_object()) {
+            $user_permisions[$row->id] = array('write' => $row->write);
+        }
+
+        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
+        while ($row = $result->fetch_object()) {
+            $orgid = $row->orgid;
+            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");
+            while ($row = $result2->fetch_object()) {
+                $user_permisions[$row->id] = array('write' => $row->write);
+            }
+        }
+
+        return $user_permisions;
+    }
+
+    public function removeuserfromsharedlibrary($userid, $selected_library, $user_to_remove) {
+        global $user;
+        $userid = (int) $userid;
+        $selected_library = (int) $selected_library;
+        $user_to_remove = preg_replace('/[^\w\s]/', '', $user_to_remove);
+
+        if (!$this->has_write_access_library($userid, $selected_library))
+            return "You haven't got enough permissions";
+
+        // 1. Check if user_to_remove is a user or an organisation
+        $user_to_remove_id = $user->get_id($user_to_remove);
+
+        if ($user_to_remove_id == false) {
+            $result = $this->mysqli->query("SELECT * FROM organisations WHERE `name`='$user_to_remove'");
+            if ($result->num_rows == 1) { //user_to_remove is an organisation                
+                $row = $result->fetch_object();
+                $orgid = $row->id;
+
+                $result = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$selected_library' AND `orgid`='$orgid'");
+                $result = $result == true ? 'Organisation removed' : 'Organisation could not be removed';
+                return $result;
+            }
+        } else { // $user_to_remove is a user
+            if ($userid == $user_to_remove_id)
+                return "You cannot remove yourself";
+            $result = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$selected_library' AND `userid`='$user_to_remove_id'");
+            $result = $result == true ? 'User removed' : 'User could not be removed';
+            return $result;
+        }
+
+        return 'User or organisation not found';
     }
 
     // ------------------------------------------------------------------------------------------------
@@ -454,15 +624,16 @@ class Assessment {
         }
 
         //Handle the image: check format, it is not empty, name of file is valid, file name not too long if it exists and move it
-        $result = [];
+        $result = array();
         foreach ($images as $image) {
             $message = '';
             $allowedExts = array("gif", "jpeg", "jpg", "png");
             $temp = explode(".", $image["name"]);
             $extension = end($temp);
+            $image_info = getimagesize($image["tmp_name"]);
             if ((($image["type"] != "image/gif") && ($image["type"] != "image/jpeg") && ($image["type"] != "image/jpg") && ($image["type"] != "image/pjpeg") && ($image["type"] != "image/x-png") && ($image["type"] != "image/png")) || !in_array($extension, $allowedExts))
                 $message = "Invalid file";
-            else if (getimagesize($image["tmp_name"])["mime"] != $image["type"])
+            else if ($image_info["mime"] != $image["type"])
                 $message = "The mime type of the file is not the one expected";
             else if ($image["error"] > 0)
                 $message = "Error uploading file: " . $image["error"];
@@ -496,11 +667,13 @@ class Assessment {
         // Check if user has access to this assesment      
         if (!$this->has_access($userid, $projectid))
             return "User has no access to the assesment";
-        $result = [];
+        $result = array();
         error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
         $message = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
         $message = $message === true ? "Deleted" : "File couldn't be deleted";
-        return [$filename => $message];
+        $to_return = array();
+        $to_return[$filename] = $message;
+        return $to_return;
     }
 
 }

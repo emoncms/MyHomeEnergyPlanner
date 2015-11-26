@@ -204,7 +204,7 @@ calc.fabric = function (data)
         }
         data.fabric.elements[z].netarea = data.fabric.elements[z].area;
 
-        if (data.fabric.elements[z].type != 'window') {
+        if (data.fabric.elements[z].type != 'window' && data.fabric.elements[z].type != 'Window') {
             data.fabric.elements[z].windowarea = 0;
         }
 
@@ -212,7 +212,7 @@ calc.fabric = function (data)
 
         for (w in data.fabric.elements)
         {
-            if (data.fabric.elements[w].type == 'window')
+            if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window')
             {
                 if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
                 {
@@ -233,24 +233,27 @@ calc.fabric = function (data)
         data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
 
         // By checking that the u-value is not 0 = internal walls we can calculate total external area
+        //if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].netarea != undefined) {
         if (data.fabric.elements[z].uvalue != 0) {
+            if (data.fabric.elements[z].netarea == undefined)
+                data.fabric.elements[z].netarea = 0;
             data.fabric.total_external_area += data.fabric.elements[z].netarea;
         }
 
 
-        if (data.fabric.elements[z].type == 'floor') {
+        if (data.fabric.elements[z].type == 'floor' || data.fabric.elements[z].type == 'Floor') {
             data.fabric.total_floor_WK += data.fabric.elements[z].wk;
             data.fabric.total_floor_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'wall') {
+        if (data.fabric.elements[z].type == 'wall' || data.fabric.elements[z].type == 'Wall') {
             data.fabric.total_wall_WK += data.fabric.elements[z].wk;
             data.fabric.total_wall_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'roof') {
+        if (data.fabric.elements[z].type == 'roof' || data.fabric.elements[z].type == 'Roof') {
             data.fabric.total_roof_WK += data.fabric.elements[z].wk;
             data.fabric.total_roof_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'window') {
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window') {
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
@@ -260,7 +263,7 @@ calc.fabric = function (data)
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;
         }
 
-        if (data.fabric.elements[z].type == 'window')
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window')
         {
             var orientation = data.fabric.elements[z]['orientation'];
             var area = data.fabric.elements[z]['area'];
@@ -773,9 +776,9 @@ calc.energy_systems = function (data)
         data.energy_systems = {};
     if (data.fuels == undefined)
         data.fuels = {};
-    if (data.systemlibrary == undefined) {
-        data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
-    }
+    //if (data.systemlibrary == undefined) {
+    //  data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
+    //}
 
     // Copy dataset over to user data without overwritting user changed properties
     var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
@@ -800,11 +803,11 @@ calc.energy_systems = function (data)
         {
             data.energy_systems[z][x].demand = quantity * data.energy_systems[z][x].fraction;
 
-            var system = data.energy_systems[z][x].system;
-            if (data.systemlibrary[system] != undefined) {
-                data.energy_systems[z][x].name = data.systemlibrary[system].name;
-                data.energy_systems[z][x].efficiency = data.systemlibrary[system].efficiency;
-            }
+            /*var system = data.energy_systems[z][x].system;
+             if (data.systemlibrary[system] != undefined) {
+             data.energy_systems[z][x].name = data.systemlibrary[system].name;
+             data.energy_systems[z][x].efficiency = data.systemlibrary[system].efficiency;
+             }*/
         }
     }
 
@@ -821,8 +824,10 @@ calc.energy_systems = function (data)
                 var Q_water = data.energy_systems["waterheating"][a].demand;
                 var Q_space = data.energy_systems["space_heating"][b].demand;
 
-                var n_winter = data.systemlibrary[system_water].winter;
-                var n_summer = data.systemlibrary[system_water].summer;
+                //var n_winter = data.systemlibrary[system_water].winter;
+                //var n_summer = data.data.energy_systems[eid][system_water].summer;
+                var n_winter = data.energy_systems["waterheating"][a].winter;
+                var n_summer = data.energy_systems["waterheating"][a].summer;
                 var n = (Q_water + Q_space) / ((Q_space / n_winter) + (Q_water / n_summer));
 
                 data.energy_systems["waterheating"][a].efficiency = n;
@@ -838,12 +843,16 @@ calc.energy_systems = function (data)
 
             var system = data.energy_systems[z][x].system;
 
-            if (data.systemlibrary[system] != undefined) {
-                var fuel = data.systemlibrary[system].fuel;
-                if (data.fuel_totals[fuel] == undefined)
-                    data.fuel_totals[fuel] = {name: fuel, quantity: 0};
-                data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
-            }
+            /*if (data.systemlibrary[system] != undefined) {
+             var fuel = data.systemlibrary[system].fuel;
+             if (data.fuel_totals[fuel] == undefined)
+             data.fuel_totals[fuel] = {name: fuel, quantity: 0};
+             data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
+             }*/
+            var fuel = data.energy_systems[z][x].fuel;
+            if (data.fuel_totals[fuel] == undefined)
+                data.fuel_totals[fuel] = {name: fuel, quantity: 0};
+            data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
         }
     }
 
@@ -869,7 +878,7 @@ calc.energy_systems = function (data)
     data.net_cost = data.total_cost - data.total_income;
 
     return data;
-}
+};
 
 //---------------------------------------------------------------------------------------------
 // SAP
@@ -1006,7 +1015,7 @@ calc.LAC = function (data)
     // CO2 emissions in kg/m2/year associated with cooking
     var cooking_CO2 = (119 + 24 * data.occupancy) / data.TFA;
 
-    data.LAC.EC = GC * 0.024 * 365;
+    data.LAC.EC = cooking_CO2 * data.TFA / 0.519; // We stimate the clculation of annual energy use from the emissions
 
     if (GC > 0 && data.LAC.use_SAP_cooking) {
         data.gains_W["Cooking"] = GC_monthly;
