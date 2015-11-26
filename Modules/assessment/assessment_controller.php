@@ -28,6 +28,24 @@ function assessment_controller() {
     }
 
 
+    // Add "type" to element library table in database (if it doesn't exist), and for all the libraries set the type to elements (this were the original type so we can be sure that at the moment of adding the column all the libraries are type "element"
+    $columns_in_table = $mysqli->query("DESCRIBE element_library");
+    $field_found = false;
+    foreach ($columns_in_table as $column) {
+        if ($column['Field'] === 'type')
+            $field_found = true;
+    }
+    if ($field_found === false)
+        $mysqli->query("ALTER TABLE  `element_library` ADD  `type` VARCHAR( 255 ) NOT NULL DEFAULT  'elements' AFTER  `name`");
+
+    // Grant all the users write permissions for their own library
+    $libresult = $mysqli->query("SELECT * FROM `element_library`");
+    foreach ($libresult as $row) {
+        $req = $mysqli->prepare("UPDATE `element_library_access` SET `write`='1' WHERE `userid`=? AND `id`=?");
+        $req->bind_param('ii', $row['userid'], $row['id']);
+        $req->execute();
+    }
+    
     /* End backwards compatibility section */
 
 
@@ -35,13 +53,13 @@ function assessment_controller() {
     // Check if session has been authenticated, if not redirect to login page (html) 
     // or send back "false" (json)
     // -------------------------------------------------------------------------
-    if (!$session['read']) {
-        if ($route->format == 'html')
-            $result = view("Modules/user/login_block.php", array());
-        else
-            $result = "Not logged";
-        return array('content' => $result);
-    }
+        if (!$session['read']) {
+            if ($route->format == 'html')
+                $result = view("Modules/user/login_block.php", array());
+            else
+                $result = "Not logged";
+            return array('content' => $result);
+        }
 
     // -------------------------------------------------------------------------    
     // Session is authenticated so we run the action
@@ -166,10 +184,16 @@ function assessment_controller() {
 
         if ($route->action == 'listlibrary' && $session['write'])
             $result = $assessment->listlibrary($session['userid']);
-        if ($route->action == 'newlibrary' && $session['write'])
-            $result = $assessment->newlibrary($session['userid'], get('name'));
 
-        // Save library
+        if ($route->action == 'newlibrary' && $session['write'])
+            $result = $assessment->newlibrary($session['userid'], get('name'), get('type'));
+
+        if ($route->action == 'copylibrary' && $session['write'])
+            $result = $assessment->copylibrary($session['userid'], get('name'), get('type'), get('id'));
+
+        // -------------------------------------------------------------------------------------------------------------
+        // Library
+        // -------------------------------------------------------------------------------------------------------------        
         if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
             $result = $assessment->savelibrary($session['userid'], post('id'), $_POST['data']);
         }
@@ -177,11 +201,20 @@ function assessment_controller() {
         if ($route->action == 'loadlibrary' && $session['write'])
             $result = $assessment->loadlibrary($session['userid'], get('id'));
 
+        if ($route->action == 'loaduserlibraries' && $session['write'])
+            $result = $assessment->loaduserlibraries($session['userid']);
+
         if ($route->action == 'sharelibrary' && $session['write'])
-            $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'));
+            $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'), get('write_permissions'));
 
         if ($route->action == 'getsharedlibrary' && $session['write'])
             $result = $assessment->getsharedlibrary($session['userid'], get('id'));
+
+        if ($route->action == 'getuserpermissions' && $session['write'])
+            $result = $assessment->getuserpermissions($session['userid']);
+
+        if ($route->action == 'removeuserfromsharedlibrary' && $session['write'])
+            $result = $assessment->removeuserfromsharedlibrary($session['userid'], get('library_id'), get('user_to_remove'));
 
         // -------------------------------------------------------------------------------------------------------------
         // Image gallery
