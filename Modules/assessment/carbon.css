@@ -148,6 +148,15 @@
   background: #fef2ef; }
 .carbon-report-wrapper .highlight-box + .highlight-box {
   margin-top: 3em; }
+.carbon-report-wrapper .image-figure {
+  margin: 20px auto;
+  display: block; }
+.carbon-report-wrapper .comfort-tables {
+  overflow: hidden; }
+.carbon-report-wrapper .comfort-table-wrapper {
+  margin-bottom: 40px;
+  float: left;
+  width: 50%; }
 @media screen and (max-width: 700px) {
   .carbon-report-wrapper .highlight-box {
     padding: 15px; } }
@@ -181,8 +190,11 @@
   .carbon-report-wrapper .sap-table thead {
     background: #e41b3a;
     color: white; }
-  .carbon-report-wrapper .sap-table th {
-    padding: 10px 15px; }
+  .carbon-report-wrapper .sap-table th, .carbon-report-wrapper .sap-table td {
+    padding: 10px 15px;
+    text-align: left; }
+  .carbon-report-wrapper .sap-table td {
+    background: white; }
   .carbon-report-wrapper .three-col-table {
     margin-bottom: 1em;
     width: 100%;
@@ -323,6 +335,38 @@
       padding-top: 50px; }
     .carbon-report-wrapper .five-col-table td:before {
       left: 0px; } }
+  .carbon-report-wrapper .data-table {
+    border-collapse: collapse;
+    border-spacing: 0; }
+  .carbon-report-wrapper .data-table td {
+    font-size: 14px;
+    padding: 10px 5px;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal; }
+  .carbon-report-wrapper .data-table th, .carbon-report-wrapper .data-table .th {
+    font-size: 14px;
+    font-weight: normal;
+    font-weight: bold;
+    padding: 10px 5px;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    word-break: normal;
+    background: #fef2ef;
+    color: #e41b3a;
+    vertical-align: top; }
+  .carbon-report-wrapper .comfort-table-option {
+    border: solid 1px #e41b3a;
+    width: 30px;
+    height: 30px; }
+  .carbon-report-wrapper .extreme-left, .carbon-report-wrapper .extreme-right {
+    width: 100px;
+    padding: 5px;
+    font-size: 14px; }
+  .carbon-report-wrapper .extreme-left {
+    text-align: right; }
 
 .carbon-report-wrapper .right-align-item-list {
   margin-bottom: 2rem;
@@ -419,6 +463,19 @@
   margin: 0 auto; }
 .carbon-report-wrapper .page-wrapper > section:last-of-type {
   margin-bottom: 5em; }
+.carbon-report-wrapper pre {
+  word-break: normal;
+  background: none;
+  white-space: pre-wrap;
+  /* CSS 3 */
+  white-space: -moz-pre-wrap;
+  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  word-wrap: break-word;
+  /* Internet Explorer 5.5+ */ }
 @media screen and (max-width: 1100px) {
   .carbon-report-wrapper section {
     padding: 0 20px; } }
@@ -469,5 +526,71 @@
   margin-bottom: 0.8em; }
 .carbon-report-wrapper .client-info span {
   margin-bottom: 0; }
+.carbon-report-wrapper .performance-summary-wrapper {
+  background: white;
+  padding: 40px; }
+.carbon-report-wrapper .performace-summary-target-bar {
+  margin-bottom: 40px; }
+.carbon-report-wrapper #performace-summary-key {
+  margin-bottom: 40px;
+  border-top: 1px dashed #e41b3a;
+  padding-top: 5px; }
+.carbon-report-wrapper #performace-summary-key li {
+  float: left;
+  width: 25%;
+  padding: 10px 0 20px; }
+.carbon-report-wrapper .key-square {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  background: grey;
+  position: relative;
+  top: 3px; }
+
+.house-heatloss-diagrams-wrapper {
+  position: relative; }
+
+.house-heatloss-diagrams-wrapper ul {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px; }
+
+.house-heatloss-diagram-picker li {
+  cursor: pointer; }
+
+.house-heatloss-diagram-picker li:hover {
+  color: #e41b3a; }
+
+.house-heatloss-diagram-picker .selected {
+  color: #e41b3a;
+  text-decoration: underline; }
+
+.carbon-report-wrapper .centered-house {
+  border-bottom: solid 2px #fef2ef; }
+
+.carbon-report-wrapper .centered-house svg {
+  position: relative;
+  left: 10px; }
+
+#house-heatloss-diagram-master {
+  display: block; }
+
+#house-heatloss-diagram-scenario1,
+#house-heatloss-diagram-scenario2,
+#house-heatloss-diagram-scenario3,
+.house-heatloss-diagrams-wrapper p {
+  display: none; }
+
+@media print {
+  .house-heatloss-diagram-picker {
+    display: none; }
+
+  #house-heatloss-diagram-scenario1,
+  #house-heatloss-diagram-scenario2,
+  #house-heatloss-diagram-scenario3,
+  .house-heatloss-diagrams-wrapper p {
+    display: block !important; } }
 
 /*# sourceMappingURL=carbon.css.map */

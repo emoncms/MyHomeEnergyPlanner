@@ -4,6 +4,9 @@
 			<div class="doc-title-wrapper">
 				<h1 class="doc-title">Carbon Co-op</h1>
 				<span class="doc-sub-title">My Home Energy Planner</span>
+				<!-- <p>
+					<a href="" class='js-printer-friendly-link'>View printer friendly version</a>
+				</p> -->
 			</div>
 			<div class="grid grid-margin-bottom">
 				<div class="col-2">
@@ -28,7 +31,9 @@
 					</div>
 				</div>
 				<div class="col-2">
-					<img class="home-image" src="../Modules/assessment/img-assets/images/house.png">
+					<div class="js-home-image-wrapper">
+						
+					</div>
 				</div>
 			</div>
 
@@ -88,13 +93,10 @@
 				</li>
 				<li>
 					<p><strong class="top-border-title bolded">Appendices</strong></p>
-					<p>Figure 22 Fabric Condition Comparison (across scenarios)</p>
-					<p>Figure 23 Heating and Hot Water System Comparison (across scenarios)</p>
-					<p>Figure 24 Ventilation Comparison (across scenarios)</p>
-					<p>Figure 25 Lighting Comparison (across scenarios)</p>
-					<p>Figure 26 Appliances and Cooking Comparison (across scenarios)</p>
-					<p>Figure 27 Renewables Comparison (across scenarios)</p>
-					<p>Figure 28: Table taken directly from Householder Questionnaire</p>
+					<p>Figure 22 Scenario Comparison</p>
+					<p>Figure 23 Scenario 1 Measures Table (Full)</p>
+					<p>Figure 24 Scenario 2 Measures Table (Full)</p>
+					<p>Figure 25 Scenario 3 Measures Table (Full)</p>
 				</li>
 			</ol>
 		</section>
@@ -128,10 +130,21 @@
 			</div>
 			<div class="highlight-box pink-highlight">
 				<h4 class="top-border-title title-margin-bottom ">Figure 2. Performance Summary</h4>
-				<div id="space-heating-demand" width='1000px' height='100px'></div>
-				<div id="primary-energy" width='1000px' height='100px'></div>
-				<div id="co2-emission-rate" width='1000px' height='100px'></div>
-				<div id="energy-use-per-person" width='1000px' height='100px'></div>
+				<div class="performance-summary-wrapper">
+					<div class='performace-summary-target-bar' id="space-heating-demand" width='1000px' height='100px'></div>
+					<div class='performace-summary-target-bar' id="primary-energy" width='1000px' height='100px'></div>
+					<div class='performace-summary-target-bar' id="co2-emission-rate" width='1000px' height='100px'></div>
+					<!-- <div class='performace-summary-target-bar' id="energy-use-per-person" width='1000px' height='100px'></div> -->
+					<div id="performace-summary-key">
+						Key
+						<ul>
+							<li><span class='key-square key-square--master'></span> Master</li>
+							<li><span class='key-square key-square--scenario1'></span> Scenario 1</li>
+							<li><span class='key-square key-square--scenario2'></span> Scenario 2</li>
+							<li><span class='key-square key-square--scenario3'></span> Scenario 3</li>
+						</ul>
+					</div>	
+				</div>
 			</div>
 			</div>
 
@@ -167,8 +180,8 @@
 			<p>A bit more information about the model we used to produce this report.</p>
 
 			<p>This report was prepared by one of our experienced and expert assessors.</p>
-			<p>Your assessor is: (name) </p>
-			<p>(brief biog)</p>
+			<p>Your assessor is: <span key='data.household.assessor_name'></span> </p>
+			<p><span key='data.household.assessor_biography'></span></p>
 
 			<p>If you’ve got any questions about this report, please contact: info@carbon.coop or 0161 448 6492</p>
 
@@ -196,136 +209,36 @@
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 3. Performance Summary</h4>
-					<ul class='js-house-heatloss-diagram-picker'>
-						<li><span class='selected' data-scenario='master'>Your home now</span></li>
-						<li><span data-scenario='scenario1'>Scenario 1</span></li>
-						<li><span data-scenario='scenario2'>Scenario 2</span></li>
-						<li><span data-scenario='scenario3'>Scenario 3</span></li>
-					</ul>
-						<div class='js-house-heatloss-diagrams-wrapper'>	
+						<div class='house-heatloss-diagrams-wrapper js-house-heatloss-diagrams-wrapper'>	
+							<ul class='js-house-heatloss-diagram-picker house-heatloss-diagram-picker'>
+								<li><span class='selected' data-scenario='master'>Your home now</span></li>
+								<li><span data-scenario='scenario1'>Scenario 1</span></li>
+								<li><span data-scenario='scenario2'>Scenario 2</span></li>
+								<li><span data-scenario='scenario3'>Scenario 3</span></li>
+							</ul>
 					        <div class="bar-chart-container centered-house" id='house-heatloss-diagram-master' data-scenario-diagram='master'>
-						        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
-						            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
-						            
-						            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            
-						            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
-						                <text x="580" y="648" style="font-weight:bold">Floor</text>
-						                <text id="house-floorwk" x="580" y="680">50 W/K</text>
-						                
-						                <text x="720" y="180" style="font-weight:bold">Roof</text>
-						                <text id="house-roofwk" x="720" y="215">50 W/K</text>
-						                
-						                <text x="740" y="320" style="font-weight:bold">Walls</text>
-						                <text id="house-wallswk" x="740" y="355">50 W/K</text>
-						                
-						                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
-						                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
-						                
-						                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
-						                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
-						                
-						                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
-						                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
-						            </g>
-						        </svg>
+						        <p>
+						        	Your home now
+						        </p>
+						        <div class="js-svg"></div>
 					        </div>
 					        <div class="bar-chart-container centered-house" id='house-heatloss-diagram-scenario1' data-scenario-diagram='scenario1'>
-						        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
-						            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
-						            
-						            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            
-						            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
-						                <text x="580" y="648" style="font-weight:bold">Floor</text>
-						                <text id="house-floorwk" x="580" y="680">50 W/K</text>
-						                
-						                <text x="720" y="180" style="font-weight:bold">Roof</text>
-						                <text id="house-roofwk" x="720" y="215">50 W/K</text>
-						                
-						                <text x="740" y="320" style="font-weight:bold">Walls</text>
-						                <text id="house-wallswk" x="740" y="355">50 W/K</text>
-						                
-						                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
-						                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
-						                
-						                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
-						                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
-						                
-						                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
-						                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
-						            </g>
-						        </svg>
+						        <p>
+						        	Scenario 1
+						        </p>
+						        <div class="js-svg"></div>
 					        </div>
 					        <div class="bar-chart-container centered-house" id='house-heatloss-diagram-scenario2' data-scenario-diagram='scenario2'>
-						        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
-						            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
-						            
-						            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            
-						            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
-						                <text x="580" y="648" style="font-weight:bold">Floor</text>
-						                <text id="house-floorwk" x="580" y="680">50 W/K</text>
-						                
-						                <text x="720" y="180" style="font-weight:bold">Roof</text>
-						                <text id="house-roofwk" x="720" y="215">50 W/K</text>
-						                
-						                <text x="740" y="320" style="font-weight:bold">Walls</text>
-						                <text id="house-wallswk" x="740" y="355">50 W/K</text>
-						                
-						                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
-						                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
-						                
-						                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
-						                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
-						                
-						                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
-						                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
-						            </g>
-						        </svg>
+						        <p>
+						        	Scenario 2
+						        </p>
+						        <div class="js-svg"></div>
 					        </div>
 					        <div class="bar-chart-container centered-house" id='house-heatloss-diagram-scenario3' data-scenario-diagram='scenario3'>
-						        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="500" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
-						            <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
-						            
-						            <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
-						            
-						            <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
-						                <text x="580" y="648" style="font-weight:bold">Floor</text>
-						                <text id="house-floorwk" x="580" y="680">50 W/K</text>
-						                
-						                <text x="720" y="180" style="font-weight:bold">Roof</text>
-						                <text id="house-roofwk" x="720" y="215">50 W/K</text>
-						                
-						                <text x="740" y="320" style="font-weight:bold">Walls</text>
-						                <text id="house-wallswk" x="740" y="355">50 W/K</text>
-						                
-						                <text x="260" y="640" style="font-weight:bold;" text-anchor="end">Ventilation</text>
-						                <text id="house-ventilationwk" x="260" y="675" text-anchor="end">50 W/K</text>
-						                
-						                <text x="260" y="200" style="font-weight:bold;" text-anchor="end">Windows</text>
-						                <text id="house-windowswk" x="260" y="235" text-anchor="end">50 W/K</text>
-						                
-						                <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
-						                <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
-						            </g>
-						        </svg>
+								<p>
+									Scenario 3
+								</p>
+								<div class="js-svg"></div>
 					        </div>
 				        </div>
 				</div>
@@ -429,7 +342,7 @@
 								<th class="half-width"></th>
 								<th>Typical Home (SAP)</th>
 								<th>Your Home</th>
-								<th>Results</th>
+								<th>Comparison</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -437,31 +350,31 @@
 								<th class="half-width">Number of Occupants</th>
 								<td>2.9 people</td>
 								<td><span key='data.occupancy'></span> people</td>
-								<td>Higher/Lower</td>
+								<td><span class='js-occupancy-comparison'></span></td>
 							</tr>
 							<tr>
 								<th class="half-width">Average hours of heating</th>
 								<td>9 hours</td>
-								<td><span key='data.occupancy'></span> hours</td>
-								<td>Higher/Lower</td>
+								<td><span class='js-average-heating-hours'></span> hours</td>
+								<td><span class='js-average-heating-hours-comparison'></span></td>
 							</tr>
 							<tr>
 								<th class="half-width">Living room thermostat temperature</th>
 								<td>21°C</td>
 								<td><span key='data.household.3a_roomthermostat'></span>°C</td>
-								<td>Higher/Lower</td>
+								<td><span class='js-thermostat-comparison'></span></td>
 							</tr>
 							<tr>
-								<th class="half-width">number of habitable rooms not heated</th>
+								<th class="half-width">Number of habitable rooms not heated</th>
 								<td>0 room(s)</td>
-								<td>1 room(s)</td>
-								<td>Higher/Lower</td>
+								<td><span key='data.household.3a_habitable_not_heated_rooms'></span> room(s)</td>
+								<td><span class='js-unheated-rooms-comparison'></span></td>
 							</tr>
 							<tr>
 								<th class="half-width">Estimated current appliance energy use*</th>
 								<td>3880 kWh per year</td>
-								<td>4129 kWh per year</td>
-								<td>Higher/Lower</td>
+								<td><span class='js-appliance-energy-use'></span> kWh per year</td>
+								<td><span class='js-appliance-energy-use-comparison'></span></td>
 							</tr>
 						</tbody>
 					</table>
@@ -485,54 +398,36 @@
 					<table class="sap-table">
 						<thead>
 							<tr>
-								<th>SAP Rating</th>
-								<th>Your Home Now</th>
-								<th>Your 2050 Home</th>
-								<th>UK Average</th>
+								<th>Scenario</th>
+								<th>Score</th>
+								<th>Rating</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr data-sap-rating='A'>
-								<td>A</td>
-								<td class='cell-sap-now'></td>
-								<td class='cell-sap-average'></td>
-								<td class='cell-sap-future'></td>
+							<tr>
+								<td>Your home now</td>
+								<td class='js-sap-score-now'></td>
+								<td class='js-sap-rating-now'></td>
 							</tr>
-							<tr data-sap-rating='B'>
-								<td>B</td>
-								<td class='cell-sap-now'></td>
-								<td class='cell-sap-average'></td>
-								<td class='cell-sap-future'></td>
+							<tr>
+								<td>Scenario 1</td>
+								<td class='js-sap-score-scenario1'></td>
+								<td class='js-sap-rating-scenario1'></td>
 							</tr>
-							<tr data-sap-rating='C'>
-								<td>C</td>
-								<td class='cell-sap-now'></td>
-								<td class='cell-sap-average'></td>
-								<td class='cell-sap-future'></td>
+							<tr>
+								<td>Scenario 2</td>
+								<td class='js-sap-score-scenario2'></td>
+								<td class='js-sap-rating-scenario2'></td>
 							</tr>
-							<tr data-sap-rating='D'>
-								<td>D</td>
-								<td class='cell-sap-now'></td>
-								<td class='cell-sap-average'></td>
-								<td class='cell-sap-future'></td>
+							<tr>
+								<td>Scenario 3</td>
+								<td class='js-sap-score-2050'></td>
+								<td class='js-sap-rating-2050'></td>
 							</tr>
-							<tr data-sap-rating='E'>
-								<td>E</td>
-								<td class='cell-sap-now'></td>
-								<td class='cell-sap-average'></td>
-								<td class='cell-sap-future'></td>
-							</tr>
-							<tr data-sap-rating='F'>
-								<td>F</td>
-								<td class='cell-sap-now'></td>
-								<td class='cell-sap-average'></td>
-								<td class='cell-sap-future'></td>
-							</tr>
-							<tr data-sap-rating='G'>
-								<td>G</td>
-								<td class='cell-sap-now'></td>
-								<td class='cell-sap-average'></td>
-								<td class='cell-sap-future'></td>
+							<tr>
+								<td>UK Average</td>
+								<td class='js-sap-score-average'></td>
+								<td class='js-sap-rating-average'></td>
 							</tr>
 						</tbody>
 					</table>
@@ -552,40 +447,86 @@
 				
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 13: Comfort tables based on what you told us</h4>
-					<!-- <span style="font-weight: bold; color:blue; font-size: 30px">Placeholder (table)</span> -->
-					<p>
-						Temperature in winter: <span key='data.household.6a_temperature_winter'></span><br />
-						Air in winter: <span key='data.household.6a_airquality_winter'></span><br />
-					</p>
+					<div class="comfort-tables">
+						<div class="comfort-table-wrapper">
+							<p>Temperature in winter:</p>
+							<table id="comfort-table-winter-temp">
+								<tr>
+									<td class='extreme-left'>Too cold</td>
+									<td class='extreme-right'>Too hot</td>
+								</tr>
+							</table>
+						</div>
+						<div class="comfort-table-wrapper">
+							<p>Air in winter:</p>
+							<table id="comfort-table-winter-air">
+								<tr>
+									<td class='extreme-left'>Too dry</td>
+									<td class='extreme-right'>Too stuffy</td>
+								</tr>
+							</table>
+						</div>
 
-					<p>
-						Temperature in summer: <span key='data.household.6a_temperature_summer'></span><br />
-						Air in summer: <span key='data.household.6a_airquality_summer'></span><br />
-					</p>
+						<div class="comfort-table-wrapper">
+							<p>Temperature in summer:</p>
+							
+							<table id="comfort-table-winter-temp">
+								<tr>
+									<td class='extreme-left'>Too cold</td>
+									<td class='extreme-right'>Too hot</td>
+								</tr>
+							</table>
+						</div>
+						
+						<div class="comfort-table-wrapper">
+							<p>Air in summer:</p>
+							
+							<table id="comfort-table-winter-temp">
+								<tr>
+									<td class='extreme-left'>Too cold</td>
+									<td class='extreme-right'>Too hot</td>
+								</tr>
+							</table>
+						</div>
 
-					<p>
-						Draughts: <span key='data.household.6a_draughts_comment'></span>
-					</p>
+	<!-- 					<p>
+							Draughts: <span key='data.household.6a_draughts_comment'></span>
+						</p> -->
 
-					<p>
-						Amount of daylight: <span key='data.household.6b_daylightamount'></span>
-						Amount of artificial light: <span key='data.household.6b_artificiallightamount'></span>
-					</p>
+						<div class="comfort-table-wrapper">
+							<p>Amount of daylight:</p>
+							<table id="comfort-table-daylight-amount">
+								<tr>
+									<td class='extreme-left'>Too little</td>
+									<td class='extreme-right'>Too much</td>
+								</tr>
+							</table>
+						</div>
+						<div class="comfort-table-wrapper">
+							<p>Amount of artificial light:</p>
+							<table id="comfort-table-artificial-light-amount">
+								<tr>
+									<td class='extreme-left'>Too little</td>
+									<td class='extreme-right'>Too much</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					
 				</div>
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 14: RH data</h4>
 					<p>
-						When we visited, the relative humidity was
-						<span key='data.household.reading_humidity1'></span> - <span key='data.household.reading_humidity1'></span> %. (The ideal range is 40-60%).
+						When we visited, the relative humidity was <span class='js-average-humidity'></span>%.
+						(The ideal range is 40-60%).
 					</p>
 				</div>
 
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 15: Temperature data</h4>
 					<p>
-						When we visited, your living room temperature was
-						<span key='data.household.reading_temp1'></span> - <span key='data.household.reading_temp2'></span>°C.
+						When we visited, your living room temperature was <span class='js-average-temp'></span>°C.
 					</p>
 				</div>
 
@@ -594,12 +535,12 @@
 					<h4 class="top-border-title title-margin-bottom ">Figure 16: You also told us</h4>
 					<p>Noise: <span key='data.household.6c_noise_comment'></span></p>
 					<p>Daylighting: <span key='data.household.6b_problem_locations'></span></p>
-					<p>Comfort: <span key="data.household.6a_draughts_comment"></span></p>
+					<p>Comfort: <span key="data.household.6a_problem_locations"></span></p>
 					<p>
 						Rooms: Loved - <span key='data.household.6d_favourite_room'></span>
 						Unloved: <span key='data.household.6d_unloved_rooms'></span>
 					</p>
-					<p>Laundry: </p>
+					<p>Laundry: <span class='js-laundry-habits'></span></p>
 					
 				</div>
 			</section>
@@ -678,355 +619,28 @@
 				<h3 class="top-border-title title-extra-margin-top title-margin-bottom ">Figure 17 Scenario 1: <span id='output-scenario1-name'></span></h4>
 
 				<div class="five-col-table-wrapper">
-					<table class="five-col-table">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Description</th>
-								<th>Benefits (in order)</th>
-								<th>Cost</th>
-								<th>Completed By</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-						</tbody>
+					<table class="five-col-table js-measures1-summary" >
 					</table>
 				</div>
+
+
 				<h3 class="top-border-title title-margin-bottom ">Figure 18 Scenario 2: <span id='output-scenario2-name'></span></h4>
 				<div class="five-col-table-wrapper">
-					<table class="five-col-table">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Description</th>
-								<th>Benefits (in order)</th>
-								<th>Cost</th>
-								<th>Completed By</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-						</tbody>
+					<table class="five-col-table js-measures2-summary" >
 					</table>
 				</div>
+
 				<h3 class="top-border-title title-margin-bottom ">Figure 19 Scenario 3: <span id='output-scenario3-name'></span></h4>
 				<div class="five-col-table-wrapper">
-					<table class="five-col-table">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Description</th>
-								<th>Benefits (in order)</th>
-								<th>Cost</th>
-								<th>Completed By</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Overall</td>
-								<td>
-									<div class="text-width-limiter">
-										DIY draught-proofing measures windows, skirting boards/ junctions, stair treads, ceilings letter boxes and cat flaps etc.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£300</td>
-								<td>DIY/ Small Contractor</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Timber Floors</td>
-								<td>
-									<div class="text-width-limiter">
-										Rake out gaps and seal exposed areas of timber ground floor or exposed floor using low-VOC sealant. Ensure gaps at skirting boards and thresholds are filled.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£585</td>
-								<td>DIY/ General Contractor (Joiner)</td>
-							</tr>
-							<tr>
-								<td class="highlighted-col">Exposed Floor</td>
-								<td>
-									<div class="text-width-limiter">
-										Insulation to exposed floor above ground level (e.g. first floor overhang) with woodfibre batts fitted from above/ inside by lifting floorboards. An air-tightness and vapour-check layer should be created at floorboard level (warm side of insulation) with membrane or by sealing between the boards.
-									</div>
-									</td>
-								<td>Comfort + Carbon Emissions + Fuel Bills</td>
-								<td class="cost">£86.25</td>
-								<td>Small Contractor</td>
-							</tr>
-						</tbody>
+					<table class="five-col-table js-measures3-summary">
 					</table>
 				</div>
 
 			<h3 class="top-border-title title-margin-top title-margin-bottom">2.3 Commentary</h3>
 
-			<pre>
-				<span key='data.household.commentary'></span>
-			</pre>
+			
+			<pre><span key='data.household.commentary'></span></pre>
+			
 
 		</section>
 	
@@ -1085,7 +699,7 @@
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 20: Time Cost Quality</h4>
 
-					<img src="../Modules/assessment/img-assets/images/venn-diagram.png" alt="">
+					<img class='image-figure' src="../Modules/assessment/img-assets/images/venn-diagram-transparent.png" alt="">
 					
 				</div>
 
@@ -1128,7 +742,7 @@
 				</ol>
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 21: Your home now >>> Your 2050 Home</h4>
-					<img src="../Modules/assessment/img-assets/images/transforming_your_home_now_to_2050_home.png" alt="">
+					<img class='image-figure' src="../Modules/assessment/img-assets/images/transforming_your_home_now_to_2050_home_transparent.png" alt="">
 				</div>
 			</section>
 
@@ -1266,6 +880,28 @@
 			<div class="section-title title-margin-top">
 				<h2>Appendices</h2>
 			</div>
+
+			<h4 class="top-border-title title-margin-bottom ">Figure 22: Scenario 1 Measures Complete Table</h4>
+
+			<div class="five-col-table-wrapper">
+				<table class="data-table" id='scenario1-measures'>					 
+				</table>
+			</div>		
+
+			
+			<h4 class="top-border-title title-margin-bottom ">Figure 23: Scenario 2 Measures Complete Table</h4>
+
+			<div class="five-col-table-wrapper">
+				<table class="data-table" id='scenario2-measures'>					 
+				</table>
+			</div>
+
+			<h4 class="top-border-title title-margin-bottom ">Figure 24: Scenario 3 Measures Complete Table</h4>
+
+			<div class="five-col-table-wrapper">
+				<table class="data-table" id='scenario3-measures'>					 
+				</table>
+			</div>
 				
 			<section>
 				<h3 class="top-border-title title-margin-top title-margin-bottom">Appendix A: What is the current condition of your home?</h3>
@@ -1281,6 +917,10 @@
 				<p>The things you told us about you and your home, taken from the questionnaire we completed with you</p>
 				<div class="highlight-box pink-highlight">
 					<h4 class="top-border-title title-margin-bottom ">Figure 23: About You</h4>
+					<p>Total heating hours in winter</p>
+					<p>Normal day: <span class='js-heating-hours-normal'></span> hours</p>
+					<p>Normal day: <span class='js-heating-hours-alt'></span> hours</p>
+					<p>Number of habitable rooms not heated: <span key='data.household.3a_habitable_not_heated_rooms'></span></p>
 				</div>
 			</section>
 

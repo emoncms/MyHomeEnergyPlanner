@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="240" height="245" preserveAspectRatio="xMinYMin" viewBox="0 0 240 245" xml:space="preserve">
+
+        <rect x="220" y="100" width="10" height="110" stroke-width="5" style="fill:rgb(244,36,52);"/>
+
+        <rect x="10" y="140" width="10" height="30" stroke-width="5" style="fill:rgb(244,36,52);"/>
+        
+        <polygon points="120,235 220,235 220,210 230,210 230,245 10,245 10,210 20,210 20,235" fill="rgb(244,36,52)" />
+        
+        <polygon points="20,90 20,100 10,100 10,90 0,90 0,85 120,0 240,85 240,90 230,90 230,100 220,100 220,90 120,20" fill="rgb(244,36,52)" />
+        
+        <rect x="11" y="100" width="8" height="40" stroke-width="5" style="fill:rgb(255,225,218);"/>
+        
+        <rect x="11" y="170" width="8" height="40" stroke-width="5" style="fill:rgb(255,225,218);"/>
+</svg>
+

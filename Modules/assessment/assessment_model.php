@@ -144,7 +144,7 @@ class Assessment {
         if (!$this->has_access($userid, $id))
             return false;
 
-        $data = preg_replace('/[^\w\s-.",:{}\[\]]/', '', $data);
+        $data = preg_replace('/[^\w\s-.",:{}\'\[\]\\\]/', '', $data);
         $data = json_decode($data);
 
         $mdate = time();
