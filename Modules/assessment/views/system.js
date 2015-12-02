@@ -111,6 +111,39 @@ function system_initUI()
     }
     // End backwards compatibility for "ids"
 
+    /**************************************************************************
+     /* FOR BACKWARDS COMPATIBILITY
+     * We have just added "description","performance","benefits","cost","who_by",
+     * "who_by","disruption","associated_work","key_risks","notes" and "maintenance" 
+     * to the systems. We initialize them if they are empty (systems that were 
+     * created before the addition)
+     ***************************************************************************/
+    for (z in data.energy_systems) {
+        for (i in data.energy_systems[z]) {
+            if (data.energy_systems[z][i].description == undefined)
+                data.energy_systems[z][i].description = '--';
+            if (data.energy_systems[z][i].performance == undefined)
+                data.energy_systems[z][i].performance = '--';
+            if (data.energy_systems[z][i].benefits == undefined)
+                data.energy_systems[z][i].benefits = '--';
+            if (data.energy_systems[z][i].cost == undefined)
+                data.energy_systems[z][i].cost = '--';
+            if (data.energy_systems[z][i].who_by == undefined)
+                data.energy_systems[z][i].who_by = '--';
+            if (data.energy_systems[z][i].disruption == undefined)
+                data.energy_systems[z][i].disruption = '--';
+            if (data.energy_systems[z][i].associated_work == undefined)
+                data.energy_systems[z][i].associated_work = '--';
+            if (data.energy_systems[z][i].key_risks == undefined)
+                data.energy_systems[z][i].key_risks = '--';
+            if (data.energy_systems[z][i].notes == undefined)
+                data.energy_systems[z][i].notes = '--';
+            if (data.energy_systems[z][i].maintenance == undefined)
+                data.energy_systems[z][i].maintenance = '--';
+        }
+    }
+    // End backwards compatibility for "description","performance","benefits","cost","who_by",
+    //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
 
 
 

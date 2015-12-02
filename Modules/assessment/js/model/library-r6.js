@@ -6,7 +6,17 @@ var standard_library = {
             uvalue: 1.30,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "CV2": {
             name: "Uninsulated cavity lightweight block",
@@ -14,7 +24,17 @@ var standard_library = {
             uvalue: 0.96,
             kvalue: 140,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "CV3": {
             name: "Uninsulated cavity wall",
@@ -22,7 +42,17 @@ var standard_library = {
             uvalue: 1.2,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "CV4": {
             name: "Insulated cavity wall",
@@ -30,7 +60,17 @@ var standard_library = {
             uvalue: 0.3,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: ["CV1", "CV2", "CV3", "CV5"]
+            criteria: ["CV1", "CV2", "CV3", "CV5"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "CV5": {
             name: "Cavity walls involving brick and block with external render (for 1919-1975)",
@@ -38,7 +78,17 @@ var standard_library = {
             uvalue: 1.7,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "CV6": {
             name: "Brick/block cavity walls with insulation (for 2003-present)",
@@ -46,7 +96,17 @@ var standard_library = {
             uvalue: 0.3,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: ["CV1", "CV2", "CV3", "CV5"]
+            criteria: ["CV1", "CV2", "CV3", "CV5"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "CV7": {
             name: "Brick/brick cavity wall with 105mm brick, 50mm airspace, 105mm brick and 13mm dense plaster",
@@ -54,7 +114,17 @@ var standard_library = {
             uvalue: 1.44,
             kvalue: 70,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "SLD1": {
             name: "Uninsulated 600mm stone wall finished with 'plaster on laths'",
@@ -62,7 +132,17 @@ var standard_library = {
             uvalue: 1.1,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "SLD2": {
             name: "Uninsulated 600mm stone wall finished with 'plaster on the hard'",
@@ -70,7 +150,17 @@ var standard_library = {
             uvalue: 1.6,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "SLD3": {
             name: "Uninsulated 600mm stone wall finished with plasterboard",
@@ -78,7 +168,17 @@ var standard_library = {
             uvalue: 0.9,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "SLD4": {
             name: "Traditional sandstone or granite dwelling with solid walls: stone thickness typically 600mm with internal lath and plaster finish (for the pre-1919 period)",
@@ -86,7 +186,17 @@ var standard_library = {
             uvalue: 1.7,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "SLD5": {
             name: "600mm stonewall with a 50mm airspace and finished with 25mm dense plaster on laths",
@@ -94,7 +204,17 @@ var standard_library = {
             uvalue: 1.38,
             kvalue: 110,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "SLD6": {
             name: "600mm stone wall + 200mm hemp lime",
@@ -102,7 +222,17 @@ var standard_library = {
             uvalue: 0.58,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: ["SLD1", "SLD2", "SLD3"]
+            criteria: ["SLD1", "SLD2", "SLD3"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "TBRF1": {
             name: "Cavity of timber frame wall with 50mm insulation",
@@ -110,7 +240,17 @@ var standard_library = {
             uvalue: 0.45,
             kvalue: 18,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "TBRF2": {
             name: "Cavity of timber frame wall with 100mm insulation (2002 UK)",
@@ -118,7 +258,17 @@ var standard_library = {
             uvalue: 0.35,
             kvalue: 18,
             tags: ["Wall"],
-            criteria: ["TBRF1"]
+            criteria: ["TBRF1"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "TBRF3": {
             name: "Superinsulated timber frame wall with 250mm insulation",
@@ -127,6 +277,16 @@ var standard_library = {
             kvalue: 18,
             tags: ["Wall"],
             criteria: ["TBRF1", "TBRF2"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "BRK1": {
             name: "Solid brick 225mm",
@@ -134,7 +294,17 @@ var standard_library = {
             uvalue: 2.20,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "BRK2": {
             name: "220mm solid brick wall with 13mm dense plaster",
@@ -142,7 +312,17 @@ var standard_library = {
             uvalue: 2.09,
             kvalue: 190,
             tags: ["Wall"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "BRK3": {
             name: "220mm solid brick wall with 50mm airspace/battens and 12.5mm plasterboard",
@@ -150,7 +330,17 @@ var standard_library = {
             uvalue: 1.41,
             kvalue: 150,
             tags: ["Wall"],
-            criteria: ["BRK1", "BRK2"]
+            criteria: ["BRK1", "BRK2"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "RF1": {
             name: "Uninsulated loft",
@@ -158,7 +348,17 @@ var standard_library = {
             uvalue: 2.0,
             kvalue: 9,
             tags: ["Roof"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "RF2": {
             name: "Loft with 100mm insulation",
@@ -166,7 +366,17 @@ var standard_library = {
             uvalue: 0.3,
             kvalue: 9,
             tags: ["Roof"],
-            criteria: ["RF1"]
+            criteria: ["RF1"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "RF3": {
             name: "Room in the roof 200mm (2002 UK)",
@@ -174,7 +384,17 @@ var standard_library = {
             uvalue: 0.2,
             kvalue: 9,
             tags: ["Roof"],
-            criteria: ["RF1", "RF2"]
+            criteria: ["RF1", "RF2"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "RF4": {
             name: "Loft with 250mm insulation (2002 UK)",
@@ -182,7 +402,17 @@ var standard_library = {
             uvalue: 0.16,
             kvalue: 9,
             tags: ["Roof"],
-            criteria: ["RF1", "RF2", "RF3"]
+            criteria: ["RF1", "RF2", "RF3"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "RF5": {
             name: "Superinsulated loft with 300mm insulation",
@@ -190,7 +420,17 @@ var standard_library = {
             uvalue: 0.12,
             kvalue: 9,
             tags: ["Roof"],
-            criteria: ["RF1", "RF2", "RF3", "RF4"]
+            criteria: ["RF1", "RF2", "RF3", "RF4"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "FLR1": {
             name: "Timber floor uninsulated",
@@ -198,7 +438,17 @@ var standard_library = {
             uvalue: 0.83,
             kvalue: 20,
             tags: ["Floor"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "FLR2": {
             name: "Timber floor with 150mm insulation",
@@ -206,7 +456,17 @@ var standard_library = {
             uvalue: 0.25,
             kvalue: 20,
             tags: ["Floor"],
-            criteria: ["FLR1"]
+            criteria: ["FLR1"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "FLR3": {
             name: "Timber floor superinsulated 250mm insulation",
@@ -214,7 +474,17 @@ var standard_library = {
             uvalue: 0.14,
             kvalue: 20,
             tags: ["Floor"],
-            criteria: ["FLR1", "FLR2"]
+            criteria: ["FLR1", "FLR2"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "FLR4": {
             name: "Solid floor uninsulated (average house)",
@@ -222,7 +492,17 @@ var standard_library = {
             uvalue: 0.70,
             kvalue: 110,
             tags: ["Floor"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "FLR5": {
             name: "Solid floor with 100mm insulation (2002 UK)",
@@ -230,7 +510,17 @@ var standard_library = {
             uvalue: 0.25,
             kvalue: 110,
             tags: ["Floor"],
-            criteria: ["FLR4"]
+            criteria: ["FLR4"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "FLR6": {
             name: "Solid floor superinsulated 200mm insulation",
@@ -238,7 +528,17 @@ var standard_library = {
             uvalue: 0.15,
             kvalue: 110,
             tags: ["Floor"],
-            criteria: ["FLR4", "FLR5"]
+            criteria: ["FLR4", "FLR5"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "WND1": {
             name: "Single glazed",
@@ -249,7 +549,17 @@ var standard_library = {
             ff: 0.7,
             kvalue: 0,
             tags: ["Window"],
-            criteria: []
+            criteria: [],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "WND2": {
             name: "Double-low-E 12mm airspace (2002 UK)",
@@ -260,7 +570,17 @@ var standard_library = {
             ff: 0.7,
             kvalue: 0,
             tags: ["Window"],
-            criteria: ["WND1"]
+            criteria: ["WND1"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "WND3": {
             name: "Double-low-E Argon fill 16mm airspace",
@@ -271,7 +591,17 @@ var standard_library = {
             ff: 0.7,
             kvalue: 0,
             tags: ["Window"],
-            criteria: ["WND1", "WND2"]
+            criteria: ["WND1", "WND2"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         },
         "WND4": {
             name: "Triple-low-E Argon fill or double super low-E",
@@ -282,23 +612,31 @@ var standard_library = {
             ff: 0.7,
             kvalue: 0,
             tags: ["Window"],
-            criteria: ["WND1", "WND2", "WND3"]
+            criteria: ["WND1", "WND2", "WND3"],
+            description: '--',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
         }
     },
     systems: {
-        'electric': {name: "Standard Electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'},
-        'gasboiler': {name: "Standard Gas boiler", efficiency: 0.90, winter: 0.90, summer: 0.80, fuel: 'gas'},
-        'oilboiler': {name: "Oil boiler", efficiency: 0.85, winter: 0.85, summer: 0.85, fuel: 'oil'},
-        'heatpump': {name: "Heatpump", efficiency: 3.0, winter: 3.0, summer: 3.0, fuel: 'electric'},
-        'woodbatch': {name: "Wood batch boiler", efficiency: 0.92, winter: 0.92, summer: 0.92, fuel: 'wood'},
-        'woodpellet': {name: "Wood pellet boiler", efficiency: 0.92, winter: 0.92, summer: 0.92, fuel: 'wood'},
-        'woodstove': {name: "Wood stove", efficiency: 0.87, winter: 0.87, summer: 0.87, fuel: 'wood'},
-        'openwoodfire': {name: "Open wood fire", efficiency: 0.25, winter: 0.25, summer: 0.25, fuel: 'wood'},
-        'electricheater': {name: "Electric room heater", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'},
-        'electricimmersion': {name: "Electric immersion heater", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'},
-        'electric-high': {name: "High rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-high'},
-        'electric-low': {name: "Low rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-low'},
+        'electric': {name: "Standard Electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'gasboiler': {name: "Standard Gas boiler", efficiency: 0.90, winter: 0.90, summer: 0.80, fuel: 'gas', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'oilboiler': {name: "Oil boiler", efficiency: 0.85, winter: 0.85, summer: 0.85, fuel: 'oil', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'heatpump': {name: "Heatpump", efficiency: 3.0, winter: 3.0, summer: 3.0, fuel: 'electric', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'woodbatch': {name: "Wood batch boiler", efficiency: 0.92, winter: 0.92, summer: 0.92, fuel: 'wood', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'woodpellet': {name: "Wood pellet boiler", efficiency: 0.92, winter: 0.92, summer: 0.92, fuel: 'wood', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'woodstove': {name: "Wood stove", efficiency: 0.87, winter: 0.87, summer: 0.87, fuel: 'wood', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'openwoodfire': {name: "Open wood fire", efficiency: 0.25, winter: 0.25, summer: 0.25, fuel: 'wood', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'electricheater': {name: "Electric room heater", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'electricimmersion': {name: "Electric immersion heater", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'electric-high': {name: "High rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-high', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
+        'electric-low': {name: "Low rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-low', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'}
     }
-
-
 };  

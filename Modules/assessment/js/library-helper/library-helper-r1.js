@@ -557,7 +557,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
 
 libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'};
+        item = {name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -574,7 +574,18 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
             out += '<option value="' + fuel + '">' + fuel + '</option>';
     }
     out += '</select></td></tr>';
-    out += '</tbody></table>'
+    out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
+    out += '<tr><td>Description</td><td><input type="text" class="create-element-description" value="' + item.description + '" /></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="create-element-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="create-element-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="create-element-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="create-element-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><input type="text" class="create-element-notes" value="' + item.notes + '" /></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="create-element-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
     return out;
 };
 libraryHelper.prototype.elements_item_to_html = function (item, tag) {
