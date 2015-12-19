@@ -666,6 +666,20 @@ calc.space_heating = function (data)
     var annual_heating_demand = 0;
     var annual_cooling_demand = 0;
 
+    //Internal gains for "Metabolic" and "Losses", they are not calculated anywhere else but we need them before we can calculate the heat/cooling demand
+    data.gains_W['metabolic'] = new Array();
+    data.gains_W['losses'] = new Array();
+    for (m = 0; m < 12; m++) {
+        if (data.space_heating.use_utilfactor_forgains) {
+            data.gains_W['metabolic'][m] = 60 * data.occupancy;
+            data.gains_W['losses'][m] = -40 * data.occupancy;
+        }
+        else {
+            data.gains_W['metabolic'][m] = 50 * data.occupancy;
+            data.gains_W['losses'][m] = -40 * data.occupancy;
+        }
+    }
+
     for (m = 0; m < 12; m++)
     {
         // DeltaT (Difference between Internal and External temperature)
@@ -711,11 +725,10 @@ calc.space_heating = function (data)
         annual_heating_demand += heat_demand_kwh[m];
         annual_cooling_demand += cooling_demand_kwh[m];
 
-
         //Annual useful gains. Units: kwh/m2/year
         var gains_source = "";
         for (z in data.gains_W) {
-            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps')
+            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps' || z === 'metabolic' || z === 'losses')
                 gains_source = "Internal";
             if (z === "solar")
                 gains_source = "Solar";
@@ -1671,7 +1684,7 @@ calc.fans_and_pumps = function (data) {
             break;
     }
 
-    for (var i = 0; i < 12; i++) 
+    for (var i = 0; i < 12; i++)
         data.gains_W['fans_and_pumps'][i] = monthly_heat_gains;
     console.log(data.gains_W);
 };
