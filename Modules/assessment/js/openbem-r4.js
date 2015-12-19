@@ -227,8 +227,8 @@ var openbem = {
                 l: data.fabric.elements[z].l,
                 h: data.fabric.elements[z].h,
                 area: data.fabric.elements[z].area,
-                uvalue: data.fabric.elements[z].uvalue,
-                id: data.fabric.elements[z].id
+                uvalue: 1.0 * data.fabric.elements[z].uvalue,
+                id: 1.0 * data.fabric.elements[z].id
             };
             if (data.fabric.elements[z].description != undefined)
                 inputdata.fabric.elements[z].description = data.fabric.elements[z].description;
@@ -244,6 +244,24 @@ var openbem = {
                 inputdata.fabric.elements[z].gL = data.fabric.elements[z].gL;
             if (data.fabric.elements[z].ff != undefined)
                 inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
+            if (data.fabric.elements[z].performance != undefined)
+                inputdata.fabric.elements[z].performance = data.fabric.elements[z].performance;
+            if (data.fabric.elements[z].benefits != undefined)
+                inputdata.fabric.elements[z].benefits = data.fabric.elements[z].benefits;
+            if (data.fabric.elements[z].cost != undefined)
+                inputdata.fabric.elements[z].cost = data.fabric.elements[z].cost;
+            if (data.fabric.elements[z].ff != undefined)
+                inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
+            if (data.fabric.elements[z].who_by != undefined)
+                inputdata.fabric.elements[z].who_by = data.fabric.elements[z].who_by;
+            if (data.fabric.elements[z].disruption != undefined)
+                inputdata.fabric.elements[z].disruption = data.fabric.elements[z].disruption;
+            if (data.fabric.elements[z].associated_work != undefined)
+                inputdata.fabric.elements[z].associated_work = data.fabric.elements[z].associated_work;
+            if (data.fabric.elements[z].notes != undefined)
+                inputdata.fabric.elements[z].notes = data.fabric.elements[z].notes;
+            if (data.fabric.elements[z].maintenance != undefined)
+                inputdata.fabric.elements[z].maintenance = data.fabric.elements[z].maintenance;
         }
 
 // Ventilation
@@ -311,7 +329,8 @@ var openbem = {
             orientation: data.SHW.orientation,
             overshading: data.SHW.overshading,
             Vs: data.SHW.Vs,
-            combined_cylinder_volume: data.SHW.combined_cylinder_volume
+            combined_cylinder_volume: data.SHW.combined_cylinder_volume,
+            pump: data.SHW.pump
         };
         // Detailed Appliaces List
         inputdata.use_appliancelist = data.use_appliancelist;
@@ -371,7 +390,14 @@ var openbem = {
                     system: data.energy_systems[z][i].system,
                     description: data.energy_systems[z][i].description,
                     fraction: data.energy_systems[z][i].fraction,
-                    efficiency: data.energy_systems[z][i].efficiency
+                    efficiency: data.energy_systems[z][i].efficiency,
+                    name: data.energy_systems[z][i].name,
+                    summer: data.energy_systems[z][i].summer,
+                    winter: data.energy_systems[z][i].winter,
+                    fuel: data.energy_systems[z][i].fuel,
+                    id: 1.0 * data.energy_systems[z][i].id,
+                    fans_and_pumps: data.energy_systems[z][i].fans_and_pumps,
+                    combi_keep_hot: data.energy_systems[z][i].combi_keep_hot
                 });
             }
 
@@ -379,9 +405,15 @@ var openbem = {
 
         // Fuels
         inputdata.fuels = data.fuels;
+
         //Images
         inputdata.imagegallery = data.imagegallery;
         inputdata.featuredimage = data.featuredimage;
+
+        //Measures
+        inputdata.measures = data.measures;
+
         return inputdata;
+
     }
 }

@@ -1,63 +1,63 @@
 
 <style>
-.er td:nth-of-type(1) { width:25%;}
-.er td:nth-of-type(2) { width:15%;}
-.er td:nth-of-type(3) { width:20%;}
-.er td:nth-of-type(4) { width:20%;}
-.er td:nth-of-type(5) { width:20%;}
+    .er td:nth-of-type(1) { width:25%;}
+    .er td:nth-of-type(2) { width:15%;}
+    .er td:nth-of-type(3) { width:20%;}
+    .er td:nth-of-type(4) { width:20%;}
+    .er td:nth-of-type(5) { width:20%;}
 
-.fc td:nth-of-type(1) { width:40%;}
-.fc td:nth-of-type(2) { width:20%;}
-.fc td:nth-of-type(3) { width:20%;}
-.fc td:nth-of-type(4) { width:20%;}
+    .fc td:nth-of-type(1) { width:40%;}
+    .fc td:nth-of-type(2) { width:20%;}
+    .fc td:nth-of-type(3) { width:20%;}
+    .fc td:nth-of-type(4) { width:20%;}
 </style>
 
-<div class="page">
+<div id="systems" class="page">
 
     <hr>
     <h3>Mean Internal Temperature</h3>
     <hr>
 
     <table class="table">
-    <tr>
-        <td>
-            <h4>Heating system</h4>
-            <div class="input-prepend input-append">
-                <span class="add-on">Responsiveness:</span>
-                <input key="data.temperature.responsiveness" type="text" style="width:40px" />
-                <span class="add-on">Control type:</span>
-                <select key="data.temperature.control_type" style="width:80px">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-            </div>
-            
-        </td><td>
+        <tr>
+            <td>
+                <h4>Heating system</h4>
+                <div class="input-prepend input-append">
+                    <span class="add-on">Responsiveness:</span>
+                    <input key="data.temperature.responsiveness" type="text" style="width:40px" />
+                    <span class="add-on">Control type:</span>
+                    <select key="data.temperature.control_type" style="width:80px">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
 
-            <h4>Living area and target temperature</h4>
-            <div class="input-prepend input-append">
-                <span class="add-on">Living area:</span>
-                <input key="data.temperature.living_area" type="text" style="width:40px" />
-                <span class="add-on">m2</span>
+            </td><td>
 
-                <span class="add-on">Target temperature:</span>
-                <input key="data.temperature.target" type="text" style="width:40px" />
-                <span class="add-on">C</span>
-            </div>
-            
-        </td>
-    </tr>
+                <h4>Living area and target temperature</h4>
+                <div class="input-prepend input-append">
+                    <span class="add-on">Living area:</span>
+                    <input key="data.temperature.living_area" type="text" style="width:40px" />
+                    <span class="add-on">m2</span>
+
+                    <span class="add-on">Target temperature:</span>
+                    <input key="data.temperature.target" type="text" style="width:40px" />
+                    <span class="add-on">C</span>
+                </div>
+
+            </td>
+        </tr>
     </table>
 
     <hr>
     <h3>Energy Requirements</h3>
     <hr>
-        
+
     <table class="table">
-    
+
         <tbody id="energyrequirement-template"  style="display:none">
-        
+
             <tr style="background-color:#eee">
                 <th><span key="data.energy_requirements.template.name"></span></th>
                 <th></th>
@@ -67,7 +67,7 @@
                 <th></th>
                 <th></th>
             </tr>
-        
+
             <tr>
                 <td style="text-align:left">Supplied by:</td>
                 <td>Notes</td>
@@ -75,16 +75,16 @@
                 <td>Demand</td>
                 <td>Efficiency</td>
                 <td>Fuel input </td>
-                
-                <td style="text-align:center"><span class="modal-add-system" style="cursor:pointer" eid="template"><button class="btn" style="padding-top:2px; padding-bottom:2px"><i class="icon-plus"></i> Add</button></span></td>
+
+                <td style="text-align:center"><span class="add-from-lib" style="cursor:pointer" eid="template"><button class="btn" style="padding-top:2px; padding-bottom:2px"><i class="icon-plus"></i> Add</button></span></td>
             </tr>
-            
+
         </tbody>
-        
+
         <tbody id="suppliedby-template" style="display:none">
             <tr>
                 <td style="text-align:left">
-                    <span key="data.energy_systems.template.x.name"></span>
+                    <span key="data.energy_systems.template.x.system"></span>: <span key="data.energy_systems.template.x.name"></span>
                     <!--<select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>-->
                 </td>
                 <td><input type="text" key="data.energy_systems.template.x.description" style="width:120px"/></td>
@@ -92,13 +92,17 @@
                 <td><span key="data.energy_systems.template.x.demand" dp=0></span> kWh/year</td>
                 <td><span key="data.energy_systems.template.x.efficiency" dp=3></span></td>
                 <td><span key="data.energy_systems.template.x.fuelinput" dp=0></span> kWh/year</td>
-                <td style="text-align:center"><span class="delete-system" eid="eid" sid="sid" style="cursor:pointer"><a><i class="icon-trash"></i></a></span></td>
+                <td style="text-align:center">
+                    <button class="apply-measure" tag="template" row="template" item="template" type-of-item='template' item_id="template" style="margin-right:25px">Apply Measure</button>
+                    <span class="edit-item"  eid="eid" sid="sid" row="template" type-of-item="template" tag="template" style="cursor:pointer; margin-right:15px" item="template" title="Editing a system this way is not considered a Measure"><a><i class="icon-edit"></i></a></span>
+                    <span class="delete-system" eid="eid" sid="sid" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span>
+                </td>
             </tr>
         </tbody>
-        
+
         <tbody id="energyrequirements"></tbody>
     </table>
-    
+
     <br>
     <hr>
     <h3>Fuel requirements & costs</h3>
@@ -115,26 +119,26 @@
             <th>Daily<br>Standing<br>charge</th>
             <th>Annual cost</th>
         </tr>
-        
+
         <tbody id="fuel_totals_template" style="display:none">
             <tr>
                 <td style="text-align:left"><span key="data.fuel_totals.z.name"></span></td>
                 <td><span key="data.fuel_totals.z.quantity" dp=0></span> kWh</td>
-                
+
                 <td>x<input type="text" key="data.fuels.f.co2factor" value=0 style="width:60px"/></td>
                 <td><span key="data.fuel_totals.z.annualco2" dp=0></span> kg</td>
-                                
+
                 <td>x<input type="text" key="data.fuels.f.primaryenergyfactor" value=0 style="width:60px"/></td>
                 <td><span key="data.fuel_totals.z.primaryenergy" dp=0></span> kWh</td>
-                
+
                 <td>£ <input type="text" key="data.fuels.f.fuelcost" value=0 style="width:60px"/></td>
                 <td>£ <input type="text" key="data.fuels.f.standingcharge" value=0 style="width:60px"/></td>
                 <td>£<span key="data.fuel_totals.z.annualcost" dp=0></span></td>
             </tr>
         </tbody>
-        
+
         <tbody id="fuel_totals"></tbody>
-        
+
         <tr>
             <td style="text-align:left"><b>Total energy cost:</b></td>
             <td></td>
@@ -146,7 +150,7 @@
             <td></td>
             <td><b>£<span key="data.total_cost" dp=0></span></b> (<span key="data.SAP.rating" dp=0></span>)</td>
         </tr>
-        
+
         <tr>
             <td style="text-align:left"><b>Total energy income<br>(FIT's):</b></td>
             <td></td>
@@ -158,7 +162,7 @@
             <td></td>
             <td><b>£<span key="data.total_income" dp=0></span></b></td>
         </tr>
-        
+
         <tr>
             <td style="text-align:left"><b>Net cost:</b></td>
             <td></td>
@@ -174,7 +178,7 @@
 </div>
 
 
-
+<!--
 <div id="modal-system-library" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="modal-system-library-label" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -205,3 +209,4 @@
         <button class="btn btn-success save-system" style="display:none">Save</button>
     </div>
 </div>
+-->

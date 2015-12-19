@@ -10,8 +10,13 @@
 		color:$white;
 	}
 
-	.sap-table th{
-		padding: 10px 15px; 
+	.sap-table th, .sap-table td{
+		padding: 10px 15px;
+		text-align:left; 
+	}
+
+	.sap-table td{
+		background:$white;
 	}
 
 	.three-col-table {
@@ -250,4 +255,48 @@
 			}
 		}
 	}
+
+	.data-table {
+		border-collapse:collapse;
+		border-spacing:0;
+	}
+
+	.data-table td {
+		font-size:14px;
+		padding:10px 5px;
+		border-style:solid;
+		border-width:1px;
+		overflow:hidden;
+		word-break:normal;
+	}
+	.data-table th, .data-table .th {
+		font-size:14px;
+		font-weight:normal;
+		font-weight: bold;
+		padding:10px 5px;
+		border-style:solid;
+		border-width:1px;
+		overflow:hidden;
+		word-break:normal;
+		background:$pink--light;
+		color:$red;
+		vertical-align:top;
+	}
+
+	.comfort-table-option { 
+		border: solid 1px $red;
+		width:30px;
+		height:30px;
+	}
+
+	.extreme-left,.extreme-right{
+		width:100px;
+		padding:5px;
+		font-size:14px;
+	}
+
+	.extreme-left{
+		text-align:right;
+	}
+
 }

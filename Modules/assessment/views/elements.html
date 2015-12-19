@@ -14,9 +14,11 @@
     .apply-measure td{
         max-width: 200px;
     }
+
+
 </style>
 
-<div class="page">
+<div id="elements-container" class="page">
 
 
     <h3> Thermal Mass Parameter (TMP)</h3>
@@ -56,7 +58,7 @@
 
         <tbody id="element-template" style="display:none">
             <tr>
-                <td style="text-align:left"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span>: <span key="data.fabric.elements.template.name" ></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m2</span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m2</span></td>
+                <td style="text-align:left"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span>: <span key="data.fabric.elements.template.name" ></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m2</span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m2</span><br /><span style="font-size:0.8em" title="fabric-template-title">more...</span></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
@@ -64,10 +66,9 @@
                 <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
 
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
-                <td><button class="apply-measure-list" row="template" element_id="template">Apply Measure</button></td>
-                <td><span class="delete-element" row="template" style="cursor:pointer"><a><i class="icon-trash"></i></a></span></td>
-                <td><input type="checkbox" /></td>
-
+                <td><button class="apply-measure" tag="template" row="template" item="template" item_id="template">Apply Measure</button></td>
+                <td><span class="edit-item" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tag="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
+                <td><span class="delete-element" row="template" style="cursor:pointer" item_id="template"  title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span></td>
             </tr>
         </tbody>
 
@@ -75,7 +76,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="btn add-element-from-lib" tags="Wall">Add wall from library</button>
+                <button class="btn add-from-lib" tags="Wall">Add wall from library</button>
             </td>
             <td></th>
             <td></td>
@@ -98,7 +99,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="btn add-element-from-lib" tags="Floor">Add floor from library</button>
+                <button class="btn add-from-lib" tags="Floor">Add floor from library</button>
             </td>
             <td></th>
             <td></td>
@@ -121,7 +122,7 @@
 
         <tr>
             <td style="text-align:left">
-                <button class="btn add-element-from-lib" tags="Roof">Add roof from library</button>
+                <button class="btn add-from-lib" tags="Roof">Add roof from library</button>
             </td>
             <td></th>
             <td></td>
@@ -179,6 +180,7 @@
             <td style="text-align:left">
                 <b><span key="data.fabric.elements.template.lib"></span>: <span key="data.fabric.elements.template.name"></span></b> <br />
                 g:<span key="data.fabric.elements.template.g"> </span>, gL:<span key="data.fabric.elements.template.gL"></span>, ff:<span key="data.fabric.elements.template.ff"></span>, U-value: <span key="data.fabric.elements.template.uvalue"></span>
+                <br /><span style="font-size:0.8em" title="fabric-template-title">more...</span>
             </td>
             <td><input type="text" value="0"  key="data.fabric.elements.template.description" /></td>
             <td>
@@ -213,8 +215,9 @@
 
             <td><span key="data.fabric.elements.template.gain" dp=0>0</span>W</td>
             <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
-            <td><button class="apply-measure-list" row="template">Apply Measure</button></td>
-            <td><span class="delete-element" row="template" style="cursor:pointer"><i class="icon-trash"></i></span></td>
+            <td><button class="apply-measure" row="template" item="template" tag="template" item_id="template">Apply Measure</button></td>
+            <td><span class="edit-item" row="template" style="cursor:pointer" item="template" item_id="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
+            <td><span class="delete-element" row="template" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" item_id="template"><i class="icon-trash"></i></span></td>
 
         </tr>
     </tbody>
@@ -222,7 +225,7 @@
     <tbody id="windows"></tbody>
 
     <tr>
-        <td><button class="btn add-element-from-lib" tags="Window">Add window from library</button></td>
+        <td><button class="btn add-from-lib" tags="Window">Add window from library</button></td>
         <td></td>
     </tr>
 
@@ -252,7 +255,7 @@
 </table>    
 </div>
 
-
+<!--
 <div id="myModal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -319,41 +322,42 @@
                 <tr><td>gL</td><td><input type="text" id="create-element-gL" /></td></tr>
                 <tr><td>Frame factor (ff)</td><td><input type="text" id="create-element-ff" /></td></tr>
             </tbody>
-            <!--<tr><td>Criteria to be measure (comma seperated element tags)</td><td><input type="text" id="create-element-criteria" /></td></tr>-->
-            <tr><td>Description</td><td><input type="text" id="create-element-description" /></td></tr>
-            <tr><td>Performance</td><td><input type="text" id="create-element-performance" /></td></tr>
-            <tr><td>Benefits</td><td><input type="text" id="create-element-benefits" /></td></tr>
-            <tr><td>Cost</td><td><input type="text" id="create-element-cost" /></td></tr>
-            <tr><td>Who by</td><td><input type="text" id="create-element-who_by" /></td></tr>
-            <tr><td>Disruption</td><td><input type="text" id="create-element-disruption" /></td></tr>
-            <tr><td>Associated work</td><td><input type="text" id="create-element-associated_work" /></td></tr>
-            <tr><td>Key risks</td><td><input type="text" id="create-element-key_risks" /></td></tr>
-            <tr><td>Notes</td><td><input type="text" id="create-element-notes" /></td></tr>
-            <tr><td>Maintenance</td><td><input type="text" id="create-element-maintenance" /></td></tr>
-        </table>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" id="create-element-cancel" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button class="btn" id="create-element-save">Save</button>
-    </div>
+
+<!--<tr><td>Criteria to be measure (comma seperated element tags)</td><td><input type="text" id="create-element-criteria" /></td></tr>-->
+<!--          <tr><td>Description</td><td><input type="text" id="create-element-description" /></td></tr>
+          <tr><td>Performance</td><td><input type="text" id="create-element-performance" /></td></tr>
+          <tr><td>Benefits</td><td><input type="text" id="create-element-benefits" /></td></tr>
+          <tr><td>Cost</td><td><input type="text" id="create-element-cost" /></td></tr>
+          <tr><td>Who by</td><td><input type="text" id="create-element-who_by" /></td></tr>
+          <tr><td>Disruption</td><td><input type="text" id="create-element-disruption" /></td></tr>
+          <tr><td>Associated work</td><td><input type="text" id="create-element-associated_work" /></td></tr>
+          <tr><td>Key risks</td><td><input type="text" id="create-element-key_risks" /></td></tr>
+          <tr><td>Notes</td><td><input type="text" id="create-element-notes" /></td></tr>
+          <tr><td>Maintenance</td><td><input type="text" id="create-element-maintenance" /></td></tr>
+      </table>
+  </div>
+  <div class="modal-footer">
+      <button class="btn" id="create-element-cancel" data-dismiss="modal" aria-hidden="true">Cancel</button>
+      <button class="btn" id="create-element-save">Save</button>
+  </div>
 </div>
 
 <div id="modal-share-library" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Share library: </h3>
-    </div>
-    <div class="modal-body">
-
-        <p>Shared with:</p>
-        <table class="table" id="shared-with-table">
-        </table>
-
-        <p>Enter user, or organisation name to share this library with:</p>
-        <input id="sharename" type="text" style="width:420px"/>
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button id="share-library" class="btn btn-primary">Share</button>
-    </div>
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Share library: </h3>
+  </div>
+  <div class="modal-body">
+      <p>Enter user, or organisation name to share this library with: </p>
+      <input id="sharename" type="text" style="margin:10px;width:120px"/>
+      <input type="checkbox" id="write_permissions">  Grant write persmisions
+      <p id="return-message" style="margin-bottom:25px"></p>
+      <table class="table" id="shared-with-table">
+      </table>
+  </div>
+  <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+      <button id="share-library" class="btn btn-primary">Share</button>
+  </div>
 </div>
+-->

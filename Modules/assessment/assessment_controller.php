@@ -6,6 +6,124 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 function assessment_controller() {
     global $session, $route, $mysqli;
 
+    /* --------------------------------------------------------------------------
+      // Backwards compatibility:
+      // During development, i am finding many situations when we need to do something
+      // make what is implemented compatible with the previous version. This section
+      // is here fot his pourpose and will be deleted when the final realease is made
+      //---------------------------------------------------------------------------- */
+    if (!isset($_SESSION['backwards_comp'])) { // We only run when we start the session
+        $_SESSION['backwards_comp'] = true;
+
+        // Rename standard libraries to include users name (important to identify libraries after sharing
+        $libresult = $mysqli->query("SELECT id,name,userid FROM element_library");
+        foreach ($libresult as $row) {
+            if ($row['name'] === "StandardLibrary") {
+                $user_name = $mysqli->query("SELECT username FROM users WHERE id = " . $row['userid']);
+                $user_name = $user_name->fetch_object();
+                $user_name = $user_name->username;
+                $req = $mysqli->prepare('UPDATE element_library SET `name` = ? WHERE `id` = ?  ');
+                $new_name = "StandardLibrary - " . $user_name;
+                $req->bind_param("si", $new_name, $row['id']);
+                $req->execute();
+            }
+        }
+
+
+        // Add "type" to element library table in database (if it doesn't exist), and for all the libraries set the type to elements (this were the original type so we can be sure that at the moment of adding the column all the libraries are type "element"
+        $columns_in_table = $mysqli->query("DESCRIBE element_library");
+        $field_found = false;
+        foreach ($columns_in_table as $column) {
+            if ($column['Field'] === 'type')
+                $field_found = true;
+        }
+        if ($field_found === false)
+            $mysqli->query("ALTER TABLE  `element_library` ADD  `type` VARCHAR( 255 ) NOT NULL DEFAULT  'elements' AFTER  `name`");
+
+        // Grant all the users write permissions for their own library
+        $libresult = $mysqli->query("SELECT * FROM `element_library`");
+        foreach ($libresult as $row) {
+            $req = $mysqli->prepare("UPDATE `element_library_access` SET `write`='1' WHERE `userid`=? AND `id`=?");
+            $req->bind_param('ii', $row['userid'], $row['id']);
+            $req->execute();
+        }
+
+        // Add fans_and_pumps and keep hot facility for combi boilers to systems in existing libraries
+        $libresult = $mysqli->query("SELECT * FROM `element_library`WHERE `type`='systems'");
+        foreach ($libresult as $row) {
+            $library = json_decode($row['data']);
+            $update_needed = false;
+            foreach ($library as $system_key => $system) {
+                if (!isset($system->combi_keep_hot)) {
+                    $update_needed = true;
+                    $system->combi_keep_hot = 0;
+                    switch ($system_key) {
+                        case 'gasboiler':
+                        case 'heatpump':
+                        case 'woodbatch':
+                        case 'woodpellet':
+                            $system->fans_and_pumps = 45;
+                            break;
+                        case 'oilboiler':
+                            $system->fans_and_pumps = 100;
+                            break;
+                        default:
+                            $system->fans_and_pumps = 0;
+                            break;
+                    }
+                }
+            }
+            if ($update_needed === true) {
+                $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+                $library = json_encode($library);
+                $req->bind_param('si', $library, $row['id']);
+                $req->execute();
+            }
+        }
+// Add fans_and_pumps and keep hot facility of comi boilers to systems in existing energy_systems in scenarios
+        $assesment_result = $mysqli->query("SELECT * FROM `assessment`");
+        foreach ($assesment_result as $row) {
+            $scenarios = json_decode($row['data']);
+            $gsd = is_array($scenarios);
+            $update_needed = false;
+            ini_set('display_errors', 0);
+            foreach ($scenarios as $scenario) {
+                foreach ($scenario->energy_systems as $energy_system) {
+                    foreach ($energy_system as $system_key => $system) {
+                        if (!isset($system->combi_keep_hot)) {
+                            $update_needed = true;
+                            $system->combi_keep_hot = 0;
+                            switch ($system_key) {
+                                case 'gasboiler':
+                                case 'heatpump':
+                                case 'woodbatch':
+                                case 'woodpellet':
+                                    $system->fans_and_pumps = 45;
+                                    break;
+                                case 'oilboiler':
+                                    $system->fans_and_pumps = 100;
+                                    break;
+                                default:
+                                    $system->fans_and_pumps = 0;
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            ini_set('display_errors', 1);
+            if ($update_needed === true) {
+                $req = $mysqli->prepare("UPDATE `assessment` SET `data`=? WHERE `id`=?");
+                $scenarios = json_encode($scenarios);
+                $req->bind_param('si', $scenarios, $row['id']);
+                $req->execute();
+            }
+        }
+    }
+
+    /* End backwards compatibility section */
+
+
     // -------------------------------------------------------------------------
     // Check if session has been authenticated, if not redirect to login page (html) 
     // or send back "false" (json)
@@ -141,10 +259,16 @@ function assessment_controller() {
 
         if ($route->action == 'listlibrary' && $session['write'])
             $result = $assessment->listlibrary($session['userid']);
-        if ($route->action == 'newlibrary' && $session['write'])
-            $result = $assessment->newlibrary($session['userid'], get('name'));
 
-        // Save library
+        if ($route->action == 'newlibrary' && $session['write'])
+            $result = $assessment->newlibrary($session['userid'], get('name'), get('type'));
+
+        if ($route->action == 'copylibrary' && $session['write'])
+            $result = $assessment->copylibrary($session['userid'], get('name'), get('type'), get('id'));
+
+        // -------------------------------------------------------------------------------------------------------------
+        // Library
+        // -------------------------------------------------------------------------------------------------------------        
         if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
             $result = $assessment->savelibrary($session['userid'], post('id'), $_POST['data']);
         }
@@ -152,11 +276,20 @@ function assessment_controller() {
         if ($route->action == 'loadlibrary' && $session['write'])
             $result = $assessment->loadlibrary($session['userid'], get('id'));
 
+        if ($route->action == 'loaduserlibraries' && $session['write'])
+            $result = $assessment->loaduserlibraries($session['userid']);
+
         if ($route->action == 'sharelibrary' && $session['write'])
-            $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'));
+            $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'), get('write_permissions'));
 
         if ($route->action == 'getsharedlibrary' && $session['write'])
             $result = $assessment->getsharedlibrary($session['userid'], get('id'));
+
+        if ($route->action == 'getuserpermissions' && $session['write'])
+            $result = $assessment->getuserpermissions($session['userid']);
+
+        if ($route->action == 'removeuserfromsharedlibrary' && $session['write'])
+            $result = $assessment->removeuserfromsharedlibrary($session['userid'], get('library_id'), get('user_to_remove'));
 
         // -------------------------------------------------------------------------------------------------------------
         // Image gallery

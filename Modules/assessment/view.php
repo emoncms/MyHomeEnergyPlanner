@@ -11,14 +11,15 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r5.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r5.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesCarbonCoop-r1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-helper/library-helper-r1.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/canvas-barchart/barchart.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-carboncoop.js"></script>
@@ -245,6 +246,8 @@ global $reports;
 
     var keys = {};
 
+    run_backwards_compatibility();
+
     for (s in project) {
         // QUESTION: do you really want to do calc.run twice here?
         project[s] = calc.run(calc.run(project[s]));
@@ -262,6 +265,9 @@ global $reports;
     if (project[scenario] == undefined)
         scenario = 'master';
     data = project[scenario];
+
+    if (data.measures == undefined)
+        data.measures = {};
 
     load_view("#content", page);
     InitUI();
@@ -304,6 +310,26 @@ global $reports;
         });
     }
 
+    function run_backwards_compatibility() {
+        // Before the library_helper was implemented, systems in data.energy_systems[z][x] were not 
+        // a full copy of the item in the library, they only had the "system" and 
+        // "fraction" properties and the other ones were copied in the modelr5.js from data.systemlibrary.
+        // With the changes required to use the library helper we needto add the 
+        // missing property to the systems
+        for (scenario in project) {
+            for (z in project[scenario].energy_systems) {
+                for (index in project[scenario].energy_systems[z]) {
+                    if (project[scenario].energy_systems[z][index].summer == undefined) {
+                        var system = project[scenario].energy_systems[z][index].system;
+                        project[scenario].energy_systems[z][index].summer = project[scenario].systemlibrary[system].summer;
+                        project[scenario].energy_systems[z][index].winter = project[scenario].systemlibrary[system].winter;
+                        project[scenario].energy_systems[z][index].fuel = project[scenario].systemlibrary[system].fuel;
+                        project[scenario].energy_systems[z][index].name = project[scenario].systemlibrary[system].name;                    }
+                }
+            }
+        }
+    }
+
     $("#openbem").on("change", '[key]', function () {
         var key = $(this).attr('key');
         var val = $(this).val();
@@ -315,13 +341,15 @@ global $reports;
 
         if (!isNaN(val) && val != "")
             val *= 1;
-        
-        if (key=="data.use_appliancelist" || key=="data.use_applianceCarbonCoop" || key=="data.LAC.use_SAP_appliances") {
-            data.use_appliancelist = false; data.use_applianceCarbonCoop = false; data.LAC.use_SAP_appliances = false;
+
+        if (key == "data.use_appliancelist" || key == "data.use_applianceCarbonCoop" || key == "data.LAC.use_SAP_appliances") {
+            data.use_appliancelist = false;
+            data.use_applianceCarbonCoop = false;
+            data.LAC.use_SAP_appliances = false;
         }
-            
+
         var lastval = varset(key, val);
-        
+
         $("#openbem").trigger("onKeyChange", {key: key, value: val});
         update();
 
@@ -344,18 +372,18 @@ global $reports;
         }
     });
 
-    $("#openbem").on('click',"#create-new",function () {
+    $("#openbem").on('click', "#create-new", function () {
         // Reset select
         $('#select-scenario').html("");
-        
+
         // Fill up the select
         for (z in project)
             $('#select-scenario').append("<option value='" + z + "'>" + z + "</option>");
 
-         $('#modal-create-scenario').modal('show');
+        $('#modal-create-scenario').modal('show');
     });
 
-    $("#modal-create-scenario").on('click','#modal-create-scenario-done',function () {
+    $("#modal-create-scenario").on('click', '#modal-create-scenario-done', function () {
         var n = 0;
         for (z in project)
             n++;

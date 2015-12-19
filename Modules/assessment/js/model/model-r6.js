@@ -55,6 +55,7 @@ calc.run = function (datain)
     calc.temperature(calc.data);
     calc.space_heating(calc.data);
     calc.energy_systems(calc.data);
+    calc.fans_and_pumps(calc.data);
     calc.SAP(calc.data);
 
     calc.data.totalWK = calc.data.fabric.total_heat_loss_WK + calc.data.ventilation.average_WK;
@@ -204,7 +205,7 @@ calc.fabric = function (data)
         }
         data.fabric.elements[z].netarea = data.fabric.elements[z].area;
 
-        if (data.fabric.elements[z].type != 'window') {
+        if (data.fabric.elements[z].type != 'window' && data.fabric.elements[z].type != 'Window') {
             data.fabric.elements[z].windowarea = 0;
         }
 
@@ -212,7 +213,7 @@ calc.fabric = function (data)
 
         for (w in data.fabric.elements)
         {
-            if (data.fabric.elements[w].type == 'window')
+            if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window')
             {
                 if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
                 {
@@ -233,24 +234,27 @@ calc.fabric = function (data)
         data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
 
         // By checking that the u-value is not 0 = internal walls we can calculate total external area
+        //if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].netarea != undefined) {
         if (data.fabric.elements[z].uvalue != 0) {
+            if (data.fabric.elements[z].netarea == undefined)
+                data.fabric.elements[z].netarea = 0;
             data.fabric.total_external_area += data.fabric.elements[z].netarea;
         }
 
 
-        if (data.fabric.elements[z].type == 'floor') {
+        if (data.fabric.elements[z].type == 'floor' || data.fabric.elements[z].type == 'Floor') {
             data.fabric.total_floor_WK += data.fabric.elements[z].wk;
             data.fabric.total_floor_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'wall') {
+        if (data.fabric.elements[z].type == 'wall' || data.fabric.elements[z].type == 'Wall') {
             data.fabric.total_wall_WK += data.fabric.elements[z].wk;
             data.fabric.total_wall_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'roof') {
+        if (data.fabric.elements[z].type == 'roof' || data.fabric.elements[z].type == 'Roof') {
             data.fabric.total_roof_WK += data.fabric.elements[z].wk;
             data.fabric.total_roof_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'window') {
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window') {
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
@@ -260,7 +264,7 @@ calc.fabric = function (data)
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;
         }
 
-        if (data.fabric.elements[z].type == 'window')
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window')
         {
             var orientation = data.fabric.elements[z]['orientation'];
             var area = data.fabric.elements[z]['area'];
@@ -351,8 +355,8 @@ calc.ventilation = function (data)
         percentage_draught_proofed: 0,
         number_of_sides_sheltered: 0,
         ventilation_type: 'd',
-        system_air_change_rate: 0,
-        balanced_heat_recovery_efficiency: 100
+        system_air_change_rate: 0.5,
+        balanced_heat_recovery_efficiency: 65
     }
 
     if (data.ventilation == undefined)
@@ -711,7 +715,7 @@ calc.space_heating = function (data)
         //Annual useful gains. Units: kwh/m2/year
         var gains_source = "";
         for (z in data.gains_W) {
-            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating")
+            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps')
                 gains_source = "Internal";
             if (z === "solar")
                 gains_source = "Solar";
@@ -773,9 +777,9 @@ calc.energy_systems = function (data)
         data.energy_systems = {};
     if (data.fuels == undefined)
         data.fuels = {};
-    if (data.systemlibrary == undefined) {
-        data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
-    }
+    //if (data.systemlibrary == undefined) {
+    //  data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
+    //}
 
     // Copy dataset over to user data without overwritting user changed properties
     var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
@@ -800,11 +804,11 @@ calc.energy_systems = function (data)
         {
             data.energy_systems[z][x].demand = quantity * data.energy_systems[z][x].fraction;
 
-            var system = data.energy_systems[z][x].system;
-            if (data.systemlibrary[system] != undefined) {
-                data.energy_systems[z][x].name = data.systemlibrary[system].name;
-                data.energy_systems[z][x].efficiency = data.systemlibrary[system].efficiency;
-            }
+            /*var system = data.energy_systems[z][x].system;
+             if (data.systemlibrary[system] != undefined) {
+             data.energy_systems[z][x].name = data.systemlibrary[system].name;
+             data.energy_systems[z][x].efficiency = data.systemlibrary[system].efficiency;
+             }*/
         }
     }
 
@@ -821,8 +825,10 @@ calc.energy_systems = function (data)
                 var Q_water = data.energy_systems["waterheating"][a].demand;
                 var Q_space = data.energy_systems["space_heating"][b].demand;
 
-                var n_winter = data.systemlibrary[system_water].winter;
-                var n_summer = data.systemlibrary[system_water].summer;
+                //var n_winter = data.systemlibrary[system_water].winter;
+                //var n_summer = data.data.energy_systems[eid][system_water].summer;
+                var n_winter = data.energy_systems["waterheating"][a].winter;
+                var n_summer = data.energy_systems["waterheating"][a].summer;
                 var n = (Q_water + Q_space) / ((Q_space / n_winter) + (Q_water / n_summer));
 
                 data.energy_systems["waterheating"][a].efficiency = n;
@@ -838,12 +844,16 @@ calc.energy_systems = function (data)
 
             var system = data.energy_systems[z][x].system;
 
-            if (data.systemlibrary[system] != undefined) {
-                var fuel = data.systemlibrary[system].fuel;
-                if (data.fuel_totals[fuel] == undefined)
-                    data.fuel_totals[fuel] = {name: fuel, quantity: 0};
-                data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
-            }
+            /*if (data.systemlibrary[system] != undefined) {
+             var fuel = data.systemlibrary[system].fuel;
+             if (data.fuel_totals[fuel] == undefined)
+             data.fuel_totals[fuel] = {name: fuel, quantity: 0};
+             data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
+             }*/
+            var fuel = data.energy_systems[z][x].fuel;
+            if (data.fuel_totals[fuel] == undefined)
+                data.fuel_totals[fuel] = {name: fuel, quantity: 0};
+            data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
         }
     }
 
@@ -869,7 +879,7 @@ calc.energy_systems = function (data)
     data.net_cost = data.total_cost - data.total_income;
 
     return data;
-}
+};
 
 //---------------------------------------------------------------------------------------------
 // SAP
@@ -936,7 +946,7 @@ calc.LAC = function (data)
 
         var EL_sum = 0;
         for (var m = 0; m < 12; m++) {
-            EL_monthly[m] = data.LAC.EL * (1.0 + (0.5 * Math.cos((2 * Math.PI * ((m+1) - 0.2)) / 12.0))) * datasets.table_1a[m] / 365.0;
+            EL_monthly[m] = data.LAC.EL * (1.0 + (0.5 * Math.cos((2 * Math.PI * ((m + 1) - 0.2)) / 12.0))) * datasets.table_1a[m] / 365.0;
             EL_sum += EL_monthly[m];
 
             GL_monthly[m] = EL_monthly[m] * 0.85 * 1000 / (24 * datasets.table_1a[m]);
@@ -965,7 +975,7 @@ calc.LAC = function (data)
     for (var m = 0; m < 12; m++)
     {
         // The appliances energy use in kWh in month m (January = 1 to December = 12) is
-        EA_monthly[m] = EA_initial * (1.0 + (0.157 * Math.cos((2 * Math.PI * ((m+1) - 1.78)) / 12.0))) * datasets.table_1a[m] / 365.0;
+        EA_monthly[m] = EA_initial * (1.0 + (0.157 * Math.cos((2 * Math.PI * ((m + 1) - 1.78)) / 12.0))) * datasets.table_1a[m] / 365.0;
         GA_monthly[m] = EA_monthly[m] * 1000 / (24 * datasets.table_1a[m]);
 
         if (data.LAC.energy_efficient_appliances) {
@@ -1006,7 +1016,7 @@ calc.LAC = function (data)
     // CO2 emissions in kg/m2/year associated with cooking
     var cooking_CO2 = (119 + 24 * data.occupancy) / data.TFA;
 
-    data.LAC.EC = GC * 0.024 * 365;
+    data.LAC.EC = cooking_CO2 * data.TFA / 0.519; // We stimate the clculation of annual energy use from the emissions
 
     if (GC > 0 && data.LAC.use_SAP_cooking) {
         data.gains_W["Cooking"] = GC_monthly;
@@ -1452,36 +1462,33 @@ calc.generation = function (data) {
 calc.currentenergy = function (data)
 {
     var defaults = {
-        'electric': {name: "Electricity", note: "",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
-        'electric-heating': {name: "Electricity for direct heating", note: "e.g: Storage Heaters", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
-        'electric-heatpump': {name: "Electricity for heatpump", note: "annual electricity input to the heatpump", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
+        'electric': {name: "Electricity", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-heating': {name: "Electricity for direct heating", note: "e.g: Storage Heaters", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-heatpump': {name: "Electricity for heatpump", note: "annual electricity input to the heatpump", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
         'electric-waterheating': {name: "Electricity for water heating", note: "",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
-        'electric-car': {name: "Electric car", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Electric"},
-        'electric-e7': {name: "Electricity (Economy 7)", note: "",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
+            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-car': {name: "Electric car", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-e7': {name: "Electricity (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
         'electric-heating-e7': {name: "Electricity for direct heating (Economy 7)", note: "e.g: Storage Heaters",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
+            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
         'electric-heatpump-e7': {name: "Electricity for heatpump (Economy 7)", note: "annual electricity input to the heatpump",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
+            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
         'electric-waterheating-e7': {name: "Electricity for water heating (Economy 7)", note: "",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
-        'electric-car-e7': {name: "Electric car (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.512, primaryenergy: 2.4, unitcost: 0.15, standingcharge: 0.0, selected: 0, group: "Economy 7"},
-        'gas': {name: "Mains gas", note: "",
-            quantity: 0, units: "m3", kwh: 9.8, co2: 2.198, primaryenergy: 1.1, unitcost: 0.4214, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+        'electric-car-e7': {name: "Electric car (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+        'gas': {name: "Mains gas", note: "", quantity: 0, units: "m3", kwh: 9.8, co2: 2.1168, primaryenergy: 1.22, unitcost: 0.34104, standingcharge: 120.00, selected: 0, group: "Heating (non-electric)"},
         'gas-kwh': {name: "Mains gas in kWh", note: "",
-            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.224, primaryenergy: 1.1, unitcost: 0.043, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.216, primaryenergy: 1.22, unitcost: 0.0348, standingcharge: 120, selected: 0, group: "Heating (non-electric)"},
         'wood-logs': {name: "Wood Logs", note: "",
-            quantity: 0, units: "m3", kwh: 1380, co2: 0.00, primaryenergy: 1.1, unitcost: 69, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
-        'wood-pellets': {name: "Wood Pellets", note: "",
-            quantity: 0, units: "m3", kwh: 4800, co2: 0.00, primaryenergy: 1.1, unitcost: 240, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+            quantity: 0, units: "m3", kwh: 1380, co2: 26.22, primaryenergy: 1.04, unitcost: 58.374, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+        'wood-pellets': {name: "Wood Pellets", note: "In bags",
+            quantity: 0, units: "m3", kwh: 4800, co2: 187.2, primaryenergy: 1.26, unitcost: 278.88, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
         'oil': {name: "Oil", note: "",
-            quantity: 0, units: "L", kwh: 10.27, co2: 2.518, primaryenergy: 1.1, unitcost: 0.55, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+            quantity: 0, units: "L", kwh: 10.27, co2: 3.06, primaryenergy: 1.1, unitcost: 0.5587, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
         'lpg': {name: "LPG", note: "",
-            quantity: 0, units: "kWh", kwh: 11.0, co2: 1.5, primaryenergy: 1.1, unitcost: 0.55, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+            quantity: 0, units: "kWh", kwh: 11.0, co2: 2.651, primaryenergy: 1.09, unitcost: 0.836, standingcharge: 70.00, selected: 0, group: "Heating (non-electric)"},
         'bottledgas': {name: "Bottled gas", note: "",
-            quantity: 0, units: "kg", kwh: 13.9, co2: 2.198, primaryenergy: 1.1, unitcost: 1.8, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+            quantity: 0, units: "kg", kwh: 13.9, co2: 3.35, primaryenergy: 1.09, unitcost: 1.4317, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
         //'electric-car-miles': { name: "Electric car (miles)", note: "miles not included in home electricty above, assuming 100% green electricity",
         //    quantity:0, units: "miles", kwh: 0.25, co2: 0.02, primaryenergy: 2.4, unitcost:0.00, standingcharge:0.00},
         'car1': {name: "Car 1", note: "",
@@ -1537,8 +1544,8 @@ calc.currentenergy = function (data)
             energy[tag].co2 = 0.02;
             energy[tag].primaryenergy = 1.3;
         } else {
-            energy[tag].co2 = 0.512;
-            energy[tag].primaryenergy = 2.4;
+            energy[tag].co2 = 0.519;
+            energy[tag].primaryenergy = 3.07;
         }
     }
 
@@ -1558,7 +1565,7 @@ calc.currentenergy = function (data)
             energy[item].annual_co2 = (energy[item].quantity / energy[item].mpg) * energy[item].co2;
         }
 
-        energy[item].annual_cost = (energy[item].quantity * energy[item].unitcost) + (365 * energy[item].standingcharge);
+        energy[item].annual_cost = (energy[item].quantity * energy[item].unitcost) + energy[item].standingcharge;
 
 
     }
@@ -1599,6 +1606,74 @@ calc.currentenergy = function (data)
     data.currentenergy.energyuseperperson = (enduse_annual_kwh / 365.0) / data.occupancy;
 
     return data;
+};
+
+/************************************************************************/
+/* "Pumps and fans" and "electric keep-hot faciliity for combi boilers" */
+/************************************************************************/
+calc.fans_and_pumps = function (data) {
+    if (data.fans_and_pumps == undefined)
+        data.fans_and_pumps = {};
+
+    // 1.- Annual energy requirements for pumps, fans and electric keep-hot
+    var annual_energy = 0
+
+    // From heating systems
+    if (data.energy_systems.space_heating != undefined) {
+        for (system in data.energy_systems.space_heating) {
+            annual_energy += data.energy_systems.space_heating[system].fans_and_pumps;
+            annual_energy += data.energy_systems.space_heating[system].combi_keep_hot; // I assume that if there is a combi boiler, it is used for water and space heating. We only want to check if there is a "combi keep hot facility" once, so i do it in space heating but not in water heating
+        }
+    }
+
+    // From Ventilation (SAP2012 document page 213)
+    switch (data.ventilation.ventilation_type) {
+        case 'd':  //Positive input ventilation (from loft space)
+            // Do nothing - In this case annual energy is 0, see SAP2012 2.6.1: The energy used by the fan is taken as counterbalancing the effect of using slightly warmer air from the loft space compared with outside
+            break;
+        case 'c':  //Positive input ventilation (from outside) or mechanical extract ventilation   
+            annual_energy += 2.5 * 0.8 * 1.22 * data.volume; // annual_energy += IUF * SFP * 1.22 * V;
+            break;
+        case 'a':  //Balanced mechanical ventilation with heat recovery (MVHR)
+            annual_energy += 2.5 * 2 * 2.44 * data.ventilation.system_air_change_rate * data.volume; //annual_energy += IUF * SFP * 2.44 * nmech * V;
+            break;
+        case 'b':  //Balanced mechanical ventilation without heat recovery (MV)
+            annual_energy += 2.5 * 2 * 2.44 * data.ventilation.system_air_change_rate * data.volume; //annual_energy += IUF * SFP * 2.44 * nmech * V;
+            break;
+    }
+
+    // From Solar Hot Water
+    if (data.use_SHW === 1) {
+        if (data.SHW.pump != undefined && data.SHW.pump == 'electric')
+            annual_energy += 50;
+    }
+
+    if (annual_energy > 0)
+        data.energy_requirements.fans_and_pumps = {name: "Fans and pumps", quantity: annual_energy};
+
+    // 2.- Internal heat gains - SAP2012 table 5, p. 215
+    var monthly_heat_gains = 0;
+    data.gains_W['fans_and_pumps'] = new Array();
+
+    // Note: From if there was an oil boiler with pump inside dweling we should add 10W of gains, the problem is that i don't know where in MHEP we can as this. Therefor we assume taht in the case of havin an oil boiler the pump is outside :(
+
+    // From ventilation
+    switch (data.ventilation.ventilation_type) {
+        case 'a':  //Balanced mechanical ventilation with heat recovery (MVHR), the heat gains in this case are included in the MVHR efficiency
+        case 'd':  //Positive input ventilation (from loft space)
+            // Do nothing 
+            break;
+        case 'c':  //Positive input ventilation (from outside) or mechanical extract ventilation   
+            monthly_heat_gains += 2.5 * 0.8 * 0.12 * data.volume; // monthly_heat_gains += IUF * SFP *  0.12 *  V;
+            break;
+        case 'b':  //Balanced mechanical ventilation without heat recovery (MV)
+            monthly_heat_gains += 2.5 * 2 * 0.06 * data.volume; //monthly_heat_gains += IUF * SFP *  0.06 *  V;
+            break;
+    }
+
+    for (var i = 0; i < 12; i++) 
+        data.gains_W['fans_and_pumps'][i] = monthly_heat_gains;
+    console.log(data.gains_W);
 };
 
 
