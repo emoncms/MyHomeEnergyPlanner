@@ -13,7 +13,7 @@ global $reports;
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r5.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesCarbonCoop-r1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
@@ -320,14 +320,11 @@ global $reports;
             for (z in project[scenario].energy_systems) {
                 for (index in project[scenario].energy_systems[z]) {
                     if (project[scenario].energy_systems[z][index].summer == undefined) {
-                        console.log(project[scenario].energy_systems[z][index]);
                         var system = project[scenario].energy_systems[z][index].system;
                         project[scenario].energy_systems[z][index].summer = project[scenario].systemlibrary[system].summer;
                         project[scenario].energy_systems[z][index].winter = project[scenario].systemlibrary[system].winter;
                         project[scenario].energy_systems[z][index].fuel = project[scenario].systemlibrary[system].fuel;
-                        project[scenario].energy_systems[z][index].name = project[scenario].systemlibrary[system].name;
-                        console.log(project[scenario].energy_systems[z][index]);
-                    }
+                        project[scenario].energy_systems[z][index].name = project[scenario].systemlibrary[system].name;                    }
                 }
             }
         }

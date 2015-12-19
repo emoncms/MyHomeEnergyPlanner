@@ -329,7 +329,8 @@ var openbem = {
             orientation: data.SHW.orientation,
             overshading: data.SHW.overshading,
             Vs: data.SHW.Vs,
-            combined_cylinder_volume: data.SHW.combined_cylinder_volume
+            combined_cylinder_volume: data.SHW.combined_cylinder_volume,
+            pump: data.SHW.pump
         };
         // Detailed Appliaces List
         inputdata.use_appliancelist = data.use_appliancelist;
@@ -394,7 +395,9 @@ var openbem = {
                     summer: data.energy_systems[z][i].summer,
                     winter: data.energy_systems[z][i].winter,
                     fuel: data.energy_systems[z][i].fuel,
-                    id: 1.0 * data.energy_systems[z][i].id
+                    id: 1.0 * data.energy_systems[z][i].id,
+                    fans_and_pumps: data.energy_systems[z][i].fans_and_pumps,
+                    combi_keep_hot: data.energy_systems[z][i].combi_keep_hot
                 });
             }
 

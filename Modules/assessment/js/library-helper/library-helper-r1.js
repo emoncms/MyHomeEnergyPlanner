@@ -353,7 +353,7 @@ libraryHelper.prototype.onEditLibraryItem = function (origin) {
     $('#library-to-edit-item').parent().show();
     $('.edit-item-in-library').html(out);
     $('#edit-item-ok').attr('class', "btn edit-library-item-ok");
-    $('.item-tag').attr('disabled', 'true');    
+    $('.item-tag').attr('disabled', 'true');
     $('.editable-field').removeAttr("disabled");
     $("#edit-item-message").html('');
     $('#modal-edit-item button').show();
@@ -390,7 +390,7 @@ libraryHelper.prototype.onEditItem = function (origin) {
     var out = this[function_name](item, tag);
     $('.edit-item-in-library').html(out);
     $('#library-to-edit-item').parent().hide();
-    $('.item-tag').attr('disabled', 'true'); 
+    $('.item-tag').attr('disabled', 'true');
     $('.editable-field').attr('disabled', 'true');
     $('#edit-item-ok').attr('class', "btn edit-item-ok");
     $("#edit-item-message").html('');
@@ -408,7 +408,7 @@ libraryHelper.prototype.onEditItemOk = function () {
     var item = this[function_name]();
     var index = $('#edit-item-ok').attr('row');
     var item_subsystem = $('#edit-item-ok').attr('type-of-item');
-    edit_item(item, index,item_subsystem); // This function is declared in the view
+    edit_item(item, index, item_subsystem); // This function is declared in the view
     $('.modal').modal('hide');
 };
 
@@ -557,7 +557,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
 
 libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+        item = {name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', fans_and_pumps: 0, combi_keep_hot: 0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -566,6 +566,8 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     out += '<tr><td>Default efficiency</td><td><input type="text" class="edit-system-efficiency editable-field" value="' + item.efficiency + '" /></td></tr>';
     out += '<tr><td>Winter efficiency</td><td><input type="text" class="edit-system-winter editable-field" value="' + item.winter + '" /></td></tr>';
     out += '<tr><td>Summer efficiency</td><td><input type="text" class="edit-system-summer editable-field" value="' + item.summer + '" /></td></tr>';
+    out += '<tr><td>Pumps and fans (kWh/year)</td><td><input type="text" class="edit-system-fans_and_pumps editable-field" value="' + item.fans_and_pumps + '" /></td></tr>';
+    out += '<tr><td>Keep hot facility, combi boilers only (kWh/year)</td><td><input type="text" class="editable-field edit-system-combi_keep_hot" value="' + item.combi_keep_hot + '" /></td></tr>';
     out += '<tr><td>Fuel</td><td><select class="edit-system-fuel editable-field" default="' + item.fuel + '">';
     for (fuel in datasets.fuels) {
         if (fuel == item.fuel)
@@ -575,16 +577,16 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     }
     out += '</select></td></tr>';
     out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
-    out += '<tr><td>Description</td><td><input type="text" class="create-element-description" value="' + item.description + '" /></td></tr>';
-    out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
-    out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
-    out += '<tr><td>Cost</td><td><input type="text" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
-    out += '<tr><td>Who by</td><td><input type="text" class="create-element-who_by" value="' + item.who_by + '" /></td></tr>';
-    out += '<tr><td>Disruption</td><td><input type="text" class="create-element-disruption" value="' + item.disruption + '" /></td></tr>';
-    out += '<tr><td>Associated work</td><td><input type="text" class="create-element-associated_work" value="' + item.associated_work + '" /></td></tr>';
-    out += '<tr><td>Key risks</td><td><input type="text" class="create-element-key_risks" value="' + item.key_risks + '" /></td></tr>';
-    out += '<tr><td>Notes</td><td><input type="text" class="create-element-notes" value="' + item.notes + '" /></td></tr>';
-    out += '<tr><td>Maintenance</td><td><input type="text" class="create-element-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><input type="text" class="edit-system-description" value="' + item.description + '" /></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="edit-system-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="edit-system-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="edit-system-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="edit-system-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="edit-system-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="edit-system-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="edit-system-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><input type="text" class="edit-system-notes" value="' + item.notes + '" /></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="edit-system-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
     return out;
 };
@@ -654,11 +656,23 @@ libraryHelper.prototype.systems_get_item_to_save = function () {
     var item = {};
     var system = $(".edit-system-tag").val();
     item[system] = {
-        name: $(".edit-system-name").val(),
+        name: $(".edit-system-nedame").val(),
         efficiency: $(".edit-system-efficiency").val(),
         winter: $(".edit-system-winter").val(),
         summer: $(".edit-system-summer").val(),
-        fuel: $(".edit-system-fuel").val()
+        fuel: $(".edit-system-fuel").val(),
+        fans_and_pumps: $(".edit-system-fans_and_pumps").val(),
+        combi_keep_hot: $(".edit-system-combi_keep_hot").val(),
+        description: $(".edit-system-description").val(),
+        performance: $(".edit-system-performance").val(),
+        benefits: $(".edit-system-benefits").val(),
+        cost: $(".edit-system-cost").val(),
+        who_by: $(".edit-system-who_by").val(),
+        disruption: $(".edit-system-disruption").val(),
+        associated_work: $(".edit-system-associated_work").val(),
+        key_risks: $(".edit-system-key_risks").val(),
+        notes: $(".edit-system-notes").val(),
+        maintenance: $(".edit-system-maintenance").val()
     };
     return item;
 };
