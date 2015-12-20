@@ -53,9 +53,9 @@ calc.run = function (datain)
     calc.currentenergy(calc.data);
 
     calc.temperature(calc.data);
+    calc.fans_and_pumps(calc.data);
     calc.space_heating(calc.data);
     calc.energy_systems(calc.data);
-    calc.fans_and_pumps(calc.data);
     calc.SAP(calc.data);
 
     calc.data.totalWK = calc.data.fabric.total_heat_loss_WK + calc.data.ventilation.average_WK;
@@ -1143,12 +1143,18 @@ calc.water_heating = function (data)
     var hot_water_heater_output = [];
     var heat_gains_from_water_heating = [];
 
-    data.water_heating.annual_energy_content = 0;
-
-    for (var m = 0; m < 12; m++) {
-        Vd_m[m] = datasets.table_1c[m] * data.water_heating.Vd_average;
-        monthly_energy_content[m] = (4.180 * Vd_m[m] * datasets.table_1a[m] * datasets.table_1d[m]) / 3600;
-        data.water_heating.annual_energy_content += monthly_energy_content[m];
+    if (data.water_heating.override_annual_energy_content == 1) {
+        // We don't need to calculate data.water_heating.annual_energy_content as it has been inputed in waterheating.html
+        for (var m = 0; m < 12; m++)
+            monthly_energy_content[m] = datasets.table_1c[m] * data.water_heating.annual_energy_content / 12;
+    }
+    else {
+        data.water_heating.annual_energy_content = 0;
+        for (var m = 0; m < 12; m++) {
+            Vd_m[m] = datasets.table_1c[m] * data.water_heating.Vd_average;
+            monthly_energy_content[m] = (4.180 * Vd_m[m] * datasets.table_1a[m] * datasets.table_1d[m]) / 3600;
+            data.water_heating.annual_energy_content += monthly_energy_content[m];
+        }
     }
 
     //----------------------------------------------------------------------------------------
@@ -1252,11 +1258,11 @@ calc.water_heating = function (data)
      }
      */
 
-    if (data.use_water_heating) {
-        data.gains_W["waterheating"] = waterheating_gains;
-        if (annual_waterheating_demand > 0)
-            data.energy_requirements.waterheating = {name: "Water Heating", quantity: annual_waterheating_demand};
-    }
+    //if (data.use_water_heating) {
+    data.gains_W["waterheating"] = waterheating_gains;
+    if (annual_waterheating_demand > 0)
+        data.energy_requirements.waterheating = {name: "Water Heating", quantity: annual_waterheating_demand};
+    //}
 
     return data;
 };
@@ -1625,14 +1631,12 @@ calc.currentenergy = function (data)
 /* "Pumps and fans" and "electric keep-hot faciliity for combi boilers" */
 /************************************************************************/
 calc.fans_and_pumps = function (data) {
-    if (data.fans_and_pumps == undefined)
-        data.fans_and_pumps = {};
 
     // 1.- Annual energy requirements for pumps, fans and electric keep-hot
     var annual_energy = 0
 
     // From heating systems
-    if (data.energy_systems.space_heating != undefined) {
+    if (data.energy_systems != undefined && data.energy_systems.space_heating != undefined) {
         for (system in data.energy_systems.space_heating) {
             annual_energy += data.energy_systems.space_heating[system].fans_and_pumps;
             annual_energy += data.energy_systems.space_heating[system].combi_keep_hot; // I assume that if there is a combi boiler, it is used for water and space heating. We only want to check if there is a "combi keep hot facility" once, so i do it in space heating but not in water heating
@@ -1686,7 +1690,6 @@ calc.fans_and_pumps = function (data) {
 
     for (var i = 0; i < 12; i++)
         data.gains_W['fans_and_pumps'][i] = monthly_heat_gains;
-    console.log(data.gains_W);
 };
 
 
