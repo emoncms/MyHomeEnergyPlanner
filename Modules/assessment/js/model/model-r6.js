@@ -181,6 +181,7 @@ calc.fabric = function (data)
     data.fabric.total_wall_WK = 0;
     data.fabric.total_roof_WK = 0;
     data.fabric.total_window_WK = 0;
+    data.fabric.total_party_wall_WK = 0;
 
     data.fabric.annual_solar_gain = 0;
 
@@ -190,6 +191,8 @@ calc.fabric = function (data)
     data.fabric.total_floor_area = 0;
     data.fabric.total_roof_area = 0;
     data.fabric.total_window_area = 0;
+    data.fabric.total_party_wall_area = 0;
+
     // Solar gains
     var sum = 0;
     var gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -258,7 +261,10 @@ calc.fabric = function (data)
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
-
+        if (data.fabric.elements[z].type == 'party_wall' || data.fabric.elements[z].type == 'Party_wall') {
+            data.fabric.total_party_wall_WK += data.fabric.elements[z].wk;
+            data.fabric.total_party_wall_area += data.fabric.elements[z].netarea;
+        }
         // Calculate total thermal capacity
         if (data.fabric.elements[z].kvalue != undefined) {
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;

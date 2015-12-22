@@ -619,8 +619,12 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     var out = '<div class="input-prepend"><span class="add-on">Type</span><select class="create-element-type">';
     out += type == 'Wall' ? '<option value="Wall" selected>Wall</option>' : '<option value = "Wall" > Wall </option>';
     out += type == 'Roof' ? '<option value="Roof" selected>Roof</option>' : '<option value="Roof">Roof</option>';
-    out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>'
-    out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option > ';
+    out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
+    out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
+    if (type == 'party_wall' || type == 'Party_wall')
+        out += '<option value="party_wall" selected>Party wall</option>';
+    else
+        out += '<option value="party_wall">Party wall</option>';
     out += '</select></div>';
     out += '<table class="table">';
     out += '<tr><td>Tag</td><td><input type="text" class="create-element-tag item-tag" value="' + item.tag + '" /></td></tr>';

@@ -119,7 +119,94 @@ function assessment_controller() {
                 $req->execute();
             }
         }
+
+        // Add party walls to users elements libraries
+        $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
+        foreach ($libresult as $row) {
+            $data = json_decode($row['data']);
+            $iuy = 0;
+            if (!isset($data->PW1)) {
+                $data->PW1 = (object) array(
+                            'name' => "Solid (including structurally insulated panel)",
+                            'source' => "SAP2012, table 3.6, p.20",
+                            'uvalue' => 0,
+                            'kvalue' => 140,
+                            'tags' => ["party_wall"],
+                            'criteria' => [],
+                            'description' => '--',
+                            'performance' => '--',
+                            'benefits' => '--',
+                            'cost' => 0,
+                            'who_by' => '--',
+                            'disruption' => '--',
+                            'associated_work' => '--',
+                            'key_risks' => '--',
+                            'notes' => '--',
+                            'maintenance' => '--'
+                );
+                $data->PW2 = (object) array(
+                            'name' => "Unfilled cavity with no effective edge sealing)",
+                            'source' => "SAP2012, table 3.6, p.20",
+                            'uvalue' => 0.5,
+                            'kvalue' => 140,
+                            'tags' => ["party_wall"],
+                            'criteria' => [],
+                            'description' => 'Unfilled cavity with no effective edge sealing))',
+                            'performance' => '--',
+                            'benefits' => '--',
+                            'cost' => 0,
+                            'who_by' => '--',
+                            'disruption' => '--',
+                            'associated_work' => '--',
+                            'key_risks' => '--',
+                            'notes' => '--',
+                            'maintenance' => '--'
+                );
+                $data->PW3 = (object) array(
+                            'name' => "Unfilled cavity with effective sealing around all exposed edges and in line with insulation layers in abutting elements",
+                            'source' => "SAP2012, table 3.6, p.20",
+                            'uvalue' => 0.2,
+                            'kvalue' => 140,
+                            'tags' => ["party_wall"],
+                            'criteria' => [],
+                            'description' => 'Unfilled cavity with effective sealing around all exposed edges and in line with insulation layers in abutting elements',
+                            'performance' => '--',
+                            'benefits' => '--',
+                            'cost' => 0,
+                            'who_by' => '--',
+                            'disruption' => '--',
+                            'associated_work' => '--',
+                            'key_risks' => '--',
+                            'notes' => '--',
+                            'maintenance' => '--'
+                );
+                $data->PW4 = (object) array(
+                            'name' => "Fully filled cavity with effective sealing at all exposed edges and in line with insulation layers in abutting elements",
+                            'source' => "SAP2012, table 3.6, p.20",
+                            'uvalue' => 0,
+                            'kvalue' => 140,
+                            'tags' => ["party_wall"],
+                            'criteria' => [],
+                            'description' => 'Fully filled cavity with effective sealing at all exposed edges and in line with insulation layers in abutting elements',
+                            'performance' => '--',
+                            'benefits' => '--',
+                            'cost' => 0,
+                            'who_by' => '--',
+                            'disruption' => '--',
+                            'associated_work' => '--',
+                            'key_risks' => '--',
+                            'notes' => '--',
+                            'maintenance' => '--'
+                );
+                $data = json_encode($data);
+                $req = $mysqli->prepare('UPDATE element_library SET `data` = ? WHERE `id` = ?  ');
+                $req->bind_param("si", $data, $row['id']);
+                $req->execute();
+            }
+        }
     }
+
+
 
     /* End backwards compatibility section */
 
