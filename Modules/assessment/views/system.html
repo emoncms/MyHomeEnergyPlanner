@@ -66,6 +66,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th style="text-align:right"><span class="add-from-lib" style="cursor:pointer" eid="template"><button class="btn" style="padding-top:2px; padding-bottom:2px"><i class="icon-plus"></i> Add</button></span></th>
             </tr>
 
             <tr>
@@ -74,9 +75,20 @@
                 <td>Fraction</td>
                 <td>Demand</td>
                 <td>Efficiency</td>
-                <td>Fuel input </td>
-
-                <td style="text-align:center"><span class="add-from-lib" style="cursor:pointer" eid="template"><button class="btn" style="padding-top:2px; padding-bottom:2px"><i class="icon-plus"></i> Add</button></span></td>
+                <td>Fuel input</td>
+                <td style=" width:120px;text-align: center"><span style="display:none;" class="secondary-space-heating template" >Secondary <i class="icon-question-sign" title="SAP2012 fractions for secondary heating system
+- All gas, oil and solid fuel systems- 0.10
+- Heat pump - 0.10
+- Electric storage heaters (not integrated)
+            - not fan-assisted - 0.15
+            - fan-assisted - 0.1
+            - high heat retention - 0.1
+- Integrated storage/direct-acting electric systems- 0.10
+- Electric CPSU- 0.10
+- Electric room heaters- 0.20
+- Other electric systems- 0.10
+- Community heating- 0.10"></i></span></td>
+                <td></td>
             </tr>
 
         </tbody>
@@ -92,6 +104,7 @@
                 <td><span key="data.energy_systems.template.x.demand" dp=0></span> kWh/year</td>
                 <td><span key="data.energy_systems.template.x.efficiency" dp=3></span></td>
                 <td><span key="data.energy_systems.template.x.fuelinput" dp=0></span> kWh/year</td>
+                <td style="text-align: center"><input class="secondary-space-heating template" style="display:none;" type="checkbox" key="data.energy_systems.template.x.secondary"/></td>
                 <td style="text-align:center">
                     <button class="apply-measure" tag="template" row="template" item="template" type-of-item='template' item_id="template" style="margin-right:25px">Apply Measure</button>
                     <span class="edit-item"  eid="eid" sid="sid" row="template" type-of-item="template" tag="template" style="cursor:pointer; margin-right:15px" item="template" title="Editing a system this way is not considered a Measure"><a><i class="icon-edit"></i></a></span>

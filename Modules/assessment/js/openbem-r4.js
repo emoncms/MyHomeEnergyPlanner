@@ -403,6 +403,8 @@ var openbem = {
                     fans_and_pumps: data.energy_systems[z][i].fans_and_pumps,
                     combi_keep_hot: data.energy_systems[z][i].combi_keep_hot
                 });
+                if(data.energy_systems[z][i].secondary != undefined) // Secondary heating system
+                    inputdata.energy_systems[z][i].secondary = data.energy_systems[z][i].secondary;
             }
 
         }

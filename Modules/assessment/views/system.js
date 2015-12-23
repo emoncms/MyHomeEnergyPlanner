@@ -35,6 +35,11 @@ function system_UpdateUI()
         $("#energyrequirements [key='data.energy_requirements.template.name']").attr('key', 'data.energy_requirements.' + z + '.name');
         $("#energyrequirements [key='data.energy_requirements.template.quantity']").attr('key', 'data.energy_requirements.' + z + '.quantity');
         $("#energyrequirements [eid=template]").attr('eid', z);
+
+        if (z == 'space_heating')
+            $("#energyrequirements .secondary-space-heating.template").show();
+        $("#energyrequirements .secondary-space-heating.template").removeClass('template');
+
         for (x in data.energy_systems[z])
             add_energy_system(z, x);
     }
@@ -87,6 +92,14 @@ function add_energy_system(z, x)
 
     $("#energyrequirements [z='tmp']").attr('z', z);
     $("#energyrequirements [x='tmp']").attr('x', x);
+
+    if (z == 'space_heating') {
+        $("#energyrequirements [key='data.energy_systems.template.x.secondary']").attr('key', prefixB + '.secondary');
+        $("#energyrequirements .secondary-space-heating.template").show();
+    }
+    $("#energyrequirements .secondary-space-heating.template").removeClass('template');
+
+
 }
 
 function system_initUI()
