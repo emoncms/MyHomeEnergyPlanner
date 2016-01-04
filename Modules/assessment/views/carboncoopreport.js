@@ -667,6 +667,10 @@ function carboncoopreport_initUI() {
 							primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['space_heating'].quantity/data.TFA, label: 'Space Heating'});
 						}
 
+						if (typeof project[scenarios[i]].energy_requirements['fans_and_pumps'] !== "undefined"){
+							primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['fans_and_pumps'].quantity/data.TFA, label: 'Fans and Pumps'});
+						}
+
 					}
 				}
 			}
@@ -702,6 +706,7 @@ function carboncoopreport_initUI() {
 				'Cooking': 'rgb(24,86,62)',
 				'Water Heating': 'rgb(157,213,203)',
 				'Space Heating' : 'rgb(231,37,57)',
+				'Fans and Pumps' : 'rgb(246, 167, 7)',
 				'Total' : 'rgb(131, 51, 47)',
 			},
 			data: [
