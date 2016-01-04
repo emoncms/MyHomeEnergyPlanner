@@ -301,7 +301,7 @@ var openbem = {
             greenenergy: data.currentenergy.greenenergy
         };
         // Waterheating
-        inputdata.use_water_heating = data.use_water_heating;
+        //inputdata.use_water_heating = data.use_water_heating;
         inputdata.water_heating = {
             low_water_use_design: data.water_heating.low_water_use_design,
             instantaneous_hotwater: data.water_heating.instantaneous_hotwater,
@@ -317,7 +317,11 @@ var openbem = {
             community_heating: data.water_heating.community_heating,
             hot_water_store_in_dwelling: data.water_heating.hot_water_store_in_dwelling,
             contains_dedicated_solar_storage_or_WWHRS: data.water_heating.contains_dedicated_solar_storage_or_WWHRS,
-            hot_water_control_type: data.water_heating.hot_water_control_type
+            hot_water_control_type: data.water_heating.hot_water_control_type,
+            override_annual_energy_content: data.water_heating.override_annual_energy_content,
+            annual_energy_content: data.water_heating.annual_energy_content
+
+
         };
         inputdata.use_SHW = data.use_SHW;
         inputdata.SHW = {
@@ -329,7 +333,8 @@ var openbem = {
             orientation: data.SHW.orientation,
             overshading: data.SHW.overshading,
             Vs: data.SHW.Vs,
-            combined_cylinder_volume: data.SHW.combined_cylinder_volume
+            combined_cylinder_volume: data.SHW.combined_cylinder_volume,
+            pump: data.SHW.pump
         };
         // Detailed Appliaces List
         inputdata.use_appliancelist = data.use_appliancelist;
@@ -394,7 +399,9 @@ var openbem = {
                     summer: data.energy_systems[z][i].summer,
                     winter: data.energy_systems[z][i].winter,
                     fuel: data.energy_systems[z][i].fuel,
-                    id: 1.0 * data.energy_systems[z][i].id
+                    id: 1.0 * data.energy_systems[z][i].id,
+                    fans_and_pumps: data.energy_systems[z][i].fans_and_pumps,
+                    combi_keep_hot: data.energy_systems[z][i].combi_keep_hot
                 });
             }
 

@@ -13,7 +13,7 @@ global $reports;
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r5.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesCarbonCoop-r1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
@@ -86,9 +86,9 @@ global $reports;
                         <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
                         <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
                         <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
+                        <div class="scenario-nav"><a href="#template/waterheating">Water Heating</a></div>
                         <div class="scenario-nav-heading">Extended input</a></div>
 
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_water_heating"/> <a href="#template/waterheating">Water Heating</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_applianceCarbonCoop"/> <a href="#template/applianceCarbonCoop">Appliances CarbonCoop calculation</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/> <a href="#template/appliancelist">Detailed Appliance List</a></div>
@@ -320,13 +320,11 @@ global $reports;
             for (z in project[scenario].energy_systems) {
                 for (index in project[scenario].energy_systems[z]) {
                     if (project[scenario].energy_systems[z][index].summer == undefined) {
-                        console.log(project[scenario].energy_systems[z][index]);
                         var system = project[scenario].energy_systems[z][index].system;
                         project[scenario].energy_systems[z][index].summer = project[scenario].systemlibrary[system].summer;
                         project[scenario].energy_systems[z][index].winter = project[scenario].systemlibrary[system].winter;
                         project[scenario].energy_systems[z][index].fuel = project[scenario].systemlibrary[system].fuel;
                         project[scenario].energy_systems[z][index].name = project[scenario].systemlibrary[system].name;
-                        console.log(project[scenario].energy_systems[z][index]);
                     }
                 }
             }

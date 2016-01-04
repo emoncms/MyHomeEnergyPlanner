@@ -337,8 +337,8 @@ var project = {
             "percentage_draught_proofed": 0,
             "number_of_sides_sheltered": 2,
             "ventilation_type": "d",
-            "system_air_change_rate": 0,
-            "balanced_heat_recovery_efficiency": 100
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": 65
         },
         "use_LAC": 1,
         "LAC": {

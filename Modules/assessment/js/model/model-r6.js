@@ -53,6 +53,7 @@ calc.run = function (datain)
     calc.currentenergy(calc.data);
 
     calc.temperature(calc.data);
+    calc.fans_and_pumps(calc.data);
     calc.space_heating(calc.data);
     calc.energy_systems(calc.data);
     calc.SAP(calc.data);
@@ -180,6 +181,7 @@ calc.fabric = function (data)
     data.fabric.total_wall_WK = 0;
     data.fabric.total_roof_WK = 0;
     data.fabric.total_window_WK = 0;
+    data.fabric.total_party_wall_WK = 0;
 
     data.fabric.annual_solar_gain = 0;
 
@@ -189,6 +191,8 @@ calc.fabric = function (data)
     data.fabric.total_floor_area = 0;
     data.fabric.total_roof_area = 0;
     data.fabric.total_window_area = 0;
+    data.fabric.total_party_wall_area = 0;
+
     // Solar gains
     var sum = 0;
     var gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -257,7 +261,10 @@ calc.fabric = function (data)
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
-
+        if (data.fabric.elements[z].type == 'party_wall' || data.fabric.elements[z].type == 'Party_wall') {
+            data.fabric.total_party_wall_WK += data.fabric.elements[z].wk;
+            data.fabric.total_party_wall_area += data.fabric.elements[z].netarea;
+        }
         // Calculate total thermal capacity
         if (data.fabric.elements[z].kvalue != undefined) {
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;
@@ -354,8 +361,8 @@ calc.ventilation = function (data)
         percentage_draught_proofed: 0,
         number_of_sides_sheltered: 0,
         ventilation_type: 'd',
-        system_air_change_rate: 0,
-        balanced_heat_recovery_efficiency: 100
+        system_air_change_rate: 0.5,
+        balanced_heat_recovery_efficiency: 65
     }
 
     if (data.ventilation == undefined)
@@ -665,6 +672,20 @@ calc.space_heating = function (data)
     var annual_heating_demand = 0;
     var annual_cooling_demand = 0;
 
+    //Internal gains for "Metabolic" and "Losses", they are not calculated anywhere else but we need them before we can calculate the heat/cooling demand
+    data.gains_W['metabolic'] = new Array();
+    data.gains_W['losses'] = new Array();
+    for (m = 0; m < 12; m++) {
+        if (data.space_heating.use_utilfactor_forgains) {
+            data.gains_W['metabolic'][m] = 60 * data.occupancy;
+            data.gains_W['losses'][m] = -40 * data.occupancy;
+        }
+        else {
+            data.gains_W['metabolic'][m] = 50 * data.occupancy;
+            data.gains_W['losses'][m] = -40 * data.occupancy;
+        }
+    }
+
     for (m = 0; m < 12; m++)
     {
         // DeltaT (Difference between Internal and External temperature)
@@ -710,11 +731,10 @@ calc.space_heating = function (data)
         annual_heating_demand += heat_demand_kwh[m];
         annual_cooling_demand += cooling_demand_kwh[m];
 
-
         //Annual useful gains. Units: kwh/m2/year
         var gains_source = "";
         for (z in data.gains_W) {
-            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating")
+            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps' || z === 'metabolic' || z === 'losses')
                 gains_source = "Internal";
             if (z === "solar")
                 gains_source = "Solar";
@@ -1129,12 +1149,18 @@ calc.water_heating = function (data)
     var hot_water_heater_output = [];
     var heat_gains_from_water_heating = [];
 
-    data.water_heating.annual_energy_content = 0;
-
-    for (var m = 0; m < 12; m++) {
-        Vd_m[m] = datasets.table_1c[m] * data.water_heating.Vd_average;
-        monthly_energy_content[m] = (4.180 * Vd_m[m] * datasets.table_1a[m] * datasets.table_1d[m]) / 3600;
-        data.water_heating.annual_energy_content += monthly_energy_content[m];
+    if (data.water_heating.override_annual_energy_content == 1) {
+        // We don't need to calculate data.water_heating.annual_energy_content as it has been inputed in waterheating.html
+        for (var m = 0; m < 12; m++)
+            monthly_energy_content[m] = datasets.table_1c[m] * data.water_heating.annual_energy_content / 12;
+    }
+    else {
+        data.water_heating.annual_energy_content = 0;
+        for (var m = 0; m < 12; m++) {
+            Vd_m[m] = datasets.table_1c[m] * data.water_heating.Vd_average;
+            monthly_energy_content[m] = (4.180 * Vd_m[m] * datasets.table_1a[m] * datasets.table_1d[m]) / 3600;
+            data.water_heating.annual_energy_content += monthly_energy_content[m];
+        }
     }
 
     //----------------------------------------------------------------------------------------
@@ -1238,11 +1264,11 @@ calc.water_heating = function (data)
      }
      */
 
-    if (data.use_water_heating) {
-        data.gains_W["waterheating"] = waterheating_gains;
-        if (annual_waterheating_demand > 0)
-            data.energy_requirements.waterheating = {name: "Water Heating", quantity: annual_waterheating_demand};
-    }
+    //if (data.use_water_heating) {
+    data.gains_W["waterheating"] = waterheating_gains;
+    if (annual_waterheating_demand > 0)
+        data.energy_requirements.waterheating = {name: "Water Heating", quantity: annual_waterheating_demand};
+    //}
 
     return data;
 };
@@ -1479,7 +1505,7 @@ calc.currentenergy = function (data)
         'gas-kwh': {name: "Mains gas in kWh", note: "",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.216, primaryenergy: 1.22, unitcost: 0.0348, standingcharge: 120, selected: 0, group: "Heating (non-electric)"},
         'wood-logs': {name: "Wood Logs", note: "",
-            quantity: 0, units: "m3", kwh: 1380, co2: 26.22,primaryenergy: 1.04, unitcost: 58.374, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+            quantity: 0, units: "m3", kwh: 1380, co2: 26.22, primaryenergy: 1.04, unitcost: 58.374, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
         'wood-pellets': {name: "Wood Pellets", note: "In bags",
             quantity: 0, units: "m3", kwh: 4800, co2: 187.2, primaryenergy: 1.26, unitcost: 278.88, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
         'oil': {name: "Oil", note: "",
@@ -1605,6 +1631,71 @@ calc.currentenergy = function (data)
     data.currentenergy.energyuseperperson = (enduse_annual_kwh / 365.0) / data.occupancy;
 
     return data;
+};
+
+/************************************************************************/
+/* "Pumps and fans" and "electric keep-hot faciliity for combi boilers" */
+/************************************************************************/
+calc.fans_and_pumps = function (data) {
+
+    // 1.- Annual energy requirements for pumps, fans and electric keep-hot
+    var annual_energy = 0
+
+    // From heating systems
+    if (data.energy_systems != undefined && data.energy_systems.space_heating != undefined) {
+        for (system in data.energy_systems.space_heating) {
+            annual_energy += data.energy_systems.space_heating[system].fans_and_pumps;
+            annual_energy += data.energy_systems.space_heating[system].combi_keep_hot; // I assume that if there is a combi boiler, it is used for water and space heating. We only want to check if there is a "combi keep hot facility" once, so i do it in space heating but not in water heating
+        }
+    }
+
+    // From Ventilation (SAP2012 document page 213)
+    switch (data.ventilation.ventilation_type) {
+        case 'd':  //Positive input ventilation (from loft space)
+            // Do nothing - In this case annual energy is 0, see SAP2012 2.6.1: The energy used by the fan is taken as counterbalancing the effect of using slightly warmer air from the loft space compared with outside
+            break;
+        case 'c':  //Positive input ventilation (from outside) or mechanical extract ventilation   
+            annual_energy += 2.5 * 0.8 * 1.22 * data.volume; // annual_energy += IUF * SFP * 1.22 * V;
+            break;
+        case 'a':  //Balanced mechanical ventilation with heat recovery (MVHR)
+            annual_energy += 2.5 * 2 * 2.44 * data.ventilation.system_air_change_rate * data.volume; //annual_energy += IUF * SFP * 2.44 * nmech * V;
+            break;
+        case 'b':  //Balanced mechanical ventilation without heat recovery (MV)
+            annual_energy += 2.5 * 2 * 2.44 * data.ventilation.system_air_change_rate * data.volume; //annual_energy += IUF * SFP * 2.44 * nmech * V;
+            break;
+    }
+
+    // From Solar Hot Water
+    if (data.use_SHW === 1) {
+        if (data.SHW.pump != undefined && data.SHW.pump == 'electric')
+            annual_energy += 50;
+    }
+
+    if (annual_energy > 0)
+        data.energy_requirements.fans_and_pumps = {name: "Fans and pumps", quantity: annual_energy};
+
+    // 2.- Internal heat gains - SAP2012 table 5, p. 215
+    var monthly_heat_gains = 0;
+    data.gains_W['fans_and_pumps'] = new Array();
+
+    // Note: From if there was an oil boiler with pump inside dweling we should add 10W of gains, the problem is that i don't know where in MHEP we can as this. Therefor we assume taht in the case of havin an oil boiler the pump is outside :(
+
+    // From ventilation
+    switch (data.ventilation.ventilation_type) {
+        case 'a':  //Balanced mechanical ventilation with heat recovery (MVHR), the heat gains in this case are included in the MVHR efficiency
+        case 'd':  //Positive input ventilation (from loft space)
+            // Do nothing 
+            break;
+        case 'c':  //Positive input ventilation (from outside) or mechanical extract ventilation   
+            monthly_heat_gains += 2.5 * 0.8 * 0.12 * data.volume; // monthly_heat_gains += IUF * SFP *  0.12 *  V;
+            break;
+        case 'b':  //Balanced mechanical ventilation without heat recovery (MV)
+            monthly_heat_gains += 2.5 * 2 * 0.06 * data.volume; //monthly_heat_gains += IUF * SFP *  0.06 *  V;
+            break;
+    }
+
+    for (var i = 0; i < 12; i++)
+        data.gains_W['fans_and_pumps'][i] = monthly_heat_gains;
 };
 
 

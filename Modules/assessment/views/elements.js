@@ -34,6 +34,8 @@ $("#openbem").on("click", '.add-element', function () {
         add_element("#floors", newelementid);
     if (type == "Window")
         add_window(newelementid);
+     if (type == "Party_wall")
+        add_element("#party_walls", newelementid);
     update();
     if (type != "Window" && type != "Floor") {
         for (z in data.fabric.elements) {
@@ -274,6 +276,7 @@ function elements_initUI()
     $("#roofs").html("");
     $("#floors").html("");
     $("#windows").html("");
+    $("#party_walls").html("");
 
     // Initial addition of floors
     for (z in data.fabric.elements) {
@@ -287,6 +290,8 @@ function elements_initUI()
             add_element("#roofs", z);
         } else if (type == 'Window' || type == 'window') {
             add_window(z);
+        } else if (type == 'Party_wall' || type == 'party_wall') {
+            add_element("#party_walls", z);
         }
     }
 
