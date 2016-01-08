@@ -427,6 +427,8 @@ calc.ventilation = function (data)
     // (23b)  input.effective_air_change_rate.exhaust_air_heat_pump
     // (23c)  input.balanced_heat_recovery_efficiency
     var effective_air_change_rate = [];
+    var infiltration_WK = [];
+    var ventilation_WK = [];
     switch (data.ventilation.ventilation_type)
     {
         case 'a':
@@ -434,6 +436,9 @@ calc.ventilation = function (data)
             {
                 // (24a)m = (22b)m + (23b) x (1 - (23c) / 100)
                 effective_air_change_rate[m] = adjusted_infiltration[m] + data.ventilation.system_air_change_rate * (1 - data.ventilation.balanced_heat_recovery_efficiency / 100.0);
+                infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
+                ventilation_WK[m] = data.volume * 0.33 * data.ventilation.system_air_change_rate * (1 - data.ventilation.balanced_heat_recovery_efficiency / 100.0);
+
             }
             break;
 
@@ -442,6 +447,9 @@ calc.ventilation = function (data)
             {
                 // (24b)m = (22b)m + (23b)
                 effective_air_change_rate[m] = adjusted_infiltration[m] + data.ventilation.system_air_change_rate;
+                infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
+                ventilation_WK[m] = data.volume * 0.33 * data.ventilation.system_air_change_rate;
+
             }
             break;
 
@@ -452,8 +460,12 @@ calc.ventilation = function (data)
                 // effective_air_change_rate[m] =
                 if (adjusted_infiltration[m] < 0.5 * data.ventilation.system_air_change_rate) {
                     effective_air_change_rate[m] = data.ventilation.system_air_change_rate;
+                    infiltration_WK[m] = 0;
+                    ventilation_WK[m] = data.volume * 0.33 * data.ventilation.system_air_change_rate;
                 } else {
                     effective_air_change_rate[m] = adjusted_infiltration[m] + (0.5 * data.ventilation.system_air_change_rate);
+                    infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
+                    ventilation_WK[m] = data.volume * 0.33 * 0.5 * data.ventilation.system_air_change_rate;
                 }
             }
             break;
@@ -464,26 +476,34 @@ calc.ventilation = function (data)
                 // if (22b)m ≥ 1, then (24d)m = (22b)m otherwise (24d)m = 0.5 + [(22b)m2 × 0.5]
                 if (adjusted_infiltration[m] >= 1) {
                     effective_air_change_rate[m] = adjusted_infiltration[m];
+                    infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
+                    ventilation_WK[m] = 0;
                 } else {
                     effective_air_change_rate[m] = 0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5;
+                    infiltration_WK[m] = data.volume * 0.33 * (0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5);
+                    ventilation_WK[m] = 0;
                 }
             }
             break;
     }
 
-    var sum = 0;
-    var infiltration_WK = [];
+    var sum_infiltration = 0;
+    var sum_ventilation = 0;
     for (var m = 0; m < 12; m++)
     {
-        infiltration_WK[m] = effective_air_change_rate[m] * data.volume * 0.33;
-        sum += infiltration_WK[m];
+        sum_infiltration += infiltration_WK[m];
+        sum_ventilation += ventilation_WK[m];
     }
-    data.ventilation.average_WK = sum / 12.0;
+    data.ventilation.average_WK = (sum_infiltration + sum_ventilation) / 12.0;
+    data.ventilation.average_infiltration_WK = sum_infiltration / 12.0;
+    data.ventilation.average_ventilation_WK = sum_ventilation / 12.0;
 
     data.ventilation.effective_air_change_rate = effective_air_change_rate;
     data.ventilation.infiltration_WK = infiltration_WK;
+    data.ventilation.ventilation_WK = ventilation_WK;
 
-    data.losses_WK.ventilation = infiltration_WK;
+    data.losses_WK.ventilation = ventilation_WK;
+    data.losses_WK.infiltration = infiltration_WK
 
     return data;
 }
