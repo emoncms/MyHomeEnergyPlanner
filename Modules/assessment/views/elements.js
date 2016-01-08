@@ -34,7 +34,7 @@ $("#openbem").on("click", '.add-element', function () {
         add_element("#floors", newelementid);
     if (type == "Window")
         add_window(newelementid);
-     if (type == "Party_wall")
+    if (type == "Party_wall")
         add_element("#party_walls", newelementid);
     update();
     if (type != "Window" && type != "Floor") {
@@ -57,6 +57,24 @@ $("#openbem").on("click", '.delete-element', function () {
     elements_initUI();
     update();
 });
+$("#openbem").on("click", '#apply-measure-TB', function () {
+    $('#TB-measure-value').val(data.fabric.thermal_bridging_yvalue);
+    $('#apply-measure-TB-modal').modal('show');
+});
+$("#openbem").on("click", '#apply-measure-TB-modal-ok', function () {
+    data.measures.thermal_bridging = {original_element: {}, measure: {}};
+    data.measures.thermal_bridging.original_element.value = data.fabric.thermal_bridging_yvalue;
+    data.fabric.thermal_bridging_yvalue = $('#TB-measure-value').val();
+    data.measures.thermal_bridging.measure.value = $('#TB-measure-value').val();
+    data.measures.thermal_bridging.measure.description = $('#TB-measure-description').val();;
+    $('#apply-measure-TB-modal').modal('hide');
+    elements_initUI();
+    update();
+});
+
+
+
+
 /*$("#create-element").click(function () {
  // Empty "tag" so that it has nothing, we leave the other inputs as it can be handy for the user
  $('#create-element-tag').val("");
@@ -239,7 +257,7 @@ function elements_initUI()
     }
     // End backwards compatibility for "description","performance","benefits","cost","who_by",
     //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
-    
+
     /**************************************************************************
      /* FOR BACKWARDS COMPATIBILITY
      * We have just added "description","performance","benefits","cost","who_by",
