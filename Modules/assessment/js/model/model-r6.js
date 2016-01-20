@@ -1471,7 +1471,7 @@ calc.generation = function (data) {
         {
             data.energy_requirements.solarpv = {name: "Solar PV", quantity: -data.generation.solar_annual_kwh * data.generation.solar_fraction_used_onsite};
             data.energy_systems.solarpv = [];
-            data.energy_systems.solarpv[0] = {system: "electric", fraction: 1, efficiency: 1};
+            data.energy_systems.solarpv[0] = {system: "electric", fraction: 1, efficiency: 1, fuel: "electric"};
             data.total_income += data.generation.solar_annual_kwh * data.generation.solar_FIT;
         }
 
@@ -1479,23 +1479,23 @@ calc.generation = function (data) {
         {
             data.energy_requirements.wind = {name: "Wind", quantity: -data.generation.wind_annual_kwh * data.generation.wind_fraction_used_onsite};
             data.energy_systems.wind = [];
-            data.energy_systems.wind[0] = {system: "electric", fraction: 1, efficiency: 1};
+            data.energy_systems.wind[0] = {system: "electric", fraction: 1, efficiency: 1, fuel: "electric"};
             data.total_income += data.generation.wind_annual_kwh * data.generation.wind_FIT;
         }
 
-        if (data.generation.wind_annual_kwh > 0)
+        if (data.generation.hydro_annual_kwh > 0)
         {
             data.energy_requirements.hydro = {name: "Hydro", quantity: -data.generation.hydro_annual_kwh * data.generation.hydro_fraction_used_onsite};
             data.energy_systems.hydro = [];
-            data.energy_systems.hydro[0] = {system: "electric", fraction: 1, efficiency: 1};
+            data.energy_systems.hydro[0] = {system: "electric", fraction: 1, efficiency: 1, fuel: "electric"};
             data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT;
         }
 
         if (data.generation.solarpv_annual_kwh > 0)
         {
-            data.energy_requirements.solarpv2 = {name: "Solar PV", quantity: -data.generation.solarpv_annual_kwh * data.generation.solarpv_fraction_used_onsite};
+            data.energy_requirements.solarpv2 = {name: "Solar PV from calculator", quantity: -data.generation.solarpv_annual_kwh * data.generation.solarpv_fraction_used_onsite};
             if (data.energy_systems.solarpv2 == undefined) {
-                data.energy_systems.solarpv2 = [{system: "electric", fraction: 1, efficiency: 1}];
+                data.energy_systems.solarpv2 = [{system: "electric", fraction: 1, efficiency: 1, fuel: "electric"}];
             }
             data.total_income += data.generation.solarpv_annual_kwh * data.generation.solarpv_FIT;
         }

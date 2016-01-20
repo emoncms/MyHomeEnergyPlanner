@@ -100,12 +100,12 @@
                     <!--<select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>-->
                 </td>
                 <td><input type="text" key="data.energy_systems.template.x.description" style="width:120px"/></td>
-                <td><input type="text" key="data.energy_systems.template.x.fraction" dp=2 style="width:60px"/></td>
+                <td class="fraction template"><input type="number" min="0.01" max="1" step="0.01" key="data.energy_systems.template.x.fraction" dp=2 style="width:60px"/></td>
                 <td><span key="data.energy_systems.template.x.demand" dp=0></span> kWh/year</td>
                 <td><span key="data.energy_systems.template.x.efficiency" dp=3></span></td>
                 <td><span key="data.energy_systems.template.x.fuelinput" dp=0></span> kWh/year</td>
                 <td style="text-align: center"><input class="secondary-space-heating template" style="display:none;" type="checkbox" key="data.energy_systems.template.x.secondary"/></td>
-                <td style="text-align:center">
+                <td style="text-align:center" class="suppliedby-template-buttons">
                     <button class="apply-measure" tag="template" row="template" item="template" type-of-item='template' item_id="template" style="margin-right:25px">Apply Measure</button>
                     <span class="edit-item"  eid="eid" sid="sid" row="template" type-of-item="template" tag="template" style="cursor:pointer; margin-right:15px" item="template" title="Editing a system this way is not considered a Measure"><a><i class="icon-edit"></i></a></span>
                     <span class="delete-system" eid="eid" sid="sid" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span>

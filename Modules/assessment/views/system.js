@@ -39,6 +39,8 @@ function system_UpdateUI()
         if (z == 'space_heating')
             $("#energyrequirements .secondary-space-heating.template").show();
         $("#energyrequirements .secondary-space-heating.template").removeClass('template');
+        if (z == 'solarpv' || z == 'wind' || z == 'hydro' || z == 'solarpv2')
+            $("#energyrequirements [eid='" + z + "']").hide();
 
         for (x in data.energy_systems[z])
             add_energy_system(z, x);
@@ -98,6 +100,18 @@ function add_energy_system(z, x)
         $("#energyrequirements .secondary-space-heating.template").show();
     }
     $("#energyrequirements .secondary-space-heating.template").removeClass('template');
+
+    if (z == 'solarpv' || z == 'wind' || z == 'hydro' || z == 'solarpv2') {
+        $('#energyrequirements .fraction.template').html('');
+        $('#energyrequirements .fraction.template').html('<span key="' + prefixB + '.fraction" style="margin-left:0px" dp="2" />');
+        $('#energyrequirements .suppliedby-template-buttons').html('');
+    }
+        $('#energyrequirements .fraction.template').removeClass('template');
+        $('#energyrequirements .suppliedby-template-buttons').removeClass('suppliedby-template-buttons');
+
+
+
+
 
 
 }
