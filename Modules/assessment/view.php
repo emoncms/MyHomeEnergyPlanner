@@ -311,6 +311,18 @@ global $reports;
     }
 
     function run_backwards_compatibility() {
+        // Some old assesments have renewable energy systems that are missing the "summer" and "winter" efficiencies
+        for (scenario in project) {
+            for (z in project[scenario].energy_systems) {
+                for (index in project[scenario].energy_systems[z]) {
+                    if (project[scenario].energy_systems[z][index].efficiency != undefined && project[scenario].energy_systems[z][index].summer == undefined) {
+                        project[scenario].energy_systems[z][index].summer = 1;
+                        project[scenario].energy_systems[z][index].winter = 1;
+                    }
+                }
+            }
+        }
+
         // Before the library_helper was implemented, systems in data.energy_systems[z][x] were not 
         // a full copy of the item in the library, they only had the "system" and 
         // "fraction" properties and the other ones were copied in the modelr5.js from data.systemlibrary.
