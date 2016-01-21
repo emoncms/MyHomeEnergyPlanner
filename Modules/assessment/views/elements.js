@@ -386,6 +386,7 @@ function apply_measure(measure) {
                     measure.item[lib][z] = data.fabric.elements[measure.row][z];
             }
             //console.log(data.fabric.elements[measure.row]);
+            data.fabric.elements[measure.row] = measure.item[lib];
             data.fabric.measures[measure.item_id].measure = measure.item[lib];
             //data.fabric.elements[measure.row] = measure.item[lib];
             console.log(data.fabric.elements[measure.row]);

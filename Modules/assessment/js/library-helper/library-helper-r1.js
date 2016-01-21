@@ -420,6 +420,10 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-ok').attr('item_id', origin.attr('item_id'));
     $('#apply-measure-ok').attr('item', origin.attr('item'));
     $('#apply-measure-ok').attr('type-of-item', origin.attr('type-of-item')); // Used for energy_systems
+    //// Check remove item (option by default) and hide item
+    $('[name=radio-type-of-measure]').filter('[value=remove]').prop('checked', true);
+    $('#apply-measure-item-fields').hide();
+    
     // Populate the selects library to choose a liibrary and an item (used when replace the item with onee from library)
     var out = '';
     this.library_list[this.type].forEach(function (library) {
@@ -427,9 +431,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     });
     $("#replace-from-lib").html(out);
     this.onChangeApplyMeasureReplaceFromLib(); // This one to populate the select for items
-    // Check remove item, option by default
-    $('[name=radio-type-of-measure]').filter('[value="remove"]').attr('checked', true);
-    // Show/hide modals
+        // Show/hide modals
     $('.modal').modal('hide');
     $('#apply-measure-modal').modal('show');
 };
@@ -451,6 +453,7 @@ libraryHelper.prototype.onApplyMeasureOk = function (origin) {
             break;
     }
     apply_measure(measure);
+    
     $('#apply-measure-modal').modal('hide');
 };
 libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
@@ -785,4 +788,3 @@ libraryHelper.prototype.populate_measure_new_item = function () {
     var out = this[function_name](new_item, item_index);
     $('#apply-measure-item-fields').html(out);
 };
-
