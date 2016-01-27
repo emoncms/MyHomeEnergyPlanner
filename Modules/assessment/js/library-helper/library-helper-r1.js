@@ -489,7 +489,7 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function () {
     var library = this.get_library_by_id($('#replace-from-lib').val()).data;
     for (item in library) {
         if (this.type == 'elements') {
-            if (library[item].tags[0] == original_item.type)
+            if (library[item].tags[0].toUpperCase() == original_item.type.toUpperCase())
                 out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
         }
         else
