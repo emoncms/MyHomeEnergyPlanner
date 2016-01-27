@@ -8,10 +8,11 @@ $("#openbem").on("click", '.add-system', function () {
     var library = library_helper.get_library_by_id($(this).attr('library'));
     var system_id = 1 + get_systems_max_id();
 
-    var system_to_add = library.data[system];
+    var system_to_add = JSON.parse(JSON.stringify(library.data[system]));
     system_to_add.system = system;
     system_to_add.fraction = 1.0;
     system_to_add.id = system_id;
+    system_to_add.demand = data.energy_requirements[eid].quantity;
 
     //data.energy_systems[eid].push({system: system, fraction: 1.0});
     data.energy_systems[eid].push(system_to_add);
