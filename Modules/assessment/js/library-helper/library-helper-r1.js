@@ -423,7 +423,9 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     //// Check remove item (option by default) and hide item
     $('[name=radio-type-of-measure]').filter('[value=remove]').prop('checked', true);
     $('#apply-measure-item-fields').hide();
-    
+    $('#apply-measure-replace').hide();
+
+
     // Populate the selects library to choose a liibrary and an item (used when replace the item with onee from library)
     var out = '';
     this.library_list[this.type].forEach(function (library) {
@@ -431,7 +433,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     });
     $("#replace-from-lib").html(out);
     this.onChangeApplyMeasureReplaceFromLib(); // This one to populate the select for items
-        // Show/hide modals
+    // Show/hide modals
     $('.modal').modal('hide');
     $('#apply-measure-modal').modal('show');
 };
@@ -453,7 +455,7 @@ libraryHelper.prototype.onApplyMeasureOk = function (origin) {
             break;
     }
     apply_measure(measure);
-    
+
     $('#apply-measure-modal').modal('hide');
 };
 libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
@@ -475,6 +477,7 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             var function_name = this.type + "_item_to_html";
             var out = this[function_name](original_item, tag);
             $('#apply-measure-item-fields').html(out);
+            $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
             $('#apply-measure-replace').hide();
             $('#apply-measure-item-fields').show();
             break;
@@ -482,16 +485,25 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
 };
 libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function () {
     var out = "";
+    var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var library = this.get_library_by_id($('#replace-from-lib').val()).data;
     for (item in library) {
-        out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
+        if (this.type == 'elements') {
+            if (library[item].tags[0] == original_item.type)
+                out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
+        }
+        else
+            out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
     }
 
     $('#replace-from-lib-items').html(out);
     this.populate_measure_new_item();
+
 };
 libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function () {
     this.populate_measure_new_item();
+    //disable the possibility to change the type of the element
+    $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
 };
 /**********************************************
  * Libraries to html

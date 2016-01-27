@@ -120,18 +120,18 @@ function assessment_controller() {
             }
         }
 
-        // Add party walls to users elements libraries
+        // Add party walls to users elements libraries, and if it is already there check theat the type (tags[0]) has the first letter upper case
         $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
         foreach ($libresult as $row) {
             $data = json_decode($row['data']);
             $iuy = 0;
-            if (!isset($data->PW1)) {
+            if (!isset($data->PW1) || $data->PW1->tags[0] == 'party_wall') {
                 $data->PW1 = (object) array(
                             'name' => "Solid (including structurally insulated panel)",
                             'source' => "SAP2012, table 3.6, p.20",
                             'uvalue' => 0,
                             'kvalue' => 140,
-                            'tags' => ["party_wall"],
+                            'tags' => ["Party_wall"],
                             'criteria' => [],
                             'description' => '--',
                             'performance' => '--',
@@ -149,7 +149,7 @@ function assessment_controller() {
                             'source' => "SAP2012, table 3.6, p.20",
                             'uvalue' => 0.5,
                             'kvalue' => 140,
-                            'tags' => ["party_wall"],
+                            'tags' => ["Party_wall"],
                             'criteria' => [],
                             'description' => 'Unfilled cavity with no effective edge sealing))',
                             'performance' => '--',
@@ -167,7 +167,7 @@ function assessment_controller() {
                             'source' => "SAP2012, table 3.6, p.20",
                             'uvalue' => 0.2,
                             'kvalue' => 140,
-                            'tags' => ["party_wall"],
+                            'tags' => ["Party_wall"],
                             'criteria' => [],
                             'description' => 'Unfilled cavity with effective sealing around all exposed edges and in line with insulation layers in abutting elements',
                             'performance' => '--',
@@ -185,7 +185,7 @@ function assessment_controller() {
                             'source' => "SAP2012, table 3.6, p.20",
                             'uvalue' => 0,
                             'kvalue' => 140,
-                            'tags' => ["party_wall"],
+                            'tags' => ["Party_wall"],
                             'criteria' => [],
                             'description' => 'Fully filled cavity with effective sealing at all exposed edges and in line with insulation layers in abutting elements',
                             'performance' => '--',
