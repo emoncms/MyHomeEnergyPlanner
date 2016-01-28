@@ -252,9 +252,11 @@ function elements_initUI()
      * to the measures. We initialize them if they are empty (measures that were 
      * applied before the addition)
      ***************************************************************************/
-    for (z in data.fabric.measures) {
+    //This is breaking when there are measures like "Element deleted". So go away theis back compatibility
+    
+    /*for (z in data.fabric.measures) {
         check_and_add_measure_fields(data.fabric.measures[z].measure);
-    }
+    }*/
     // End backwards compatibility for "description","performance","benefits","cost","who_by",
     //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
 
@@ -402,6 +404,7 @@ function get_element_value(element) {
 }
 
 function check_and_add_measure_fields(element) {
+    console.log(element);
     if (element.description == undefined || element.description == '')
         element.description = '--';
     if (element.performance == undefined || element.performance == '')
