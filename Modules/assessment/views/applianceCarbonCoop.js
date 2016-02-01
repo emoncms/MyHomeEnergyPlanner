@@ -23,26 +23,30 @@ function applianceCarbonCoop_initUI() {
 
 function applianceCarbonCoop_UpdateUI() {
     for (z in data.applianceCarbonCoop.list) {
-        data.applianceCarbonCoop.list[z].primary_energy_total = data.applianceCarbonCoop.list[z].primary_energy_total.toFixed(2);
-        data.applianceCarbonCoop.list[z].primary_energy_m2 = data.applianceCarbonCoop.list[z].primary_energy_m2.toFixed(2);
-        data.applianceCarbonCoop.list[z].co2_total = data.applianceCarbonCoop.list[z].co2_total.toFixed(2);
-        data.applianceCarbonCoop.list[z].co2_m2 = data.applianceCarbonCoop.list[z].co2_m2.toFixed(2);
+        data.applianceCarbonCoop.list[z].energy_demand = data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
+        //data.applianceCarbonCoop.list[z].primary_energy_total = data.applianceCarbonCoop.list[z].primary_energy_total.toFixed(2);
+        //data.applianceCarbonCoop.list[z].primary_energy_m2 = data.applianceCarbonCoop.list[z].primary_energy_m2.toFixed(2);
+        //data.applianceCarbonCoop.list[z].co2_total = data.applianceCarbonCoop.list[z].co2_total.toFixed(2);
+        //data.applianceCarbonCoop.list[z].co2_m2 = data.applianceCarbonCoop.list[z].co2_m2.toFixed(2);
     }
 
-    data.applianceCarbonCoop.primary_energy_total.total = data.applianceCarbonCoop.primary_energy_total.total.toFixed(2);
-    data.applianceCarbonCoop.primary_energy_m2.total = data.applianceCarbonCoop.primary_energy_m2.total.toFixed(2);
-    data.applianceCarbonCoop.co2_total.total = data.applianceCarbonCoop.co2_total.total.toFixed(2);
-    data.applianceCarbonCoop.co2_m2.total = data.applianceCarbonCoop.co2_m2.total.toFixed(2);
+    data.applianceCarbonCoop.energy_demand_total.total = data.applianceCarbonCoop.energy_demand_total.total.toFixed(2);
+    //data.applianceCarbonCoop.primary_energy_total.total = data.applianceCarbonCoop.primary_energy_total.total.toFixed(2);
+    //data.applianceCarbonCoop.primary_energy_m2.total = data.applianceCarbonCoop.primary_energy_m2.total.toFixed(2);
+    //data.applianceCarbonCoop.co2_total.total = data.applianceCarbonCoop.co2_total.total.toFixed(2);
+    //data.applianceCarbonCoop.co2_m2.total = data.applianceCarbonCoop.co2_m2.total.toFixed(2);
 
-    data.applianceCarbonCoop.primary_energy_total.cooking = data.applianceCarbonCoop.primary_energy_total.cooking.toFixed(2);
-    data.applianceCarbonCoop.primary_energy_m2.cooking = data.applianceCarbonCoop.primary_energy_m2.cooking.toFixed(2);
-    data.applianceCarbonCoop.co2_total.cooking = data.applianceCarbonCoop.co2_total.cooking.toFixed(2);
-    data.applianceCarbonCoop.co2_m2.cooking = data.applianceCarbonCoop.co2_m2.cooking.toFixed(2);
+    data.applianceCarbonCoop.energy_demand_total.cooking = data.applianceCarbonCoop.energy_demand_total.cooking.toFixed(2);
+    //data.applianceCarbonCoop.primary_energy_total.cooking = data.applianceCarbonCoop.primary_energy_total.cooking.toFixed(2);
+    //data.applianceCarbonCoop.primary_energy_m2.cooking = data.applianceCarbonCoop.primary_energy_m2.cooking.toFixed(2);
+    //data.applianceCarbonCoop.co2_total.cooking = data.applianceCarbonCoop.co2_total.cooking.toFixed(2);
+    //data.applianceCarbonCoop.co2_m2.cooking = data.applianceCarbonCoop.co2_m2.cooking.toFixed(2);
 
-    data.applianceCarbonCoop.primary_energy_total.appliances = data.applianceCarbonCoop.primary_energy_total.appliances.toFixed(2);
-    data.applianceCarbonCoop.primary_energy_m2.appliances = data.applianceCarbonCoop.primary_energy_m2.appliances.toFixed(2);
-    data.applianceCarbonCoop.co2_total.appliances = data.applianceCarbonCoop.co2_total.appliances.toFixed(2);
-    data.applianceCarbonCoop.co2_m2.appliances = data.applianceCarbonCoop.co2_m2.appliances.toFixed(2);
+    data.applianceCarbonCoop.energy_demand_total.appliances = data.applianceCarbonCoop.energy_demand_total.appliances.toFixed(2);
+    //data.applianceCarbonCoop.primary_energy_total.appliances = data.applianceCarbonCoop.primary_energy_total.appliances.toFixed(2);
+    //data.applianceCarbonCoop.primary_energy_m2.appliances = data.applianceCarbonCoop.primary_energy_m2.appliances.toFixed(2);
+    //data.applianceCarbonCoop.co2_total.appliances = data.applianceCarbonCoop.co2_total.appliances.toFixed(2);
+    //data.applianceCarbonCoop.co2_m2.appliances = data.applianceCarbonCoop.co2_m2.appliances.toFixed(2);
 }
 
 function add_applianceCarbonCoop(z)
@@ -60,10 +64,11 @@ function add_applianceCarbonCoop(z)
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.electric_fraction']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.electric_fraction');
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.dhw_fraction']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.dhw_fraction');
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.gas_fraction']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.gas_fraction');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.primary_energy_total']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.primary_energy_total');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.primary_energy_m2']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.primary_energy_m2');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.co2_total']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.co2_total');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.co2_m2']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.co2_m2');
+    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.energy_demand']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.energy_demand');
+    //$("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.primary_energy_total']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.primary_energy_total');
+    //$("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.primary_energy_m2']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.primary_energy_m2');
+    //$("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.co2_total']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.co2_total');
+    //$("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.co2_m2']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.co2_m2');
     $("#applianceCarbonCoop [index='z']").attr('index', z);
 }
 

@@ -1298,8 +1298,8 @@ calc.applianceCarbonCoop = function (data) {
         data.applianceCarbonCoop = {list: {}};
 
     // "Constants" to be used in the calculations
-    var primary_energy_multiplier = {electricity: 3.07, DHW: 1.22, gas: 1.22};
-    var co2_multiplier = {electricity: 0.519, DHW: 0.216, gas: 0.216};
+    //var primary_energy_multiplier = {electricity: 3.07, DHW: 1.22, gas: 1.22};
+    //var co2_multiplier = {electricity: 0.519, DHW: 0.216, gas: 0.216};
 
     // Local variables to be used for the calculations
     var appliance = {};
@@ -1309,10 +1309,11 @@ calc.applianceCarbonCoop = function (data) {
     var gas_demand = 0;
 
     // Variables in the data object that hold the results
-    data.applianceCarbonCoop.primary_energy_total = {appliances: 0, cooking: 0, total: 0};
-    data.applianceCarbonCoop.primary_energy_m2 = {appliances: 0, cooking: 0, total: 0};
-    data.applianceCarbonCoop.co2_total = {appliances: 0, cooking: 0, total: 0};
-    data.applianceCarbonCoop.co2_m2 = {appliances: 0, cooking: 0, total: 0};
+    data.applianceCarbonCoop.energy_demand_total = {appliances: 0, cooking: 0, total: 0};
+    //data.applianceCarbonCoop.primary_energy_total = {appliances: 0, cooking: 0, total: 0};
+    //data.applianceCarbonCoop.primary_energy_m2 = {appliances: 0, cooking: 0, total: 0};
+    //data.applianceCarbonCoop.co2_total = {appliances: 0, cooking: 0, total: 0};
+    //data.applianceCarbonCoop.co2_m2 = {appliances: 0, cooking: 0, total: 0};
     data.applianceCarbonCoop.energy_demand = {
         cooking: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0},
         appliances: {electricity: 0, electricity_after_rating: 0, DHW: 0, gas: 0},
@@ -1325,8 +1326,8 @@ calc.applianceCarbonCoop = function (data) {
     for (z in data.applianceCarbonCoop.list) {
         appliance = data.applianceCarbonCoop.list[z];
 
-        if (data.applianceCarbonCoop.list[z].primary_energy_total == undefined)
-            data.applianceCarbonCoop.list[z].primary_energy_total = 0;
+        if (data.applianceCarbonCoop.list[z].energy_demand == undefined)
+            data.applianceCarbonCoop.list[z].energy_demand = 0;
 
         // Energy demand calculation
         electric_demand = appliance.number_used * appliance.norm_demand * appliance.utilisation_factor * appliance.reference_quantity * appliance.frequency * appliance.electric_fraction;
@@ -1335,16 +1336,18 @@ calc.applianceCarbonCoop = function (data) {
         gas_demand = appliance.number_used * appliance.norm_demand * appliance.utilisation_factor * appliance.frequency * appliance.reference_quantity * appliance.gas_fraction;
 
         // Results for the appliance
-        appliance.primary_energy_total = primary_energy_multiplier.electricity * electric_demand_after_rating + primary_energy_multiplier.DHW * DHW_demand + primary_energy_multiplier.gas * gas_demand;
-        appliance.primary_energy_m2 = appliance.primary_energy_total / data.TFA;
-        appliance.co2_total = co2_multiplier.electricity * electric_demand_after_rating + co2_multiplier.DHW * DHW_demand + co2_multiplier.gas * gas_demand;
-        appliance.co2_m2 = appliance.co2_total / data.TFA;
+        appliance.energy_demand = electric_demand_after_rating + DHW_demand + gas_demand;
+        //appliance.primary_energy_total = primary_energy_multiplier.electricity * electric_demand_after_rating + primary_energy_multiplier.DHW * DHW_demand + primary_energy_multiplier.gas * gas_demand;
+        //appliance.primary_energy_m2 = appliance.primary_energy_total / data.TFA;
+        //appliance.co2_total = co2_multiplier.electricity * electric_demand_after_rating + co2_multiplier.DHW * DHW_demand + co2_multiplier.gas * gas_demand;
+        //appliance.co2_m2 = appliance.co2_total / data.TFA;
 
         // Results: totals from all the appliances
-        data.applianceCarbonCoop.primary_energy_total.total += appliance.primary_energy_total;
-        data.applianceCarbonCoop.primary_energy_m2.total += appliance.primary_energy_m2;
-        data.applianceCarbonCoop.co2_total.total += appliance.co2_total;
-        data.applianceCarbonCoop.co2_m2.total += appliance.co2_m2;
+        data.applianceCarbonCoop.energy_demand_total.total += appliance.energy_demand;
+//data.applianceCarbonCoop.primary_energy_total.total += appliance.primary_energy_total;
+        //data.applianceCarbonCoop.primary_energy_m2.total += appliance.primary_energy_m2;
+        //data.applianceCarbonCoop.co2_total.total += appliance.co2_total;
+        //data.applianceCarbonCoop.co2_m2.total += appliance.co2_m2;
         data.applianceCarbonCoop.energy_demand.total.electricity += electric_demand;
         data.applianceCarbonCoop.energy_demand.total.electricity_after_rating += electric_demand_after_rating;
         data.applianceCarbonCoop.energy_demand.total.DHW += DHW_demand;
@@ -1352,19 +1355,21 @@ calc.applianceCarbonCoop = function (data) {
 
         // Results: totals by category
         if (appliance.category === "Cooking") {
-            data.applianceCarbonCoop.primary_energy_total.cooking += appliance.primary_energy_total;
-            data.applianceCarbonCoop.primary_energy_m2.cooking += appliance.primary_energy_m2;
-            data.applianceCarbonCoop.co2_total.cooking += appliance.co2_total;
-            data.applianceCarbonCoop.co2_m2.cooking += appliance.co2_m2;
+            data.applianceCarbonCoop.energy_demand_total.cooking += appliance.energy_demand;
+            //data.applianceCarbonCoop.primary_energy_total.cooking += appliance.primary_energy_total;
+            //data.applianceCarbonCoop.primary_energy_m2.cooking += appliance.primary_energy_m2;
+            //data.applianceCarbonCoop.co2_total.cooking += appliance.co2_total;
+            //data.applianceCarbonCoop.co2_m2.cooking += appliance.co2_m2;
             data.applianceCarbonCoop.energy_demand.cooking.electricity += electric_demand;
             data.applianceCarbonCoop.energy_demand.cooking.electricity_after_rating += electric_demand_after_rating;
             data.applianceCarbonCoop.energy_demand.cooking.DHW += DHW_demand;
             data.applianceCarbonCoop.energy_demand.cooking.gas += gas_demand;
         } else {
-            data.applianceCarbonCoop.primary_energy_total.appliances += appliance.primary_energy_total;
-            data.applianceCarbonCoop.primary_energy_m2.appliances += appliance.primary_energy_m2;
-            data.applianceCarbonCoop.co2_total.appliances += appliance.co2_total;
-            data.applianceCarbonCoop.co2_m2.appliances += appliance.co2_m2;
+            data.applianceCarbonCoop.energy_demand_total.appliances += appliance.energy_demand;
+            //data.applianceCarbonCoop.primary_energy_total.appliances += appliance.primary_energy_total;
+            //data.applianceCarbonCoop.primary_energy_m2.appliances += appliance.primary_energy_m2;
+            //data.applianceCarbonCoop.co2_total.appliances += appliance.co2_total;
+            //data.applianceCarbonCoop.co2_m2.appliances += appliance.co2_m2;
             data.applianceCarbonCoop.energy_demand.appliances.electricity += electric_demand;
             data.applianceCarbonCoop.energy_demand.appliances.electricity_after_rating += electric_demand_after_rating;
             data.applianceCarbonCoop.energy_demand.appliances.DHW += DHW_demand;
@@ -1372,8 +1377,8 @@ calc.applianceCarbonCoop = function (data) {
         }
     }
 
-    data.applianceCarbonCoop.gains_W['Appliances'] = data.applianceCarbonCoop.primary_energy_total.appliances;
-    data.applianceCarbonCoop.gains_W['Cooking'] = data.applianceCarbonCoop.primary_energy_total.cooking;
+    data.applianceCarbonCoop.gains_W['Appliances'] = data.applianceCarbonCoop.energy_demand_total.appliances;
+    data.applianceCarbonCoop.gains_W['Cooking'] = data.applianceCarbonCoop.energy_demand_total.cooking;
     data.applianceCarbonCoop.gains_W_monthly['Appliances'] = [];
     data.applianceCarbonCoop.gains_W_monthly['Cooking'] = [];
     for (var m = 0; m < 12; m++) {
@@ -1383,13 +1388,13 @@ calc.applianceCarbonCoop = function (data) {
 
     if (data.use_applianceCarbonCoop) {
 
-        if (data.applianceCarbonCoop.primary_energy_total.appliances > 0) {
-            data.energy_requirements.appliances = {name: "Appliances", quantity: data.applianceCarbonCoop.primary_energy_total.appliances};
+        if (data.applianceCarbonCoop.energy_demand_total.appliances > 0) {
+            data.energy_requirements.appliances = {name: "Appliances", quantity: data.applianceCarbonCoop.energy_demand_total.appliances};
             data.gains_W["Appliances"] = data.applianceCarbonCoop.gains_W_monthly['Appliances'];
         }
 
-        if (data.applianceCarbonCoop.primary_energy_total.cooking > 0) {
-            data.energy_requirements.cooking = {name: "Cooking", quantity: data.applianceCarbonCoop.primary_energy_total.cooking};
+        if (data.applianceCarbonCoop.energy_demand_total.cooking > 0) {
+            data.energy_requirements.cooking = {name: "Cooking", quantity: data.applianceCarbonCoop.energy_demand_total.cooking};
             data.gains_W["Cooking"] = data.applianceCarbonCoop.gains_W_monthly['Cooking'];
         }
     }
