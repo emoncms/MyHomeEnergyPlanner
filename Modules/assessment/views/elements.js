@@ -219,8 +219,10 @@ function add_window(z)
     $("#windows [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
+        // here
         if (data.fabric.elements[i].type != 'Window' && data.fabric.elements[i].type != 'Floor')
-            subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
+            subtractfromhtml += "<option value='" + data.fabric.elements[i].id + "'>" + data.fabric.elements[i].name + "</option>";
+            //subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
     }
     $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").html(subtractfromhtml);
 }

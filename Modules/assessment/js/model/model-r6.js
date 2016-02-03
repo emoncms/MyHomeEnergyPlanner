@@ -218,7 +218,8 @@ calc.fabric = function (data)
         {
             if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window')
             {
-                if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
+                //if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
+                if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == data.fabric.elements[z].id)
                 {
                     var windowarea = data.fabric.elements[w].area;
 
