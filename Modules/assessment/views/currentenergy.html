@@ -2,7 +2,7 @@
 <h3>Current Energy Use</h3>
 <hr><br>
 
-<p class="alert alert-success"><b>100% green electricity tariff?</b> <input type="checkbox" key="data.currentenergy.greenenergy" /><br>Ticking the green electricity tariff button here reduces electricity co2 emissions from <b>0.519kgCO2/kWh</b> to <b>0.02 kgCO2/kWh</b> and the primary energy factor is also reduced from <b>3.07</b> that relates to ~58% energy loss in coal and gas electricity generation to <b>1.3</b></p>
+<p class="alert alert-success"><b>100% green electricity tariff?</b> <input type="checkbox" key="project['master'].currentenergy.greenenergy" /><br>Ticking the green electricity tariff button here reduces electricity co2 emissions from <b>0.519kgCO2/kWh</b> to <b>0.02 kgCO2/kWh</b> and the primary energy factor is also reduced from <b>3.07</b> that relates to ~58% energy loss in coal and gas electricity generation to <b>1.3</b></p>
 <table class="table" style="background-color:#f0f0f0">
     <tr>
         <th style="width:250px"></th>
@@ -32,14 +32,14 @@
     <td>
     <p><b>Totals</b></p><br>
     <table class="table">
-        <tr><td>Total space heating energy consumption:</td><td><span key="data.currentenergy.spaceheating_annual_kwh" dp=0></span> kWh</td></tr>
-        <tr><td>Total primary energy consumption:</td><td><span key="data.currentenergy.primaryenergy_annual_kwh" dp=0></span> kWh</td></tr>
-        <tr><td>Total CO<sub>2</sub> emissions:</td><td><span key="data.currentenergy.total_co2" dp=0></span> kg</td></tr>
-        <tr><td>Total energy cost:</td><td>£<span key="data.currentenergy.total_cost" dp=0></span></td></tr>
+        <tr><td>Total space heating energy consumption:</td><td><span key="project['master'].currentenergy.spaceheating_annual_kwh" dp=0></span> kWh</td></tr>
+        <tr><td>Total primary energy consumption:</td><td><span key="project['master'].currentenergy.primaryenergy_annual_kwh" dp=0></span> kWh</td></tr>
+        <tr><td>Total CO<sub>2</sub> emissions:</td><td><span key="project['master'].currentenergy.total_co2" dp=0></span> kg</td></tr>
+        <tr><td>Total energy cost:</td><td>£<span key="project['master'].currentenergy.total_cost" dp=0></span></td></tr>
         
-        <tr><td>Total space heating energy consumption per m<sup>2</sup> floor area:</td><td><span key="data.currentenergy.spaceheating_annual_kwhm2" dp=0></span> kWh/m<sup>2</sup></td></tr>
-        <tr><td>Total primary energy consumption per m<sup>2</sup> floor area:</td><td><span key="data.currentenergy.primaryenergy_annual_kwhm2" dp=0></span> kWh/m<sup>2</sup></td></tr>
-        <tr><td>Total co2 emissions per m<sup>2</sup> floor area:</td><td><span key="data.currentenergy.total_co2m2" dp=0></span> kgCO2/m<sup>2</sup>/year</td></tr>
+        <tr><td>Total space heating energy consumption per m<sup>2</sup> floor area:</td><td><span key="project['master'].currentenergy.spaceheating_annual_kwhm2" dp=0></span> kWh/m<sup>2</sup></td></tr>
+        <tr><td>Total primary energy consumption per m<sup>2</sup> floor area:</td><td><span key="project['master'].currentenergy.primaryenergy_annual_kwhm2" dp=0></span> kWh/m<sup>2</sup></td></tr>
+        <tr><td>Total co2 emissions per m<sup>2</sup> floor area:</td><td><span key="project['master'].currentenergy.total_co2m2" dp=0></span> kgCO2/m<sup>2</sup>/year</td></tr>
     </table>
     </td>
     <td>
