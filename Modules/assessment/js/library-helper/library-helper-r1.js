@@ -91,6 +91,11 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('change', '#replace-from-lib-items', function () {
         myself.onChangeApplyMeasureReplaceFromLibItem();
     });
+    this.container.on('change', '#modal-create-in-library .create-element-type', function () {
+        myself.onChangeTypeOnCreateElementLibItem();
+    });
+
+
 };
 libraryHelper.prototype.append_modals = function () {
     var html;
@@ -505,6 +510,16 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function () {
     //disable the possibility to change the type of the element
     $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
 };
+
+
+libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
+    if ($('#modal-create-in-library .create-element-type').val() == 'Window')
+        $('.window-element').show();
+    else
+        $('.window-element').hide();
+};
+
+
 /**********************************************
  * Libraries to html
  **********************************************/
@@ -648,9 +663,15 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<tr><td>U-value</td><td><input type="text" class="create-element-uvalue editable-field" value="' + item.uvalue + '" /></td></tr>';
     out += '<tr><td>K-value</td><td><input type="text" class="create-element-kvalue editable-field" value="' + item.kvalue + '" /></td></tr>';
     if (type == 'Window') {
-        out += '<tr><td>g</td><td><input type="text" class="create-element-g window-element" value="' + item.g + '" /></td></tr>';
-        out += '<tr><td>gL</td><td><input type="text" class="create-element-gL window-element" value="' + item.gL + '" /></td></tr>';
-        out += '<tr><td>Frame factor (ff)</td><td><input type="text" class="create-element-ff window-element" value="' + item.ff + '" /></td></tr>';
+        out += '<tr><td>g</td><td><input type="text" class="create-element-g window-element editable-field" value="' + item.g + '" /></td></tr>';
+        out += '<tr><td>gL</td><td><input type="text" class="create-element-gL window-element editable-field" value="' + item.gL + '" /></td></tr>';
+        out += '<tr><td>Frame factor (ff)</td><td><input type="text" class="create-element-ff editable-field window-element" value="' + item.ff + '" /></td></tr>';
+    }
+    else {
+        out += '<tr class="window-element" style="display:none"><td>g</td><td><input type="text" class="create-element-g window-element editable-field" value="1" /></td></tr>';
+        out += '<tr class="window-element" style="display:none"><td>gL</td><td><input type="text" class="create-element-gL window-element editable-field" value="1" /></td></tr>';
+        out += '<tr class="window-element" style="display:none" ><td>Frame factor (ff)</td><td><input type="text" class="create-element-ff editable-field window-element" value="1" /></td></tr>';
+
     }
 
     out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
