@@ -6,9 +6,10 @@ var datasets = {
         'gas': {fuelcost: 0.043, standingcharge: 0, co2factor: 0.216, primaryenergyfactor: 1.22},
         'wood': {fuelcost: 0.00, standingcharge: 0, co2factor: 0.019, primaryenergyfactor: 1.04},
         'electric': {fuelcost: 0.145, standingcharge: 0, co2factor: 0.519, primaryenergyfactor: 3.07},
-        'greenelectric': {fuelcost: 0.145, standingcharge: 0, co2factor: 0.020, primaryenergyfactor: 1.5},
+        //'greenelectric': {fuelcost: 0.145, standingcharge: 0, co2factor: 0.020, primaryenergyfactor: 1.5}, We have removed this as a fuel to avoid double counting: SAP uses total generation (not only onsite fraction) to calculate CO2 and Primary energy savings. Also the CO2factor of electric already takes into account renewable contribution to the grid
         'electric-high': {fuelcost: 0.155, standingcharge: 0, co2factor: 0.519, primaryenergyfactor: 3.07},
         'electric-low': {fuelcost: 0.07, standingcharge: 0, co2factor: 0.519, primaryenergyfactor: 3.07},
+        'generation': {fuelcost: 0.145, standingcharge: 0, co2factor: 0.519, primaryenergyfactor: 3.07}
     },
     
     regions: [

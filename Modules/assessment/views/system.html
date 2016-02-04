@@ -73,17 +73,17 @@
                 <td style="text-align:left">Supplied by:</td>
                 <td>Notes</td>
                 <td>Fraction<span style="display:none;" class="secondary-space-heating template" >  <i class="icon-question-sign" title="SAP2012 fractions for secondary heating system
-- All gas, oil and solid fuel systems- 0.10
-- Heat pump - 0.10
-- Electric storage heaters (not integrated)
-            - not fan-assisted - 0.15
-            - fan-assisted - 0.1
-            - high heat retention - 0.1
-- Integrated storage/direct-acting electric systems- 0.10
-- Electric CPSU- 0.10
-- Electric room heaters- 0.20
-- Other electric systems- 0.10
-- Community heating- 0.10"></i></td>
+                                                                                                       - All gas, oil and solid fuel systems- 0.10
+                                                                                                       - Heat pump - 0.10
+                                                                                                       - Electric storage heaters (not integrated)
+                                                                                                       - not fan-assisted - 0.15
+                                                                                                       - fan-assisted - 0.1
+                                                                                                       - high heat retention - 0.1
+                                                                                                       - Integrated storage/direct-acting electric systems- 0.10
+                                                                                                       - Electric CPSU- 0.10
+                                                                                                       - Electric room heaters- 0.20
+                                                                                                       - Other electric systems- 0.10
+                                                                                                       - Community heating- 0.10"></i></td>
                 <td>Demand</td>
                 <td>Efficiency</td>
                 <td>Fuel input</td>
@@ -113,81 +113,128 @@
             </tr>
         </tbody>
 
-        <tbody id="energyrequirements"></tbody>
-    </table>
+        <table class="table">
+            <tbody id="energyrequirements"></tbody>
+        </table>
 
-    <br>
-    <hr>
-    <h3>Fuel requirements & costs</h3>
-    <hr>
-    <table class="table">
-        <tr>
-            <th style="text-align:left">Fuel type</th>
-            <th>Fuel quantity</th>
-            <th>kgCO2/kWh</th>
-            <th>Annual<br>kgCO2</th>
-            <th>Primary<br>Energy<br>Factor</th>
-            <th>Primary<br>Energy</th>
-            <th>Unit cost</th>
-            <th>Daily<br>Standing<br>charge</th>
-            <th>Annual cost</th>
-        </tr>
+        <div id="generation-container" style="display:none">
+            <br>
+            <hr>
+            <h3>Generation <i class="icon-question-sign" title="This table is autogenearted with data from the Generation page"></i></h3>
+            <hr>
+            <table class="table">
+                <tbody>
 
-        <tbody id="fuel_totals_template" style="display:none">
+                    <tr style="background-color:#eee">
+                        <th>Renewable Generation</th>
+                        <th></th>
+                        <th><span key="data.generation.total_generation" dp=0></span> kWh/year</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th style="text-align:right"></th>
+                    </tr>
+
+                    <tr>
+                        <td style="text-align:left">Supplied by:</td>
+                        <td>Quantity</td>                    
+                        <td>Fraction used on site</td>
+                        <td>Annual kgCO<sub>2</sub></td>
+
+                    </tr>
+
+                </tbody>
+
+                <tbody id="suppliedby-generation-template" style="display:none">
+                    <tr>
+                        <td style="text-align:left">
+                            <span key="data.generation.template.x.name"></span>
+                            <!--<select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>-->
+                        </td>
+                        <td><span key="data.generation.template.x.quantity" dp=0></span> kWh/year</td>
+                        <td><span type="text" key="data.generation.template.x.fraction_used_onsite" dp="1" style="width:120px"/></td>
+                        <td><span type="text" key="data.generation.template.x.CO2" dp="0" style="width:120px"/></td>
+
+                    </tr>
+                </tbody>
+
+                <tbody id="generation"></tbody>
+            </table>
+        </div>
+
+        <br>
+        <hr>
+        <h3>Fuel requirements & costs</h3>
+        <hr>
+        <table class="table">
             <tr>
-                <td style="text-align:left"><span key="data.fuel_totals.z.name"></span></td>
-                <td><span key="data.fuel_totals.z.quantity" dp=0></span> kWh</td>
-
-                <td>x<input type="text" key="data.fuels.f.co2factor" value=0 style="width:60px"/></td>
-                <td><span key="data.fuel_totals.z.annualco2" dp=0></span> kg</td>
-
-                <td>x<input type="text" key="data.fuels.f.primaryenergyfactor" value=0 style="width:60px"/></td>
-                <td><span key="data.fuel_totals.z.primaryenergy" dp=0></span> kWh</td>
-
-                <td>£ <input type="text" key="data.fuels.f.fuelcost" value=0 style="width:60px"/></td>
-                <td>£ <input type="text" key="data.fuels.f.standingcharge" value=0 style="width:60px"/></td>
-                <td>£<span key="data.fuel_totals.z.annualcost" dp=0></span></td>
+                <th style="text-align:left">Fuel type</th>
+                <th>Fuel quantity</th>
+                <th>kgCO<sub>2</sub>/kWh</th>
+                <th>Annual<br>kgCO<sub>2</sub></th>
+                <th>Primary<br>Energy<br>Factor</th>
+                <th>Primary<br>Energy</th>
+                <th>Unit cost</th>
+                <th>Daily<br>Standing<br>charge</th>
+                <th>Annual cost</th>
             </tr>
-        </tbody>
 
-        <tbody id="fuel_totals"></tbody>
+            <tbody id="fuel_totals_template" style="display:none">
+                <tr>
+                    <td style="text-align:left"><span key="data.fuel_totals.z.name"></span></td>
+                    <td><span key="data.fuel_totals.z.quantity" dp=0></span> kWh</td>
 
-        <tr>
-            <td style="text-align:left"><b>Total energy cost:</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>£<span key="data.total_cost" dp=0></span></b> (<span key="data.SAP.rating" dp=0></span>)</td>
-        </tr>
+                    <td>x<input type="text" key="data.fuels.f.co2factor" value=0 style="width:60px"/></td>
+                    <td><span key="data.fuel_totals.z.annualco2" dp=0></span> kg</td>
 
-        <tr>
-            <td style="text-align:left"><b>Total energy income<br>(FIT's):</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>£<span key="data.total_income" dp=0></span></b></td>
-        </tr>
+                    <td>x<input type="text" key="data.fuels.f.primaryenergyfactor" value=0 style="width:60px"/></td>
+                    <td><span key="data.fuel_totals.z.primaryenergy" dp=0></span> kWh</td>
 
-        <tr>
-            <td style="text-align:left"><b>Net cost:</b></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><b>£<span key="data.net_cost" dp=0></span></b></td>
-        </tr>
-    </table>    
+                    <td>£ <input type="text" key="data.fuels.f.fuelcost" value=0 style="width:60px"/></td>
+                    <td>£ <input type="text" key="data.fuels.f.standingcharge" value=0 style="width:60px"/></td>
+                    <td>£<span key="data.fuel_totals.z.annualcost" dp=0></span></td>
+                </tr>
+            </tbody>
+
+            <tbody id="fuel_totals"></tbody>
+
+            <tr>
+                <td style="text-align:left"><b>Total energy cost:</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>£<span key="data.total_cost" dp=0></span></b> (<span key="data.SAP.rating" dp=0></span>)</td>
+            </tr>
+
+            <tr>
+                <td style="text-align:left"><b>Total energy income<br>(FIT's):</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>£<span key="data.total_income" dp=0></span></b></td>
+            </tr>
+
+            <tr>
+                <td style="text-align:left"><b>Net cost:</b></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><b>£<span key="data.net_cost" dp=0></span></b></td>
+            </tr>
+        </table>    
 </div>
 
 

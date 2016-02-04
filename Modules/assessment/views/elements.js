@@ -222,7 +222,7 @@ function add_window(z)
         // here
         if (data.fabric.elements[i].type != 'Window' && data.fabric.elements[i].type != 'Floor')
             subtractfromhtml += "<option value='" + data.fabric.elements[i].id + "'>" + data.fabric.elements[i].name + "</option>";
-            //subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
+        //subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
     }
     $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").html(subtractfromhtml);
 }
@@ -255,10 +255,10 @@ function elements_initUI()
      * applied before the addition)
      ***************************************************************************/
     //This is breaking when there are measures like "Element deleted". So go away theis back compatibility
-    
+
     /*for (z in data.fabric.measures) {
-        check_and_add_measure_fields(data.fabric.measures[z].measure);
-    }*/
+     check_and_add_measure_fields(data.fabric.measures[z].measure);
+     }*/
     // End backwards compatibility for "description","performance","benefits","cost","who_by",
     //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
 

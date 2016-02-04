@@ -142,6 +142,10 @@ function UpdateUI(data)
             }
         }
     }
+
+    // Hide the  Apply measure buttons when we are in Master. this scenario is the real picture of the house so we don't should be able to apply measures
+    //if (scenario == 'master')
+    //  $('button.apply-measure').hide();
 }
 
 function getkeys(key, val)
