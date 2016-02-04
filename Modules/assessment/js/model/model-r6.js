@@ -1398,7 +1398,9 @@ calc.currentenergy = function (data)
         'electric-waterheating': {name: "Electricity for water heating", note: "",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
         'electric-car': {name: "Electric car", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
-        'electric-e7': {name: "Electricity (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+        'electric-e7-day': {name: "Electricity (Economy 7 day rate)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy:3.07, unitcost: 0.1529, standingcharge: 24, selected: 0, group: "Economy 7"},
+        'electric-e7-night': {name: "Electricity (Economy 7 night rate)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.055, standingcharge: 24, selected: 0, group: "Economy 7"},
+        /*'electric-e7': {name: "Electricity (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
         'electric-heating-e7': {name: "Electricity for direct heating (Economy 7)", note: "e.g: Storage Heaters",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
         'electric-heatpump-e7': {name: "Electricity for heatpump (Economy 7)", note: "annual electricity input to the heatpump",
@@ -1406,6 +1408,7 @@ calc.currentenergy = function (data)
         'electric-waterheating-e7': {name: "Electricity for water heating (Economy 7)", note: "",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
         'electric-car-e7': {name: "Electric car (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+        */
         'gas': {name: "Mains gas", note: "", quantity: 0, units: "m3", kwh: 9.8, co2: 2.1168, primaryenergy: 1.22, unitcost: 0.34104, standingcharge: 120.00, selected: 0, group: "Heating (non-electric)"},
         'gas-kwh': {name: "Mains gas in kWh", note: "",
             quantity: 0, units: "kWh", kwh: 1.0, co2: 0.216, primaryenergy: 1.22, unitcost: 0.0348, standingcharge: 120, selected: 0, group: "Heating (non-electric)"},
@@ -1494,13 +1497,13 @@ calc.currentenergy = function (data)
         energy[item].annual_cost = (energy[item].quantity * energy[item].unitcost) + energy[item].standingcharge;
     }
 
-    var spaceheatingtags = ['electric-heating', 'electric-heatpump', 'electric-heating-e7', 'electric-heatpump-e7', 'wood-logs', 'wood-pellets', 'oil', 'gas', 'gas-kwh', 'lpg', 'bottledgas'];
+    var spaceheatingtags = ['electric-heating', 'electric-heatpump', /*'electric-heating-e7', 'electric-heatpump-e7',*/'electric-e7-day','electric-e7-night', 'wood-logs', 'wood-pellets', 'oil', 'gas', 'gas-kwh', 'lpg', 'bottledgas'];
     var spaceheating_annual_kwh = 0;
     for (z in spaceheatingtags) {
         spaceheating_annual_kwh += energy[spaceheatingtags[z]].annual_kwh
     }
 
-    var primaryenergytags = ['electric', 'electric-heating', 'electric-waterheating', 'electric-heatpump', 'electric-e7', 'electric-heating-e7', 'electric-waterheating-e7', 'electric-heatpump-e7', 'wood-logs', 'wood-pellets', 'oil', 'gas', 'gas-kwh', 'lpg', 'bottledgas'];
+    var primaryenergytags = ['electric', 'electric-heating', 'electric-waterheating', 'electric-heatpump', 'electric-e7-day','electric-e7-night',/*'electric-e7', 'electric-heating-e7', 'electric-waterheating-e7', 'electric-heatpump-e7',*/ 'wood-logs', 'wood-pellets', 'oil', 'gas', 'gas-kwh', 'lpg', 'bottledgas'];
     var total_co2 = 0;
     var total_cost = 0;
     var primaryenergy_annual_kwh = 0;
