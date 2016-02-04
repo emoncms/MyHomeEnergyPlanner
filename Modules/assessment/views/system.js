@@ -48,13 +48,17 @@ function system_UpdateUI()
     }
 
     $('#generation').html("");
-    if (data.use_generation == 1) {
+    if (data.use_generation != 1) {
+        $('#generation-container').hide();
+        $("#fit_income").html('£0');
+    }
+    else {
         $('#generation-container').show();
+        $("#fit_income").html('<b>£<span key="data.total_income" dp=0></span></b>');
         for (z in data.generation.systems) {
             $('#generation').append($('#suppliedby-generation-template').html());
             $("#generation [key='data.generation.template.x.name']").attr('key', 'data.generation.systems.' + z + '.name');
             $("#generation [key='data.generation.template.x.quantity']").attr('key', 'data.generation.systems.' + z + '.quantity');
-            $("#generation [key='data.generation.template.x.fraction_used_onsite']").attr('key', 'data.generation.systems.' + z + '.fraction_used_onsite');
             $("#generation [key='data.generation.template.x.CO2']").attr('key', 'data.generation.systems.' + z + '.CO2');
         }
     }

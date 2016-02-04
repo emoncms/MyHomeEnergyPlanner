@@ -815,6 +815,7 @@ calc.energy_systems = function (data)
 // Total energy use, fuel costs, Annual CO2 and primary energy due to the energy requirements
     data.energy_use = 0;
     data.annualco2 = 0;
+    data.energy_delivered = 0
     for (z in data.fuel_totals)
     {
         data.fuel_totals[z].annualcost = data.fuel_totals[z].quantity * data.fuels[z].fuelcost + data.fuels[z].standingcharge * 365;
@@ -826,6 +827,7 @@ calc.energy_systems = function (data)
         data.primary_energy_use += data.fuel_totals[z].primaryenergy;
         data.annualco2 += data.fuel_totals[z].annualco2;
     }
+    data.energy_delivered = data.energy_use;
 
     // Annual CO2, primary energy and cost saved due to generation. Be aware generation is not used for the calculation of Energy use
     if (data.use_generation == 1) {
@@ -839,6 +841,7 @@ calc.energy_systems = function (data)
         data.primary_energy_use += data.fuel_totals['generation'].primaryenergy;
         data.annualco2 += data.fuel_totals['generation'].annualco2;
         data.total_cost += data.fuel_totals['generation'].annualcost;
+        data.energy_delivered += data.fuel_totals['generation'].quantity;
     }
 
     data.net_cost = data.use_generation == 1 ? data.total_cost - data.total_income : data.total_cost;
