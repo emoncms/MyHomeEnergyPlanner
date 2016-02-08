@@ -29,13 +29,16 @@ libraryHelper.prototype.add_events = function () {
         myself.onAddItemFromLib($(this));
     });
     this.container.on('click', '#open-share-library', function () {
-        myself.onOpenShareLib();
+        myself.onOpenShareLib($(this).attr('library-id'));
     });
     this.container.on('click', "#share-library", function () {
-        myself.onShareLib();
+        var library = null;
+        if ($(this).attr('library-id') != '')
+            library_id = $(this).attr('library-id');
+        myself.onShareLib(library_id);
     });
     this.container.on('click', '.remove-user', function () {
-        myself.onRemoveUserFromSharedLib($(this).attr('username'));
+        myself.onRemoveUserFromSharedLib($(this).attr('username'),$(this).attr('library-id'));
     });
     this.container.on('change', '#library-select', function () {
         myself.onSelectingLibraryToShow($(this));
@@ -50,10 +53,16 @@ libraryHelper.prototype.add_events = function () {
         $('.modal').modal('hide');
     });
     this.container.on('click', '#create-in-library', function () {
-        myself.onCreateInLibrary();
+        var library_id = null;
+        if ($(this).attr('library-id') != '')
+            library_id = $(this).attr('library-id');
+        myself.onCreateInLibrary(library_id);
     });
     this.container.on('click', '#create-in-library-ok', function () {
-        myself.onCreateInLibraryOk();
+        var library_id = null;
+        if ($(this).attr('library-id') != undefined)
+            library_id = $(this).attr('library-id');
+        myself.onCreateInLibraryOk(library_id);
     });
     this.container.on('change', "[name=empty_or_copy_item]", function () {
         myself.onChangeEmptyOrCopyItem();
@@ -68,7 +77,10 @@ libraryHelper.prototype.add_events = function () {
         myself.onEditLibraryItem($(this));
     });
     this.container.on('click', '.edit-library-item-ok', function () {
-        myself.onEditLibraryItemOk();
+        var library_id = null;
+        if ($(this).attr('library-id') != '')
+            library_id = $(this).attr('library-id');
+        myself.onEditLibraryItemOk(library_id);
     });
     this.container.on('click', '.edit-item', function () {
         myself.onEditItem($(this));
@@ -94,9 +106,20 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('change', '#modal-create-in-library .create-element-type', function () {
         myself.onChangeTypeOnCreateElementLibItem();
     });
-
-
+    this.container.on('click', '.edit-library-name', function () {
+        myself.onEditLibraryName($(this));
+    });
+    this.container.on('click', '#edit-library-name-ok', function () {
+        myself.onEditLibraryNameOk();
+    });
+    this.container.on('click', '.show-items', function () {
+        myself.onShowLibraryItems($(this).attr('library-id'));
+    });
+    this.container.on('click', '.manage-users', function () {
+        myself.onOpenShareLib($(this).attr('library-id'));
+    });
 };
+
 libraryHelper.prototype.append_modals = function () {
     var html;
     var myself = this;
@@ -123,41 +146,23 @@ libraryHelper.prototype.onAddItemFromLib = function (origin) {
                     }});
             }});
     }
-
-    // Populate the select to choose library to display
-    var out = '';
-    this.library_list[this.type].forEach(function (library) {
-        out += "<option value=" + library.id + ">" + library.name + "</option>";
-    });
-    out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
-    $("#library-select").html(out);
-    // Heading of the modal
-    $('#show-library-modal .modal-header h3').html(page[0].toUpperCase() + page.slice(1) + ' library');
-    // Draw the library
-    $('#library_table').html('');
-    var function_name = this.type + '_library_to_html';
-    out = this[function_name](origin);
-    $("#library_table").html(out);
-    // Hide/show "share" option according to the permissions
-    var id = $('#library-select').val();
-    if (this.library_permissions[id].write == 0)
-        $('.if-write').hide();
-    else
-        $('.if-write').show();
-    // Show the modal
+    this.populate_library_modal(origin);
     $("#show-library-modal").modal('show');
 };
-libraryHelper.prototype.onOpenShareLib = function () {
-    var selected_library = $('#library-select').val();
+libraryHelper.prototype.onOpenShareLib = function (selected_library) {
+    if ($('#library-select').val() != undefined)
+        selected_library = $('#library-select').val();
     this.display_library_users(selected_library);
+    $('#modal-share-library #share-library').attr('library-id', selected_library);
     $('.modal').modal('hide');
     $('#modal-share-library').modal('show');
 };
-libraryHelper.prototype.onShareLib = function () {
+libraryHelper.prototype.onShareLib = function (selected_library) {
     $('#return-message').html('');
     var username = $("#sharename").val();
     var write_permissions = $('#write_permissions').is(":checked");
-    var selected_library = $('#library-select').val();
+    if ($('#library-select').val() != undefined)
+        selected_library = $('#library-select').val();
     var myself = this;
     if (selected_library != -1) {
         $.ajax({
@@ -169,9 +174,33 @@ libraryHelper.prototype.onShareLib = function () {
             }});
     }
 };
-libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove) {
+libraryHelper.prototype.onEditLibraryName = function (original_element) {
+    console.log(original_element);
+    $('#edit-library-name-modal #new-library-name').attr('placeholder', original_element.attr('library-name'));
+    $('#edit-library-name-modal #edit-library-name-ok').attr('library-id', original_element.attr('library-id'));
+    $('#edit-library-name-modal').modal('show');
+};
+libraryHelper.prototype.onEditLibraryNameOk = function () {
+    var library_id = $('#edit-library-name-modal #edit-library-name-ok').attr('library-id');
+    var library_new_name = $('#edit-library-name-modal #new-library-name').val();
+    var myself = this;
+    this.set_library_name(library_id, library_new_name, function (result) {
+        console.log(myself);
+        if (result == 1) {
+            var library = myself.get_library_by_id(library_id);
+            library.name = library_new_name;
+            UpdateUI(data);
+            $('.modal').modal('hide');
+        }
+        else
+            $('#edit-library-name-modal #message').html('Library name could not be changed: ' + result);
+    });
+    //this.set_library_name(library_id, library_new_name);
+};
+
+libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove,selected_library) {
     $('#return-message').html('');
-    var selected_library = $('#library-select').val();
+    //var selected_library = $('#library-select').val();
     var myself = this;
     $.ajax({url: path + "assessment/removeuserfromsharedlibrary.json", data: 'library_id=' + selected_library + '&user_to_remove=' + user_to_remove, success: function (result) {
             $('#return-message').html(result);
@@ -247,7 +276,7 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
         }
     }
 };
-libraryHelper.prototype.onCreateInLibrary = function () {
+libraryHelper.prototype.onCreateInLibrary = function (library_id) {
     $('#modal-create-in-library .modal-header h3').html('Create ' + page);
     $('#modal-create-in-library .btn').show();
     $('#modal-create-in-library #create-in-library-finish').hide();
@@ -273,11 +302,16 @@ libraryHelper.prototype.onCreateInLibrary = function () {
     $('.item-tag').removeAttr("disabled");
     $('.editable-field').removeAttr("disabled");
     $('.modal').modal('hide');
+
+    if (library_id != undefined)
+        $('#create-in-library-ok').attr('library-id', library_id);
     $('#modal-create-in-library').modal('show');
 };
-libraryHelper.prototype.onCreateInLibraryOk = function () {
+libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
     $("#create-in-library-message").html('');
-    var selected_library = this.get_library_by_id($('#library-select').val());
+    if ($('#library-select').val() != undefined)
+        library_id = $('#library-select').val();
+    var selected_library = this.get_library_by_id(library_id);
     var item = {};
     // Call to specific function for the type
     var function_name = this.type + '_get_item_to_save';
@@ -347,7 +381,8 @@ libraryHelper.prototype.onChangeItemToCopySelect = function () {
 }
 
 libraryHelper.prototype.onEditLibraryItem = function (origin) {
-    var selected_library = this.get_library_by_id($('#library-select').val());
+    //var selected_library = this.get_library_by_id($('#library-select').val());
+    var selected_library = this.get_library_by_id(origin.attr('library'));
     var library_name = selected_library.name;
     $('#library-to-edit-item').html(library_name);
     var tag = origin.attr('tag');
@@ -358,6 +393,7 @@ libraryHelper.prototype.onEditLibraryItem = function (origin) {
     $('#library-to-edit-item').parent().show();
     $('.edit-item-in-library').html(out);
     $('#edit-item-ok').attr('class', "btn edit-library-item-ok");
+    $('#edit-item-ok').attr('library-id', selected_library.id);
     $('.item-tag').attr('disabled', 'true');
     $('.editable-field').removeAttr("disabled");
     $("#edit-item-message").html('');
@@ -366,9 +402,11 @@ libraryHelper.prototype.onEditLibraryItem = function (origin) {
     $('.modal').modal('hide');
     $('#modal-edit-item').modal('show');
 };
-libraryHelper.prototype.onEditLibraryItemOk = function () {
+libraryHelper.prototype.onEditLibraryItemOk = function (library_id) {
     $("#edit-item-message").html('');
-    var selected_library = this.get_library_by_id($('#library-select').val());
+    if ($('#library-select').val() != undefined)
+        library_id = $('#library-select').val();
+    var selected_library = this.get_library_by_id(library_id);
     var item = {};
     // Call to specific function for the type
     var function_name = this.type + '_get_item_to_save';
@@ -510,8 +548,6 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function () {
     //disable the possibility to change the type of the element
     $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
 };
-
-
 libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
     if ($('#modal-create-in-library .create-element-type').val() == 'Window')
         $('.window-element').show();
@@ -520,13 +556,62 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
 };
 
 
+libraryHelper.prototype.onShowLibraryItems = function (library_id) {
+    var library = this.get_library_by_id(library_id);
+    this.type = library.type;
+    //Header
+    var header;
+    switch (library.type) {
+        case 'elements':
+            header = 'Fabric elements library';
+            break;
+        case 'systems':
+            header = 'Energy systems library';
+            break;
+        default:
+            header = library.type + ' library';
+    }
+    $("#show-library-items-header").html(header);
+    $('#show-library-items-library-name').html(library.name);
+
+    // Items
+    var function_name = library.type + '_library_to_html';
+    var out = this[function_name](null, library_id);
+    $("#show-library-items-modal #show-library-items-table").html(out);
+
+    // Add Library id to edit buttons
+
+    // Hide the Use buttons
+    $("#show-library-items-modal .use-from-lib").hide();
+
+    // Hide Write options if no write access
+    if (this.library_permissions[library.id].write != 1)
+        $("#show-library-items-modal .if-write").hide();
+
+    // Add library id to Create new item 
+    $('#show-library-items-modal #create-in-library').attr('library-id', library_id);
+
+    // Show modal
+    $("#show-library-items-modal").modal('show');
+
+};
+libraryHelper.prototype.onManageUsers = function (library_id) {
+
+}
+
 /**********************************************
  * Libraries to html
  **********************************************/
 
-libraryHelper.prototype.systems_library_to_html = function (origin) {
-    var eid = $(origin).attr('eid');
-    var selected_library = this.get_library_by_id($('#library-select').val());
+libraryHelper.prototype.systems_library_to_html = function (origin, library_id) {
+    var eid = '';
+    if (origin != undefined)
+        eid = $(origin).attr('eid');
+    else
+        eid = '';
+    if ($('#library-select').val() != undefined)
+        library_id = $('#library-select').val();
+    selected_library = this.get_library_by_id(library_id);
     $('#library-select').attr('eid', eid);
     var out = "";
     for (z in selected_library.data) {
@@ -546,9 +631,14 @@ libraryHelper.prototype.systems_library_to_html = function (origin) {
     }
     return out;
 };
-libraryHelper.prototype.elements_library_to_html = function (origin) {
-    var tag = $(origin).attr('tags');
-    var library_id = $('#library-select').val();
+libraryHelper.prototype.elements_library_to_html = function (origin, library_id) {
+    var tag = '';
+    if (origin != undefined)
+        tag = $(origin).attr('tags');
+    else
+        tag = 'Wall';
+    if ($('#library-select').val() != undefined)
+        library_id = $('#library-select').val();
     var element_library = this.get_library_by_id(library_id).data;
     $('#library-select').attr('tags', tag);
     var out = "";
@@ -696,7 +786,7 @@ libraryHelper.prototype.systems_get_item_to_save = function () {
     var item = {};
     var system = $(".edit-system-tag").val();
     item[system] = {
-        name: $(".edit-system-nedame").val(),
+        name: $(".edit-system-name").val(),
         efficiency: $(".edit-system-efficiency").val(),
         winter: $(".edit-system-winter").val(),
         summer: $(".edit-system-summer").val(),
@@ -795,7 +885,7 @@ libraryHelper.prototype.display_library_users = function (library_id) {
             for (var i in shared) {
                 write = shared[i].write == 1 ? 'Yes' : 'No';
                 if (shared[i].username != p.author)
-                    out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' username='" + shared[i].username + "'></i></td></tr>";
+                    out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' library-id='" + library_id + "' username='" + shared[i].username + "'></i></td></tr>";
                 else
                     out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td>&nbsp;</td></tr>";
             }
@@ -805,9 +895,11 @@ libraryHelper.prototype.display_library_users = function (library_id) {
         }});
 };
 libraryHelper.prototype.get_library_by_id = function (id) {
-    for (z in this.library_list[this.type]) {
-        if (this.library_list[this.type][z].id == id)
-            return this.library_list[this.type][z];
+    for (z in this.library_list) {
+        for (i in this.library_list[z]) {
+            if (this.library_list[z][i].id == id)
+                return this.library_list[z][i];
+        }
     }
 };
 libraryHelper.prototype.populate_measure_new_item = function () {
@@ -821,3 +913,44 @@ libraryHelper.prototype.populate_measure_new_item = function () {
     var out = this[function_name](new_item, item_index);
     $('#apply-measure-item-fields').html(out);
 };
+
+libraryHelper.prototype.set_library_name = function (library_id, new_name, callback) {
+    $.ajax({url: path + "assessment/setlibraryname.json", data: "library_id=" + library_id + "&new_library_name=" + new_name, async: false, datatype: "json", success: function (result) {
+            callback(result);
+        }});
+};
+
+libraryHelper.prototype.populate_library_modal = function (origin) {
+    // Populate the select to choose library to display
+    var out = '';
+    this.library_list[this.type].forEach(function (library) {
+        out += "<option value=" + library.id + ">" + library.name + "</option>";
+    });
+    out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
+    $("#library-select").html(out);
+    // Heading of the modal
+    var header = '';
+    switch (this.type) {
+        case 'elements':
+            header = 'Fabric elements library';
+            break;
+        case 'systems':
+            header = 'Energy systems library';
+            break;
+        default:
+            header = this.type.toUpperCase() + this.type.slice(1) + ' library';
+    }
+    $('#show-library-modal .modal-header h3').html(header);
+    // Draw the library
+    $('#library_table').html('');
+    var function_name = this.type + '_library_to_html';
+    out = this[function_name](origin);
+    $("#library_table").html(out);
+    // Hide/show "share" option according to the permissions
+    var id = $('#library-select').val();
+    if (this.library_permissions[id].write == 0)
+        $('.if-write').hide();
+    else
+        $('.if-write').show();
+};
+

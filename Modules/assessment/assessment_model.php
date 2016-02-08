@@ -606,6 +606,20 @@ class Assessment {
         return 'User or organisation not found';
     }
 
+    public function setlibraryname($userid, $library_id, $new_library_name){
+        $userid = (int) $userid;
+        $library_id = (int) $library_id;
+        $new_library_name = preg_replace('/[^\w\s]/', '', $new_library_name);
+
+        if (!$this->has_write_access_library($userid, $library_id))
+            return "You haven't got enough permissions";
+        else{
+            $result = $this->mysqli->query("UPDATE `element_library` SET `name`='$new_library_name' WHERE `id` = '$library_id'");
+            return $result;
+        }
+        
+        
+    }
     // ------------------------------------------------------------------------------------------------
     // IMAGE GALLERY
     // ------------------------------------------------------------------------------------------------

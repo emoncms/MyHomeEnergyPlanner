@@ -69,6 +69,7 @@ global $reports;
                 <div class="scenario-nav"><a href="#master/currentenergy">Current Energy</a></div>
                 <div class="scenario-nav"><a href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a href="#master/imagegallery">Image gallery</a></div>
+                <div class="scenario-nav"><a href="#master/librariesmanager">Libraries manager</a></div>
             </div>
         </div>
 
