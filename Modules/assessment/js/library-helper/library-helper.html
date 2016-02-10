@@ -48,9 +48,9 @@
 <div id="new-library-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3>Create a new library</h3>
+        <h3>Create a new library - <span id="new-library-type"></span></h3>
     </div>
-    <div class="modal-body" style="height:500px">
+    <div class="modal-body">
         <p id="create-library-message"></p>
         <div class="input-append input-prepend">
             <span class="add-on">Enter name for new library</span>
@@ -221,6 +221,21 @@
     </div>
     <div class="modal-footer">
         <button class="btn if-write" id="create-in-library" library-id="">Create new item</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+
+<div id="confirm-delete-library-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="show-library-items-header">Are you sure you want to delete this library?</h3>
+    </div>
+    <div class="modal-body">
+        <p>Once a library is deleted it cannot be recovered</p>
+        <p class="message" style="font-weight: bold"></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" id="delete-library-ok" library-id="">Delete library</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
     </div>
 </div>

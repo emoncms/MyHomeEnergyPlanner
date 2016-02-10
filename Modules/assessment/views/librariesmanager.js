@@ -2,6 +2,7 @@ console.log("debug libraries_manager.js");
 var library_helper = new libraryHelper('', $('#librariesmanager'));
 function librariesmanager_UpdateUI()
 {
+    //library_helper.init();
     $('#libraries-table').html('');
     for (t in library_helper.library_list) {
         // Add header
@@ -17,7 +18,7 @@ function librariesmanager_UpdateUI()
             default:
                 header = t;
         }
-        $("#libraries-table [library-type='template']").html(header);
+        $("#libraries-table .header[library-type='template']").html(header);
         $("#libraries-table [library-type='template']").attr('library-type', t);
         //Add libraries
         var library = {};

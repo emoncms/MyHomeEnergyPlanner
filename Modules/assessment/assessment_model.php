@@ -606,20 +606,35 @@ class Assessment {
         return 'User or organisation not found';
     }
 
-    public function setlibraryname($userid, $library_id, $new_library_name){
+    public function setlibraryname($userid, $library_id, $new_library_name) {
         $userid = (int) $userid;
         $library_id = (int) $library_id;
         $new_library_name = preg_replace('/[^\w\s]/', '', $new_library_name);
 
         if (!$this->has_write_access_library($userid, $library_id))
             return "You haven't got enough permissions";
-        else{
+        else {
             $result = $this->mysqli->query("UPDATE `element_library` SET `name`='$new_library_name' WHERE `id` = '$library_id'");
             return $result;
         }
-        
-        
     }
+
+    public function deletelibrary($userid, $library_id) {
+        $userid = (int) $userid;
+        $library_id = (int) $library_id;
+
+        if (!$this->has_write_access_library($userid, $library_id))
+            return "You haven't got enough permissions";
+        else {
+            $result1 = $this->mysqli->query("DELETE FROM element_library WHERE `id` = '$library_id'");
+            $result2 = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$library_id'");
+            if ($result1 == 1 && $result2 == 1)
+                return 1;
+            else
+                return 'There was a problem deleting the library from the database';
+        }
+    }
+
     // ------------------------------------------------------------------------------------------------
     // IMAGE GALLERY
     // ------------------------------------------------------------------------------------------------

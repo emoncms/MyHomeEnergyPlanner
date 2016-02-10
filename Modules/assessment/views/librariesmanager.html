@@ -5,15 +5,26 @@
 
     <table>
         <tbody id="library-table-header-template" style="display:none"> 
-            <tr><th colspan="3" style="background-color:#eee" library-type="template"></th></tr>
-            <tr><th>Library</th><th>Access</th><th /></tr>
-        <hr /> 
+            <tr style="background-color:#eee">
+                <th colspan="3" class="header" library-type="template"></th>
+                <th style="text-align:right"><button style="padding-top:2px; padding-bottom:2px" library-type="template" class="btn create-new-library"><i class="icon-plus"></i> Add</button></th></tr>
+            <tr>
+                <th></th>
+                <th>Library</th>
+                <th>Access</th>
+                <th></th>
+            </tr>
         </tbody>
     </table>
 
     <table>
         <tbody id="library-template" style="display:none">
-            <tr><td library-name="template"></td><td library-access="template"></td><td><i library-id="template" library-name="template" class="icon-edit if-write-access edit-library-name" style="cursor:pointer;margin-right:15px"></i><button library-id="template" class="show-items" style="margin-right:15px">Show items</button><button library-id="template" class="manage-users if-write-access">Manage users</button></td></tr>
+            <tr>
+                <td width="50px"><i library-id="template" library-name="template" class="icon-edit if-write-access edit-library-name" style="cursor:pointer;margin-right:5px"></i><i class="icon-trash delete-library if-write-access" library-id="template" style="cursor:pointer;margin-right:15px"></i></td>
+                <td library-name="template"></td>
+                <td library-access="template"></td>
+                <td><button library-id="template" library-type="template"class="add-item if-write-access" style="margin-right:15px">Add item</button><button library-id="template" class="show-items" style="margin-right:15px">Show items</button><button library-id="template" class="manage-users if-write-access">Manage users</button></td>
+            </tr>
         </tbody>
     </table>
 

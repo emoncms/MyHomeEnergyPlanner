@@ -380,6 +380,9 @@ function assessment_controller() {
 
          if ($route->action == 'setlibraryname' && $session['write'])
             $result = $assessment->setlibraryname($session['userid'], get('library_id'), get('new_library_name'));
+         
+         if ($route->action == 'deletelibrary' && $session['write'])
+            $result = $assessment->deletelibrary($session['userid'], get('library_id'));
 
         // -------------------------------------------------------------------------------------------------------------
         // Image gallery

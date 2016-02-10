@@ -38,7 +38,7 @@ libraryHelper.prototype.add_events = function () {
         myself.onShareLib(library_id);
     });
     this.container.on('click', '.remove-user', function () {
-        myself.onRemoveUserFromSharedLib($(this).attr('username'),$(this).attr('library-id'));
+        myself.onRemoveUserFromSharedLib($(this).attr('username'), $(this).attr('library-id'));
     });
     this.container.on('change', '#library-select', function () {
         myself.onSelectingLibraryToShow($(this));
@@ -118,6 +118,22 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '.manage-users', function () {
         myself.onOpenShareLib($(this).attr('library-id'));
     });
+    this.container.on('click', '.create-new-library', function () {
+        myself.type = $(this).attr('library-type');
+        myself.onNewLibraryOption();
+    });
+    this.container.on('click', '.delete-library', function () {
+        myself.onDeleteLibrary($(this).attr('library-id'));
+    });
+    this.container.on('click', '#delete-library-ok', function () {
+        myself.onDeleteLibraryOk($(this).attr('library-id'));
+    });
+    this.container.on('click', '.add-item', function () {
+        var library_id = $(this).attr('library-id');
+        myself.type = myself.get_library_by_id(library_id).type;
+        myself.onCreateInLibrary(library_id);
+    });
+
 };
 
 libraryHelper.prototype.append_modals = function () {
@@ -198,7 +214,7 @@ libraryHelper.prototype.onEditLibraryNameOk = function () {
     //this.set_library_name(library_id, library_new_name);
 };
 
-libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove,selected_library) {
+libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove, selected_library) {
     $('#return-message').html('');
     //var selected_library = $('#library-select').val();
     var myself = this;
@@ -224,12 +240,26 @@ libraryHelper.prototype.onSelectingLibraryToShow = function (origin) {
     }
 };
 libraryHelper.prototype.onNewLibraryOption = function () {
+    // Display type of library
+    var type;
+    switch (this.type) {
+        case 'elements':
+            type = 'Fabric elements';
+            break;
+        case 'systems':
+            type = 'Energy systems';
+            break;
+        default:
+            type = this.type;
+    }
+    $('#new-library-modal #new-library-type').html(type);
     // Populate the select to choose library to copy
     var out = '';
     this.library_list[this.type].forEach(function (library) {
         out += "<option value=" + library.id + ">" + library.name + "</option>";
     });
     $("#library-to-copy-select").html(out);
+
     $('#new-library-name').val('New name');
     $(".modal").modal('hide');
     $('#new-library-modal .btn').show();
@@ -275,6 +305,7 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
                 }});
         }
     }
+    UpdateUI(data);
 };
 libraryHelper.prototype.onCreateInLibrary = function (library_id) {
     $('#modal-create-in-library .modal-header h3').html('Create ' + page);
@@ -555,7 +586,6 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
         $('.window-element').hide();
 };
 
-
 libraryHelper.prototype.onShowLibraryItems = function (library_id) {
     var library = this.get_library_by_id(library_id);
     this.type = library.type;
@@ -598,7 +628,23 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
 libraryHelper.prototype.onManageUsers = function (library_id) {
 
 }
+libraryHelper.prototype.onDeleteLibrary = function (library_id) {
+    $('#confirm-delete-library-modal #delete-library-ok').attr('library-id', library_id);
+    $('#confirm-delete-library-modal').modal('show');
+}
+libraryHelper.prototype.onDeleteLibraryOk = function (library_id) {
+    var myself = this;
+    $.ajax({url: path + "assessment/deletelibrary.json", data: "library_id=" + library_id, async: false, datatype: "json", success: function (result) {
+            if (result == 1) {
+                $('#confirm-delete-library-modal').modal('hide');
+                myself.init();
+                UpdateUI();
+            }
+            else
+                $('#confirm-delete-library-modal .message').html('Library could not be deleted - ' + result);
+        }});
 
+}
 /**********************************************
  * Libraries to html
  **********************************************/
