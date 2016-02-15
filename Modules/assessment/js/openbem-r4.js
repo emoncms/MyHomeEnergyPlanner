@@ -228,40 +228,24 @@ var openbem = {
                 h: data.fabric.elements[z].h,
                 area: data.fabric.elements[z].area,
                 uvalue: 1.0 * data.fabric.elements[z].uvalue,
-                id: 1.0 * data.fabric.elements[z].id
+                id: 1.0 * data.fabric.elements[z].id,
+                location: data.fabric.elements[z].location || '',
+                description: data.fabric.elements[z].description || '',
+                kvalue: data.fabric.elements[z].kvalue || '',
+                orientation: data.fabric.elements[z].orientation || '',
+                overshading: data.fabric.elements[z].overshading || '',
+                g: data.fabric.elements[z].g || '',
+                gL: data.fabric.elements[z].gL || '',
+                ff: data.fabric.elements[z].ff || '',
+                performance: data.fabric.elements[z].performance || '',
+                benefits: data.fabric.elements[z].benefits || '',
+                cost: data.fabric.elements[z].cost || '',
+                who_by: data.fabric.elements[z].who_by || '',
+                disruption: data.fabric.elements[z].disruption || '',
+                associated_work: data.fabric.elements[z].associated_work || '',
+                notes: data.fabric.elements[z].notes || '',
+                maintenance: data.fabric.elements[z].maintenance || ''
             };
-            if (data.fabric.elements[z].description != undefined)
-                inputdata.fabric.elements[z].description = data.fabric.elements[z].description;
-            if (data.fabric.elements[z].kvalue != undefined)
-                inputdata.fabric.elements[z].kvalue = data.fabric.elements[z].kvalue;
-            if (data.fabric.elements[z].orientation != undefined)
-                inputdata.fabric.elements[z].orientation = data.fabric.elements[z].orientation;
-            if (data.fabric.elements[z].overshading != undefined)
-                inputdata.fabric.elements[z].overshading = data.fabric.elements[z].overshading;
-            if (data.fabric.elements[z].g != undefined)
-                inputdata.fabric.elements[z].g = data.fabric.elements[z].g;
-            if (data.fabric.elements[z].gL != undefined)
-                inputdata.fabric.elements[z].gL = data.fabric.elements[z].gL;
-            if (data.fabric.elements[z].ff != undefined)
-                inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
-            if (data.fabric.elements[z].performance != undefined)
-                inputdata.fabric.elements[z].performance = data.fabric.elements[z].performance;
-            if (data.fabric.elements[z].benefits != undefined)
-                inputdata.fabric.elements[z].benefits = data.fabric.elements[z].benefits;
-            if (data.fabric.elements[z].cost != undefined)
-                inputdata.fabric.elements[z].cost = data.fabric.elements[z].cost;
-            if (data.fabric.elements[z].ff != undefined)
-                inputdata.fabric.elements[z].ff = data.fabric.elements[z].ff;
-            if (data.fabric.elements[z].who_by != undefined)
-                inputdata.fabric.elements[z].who_by = data.fabric.elements[z].who_by;
-            if (data.fabric.elements[z].disruption != undefined)
-                inputdata.fabric.elements[z].disruption = data.fabric.elements[z].disruption;
-            if (data.fabric.elements[z].associated_work != undefined)
-                inputdata.fabric.elements[z].associated_work = data.fabric.elements[z].associated_work;
-            if (data.fabric.elements[z].notes != undefined)
-                inputdata.fabric.elements[z].notes = data.fabric.elements[z].notes;
-            if (data.fabric.elements[z].maintenance != undefined)
-                inputdata.fabric.elements[z].maintenance = data.fabric.elements[z].maintenance;
         }
 
 // Ventilation
@@ -403,7 +387,7 @@ var openbem = {
                     fans_and_pumps: data.energy_systems[z][i].fans_and_pumps,
                     combi_keep_hot: data.energy_systems[z][i].combi_keep_hot
                 });
-                if(data.energy_systems[z][i].secondary != undefined) // Secondary heating system
+                if (data.energy_systems[z][i].secondary != undefined) // Secondary heating system
                     inputdata.energy_systems[z][i].secondary = data.energy_systems[z][i].secondary;
             }
 
@@ -411,15 +395,11 @@ var openbem = {
 
         // Fuels
         inputdata.fuels = data.fuels;
-
         //Images
         inputdata.imagegallery = data.imagegallery;
         inputdata.featuredimage = data.featuredimage;
-
         //Measures
         inputdata.measures = data.measures;
-
         return inputdata;
-
     }
 }

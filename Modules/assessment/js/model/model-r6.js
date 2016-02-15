@@ -268,6 +268,8 @@ calc.fabric = function (data)
                 if (month >= 5 && month <= 8)
                     summer = 1;
                 var access_factor = table_6d[overshading][summer];
+                console.log(overshading);
+                console.log(summer);
                 // Map orientation code from window to solar rad orientation codes.
                 if (orientation == 5)
                     orientation = 3; // SE/SW

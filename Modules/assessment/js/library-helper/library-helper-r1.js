@@ -758,7 +758,7 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: 'new tag', name: 'New name', uvalue: 1.0, kvalue: 1.0, tags: ['Wall'],
+        item = {tag: 'new tag', name: 'New name', uvalue: 1.0, kvalue: 1.0, tags: ['Wall'],location:'',
             source: "", description: "", performance: "", benefits: "", cost: "",
             who_by: "", disruption: "", associated_work: "", key_risks: "", notes: "",
             maintenance: "", };
@@ -795,6 +795,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<table class="table">';
     out += '<tr><td>Tag</td><td><input type="text" class="create-element-tag item-tag" value="' + item.tag + '" /></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="create-element-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Location</td><td><input type="text" class="create-element-location" value="' + item.location + '" /></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="create-element-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>U-value</td><td><input type="text" class="create-element-uvalue editable-field" value="' + item.uvalue + '" /></td></tr>';
     out += '<tr><td>K-value</td><td><input type="text" class="create-element-kvalue editable-field" value="' + item.kvalue + '" /></td></tr>';
@@ -858,6 +859,7 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
     var tag = $(".create-element-tag").val();
     item[tag] = {};
     item[tag].name = $(".create-element-name").val();
+    item[tag].location = $(".create-element-location").val();
     item[tag].source = $(".create-element-source").val();
     item[tag].uvalue = 1.0 * $(".create-element-uvalue").val();
     item[tag].kvalue = 1.0 * $(".create-element-kvalue").val();
@@ -953,7 +955,7 @@ libraryHelper.prototype.populate_measure_new_item = function () {
     var library = this.get_library_by_id($('#replace-from-lib').val()).data;
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var new_item = library[item_index];
-    new_item.name = original_item.name;
+    new_item.location = original_item.location;
     $('#apply-measure-item-fields').html('');
     var function_name = this.type + "_item_to_html";
     var out = this[function_name](new_item, item_index);

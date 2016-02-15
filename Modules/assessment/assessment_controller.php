@@ -204,6 +204,25 @@ function assessment_controller() {
                 $req->execute();
             }
         }
+
+        // Add 'location' to the elements in existing libraries
+        $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
+        foreach ($libresult as $row) {
+            $update_needed = false;
+            $library = json_decode($row['data']);
+            foreach ($library as $item) {
+                if (!isset($item->location)) {
+                    $update_needed = true;
+                    $item->location = '';
+                }
+            }
+            if ($update_needed === true) {
+                $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+                $library = json_encode($library);
+                $req->bind_param('si', $library, $row['id']);
+                $req->execute();
+            }
+        }
     }
 
 
@@ -378,10 +397,10 @@ function assessment_controller() {
         if ($route->action == 'removeuserfromsharedlibrary' && $session['write'])
             $result = $assessment->removeuserfromsharedlibrary($session['userid'], get('library_id'), get('user_to_remove'));
 
-         if ($route->action == 'setlibraryname' && $session['write'])
+        if ($route->action == 'setlibraryname' && $session['write'])
             $result = $assessment->setlibraryname($session['userid'], get('library_id'), get('new_library_name'));
-         
-         if ($route->action == 'deletelibrary' && $session['write'])
+
+        if ($route->action == 'deletelibrary' && $session['write'])
             $result = $assessment->deletelibrary($session['userid'], get('library_id'));
 
         // -------------------------------------------------------------------------------------------------------------
