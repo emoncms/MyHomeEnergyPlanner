@@ -22,6 +22,7 @@ $d = $path . "Modules/assessment/";
 </style>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
 
 <div id="left-pane">
 
@@ -187,6 +188,31 @@ $d = $path . "Modules/assessment/";
             draw_projects("#projects", projects);
             $("#assessments-title").html("My Assessments");
         }});
+
+// -----------------------------------------------------------------------------------
+// Check that the user has all the standard libraries and create them if not
+// -----------------------------------------------------------------------------------
+    var libraries = {};
+    $.ajax({url: path + "assessment/loaduserlibraries.json", async: true, datatype: "json", success: function (user_libraries) {
+            var user_has_the_library = false;
+            for (library_type in standard_library) {
+                user_has_the_library = false;
+                for (library_index in user_libraries) {
+                    if (user_libraries[library_index].type == library_type)
+                        user_has_the_library = true;
+                }
+                if (user_has_the_library == false) {
+                    var library_name = "StandardLibrary - " + myusername;
+                    $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + library_type, datatype: "json", async: true, success: function (result) {
+                            var library_id = result;
+                            $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + JSON.stringify(standard_library[library_type]), success: function (result) {
+                                    console.log("Library: " + library_type + ' - ' + result);
+                                }});
+                        }});
+                }
+            }
+        }});
+
 
 // -----------------------------------------------------------------------------------
 // Create new assessment

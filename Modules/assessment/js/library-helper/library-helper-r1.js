@@ -148,8 +148,8 @@ libraryHelper.prototype.append_modals = function () {
  * Events methods
  *************************************/
 libraryHelper.prototype.onAddItemFromLib = function (origin) {
-    // Check if the user has a library of this type and if not create it
-    if (this.library_list[this.type] === undefined) {
+    // Check if the user has a library of this type and if not create it. THIS HAS BEEN IMPLEMENTED IN projects.php
+   /* if (this.library_list[this.type] === undefined) {
         this.library_list[this.type] = [];
         var library_name = "StandardLibrary - " + p.author;
         var myself = this;
@@ -161,7 +161,7 @@ libraryHelper.prototype.onAddItemFromLib = function (origin) {
                         console.log("save library result: " + result);
                     }});
             }});
-    }
+    }*/
     this.populate_library_modal(origin);
     $("#show-library-modal").modal('show');
 };
