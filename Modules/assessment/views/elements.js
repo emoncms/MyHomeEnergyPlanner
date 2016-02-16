@@ -32,7 +32,7 @@ $("#openbem").on("click", '.add-element', function () {
         add_element("#roofs", newelementid);
     if (type == "Floor")
         add_element("#floors", newelementid);
-    if (type == "Window")
+    if (type == "Window" || type == "Door" || type == "Roof_light")
         add_window(newelementid);
     if (type == "Party_wall")
         add_element("#party_walls", newelementid);
@@ -66,7 +66,8 @@ $("#openbem").on("click", '#apply-measure-TB-modal-ok', function () {
     data.measures.thermal_bridging.original_element.value = data.fabric.thermal_bridging_yvalue;
     data.fabric.thermal_bridging_yvalue = $('#TB-measure-value').val();
     data.measures.thermal_bridging.measure.value = $('#TB-measure-value').val();
-    data.measures.thermal_bridging.measure.description = $('#TB-measure-description').val();;
+    data.measures.thermal_bridging.measure.description = $('#TB-measure-description').val();
+    ;
     $('#apply-measure-TB-modal').modal('hide');
     elements_initUI();
     update();
@@ -311,7 +312,7 @@ function elements_initUI()
             add_element("#floors", z);
         } else if (type == 'Roof' || type == 'roof') {
             add_element("#roofs", z);
-        } else if (type == 'Window' || type == 'window') {
+        } else if (type == 'Window' || type == 'window' || type == 'Door' || type == 'Roof_light') {
             add_window(z);
         } else if (type == 'Party_wall' || type == 'party_wall') {
             add_element("#party_walls", z);
@@ -333,20 +334,34 @@ function elements_initUI()
 function elements_UpdateUI()
 {
     for (z in data.fabric.elements) {
+        var color = "#fff";
 
-        if (data.fabric.elements[z].type == 'Window') {
-            var name = data.fabric.elements[z].name;
-            name = name.toLowerCase();
+        var name = data.fabric.elements[z].name;
+        name = name.toLowerCase();
 
-            var color = "#fff";
-            if (name.indexOf("door") != -1)
-                color = '#ffeeee';
-            if (name.indexOf("roof") != -1)
-                color = '#ddffdd';
-
-            $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', color);
-
+        if (data.fabric.elements[z].type == 'Door' || name.indexOf("door") != -1) {
+            color = '#ffeeee';
         }
+
+        if (data.fabric.elements[z].type == 'Roof_light' || name.indexOf("roof") != -1) {
+            color = '#ddffdd';
+        }
+
+        $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', color);
+
+        /*if (data.fabric.elements[z].type == 'Window') {
+         var name = data.fabric.elements[z].name;
+         name = name.toLowerCase();
+         
+         var color = "#fff";
+         if (name.indexOf("door") != -1)
+         color = '#ffeeee';
+         if (name.indexOf("roof") != -1)
+         color = '#ddffdd';
+         
+         // $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', color);
+         }*/
+
     }
 }
 

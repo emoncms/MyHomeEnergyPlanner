@@ -149,19 +149,19 @@ libraryHelper.prototype.append_modals = function () {
  *************************************/
 libraryHelper.prototype.onAddItemFromLib = function (origin) {
     // Check if the user has a library of this type and if not create it. THIS HAS BEEN IMPLEMENTED IN projects.php
-   /* if (this.library_list[this.type] === undefined) {
-        this.library_list[this.type] = [];
-        var library_name = "StandardLibrary - " + p.author;
-        var myself = this;
-        $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + myself.type, datatype: "json", async: false, success: function (result) {
-                library_id = result;
-                myself.library_list[myself.type] = [{id: library_id, name: library_name, type: myself.type, data: standard_library[myself.type]}];
-                myself.library_permissions[library_id] = {write: 1};
-                $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + JSON.stringify(standard_library[myself.type]), success: function (result) {
-                        console.log("save library result: " + result);
-                    }});
-            }});
-    }*/
+    /* if (this.library_list[this.type] === undefined) {
+     this.library_list[this.type] = [];
+     var library_name = "StandardLibrary - " + p.author;
+     var myself = this;
+     $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + myself.type, datatype: "json", async: false, success: function (result) {
+     library_id = result;
+     myself.library_list[myself.type] = [{id: library_id, name: library_name, type: myself.type, data: standard_library[myself.type]}];
+     myself.library_permissions[library_id] = {write: 1};
+     $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + JSON.stringify(standard_library[myself.type]), success: function (result) {
+     console.log("save library result: " + result);
+     }});
+     }});
+     }*/
     this.populate_library_modal(origin);
     $("#show-library-modal").modal('show');
 };
@@ -678,18 +678,18 @@ libraryHelper.prototype.systems_library_to_html = function (origin, library_id) 
     return out;
 };
 libraryHelper.prototype.elements_library_to_html = function (origin, library_id) {
-    var tag = '';
+    var tag = [];
     if (origin != undefined)
-        tag = $(origin).attr('tags');
+        tag = $(origin).attr('tags').split(',');
     else
-        tag = 'Wall';
+        tag = ['Wall'];
     if ($('#library-select').val() != undefined)
         library_id = $('#library-select').val();
     var element_library = this.get_library_by_id(library_id).data;
     $('#library-select').attr('tags', tag);
     var out = "";
     for (z in element_library) {
-        if (element_library[z].tags.indexOf(tag) != -1) {
+        if (tag.indexOf(element_library[z].tags[0]) != -1) {
             out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
             out += "<td style='width:20px;'>" + z + "</td>";
             out += "<td style='width:200px;'>" + element_library[z].name;
@@ -701,16 +701,16 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
             out += "<td style='width:200px; font-size:13px'>";
             out += "<b>U-value:</b> " + element_library[z].uvalue + " W/K.m2";
             out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/K.m2";
-            if (element_library[z].tags[0] == "Window") {
+            if (element_library[z].tags[0] == "Window" || element_library[z].tags[0] == "Door" || element_library[z].tags[0] == "Roof_light" ) {
                 out += "<br><b>g:</b> " + element_library[z].g + ", ";
                 out += "<b>gL:</b> " + element_library[z].gL + ", ";
                 out += "<b>ff:</b> " + element_library[z].ff;
             }
             out += "</td>";
             out += "<td style='width:120px' >";
-            out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' library='" + library_id + "' lib='" + z + "' type='" + tag + "' tag='" + z + "'></i>";
+            out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             // out += "<i class='icon-trash' style='margin-left:20px'></i>";
-            out += "<button class='add-element use-from-lib btn' style='margin-left:20px' library='" + library_id + "' lib='" + z + "' type='" + tag + "'>use</button</i>";
+            out += "<button class='add-element use-from-lib btn' style='margin-left:20px' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "'>use</button</i>";
             out += "</td>";
             out += "</tr>";
         }
@@ -758,7 +758,7 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: 'new tag', name: 'New name', uvalue: 1.0, kvalue: 1.0, tags: ['Wall'],location:'',
+        item = {tag: 'new tag', name: 'New name', uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
             source: "", description: "", performance: "", benefits: "", cost: "",
             who_by: "", disruption: "", associated_work: "", key_risks: "", notes: "",
             maintenance: "", };
@@ -784,13 +784,15 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
 
     var out = '<div class="input-prepend"><span class="add-on">Type</span><select class="create-element-type">';
     out += type == 'Wall' ? '<option value="Wall" selected>Wall</option>' : '<option value = "Wall" > Wall </option>';
-    out += type == 'Roof' ? '<option value="Roof" selected>Roof</option>' : '<option value="Roof">Roof</option>';
-    out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
-    out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
     if (type == 'party_wall' || type == 'Party_wall')
         out += '<option value="party_wall" selected>Party wall</option>';
     else
         out += '<option value="party_wall">Party wall</option>';
+    out += type == 'Roof' ? '<option value="Roof" selected>Roof/loft</option>' : '<option value="Roof">Roof</option>';
+    out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
+    out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
+        out += type == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
+    out += type == 'Roof_light' ? ' <option value = "Roof_light" selected > Roof light </option>' : '<option value="Roof_light">Roof light</option> ';
     out += '</select></div>';
     out += '<table class="table">';
     out += '<tr><td>Tag</td><td><input type="text" class="create-element-tag item-tag" value="' + item.tag + '" /></td></tr>';
@@ -863,11 +865,11 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
     item[tag].source = $(".create-element-source").val();
     item[tag].uvalue = 1.0 * $(".create-element-uvalue").val();
     item[tag].kvalue = 1.0 * $(".create-element-kvalue").val();
-    if (type == "Window")
+    if (type == "Window" ||type == "Door"||type == "Roof_light")
         item[tag].g = $(".create-element-g").val();
-    if (type == "Window")
+    if (type == "Window" ||type == "Door"||type == "Roof_light")
         item[tag].gL = $(".create-element-gL").val();
-    if (type == "Window")
+    if (type == "Window" ||type == "Door"||type == "Roof_light")
         item[tag].ff = $(".create-element-ff").val();
     item[tag].tags = [type];
     //item[tag].criteria = $(".create-element-criteria").val().split(",");
