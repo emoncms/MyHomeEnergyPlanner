@@ -115,6 +115,10 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '.show-items', function () {
         myself.onShowLibraryItems($(this).attr('library-id'));
     });
+    this.container.on('change', '#show-library-items-modal .element-type select', function () {
+        myself.onChangeTypeOfElementsToShow($(this));
+    });
+
     this.container.on('click', '.manage-users', function () {
         myself.onOpenShareLib($(this).attr('library-id'));
     });
@@ -619,12 +623,32 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
     if (this.library_permissions[library.id].write != 1)
         $("#show-library-items-modal .if-write").hide();
 
+    // Show the select to choose the type of fabric elements when library is "elements"
+    if (this.type == 'elements')
+        $('#show-library-items-modal .element-type').show();
+
     // Add library id to Create new item 
     $('#show-library-items-modal #create-in-library').attr('library-id', library_id);
 
     // Show modal
     $("#show-library-items-modal").modal('show');
 
+};
+libraryHelper.prototype.onChangeTypeOfElementsToShow = function (origin) {
+    origin.attr('tags', [origin.val()]); //this is the type of elements to display
+    var library_id = origin.attr('library_id');
+    var out = this.elements_library_to_html(origin, library_id);
+    // Items
+    $("#show-library-items-modal #show-library-items-table").html(out);
+    // Add Library id to edit buttons
+
+    // Hide the Use buttons
+    $("#show-library-items-modal .use-from-lib").hide();
+    // Hide Write options if no write access
+    if (this.library_permissions[library_id].write != 1)
+        $("#show-library-items-modal .if-write").hide();
+    // Show the select to choose the type of fabric elements when library is "elements"
+    $('#show-library-items-modal .element-type').show();
 };
 libraryHelper.prototype.onManageUsers = function (library_id) {
 
@@ -688,27 +712,24 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
         library_id = $('#library-select').val();
     var element_library = this.get_library_by_id(library_id).data;
     $('#library-select').attr('tags', tag);
-    
-    //Select to choose the type to display ---- AQUI
-    /*
-    var out = '<div class="input-prepend"><span class="add-on">Type</span><select class="create-element-type">';
-    out += type == 'Wall' ? '<option value="Wall" selected>Wall</option>' : '<option value = "Wall" > Wall </option>';
-    if (type == 'party_wall' || type == 'Party_wall')
+
+
+    var out = "";
+    //Select to choose the type of element to display, not always used and is hidden by default
+    out = '<div class="input-prepend element-type" style="display:none" ><span class="add-on">Type</span><select library_id="' + library_id + '" >';
+    out += tag[0] == 'Wall' ? '<option value="Wall" selected>Wall</option>' : '<option value = "Wall" > Wall </option>';
+    if (tag[0] == 'party_wall' || tag[0] == 'Party_wall')
         out += '<option value="party_wall" selected>Party wall</option>';
     else
         out += '<option value="party_wall">Party wall</option>';
-    out += type == 'Roof' ? '<option value="Roof" selected>Roof/loft</option>' : '<option value="Roof">Roof</option>';
-    out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
-    out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
-        out += type == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
-    out += type == 'Roof_light' ? ' <option value = "Roof_light" selected > Roof light </option>' : '<option value="Roof_light">Roof light</option> ';
+    out += tag[0] == 'Roof' ? '<option value="Roof" selected>Roof/loft</option>' : '<option value="Roof">Roof</option>';
+    out += tag[0] == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
+    out += tag[0] == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
+    out += tag[0] == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
+    out += tag[0] == 'Roof_light' ? ' <option value = "Roof_light" selected > Roof light </option>' : '<option value="Roof_light">Roof light</option> ';
     out += '</select></div>';
-    */
-   
-   
-   
+
     // Elements
-    var out = "";
     for (z in element_library) {
         if (tag.indexOf(element_library[z].tags[0]) != -1) {
             out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
