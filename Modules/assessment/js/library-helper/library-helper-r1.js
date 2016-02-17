@@ -98,10 +98,10 @@ libraryHelper.prototype.add_events = function () {
         myself.onChangeApplyMeasureWhatToDo();
     });
     this.container.on('change', '#replace-from-lib', function () {
-        myself.onChangeApplyMeasureReplaceFromLib(); // This one to populate the select for items();
+        myself.onChangeApplyMeasureReplaceFromLib($(this).attr('library_type')); // This one to populate the select for items();
     });
     this.container.on('change', '#replace-from-lib-items', function () {
-        myself.onChangeApplyMeasureReplaceFromLibItem();
+        myself.onChangeApplyMeasureReplaceFromLibItem($(this).attr('library_type'));
     });
     this.container.on('change', '#modal-create-in-library .create-element-type', function () {
         myself.onChangeTypeOnCreateElementLibItem();
@@ -502,15 +502,20 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('[name=radio-type-of-measure]').filter('[value=remove]').prop('checked', true);
     $('#apply-measure-item-fields').hide();
     $('#apply-measure-replace').hide();
+    //If we are in fabric Elements show the option to Apply Measure from Measures Library
+    if (this.type = 'elements')
+        $('.replace_from_measure_library').show();
 
+    // Populate the selects library to choose a library and an item (used when replace the item with one from library)
+    //Moved to onChangeApplyMeasureWhatToDo
+    /*var out = '';
+     this.library_list[this.type].forEach(function (library) {
+     out += "<option value=" + library.id + ">" + library.name + "</option>";
+     });
+     $("#replace-from-lib").html(out);
+     this.onChangeApplyMeasureReplaceFromLib(); // This one to populate the select for items
+     */
 
-    // Populate the selects library to choose a liibrary and an item (used when replace the item with onee from library)
-    var out = '';
-    this.library_list[this.type].forEach(function (library) {
-        out += "<option value=" + library.id + ">" + library.name + "</option>";
-    });
-    $("#replace-from-lib").html(out);
-    this.onChangeApplyMeasureReplaceFromLib(); // This one to populate the select for items
     // Show/hide modals
     $('.modal').modal('hide');
     $('#apply-measure-modal').modal('show');
@@ -531,6 +536,10 @@ libraryHelper.prototype.onApplyMeasureOk = function (origin) {
             var function_name = this.type + '_get_item_to_save';
             measure.item = this[function_name]();
             break;
+            case'replace_from_measure_library':
+                var function_name = this.type + '_measures_get_item_to_save';
+            measure.item = this[function_name]();
+            break;
     }
     apply_measure(measure);
 
@@ -543,8 +552,16 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             $('#apply-measure-item-fields').hide();
             break;
         case 'replace':
-            this.onChangeApplyMeasureReplaceFromLib();
-            this.onChangeApplyMeasureReplaceFromLibItem();
+            this.populate_selects_in_apply_measure_modal(this.type),
+            this.onChangeApplyMeasureReplaceFromLib(this.type);
+            this.onChangeApplyMeasureReplaceFromLibItem(this.type);
+            $('#apply-measure-replace').show();
+            $('#apply-measure-item-fields').show();
+            break;
+        case 'replace_from_measure_library':
+            this.populate_selects_in_apply_measure_modal(this.type + "_measures")
+            this.onChangeApplyMeasureReplaceFromLib(this.type + "_measures");
+            this.onChangeApplyMeasureReplaceFromLibItem(this.type + "_measures");
             $('#apply-measure-replace').show();
             $('#apply-measure-item-fields').show();
             break;
@@ -561,12 +578,12 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             break;
     }
 };
-libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function () {
+libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_library) {
     var out = "";
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var library = this.get_library_by_id($('#replace-from-lib').val()).data;
     for (item in library) {
-        if (this.type == 'elements') {
+        if (type_of_library == 'elements' ||type_of_library == 'elements_measures') {
             if (library[item].tags[0].toUpperCase() == original_item.type.toUpperCase())
                 out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
         }
@@ -575,11 +592,12 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function () {
     }
 
     $('#replace-from-lib-items').html(out);
-    this.populate_measure_new_item();
+    $("#replace-from-lib-items").attr('library_type',type_of_library);
+    this.populate_measure_new_item(type_of_library);
 
 };
-libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function () {
-    this.populate_measure_new_item();
+libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function (type_of_library) {
+    this.populate_measure_new_item(type_of_library);
     //disable the possibility to change the type of the element
     $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
 };
@@ -722,7 +740,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
         out += '<option value="party_wall" selected>Party wall</option>';
     else
         out += '<option value="party_wall">Party wall</option>';
-    out += tag[0] == 'Roof' ? '<option value="Roof" selected>Roof/loft</option>' : '<option value="Roof">Roof</option>';
+    out += tag[0] == 'Roof' ? '<option value="Roof" selected>Roof</option>' : '<option value="Roof">Roof</option>';
     out += tag[0] == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
     out += tag[0] == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
     out += tag[0] == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
@@ -830,7 +848,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
         out += '<option value="party_wall" selected>Party wall</option>';
     else
         out += '<option value="party_wall">Party wall</option>';
-    out += type == 'Roof' ? '<option value="Roof" selected>Roof/loft</option>' : '<option value="Roof">Roof</option>';
+    out += type == 'Roof' ? '<option value="Roof" selected>Roof</option>' : '<option value="Roof">Roof</option>';
     out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
     out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
     out += type == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
@@ -867,6 +885,10 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<tr><td>Notes</td><td><input type="text" class="create-element-notes" value="' + item.notes + '" /></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="create-element-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</table>';
+    return out;
+};
+libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
+    var out = this.elements_item_to_html(item, tag);
     return out;
 };
 /*******************************************************
@@ -941,6 +963,10 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
         item[tag].maintenance = $(".create-element-maintenance").val();
     return item;
 };
+libraryHelper.prototype.elements_measures_get_item_to_save = function () {
+    var item = this.elements_get_item_to_save();
+    return item;
+};
 /***************************************************
  * Other methods
  ***************************************************/
@@ -994,14 +1020,14 @@ libraryHelper.prototype.get_library_by_id = function (id) {
         }
     }
 };
-libraryHelper.prototype.populate_measure_new_item = function () {
+libraryHelper.prototype.populate_measure_new_item = function (type_of_library) {
     var item_index = $('#replace-from-lib-items').val();
     var library = this.get_library_by_id($('#replace-from-lib').val()).data;
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var new_item = library[item_index];
     new_item.location = original_item.location;
     $('#apply-measure-item-fields').html('');
-    var function_name = this.type + "_item_to_html";
+    var function_name = type_of_library + "_item_to_html";
     var out = this[function_name](new_item, item_index);
     $('#apply-measure-item-fields').html(out);
 };
@@ -1046,3 +1072,12 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
         $('.if-write').show();
 };
 
+libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type_of_library) {
+    var out = '';
+    this.library_list[type_of_library].forEach(function (library) {
+        out += "<option value=" + library.id + ">" + library.name + "</option>";
+    });
+    $("#replace-from-lib").html(out);
+    $("#replace-from-lib").attr('library_type',type_of_library);
+    this.onChangeApplyMeasureReplaceFromLib(type_of_library); // This one to populate the select for items
+};

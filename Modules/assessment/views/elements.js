@@ -62,8 +62,13 @@ $("#openbem").on("click", '#apply-measure-TB', function () {
     $('#apply-measure-TB-modal').modal('show');
 });
 $("#openbem").on("click", '#apply-measure-TB-modal-ok', function () {
-    data.measures.thermal_bridging = {original_element: {}, measure: {}};
-    data.measures.thermal_bridging.original_element.value = data.fabric.thermal_bridging_yvalue;
+   //We only record the original value if this is the first time we apply the measure in this scenario
+    if (data.measures.thermal_bridging == undefined) {
+        data.measures.thermal_bridging = {original_element: {}, measure: {}};
+        data.measures.thermal_bridging.original_element.value = data.fabric.thermal_bridging_yvalue;
+    }
+    
+    //Apply measure
     data.fabric.thermal_bridging_yvalue = $('#TB-measure-value').val();
     data.measures.thermal_bridging.measure.value = $('#TB-measure-value').val();
     data.measures.thermal_bridging.measure.description = $('#TB-measure-description').val();
@@ -395,9 +400,10 @@ function apply_measure(measure) {
             data.fabric.elements.splice(measure.row, 1);
             data.fabric.measures[measure.item_id].measure = "Element deleted";
             break;
+        case  'replace_from_measure_library':
         case 'replace':
         case 'edit':
-            console.log(measure);
+            //console.log(measure);
             for (z in measure.item) // measure.item only has one element, we do it this way to the "property", in this case somemthing like "CV1" oof "ROOF1"
                 var lib = z;
             measure.item[lib].lib = lib;
