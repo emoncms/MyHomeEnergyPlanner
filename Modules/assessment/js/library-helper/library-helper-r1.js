@@ -580,7 +580,8 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function () {
     $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
 };
 libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
-    if ($('#modal-create-in-library .create-element-type').val() == 'Window')
+    var type = $('#modal-create-in-library .create-element-type').val();
+    if (type == 'Window' || type == 'Door' || type == 'Roof_light')
         $('.window-element').show();
     else
         $('.window-element').hide();
@@ -687,6 +688,26 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
         library_id = $('#library-select').val();
     var element_library = this.get_library_by_id(library_id).data;
     $('#library-select').attr('tags', tag);
+    
+    //Select to choose the type to display ---- AQUI
+    /*
+    var out = '<div class="input-prepend"><span class="add-on">Type</span><select class="create-element-type">';
+    out += type == 'Wall' ? '<option value="Wall" selected>Wall</option>' : '<option value = "Wall" > Wall </option>';
+    if (type == 'party_wall' || type == 'Party_wall')
+        out += '<option value="party_wall" selected>Party wall</option>';
+    else
+        out += '<option value="party_wall">Party wall</option>';
+    out += type == 'Roof' ? '<option value="Roof" selected>Roof/loft</option>' : '<option value="Roof">Roof</option>';
+    out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
+    out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
+        out += type == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
+    out += type == 'Roof_light' ? ' <option value = "Roof_light" selected > Roof light </option>' : '<option value="Roof_light">Roof light</option> ';
+    out += '</select></div>';
+    */
+   
+   
+   
+    // Elements
     var out = "";
     for (z in element_library) {
         if (tag.indexOf(element_library[z].tags[0]) != -1) {
@@ -701,7 +722,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
             out += "<td style='width:200px; font-size:13px'>";
             out += "<b>U-value:</b> " + element_library[z].uvalue + " W/K.m2";
             out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/K.m2";
-            if (element_library[z].tags[0] == "Window" || element_library[z].tags[0] == "Door" || element_library[z].tags[0] == "Roof_light" ) {
+            if (element_library[z].tags[0] == "Window" || element_library[z].tags[0] == "Door" || element_library[z].tags[0] == "Roof_light") {
                 out += "<br><b>g:</b> " + element_library[z].g + ", ";
                 out += "<b>gL:</b> " + element_library[z].gL + ", ";
                 out += "<b>ff:</b> " + element_library[z].ff;
@@ -782,7 +803,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
      item.tags = ['Wall'];
      }*/
 
-    var out = '<div class="input-prepend"><span class="add-on">Type</span><select class="create-element-type">';
+    var out = '<div class="input-prepend"><span class="add-on">Type</span><select class="create-element-type editable-field">';
     out += type == 'Wall' ? '<option value="Wall" selected>Wall</option>' : '<option value = "Wall" > Wall </option>';
     if (type == 'party_wall' || type == 'Party_wall')
         out += '<option value="party_wall" selected>Party wall</option>';
@@ -791,7 +812,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += type == 'Roof' ? '<option value="Roof" selected>Roof/loft</option>' : '<option value="Roof">Roof</option>';
     out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
     out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
-        out += type == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
+    out += type == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
     out += type == 'Roof_light' ? ' <option value = "Roof_light" selected > Roof light </option>' : '<option value="Roof_light">Roof light</option> ';
     out += '</select></div>';
     out += '<table class="table">';
@@ -865,11 +886,11 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
     item[tag].source = $(".create-element-source").val();
     item[tag].uvalue = 1.0 * $(".create-element-uvalue").val();
     item[tag].kvalue = 1.0 * $(".create-element-kvalue").val();
-    if (type == "Window" ||type == "Door"||type == "Roof_light")
+    if (type == "Window" || type == "Door" || type == "Roof_light")
         item[tag].g = $(".create-element-g").val();
-    if (type == "Window" ||type == "Door"||type == "Roof_light")
+    if (type == "Window" || type == "Door" || type == "Roof_light")
         item[tag].gL = $(".create-element-gL").val();
-    if (type == "Window" ||type == "Door"||type == "Roof_light")
+    if (type == "Window" || type == "Door" || type == "Roof_light")
         item[tag].ff = $(".create-element-ff").val();
     item[tag].tags = [type];
     //item[tag].criteria = $(".create-element-criteria").val().split(",");
