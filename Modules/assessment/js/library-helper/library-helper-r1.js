@@ -748,6 +748,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     out += '</select></div>';
 
     // Elements
+    out+='<table>';
     for (z in element_library) {
         if (tag.indexOf(element_library[z].tags[0]) != -1) {
             out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
@@ -775,6 +776,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
             out += "</tr>";
         }
     }
+    out+='</table>';
     return out;
 };
 /**********************************************
