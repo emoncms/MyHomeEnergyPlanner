@@ -779,6 +779,11 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     out+='</table>';
     return out;
 };
+libraryHelper.prototype.elements_measures_library_to_html = function (origin, library_id){
+    var out = this.elements_library_to_html(origin,library_id);
+    return out;
+};
+        
 /**********************************************
  * Items to html
  **********************************************/
