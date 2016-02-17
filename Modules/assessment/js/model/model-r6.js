@@ -187,7 +187,7 @@ calc.fabric = function (data)
             data.fabric.elements[z].area = data.fabric.elements[z]['l'] * data.fabric.elements[z]['h'];
         }
         data.fabric.elements[z].netarea = data.fabric.elements[z].area;
-        if (data.fabric.elements[z].type != 'window' && data.fabric.elements[z].type != 'Window') {
+        if (data.fabric.elements[z].type != 'window' && data.fabric.elements[z].type != 'Window' && data.fabric.elements[z].type != 'Door' && data.fabric.elements[z].type != 'Roof_light') {
             data.fabric.elements[z].windowarea = 0;
         }
 
@@ -195,7 +195,7 @@ calc.fabric = function (data)
 
         for (w in data.fabric.elements)
         {
-            if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window')
+            if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window'|| data.fabric.elements[w].type == 'Door'|| data.fabric.elements[w].type == 'Roof_light')
             {
                 //if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
                 if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == data.fabric.elements[z].id)
@@ -235,7 +235,7 @@ calc.fabric = function (data)
             data.fabric.total_roof_WK += data.fabric.elements[z].wk;
             data.fabric.total_roof_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window') {
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light') {
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
@@ -248,7 +248,7 @@ calc.fabric = function (data)
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;
         }
 
-        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window')
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window'|| data.fabric.elements[z].type == 'Door'|| data.fabric.elements[z].type == 'Roof_light')
         {
             var orientation = data.fabric.elements[z]['orientation'];
             var area = data.fabric.elements[z]['area'];
