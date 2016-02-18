@@ -51,7 +51,6 @@
         <h3>Create a new library - <span id="new-library-type"></span></h3>
     </div>
     <div class="modal-body">
-        <p id="create-library-message"></p>
         <div class="input-append input-prepend">
             <span class="add-on">Enter name for new library</span>
             <input type="text" id="new-library-name" placeholder="Name"/>
@@ -67,6 +66,7 @@
         </div>
     </div>
     <div class="modal-footer">
+        <p id="create-library-message"></p>
         <button id="cancelnewlibrary" data-dismiss="modal" class="btn">Cancel</button>
         <button id="newlibrary" class="btn">Create</button>
         <button id="finishcreatelibrary" data-dismiss="modal" style="display:none" class="btn">Finish</button>
@@ -79,7 +79,6 @@
         <h3 id="myModalLabel"> </h3>
     </div>
     <div class="modal-body">
-        <p id="create-in-library-message" style="font-weight: bold"></p>
         <p>What do you want to do?</p>
         <div style="margin-left:25px">
             <p><input type="radio" id="create_empty_item" name="empty_or_copy_item" value="empty" checked /> Create an empty one</p>
@@ -99,6 +98,7 @@
         <div class="new-item-in-library"></div>
     </div>
     <div class="modal-footer">
+        <p id="create-in-library-message" style="font-weight: bold"></p>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button id="create-in-library-ok" class="btn btn-primary">Create</button>
         <button id="create-in-library-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
@@ -113,11 +113,11 @@
         <h3 id="myModalLabel">Edit item</h3>
     </div>
     <div class="modal-body">
-        <p id="edit-item-message" style="font-weight: bold"></p>
         <p>Library: <span id="library-to-edit-item"></span></p>
         <table class="table edit-item-in-library" style='margin:15px 0 0 25px'></table>
     </div>
     <div class="modal-footer">
+        <p id="edit-item-message" style="font-weight: bold"></p>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button id="edit-item-ok" class="btn btn-primary">Edit</button>
         <button id="edit-item-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
@@ -131,7 +131,6 @@
         <h3 id="myModalLabel">Apply measure</h3>
     </div>
     <div class="modal-body">
-        <p id="apply-measure-message" style="font-weight: bold"></p>
         <p>What do you want to do?</p>
         <p style="margin-left:25px"><input type="radio" name="radio-type-of-measure" value="remove" /> Remove item</p>
         <p style="margin-left:25px"><input type="radio" name="radio-type-of-measure" value="edit" /> Edit manually</p>
@@ -144,6 +143,7 @@
         <div id="apply-measure-item-fields" style="display:none;margin-left:25px"></div>
     </div>
     <div class="modal-footer">
+        <p id="apply-measure-message" style="font-weight: bold"></p>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button id="apply-measure-ok" tag="" library="" row="" item_id="" class="btn btn-primary">Apply measure</button>
         <button id="apply-measure-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
@@ -155,12 +155,12 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>Edit library name</h3>
-        <p id="message"></p>
     </div>
     <div class="modal-body">
         <p>Enter new name</p><p><input id="new-library-name" type="text" placeholder="" /></p>
     </div>
     <div class="modal-footer">
+        <p id="message"></p>
         <button class="btn" id="edit-library-name-ok" library-id="">OK</button>
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
     </div>
