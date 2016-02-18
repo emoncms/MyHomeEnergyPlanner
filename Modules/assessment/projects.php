@@ -203,7 +203,7 @@ $d = $path . "Modules/assessment/";
                 }
                 if (user_has_the_library == false) {
                     var library_name = "StandardLibrary - " + myusername;
-                    $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + library_type, datatype: "json", async: true, success: function (result) {
+                    $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + library_type, datatype: "json", async: false, success: function (result) {
                             var library_id = result;
                             $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + JSON.stringify(standard_library[library_type]), success: function (result) {
                                     console.log("Library: " + library_type + ' - ' + result);
