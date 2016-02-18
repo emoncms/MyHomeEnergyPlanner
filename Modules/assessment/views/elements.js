@@ -157,8 +157,7 @@ $("[key='data.fabric.global_TMP']").change(function () {
 function add_element(id, z)
 {
     var element = data.fabric.elements[z];
-    var title = "\nDescription: " +
-            element.description + "\nPerformance: " +
+    var title = "\nDescription: " + element.description + "\nSource: " + element.source + "\nPerformance: " +
             element.performance + "\nBenefits: " + element.benefits + "\nCost: " + element.cost +
             "\nWho by: " + element.who_by + "\nDisruption" + element.disruption + "\nAssociated work: " +
             element.associated_work + "\nKey risks: " + element.key_risks + "\nNotes: " + element.notes +
@@ -177,7 +176,7 @@ function add_element(id, z)
     $(id + " [key='data.fabric.elements.template.uvalue']").attr('key', 'data.fabric.elements.' + z + '.uvalue');
     $(id + " [key='data.fabric.elements.template.kvalue']").attr('key', 'data.fabric.elements.' + z + '.kvalue');
     $(id + " [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
-    $(id + " [key='data.fabric.elements.template.EWI']").html(data.fabric.elements[z].EWI == true ? 'EWI': '');
+    $(id + " [key='data.fabric.elements.template.EWI']").html(data.fabric.elements[z].EWI == true ? 'EWI' : '');
     $(id + " [key='data.fabric.elements.template.EWI']").removeAttr('key');
     $(id + " [row='template']").attr('row', z);
     $(id + " [item_id='template']").attr('item_id', data.fabric.elements[z].id);
@@ -189,7 +188,7 @@ function add_element(id, z)
 function add_window(z)
 {
     var element = data.fabric.elements[z];
-    var title = "\nDescription: " + element.description + "\nPerformance: " +
+    var title = "\nDescription: " + element.description + "\nSource: " + element.source + "\nPerformance: " +
             element.performance + "\nBenefits: " + element.benefits + "\nCost: " + element.cost +
             "\nWho by: " + element.who_by + "\nDisruption" + element.disruption + "\nAssociated work: " +
             element.associated_work + "\nKey risks: " + element.key_risks + "\nNotes: " + element.notes +
@@ -197,13 +196,15 @@ function add_window(z)
 
     $("#windows").append($("#window-template").html());
     $("#windows [key='data.fabric.elements.template.lib']").attr('key', 'data.fabric.elements.' + z + '.lib');
-    $("#windows [key='data.fabric.elements.template.name']").attr('key', 'data.fabric.elements.' + z + '.name');
+    $("#windows [key='data.fabric.elements.template.name']").attr('key', 'data.fabric.elements.' + z + '.name');    
+    $("#windows [key='data.fabric.elements.template.location']").attr('key', 'data.fabric.elements.' + z + '.location');
     $("#windows [key='data.fabric.elements.template.description']").attr('key', 'data.fabric.elements.' + z + '.description');
     $("#windows [key='data.fabric.elements.template.subtractfrom']").attr('key', 'data.fabric.elements.' + z + '.subtractfrom');
     $("#windows [key='data.fabric.elements.template.l']").attr('key', 'data.fabric.elements.' + z + '.l');
     $("#windows [key='data.fabric.elements.template.h']").attr('key', 'data.fabric.elements.' + z + '.h');
     $("#windows [key='data.fabric.elements.template.area']").attr('key', 'data.fabric.elements.' + z + '.area');
     $("#windows [key='data.fabric.elements.template.uvalue']").attr('key', 'data.fabric.elements.' + z + '.uvalue');
+    $("#windows [key='data.fabric.elements.template.kvalue']").attr('key', 'data.fabric.elements.' + z + '.kvalue');
     $("#windows [key='data.fabric.elements.template.orientation']").attr('key', 'data.fabric.elements.' + z + '.orientation');
     $("#windows [key='data.fabric.elements.template.overshading']").attr('key', 'data.fabric.elements.' + z + '.overshading');
     $("#windows [key='data.fabric.elements.template.g']").attr('key', 'data.fabric.elements.' + z + '.g');
@@ -230,7 +231,7 @@ function add_window(z)
     for (i in data.fabric.elements) {
         // here
         if (data.fabric.elements[i].type != 'Window' && data.fabric.elements[i].type != 'Floor')
-            subtractfromhtml += "<option value='" + data.fabric.elements[i].id + "'>" + data.fabric.elements[i].name + "</option>";
+            subtractfromhtml += "<option value='" + data.fabric.elements[i].id + "'>" + data.fabric.elements[i].location + "</option>";
         //subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
     }
     $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").html(subtractfromhtml);

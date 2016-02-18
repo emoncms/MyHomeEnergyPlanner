@@ -46,6 +46,7 @@
 
         <tr>
             <th style="text-align:left">Element</th>
+            <th>Label/Location</th>
             <th>Length<br>(m)</th>
             <th>Height<br>(m)</th>
             <th>Area<br>(m<sup>2</sup>)</th>
@@ -59,7 +60,8 @@
 
         <tbody id="element-template" style="display:none">
             <tr>
-                <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span>: <span key="data.fabric.elements.template.name" ></span> - <span key="data.fabric.elements.template.location" ></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m2</span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m2</span><br /><span style="font-size:0.8em" title="fabric-template-title">more...</span></td>
+                <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m2</span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m2</span><br /><span style="font-size:0.8em" title="fabric-template-title">more...</span></td>
+                <td><input type="text" key="data.fabric.elements.template.location" /></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
@@ -184,7 +186,7 @@
         <tr>
             <!--<th>Type</th>-->
             <th style="text-align:left; ">&nbsp;</th>
-            <th>Description</th>
+            <th>Label/Location</th>
             <th>subtract<br>from:</th>
             <th>Width<br>(m)</th>
             <th>Height<br>(m)</th>
@@ -209,10 +211,10 @@
 
                 <td style="text-align:left">
                     <b><span key="data.fabric.elements.template.lib"></span>: <span key="data.fabric.elements.template.name"></span></b> <br />
-                    g:<span key="data.fabric.elements.template.g"> </span>, gL:<span key="data.fabric.elements.template.gL"></span>, ff:<span key="data.fabric.elements.template.ff"></span>, U-value: <span key="data.fabric.elements.template.uvalue"></span>
+                     U-value: <span key="data.fabric.elements.template.uvalue"></span>, K-value: <span key="data.fabric.elements.template.kvalue"></span>, g:<span key="data.fabric.elements.template.g"> </span>, gL:<span key="data.fabric.elements.template.gL"></span>, ff:<span key="data.fabric.elements.template.ff"></span>
                     <br /><span style="font-size:0.8em" title="fabric-template-title">more...</span>
                 </td>
-                <td><input type="text" value="0"  key="data.fabric.elements.template.description" /></td>
+                <td><input type="text" value="0"  key="data.fabric.elements.template.location" /></td>
                 <td>
                     <select key="data.fabric.elements.template.subtractfrom" style="width:100px">
 

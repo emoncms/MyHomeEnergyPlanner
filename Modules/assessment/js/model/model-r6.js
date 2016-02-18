@@ -250,11 +250,11 @@ calc.fabric = function (data)
 
         if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window' || data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light')
         {
-            //var orientation = data.fabric.elements[z]['orientation'] != '' ? data.fabric.elements[z]['orientation'] : 2;
-            var orientation = data.fabric.elements[z]['orientation'];
+            var orientation = data.fabric.elements[z]['orientation'] != '' ? data.fabric.elements[z]['orientation'] : 2;
+            //var orientation = data.fabric.elements[z]['orientation'];
             var area = data.fabric.elements[z]['area'];
-            //var overshading = data.fabric.elements[z]['overshading'] != '' ? data.fabric.elements[z]['overshading'] : 2;
-            var overshading = data.fabric.elements[z]['overshading'];
+            var overshading = data.fabric.elements[z]['overshading'] != '' ? data.fabric.elements[z]['overshading'] : 2;
+            //var overshading = data.fabric.elements[z]['overshading'];
             var g = data.fabric.elements[z]['g'];
             var ff = data.fabric.elements[z]['ff'];
             var gain = 0;
