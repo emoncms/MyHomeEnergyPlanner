@@ -536,8 +536,8 @@ libraryHelper.prototype.onApplyMeasureOk = function (origin) {
             var function_name = this.type + '_get_item_to_save';
             measure.item = this[function_name]();
             break;
-            case'replace_from_measure_library':
-                var function_name = this.type + '_measures_get_item_to_save';
+        case'replace_from_measure_library':
+            var function_name = this.type + '_measures_get_item_to_save';
             measure.item = this[function_name]();
             break;
     }
@@ -553,7 +553,7 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             break;
         case 'replace':
             this.populate_selects_in_apply_measure_modal(this.type),
-            this.onChangeApplyMeasureReplaceFromLib(this.type);
+                    this.onChangeApplyMeasureReplaceFromLib(this.type);
             this.onChangeApplyMeasureReplaceFromLibItem(this.type);
             $('#apply-measure-replace').show();
             $('#apply-measure-item-fields').show();
@@ -583,7 +583,7 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_l
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var library = this.get_library_by_id($('#replace-from-lib').val()).data;
     for (item in library) {
-        if (type_of_library == 'elements' ||type_of_library == 'elements_measures') {
+        if (type_of_library == 'elements' || type_of_library == 'elements_measures') {
             if (library[item].tags[0].toUpperCase() == original_item.type.toUpperCase())
                 out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
         }
@@ -592,7 +592,7 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_l
     }
 
     $('#replace-from-lib-items').html(out);
-    $("#replace-from-lib-items").attr('library_type',type_of_library);
+    $("#replace-from-lib-items").attr('library_type', type_of_library);
     this.populate_measure_new_item(type_of_library);
 
 };
@@ -607,6 +607,11 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
         $('.window-element').show();
     else
         $('.window-element').hide();
+
+    if (type == "Wall" && this.type == 'elements_measures')
+        $('#modal-create-in-library .EWI-row').show();
+    else
+        $('#modal-create-in-library .EWI-row').hide();
 };
 
 libraryHelper.prototype.onShowLibraryItems = function (library_id) {
@@ -748,7 +753,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     out += '</select></div>';
 
     // Elements
-    out+='<table>';
+    out += '<table>';
     for (z in element_library) {
         if (tag.indexOf(element_library[z].tags[0]) != -1) {
             out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
@@ -776,14 +781,14 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
             out += "</tr>";
         }
     }
-    out+='</table>';
+    out += '</table>';
     return out;
 };
-libraryHelper.prototype.elements_measures_library_to_html = function (origin, library_id){
-    var out = this.elements_library_to_html(origin,library_id);
+libraryHelper.prototype.elements_measures_library_to_html = function (origin, library_id) {
+    var out = this.elements_library_to_html(origin, library_id);
     return out;
 };
-        
+
 /**********************************************
  * Items to html
  **********************************************/
@@ -825,7 +830,7 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: 'new tag', name: 'New name', uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
+        item = {tag: 'new tag', name: 'New name', EWI: false, uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
             source: "", description: "", performance: "", benefits: "", cost: "",
             who_by: "", disruption: "", associated_work: "", key_risks: "", notes: "",
             maintenance: "", };
@@ -866,6 +871,10 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<tr><td>Name</td><td><input type="text" class="create-element-name" value="' + item.name + '" /></td></tr>';
     out += '<tr><td>Location</td><td><input type="text" class="create-element-location" value="' + item.location + '" /></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="create-element-source" value="' + item.source + '" /></td></tr>';
+    if (item.EWI == true)
+        out += '<tr class="EWI-row" style="display:none" title="Ticking this box will increase the area of the wall by 1.15"><td>EWI</td><td><input type="checkbox" class="create-element-ewi" checked /></td></tr>';
+    else
+        out += '<tr class="EWI-row" style="display:none"><td>EWI</td><td><input type="checkbox" class="create-element-ewi"  /></td></tr>';
     out += '<tr><td>U-value</td><td><input type="text" class="create-element-uvalue editable-field" value="' + item.uvalue + '" /></td></tr>';
     out += '<tr><td>K-value</td><td><input type="text" class="create-element-kvalue editable-field" value="' + item.kvalue + '" /></td></tr>';
     if (type == 'Window') {
@@ -896,6 +905,8 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
     var out = this.elements_item_to_html(item, tag);
+    if (item == undefined || item.tags[0] == 'Wall')
+        out = out.replace('<tr class="EWI-row" style="display:none">', '<tr class="EWI-row">');
     return out;
 };
 /*******************************************************
@@ -972,6 +983,10 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
 };
 libraryHelper.prototype.elements_measures_get_item_to_save = function () {
     var item = this.elements_get_item_to_save();
+    var type = $(".create-element-type").val();
+    var tag = $(".create-element-tag").val();
+    if (type = 'Wall')
+        item[tag].EWI = $(".create-element-ewi").prop('checked');
     return item;
 };
 /***************************************************
@@ -1085,6 +1100,6 @@ libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type
         out += "<option value=" + library.id + ">" + library.name + "</option>";
     });
     $("#replace-from-lib").html(out);
-    $("#replace-from-lib").attr('library_type',type_of_library);
+    $("#replace-from-lib").attr('library_type', type_of_library);
     this.onChangeApplyMeasureReplaceFromLib(type_of_library); // This one to populate the select for items
 };

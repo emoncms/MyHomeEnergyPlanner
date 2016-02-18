@@ -62,12 +62,12 @@ $("#openbem").on("click", '#apply-measure-TB', function () {
     $('#apply-measure-TB-modal').modal('show');
 });
 $("#openbem").on("click", '#apply-measure-TB-modal-ok', function () {
-   //We only record the original value if this is the first time we apply the measure in this scenario
+    //We only record the original value if this is the first time we apply the measure in this scenario
     if (data.measures.thermal_bridging == undefined) {
         data.measures.thermal_bridging = {original_element: {}, measure: {}};
         data.measures.thermal_bridging.original_element.value = data.fabric.thermal_bridging_yvalue;
     }
-    
+
     //Apply measure
     data.fabric.thermal_bridging_yvalue = $('#TB-measure-value').val();
     data.measures.thermal_bridging.measure.value = $('#TB-measure-value').val();
@@ -177,6 +177,8 @@ function add_element(id, z)
     $(id + " [key='data.fabric.elements.template.uvalue']").attr('key', 'data.fabric.elements.' + z + '.uvalue');
     $(id + " [key='data.fabric.elements.template.kvalue']").attr('key', 'data.fabric.elements.' + z + '.kvalue');
     $(id + " [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
+    $(id + " [key='data.fabric.elements.template.EWI']").html(data.fabric.elements[z].EWI == true ? 'EWI': '');
+    $(id + " [key='data.fabric.elements.template.EWI']").removeAttr('key');
     $(id + " [row='template']").attr('row', z);
     $(id + " [item_id='template']").attr('item_id', data.fabric.elements[z].id);
     $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
@@ -393,6 +395,9 @@ function apply_measure(measure) {
         data.fabric.measures[measure.item_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[measure.row]));
     }
 
+    for (z in measure.item) // measure.item only has one element, we do it this way to the "property", in this case somemthing like "CV1" oof "ROOF1"
+        var lib = z;
+
     switch (measure.type) {
         case 'remove':
             var selector = '[row="' + measure.row + '"]'
@@ -400,12 +405,16 @@ function apply_measure(measure) {
             data.fabric.elements.splice(measure.row, 1);
             data.fabric.measures[measure.item_id].measure = "Element deleted";
             break;
-        case  'replace_from_measure_library':
+        case  'replace_from_measure_library': // watch out no 'break' at the end of this case
+            if (measure.item[lib].EWI != undefined && measure.item[lib].EWI == true) {
+                data.fabric.elements[measure.row].l = 0;
+                data.fabric.elements[measure.row].h = 0;
+                data.fabric.elements[measure.row].area = 1.15 * data.fabric.elements[measure.row].area;
+            }
+
+            console.log(measure);
         case 'replace':
         case 'edit':
-            //console.log(measure);
-            for (z in measure.item) // measure.item only has one element, we do it this way to the "property", in this case somemthing like "CV1" oof "ROOF1"
-                var lib = z;
             measure.item[lib].lib = lib;
             for (z in data.fabric.elements[measure.row]) { // We copy over all the properties that are not asked when applying measures, this are the ones that the user inputed like "length" and "height"
                 if (measure.item[lib][z] == undefined)
@@ -415,7 +424,6 @@ function apply_measure(measure) {
             data.fabric.elements[measure.row] = measure.item[lib];
             data.fabric.measures[measure.item_id].measure = measure.item[lib];
             //data.fabric.elements[measure.row] = measure.item[lib];
-            console.log(data.fabric.elements[measure.row]);
             break;
     }
 
