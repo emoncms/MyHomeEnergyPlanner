@@ -79,8 +79,6 @@ $("#openbem").on("click", '#apply-measure-TB-modal-ok', function () {
 });
 
 
-
-
 /*$("#create-element").click(function () {
  // Empty "tag" so that it has nothing, we leave the other inputs as it can be handy for the user
  $('#create-element-tag').val("");

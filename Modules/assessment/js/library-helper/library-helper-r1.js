@@ -1,8 +1,10 @@
 function libraryHelper(type, container) {
-    this.type = type;
     this.container = container;
     this.library_list = {};
     this.library_permissions = {};
+
+    // Variables to link the view with the controller
+    this.type = type;
     //this.library_html_strings ={};
 
     this.init();
@@ -390,6 +392,8 @@ libraryHelper.prototype.onChangeEmptyOrCopyItem = function () {
         var function_name = this.type + '_item_to_html';
         out = this[function_name](selected_item);
         $('.new-item-in-library').html(out);
+        $('#modal-create-in-library .item-tag').val('New tag')
+        
     }
 };
 libraryHelper.prototype.onChangeOriginLibrarySelect = function () {
@@ -606,15 +610,35 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function (type_
 };
 libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
     var type = $('#modal-create-in-library .create-element-type').val();
+
+    // Show window specific fields for a given type
     if (type == 'Window' || type == 'Door' || type == 'Roof_light')
         $('.window-element').show();
     else
         $('.window-element').hide();
-
     if (type == "Wall" && this.type == 'elements_measures')
         $('#modal-create-in-library .EWI-row').show();
     else
         $('#modal-create-in-library .EWI-row').hide();
+
+    // Populate elements dropdown
+    $('#modal-create-in-library #item-to-copy-select').html('');
+    var library = this.get_library_by_id($('#modal-create-in-library #origin-library-select').val());
+    console.log(library);
+    var out = '';
+    for (i in library.data) {
+        if (type.toUpperCase() == library.data[i].tags[0].toUpperCase())
+            out += '<option value="' + i + '">' + i + '</option>';
+    }
+    $('#modal-create-in-library #item-to-copy-select').html(out);
+
+    // Replace item with the first one in the list
+    $('#modal-create-in-library #new-item-in-library').html('');
+    var tag = $('#modal-create-in-library #item-to-copy-select').val();
+    out = this.elements_item_to_html(library.data[tag]);
+    $('#modal-create-in-library .new-item-in-library').html(out);
+    $('#modal-create-in-library .item-tag').val('New tag');
+
 };
 
 libraryHelper.prototype.onShowLibraryItems = function (library_id) {
@@ -667,7 +691,7 @@ libraryHelper.prototype.onChangeTypeOfElementsToShow = function (origin) {
     origin.attr('tags', [origin.val()]); //this is the type of elements to display
     var library_id = origin.attr('library_id');
     //var out = this.elements_library_to_html(origin, library_id);
-    var function_name = this.type+'_library_to_html';
+    var function_name = this.type + '_library_to_html';
     var out = this[function_name](origin, library_id);
     // Items
     $("#show-library-items-modal #show-library-items-table").html(out);
@@ -838,7 +862,7 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: 'new tag', name: 'New name', EWI: false, uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
+        item = {tag: 'New tag', name: 'New name', EWI: false, uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
             source: "", description: "", performance: "", benefits: "", cost: "",
             who_by: "", disruption: "", associated_work: "", key_risks: "", notes: "",
             maintenance: "", };
