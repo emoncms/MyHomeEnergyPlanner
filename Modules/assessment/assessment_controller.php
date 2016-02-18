@@ -223,6 +223,22 @@ function assessment_controller() {
                 $req->execute();
             }
         }
+
+        // Add 'EWI' to the wall elements in existing elements_measures libraries
+        $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements_measures'");
+        foreach ($libresult as $row) {
+            $library = json_decode($row['data']);
+            foreach ($library as $item) {
+                if ($item->tags[0] == 'Wall' && $item->name == "External Wall Insulation 160-200mm")
+                    $item->EWI = true;
+                elseif ($item->tags[0] == 'Wall' && $item->name == "Solid brick wall. ")
+                    $item->EWI = false;
+            }
+            $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+            $library = json_encode($library);
+            $req->bind_param('si', $library, $row['id']);
+            $req->execute();
+        }
     }
 
 

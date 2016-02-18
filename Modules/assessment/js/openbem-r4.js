@@ -246,6 +246,8 @@ var openbem = {
                 notes: data.fabric.elements[z].notes || '',
                 maintenance: data.fabric.elements[z].maintenance || ''
             };
+            if (data.fabric.elements[z].EWI != undefined)
+                inputdata.fabric.elements[z].EWI = data.fabric.elements[z].EWI;
         }
 
 // Ventilation

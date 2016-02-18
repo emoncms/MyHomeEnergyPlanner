@@ -52,6 +52,7 @@
             <th>Window<br>Area<br>(m<sup>2</sup>)</th>
             <th>Net<br>Area<br>(m<sup>2</sup>)</th>
             <th>W/K</th>
+            <th class="only-for-walls">EWI<i class="icon-question-sign" title="When EWI has been applied the original area of the wall has been increased by 1.15"></i></th>
             <th></th>
 
         </tr>
@@ -64,8 +65,8 @@
                 <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
                 <td><span key="data.fabric.elements.template.windowarea" dp=1>0.0</span>m<sup>2</sup></td>
                 <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
-
-                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
+                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>                
+                <td class="only-for-walls"><span key="data.fabric.elements.template.EWI">0</span> </td>
                 <td><button class="apply-measure" tag="template" row="template" item="template" item_id="template">Apply Measure</button></td>
                 <td><span class="edit-item" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tag="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
                 <td><span class="delete-element" row="template" style="cursor:pointer" item_id="template"  title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span></td>
@@ -297,8 +298,8 @@
         </table>
     </div>
     <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                <button class="btn btn-primary" id="apply-measure-TB-modal-ok">OK</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn btn-primary" id="apply-measure-TB-modal-ok">OK</button>
     </div>
 </div>
 
