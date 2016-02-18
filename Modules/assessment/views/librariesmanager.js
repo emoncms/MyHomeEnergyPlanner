@@ -15,6 +15,9 @@ function librariesmanager_UpdateUI()
             case 'systems':
                 header = 'Energy systems';
                 break;
+            case 'elements_measures':
+                header = 'Fabric elements measures';
+                break;
             default:
                 header = t;
         }
@@ -33,7 +36,7 @@ function librariesmanager_UpdateUI()
                 access = "Read";
                 $('.if-write-access[library-id=' + library.id + ']').hide();
             }
-            else{
+            else {
                 access = 'Write';
             }
             $('#libraries-table [library-access="template"]').html(access);

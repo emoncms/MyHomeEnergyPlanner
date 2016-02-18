@@ -253,6 +253,9 @@ libraryHelper.prototype.onNewLibraryOption = function () {
         case 'systems':
             type = 'Energy systems';
             break;
+        case 'elements_measures':
+            type = 'Fabric elements measures';
+            break;
         default:
             type = this.type;
     }
@@ -626,6 +629,9 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
         case 'systems':
             header = 'Energy systems library';
             break;
+        case 'elements_measures':
+            header = 'Fabric elements measures library';
+            break;
         default:
             header = library.type + ' library';
     }
@@ -647,7 +653,7 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
         $("#show-library-items-modal .if-write").hide();
 
     // Show the select to choose the type of fabric elements when library is "elements"
-    if (this.type == 'elements')
+    if (this.type == 'elements' || this.type == 'elements_measures')
         $('#show-library-items-modal .element-type').show();
 
     // Add library id to Create new item 
@@ -660,7 +666,9 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
 libraryHelper.prototype.onChangeTypeOfElementsToShow = function (origin) {
     origin.attr('tags', [origin.val()]); //this is the type of elements to display
     var library_id = origin.attr('library_id');
-    var out = this.elements_library_to_html(origin, library_id);
+    //var out = this.elements_library_to_html(origin, library_id);
+    var function_name = this.type+'_library_to_html';
+    var out = this[function_name](origin, library_id);
     // Items
     $("#show-library-items-modal #show-library-items-table").html(out);
     // Add Library id to edit buttons
@@ -1076,6 +1084,9 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
             break;
         case 'systems':
             header = 'Energy systems library';
+            break;
+        case 'elements_measures':
+            header = 'Fabric elements measures library';
             break;
         default:
             header = this.type.toUpperCase() + this.type.slice(1) + ' library';
