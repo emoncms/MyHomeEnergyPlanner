@@ -120,6 +120,11 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('change', '#show-library-items-modal .element-type select', function () {
         myself.onChangeTypeOfElementsToShow($(this));
     });
+    this.container.on('click', '#create-in-library-finish', function () {
+        $('#modal-create-in-library').modal('hide');
+        $('#modal-create-in-library .new-item-in-library').html('');
+        $('#modal-create-in-library #create-in-library-message').html('');
+    })
 
     this.container.on('click', '.manage-users', function () {
         myself.onOpenShareLib($(this).attr('library-id'));
@@ -393,7 +398,7 @@ libraryHelper.prototype.onChangeEmptyOrCopyItem = function () {
         out = this[function_name](selected_item);
         $('.new-item-in-library').html(out);
         $('#modal-create-in-library .item-tag').val('New tag')
-        
+
     }
 };
 libraryHelper.prototype.onChangeOriginLibrarySelect = function () {
