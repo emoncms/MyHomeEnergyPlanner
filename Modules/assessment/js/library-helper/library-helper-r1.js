@@ -145,6 +145,10 @@ libraryHelper.prototype.add_events = function () {
         myself.onCreateInLibrary(library_id);
     });
 
+    this.container.on('click', '.delete-library-item', function () {
+
+    });
+
 };
 
 libraryHelper.prototype.append_modals = function () {
@@ -502,6 +506,7 @@ libraryHelper.prototype.onEditItemOk = function () {
     $('.modal').modal('hide');
 };
 
+
 libraryHelper.prototype.onApplyMeasure = function (origin) {
     // Add attributes to the "Ok" button
     $('#apply-measure-ok').attr('library', origin.attr('library'));
@@ -629,7 +634,6 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
     // Populate elements dropdown
     $('#modal-create-in-library #item-to-copy-select').html('');
     var library = this.get_library_by_id($('#modal-create-in-library #origin-library-select').val());
-    console.log(library);
     var out = '';
     for (i in library.data) {
         if (type.toUpperCase() == library.data[i].tags[0].toUpperCase())
@@ -637,13 +641,18 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
     }
     $('#modal-create-in-library #item-to-copy-select').html(out);
 
-    // Replace item with the first one in the list
-    $('#modal-create-in-library #new-item-in-library').html('');
-    var tag = $('#modal-create-in-library #item-to-copy-select').val();
-    out = this.elements_item_to_html(library.data[tag]);
-    $('#modal-create-in-library .new-item-in-library').html(out);
-    $('#modal-create-in-library .item-tag').val('New tag');
+    if ($('#modal-create-in-library [name="empty_or_copy_item"]:checked').val() == 'empty') {
+        out = this.elements_item_to_html();
 
+    } else { // Copy from existing one
+        // Replace item with the first one in the list
+        $('#modal-create-in-library #new-item-in-library').html('');
+        var tag = $('#modal-create-in-library #item-to-copy-select').val();
+        out = this.elements_item_to_html(library.data[tag]);
+        $('#modal-create-in-library .new-item-in-library').html(out);
+        $('#modal-create-in-library .item-tag').val('New tag');
+
+    }
 };
 
 libraryHelper.prototype.onShowLibraryItems = function (library_id) {
@@ -756,6 +765,7 @@ libraryHelper.prototype.systems_library_to_html = function (origin, library_id) 
         out += "<td></td>";
         out += "<td style='text-align:right'>";
         out += "<button eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+        out += "<button eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
         out += "<button eid='" + eid + "' system='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
@@ -812,6 +822,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
             out += "</td>";
             out += "<td style='width:120px' >";
             out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
+            out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             // out += "<i class='icon-trash' style='margin-left:20px'></i>";
             out += "<button class='add-element use-from-lib btn' style='margin-left:20px' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "'>use</button</i>";
             out += "</td>";
