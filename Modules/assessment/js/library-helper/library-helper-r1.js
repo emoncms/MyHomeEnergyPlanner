@@ -925,7 +925,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
         out += '<tr class="EWI-row" style="display:none"><td>EWI</td><td><input type="checkbox" class="create-element-ewi"  /></td></tr>';
     out += '<tr><td>U-value</td><td><input type="text" class="create-element-uvalue editable-field" value="' + item.uvalue + '" /></td></tr>';
     out += '<tr><td>K-value</td><td><input type="text" class="create-element-kvalue editable-field" value="' + item.kvalue + '" /></td></tr>';
-    if (type == 'Window') {
+    if (type == 'Window' || type == 'Door' || type == 'Roof_light') {
         out += '<tr><td>g</td><td><input type="text" class="create-element-g window-element editable-field" value="' + item.g + '" /></td></tr>';
         out += '<tr><td>gL</td><td><input type="text" class="create-element-gL window-element editable-field" value="' + item.gL + '" /></td></tr>';
         out += '<tr><td>Frame factor (ff)</td><td><input type="text" class="create-element-ff editable-field window-element" value="' + item.ff + '" /></td></tr>';
