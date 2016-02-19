@@ -377,15 +377,16 @@ global $reports;
     $("#openbem").on('click', ".scenario-block", function () {
         var s = $(this).attr('scenario');
         if (s != scenario) {
-            scenario = s;
+            window.location = '#' + s + '/' + page;
             $(".menu-content").hide();
             $(this).find(".menu-content").show();
-
-            data = project[scenario];
-            load_view("#content", page);
-            InitUI();
-            UpdateUI(data);
-            draw_openbem_graphics();
+            /*
+             data = project[scenario];
+             load_view("#content", page);
+             InitUI();
+             UpdateUI(data);
+             draw_openbem_graphics();
+             */
         }
     });
 
