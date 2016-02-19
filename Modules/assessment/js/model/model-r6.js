@@ -1,4 +1,4 @@
-/*
+0/*
  
  An open source building energy model based on SAP.
  
@@ -216,7 +216,7 @@ calc.fabric = function (data)
         data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
         // By checking that the u-value is not 0 = internal walls we can calculate total external area
         //if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].netarea != undefined) {
-        if (data.fabric.elements[z].uvalue != 0) {
+        if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].type != 'party_wall' && data.fabric.elements[z].type != 'Party_wall') {
             if (data.fabric.elements[z].netarea == undefined)
                 data.fabric.elements[z].netarea = 0;
             data.fabric.total_external_area += data.fabric.elements[z].netarea;
@@ -235,7 +235,7 @@ calc.fabric = function (data)
             data.fabric.total_roof_WK += data.fabric.elements[z].wk;
             data.fabric.total_roof_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light') {
+        if (data.fabric.elements[z].type == 'window'|| data.fabric.elements[z].type == 'Window' ||  data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light') {
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
