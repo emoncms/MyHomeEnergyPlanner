@@ -207,6 +207,8 @@ var openbem = {
         inputdata.use_custom_occupancy = data.use_custom_occupancy;
         inputdata.custom_occupancy = data.custom_occupancy;
         inputdata.floors = [];
+        inputdata.locked = data.locked;
+        
         for (z in data.floors) {
             inputdata.floors[z] = {name: data.floors[z].name, area: data.floors[z].area, height: data.floors[z].height};
         }

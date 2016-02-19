@@ -53,7 +53,6 @@ global $reports;
 
 <div id="openbem">
     <div id="left-pane">
-
         <div class="side-block-2">
             <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
             <div style="padding:10px">
@@ -81,7 +80,8 @@ global $reports;
 
                 <div class="menu-content">
                     <div style="padding:10px">
-                        <div class="scenario-nav-heading">Core input</a></div>
+                        <div class="scenario-nav" style="float:right"><span class="lock"></span></div>
+                        <div class="scenario-nav-heading">Core input</div>
                         <div class="scenario-nav"><a href="#template/context">Floors</a></div>
                         <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
                         <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
@@ -197,6 +197,17 @@ global $reports;
     </div>
 </div>
 
+<div id="modal-scenario-locked" class="modal alert-warning hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <h3>This scenario is locked!</h3>
+    </div>
+    <div class="modal-body">
+        <p>You cannot modify it.</p>
+    </div>
+    <div class="modal-footer">
+        <p data-dismiss="modal" aria-hidden="true" class="btn btn-warning">Ok</p>
+    </div>
+</div>
 
 </body>
 </html>                                		
@@ -230,7 +241,7 @@ global $reports;
         p.data = {'master': {}};
     var project = p.data;
 
-
+    // Side Menus
     var mastermenu = $("#scenario-menu-template").html();
     for (s in project) {
         var tmp = mastermenu.replace(/template/g, s);
@@ -277,6 +288,38 @@ global $reports;
     InitUI();
     UpdateUI(data);
     draw_openbem_graphics();
+    $('button').addClass('if-not-locked');
+    $('#content i').addClass('if-not-locked');
+
+    // Lock/unlock scenario
+    for (s in project) {
+        if (project[s].locked == undefined)
+            project[s].locked = false;
+
+        if (project[s].locked == false) {
+            $(".scenario-block[scenario=" + s + "]").find(".lock").html('Lock');
+            $('.if-not-locked').show();
+        }
+        else {
+            $(".scenario-block[scenario=" + s + "]").find(".lock").html('<i class="icon-lock"></i> Unlock');
+            $('.if-not-locked').hide();
+        }
+    }
+
+    $("#openbem").on('click', '.lock', function () {
+        if (data.locked == false) {
+            data.locked = true;
+            $(".scenario-block[scenario=" + scenario + "]").find(".lock").html('<i class="icon-lock"></i> Unlock');
+            $('.if-not-locked').hide();
+        }
+        else {
+            data.locked = false;
+            $(".scenario-block[scenario=" + scenario + "]").find(".lock").html('Lock');
+            $('.if-not-locked').show();
+        }
+        update();
+    });
+
 
     $(window).on('hashchange', function () {
         var tmp = (window.location.hash).substring(1).split('/');
@@ -296,6 +339,13 @@ global $reports;
         load_view("#content", page);
         InitUI();
         UpdateUI(data);
+        $('button').addClass('if-not-locked');
+        $('#content i').addClass('if-not-locked');
+
+        if (data.locked)
+            $('.if-not-locked').hide();
+        else
+            $('.if-not-locked').show();
     });
 
     function update()
@@ -348,30 +398,34 @@ global $reports;
     }
 
     $("#openbem").on("change", '[key]', function () {
-        var key = $(this).attr('key');
-        var val = $(this).val();
-        var input_type = $(this).attr('type');
-        if (input_type == 'checkbox')
-            val = $(this)[0].checked;
-        if (input_type == 'textarea')
-            val = $(this).html();
+        if (data.locked == true)
+            $('#modal-scenario-locked').modal('show');
+        else {
+            var key = $(this).attr('key');
+            var val = $(this).val();
+            var input_type = $(this).attr('type');
+            if (input_type == 'checkbox')
+                val = $(this)[0].checked;
+            if (input_type == 'textarea')
+                val = $(this).html();
 
-        if (!isNaN(val) && val != "")
-            val *= 1;
+            if (!isNaN(val) && val != "")
+                val *= 1;
 
-        if (key == "data.use_appliancelist" || key == "data.use_applianceCarbonCoop" || key == "data.LAC.use_SAP_appliances") {
-            data.use_appliancelist = false;
-            data.use_applianceCarbonCoop = false;
-            data.LAC.use_SAP_appliances = false;
+            if (key == "data.use_appliancelist" || key == "data.use_applianceCarbonCoop" || key == "data.LAC.use_SAP_appliances") {
+                data.use_appliancelist = false;
+                data.use_applianceCarbonCoop = false;
+                data.LAC.use_SAP_appliances = false;
+            }
+
+            var lastval = varset(key, val);
+
+            $("#openbem").trigger("onKeyChange", {key: key, value: val});
+
+            console.log(key + " changed from " + lastval + " to " + val);
+            changelog += key + " changed from " + lastval + " to " + val + "<br>";
         }
-
-        var lastval = varset(key, val);
-
-        $("#openbem").trigger("onKeyChange", {key: key, value: val});
         update();
-
-        console.log(key + " changed from " + lastval + " to " + val);
-        changelog += key + " changed from " + lastval + " to " + val + "<br>";
     });
 
     $("#openbem").on('click', ".scenario-block", function () {
