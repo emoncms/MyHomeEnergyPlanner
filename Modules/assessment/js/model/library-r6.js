@@ -734,6 +734,50 @@ var standard_library = {
             notes: '--',
             maintenance: '--'
         },
+        "DR1": {
+            name: "Timber door",
+            source: "GEM",
+            location: '',
+            uvalue: 2.8,
+            kvalue: 1,
+            g: 0.76,
+            gL: 0.8,
+            ff: 0.4,
+            tags: ["Door"],
+            criteria: [],
+            description: 'Timber door top light',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
+        },
+        "RL1": {
+            name: "12mm Velux",
+            source: "GEM",
+            location: '',
+            uvalue: 3.4,
+            kvalue: 1,
+            g: 0.76,
+            gL: 0.8,
+            ff: 0.7,
+            tags: ["Roof_light"],
+            criteria: [],
+            description: '12mm Velux',
+            performance: '--',
+            benefits: '--',
+            cost: 0,
+            who_by: '--',
+            disruption: '--',
+            associated_work: '--',
+            key_risks: '--',
+            notes: '--',
+            maintenance: '--'
+        }
     },
     systems: {
         'electric': {name: "Standard Electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', fans_and_pumps: 0, combi_keep_hot: 0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'},
@@ -751,7 +795,7 @@ var standard_library = {
     },
     elements_measures: {
         "E-L01": {
-            tags: ["Roof","Loft"],
+            tags: ["Roof", "Loft"],
             "name": "Uninsulated loft. ",
             "location": "XXX (e.g. main house roof)",
             "source": "rdSAP reference",
@@ -772,7 +816,7 @@ var standard_library = {
             "maintenance": "n/a"
         },
         "M-L01": {
-            tags: ["Roof","Loft"],
+            tags: ["Roof", "Loft"],
             "name": "Loft Insulation (400mm)",
             "location": "XXX (e.g. main house roof)",
             "source": "Carbon Coop Specification",
@@ -797,7 +841,7 @@ var standard_library = {
             "name": "Solid brick wall. ",
             "location": "XXX (e.g. rear elevation)",
             "source": "Carbon Coop Specification (based on on site monitoring)",
-            "EWI": false,            
+            "EWI": false,
             "uvalue": "1.8",
             "kvalue": 190,
             "g": null,

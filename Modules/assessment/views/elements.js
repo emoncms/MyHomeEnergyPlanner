@@ -19,7 +19,8 @@ $("#openbem").on("click", '.add-element', function () {
             element[z] = library[lib][z];
     }
 
-    if (type == "Window") {
+    // Set a default value for orientation and overshading
+    if (type == "Window" || type == "Door" || type == "Roof_light") {
         element.orientation = 3;
         element.overshading = 2;
     }
@@ -37,9 +38,10 @@ $("#openbem").on("click", '.add-element', function () {
     if (type == "Party_wall")
         add_element("#party_walls", newelementid);
     update();
-    if (type != "Window" && type != "Floor") {
+
+    if (type != "Window" && type != "Door" && type != "Roof_light" && type != "Floor") {
         for (z in data.fabric.elements) {
-            if (data.fabric.elements[z].type == "Window") {
+            if (data.fabric.elements[z].type == "Window" || data.fabric.elements[z].type == "Door" || data.fabric.elements[z].type == "Roof_light") {
                 $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").append("<option value='" + newelementid + "'>" + data.fabric.elements[newelementid].name + "</option>");
             }
         }
@@ -194,7 +196,7 @@ function add_window(z)
 
     $("#windows").append($("#window-template").html());
     $("#windows [key='data.fabric.elements.template.lib']").attr('key', 'data.fabric.elements.' + z + '.lib');
-    $("#windows [key='data.fabric.elements.template.name']").attr('key', 'data.fabric.elements.' + z + '.name');    
+    $("#windows [key='data.fabric.elements.template.name']").attr('key', 'data.fabric.elements.' + z + '.name');
     $("#windows [key='data.fabric.elements.template.location']").attr('key', 'data.fabric.elements.' + z + '.location');
     $("#windows [key='data.fabric.elements.template.description']").attr('key', 'data.fabric.elements.' + z + '.description');
     $("#windows [key='data.fabric.elements.template.subtractfrom']").attr('key', 'data.fabric.elements.' + z + '.subtractfrom');
@@ -212,23 +214,25 @@ function add_window(z)
     $("#windows [key='data.fabric.elements.template.gain']").attr('key', 'data.fabric.elements.' + z + '.gain');
     $("#windows [title='fabric-template-title']").attr('title', title);
     $("#windows [tag='template']").attr('tag', data.fabric.elements[z].lib);
+
     var name = data.fabric.elements[z].name;
     name = name.toLowerCase();
-    if (name.indexOf("door") != -1) {
+    if (data.fabric.elements[z].type == 'Door' || name.indexOf("door") != -1) {
         $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', '#ffeeee');
     }
 
-    if (name.indexOf("roof") != -1) {
+    if (data.fabric.elements[z].type == 'Roof_light' || name.indexOf("roof") != -1) {
         $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', '#eeffee');
     }
 
     $("#windows [row='template']").attr('row', z);
     $("#windows [item_id='template']").attr('item_id', data.fabric.elements[z].id);
     $("#windows [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
+
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
         // here
-        if (data.fabric.elements[i].type != 'Window' && data.fabric.elements[i].type != 'Floor')
+        if (data.fabric.elements[i].type != 'Window' && data.fabric.elements[i].type != 'Door' && data.fabric.elements[i].type != 'Roof_light' && data.fabric.elements[i].type != 'Floor')
             subtractfromhtml += "<option value='" + data.fabric.elements[i].id + "'>" + data.fabric.elements[i].location + "</option>";
         //subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
     }

@@ -239,10 +239,62 @@ function assessment_controller() {
             $req->bind_param('si', $library, $row['id']);
             $req->execute();
         }
+
+        // Add a Door and a Roof light to users elements libraries
+        $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
+        foreach ($libresult as $row) {
+            $data = json_decode($row['data']);
+            if (!isset($data->DR1)) {
+                $data->DR1 = (object) array(
+                            'name' => "Timber door",
+                            'source' => "GEM",
+                            'uvalue' => 2.8,
+                            'kvalue' => 1,
+                            'g' => 0.76,
+                            'gl' => 0.8,
+                            'ff' => 0.4,
+                            'tags' => ["Door"],
+                            'criteria' => [],
+                            'description' => 'Timber door top light',
+                            'performance' => '--',
+                            'benefits' => '--',
+                            'cost' => 0,
+                            'who_by' => '--',
+                            'disruption' => '--',
+                            'associated_work' => '--',
+                            'key_risks' => '--',
+                            'notes' => '--',
+                            'maintenance' => '--'
+                );
+                $data->RL1 = (object) array(
+                            'name' => "12mm Velux",
+                            'source' => "GEM",
+                            'uvalue' => 3.4,
+                            'kvalue' => 1,
+                            'g' => 0.76,
+                            'gl' => 0.8,
+                            'ff' => 0.7,
+                            'tags' => ["Roof_light"],
+                            'criteria' => [],
+                            'description' => '12mm Velux',
+                            'performance' => '--',
+                            'benefits' => '--',
+                            'cost' => 0,
+                            'who_by' => '--',
+                            'disruption' => '--',
+                            'associated_work' => '--',
+                            'key_risks' => '--',
+                            'notes' => '--',
+                            'maintenance' => '--'
+                );
+                $data = json_encode($data);
+                $req = $mysqli->prepare('UPDATE element_library SET `data` = ? WHERE `id` = ?  ');
+                $req->bind_param("si", $data, $row['id']);
+                $req->execute();
+            }
+        }
     }
-
-
-
+    
     /* End backwards compatibility section */
 
 
