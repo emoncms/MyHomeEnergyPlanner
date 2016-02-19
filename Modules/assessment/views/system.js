@@ -1,6 +1,6 @@
 console.log("debug systems.js");
 
-var library_helper = new libraryHelper('systems', $('#systems'));
+    var library_helper = new libraryHelper('systems', $("#openbem"));
 
 $("#openbem").on("click", '.add-system', function () {
     var system = $(this).attr('system');

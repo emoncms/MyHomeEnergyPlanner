@@ -263,6 +263,9 @@ global $reports;
     if (!page)
         page = "context";
 
+    $(".menu-content").hide();
+    $('[scenario="' + scenario + '"]').find(".menu-content").show();
+
     if (project[scenario] == undefined)
         scenario = 'master';
     data = project[scenario];
