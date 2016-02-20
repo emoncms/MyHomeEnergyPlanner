@@ -69,7 +69,7 @@
                 <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>                
                 <td class="only-for-walls"><span key="data.fabric.elements.template.EWI">0</span> </td>
-                <td><button class="apply-measure" tag="template" row="template" item="template" item_id="template">Apply Measure</button></td>
+                <td><button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button></td>
                 <td><span class="edit-item" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tag="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
                 <td><span class="delete-element" row="template" style="cursor:pointer" item_id="template"  title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span></td>
             </tr>
@@ -247,7 +247,7 @@
 
                 <td><span key="data.fabric.elements.template.gain" dp=0>0</span>W</td>
                 <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
-                <td><button class="apply-measure" row="template" item="template" tag="template" item_id="template">Apply Measure</button></td>
+                <td><button class="apply-measure if-not-master" row="template" item="template" tag="template" item_id="template">Apply Measure</button></td>
                 <td><span class="edit-item" row="template" style="cursor:pointer" item="template" tag="template" item_id="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
                 <td><span class="delete-element" row="template" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" item_id="template"><i class="icon-trash"></i></span></td>
 
@@ -269,7 +269,7 @@
     <h3>Thermal Bridging</h3><hr>
     <table class="table">
         <tr><td>Total External Area: </td><td colspan="2"><span key="data.fabric.total_external_area" dp=1></span> m2</td></tr>
-        <tr><td>Thermal bridging heat loss factor (y)</td><td><input type="number" step="0.01" min="0" value="0.15" key="data.fabric.thermal_bridging_yvalue" style="width:60px" /> W/m<sup>2</sup>.K</td><td><button id="apply-measure-TB" style="margin-left:15px; vertical-align: 25%">Apply measure</button></td></tr>
+        <tr><td>Thermal bridging heat loss factor (y)</td><td><input type="number" step="0.01" min="0" value="0.15" key="data.fabric.thermal_bridging_yvalue" style="width:60px" /> W/m<sup>2</sup>.K</td><td><button id="apply-measure-TB if-not-master" style="margin-left:15px; vertical-align: 25%">Apply measure</button></td></tr>
         <tr><td>Thermal bridging heat loss: </td><td colspan="2"><span key="data.fabric.thermal_bridging_heat_loss" dp=1></span> W/K</td></tr>
     </table>
 

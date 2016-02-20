@@ -288,23 +288,29 @@ global $reports;
     InitUI();
     UpdateUI(data);
     draw_openbem_graphics();
+
+    // Lock/unlock
     $('button').addClass('if-not-locked');
     $('#content i').addClass('if-not-locked');
+    if (project[scenario].locked == false)
+        $('.if-not-locked').show();
+    else
+        $('.if-not-locked').hide();
 
-    // Lock/unlock scenario
+    // Show lock in scenario
     for (s in project) {
         if (project[s].locked == undefined)
             project[s].locked = false;
 
-        if (project[s].locked == false) {
+        if (project[s].locked == false)
             $(".scenario-block[scenario=" + s + "]").find(".lock").html('Lock');
-            $('.if-not-locked').show();
-        }
-        else {
+        else
             $(".scenario-block[scenario=" + s + "]").find(".lock").html('<i class="icon-lock"></i> Unlock');
-            $('.if-not-locked').hide();
-        }
     }
+
+    // Disable measures if master
+    if (scenario == 'master')
+        $('#openbem .if-not-master').hide();
 
     $("#openbem").on('click', '.lock', function () {
         if (data.locked == false) {
@@ -317,6 +323,10 @@ global $reports;
             $(".scenario-block[scenario=" + scenario + "]").find(".lock").html('Lock');
             $('.if-not-locked').show();
         }
+
+        // Disable measures if master
+        if (scenario == 'master')
+            $('#openbem .if-not-master').hide();
         update();
     });
 
@@ -339,15 +349,24 @@ global $reports;
         load_view("#content", page);
         InitUI();
         UpdateUI(data);
-        
-        // Lock/unlock scenario buttons and icons
+
+        // Add lock functionality to buttons and icons
         $('button').addClass('if-not-locked');
         $('#content i').addClass('if-not-locked');
+
+        // Disable measures if master
+        if (scenario == 'master')
+            $('#openbem .if-not-master').hide();
+
         if (data.locked)
             $('.if-not-locked').hide();
         else
             $('.if-not-locked').show();
-        
+
+        // Disable measures if master
+        if (scenario == 'master')
+            $('#openbem .if-not-master').hide();
+
         // Update the type of the libraries we are using
         if (library_helper != undefined) {
             if (page == "system")
