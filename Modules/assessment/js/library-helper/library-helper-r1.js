@@ -534,6 +534,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
      */
 
     // Show/hide modals
+    $('#apply-measure-finish');
     $('.modal').modal('hide');
     $('#apply-measure-modal').modal('show');
 };

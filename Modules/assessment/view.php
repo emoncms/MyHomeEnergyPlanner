@@ -85,7 +85,7 @@ global $reports;
                         <div class="scenario-nav"><a href="#template/context">Floors</a></div>
                         <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
                         <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
-                        <div class="scenario-nav"><a href="#template/system">Energy System</a></div>
+                        <div class="scenario-nav"><a href="#template/system">Energy Systems</a></div>
                         <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
                         <div class="scenario-nav"><a href="#template/waterheating">Water Heating</a></div>
                         <div class="scenario-nav-heading">Extended input</a></div>
@@ -339,13 +339,22 @@ global $reports;
         load_view("#content", page);
         InitUI();
         UpdateUI(data);
+        
+        // Lock/unlock scenario buttons and icons
         $('button').addClass('if-not-locked');
         $('#content i').addClass('if-not-locked');
-
         if (data.locked)
             $('.if-not-locked').hide();
         else
             $('.if-not-locked').show();
+        
+        // Update the type of the libraries we are using
+        if (library_helper != undefined) {
+            if (page == "system")
+                library_helper.type = 'systems';
+            else
+                library_helper.type = page;
+        }
     });
 
     function update()
