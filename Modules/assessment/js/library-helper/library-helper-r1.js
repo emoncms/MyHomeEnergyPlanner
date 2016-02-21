@@ -309,6 +309,7 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
             $('#cancelnewlibrary').hide();
             $('#newlibrary').hide();
             $('#finishcreatelibrary').show();
+            UpdateUI(data);
         }
         else
             $("#create-library-message").html(resultado)
@@ -329,7 +330,6 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
                 }});
         }
     }
-    UpdateUI(data);
 };
 libraryHelper.prototype.onCreateInLibrary = function (library_id) {
     $('#modal-create-in-library .modal-header h3').html('Create ' + page);
@@ -1163,11 +1163,11 @@ libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type
 };
 
 libraryHelper.prototype.delete_library_item = function (library_id, tag) {
-    var myself =this;
+    var myself = this;
     $.ajax({url: path + "assessment/deletelibraryitem.json", data: "library_id=" + library_id + "&tag=" + tag, async: false, datatype: "json", success: function (result) {
             if (result != true)
                 $('#confirm-delete-library-item-modal .message').html("Item could not be deleted - " + result);
-            else{
+            else {
                 $('.modal').modal('hide');
                 myself.load_user_libraries();
             }
