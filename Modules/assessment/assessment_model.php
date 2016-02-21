@@ -635,9 +635,26 @@ class Assessment {
         }
     }
 
-    // ------------------------------------------------------------------------------------------------
-    // IMAGE GALLERY
-    // ------------------------------------------------------------------------------------------------
+    public function deletelibraryitem($userid, $library_id, $tag) {
+        $userid = (int) $userid;
+        $library_id = (int) $library_id;
+        $tag = preg_replace('/[^\w\s]/', '', $tag);
+        if (!$this->has_write_access_library($userid, $library_id))
+            return "You haven't got enough permissions";
+        else {
+            $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id` = '$library_id'");
+            $row = $result->fetch_object();
+            $library = json_decode($row->data, true);
+            unset($library[$tag]);
+            $library = json_encode($library);
+            $result = $this->mysqli->query("UPDATE element_library SET `data`='$library' WHERE `id` = '$library_id'");
+            return $result;
+        }
+    }
+
+// ------------------------------------------------------------------------------------------------
+// IMAGE GALLERY
+// ------------------------------------------------------------------------------------------------
 
     public function saveimages($userid, $id, $images) {
 
@@ -692,7 +709,8 @@ class Assessment {
         return $result;
     }
 
-    public function deleteimage($userid, $projectid, $filename) {
+    public
+            function deleteimage($userid, $projectid, $filename) {
         // Check if user has access to this assesment      
         if (!$this->has_access($userid, $projectid))
             return "User has no access to the assesment";

@@ -146,7 +146,13 @@ libraryHelper.prototype.add_events = function () {
     });
 
     this.container.on('click', '.delete-library-item', function () {
-
+        $('#delete-library-item-ok').attr('library-id', $(this).attr('library'));
+        $('#delete-library-item-ok').attr('tag', $(this).attr('tag'));
+        $('.modal').modal('hide');
+        $('#confirm-delete-library-item-modal').modal('show');
+    });
+    this.container.on('click', '#confirm-delete-library-item-modal #delete-library-item-ok', function () {
+        myself.delete_library_item($(this).attr('library-id'), $(this).attr('tag'));
     });
 
 };
@@ -764,10 +770,10 @@ libraryHelper.prototype.systems_library_to_html = function (origin, library_id) 
         out += "<b>Fuel:</b> " + selected_library.data[z].fuel;
         out += "</span></td>";
         out += "<td></td>";
-        out += "<td style='text-align:right'>";
+        out += "<td style='text-align:right;width:250px'>";
         out += "<button eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
-        out += "<button eid='" + eid + "' system='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+        out += "<button style='margin-left:10px' eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        out += "<button style='margin-left:10px' eid='" + eid + "' system='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
@@ -821,7 +827,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
                 out += "<b>ff:</b> " + element_library[z].ff;
             }
             out += "</td>";
-            out += "<td style='width:120px' >";
+            out += "<td style='width:210px' >";
             out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             // out += "<i class='icon-trash' style='margin-left:20px'></i>";
@@ -1155,3 +1161,15 @@ libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type
     $("#replace-from-lib").attr('library_type', type_of_library);
     this.onChangeApplyMeasureReplaceFromLib(type_of_library); // This one to populate the select for items
 };
+
+libraryHelper.prototype.delete_library_item = function (library_id, tag) {
+    var myself =this;
+    $.ajax({url: path + "assessment/deletelibraryitem.json", data: "library_id=" + library_id + "&tag=" + tag, async: false, datatype: "json", success: function (result) {
+            if (result != true)
+                $('#confirm-delete-library-item-modal .message').html("Item could not be deleted - " + result);
+            else{
+                $('.modal').modal('hide');
+                myself.load_user_libraries();
+            }
+        }});
+}   

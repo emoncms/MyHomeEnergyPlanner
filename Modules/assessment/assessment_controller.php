@@ -294,7 +294,7 @@ function assessment_controller() {
             }
         }
     }
-    
+
     /* End backwards compatibility section */
 
 
@@ -471,6 +471,8 @@ function assessment_controller() {
         if ($route->action == 'deletelibrary' && $session['write'])
             $result = $assessment->deletelibrary($session['userid'], get('library_id'));
 
+        if ($route->action == 'deletelibraryitem' && $session['write'])
+            $result = $assessment->deletelibraryitem($session['userid'], get('library_id'), get('tag'));
         // -------------------------------------------------------------------------------------------------------------
         // Image gallery
         // -------------------------------------------------------------------------------------------------------------
