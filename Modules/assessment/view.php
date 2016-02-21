@@ -346,6 +346,15 @@ global $reports;
 
         data = project[scenario];
 
+        // Update the type of the libraries we are using
+        if (library_helper != undefined) {
+            if (page == "system")
+                library_helper.type = 'systems';
+            else
+                library_helper.type = page;
+        }
+        
+        // Render page
         load_view("#content", page);
         InitUI();
         UpdateUI(data);
@@ -367,13 +376,6 @@ global $reports;
         if (scenario == 'master')
             $('#openbem .if-not-master').hide();
 
-        // Update the type of the libraries we are using
-        if (library_helper != undefined) {
-            if (page == "system")
-                library_helper.type = 'systems';
-            else
-                library_helper.type = page;
-        }
     });
 
     function update()

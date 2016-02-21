@@ -526,7 +526,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-item-fields').hide();
     $('#apply-measure-replace').hide();
     //If we are in fabric Elements show the option to Apply Measure from Measures Library
-    if (this.type = 'elements')
+    if (this.type == 'elements')
         $('.replace_from_measure_library').show();
 
     // Populate the selects library to choose a library and an item (used when replace the item with one from library)
@@ -540,7 +540,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
      */
 
     // Show/hide modals
-    $('#apply-measure-finish');
+    $('#apply-measure-finish').hide();
     $('.modal').modal('hide');
     $('#apply-measure-modal').modal('show');
 };
