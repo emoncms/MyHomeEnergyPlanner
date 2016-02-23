@@ -1,6 +1,9 @@
 console.log('debug elements.js');
 
-var library_helper = new libraryHelper('elements', $("#openbem"));
+if (typeof library_helper != "undefined")
+    library_helper.type = 'elements';
+else
+    var library_helper = new libraryHelper('elements', $("#openbem"));
 
 
 $("#openbem").on("click", '.add-element', function () {

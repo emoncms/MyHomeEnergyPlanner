@@ -1,5 +1,8 @@
 console.log("debug systems.js");
 
+if (typeof library_helper != "undefined")
+    library_helper.type = 'systems';
+else
     var library_helper = new libraryHelper('systems', $("#openbem"));
 
 $("#openbem").on("click", '.add-system', function () {
