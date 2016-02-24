@@ -353,11 +353,12 @@ global $reports;
             else
                 library_helper.type = page;
         }
-        
+
         // Render page
         load_view("#content", page);
         InitUI();
         UpdateUI(data);
+        draw_openbem_graphics();
 
         // Add lock functionality to buttons and icons
         $('#content button').addClass('if-not-locked');
