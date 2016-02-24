@@ -290,7 +290,7 @@ global $reports;
     draw_openbem_graphics();
 
     // Lock/unlock
-    $('button').addClass('if-not-locked');
+    $('#content button').addClass('if-not-locked');
     $('#content i').addClass('if-not-locked');
     if (project[scenario].locked == false)
         $('.if-not-locked').show();
@@ -310,7 +310,7 @@ global $reports;
 
     // Disable measures if master
     if (scenario == 'master')
-        $('#openbem .if-not-master').hide();
+        $('#content .if-not-master').hide();
 
     $("#openbem").on('click', '.lock', function () {
         if (data.locked == false) {
@@ -326,7 +326,7 @@ global $reports;
 
         // Disable measures if master
         if (scenario == 'master')
-            $('#openbem .if-not-master').hide();
+            $('#content .if-not-master').hide();
         update();
     });
 
@@ -360,12 +360,12 @@ global $reports;
         UpdateUI(data);
 
         // Add lock functionality to buttons and icons
-        $('button').addClass('if-not-locked');
+        $('#content button').addClass('if-not-locked');
         $('#content i').addClass('if-not-locked');
 
         // Disable measures if master
         if (scenario == 'master')
-            $('#openbem .if-not-master').hide();
+            $('#content .if-not-master').hide();
 
         if (data.locked)
             $('.if-not-locked').hide();
@@ -374,7 +374,7 @@ global $reports;
 
         // Disable measures if master
         if (scenario == 'master')
-            $('#openbem .if-not-master').hide();
+            $('#content .if-not-master').hide();
 
     });
 
