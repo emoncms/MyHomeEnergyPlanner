@@ -65,9 +65,9 @@
                 <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
-                <td><span key="data.fabric.elements.template.windowarea" dp=1>0.0</span>m<sup>2</sup></td>
-                <td><span key="data.fabric.elements.template.netarea" dp=1>0.0</span>m<sup>2</sup></td>
-                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>                
+                <td><span key="data.fabric.elements.template.windowarea" dp=2>0.0</span>m<sup>2</sup></td>
+                <td><span key="data.fabric.elements.template.netarea" dp=2>0.0</span>m<sup>2</sup></td>
+                <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>                
                 <td class="only-for-walls"><span key="data.fabric.elements.template.EWI">0</span> </td>
                 <td><button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button></td>
                 <td><span class="edit-item" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tag="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
@@ -214,15 +214,15 @@
                      U-value: <span key="data.fabric.elements.template.uvalue"></span>, K-value: <span key="data.fabric.elements.template.kvalue"></span>, g:<span key="data.fabric.elements.template.g"> </span>, gL:<span key="data.fabric.elements.template.gL"></span>, ff:<span key="data.fabric.elements.template.ff"></span>
                     <br /><span style="font-size:0.8em" title="fabric-template-title">more...</span>
                 </td>
-                <td><input type="text" key="data.fabric.elements.template.location" /></td>
+                <td><input type="text" key="data.fabric.elements.template.location" style="width:150px" /></td>
                 <td>
-                    <select key="data.fabric.elements.template.subtractfrom" style="width:100px">
+                    <select key="data.fabric.elements.template.subtractfrom" style="width:150px">
 
                     </select>
                 </td>
 
-                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:20px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:20px"/></td>
 
                 <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
 
@@ -245,8 +245,8 @@
                     </select>
                 </td>
 
-                <td><span key="data.fabric.elements.template.gain" dp=0>0</span>W</td>
-                <td><span key="data.fabric.elements.template.wk" dp=1>0</span> W/K</td>
+                <td><span key="data.fabric.elements.template.gain" dp=2>0</span>W</td>
+                <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>
                 <td><button class="apply-measure if-not-master" row="template" item="template" tag="template" item_id="template">Apply Measure</button></td>
                 <td><span class="edit-item" row="template" style="cursor:pointer" item="template" tag="template" item_id="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
                 <td><span class="delete-element" row="template" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" item_id="template"><i class="icon-trash"></i></span></td>
@@ -263,25 +263,25 @@
 
     </table>
 
-    <p>Total window area: <span key="data.fabric.total_window_area" dp=1></span> m2</p>
+    <p>Total window area: <span key="data.fabric.total_window_area" dp=2></span> m2</p>
 
     <hr>
     <h3>Thermal Bridging</h3><hr>
     <table class="table">
-        <tr><td>Total External Area: </td><td colspan="2"><span key="data.fabric.total_external_area" dp=1></span> m2</td></tr>
+        <tr><td>Total External Area: </td><td colspan="2"><span key="data.fabric.total_external_area" dp=2></span> m2</td></tr>
         <tr><td>Thermal bridging heat loss factor (y)</td><td><input type="number" step="0.01" min="0" value="0.15" key="data.fabric.thermal_bridging_yvalue" style="width:60px" /> W/m<sup>2</sup>.K</td><td><button id="apply-measure-TB if-not-master" style="margin-left:15px; vertical-align: 25%">Apply measure</button></td></tr>
-        <tr><td>Thermal bridging heat loss: </td><td colspan="2"><span key="data.fabric.thermal_bridging_heat_loss" dp=1></span> W/K</td></tr>
+        <tr><td>Thermal bridging heat loss: </td><td colspan="2"><span key="data.fabric.thermal_bridging_heat_loss" dp=2></span> W/K</td></tr>
     </table>
 
     <hr><h3>Totals</h3><hr>
     <table class="table">
-        <tr><td>Total fabric heat loss:</td><td><span key="data.fabric.total_heat_loss_WK" dp=0>0</span> W/K</td></tr>
-        <tr><td>Ventilation heat loss:</td><td><span key="data.ventilation.average_WK" dp=0>0</span> W/K</td></tr>
-        <tr><td>Total W/K heat loss:</td><td><span key="data.totalWK" dp=0>0</span> W/K</td></tr>
+        <tr><td>Total fabric heat loss:</td><td><span key="data.fabric.total_heat_loss_WK" dp=2>0</span> W/K</td></tr>
+        <tr><td>Ventilation heat loss:</td><td><span key="data.ventilation.average_WK" dp=2>0</span> W/K</td></tr>
+        <tr><td>Total W/K heat loss:</td><td><span key="data.totalWK" dp=2>0</span> W/K</td></tr>
 
 
-        <tr><td>Total fabric thermal capacity:</td><td><span key="data.fabric.total_thermal_capacity" dp=0>0</span> kJ/K.m3</td></tr>
-        <tr><td>Annual solar gains:</td><td><span key="data.fabric.annual_solar_gain" dp=0>0</span> W (<span key="data.fabric.annual_solar_gain_kwh" dp=0>0</span> kWh)</td></tr>
+        <tr><td>Total fabric thermal capacity:</td><td><span key="data.fabric.total_thermal_capacity" dp=2>0</span> kJ/K.m3</td></tr>
+        <tr><td>Annual solar gains:</td><td><span key="data.fabric.annual_solar_gain" dp=2>0</span> W (<span key="data.fabric.annual_solar_gain_kwh" dp=0>0</span> kWh)</td></tr>
 
 
     </table>    
