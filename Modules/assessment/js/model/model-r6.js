@@ -1,4 +1,4 @@
-0/*
+/*
  
  An open source building energy model based on SAP.
  
@@ -211,9 +211,12 @@ calc.fabric = function (data)
             }
         }
 
-
-        data.fabric.elements[z].wk = data.fabric.elements[z].netarea * data.fabric.elements[z].uvalue;
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window' || data.fabric.elements[z].type == 'Roof_light')
+            data.fabric.elements[z].wk = data.fabric.elements[z].netarea * (1 / (1 / data.fabric.elements[z].uvalue + 0.04)); // SAP assumes we are using curtains: paragraph 3.2, p. 15, SAP2012
+        else
+            data.fabric.elements[z].wk = data.fabric.elements[z].netarea * data.fabric.elements[z].uvalue;
         data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
+        
         // By checking that the u-value is not 0 = internal walls we can calculate total external area
         //if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].netarea != undefined) {
         if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].type != 'party_wall' && data.fabric.elements[z].type != 'Party_wall') {
@@ -235,7 +238,7 @@ calc.fabric = function (data)
             data.fabric.total_roof_WK += data.fabric.elements[z].wk;
             data.fabric.total_roof_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'window'|| data.fabric.elements[z].type == 'Window' ||  data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light') {
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window' || data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light') {
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
