@@ -449,6 +449,9 @@ global $reports;
                 data.LAC.use_SAP_appliances = false;
             }
 
+            if (key == 'data.use_SHW')
+                data.water_heating.solar_water_heating = !data.use_SHW; // I don't know why but only works properly coping the negative
+
             var lastval = varset(key, val);
 
             $("#openbem").trigger("onKeyChange", {key: key, value: val});

@@ -1566,7 +1566,7 @@ calc.fans_and_pumps = function (data) {
     }
 
     // From Solar Hot Water
-    if (data.use_SHW === 1) {
+    if (data.use_SHW == 1) {
         if (data.SHW.pump != undefined && data.SHW.pump == 'electric')
             annual_energy += 50;
     }

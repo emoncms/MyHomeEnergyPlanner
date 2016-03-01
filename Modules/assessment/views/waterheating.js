@@ -1,3 +1,5 @@
+console.log("debug waterheating.js");
+
 function waterheating_UpdateUI()
 {
     if (data.water_heating.instantaneous_hotwater) $(".loss-interface").hide(); else  $(".loss-interface").show();
@@ -17,5 +19,8 @@ function waterheating_UpdateUI()
 }
 
 function waterheating_initUI(){
-    
 }
+
+$('#openbem').on('click','[key="data.water_heating.solar_water_heating"]',function(){
+    data.use_SHW = !data.water_heating.solar_water_heating; // I don't know why but only works properly coping the negative
+});
