@@ -95,7 +95,25 @@
                     <option value="no_cylinder_thermostat" >No cylinder thermostat</option>
                     <option value="cylinder_thermostat_without_timer">Cylinder thermostat, water heating not separately timed</option>
                     <option value="cylinder_thermostat_with_timer">Cylinder thermostat, water heating separately timed</option>
+                </select>
             </td>
+        </tr>
+        <tr>
+            <td>Combi boiler:</td>
+            <td style="text-align:center; width:100px">
+                <select key="data.water_heating.combi_boiler">
+                    <option value="None"> None</option>
+                    <option value="Instantaneous, without keep-hot facility">Instantaneous, without keep-hot facility</option>
+                    <option value="Instantaneous, with keep-hot facility controlled by time clock">Instantaneous, with keep-hot facility controlled by time clock</option>
+                    <option value="Instantaneous, with keep-hot facility not controlled by time clock">Instantaneous, with keep-hot facility not controlled by time clock</option>
+                    <option value="Storage combi boiler, store volume > 55 litres">Storage combi boiler, store volume > 55 litres</option>
+                    <option value="Storage combi boiler, store volume < 55 litres">Storage combi boiler, store volume < 55 litres</option>
+                </select>           
+            </td>
+        </tr>
+        <tr style="display:none" id="combi-storage-volume">
+            <td style="padding-left:40px">Volume of the close-coupled storage of the combi boiler</td>
+            <td style="alignment: right"><input type="number" key="data.water_heating.Vc" min="1" style="width:80px" /></td>
         </tr>
     </table>
 </div>

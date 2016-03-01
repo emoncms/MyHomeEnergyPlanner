@@ -179,9 +179,9 @@ calc.fabric = function (data)
     var gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (z in data.fabric.elements)
     {
-        // Calculate heat loss through elements
+// Calculate heat loss through elements
 
-        // Use element length and height if given rather than area.
+// Use element length and height if given rather than area.
         if (data.fabric.elements[z]['l'] != undefined && data.fabric.elements[z]['l'] != '' && data.fabric.elements[z]['h'] != undefined && data.fabric.elements[z]['h'] != '')
         {
             data.fabric.elements[z].area = data.fabric.elements[z]['l'] * data.fabric.elements[z]['h'];
@@ -191,13 +191,13 @@ calc.fabric = function (data)
             data.fabric.elements[z].windowarea = 0;
         }
 
-        // Subtract window areas:
+// Subtract window areas:
 
         for (w in data.fabric.elements)
         {
             if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window' || data.fabric.elements[w].type == 'Door' || data.fabric.elements[w].type == 'Roof_light')
             {
-                //if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
+//if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
                 if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == data.fabric.elements[z].id)
                 {
                     var windowarea = data.fabric.elements[w].area;
@@ -216,7 +216,6 @@ calc.fabric = function (data)
         else
             data.fabric.elements[z].wk = data.fabric.elements[z].netarea * data.fabric.elements[z].uvalue;
         data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
-        
         // By checking that the u-value is not 0 = internal walls we can calculate total external area
         //if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].netarea != undefined) {
         if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].type != 'party_wall' && data.fabric.elements[z].type != 'Party_wall') {
@@ -246,7 +245,7 @@ calc.fabric = function (data)
             data.fabric.total_party_wall_WK += data.fabric.elements[z].wk;
             data.fabric.total_party_wall_area += data.fabric.elements[z].netarea;
         }
-        // Calculate total thermal capacity
+// Calculate total thermal capacity
         if (data.fabric.elements[z].kvalue != undefined) {
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;
         }
@@ -265,7 +264,7 @@ calc.fabric = function (data)
             // the result of which needs to be put in a bin for totals for jan, feb etc..
             for (var month = 0; month < 12; month++)
             {
-                // Access factor table: first dimention is shading factor, 2nd in winter, summer.
+// Access factor table: first dimention is shading factor, 2nd in winter, summer.
                 var table_6d = [[0.3, 0.5], [0.54, 0.7], [0.77, 0.9], [1.0, 1.0]];
                 // access factor is time of year dependent
                 // Summer months: 5:June, 6:July, 7:August and 8:September (where jan = month 0)
@@ -509,18 +508,18 @@ calc.temperature = function (data)
         Te[m] = datasets.table_u1[data.region][m] - (0.3 * data.altitude / 50);
     }
 
-    //----------------------------------------------------------------------------------------------------------------
-    // 7. Mean internal temperature (heating season)
-    //----------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------
+// 7. Mean internal temperature (heating season)
+//----------------------------------------------------------------------------------------------------------------
 
-    // Bring calculation of (96)m forward as its used in section 7.
-    // Monthly average external temperature from Table U1
-    // for (var i=1; i<13; i++) data['96-'+i] = table_u1[i.region][i-1]-(0.3 * i.altitude / 50);
+// Bring calculation of (96)m forward as its used in section 7.
+// Monthly average external temperature from Table U1
+// for (var i=1; i<13; i++) data['96-'+i] = table_u1[i.region][i-1]-(0.3 * i.altitude / 50);
 
-    // See utilisationfactor.js for calculation
-    // Calculation is described on page 159 of SAP document
-    // Would be interesting to understand how utilisation factor equation
-    // can be derived
+// See utilisationfactor.js for calculation
+// Calculation is described on page 159 of SAP document
+// Would be interesting to understand how utilisation factor equation
+// can be derived
 
     var utilisation_factor_A = [];
     for (var m = 0; m < 12; m++)
@@ -528,11 +527,11 @@ calc.temperature = function (data)
         utilisation_factor_A[m] = calc_utilisation_factor(TMP, HLP[m], H[m], Th, Te[m], G[m]);
     }
 
-    // Table 9c: Heating requirement
-    // Living area
-    // 1. Set Ti to the temperature for the living area during heating periods (Table 9)
-    // 2. Calculate the utilisation factor (Table 9a)
-    // 3. Calculate the temperature reduction (Table 9b) for each off period (Table 9), u1 and u2, for weekdays
+// Table 9c: Heating requirement
+// Living area
+// 1. Set Ti to the temperature for the living area during heating periods (Table 9)
+// 2. Calculate the utilisation factor (Table 9a)
+// 3. Calculate the temperature reduction (Table 9b) for each off period (Table 9), u1 and u2, for weekdays
 
     var Ti_livingarea = [];
     for (var m = 0; m < 12; m++)
@@ -549,7 +548,7 @@ calc.temperature = function (data)
 
 
 
-    // rest of dwelling
+// rest of dwelling
     var Th2 = [];
     for (var m = 0; m < 12; m++) {
 
@@ -652,7 +651,7 @@ calc.space_heating = function (data)
 
     for (m = 0; m < 12; m++)
     {
-        // DeltaT (Difference between Internal and External temperature)
+// DeltaT (Difference between Internal and External temperature)
         delta_T[m] = data.internal_temperature[m] - data.external_temperature[m];
         // Monthly heat loss totals
         var H = 0; // heat transfer coefficient
@@ -674,8 +673,8 @@ calc.space_heating = function (data)
             useful_gains[m] = total_gains[m];
         }
 
-        // Space heating demand is simply the difference between the heat loss rate
-        // for our target internal temperature and the gains.
+// Space heating demand is simply the difference between the heat loss rate
+// for our target internal temperature and the gains.
         heat_demand[m] = total_losses[m] - useful_gains[m];
         cooling_demand[m] = 0;
         // Case of cooling:
@@ -833,7 +832,6 @@ calc.energy_systems = function (data)
         data.annualco2 += data.fuel_totals[z].annualco2;
     }
     data.energy_delivered = data.energy_use;
-
     // Annual CO2, primary energy and cost saved due to generation. Be aware generation is not used for the calculation of Energy use
     if (data.use_generation == 1) {
         data.fuel_totals['generation'] = {
@@ -851,7 +849,6 @@ calc.energy_systems = function (data)
 
     data.net_cost = data.use_generation == 1 ? data.total_cost - data.total_income : data.total_cost;
     return data;
-
 };
 //---------------------------------------------------------------------------------------------
 // SAP
@@ -1066,6 +1063,7 @@ calc.water_heating = function (data)
     var energy_lost_from_water_storage = 0;
     var monthly_storage_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var primary_circuit_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var combi_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var total_heat_required = [];
     var hot_water_heater_output = [];
     var heat_gains_from_water_heating = [];
@@ -1124,6 +1122,35 @@ calc.water_heating = function (data)
             primary_circuit_loss[m] = datasets.table_1a[m] * 14 * ((0.0091 * data.water_heating.pipework_insulated_fraction + 0.0245 * (1 - data.water_heating.pipework_insulated_fraction)) * hours_per_day + 0.0263);
             if (data.water_heating.solar_water_heating)
                 primary_circuit_loss[m] *= datasets.table_h4[m];
+
+            // Combi loss for each month from Table 3a, 3b or 3c (enter “0” if not a combi boiler)
+            if (data.water_heating.combi_boiler != 'None') {
+                if (Vd_m[m] < 100)
+                    var fu = Vd_m[m] / 100;
+                else
+                    var fu = 1;
+
+                switch (data.water_heating.combi_boiler)
+                {
+                    case 'Instantaneous, without keep-hot facility':
+                        combi_loss[m] = 600 * fu * datasets.table_1a[m] / 365;
+                        break;
+                    case 'Instantaneous, with keep-hot facility controlled by time clock':
+                        combi_loss[m] = 600 * datasets.table_1a[m] / 365;
+                        break;
+                    case 'Instantaneous, with keep-hot facility not controlled by time clock':
+                        combi_loss[m] = 900 * datasets.table_1a[m] / 365;
+                        break;
+                    case 'Storage combi boiler, store volume > 55 litres':
+                        combi_loss[m] = 0;
+                        break;
+                    case 'Storage combi boiler, store volume < 55 litres':
+                        combi_loss[m] = (600 - (data.water_heating.Vc - 15) * 15) * fu * datasets.table_1a[m] / 365;
+                        break;
+                }
+            }
+
+            // Total heat required
             total_heat_required[m] = 0.85 * monthly_energy_content[m] + distribution_loss[m] + monthly_storage_loss[m] + primary_circuit_loss[m] + data.water_heating.combi_loss[m];
         }
         //----------------------------------------------------------------------------------------
@@ -1158,23 +1185,6 @@ calc.water_heating = function (data)
         waterheating_gains[m] = (1000 * heat_gains_from_water_heating[m]) / (datasets.table_1a[m] * 24);
     }
 
-
-    /*
-     // Combi loss for each month from Table 3a, 3b or 3c (enter “0” if not a combi boiler)
-     switch(combi_type)
-     {
-     case 'instantaneous_no_keephot':
-     combi_loss[m] = 600 * fu * table_1a[m] / 365;
-     break;
-     case 'instantaneous_keephot_timeclock':
-     combi_loss[m] = 600 * table_1a[m] / 365;
-     break;
-     case 'instantaneous_keephot_no_timeclock':
-     combi_loss[m] = 900 * table_1a[m] / 365;
-     break;
-     case '
-     }
-     */
 
     //if (data.use_water_heating) {
     data.gains_W["waterheating"] = waterheating_gains;
@@ -1346,7 +1356,6 @@ calc.generation = function (data) {
 
     data.generation.total_energy_income = 0;
     data.generation.systems = {};
-
     if (data.generation.solar_annual_kwh > 0)
     {
         data.generation.systems.solarpv = {name: "Solar PV", quantity: data.generation.solar_annual_kwh, fraction_used_onsite: data.generation.solar_fraction_used_onsite, CO2: data.generation.solar_annual_kwh * data.fuels['electric'].co2factor, primaryenergy: data.generation.solar_annual_kwh * data.fuels['electric'].primaryenergyfactor};
