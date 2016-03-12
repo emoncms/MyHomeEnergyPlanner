@@ -4,8 +4,13 @@ function waterheating_UpdateUI()
 {
     if (data.water_heating.instantaneous_hotwater)
         $(".loss-interface").hide();
-    else
+    else {
         $(".loss-interface").show();
+        if (data.water_heating.storage)
+            $('.storage').show();
+        else
+            $('.storage').hide();
+    }
 
     if (data.water_heating.declared_loss_factor_known) {
         $(".declared-loss-factor-known").show();
@@ -20,15 +25,29 @@ function waterheating_UpdateUI()
     else
         $('#annual_energy_content').html('<span key="data.water_heating.annual_energy_content" dp=0></span>  kWh/year');
 
-    if (data.water_heating.combi_boiler == 'Storage combi boiler, store volume > 55 litres' || data.water_heating.combi_boiler == 'Storage combi boiler, store volume < 55 litres')
-        $('#combi-storage-volume').show();
+    if (data.water_heating.system == 'Combi boiler') {
+        $('#combi-boiler').show();
+        if (data.water_heating.combi_boiler == 'storage_over55' || data.water_heating.combi_boiler == 'storage_less55')
+            $('#combi-storage-volume').show();
+        else
+            $('#combi-storage-volume').hide();
+    }
     else
-        $('#combi-storage-volume').hide();
+        $('#combi-boiler').hide();
+
 }
 
 function waterheating_initUI() {
+    $('#solarhotwater-link').prop('href', 'view?id=' + p.id + '#' + scenario + '/solarhotwater');
 }
 
 $('#openbem').on('click', '[key="data.water_heating.solar_water_heating"]', function () {
     data.use_SHW = !data.water_heating.solar_water_heating; // I don't know why but only works properly coping the negative
+});
+
+$('#openbem').on('change', '[key="data.water_heating.system"]', function () {
+    if ($('[key="data.water_heating.system"]').val() == 'Community heating')
+        data.water_heating.community_heating = 1;
+    else
+        data.water_heating.community_heating = false;
 });

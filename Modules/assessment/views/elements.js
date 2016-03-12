@@ -39,7 +39,7 @@ $("#openbem").on("click", '.add-element', function () {
         add_element("#floors", newelementid);
     if (type == "Window" || type == "Door" || type == "Roof_light")
         add_window(newelementid);
-    if (type == "Party_wall")
+    if (type == "Party_wall" || type == "party_wall")
         add_element("#party_walls", newelementid);
     update();
 

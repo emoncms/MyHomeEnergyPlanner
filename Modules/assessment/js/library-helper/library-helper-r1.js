@@ -796,9 +796,9 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     out = '<div class="input-prepend element-type" style="display:none" ><span class="add-on">Type</span><select library_id="' + library_id + '" >';
     out += tag[0] == 'Wall' ? '<option value="Wall" selected>Wall</option>' : '<option value = "Wall" > Wall </option>';
     if (tag[0] == 'party_wall' || tag[0] == 'Party_wall')
-        out += '<option value="party_wall" selected>Party wall</option>';
+        out += '<option value="Party_wall" selected>Party wall</option>';
     else
-        out += '<option value="party_wall">Party wall</option>';
+        out += '<option value="Party_wall">Party wall</option>';
     out += tag[0] == 'Roof' ? '<option value="Roof" selected>Roof</option>' : '<option value="Roof">Roof</option>';
     out += tag[0] == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
     out += tag[0] == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
@@ -847,7 +847,6 @@ libraryHelper.prototype.elements_measures_library_to_html = function (origin, li
 /**********************************************
  * Items to html
  **********************************************/
-
 libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', fans_and_pumps: 0, combi_keep_hot: 0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
@@ -859,7 +858,7 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     out += '<tr><td>Default efficiency</td><td><input type="text" class="edit-system-efficiency editable-field" value="' + item.efficiency + '" /></td></tr>';
     out += '<tr><td>Winter efficiency</td><td><input type="text" class="edit-system-winter editable-field" value="' + item.winter + '" /></td></tr>';
     out += '<tr><td>Summer efficiency</td><td><input type="text" class="edit-system-summer editable-field" value="' + item.summer + '" /></td></tr>';
-    out += '<tr><td>Pumps and fans (kWh/year)</td><td><input type="text" class="edit-system-fans_and_pumps editable-field" value="' + item.fans_and_pumps + '" /></td></tr>';
+    out += '<tr><td>Pumps and fans (kWh/year) <i class="icon-question-sign" title="Include here electricity for central heating pump, oil boiler pump, any flue fan and/or warm air heating systems"></i></td><td><input type="text" class="edit-system-fans_and_pumps editable-field" value="' + item.fans_and_pumps + '" /></td></tr>';
     out += '<tr><td>Keep hot facility, combi boilers only (kWh/year)</td><td><input type="text" class="editable-field edit-system-combi_keep_hot" value="' + item.combi_keep_hot + '" /></td></tr>';
     out += '<tr><td>Fuel</td><td><select class="edit-system-fuel editable-field" default="' + item.fuel + '">';
     for (fuel in datasets.fuels) {
@@ -912,9 +911,9 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     var out = '<div class="input-prepend"><span class="add-on">Type</span><select class="create-element-type editable-field">';
     out += type == 'Wall' ? '<option value="Wall" selected>Wall</option>' : '<option value = "Wall" > Wall </option>';
     if (type == 'party_wall' || type == 'Party_wall')
-        out += '<option value="party_wall" selected>Party wall</option>';
+        out += '<option value="Party_wall" selected>Party wall</option>';
     else
-        out += '<option value="party_wall">Party wall</option>';
+        out += '<option value="Party_wall">Party wall</option>';
     out += type == 'Roof' ? '<option value="Roof" selected>Roof</option>' : '<option value="Roof">Roof</option>';
     out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
     out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';

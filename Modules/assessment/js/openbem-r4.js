@@ -208,7 +208,7 @@ var openbem = {
         inputdata.custom_occupancy = data.custom_occupancy;
         inputdata.floors = [];
         inputdata.locked = data.locked;
-        
+
         for (z in data.floors) {
             inputdata.floors[z] = {name: data.floors[z].name, area: data.floors[z].area, height: data.floors[z].height};
         }
@@ -234,8 +234,8 @@ var openbem = {
                 location: data.fabric.elements[z].location || '',
                 description: data.fabric.elements[z].description || '',
                 kvalue: data.fabric.elements[z].kvalue || '',
-                orientation: data.fabric.elements[z].orientation || '',
-                overshading: data.fabric.elements[z].overshading || '',
+                orientation: data.fabric.elements[z].orientation,
+                overshading: data.fabric.elements[z].overshading,
                 g: data.fabric.elements[z].g || '',
                 gL: data.fabric.elements[z].gL || '',
                 ff: data.fabric.elements[z].ff || '',
@@ -307,9 +307,11 @@ var openbem = {
             contains_dedicated_solar_storage_or_WWHRS: data.water_heating.contains_dedicated_solar_storage_or_WWHRS,
             hot_water_control_type: data.water_heating.hot_water_control_type,
             override_annual_energy_content: data.water_heating.override_annual_energy_content,
-            annual_energy_content: data.water_heating.annual_energy_content
-
-
+            annual_energy_content: data.water_heating.annual_energy_content,
+            system: data.water_heating.system,
+            storage: data.water_heating.storage,
+            combi_boiler: data.water_heating.combi_boiler,
+            Vc: data.water_heating.Vc
         };
         inputdata.use_SHW = data.use_SHW;
         inputdata.SHW = {
@@ -364,7 +366,9 @@ var openbem = {
             responsiveness: data.temperature.responsiveness,
             target: data.temperature.target,
             control_type: data.temperature.control_type,
-            living_area: data.temperature.living_area
+            living_area: data.temperature.living_area,
+            temperature_adjustment: data.temperature.temperature_adjustment,
+            heating_off_summer:data.temperature.heating_off_summer
         };
         // Space heating
         inputdata.space_heating = {

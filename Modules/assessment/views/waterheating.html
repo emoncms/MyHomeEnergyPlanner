@@ -19,101 +19,116 @@
         <td style="text-align:center; width:150px" id="annual_energy_content"></td>
     </tr>
 
-    <tr>
-        <td>Is water heating system instantaneous water heating at point of use (no hot water storage)</td>
-        <td style="text-align:center; width:100px"><input key="data.water_heating.instantaneous_hotwater" type="checkbox" /></td>
-    </tr>
 </table>
 
-<div class="loss-interface">
+<h4>Heating system</h4>
 
-    <table class="table">
-        <tr>
-            <td>Storage volume (litres) including any solar or WWHRS storage within same vessel: <br>(f community heating and no tank in dwelling, enter 110. If no stored hot water (this includes instantaneous combi boilers) enter 0</td>
-            <td><input key="data.water_heating.storage_volume" type="text" style="width:80px" /></td>
-        </tr>
-        <tr>
-            <td><b>Is the manufacturer’s declared loss factor for the storage vessel known?</b></td>
-            <td style="text-align:center"><input key="data.water_heating.declared_loss_factor_known" type="checkbox" /></td>
-        </tr>
+<table class="table">
+    <tr>
+        <td>Is water heating system instantaneous water heating at point of use (no hot water storage)</td>
+        <td style="text-align:center; width:150px"><input key="data.water_heating.instantaneous_hotwater" type="checkbox" /></td>
+    </tr>
 
-        <tbody class="declared-loss-factor-known">
-            <tr>
-                <td style="padding-left:40px">Manufacturer's declared loss factor (kWh/day)</td><td><input type="text" style="width:80px" key="data.water_heating.manufacturer_loss_factor" /></td>
-            </tr>
-            <tr>
-                <td style="padding-left:40px">Temperature factor from Table 2b</td><td><input type="text" style="width:80px" key="data.water_heating.temperature_factor_a" /></td>
-            </tr>
-        </tbody>
-
-        <tbody class="declared-loss-factor-not-known" style="display:none">
-            <tr>
-                <td style="padding-left:40px">Hot water storage loss factor from Table 2 (kWh/litre/day)<br>(If community heating see section 4.3)</td>
-
-                <td><input type="text" style="width:80px" key="data.water_heating.loss_factor_b" /></td>
-            </tr>
-
-            <tr>
-                <td style="padding-left:40px">Volume factor from Table 2a:</td>
-                <td><input type="text" style="width:80px" key="data.water_heating.volume_factor_b" /></td>
-            </tr>
-            <tr>
-                <td style="padding-left:40px">Temperature factor from Table 2b:</td>
-                <td><input type="text" style="width:80px" key="data.water_heating.temperature_factor_b" /></td>
-            </tr>
-        </tbody>
+    <tbody class="loss-interface">
         <tr>
-            <td style="padding-left:40px">Energy lost from water storage, kWh/day:</td>
-            <td><span></span></td>
-        </tr>
-    </table>
-
-</div>
-
-<div class="loss-interface">
-    <table class="table" >
-        <tr>
-            <td>Include solar hot water input? [See: <a href="solarhotwater">Solar Hot Water</a>] </td>
-            <td style="text-align:center; width:100px"><input key="data.water_heating.solar_water_heating" type="checkbox" /></td>
-        </tr>
-        <tr>
-            <td>Is hot water provided by community heating?</td>
-            <td style="text-align:center; width:100px"><input key="data.water_heating.community_heating" type="checkbox" /></td>
-        </tr>
-        <tr>
-            <td>Is there a hot water store inside the dwelling?</td>
-            <td style="text-align:center; width:100px"><input key="data.water_heating.hot_water_store_in_dwelling" type="checkbox" /></td>
-        </tr>
-        <tr>
-            <td>Does the storage vessel contain a dedicated solar storage or WWHRS volume?</td>
-            <td style="text-align:center; width:100px"><input key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" type="checkbox" /></td>
-        </tr>
-        <tr>
-            <td>Hot water control type:</td>
-            <td style="text-align:center; width:100px">
-                <select key="data.water_heating.hot_water_control_type">
-                    <option value="no_cylinder_thermostat" >No cylinder thermostat</option>
-                    <option value="cylinder_thermostat_without_timer">Cylinder thermostat, water heating not separately timed</option>
-                    <option value="cylinder_thermostat_with_timer">Cylinder thermostat, water heating separately timed</option>
+            <td>How is the water heated?</td>
+            <td  style="text-align:center; width:150px">
+                <select key="data.water_heating.system" id="how_is_the_water_heated">
+                    <option value="Community heating">Community heating</option>
+                    <option value="Combi boiler">Combi boiler</option>
+                    <option value="Electric inmersion heater">Electric inmersion heater</option>
+                    <option value="CPSU">CPSU (including electric CPSU)</option>
+                    <option value="Boiler and thermal store within a single casing">Boiler and thermal store within a single casing</option>
+                    <option value="Separate boiler and thermal store connected by no more than 1.5m of insulated pipework">Separate boiler and thermal store connected by no more than 1.5m of insulated pipework</option>
+                    <option value="Other">Other</option>
                 </select>
             </td>
         </tr>
-        <tr>
+        <tr id="combi-boiler" style="display:none">
             <td>Combi boiler:</td>
-            <td style="text-align:center; width:100px">
+            <td style="text-align:center; width:150px">
                 <select key="data.water_heating.combi_boiler">
-                    <option value="None"> None</option>
-                    <option value="Instantaneous, without keep-hot facility">Instantaneous, without keep-hot facility</option>
-                    <option value="Instantaneous, with keep-hot facility controlled by time clock">Instantaneous, with keep-hot facility controlled by time clock</option>
-                    <option value="Instantaneous, with keep-hot facility not controlled by time clock">Instantaneous, with keep-hot facility not controlled by time clock</option>
-                    <option value="Storage combi boiler, store volume > 55 litres">Storage combi boiler, store volume > 55 litres</option>
-                    <option value="Storage combi boiler, store volume < 55 litres">Storage combi boiler, store volume < 55 litres</option>
+                    <option value="instantaneous_KH">Instantaneous, without keep-hot facility</option>
+                    <option value="instantaneous_KH_TC">Instantaneous, with keep-hot facility controlled by time clock</option>
+                    <option value="instantaneous_KH_nTC">Instantaneous, with keep-hot facility not controlled by time clock</option>
+                    <option value="storage_over55">Storage combi boiler, store volume > 55 litres</option>
+                    <option value="storage_less55">Storage combi boiler, store volume < 55 litres</option>
                 </select>           
             </td>
         </tr>
         <tr style="display:none" id="combi-storage-volume">
             <td style="padding-left:40px">Volume of the close-coupled storage of the combi boiler</td>
-            <td style="alignment: right"><input type="number" key="data.water_heating.Vc" min="1" style="width:80px" /></td>
+            <td style="text-align:center; width:150px"><input type="number" key="data.water_heating.Vc" min="1" style="width:80px" /></td>
         </tr>
-    </table>
-</div>
+        <tr>
+            <td>Include solar hot water input? [See: <a id="solarhotwater-link" href="">Solar Hot Water</a>] </td>
+            <td style="text-align:center; width:150px"><input key="data.water_heating.solar_water_heating" type="checkbox" /></td>
+        </tr>
+        <tr >
+            <td>Is there a storage?</td>
+            <td style="text-align:center; width:150px"><input type="checkbox" key="data.water_heating.storage" style="width:80px" /></td>
+        </tr>
+</table>
+
+<h4 class="storage loss-interface">Hot water storage</h4>
+<table class="table storage loss-interface">
+    <tr>
+        <td>Is the hot water store inside the dwelling?</td>
+        <td style="text-align:center; width:100px"><input key="data.water_heating.hot_water_store_in_dwelling" type="checkbox" /></td>
+    </tr>    
+    <tr>
+        <td>Hot water control type:</td>
+        <td style="text-align:center; width:100px">
+            <select key="data.water_heating.hot_water_control_type">
+                <option value="no_cylinder_thermostat" >No cylinder thermostat</option>
+                <option value="cylinder_thermostat_without_timer">Cylinder thermostat, water heating not separately timed</option>
+                <option value="cylinder_thermostat_with_timer">Cylinder thermostat, water heating separately timed</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Does the storage vessel contain a dedicated solar storage or WWHRS volume?</td>
+        <td style="text-align:center; width:100px"><input key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" type="checkbox" /></td>
+    </tr>
+    <tr>
+        <td>Storage volume (litres) including any solar or WWHRS storage within same vessel: <br>(If community heating and no tank in dwelling, enter 110. If no stored hot water (this includes instantaneous combi boilers) enter 0</td>
+        <td style="text-align:center; width:100px"><input key="data.water_heating.storage_volume" type="text" style="width:80px" /></td>
+    </tr>
+    <tr>
+        <td><b>Is the manufacturer’s declared loss factor for the storage vessel known?</b></td>
+        <td style="text-align:center; width:100px"><input key="data.water_heating.declared_loss_factor_known" type="checkbox" /></td>
+    </tr>
+
+    <tbody class="declared-loss-factor-known">
+        <tr>
+            <td style="padding-left:40px">Manufacturer's declared loss factor (kWh/day)</td>
+            <td style="text-align:center; width:100px"><input type="text" style="width:80px" key="data.water_heating.manufacturer_loss_factor" /></td>
+        </tr>
+        <tr>
+            <td style="padding-left:40px">Temperature factor from Table 2b</td>
+            <td style="text-align:center; width:100px"><input type="text" style="width:80px" key="data.water_heating.temperature_factor_a" /></td>
+        </tr>
+    </tbody>
+
+    <tbody class="declared-loss-factor-not-known" style="display:none">
+        <tr>
+            <td style="padding-left:40px">Hot water storage loss factor from Table 2 (kWh/litre/day)<br>(If community heating see section 4.3)</td>
+
+            <td style="text-align:center; width:100px"><input type="text" style="width:80px" key="data.water_heating.loss_factor_b" /></td>
+        </tr>
+
+        <tr>
+            <td style="padding-left:40px">Volume factor from Table 2a:</td>
+            <td style="text-align:center; width:100px"><input type="text" style="width:80px" key="data.water_heating.volume_factor_b" /></td>
+        </tr>
+        <tr>
+            <td style="padding-left:40px">Temperature factor from Table 2b:</td>
+            <td style="text-align:center; width:100px"><input type="text" style="width:80px" key="data.water_heating.temperature_factor_b" /></td>
+        </tr>
+    </tbody>
+    <!--<tr>
+        <td style="padding-left:40px">Energy lost from water storage, kWh/day:</td>
+        <td style="text-align:center; width:100px"><span></span></td>
+    </tr>    
+    -->
+</table>

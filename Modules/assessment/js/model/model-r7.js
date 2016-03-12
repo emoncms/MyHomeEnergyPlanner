@@ -48,6 +48,7 @@ calc.run = function (datain)
     calc.appliancelist(calc.data);
     calc.generation(calc.data);
     calc.currentenergy(calc.data);
+    calc.gains(calc.data);
     calc.temperature(calc.data);
     calc.fans_and_pumps(calc.data);
     calc.space_heating(calc.data);
@@ -82,6 +83,7 @@ calc.start = function (data)
     data.annual_useful_gains_kWh_m2 = {};
     data.annual_losses_kWh_m2 = {};
     data.energy_requirements = {};
+    data.mean_internal_temperature = {};
     data.total_cost = 0;
     data.total_income = 0;
     data.primary_energy_use = 0;
@@ -150,7 +152,7 @@ calc.occupancy = function (data)
 // Uses external function: calc_solar_gains_from_windows
 //---------------------------------------------------------------------------------------------
 
-calc.fabric = function (data)
+calc.fabric = function (data, solar_acces_factor)
 {
     if (data.fabric == undefined)
         data.fabric = {};
@@ -160,6 +162,8 @@ calc.fabric = function (data)
         data.fabric.thermal_bridging_yvalue = 0.15;
     if (data.fabric.global_TMP == undefined)
         data.fabric.global_TMP = false;
+    if (solar_acces_factor == undefined)
+        solar_acces_factor = 'winter'; // solar gains for heating only use 'Winter access factor', while the summer one is used for the calculatin of "Solar gains for cooling and Summer temperatures", table 6d, p. 216 SAP2012
     data.fabric.total_heat_loss_WK = 0;
     data.fabric.total_thermal_capacity = 0;
     data.fabric.total_floor_WK = 0;
@@ -175,8 +179,16 @@ calc.fabric = function (data)
     data.fabric.total_window_area = 0;
     data.fabric.total_party_wall_area = 0;
     // Solar gains
-    var sum = 0;
-    var gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    var sum = 0; // lighting gains
+    var gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // Solar gains
+    /*var gains_by_orientation = {
+     0:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     1:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     2:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     3:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     4:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     5:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+     };*/
     for (z in data.fabric.elements)
     {
 // Calculate heat loss through elements
@@ -252,12 +264,13 @@ calc.fabric = function (data)
 
         if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window' || data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light')
         {
-            var orientation = data.fabric.elements[z]['orientation'] != '' ? data.fabric.elements[z]['orientation'] : 2;
+            var orientation = data.fabric.elements[z]['orientation'] != '' ? data.fabric.elements[z]['orientation'] : 0; // For a reason that i haven't been able to find when it is zero, orientation = data.fabric.elements[z]['orientation'] becomes an empty string
             //var orientation = data.fabric.elements[z]['orientation'];
             var area = data.fabric.elements[z]['area'];
-            var overshading = data.fabric.elements[z]['overshading'] != '' ? data.fabric.elements[z]['overshading'] : 2;
+            var overshading = data.fabric.elements[z]['overshading'] != '' ? data.fabric.elements[z]['overshading'] : 0; // For a reason that i haven't been able to find when it is zero, orientation = data.fabric.elements[z]['overshading'] becomes an empty string
             //var overshading = data.fabric.elements[z]['overshading'];
             var g = data.fabric.elements[z]['g'];
+            var gL = data.fabric.elements[z]['gL'];
             var ff = data.fabric.elements[z]['ff'];
             var gain = 0;
             // The gains for a given window are calculated for each month
@@ -269,9 +282,12 @@ calc.fabric = function (data)
                 // access factor is time of year dependent
                 // Summer months: 5:June, 6:July, 7:August and 8:September (where jan = month 0)
                 var summer = 0;
-                if (month >= 5 && month <= 8)
+                if (solar_acces_factor == 'summer' && month >= 5 && month <= 8) // solar gains for heating only use 'Winter access factor', while the summer one is used for the calculatin of "Solar gains for cooling and Summer temperatures", table 6d, p. 216 SAP2012
                     summer = 1;
-                var access_factor = table_6d[overshading][summer];
+                if (data.fabric.elements[z].type == 'Roof_light')
+                    var access_factor = 1.0;
+                else
+                    var access_factor = table_6d[overshading][summer];
                 // Map orientation code from window to solar rad orientation codes.
                 if (orientation == 5)
                     orientation = 3; // SE/SW
@@ -281,18 +297,22 @@ calc.fabric = function (data)
                     orientation = 1; // NE/NW
 
                 var gain_month = access_factor * area * solar_rad(data.region, orientation, 90, month) * 0.9 * g * ff;
-                gains[month] += gain_month;
+                gains[month] += gain_month; // Solar gains
                 gain += gain_month;
             }
 
             var accessfactor = [0.5, 0.67, 0.83, 1.0];
-            sum += 0.9 * area * g * ff * accessfactor[overshading];
+            if (data.fabric.elements[z].type == 'Roof_light')
+                sum += 0.9 * area * gL * ff * 1.0; // Ligthing gains
+            else
+                sum += 0.9 * area * gL * ff * accessfactor[overshading]; // Ligthing gains
             data.fabric.elements[z].gain = gain / 12.0;
             data.fabric.annual_solar_gain += data.fabric.elements[z].gain;
         }
     }
 
     data.fabric.thermal_bridging_heat_loss = data.fabric.total_external_area * data.fabric.thermal_bridging_yvalue;
+    data.fabric.fabric_heat_loss_WK = data.fabric.total_heat_loss_WK;
     data.fabric.total_heat_loss_WK += data.fabric.thermal_bridging_heat_loss;
     data.fabric.annual_solar_gain_kwh = data.fabric.annual_solar_gain * 0.024 * 365;
     if (data.fabric.global_TMP)
@@ -352,6 +372,7 @@ calc.ventilation = function (data)
     var infiltration = 0;
     if (data.volume != 0) {
         infiltration = total / data.volume;
+        data.ventilation.infiltration_chimeneyes_fires_fans = infiltration;
     }
 
     if (data.ventilation.air_permeability_test == false)
@@ -374,15 +395,20 @@ calc.ventilation = function (data)
     {
         infiltration += data.ventilation.air_permeability_value / 20.0;
     }
-
+    data.ventilation.infiltration_rate = infiltration;
     var shelter_factor = 1 - (0.075 * data.ventilation.number_of_sides_sheltered);
     infiltration *= shelter_factor;
+    data.ventilation.infiltration_rate_incorp_shelter_factor = infiltration;
     var adjusted_infiltration = [];
+    data.ventilation.windfactor = [];
+    data.ventilation.adjusted_infiltration = [];
     for (var m = 0; m < 12; m++)
     {
         var windspeed = datasets.table_u2[data.region][m];
         var windfactor = windspeed / 4;
         adjusted_infiltration[m] = infiltration * windfactor;
+        data.ventilation.windfactor[m] = windfactor;
+        data.ventilation.adjusted_infiltration[m] = adjusted_infiltration[m];
     }
 
     // (24a)m effective_air_change_rate
@@ -447,11 +473,16 @@ calc.ventilation = function (data)
 
     var sum_infiltration = 0;
     var sum_ventilation = 0;
+    var SAP_ventilation_WK = [];
+    var HTC = [];
     for (var m = 0; m < 12; m++)
     {
         sum_infiltration += infiltration_WK[m];
         sum_ventilation += ventilation_WK[m];
+        SAP_ventilation_WK[m] = infiltration_WK[m] + ventilation_WK[m];
+        HTC[m] = data.fabric.total_heat_loss_WK + SAP_ventilation_WK[m];
     }
+
     data.ventilation.average_WK = (sum_infiltration + sum_ventilation) / 12.0;
     data.ventilation.average_infiltration_WK = sum_infiltration / 12.0;
     data.ventilation.average_ventilation_WK = sum_ventilation / 12.0;
@@ -459,8 +490,9 @@ calc.ventilation = function (data)
     data.ventilation.infiltration_WK = infiltration_WK;
     data.ventilation.ventilation_WK = ventilation_WK;
     data.losses_WK.ventilation = ventilation_WK;
-    data.losses_WK.infiltration = infiltration_WK
-
+    data.losses_WK.infiltration = infiltration_WK;
+    data.ventilation.SAP_ventilation_WK = SAP_ventilation_WK;
+    data.totalWK_monthly = HTC;
     return data;
 }
 
@@ -484,6 +516,8 @@ calc.temperature = function (data)
         data.temperature.target = 21;
     if (data.temperature.responsiveness == undefined)
         data.temperature.responsiveness = 1;
+    if (data.temperature.temperature_adjustment == undefined)
+        data.temperature.temperature_adjustment = 1;
     var R = data.temperature.responsiveness;
     var Th = data.temperature.target;
     var TMP = data.TMP; // data.TMP;
@@ -505,7 +539,8 @@ calc.temperature = function (data)
     var Te = [];
     for (var m = 0; m < 12; m++)
     {
-        Te[m] = datasets.table_u1[data.region][m] - (0.3 * data.altitude / 50);
+//Te[m] = datasets.table_u1[data.region][m] - (0.3 * data.altitude / 50);
+        Te[m] = datasets.table_u1[data.region][m];
     }
 
 //----------------------------------------------------------------------------------------------------------------
@@ -545,8 +580,6 @@ calc.temperature = function (data)
         var Tweekend = Th - (u1b + u2);
         Ti_livingarea[m] = (5 * Tweekday + 2 * Tweekend) / 7;
     }
-
-
 
 // rest of dwelling
     var Th2 = [];
@@ -601,10 +634,22 @@ calc.temperature = function (data)
         data.internal_temperature[m] = (fLA * Ti_livingarea[m]) + (1 - fLA) * Ti_restdwelling[m];
     }
 
+    data.HLP = HLP;
+    data.mean_internal_temperature.u_factor_living_area = utilisation_factor_A;
+    data.mean_internal_temperature.m_i_t_living_area = Ti_livingarea;
+    data.mean_internal_temperature.t_heating_periods_rest_of_dwelling = Th2;
+    data.mean_internal_temperature.u_factor_rest_of_dwelling = utilisation_factor_B;
+    data.mean_internal_temperature.m_i_t_rest_of_dwelling = Ti_restdwelling;
+    data.mean_internal_temperature.fLA = fLA;
+    data.mean_internal_temperature.m_i_t_whole_dwelling = JSON.parse(JSON.stringify(data.internal_temperature));
     data.external_temperature = Te;
+    for (var m = 0; m < 12; m++)
+    {
+        data.internal_temperature[m] = data.internal_temperature[m] + data.temperature.temperature_adjustment;
+    }
+    data.mean_internal_temperature.m_i_t_whole_dwelling_adjusted = data.internal_temperature;
     return data;
-}
-
+};
 //---------------------------------------------------------------------------------------------
 // SPACE HEATING AND COOLING
 // Calculates space heating and cooling demand.
@@ -635,20 +680,6 @@ calc.space_heating = function (data)
     var cooling_demand_kwh = [];
     var annual_heating_demand = 0;
     var annual_cooling_demand = 0;
-    //Internal gains for "Metabolic" and "Losses", they are not calculated anywhere else but we need them before we can calculate the heat/cooling demand
-    data.gains_W['metabolic'] = new Array();
-    data.gains_W['losses'] = new Array();
-    for (m = 0; m < 12; m++) {
-        if (data.space_heating.use_utilfactor_forgains) {
-            data.gains_W['metabolic'][m] = 60 * data.occupancy;
-            data.gains_W['losses'][m] = -40 * data.occupancy;
-        }
-        else {
-            data.gains_W['metabolic'][m] = 50 * data.occupancy;
-            data.gains_W['losses'][m] = -40 * data.occupancy;
-        }
-    }
-
     for (m = 0; m < 12; m++)
     {
 // DeltaT (Difference between Internal and External temperature)
@@ -683,6 +714,8 @@ calc.space_heating = function (data)
             heat_demand[m] = 0;
         }
 
+        if (data.temperature.heating_off_summer == 1 && m >= 5 && m <= 8)
+            heat_demand[m] = 0;
         heat_demand_kwh[m] = 0.024 * heat_demand[m] * datasets.table_1a[m];
         cooling_demand_kwh[m] = 0.024 * cooling_demand[m] * datasets.table_1a[m];
         annual_heating_demand += heat_demand_kwh[m];
@@ -723,10 +756,12 @@ calc.space_heating = function (data)
     data.space_heating.cooling_demand_kwh = cooling_demand_kwh;
     data.space_heating.annual_heating_demand = annual_heating_demand;
     data.space_heating.annual_cooling_demand = annual_cooling_demand;
+    data.space_heating.annual_heating_demand_m2 = annual_heating_demand / data.TFA;
+    data.space_heating.annual_cooling_demand_m2 = annual_cooling_demand / data.TFA;
     if (annual_heating_demand > 0)
-        data.energy_requirements.space_heating = {name: "Space Heating", quantity: annual_heating_demand};
+        data.energy_requirements.space_heating = {name: "Space Heating", quantity: annual_heating_demand, monthly: heat_demand_kwh};
     if (annual_cooling_demand > 0)
-        data.energy_requirements.space_cooling = {name: "Space Cooling", quantity: annual_cooling_demand};
+        data.energy_requirements.space_cooling = {name: "Space Cooling", quantity: annual_cooling_demand, monthly: cooling_demand_kwh};
     data.fabric_energy_efficiency = (annual_heating_demand + annual_cooling_demand) / data.TFA;
     return data;
 };
@@ -744,6 +779,8 @@ calc.energy_systems = function (data)
         data.energy_systems = {};
     if (data.fuels == undefined)
         data.fuels = {};
+    if (data.temperature.heating_off_summer == undefined)
+        data.temperature.heating_off_summer = true;
     //if (data.systemlibrary == undefined) {
     //  data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
     //}
@@ -761,11 +798,15 @@ calc.energy_systems = function (data)
     for (z in data.energy_requirements)
     {
         var quantity = data.energy_requirements[z].quantity;
+        var quantity_monthly = data.energy_requirements[z].monthly;
         if (data.energy_systems[z] == undefined)
             data.energy_systems[z] = [];
         for (x in data.energy_systems[z])
         {
             data.energy_systems[z][x].demand = quantity * data.energy_systems[z][x].fraction;
+            data.energy_systems[z][x].demand_monthly = [];
+            for (m = 0; m < 12; m++)
+                data.energy_systems[z][x].demand_monthly[m] = quantity_monthly[m] * data.energy_systems[z][x].fraction;
             /*var system = data.energy_systems[z][x].system;
              if (data.systemlibrary[system] != undefined) {
              data.energy_systems[z][x].name = data.systemlibrary[system].name;
@@ -774,22 +815,38 @@ calc.energy_systems = function (data)
         }
     }
 
-// Apply Winter and summer efficiency modification to water heating system if its a shared water + space heating system.
-
+    // Water heating efficiency adjustment
     for (var a in data.energy_systems["waterheating"]) {
+        // Apply Winter and summer efficiency modification to water heating system if its a shared water + space heating system. SAP2012, 9.2.1, p. 24
         var system_water = data.energy_systems["waterheating"][a].system;
         for (var b in data.energy_systems["space_heating"]) {
             var system_space = data.energy_systems["space_heating"][b].system;
+            data.energy_systems["waterheating"][a].efficiency_monthly = [];
             if (system_water == system_space) {
 
-                var Q_water = data.energy_systems["waterheating"][a].demand;
-                var Q_space = data.energy_systems["space_heating"][b].demand;
+                //var Q_water = data.energy_systems["waterheating"][a].demand;
+                //var Q_space = data.energy_systems["space_heating"][b].demand;
+                var Q_water = data.energy_systems["waterheating"][a].demand_monthly;
+                var Q_space = data.energy_systems["space_heating"][b].demand_monthly;
                 //var n_winter = data.systemlibrary[system_water].winter;
                 //var n_summer = data.data.energy_systems[eid][system_water].summer;
                 var n_winter = data.energy_systems["waterheating"][a].winter;
                 var n_summer = data.energy_systems["waterheating"][a].summer;
-                var n = (Q_water + Q_space) / ((Q_space / n_winter) + (Q_water / n_summer));
-                data.energy_systems["waterheating"][a].efficiency = n;
+
+                var n = 0;
+                var n_monthly = [];
+                for (m = 0; m < 12; m++) {
+                    n_monthly[m] = (Q_water[m] + Q_space[m]) / ((Q_space[m] / n_winter) + (Q_water[m] / n_summer));
+                    n += n_monthly[m];
+                }
+                data.energy_systems["waterheating"][a].efficiency_monthly = n_monthly;
+                data.energy_systems["waterheating"][a].efficiency = n / 12;
+                break; // we leave the for for "space_heatiing" systems so that we don't overwrite the adjusted efficiency for the water_heating system
+            }
+            else { // hot water only boiler
+                data.energy_systems["waterheating"][a].efficiency = data.energy_systems["waterheating"][a].summer;
+                for (m = 0; m < 12; m++)
+                    data.energy_systems["waterheating"][a].efficiency_monthly[m] = data.energy_systems["waterheating"][a].efficiency;
             }
         }
     }
@@ -799,6 +856,14 @@ calc.energy_systems = function (data)
     {
         for (x in data.energy_systems[z])
         {
+            data.energy_systems[z][x].fuelinput_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            for (m = 0; m < 12; m++) {
+                if (z == 'waterheating')
+                    data.energy_systems[z][x].fuelinput_monthly[m] = data.energy_systems[z][x].demand_monthly[m] / data.energy_systems[z][x].efficiency_monthly[m];
+                else
+                    data.energy_systems[z][x].fuelinput_monthly[m] = data.energy_systems[z][x].demand_monthly[m] / data.energy_systems[z][x].efficiency;
+            }
+
             data.energy_systems[z][x].fuelinput = data.energy_systems[z][x].demand / data.energy_systems[z][x].efficiency;
             var system = data.energy_systems[z][x].system;
             /*if (data.systemlibrary[system] != undefined) {
@@ -858,14 +923,33 @@ calc.energy_systems = function (data)
 
 calc.SAP = function (data)
 {
+    // Calculate total energy cost in the SAP way: taking into account only fuel cost for space heating, water heating, lighting and fans and pumps
+    var dataSAP = JSON.parse(JSON.stringify(data));
+    dataSAP.total_cost = 0;
+    dataSAP.primary_energy_use = 0;
+    dataSAP.energy_systems.appliances = [];
+    dataSAP.energy_systems.cooking = [];
+    dataSAP = calc.energy_systems(dataSAP);
+
+    // SAP
     data.SAP = {};
+    data.SAP.total_costSAP = dataSAP.total_cost;
+    data.SAP.annualco2SAP = dataSAP.annualco2;
+    data.SAP.kgco2perm2SAP = dataSAP.annualco2 / data.TFA;
     data.SAP.energy_cost_deflator = 0.42;
-    data.SAP.energy_cost_factor = (data.total_cost * data.SAP.energy_cost_deflator) / (data.TFA + 45.0);
+    data.SAP.energy_cost_factor = (data.SAP.total_costSAP * data.SAP.energy_cost_deflator) / (data.TFA + 45.0);
+    data.SAP.primary_energy_useSAP = dataSAP.primary_energy_use;
+    data.SAP.primary_energy_use_m2SAP = dataSAP.primary_energy_use / data.TFA;
     if (data.SAP.energy_cost_factor >= 3.5) {
         data.SAP.rating = 117 - 121 * (Math.log(data.SAP.energy_cost_factor) / Math.LN10);
     } else {
         data.SAP.rating = 100 - 13.95 * data.SAP.energy_cost_factor;
     }
+    var CF = data.SAP.annualco2SAP / (data.TFA + 45);
+    if (CF >= 28.3)
+        data.SAP.EI_rating = 200 - 95 * (Math.log(CF) / Math.LN10);
+    else
+        data.SAP.EI_rating = 100 - 1.34 * CF;
 
     return data;
 };
@@ -915,7 +999,8 @@ calc.LAC = function (data)
 
         if (EL_sum > 0 && data.LAC.use_SAP_lighting) {
             data.gains_W["Lighting"] = GL_monthly;
-            data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum};
+            data.gains_W["Lighting"] = [97.18, 86.32, 70.2, 53.14, 39.73, 33.54, 36.24, 47.11, 63.22, 80.28, 93.7, 99.08];
+            data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum, monthly: EL_monthly};
         }
     }
 
@@ -947,7 +1032,7 @@ calc.LAC = function (data)
     var appliances_CO2 = (EA * 0.522) / data.TFA;
     if (EA > 0 && data.LAC.use_SAP_appliances) {
         data.gains_W["Appliances"] = GA_monthly;
-        data.energy_requirements.appliances = {name: "Appliances", quantity: EA};
+        data.energy_requirements.appliances = {name: "Appliances", quantity: EA, monthly: EA_monthly};
     }
 
     data.LAC.EA = EA;
@@ -968,10 +1053,11 @@ calc.LAC = function (data)
     // CO2 emissions in kg/m2/year associated with cooking
     var cooking_CO2 = (119 + 24 * data.occupancy) / data.TFA;
     data.LAC.EC = cooking_CO2 * data.TFA / 0.519; // We stimate the clculation of annual energy use from the emissions
-
+    for (m = 0; m < 12; m++)
+        data.LAC.EC_monthly = data.LAC.EC / 12;
     if (GC > 0 && data.LAC.use_SAP_cooking) {
         data.gains_W["Cooking"] = GC_monthly;
-        data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC};
+        data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC, monthly: data.LAC.EC_monthly};
     }
 
     data.LAC.GC = data.LAC.EC;
@@ -1054,6 +1140,12 @@ calc.water_heating = function (data)
         data.water_heating.volume_factor_b = 0;
     if (data.water_heating.temperature_factor_b == undefined)
         data.water_heating.temperature_factor_b = 0;
+    if (data.water_heating.system == undefined)
+        data.water_heating.system = 'Other';
+    if (data.water_heating.Vc == undefined)
+        data.water_heating.Vc = 0;
+    if (data.water_heating.storage == undefined)
+        data.water_heating.storage = false;
     data.water_heating.Vd_average = (25 * data.occupancy) + 36;
     if (data.water_heating.low_water_use_design)
         data.water_heating.Vd_average *= 0.95;
@@ -1067,6 +1159,7 @@ calc.water_heating = function (data)
     var total_heat_required = [];
     var hot_water_heater_output = [];
     var heat_gains_from_water_heating = [];
+    // Monthly energy content
     if (data.water_heating.override_annual_energy_content == 1) {
         // We don't need to calculate data.water_heating.annual_energy_content as it has been inputed in waterheating.html
         for (var m = 0; m < 12; m++)
@@ -1081,15 +1174,17 @@ calc.water_heating = function (data)
         }
     }
 
-    //----------------------------------------------------------------------------------------
-    // Only calculate losses for storage and distribution if not instantaneous heating
+    // Losses and Total heat required
+    // Only calculate losses for storage and distribution if not instantaneous heating at point of use
     if (!data.water_heating.instantaneous_hotwater)
     {
         // STORAGE LOSS kWh/d
-        if (data.water_heating.declared_loss_factor_known) {
-            energy_lost_from_water_storage = data.water_heating.manufacturer_loss_factor * data.water_heating.temperature_factor_a;
-        } else {
-            energy_lost_from_water_storage = data.water_heating.storage_volume * data.water_heating.loss_factor_b * data.water_heating.volume_factor_b * data.water_heating.temperature_factor_b;
+        if (data.water_heating.storage) {
+            if (data.water_heating.declared_loss_factor_known) {
+                energy_lost_from_water_storage = data.water_heating.manufacturer_loss_factor * data.water_heating.temperature_factor_a;
+            } else {
+                energy_lost_from_water_storage = data.water_heating.storage_volume * data.water_heating.loss_factor_b * data.water_heating.volume_factor_b * data.water_heating.temperature_factor_b;
+            }
         }
 
         for (var m = 0; m < 12; m++) {
@@ -1097,54 +1192,57 @@ calc.water_heating = function (data)
             // DISTRIBUTION LOSSES
             distribution_loss[m] = 0.15 * monthly_energy_content[m];
             // MONTHLY STORAGE LOSSES
-            monthly_storage_loss[m] = datasets.table_1a[m] * energy_lost_from_water_storage;
-            if (data.water_heating.contains_dedicated_solar_storage_or_WWHRS && data.water_heating.storage_volume > 0) {
-                monthly_storage_loss[m] = monthly_storage_loss[m] * ((data.water_heating.storage_volume - data.water_heating.Vs) / (data.water_heating.storage_volume));
+            if (data.water_heating.storage) {
+                monthly_storage_loss[m] = datasets.table_1a[m] * energy_lost_from_water_storage;
+                if (data.water_heating.contains_dedicated_solar_storage_or_WWHRS && data.water_heating.storage_volume > 0) {
+                    monthly_storage_loss[m] = monthly_storage_loss[m] * ((data.water_heating.storage_volume - data.water_heating.Vs) / (data.water_heating.storage_volume));
+                }
             }
 
             var hours_per_day = 0;
             // PRIMARY CIRCUIT LOSSES
-            if (m >= 5 && m <= 8) {
-                hours_per_day = 3;
-            } else {
-                if (data.water_heating.hot_water_control_type == "no_cylinder_thermostat")
-                    hours_per_day = 11;
-                if (data.water_heating.hot_water_control_type == "cylinder_thermostat_without_timer")
-                    hours_per_day = 5;
-                if (data.water_heating.hot_water_control_type == "cylinder_thermostat_with_timer")
+            if (data.water_heating.system == 'Other') { // Table 3 
+                if (m >= 5 && m <= 8) {
                     hours_per_day = 3;
+                } else {
+                    if (data.water_heating.hot_water_control_type == "no_cylinder_thermostat")
+                        hours_per_day = 11;
+                    if (data.water_heating.hot_water_control_type == "cylinder_thermostat_without_timer")
+                        hours_per_day = 5;
+                    if (data.water_heating.hot_water_control_type == "cylinder_thermostat_with_timer")
+                        hours_per_day = 3;
+                    if (data.water_heating.community_heating)
+                        hours_per_day = 3;
+                }
+
                 if (data.water_heating.community_heating)
-                    hours_per_day = 3;
+                    data.water_heating.pipework_insulated_fraction = 1.0;
+                primary_circuit_loss[m] = datasets.table_1a[m] * 14 * ((0.0091 * data.water_heating.pipework_insulated_fraction + 0.0245 * (1 - data.water_heating.pipework_insulated_fraction)) * hours_per_day + 0.0263);
+                if (data.water_heating.solar_water_heating)
+                    primary_circuit_loss[m] *= datasets.table_h4[m];
             }
 
-            if (data.water_heating.community_heating)
-                data.water_heating.pipework_insulated_fraction = 1.0;
-            primary_circuit_loss[m] = datasets.table_1a[m] * 14 * ((0.0091 * data.water_heating.pipework_insulated_fraction + 0.0245 * (1 - data.water_heating.pipework_insulated_fraction)) * hours_per_day + 0.0263);
-            if (data.water_heating.solar_water_heating)
-                primary_circuit_loss[m] *= datasets.table_h4[m];
-
             // Combi loss for each month from Table 3a, 3b or 3c (enter “0” if not a combi boiler)
-            if (data.water_heating.combi_boiler != 'None') {
+            if (data.water_heating.system == "Combi boiler") {
                 if (Vd_m[m] < 100)
                     var fu = Vd_m[m] / 100;
                 else
                     var fu = 1;
-
                 switch (data.water_heating.combi_boiler)
                 {
-                    case 'Instantaneous, without keep-hot facility':
+                    case 'instantaneous_KH':
                         combi_loss[m] = 600 * fu * datasets.table_1a[m] / 365;
                         break;
-                    case 'Instantaneous, with keep-hot facility controlled by time clock':
+                    case 'instantaneous_KH_TC':
                         combi_loss[m] = 600 * datasets.table_1a[m] / 365;
                         break;
-                    case 'Instantaneous, with keep-hot facility not controlled by time clock':
+                    case 'instantaneous_KH_nTC':
                         combi_loss[m] = 900 * datasets.table_1a[m] / 365;
                         break;
-                    case 'Storage combi boiler, store volume > 55 litres':
+                    case 'storage_over55':
                         combi_loss[m] = 0;
                         break;
-                    case 'Storage combi boiler, store volume < 55 litres':
+                    case 'storage_less55':
                         combi_loss[m] = (600 - (data.water_heating.Vc - 15) * 15) * fu * datasets.table_1a[m] / 365;
                         break;
                 }
@@ -1161,7 +1259,14 @@ calc.water_heating = function (data)
             total_heat_required[m] = 0.85 * monthly_energy_content[m];
     }
 
-    //----------------------------------------------------------------------------------------
+    data.water_heating.monthly_energy_content = monthly_energy_content;
+    data.water_heating.distribution_loss = distribution_loss;
+    data.water_heating.energy_lost_from_water_storage = energy_lost_from_water_storage;
+    data.water_heating.monthly_storage_loss = monthly_storage_loss;
+    data.water_heating.primary_circuit_loss = primary_circuit_loss;
+    data.water_heating.combi_loss = combi_loss;
+    data.water_heating.total_heat_required = total_heat_required;
+    // WH energy requirements and gains
     var waterheating_gains = [];
     var annual_waterheating_demand = 0;
     for (var m = 0; m < 12; m++) {
@@ -1178,20 +1283,19 @@ calc.water_heating = function (data)
         if (data.water_heating.hot_water_store_in_dwelling || data.water_heating.community_heating) {
             heat_gains_from_water_heating[m] = 0.25 * (0.85 * monthly_energy_content[m] + data.water_heating.combi_loss[m]) + 0.8 * (distribution_loss[m] + monthly_storage_loss[m] + primary_circuit_loss[m]);
         } else {
-            heat_gains_from_water_heating[m] = 0.25 * (0.85 * monthly_energy_content[m]) + 0.8 * (distribution_loss[m] + primary_circuit_loss[m]);
+            heat_gains_from_water_heating[m] = 0.25 * (0.85 * monthly_energy_content[m] + data.water_heating.combi_loss[m]) + 0.8 * (distribution_loss[m] + primary_circuit_loss[m]);
         }
 
         // Table 5 typical gains
         waterheating_gains[m] = (1000 * heat_gains_from_water_heating[m]) / (datasets.table_1a[m] * 24);
     }
 
-
-    //if (data.use_water_heating) {
+    data.water_heating.hot_water_heater_output = hot_water_heater_output;
+    data.water_heating.annual_waterheating_demand = annual_waterheating_demand;
+    data.water_heating.heat_gains_from_water_heating = heat_gains_from_water_heating;
     data.gains_W["waterheating"] = waterheating_gains;
     if (annual_waterheating_demand > 0)
-        data.energy_requirements.waterheating = {name: "Water Heating", quantity: annual_waterheating_demand};
-    //}
-
+        data.energy_requirements.waterheating = {name: "Water Heating", quantity: annual_waterheating_demand, monthly: hot_water_heater_output};
     return data;
 };
 calc.applianceCarbonCoop = function (data) {
@@ -1209,6 +1313,7 @@ calc.applianceCarbonCoop = function (data) {
     var gas_demand = 0;
     // Variables in the data object that hold the results
     data.applianceCarbonCoop.energy_demand_total = {appliances: 0, cooking: 0, total: 0};
+    data.applianceCarbonCoop.energy_demand_monthly = {appliances: [], cooking: [], total: []};
     //data.applianceCarbonCoop.primary_energy_total = {appliances: 0, cooking: 0, total: 0};
     //data.applianceCarbonCoop.primary_energy_m2 = {appliances: 0, cooking: 0, total: 0};
     //data.applianceCarbonCoop.co2_total = {appliances: 0, cooking: 0, total: 0};
@@ -1220,6 +1325,7 @@ calc.applianceCarbonCoop = function (data) {
     };
     data.applianceCarbonCoop.gains_W = [];
     data.applianceCarbonCoop.gains_W_monthly = {};
+    //Energy demand
     // We do the calculations for each appliance in the list
     for (z in data.applianceCarbonCoop.list) {
         appliance = data.applianceCarbonCoop.list[z];
@@ -1270,7 +1376,13 @@ calc.applianceCarbonCoop = function (data) {
             data.applianceCarbonCoop.energy_demand.appliances.gas += gas_demand;
         }
     }
+    for (m = 0; m < 12; m++) {
+        data.applianceCarbonCoop.energy_demand_monthly.appliances[m] = data.applianceCarbonCoop.energy_demand_total.appliances / 12;
+        data.applianceCarbonCoop.energy_demand_monthly.cooking[m] = data.applianceCarbonCoop.energy_demand_total.cooking / 12;
+        data.applianceCarbonCoop.energy_demand_monthly.total[m] = data.applianceCarbonCoop.energy_demand_total.appliances / 12 + data.applianceCarbonCoop.energy_demand_total.cooking / 12;
+    }
 
+    //Gains
     data.applianceCarbonCoop.gains_W['Appliances'] = data.applianceCarbonCoop.energy_demand_total.appliances;
     data.applianceCarbonCoop.gains_W['Cooking'] = data.applianceCarbonCoop.energy_demand_total.cooking;
     data.applianceCarbonCoop.gains_W_monthly['Appliances'] = [];
@@ -1283,12 +1395,20 @@ calc.applianceCarbonCoop = function (data) {
     if (data.use_applianceCarbonCoop) {
 
         if (data.applianceCarbonCoop.energy_demand_total.appliances > 0) {
-            data.energy_requirements.appliances = {name: "Appliances", quantity: data.applianceCarbonCoop.energy_demand_total.appliances};
+            data.energy_requirements.appliances = {
+                name: "Appliances",
+                quantity: data.applianceCarbonCoop.energy_demand_total.appliances,
+                monthly: data.applianceCarbonCoop.energy_demand_monthly.appliances
+            };
             data.gains_W["Appliances"] = data.applianceCarbonCoop.gains_W_monthly['Appliances'];
         }
 
         if (data.applianceCarbonCoop.energy_demand_total.cooking > 0) {
-            data.energy_requirements.cooking = {name: "Cooking", quantity: data.applianceCarbonCoop.energy_demand_total.cooking};
+            data.energy_requirements.cooking = {
+                name: "Cooking",
+                quantity: data.applianceCarbonCoop.energy_demand_total.cooking,
+                monthly: data.applianceCarbonCoop.energy_demand_monthly.cooking
+            };
             data.gains_W["Cooking"] = data.applianceCarbonCoop.gains_W_monthly['Cooking'];
         }
     }
@@ -1304,6 +1424,10 @@ calc.appliancelist = function (data)
     }
 
     data.appliancelist.annualkwh = data.appliancelist.totalwh * 365 * 0.001;
+    data.appliancelist.monthlykwh = [];
+    for (m = 0; m < 12; m++)
+        data.appliancelist.monthlykwh[m] = data.appliancelist.annualkwh / 12;
+
     data.appliancelist.gains_W = data.appliancelist.totalwh / 24.0;
     data.appliancelist.gains_W_monthly = [];
     for (var m = 0; m < 12; m++)
@@ -1311,7 +1435,7 @@ calc.appliancelist = function (data)
     if (data.use_appliancelist) {
         data.gains_W["Appliances"] = data.appliancelist.gains_W_monthly;
         if (data.appliancelist.annualkwh > 0)
-            data.energy_requirements.appliances = {name: "Appliances", quantity: data.appliancelist.annualkwh};
+            data.energy_requirements.appliances = {name: "Appliances", quantity: data.appliancelist.annualkwh, monthly: data.appliancelist.monthlykwh};
     }
 
     return data;
@@ -1548,13 +1672,14 @@ calc.currentenergy = function (data)
 calc.fans_and_pumps = function (data) {
 
     // 1.- Annual energy requirements for pumps, fans and electric keep-hot
-    var annual_energy = 0
+    var annual_energy = 0;
+    var monthly_energy = [];
 
     // From heating systems
     if (data.energy_systems != undefined && data.energy_systems.space_heating != undefined) {
         for (system in data.energy_systems.space_heating) {
-            annual_energy += data.energy_systems.space_heating[system].fans_and_pumps;
-            annual_energy += data.energy_systems.space_heating[system].combi_keep_hot; // I assume that if there is a combi boiler, it is used for water and space heating. We only want to check if there is a "combi keep hot facility" once, so i do it in space heating but not in water heating
+            annual_energy += 1 * data.energy_systems.space_heating[system].fans_and_pumps;
+            annual_energy += 1 * data.energy_systems.space_heating[system].combi_keep_hot; // I assume that if there is a combi boiler, it is used for water and space heating. We only want to check if there is a "combi keep hot facility" once, so i do it in space heating but not in water heating
         }
     }
 
@@ -1580,9 +1705,35 @@ calc.fans_and_pumps = function (data) {
             annual_energy += 50;
     }
 
+    for (m = 0; m < 12; m++)
+        monthly_energy[m] = annual_energy / 12;
+
     if (annual_energy > 0)
-        data.energy_requirements.fans_and_pumps = {name: "Fans and pumps", quantity: annual_energy};
-    // 2.- Internal heat gains - SAP2012 table 5, p. 215
+        data.energy_requirements.fans_and_pumps = {name: "Fans and pumps", quantity: annual_energy, monthly: monthly_energy};
+};
+// Internal and solar gains
+calc.gains = function (data) {
+    // Solar gains are calculated in Fabric
+    // Lighting, cooking and appliances are calculated in LAC or CarbonCoop appliances or deteailed appliances list
+    // Water heating gains are calculated in water_heating
+
+    //Internal gains for "Metabolic" and "Losses"
+    data.gains_W['metabolic'] = new Array();
+    data.gains_W['losses'] = new Array();
+    for (m = 0; m < 12; m++) {
+        if (typeof data.space_heating === 'object') {
+            if (data.space_heating.use_utilfactor_forgains) {
+                data.gains_W['metabolic'][m] = 60 * data.occupancy;
+                data.gains_W['losses'][m] = -40 * data.occupancy;
+            }
+            else {
+                data.gains_W['metabolic'][m] = 50 * data.occupancy;
+                data.gains_W['losses'][m] = -40 * data.occupancy;
+            }
+        }
+    }
+
+    //  Fans and Pumps - SAP2012 table 5, p. 215
     var monthly_heat_gains = 0;
     data.gains_W['fans_and_pumps'] = new Array();
     // Note: From if there was an oil boiler with pump inside dweling we should add 10W of gains, the problem is that i don't know where in MHEP we can as this. Therefor we assume taht in the case of havin an oil boiler the pump is outside :(
@@ -1603,6 +1754,16 @@ calc.fans_and_pumps = function (data) {
 
     for (var i = 0; i < 12; i++)
         data.gains_W['fans_and_pumps'][i] = monthly_heat_gains;
+    // Results    
+    data.total_internal_gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    data.total_internal_and_solar_gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    for (m = 0; m < 12; m++) {
+        for (g in data.gains_W) {
+            data.total_internal_and_solar_gains[m] += data.gains_W[g][m];
+            if (g != 'solar')
+                data.total_internal_gains[m] += data.gains_W[g][m];
+        }
+    }
 };
 //---------------------------------------------------------------------------------------------
 // SEPERATED MODEL FUNCTIONS

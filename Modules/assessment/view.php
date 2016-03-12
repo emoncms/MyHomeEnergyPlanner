@@ -13,7 +13,7 @@ global $reports;
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r6.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r7.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesCarbonCoop-r1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
@@ -97,6 +97,7 @@ global $reports;
                         <div class="scenario-nav-heading">Other</a></div>
                         <div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
                         <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
+                        <div class="scenario-nav"><a href="#template/worksheets">SAP worksheets</a></div>
                         <!--<div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>-->
                         <br>
                         <div class="scenario-nav delete-scenario-launch">Delete scenario <i class="icon-trash"></i></div>
@@ -288,14 +289,14 @@ global $reports;
     InitUI();
     UpdateUI(data);
     draw_openbem_graphics();
-
+    console.log(project[scenario].locked);
     // Lock/unlock
     $('#content button').addClass('if-not-locked');
     $('#content i').addClass('if-not-locked');
-    if (project[scenario].locked == false)
-        $('.if-not-locked').show();
-    else
+    if (project[scenario].locked != undefined && project[scenario].locked == true)
         $('.if-not-locked').hide();
+    else
+        $('.if-not-locked').show();
 
     // Show lock in scenario
     for (s in project) {
@@ -426,6 +427,18 @@ global $reports;
                 }
             }
         }
+
+        //Dom
+        /*for (scenario in project) {
+            for (z in project[scenario].energy_systems) {
+                for (index in project[scenario].energy_systems[z]) {
+                    if (p.id == 12) {
+                        var system = project[scenario].energy_systems[z][index].system;
+                        project[scenario].energy_systems[z][index].fuel = project[scenario].systemlibrary[system].fuel;
+                    }
+                }
+            }
+        }*/
     }
 
     $("#openbem").on("change", '[key]', function () {
