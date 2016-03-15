@@ -5,6 +5,7 @@ function libraryHelper(type, container) {
 
     // Variables to link the view with the controller
     this.type = type;
+    this.library_id = 0;
     //this.library_html_strings ={};
 
     this.init();
@@ -15,6 +16,7 @@ function libraryHelper(type, container) {
 
 }
 
+//  //if ($('#library-select').val() != undefined) Needs to be removed from every function where it appears. Ensure we always pass the library id
 
 /***********************************
  * Methods called in the constructor
@@ -55,15 +57,11 @@ libraryHelper.prototype.add_events = function () {
         $('.modal').modal('hide');
     });
     this.container.on('click', '#create-in-library', function () {
-        var library_id = null;
-        if ($(this).attr('library-id') != '')
-            library_id = $(this).attr('library-id');
+        library_id = $(this).attr('library-id');
         myself.onCreateInLibrary(library_id);
     });
     this.container.on('click', '#create-in-library-ok', function () {
-        var library_id = null;
-        if ($(this).attr('library-id') != undefined)
-            library_id = $(this).attr('library-id');
+        library_id = $(this).attr('library-id');
         myself.onCreateInLibraryOk(library_id);
     });
     this.container.on('change', "[name=empty_or_copy_item]", function () {
@@ -187,8 +185,8 @@ libraryHelper.prototype.onAddItemFromLib = function (origin) {
     $("#show-library-modal").modal('show');
 };
 libraryHelper.prototype.onOpenShareLib = function (selected_library) {
-    if ($('#library-select').val() != undefined)
-        selected_library = $('#library-select').val();
+    //if ($('#library-select').val() != undefined)
+    //selected_library = $('#library-select').val();
     this.display_library_users(selected_library);
     $('#modal-share-library #share-library').attr('library-id', selected_library);
     $('.modal').modal('hide');
@@ -198,8 +196,8 @@ libraryHelper.prototype.onShareLib = function (selected_library) {
     $('#return-message').html('');
     var username = $("#sharename").val();
     var write_permissions = $('#write_permissions').is(":checked");
-    if ($('#library-select').val() != undefined)
-        selected_library = $('#library-select').val();
+    //if ($('#library-select').val() != undefined)
+    //selected_library = $('#library-select').val();
     var myself = this;
     if (selected_library != -1) {
         $.ajax({
@@ -251,8 +249,9 @@ libraryHelper.prototype.onSelectingLibraryToShow = function (origin) {
     else {
         $('#library_table').html('');
         var function_name = this.type + '_library_to_html';
-        out = this[function_name](origin);
+        out = this[function_name](origin, id);
         $("#library_table").html(out);
+        $('#create-in-library').attr('library-id', id);
         // Hide/show "share" option according to the permissions
         if (this.library_permissions[id].write == 0)
             $('.if-write').hide();
@@ -364,8 +363,8 @@ libraryHelper.prototype.onCreateInLibrary = function (library_id) {
 };
 libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
     $("#create-in-library-message").html('');
-    if ($('#library-select').val() != undefined)
-        library_id = $('#library-select').val();
+    //if ($('#library-select').val() != undefined)
+    //library_id = $('#library-select').val();
     var selected_library = this.get_library_by_id(library_id);
     var item = {};
     // Call to specific function for the type
@@ -461,8 +460,8 @@ libraryHelper.prototype.onEditLibraryItem = function (origin) {
 };
 libraryHelper.prototype.onEditLibraryItemOk = function (library_id) {
     $("#edit-item-message").html('');
-    if ($('#library-select').val() != undefined)
-        library_id = $('#library-select').val();
+    //if ($('#library-select').val() != undefined)
+    //library_id = $('#library-select').val();
     var selected_library = this.get_library_by_id(library_id);
     var item = {};
     // Call to specific function for the type
@@ -756,8 +755,8 @@ libraryHelper.prototype.systems_library_to_html = function (origin, library_id) 
         eid = $(origin).attr('eid');
     else
         eid = '';
-    if ($('#library-select').val() != undefined)
-        library_id = $('#library-select').val();
+    //if ($('#library-select').val() != undefined)
+    //library_id = $('#library-select').val();
     selected_library = this.get_library_by_id(library_id);
     $('#library-select').attr('eid', eid);
     var out = "";
@@ -785,8 +784,8 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
         tag = $(origin).attr('tags').split(',');
     else
         tag = ['Wall'];
-    if ($('#library-select').val() != undefined)
-        library_id = $('#library-select').val();
+    //if ($('#library-select').val() != undefined)
+    //library_id = $('#library-select').val();
     var element_library = this.get_library_by_id(library_id).data;
     $('#library-select').attr('tags', tag);
 
@@ -1139,12 +1138,14 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
     }
     $('#show-library-modal .modal-header h3').html(header);
     // Draw the library
+    var id = $('#library-select').val();
     $('#library_table').html('');
     var function_name = this.type + '_library_to_html';
-    out = this[function_name](origin);
+    out = this[function_name](origin, id);
     $("#library_table").html(out);
+    // Add library id to "Add item from library" button
+    $('#create-in-library').attr('library-id', id);
     // Hide/show "share" option according to the permissions
-    var id = $('#library-select').val();
     if (this.library_permissions[id].write == 0)
         $('.if-write').hide();
     else

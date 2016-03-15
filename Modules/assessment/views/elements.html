@@ -60,7 +60,7 @@
 
         <tbody id="element-template" style="display:none">
             <tr>
-                <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span> - <span key="data.fabric.elements.template.name" style="width:60px"></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m2</span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m2</span><br /><span style="font-size:0.8em" title="fabric-template-title">more...</span></td>
+                <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span> - <span key="data.fabric.elements.template.name" style="width:60px"></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m<sup>2</sup></span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m<sup>2</sup></span><br /><span style="font-size:0.8em" title="fabric-template-title">more...</span></td>
                 <td><input type="text" class="label-location" key="data.fabric.elements.template.location" /></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
@@ -90,7 +90,7 @@
 
     </table>
 
-    <p>Total wall area: <span key="data.fabric.total_wall_area" dp=1></span> m2</p>
+    <p>Total wall area: <span key="data.fabric.total_wall_area" dp=1></span> m<sup>2</sup></p>
 
     <hr>
 
@@ -115,7 +115,7 @@
 
     </table>
 
-    <p>Total party wall area: <span key="data.fabric.total_party_wall_area" dp=1></span> m2</p>
+    <p>Total party wall area: <span key="data.fabric.total_party_wall_area" dp=1></span> m<sup>2</sup></p>
 
     <hr>
 
@@ -143,7 +143,7 @@
 
     </table>
 
-    <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m2</p>
+    <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m<sup>2</sup></p>
 
     <hr>
     <h3>Roofs</h3>
@@ -166,7 +166,7 @@
 
     </table>
 
-    <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m2</p>
+    <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m<sup>2</sup></p>
 
     <hr>
     <h3>Windows, doors and roof-lights</h3>
@@ -263,12 +263,12 @@
 
     </table>
 
-    <p>Total window area: <span key="data.fabric.total_window_area" dp=2></span> m2</p>
+    <p>Total window area: <span key="data.fabric.total_window_area" dp=2></span> m<sup>2</sup></p>
 
     <hr>
     <h3>Thermal Bridging</h3><hr>
     <table class="table">
-        <tr><td>Total External Area: </td><td colspan="2"><span key="data.fabric.total_external_area" dp=2></span> m2</td></tr>
+        <tr><td>Total External Area: </td><td colspan="2"><span key="data.fabric.total_external_area" dp=2></span> m<sup>2</sup></td></tr>
         <tr><td>Thermal bridging heat loss factor (y)</td><td><input type="number" step="0.01" min="0" value="0.15" key="data.fabric.thermal_bridging_yvalue" style="width:60px" /> W/m<sup>2</sup>.K</td><td><button id="apply-measure-TB if-not-master" style="margin-left:15px; vertical-align: 25%">Apply measure</button></td></tr>
         <tr><td>Thermal bridging heat loss: </td><td colspan="2"><span key="data.fabric.thermal_bridging_heat_loss" dp=2></span> W/K</td></tr>
     </table>
