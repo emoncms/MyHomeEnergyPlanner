@@ -82,8 +82,8 @@ global $reports;
                     <div style="padding:10px">
                         <div class="scenario-nav" style="float:right"><span class="lock"></span></div>
                         <div class="scenario-nav-heading">Core input</div>
-                        <div class="scenario-nav"><a href="#template/context">Floors</a></div>
-                        <div class="scenario-nav"><a href="#template/ventilation">Ventilation</a></div>
+                        <div class="scenario-nav"><a href="#template/context">Basic Dwelling Data</a></div>
+                        <div class="scenario-nav"><a href="#template/ventilation">Ventilation and Infiltration</a></div>
                         <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
                         <div class="scenario-nav"><a href="#template/system">Energy Systems</a></div>
                         <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
