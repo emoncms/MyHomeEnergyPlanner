@@ -651,6 +651,25 @@ class Assessment {
             return $result;
         }
     }
+    
+    public function additemtolibrary($userid, $library_id, $item, $tag) {
+        $userid = (int) $userid;
+        $library_id = (int) $library_id;
+        //$item = preg_replace('/[^\w\s"\':\,{}]/', '', $item);
+        $item=  json_decode($item);
+        $tag=   preg_replace('/[^\w\s]/', '', $tag);
+        if (!$this->has_write_access_library($userid, $library_id))
+            return "You haven't got enough permissions";
+        else {
+            $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id` = '$library_id'");
+            $row = $result->fetch_object();
+            $library = json_decode($row->data, true);
+            $library[$tag] = $item;
+            $library = json_encode($library);
+            $result = $this->mysqli->query("UPDATE element_library SET `data`='$library' WHERE `id` = '$library_id'");
+            return $result;
+        }
+    }
 
 // ------------------------------------------------------------------------------------------------
 // IMAGE GALLERY

@@ -30,6 +30,7 @@ libraryHelper.prototype.init = function () {
 libraryHelper.prototype.add_events = function () {
     var myself = this;
     this.container.on('click', '.add-from-lib', function () {
+        myself.init(); // Reload the lobrary before we display it
         myself.onAddItemFromLib($(this));
     });
     this.container.on('click', '#open-share-library', function () {
@@ -113,6 +114,7 @@ libraryHelper.prototype.add_events = function () {
         myself.onEditLibraryNameOk();
     });
     this.container.on('click', '.show-items', function () {
+        myself.init(); // Reload the lobrary before we display it
         myself.onShowLibraryItems($(this).attr('library-id'));
     });
     this.container.on('change', '#show-library-items-modal .element-type select', function () {
@@ -125,6 +127,7 @@ libraryHelper.prototype.add_events = function () {
     })
 
     this.container.on('click', '.manage-users', function () {
+        myself.init(); // Reload the lobrary before we display it
         myself.onOpenShareLib($(this).attr('library-id'));
     });
     this.container.on('click', '.create-new-library', function () {
@@ -138,6 +141,7 @@ libraryHelper.prototype.add_events = function () {
         myself.onDeleteLibraryOk($(this).attr('library-id'));
     });
     this.container.on('click', '.add-item', function () {
+        myself.init(); // Reload the lobrary before we display it
         var library_id = $(this).attr('library-id');
         myself.type = myself.get_library_by_id(library_id).type;
         myself.onCreateInLibrary(library_id);
@@ -375,8 +379,8 @@ libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
         if (selected_library.data[tag] != undefined)
             $("#create-in-library-message").html("Tag already exist, choose another one");
         else {
-            selected_library.data[tag] = item[tag];
-            $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library.id + "&data=" + JSON.stringify(selected_library.data), success: function (result) {
+            //selected_library.data[tag] = item[tag];
+            $.ajax({type: "POST", url: path + "assessment/additemtolibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + JSON.stringify(item[tag]), success: function (result) {
                     if (result == true) {
                         $("#create-in-library-message").html("Item added to the library");
                         $('#modal-create-in-library button').hide();
