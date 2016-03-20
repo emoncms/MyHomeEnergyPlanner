@@ -36,7 +36,7 @@ $("#openbem").on("click", '.add-element', function () {
     if (type == "Roof")
         add_element("#roofs", newelementid);
     if (type == "Floor")
-        add_element("#floors", newelementid);
+        add_floor(newelementid);
     if (type == "Window" || type == "Door" || type == "Roof_light")
         add_window(newelementid);
     if (type == "Party_wall" || type == "party_wall")
@@ -189,6 +189,37 @@ function add_element(id, z)
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
 }
 
+function add_floor(z)
+{
+    console.log("hola");
+    var id = "#floors";
+    var element = data.fabric.elements[z];
+    var title = "\nDescription: " + element.description + "\nSource: " + element.source + "\nPerformance: " +
+            element.performance + "\nBenefits: " + element.benefits + "\nCost: " + element.cost +
+            "\nWho by: " + element.who_by + "\nDisruption" + element.disruption + "\nAssociated work: " +
+            element.associated_work + "\nKey risks: " + element.key_risks + "\nNotes: " + element.notes +
+            "\nMaintenance: " + element.maintenance;
+
+    $(id).append($("#floor-template").html());
+    $(id + " [key='data.fabric.elements.template.type']").attr('key', 'data.fabric.elements.' + z + '.type');
+    $(id + " [key='data.fabric.elements.template.name']").attr('key', 'data.fabric.elements.' + z + '.name');
+    $(id + " [key='data.fabric.elements.template.location']").attr('key', 'data.fabric.elements.' + z + '.location');
+    $(id + " [key='data.fabric.elements.template.lib']").attr('key', 'data.fabric.elements.' + z + '.lib');
+    $(id + " [key='data.fabric.elements.template.l']").attr('key', 'data.fabric.elements.' + z + '.l');
+    $(id + " [key='data.fabric.elements.template.h']").attr('key', 'data.fabric.elements.' + z + '.h');
+    $(id + " [key='data.fabric.elements.template.area']").attr('key', 'data.fabric.elements.' + z + '.area');
+    $(id + " [key='data.fabric.elements.template.uvalue']").attr('key', 'data.fabric.elements.' + z + '.uvalue');
+    $(id + " [key='data.fabric.elements.template.kvalue']").attr('key', 'data.fabric.elements.' + z + '.kvalue');
+    $(id + " [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
+    $(id + " [key='data.fabric.elements.template.EWI']").html(data.fabric.elements[z].EWI == true ? 'EWI' : '');
+    $(id + " [key='data.fabric.elements.template.EWI']").removeAttr('key');
+    $(id + " [row='template']").attr('row', z);
+    $(id + " [item_id='template']").attr('item_id', data.fabric.elements[z].id);
+    $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
+    $(id + " [title='fabric-template-title']").attr('title', title);
+    $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
+}
+
 function add_window(z)
 {
     var element = data.fabric.elements[z];
@@ -323,7 +354,7 @@ function elements_initUI()
         if (type == 'Wall' || type == 'wall') {
             add_element("#elements", z);
         } else if (type == 'Floor' || type == 'floor') {
-            add_element("#floors", z);
+            add_floor(z);
         } else if (type == 'Roof' || type == 'roof') {
             add_element("#roofs", z);
         } else if (type == 'Window' || type == 'window' || type == 'Door' || type == 'Roof_light') {

@@ -119,32 +119,6 @@
 
     <hr>
 
-
-
-
-
-    <h3>Floors</h3>
-    <hr>
-
-    <table class="table">
-
-        <tbody id="floors"></tbody>
-
-        <tr>
-            <td style="text-align:left">
-                <button class="btn add-from-lib" tags="Floor">Add floor from library</button>
-            </td>
-            <td></th>
-            <td></td>
-            <td></th>
-            <td></td>
-            <td></td>
-        </tr>
-
-    </table>
-
-    <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m<sup>2</sup></p>
-
     <hr>
     <h3>Roofs</h3>
     <hr>
@@ -167,6 +141,58 @@
     </table>
 
     <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m<sup>2</sup></p>
+    <hr>
+
+
+
+    <h3>Floors</h3>
+    <hr>
+
+    <table class="table">
+        <tr>
+            <th style="text-align:left">Element</th>
+            <th>Label/Location</th>
+            <th>U-value</th>
+            <th>Length<br>(m)</th>
+            <th>Height<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>W/K</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody id="floor-template" style="display:none">
+            <tr>
+                <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span> - <span key="data.fabric.elements.template.name" style="width:60px"></span></b><br><!--U-value: <span key="data.fabric.elements.template.uvalue"></span><span style="font-size:0.8em">W/K.m<sup>2</sup></span>, --> k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m<sup>2</sup></span><br /><span style="font-size:0.8em" title="fabric-template-title">more...</span></td>
+                <td><input type="text" class="label-location" key="data.fabric.elements.template.location" /></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.uvalue"  dp=2 style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
+                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>   
+                <td><button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button></td>
+                <td><span class="edit-item" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tag="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
+                <td><span class="delete-element" row="template" style="cursor:pointer" item_id="template"  title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span></td>
+            </tr>
+        </tbody>
+        <tbody id="floors"></tbody>
+
+        <tr>
+            <td style="text-align:left">
+                <button class="btn add-from-lib" tags="Floor">Add floor from library</button>
+            </td>
+            <td></th>
+            <td></td>
+            <td></th>
+            <td></td>
+            <td></td>
+        </tr>
+
+    </table>
+
+    <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m<sup>2</sup></p>
+
+
 
     <hr>
     <h3>Windows, doors and roof-lights</h3>
@@ -211,7 +237,7 @@
 
                 <td style="text-align:left">
                     <b><span key="data.fabric.elements.template.lib"></span>: <span key="data.fabric.elements.template.name"></span></b> <br />
-                     U-value: <span key="data.fabric.elements.template.uvalue"></span>, K-value: <span key="data.fabric.elements.template.kvalue"></span>, g:<span key="data.fabric.elements.template.g"> </span>, gL:<span key="data.fabric.elements.template.gL"></span>, ff:<span key="data.fabric.elements.template.ff"></span>
+                    U-value: <span key="data.fabric.elements.template.uvalue"></span>, K-value: <span key="data.fabric.elements.template.kvalue"></span>, g:<span key="data.fabric.elements.template.g"> </span>, gL:<span key="data.fabric.elements.template.gL"></span>, ff:<span key="data.fabric.elements.template.ff"></span>
                     <br /><span style="font-size:0.8em" title="fabric-template-title">more...</span>
                 </td>
                 <td><input type="text" key="data.fabric.elements.template.location" style="width:150px" /></td>
