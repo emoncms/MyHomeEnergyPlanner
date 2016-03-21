@@ -418,7 +418,26 @@ calc.ventilation = function (data)
     var effective_air_change_rate = [];
     var infiltration_WK = [];
     var ventilation_WK = [];
+    var ventilation_type;
     switch (data.ventilation.ventilation_type)
+    {
+        case 'NV':
+        case 'IE':
+        case 'PS':
+            ventilation_type = 'd'; // Natural ventilation or whole house positive input ventilation from loft'
+            break;
+        case 'DEV':
+        case'MEV':
+            ventilation_type = 'c'; // Whole house extract ventilation or positive input ventilation from outside
+            break;
+        case 'MV':
+            ventilation_type = 'b'; // Balanced mechanical ventilation without heat recovery (MV)
+            break;
+        case 'MVHR':
+            ventilation_type = 'a'; //Balanced mechanical ventilation with heat recovery (MVHR)
+            break;
+    }
+    switch (ventilation_type)
     {
         case 'a':
             for (var m = 0; m < 12; m++)
