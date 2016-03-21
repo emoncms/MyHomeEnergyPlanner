@@ -332,6 +332,7 @@ var openbem = {
         for (z in data.appliancelist.list) {
             inputdata.appliancelist.list[z] = {
                 name: data.appliancelist.list[z].name,
+                category: data.appliancelist.list[z].category,
                 power: data.appliancelist.list[z].power,
                 hours: data.appliancelist.list[z].hours
             }
@@ -368,7 +369,7 @@ var openbem = {
             control_type: data.temperature.control_type,
             living_area: data.temperature.living_area,
             temperature_adjustment: data.temperature.temperature_adjustment,
-            heating_off_summer:data.temperature.heating_off_summer
+            heating_off_summer: data.temperature.heating_off_summer
         };
         // Space heating
         inputdata.space_heating = {

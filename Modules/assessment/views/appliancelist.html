@@ -8,6 +8,7 @@
 
     <tr>
         <th style="text-align:left">Item name</th>
+        <th>Category</th>
         <th>Power (W)</th>
         <th>Use time (hours)</th>
         <th>Energy (Wh)</th>
@@ -16,8 +17,13 @@
     <tbody id="template" style="display:none">
         <tr>
             <td style="text-align:left"><input style="text-align:left; width:200px" type="text" key="data.appliancelist.list.z.name"></td>
-            <td><input type="text" value="0" key="data.appliancelist.list.z.power" style="width:60px" /></th>
-            <td><input type="text" value="0" key="data.appliancelist.list.z.hours" style="width:60px" /></th>
+            <td><select key="data.appliancelist.list.z.category" style="width:200px">
+                    <option value="lighting" selected>Lighting</option>
+                    <option value="appliances">Appliances</option>
+                    <option value="cooking">Cooking</option>
+                </select></td>
+            <td><input type="text" value="0" key="data.appliancelist.list.z.power" style="width:60px" /></td>
+            <td><input type="text" value="0" key="data.appliancelist.list.z.hours" style="width:60px" /></td>
             <td><span key="data.appliancelist.list.z.energy"></span> Wh</th>
         </tr>
     </tbody>

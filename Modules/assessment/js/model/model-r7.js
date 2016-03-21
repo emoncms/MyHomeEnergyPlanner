@@ -1461,6 +1461,48 @@ calc.appliancelist = function (data)
             data.energy_requirements.appliances = {name: "Appliances", quantity: data.appliancelist.annualkwh, monthly: data.appliancelist.monthlykwh};
     }
 
+    if (data.appliancelist.lighting == undefined)
+        data.appliancelist.lighting = {};
+    if (data.appliancelist.cooking == undefined)
+        data.appliancelist.cooking = {};
+    if (data.appliancelist.appliances == undefined)
+        data.appliancelist.appliances = {};
+    if (data.LAC_choice == undefined)
+        data.LAC_choice = {};
+
+    data.appliancelist.lighting.totalwh = 0;
+    data.appliancelist.lighting.monthlykwh = [];
+    data.appliancelist.lighting.gains_W_monthly = [];
+    data.appliancelist.cooking.totalwh = 0;
+    data.appliancelist.cooking.monthlykwh = [];
+    data.appliancelist.cooking.gains_W_monthly = [];
+    data.appliancelist.appliances.totalwh = 0;
+    data.appliancelist.appliances.monthlykwh = [];
+    data.appliancelist.appliances.gains_W_monthly = [];
+
+    for (z in data.appliancelist.list) {
+        if (data.appliancelist.list[z].category != undefined)
+            var category = data.appliancelist.list[z].category;
+        else
+            var category = 'appliances';
+        data.appliancelist.list[z].energy = data.appliancelist.list[z].power * data.appliancelist.list[z].hours;
+        data.appliancelist[category].totalwh += data.appliancelist.list[z].energy;
+    }
+
+    for (category in {'lighting': '', 'appliances': '', 'cooking': ''}) {
+        data.appliancelist[category].annualkwh = data.appliancelist[category].totalwh * 365 * 0.001;
+        for (m = 0; m < 12; m++)
+            data.appliancelist[category].monthlykwh[m] = data.appliancelist[category].annualkwh * datasets.table_1a[m] / 365;
+        data.appliancelist[category].gains_W = data.appliancelist[category].totalwh / 24.0;
+        for (var m = 0; m < 12; m++)
+            data.appliancelist[category].gains_W_monthly[m] = data.appliancelist[category].gains_W;
+        if (data.LAC_choice == 'appliancelist') {
+            data.gains_W[category.charAt(0).toUpperCase() + category.slice(1)] = data.appliancelist[category].gains_W_monthly;
+            if (data.appliancelist[category].annualkwh > 0)
+                data.energy_requirements[category] = {name: category.charAt(0).toUpperCase() + category.slice(1), quantity: data.appliancelist[category].annualkwh, monthly: data.appliancelist[category].monthlykwh};
+        }
+    }
+
     return data;
 };
 calc.generation = function (data) {
