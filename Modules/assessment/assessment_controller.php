@@ -15,7 +15,7 @@ function assessment_controller() {
     if (!isset($_SESSION['backwards_comp'])) { // We only run when we start the session
         $_SESSION['backwards_comp'] = true;
 
-        // Rename standard libraries to include users name (important to identify libraries after sharing
+// Rename standard libraries to include users name (important to identify libraries after sharing
         $libresult = $mysqli->query("SELECT id,name,userid FROM element_library");
         foreach ($libresult as $row) {
             if ($row['name'] === "StandardLibrary") {
@@ -30,7 +30,7 @@ function assessment_controller() {
         }
 
 
-        // Add "type" to element library table in database (if it doesn't exist), and for all the libraries set the type to elements (this were the original type so we can be sure that at the moment of adding the column all the libraries are type "element"
+// Add "type" to element library table in database (if it doesn't exist), and for all the libraries set the type to elements (this were the original type so we can be sure that at the moment of adding the column all the libraries are type "element"
         $columns_in_table = $mysqli->query("DESCRIBE element_library");
         $field_found = false;
         foreach ($columns_in_table as $column) {
@@ -40,7 +40,7 @@ function assessment_controller() {
         if ($field_found === false)
             $mysqli->query("ALTER TABLE  `element_library` ADD  `type` VARCHAR( 255 ) NOT NULL DEFAULT  'elements' AFTER  `name`");
 
-        // Grant all the users write permissions for their own library
+// Grant all the users write permissions for their own library
         $libresult = $mysqli->query("SELECT * FROM `element_library`");
         foreach ($libresult as $row) {
             $req = $mysqli->prepare("UPDATE `element_library_access` SET `write`='1' WHERE `userid`=? AND `id`=?");
@@ -48,7 +48,7 @@ function assessment_controller() {
             $req->execute();
         }
 
-        // Add fans_and_pumps and keep hot facility for combi boilers to systems in existing libraries
+// Add fans_and_pumps and keep hot facility for combi boilers to systems in existing libraries
         $libresult = $mysqli->query("SELECT * FROM `element_library`WHERE `type`='systems'");
         foreach ($libresult as $row) {
             $library = json_decode($row['data']);
@@ -120,7 +120,7 @@ function assessment_controller() {
             }
         }
 
-        // Add party walls to users elements libraries, and if it is already there check theat the type (tags[0]) has the first letter upper case
+// Add party walls to users elements libraries, and if it is already there check theat the type (tags[0]) has the first letter upper case
         $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
         foreach ($libresult as $row) {
             $data = json_decode($row['data']);
@@ -205,7 +205,7 @@ function assessment_controller() {
             }
         }
 
-        // Add 'location' to the elements in existing libraries
+// Add 'location' to the elements in existing libraries
         $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
         foreach ($libresult as $row) {
             $update_needed = false;
@@ -224,7 +224,7 @@ function assessment_controller() {
             }
         }
 
-        // Add 'EWI' to the wall elements in existing elements_measures libraries
+// Add 'EWI' to the wall elements in existing elements_measures libraries
         $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements_measures'");
         foreach ($libresult as $row) {
             $library = json_decode($row['data']);
@@ -240,7 +240,7 @@ function assessment_controller() {
             $req->execute();
         }
 
-        // Add a Door and a Roof light to users elements libraries
+// Add a Door and a Roof light to users elements libraries
         $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
         foreach ($libresult as $row) {
             $data = json_decode($row['data']);
@@ -295,13 +295,29 @@ function assessment_controller() {
         }
     }
 
+// Floors U-value to zero
+    $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
+    foreach ($libresult as $row) {
+        $data = json_decode($row['data']);
+        foreach ($data as $tag => $element) {
+            if ($element->tags[0] === 'Floor') {
+                $element->uvalue = 0;
+            }
+        }
+        $data = json_encode($data);
+        $req = $mysqli->prepare('UPDATE element_library SET `data` = ? WHERE `id` = ?  ');
+        $req->bind_param("si", $data, $row['id']);
+        $req->execute();
+    }
+
+
     /* End backwards compatibility section */
 
 
-    // -------------------------------------------------------------------------
-    // Check if session has been authenticated, if not redirect to login page (html) 
-    // or send back "false" (json)
-    // -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
+// Check if session has been authenticated, if not redirect to login page (html) 
+// or send back "false" (json)
+// -------------------------------------------------------------------------
     if (!$session['read']) {
         if ($route->format == 'html')
             $result = view("Modules/user/login_block.php", array());
@@ -310,9 +326,9 @@ function assessment_controller() {
         return array('content' => $result);
     }
 
-    // -------------------------------------------------------------------------    
-    // Session is authenticated so we run the action
-    // -------------------------------------------------------------------------
+// -------------------------------------------------------------------------    
+// Session is authenticated so we run the action
+// -------------------------------------------------------------------------
     $result = false;
     if ($route->format == 'html') {
         if ($route->action == "view" && $session['write'])
@@ -332,9 +348,9 @@ function assessment_controller() {
         require "Modules/assessment/organisation_model.php";
         $organisation = new Organisation($mysqli);
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Create assessment
-        // -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+// Create assessment
+// -------------------------------------------------------------------------------------------------------------
         if ($route->action == 'create' && $session['write']) {
             $result = $assessment->create($session['userid'], get('name'), get('description'));
 
@@ -344,9 +360,9 @@ function assessment_controller() {
             }
         }
 
-        // -------------------------------------------------------------------------------------------------------------
-        // List assessments
-        // -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+// List assessments
+// -------------------------------------------------------------------------------------------------------------
         if ($route->action == 'list' && $session['write']) {
             if (isset($_GET['orgid'])) {
                 $orgid = $_GET['orgid'];
@@ -399,9 +415,9 @@ function assessment_controller() {
                 $result = $assessment->set_name_and_description($session['userid'], post('id'), $name, $description);
         }
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Organisation
-        // -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+// Organisation
+// -------------------------------------------------------------------------------------------------------------
         if ($route->action == 'neworganisation' && $session['write'] && isset($_GET['orgname'])) {
             $orgname = $_GET['orgname'];
             $orgid = $organisation->create($orgname, $session['userid']);
@@ -440,14 +456,14 @@ function assessment_controller() {
         if ($route->action == 'copylibrary' && $session['write'])
             $result = $assessment->copylibrary($session['userid'], get('name'), get('type'), get('id'));
 
-        // -------------------------------------------------------------------------------------------------------------
-        // Library
-        // -------------------------------------------------------------------------------------------------------------        
+// -------------------------------------------------------------------------------------------------------------
+// Library
+// -------------------------------------------------------------------------------------------------------------        
         if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
             $result = $assessment->savelibrary($session['userid'], post('id'), $_POST['data']);
         }
         if ($route->action == 'additemtolibrary' && $session['write']) {
-            $result = $assessment->additemtolibrary($session['userid'], post('library_id'), $_POST['item'],$_POST['tag']);
+            $result = $assessment->additemtolibrary($session['userid'], post('library_id'), $_POST['item'], $_POST['tag']);
         }
         if ($route->action == 'loadlibrary' && $session['write'])
             $result = $assessment->loadlibrary($session['userid'], get('id'));
@@ -475,9 +491,9 @@ function assessment_controller() {
 
         if ($route->action == 'deletelibraryitem' && $session['write'])
             $result = $assessment->deletelibraryitem($session['userid'], get('library_id'), get('tag'));
-        // -------------------------------------------------------------------------------------------------------------
-        // Image gallery
-        // -------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------
+// Image gallery
+// -------------------------------------------------------------------------------------------------------------
         if ($route->action == 'uploadimages' && $session['write'])
             $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
 
@@ -485,7 +501,7 @@ function assessment_controller() {
             $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
 
 
-        // Upgrade (temporary)    
+// Upgrade (temporary)    
         /*
           if ($route->action == "upgrade" && $session['admin'])
           {
