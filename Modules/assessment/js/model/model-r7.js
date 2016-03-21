@@ -436,6 +436,10 @@ calc.ventilation = function (data)
         case 'MVHR':
             ventilation_type = 'a'; //Balanced mechanical ventilation with heat recovery (MVHR)
             break;
+        default:
+            data.ventilation.ventilation_type = 'NV';
+            ventilation_type = 'd';
+            break;
     }
     switch (ventilation_type)
     {
