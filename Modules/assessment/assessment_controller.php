@@ -295,22 +295,6 @@ function assessment_controller() {
         }
     }
 
-// Floors U-value to zero
-    $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
-    foreach ($libresult as $row) {
-        $data = json_decode($row['data']);
-        foreach ($data as $tag => $element) {
-            if ($element->tags[0] === 'Floor') {
-                $element->uvalue = 0;
-            }
-        }
-        $data = json_encode($data);
-        $req = $mysqli->prepare('UPDATE element_library SET `data` = ? WHERE `id` = ?  ');
-        $req->bind_param("si", $data, $row['id']);
-        $req->execute();
-    }
-
-
     /* End backwards compatibility section */
 
 
