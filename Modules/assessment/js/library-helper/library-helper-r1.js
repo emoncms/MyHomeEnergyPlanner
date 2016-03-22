@@ -363,6 +363,10 @@ libraryHelper.prototype.onCreateInLibrary = function (library_id) {
 
     if (library_id != undefined)
         $('#create-in-library-ok').attr('library-id', library_id);
+    // Preselect create empty one
+    $('input:radio[name=empty_or_copy_item]').val(['empty']);
+    $('#copy-item-from').hide();
+    
     $('#modal-create-in-library').modal('show');
 };
 libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
