@@ -1,57 +1,94 @@
-function applianceCarbonCoop_initUI() {
+console.log('debug lac.js');
+
+function LAC_initUI() {
+    // Detailed list
+    for (z in data.appliancelist.list)
+        add_applianceDetailedList(z);
+
+    // Carbon Coop
     for (z in data.applianceCarbonCoop.list)
         add_applianceCarbonCoop(z);
-    //l=lib;
-
     var library = appliancesCarbonCoop; // in path/assesment/js/model/appliancesCarbonCoop-r1.js
-
     for (category in library) {
         var first = true;
         for (appliance in library[category]) {
             if (first === true) {
-                var row = "<tr><td>" + category + "</td><td>" + appliance + "</td><td><button class='add-element btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
+                var row = "<tr><td>" + category + "</td><td>" + appliance + "</td><td><button class='add-element-CarbonCoop btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
                 first = false;
             }
             else
-                var row = "<tr><td></td><td>" + appliance + "</td><td><button class='add-element btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
-            $("#library_table").append(row);
+                var row = "<tr><td></td><td>" + appliance + "</td><td><button class='add-element-CarbonCoop btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
+            $("#library_table-CarbonCoop").append(row);
         }
     }
 
-}
+    //Nothing to do to init the SAP div
 
+    // Show divs according o the type of calculation
+    show_LAC_divs(data.LAC_calculation_type)
+};
 
-function applianceCarbonCoop_UpdateUI() {
+function LAC_UpdateUI() {
     for (z in data.applianceCarbonCoop.list) {
         data.applianceCarbonCoop.list[z].energy_demand = data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
-        //data.applianceCarbonCoop.list[z].primary_energy_total = data.applianceCarbonCoop.list[z].primary_energy_total.toFixed(2);
-        //data.applianceCarbonCoop.list[z].primary_energy_m2 = data.applianceCarbonCoop.list[z].primary_energy_m2.toFixed(2);
-        //data.applianceCarbonCoop.list[z].co2_total = data.applianceCarbonCoop.list[z].co2_total.toFixed(2);
-        //data.applianceCarbonCoop.list[z].co2_m2 = data.applianceCarbonCoop.list[z].co2_m2.toFixed(2);
     }
-
     data.applianceCarbonCoop.energy_demand_total.total = data.applianceCarbonCoop.energy_demand_total.total.toFixed(2);
-    //data.applianceCarbonCoop.primary_energy_total.total = data.applianceCarbonCoop.primary_energy_total.total.toFixed(2);
-    //data.applianceCarbonCoop.primary_energy_m2.total = data.applianceCarbonCoop.primary_energy_m2.total.toFixed(2);
-    //data.applianceCarbonCoop.co2_total.total = data.applianceCarbonCoop.co2_total.total.toFixed(2);
-    //data.applianceCarbonCoop.co2_m2.total = data.applianceCarbonCoop.co2_m2.total.toFixed(2);
-
     data.applianceCarbonCoop.energy_demand_total.cooking = data.applianceCarbonCoop.energy_demand_total.cooking.toFixed(2);
-    //data.applianceCarbonCoop.primary_energy_total.cooking = data.applianceCarbonCoop.primary_energy_total.cooking.toFixed(2);
-    //data.applianceCarbonCoop.primary_energy_m2.cooking = data.applianceCarbonCoop.primary_energy_m2.cooking.toFixed(2);
-    //data.applianceCarbonCoop.co2_total.cooking = data.applianceCarbonCoop.co2_total.cooking.toFixed(2);
-    //data.applianceCarbonCoop.co2_m2.cooking = data.applianceCarbonCoop.co2_m2.cooking.toFixed(2);
-
     data.applianceCarbonCoop.energy_demand_total.appliances = data.applianceCarbonCoop.energy_demand_total.appliances.toFixed(2);
-    //data.applianceCarbonCoop.primary_energy_total.appliances = data.applianceCarbonCoop.primary_energy_total.appliances.toFixed(2);
-    //data.applianceCarbonCoop.primary_energy_m2.appliances = data.applianceCarbonCoop.primary_energy_m2.appliances.toFixed(2);
-    //data.applianceCarbonCoop.co2_total.appliances = data.applianceCarbonCoop.co2_total.appliances.toFixed(2);
-    //data.applianceCarbonCoop.co2_m2.appliances = data.applianceCarbonCoop.co2_m2.appliances.toFixed(2);
 }
 
+$('#openbem').on('change', '#LAC_calculation_type', function () {
+    show_LAC_divs($('#LAC_calculation_type').val());
+});
+
+function show_LAC_divs(type_of_calc) {
+    $('#LAC-container .to-be-hidden').hide();
+    switch (type_of_calc) {
+        case 'detailedlist':
+            $('#detailed-list').show();
+            break;
+        case 'SAP':
+            $('#lighting-SAP').show();
+            $('#appliances-SAP').show();
+            $('#cooking-SAP').show();
+            break;
+        case 'carboncoop_SAPlighting':
+            $('#lighting-SAP').show();
+            $('#CarbonCoop').show();
+            break;
+    }
+}
+
+
+/*********************
+ *  Detailed list    *
+ *  *****************/
+$("#add-item-detailedlist").click(function () {
+    var size = data.appliancelist.list.length;
+    var name = "Item " + (size + 1);
+    data.appliancelist.list.push({name: name, category: 'lighting', power: 0, hours: 0, energy: 0});
+    add_applianceDetailedList(size);
+
+    update();
+});
+
+function add_applianceDetailedList(z)
+{
+    $("#appliancelist").append($("#template-detailedlist").html());
+    $("#appliancelist [key='data.appliancelist.list.z.name']").attr('key', 'data.appliancelist.list.' + z + '.name');
+    $("#appliancelist [key='data.appliancelist.list.z.category']").attr('key', 'data.appliancelist.list.' + z + '.category');
+    $("#appliancelist [key='data.appliancelist.list.z.power']").attr('key', 'data.appliancelist.list.' + z + '.power');
+    $("#appliancelist [key='data.appliancelist.list.z.hours']").attr('key', 'data.appliancelist.list.' + z + '.hours');
+    $("#appliancelist [key='data.appliancelist.list.z.energy']").attr('key', 'data.appliancelist.list.' + z + '.energy');
+}
+
+
+/*********************
+ * Carbon Coop       *
+ ********************/
 function add_applianceCarbonCoop(z)
 {
-    $("#applianceCarbonCoop").append($("#template").html());
+    $("#applianceCarbonCoop").append($("#template-CarbonCoop").html());
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.category']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.category');
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.name']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.name');
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.number_used']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.number_used');
@@ -65,17 +102,12 @@ function add_applianceCarbonCoop(z)
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.dhw_fraction']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.dhw_fraction');
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.gas_fraction']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.gas_fraction');
     $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.energy_demand']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.energy_demand');
-    //$("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.primary_energy_total']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.primary_energy_total');
-    //$("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.primary_energy_m2']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.primary_energy_m2');
-    //$("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.co2_total']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.co2_total');
-    //$("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.co2_m2']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.co2_m2');
     $("#applianceCarbonCoop [index='z']").attr('index', z);
 }
-
-$("#add-item").click(function () {
+$("#add-item-CarbonCoop").click(function () {
     $("#myModal_applianceCarbonCooplibrary").modal('show');
 });
-$("#library_table").on('click', '.add-element', function () {
+$("#library_table-CarbonCoop").on('click', '.add-element-CarbonCoop', function () {
     var category = $(this).attr("cat");
     var appliance = $(this).attr("app");
 

@@ -91,8 +91,6 @@ global $reports;
                         <div class="scenario-nav-heading">Extended input</a></div>
 
                         <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_applianceCarbonCoop"/> <a href="#template/applianceCarbonCoop">Appliances CarbonCoop calculation</a></div>
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_appliancelist"/> <a href="#template/appliancelist">Detailed Appliance List</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
                         <div class="scenario-nav-heading">Other</a></div>
                         <div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
@@ -430,15 +428,15 @@ global $reports;
 
         //Dom
         /*for (scenario in project) {
-            for (z in project[scenario].energy_systems) {
-                for (index in project[scenario].energy_systems[z]) {
-                    if (p.id == 12) {
-                        var system = project[scenario].energy_systems[z][index].system;
-                        project[scenario].energy_systems[z][index].fuel = project[scenario].systemlibrary[system].fuel;
-                    }
-                }
-            }
-        }*/
+         for (z in project[scenario].energy_systems) {
+         for (index in project[scenario].energy_systems[z]) {
+         if (p.id == 12) {
+         var system = project[scenario].energy_systems[z][index].system;
+         project[scenario].energy_systems[z][index].fuel = project[scenario].systemlibrary[system].fuel;
+         }
+         }
+         }
+         }*/
     }
 
     $("#openbem").on("change", '[key]', function () {
@@ -455,12 +453,6 @@ global $reports;
 
             if (!isNaN(val) && val != "")
                 val *= 1;
-
-            if (key == "data.use_appliancelist" || key == "data.use_applianceCarbonCoop" || key == "data.LAC.use_SAP_appliances") {
-                data.use_appliancelist = false;
-                data.use_applianceCarbonCoop = false;
-                data.LAC.use_SAP_appliances = false;
-            }
 
             if (key == 'data.use_SHW')
                 data.water_heating.solar_water_heating = !data.use_SHW; // I don't know why but only works properly coping the negative

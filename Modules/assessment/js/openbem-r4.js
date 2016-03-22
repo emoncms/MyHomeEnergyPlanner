@@ -271,17 +271,14 @@ var openbem = {
             balanced_heat_recovery_efficiency: data.ventilation.balanced_heat_recovery_efficiency
         };
         // LAC
-        //inputdata.use_LAC = data.use_LAC;
         inputdata.LAC = {
-            use_SAP_lighting: data.LAC.use_SAP_lighting,
-            use_SAP_appliances: data.LAC.use_SAP_appliances,
-            use_SAP_cooking: data.LAC.use_SAP_cooking,
             LLE: data.LAC.LLE,
             L: data.LAC.L,
             energy_efficient_appliances: data.LAC.energy_efficient_appliances,
             energy_efficient_cooking: data.LAC.energy_efficient_cooking,
             reduced_heat_gains_lighting: data.LAC.reduced_heat_gains_lighting
         };
+        inputdata.LAC_calculation_type = data.LAC_calculation_type;
         inputdata.use_generation = data.use_generation;
         inputdata.generation = data.generation;
         inputdata.currentenergy = {
@@ -327,7 +324,6 @@ var openbem = {
             pump: data.SHW.pump
         };
         // Detailed Appliaces List
-        inputdata.use_appliancelist = data.use_appliancelist;
         inputdata.appliancelist = {list: []};
         for (z in data.appliancelist.list) {
             inputdata.appliancelist.list[z] = {
@@ -339,7 +335,6 @@ var openbem = {
         }
 
 // Apliances CarbonCoop
-        inputdata.use_applianceCarbonCoop = data.use_applianceCarbonCoop;
         inputdata.applianceCarbonCoop = {list: []};
         for (z in data.applianceCarbonCoop.list) {
             inputdata.applianceCarbonCoop.list[z] = {

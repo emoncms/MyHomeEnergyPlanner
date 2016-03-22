@@ -41,7 +41,7 @@ calc.run = function (datain)
     calc.occupancy(calc.data);
     calc.fabric(calc.data);
     calc.ventilation(calc.data);
-    calc.LAC(calc.data);
+    calc.LAC_SAP(calc.data);
     calc.water_heating(calc.data);
     calc.SHW(calc.data);
     calc.applianceCarbonCoop(calc.data);
@@ -72,6 +72,8 @@ calc.start = function (data)
         data.altitude = 0;
     if (data.household == undefined)
         data.household = {};
+    if (data.LAC_calculation_type == undefined)
+        data.LAC_calculation_type = 'SAP';
     data.num_of_floors = 0;
     data.TFA = 0;
     data.volume = 0;
@@ -976,7 +978,7 @@ calc.SAP = function (data)
 
     return data;
 };
-calc.LAC = function (data)
+calc.LAC_SAP = function (data)
 {
     if (data.LAC == undefined)
         data.LAC = {};
@@ -990,12 +992,7 @@ calc.LAC = function (data)
         data.LAC.energy_efficient_appliances = false;
     if (data.LAC.reduced_heat_gains_lighting == undefined)
         data.LAC.reduced_heat_gains_lighting = false;
-    if (data.LAC.use_SAP_lighting == undefined)
-        data.LAC.use_SAP_lighting = 1;
-    if (data.LAC.use_SAP_appliances == undefined)
-        data.LAC.use_SAP_appliances = 1;
-    if (data.LAC.use_SAP_cooking == undefined)
-        data.LAC.use_SAP_cooking = 1;
+
     // average annual energy consumption for lighting if no low-energy lighting is used is:
     data.LAC.EB = 59.73 * Math.pow((data.TFA * data.occupancy), 0.4714);
     if (data.LAC.L != 0)
@@ -1020,7 +1017,7 @@ calc.LAC = function (data)
                 GL_monthly[m] = 0.4 * GL_monthly[m];
         }
 
-        if (EL_sum > 0 && data.LAC.use_SAP_lighting) {
+        if (EL_sum > 0 && (data.LAC_calculation_type == 'SAP' || data.LAC_calculation_type == 'carboncoop_SAPlighting')) {
             data.gains_W["Lighting"] = GL_monthly;
             data.gains_W["Lighting"] = [97.18, 86.32, 70.2, 53.14, 39.73, 33.54, 36.24, 47.11, 63.22, 80.28, 93.7, 99.08];
             data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum, monthly: EL_monthly};
@@ -1053,16 +1050,15 @@ calc.LAC = function (data)
 
     // The annual CO2 emissions in kg/m2/year associated with electrical appliances is
     var appliances_CO2 = (EA * 0.522) / data.TFA;
-    if (EA > 0 && data.LAC.use_SAP_appliances) {
+    if (EA > 0 && data.LAC_calculation_type == 'SAP') {
         data.gains_W["Appliances"] = GA_monthly;
         data.energy_requirements.appliances = {name: "Appliances", quantity: EA, monthly: EA_monthly};
     }
 
     data.LAC.EA = EA;
-    /*
-     
-     Cooking
-     
+
+    /*     
+     Cooking     
      */
 
     // Internal heat gains in watts from cooking
@@ -1078,7 +1074,7 @@ calc.LAC = function (data)
     data.LAC.EC = cooking_CO2 * data.TFA / 0.519; // We stimate the clculation of annual energy use from the emissions
     for (m = 0; m < 12; m++)
         data.LAC.EC_monthly = data.LAC.EC / 12;
-    if (GC > 0 && data.LAC.use_SAP_cooking) {
+    if (GC > 0 && data.LAC_calculation_type == 'SAP') {
         data.gains_W["Cooking"] = GC_monthly;
         data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC, monthly: data.LAC.EC_monthly};
     }
@@ -1361,17 +1357,9 @@ calc.applianceCarbonCoop = function (data) {
         gas_demand = appliance.number_used * appliance.norm_demand * appliance.utilisation_factor * appliance.frequency * appliance.reference_quantity * appliance.gas_fraction;
         // Results for the appliance
         appliance.energy_demand = electric_demand_after_rating + DHW_demand + gas_demand;
-        //appliance.primary_energy_total = primary_energy_multiplier.electricity * electric_demand_after_rating + primary_energy_multiplier.DHW * DHW_demand + primary_energy_multiplier.gas * gas_demand;
-        //appliance.primary_energy_m2 = appliance.primary_energy_total / data.TFA;
-        //appliance.co2_total = co2_multiplier.electricity * electric_demand_after_rating + co2_multiplier.DHW * DHW_demand + co2_multiplier.gas * gas_demand;
-        //appliance.co2_m2 = appliance.co2_total / data.TFA;
 
         // Results: totals from all the appliances
         data.applianceCarbonCoop.energy_demand_total.total += appliance.energy_demand;
-//data.applianceCarbonCoop.primary_energy_total.total += appliance.primary_energy_total;
-        //data.applianceCarbonCoop.primary_energy_m2.total += appliance.primary_energy_m2;
-        //data.applianceCarbonCoop.co2_total.total += appliance.co2_total;
-        //data.applianceCarbonCoop.co2_m2.total += appliance.co2_m2;
         data.applianceCarbonCoop.energy_demand.total.electricity += electric_demand;
         data.applianceCarbonCoop.energy_demand.total.electricity_after_rating += electric_demand_after_rating;
         data.applianceCarbonCoop.energy_demand.total.DHW += DHW_demand;
@@ -1379,20 +1367,12 @@ calc.applianceCarbonCoop = function (data) {
         // Results: totals by category
         if (appliance.category === "Cooking") {
             data.applianceCarbonCoop.energy_demand_total.cooking += appliance.energy_demand;
-            //data.applianceCarbonCoop.primary_energy_total.cooking += appliance.primary_energy_total;
-            //data.applianceCarbonCoop.primary_energy_m2.cooking += appliance.primary_energy_m2;
-            //data.applianceCarbonCoop.co2_total.cooking += appliance.co2_total;
-            //data.applianceCarbonCoop.co2_m2.cooking += appliance.co2_m2;
             data.applianceCarbonCoop.energy_demand.cooking.electricity += electric_demand;
             data.applianceCarbonCoop.energy_demand.cooking.electricity_after_rating += electric_demand_after_rating;
             data.applianceCarbonCoop.energy_demand.cooking.DHW += DHW_demand;
             data.applianceCarbonCoop.energy_demand.cooking.gas += gas_demand;
         } else {
             data.applianceCarbonCoop.energy_demand_total.appliances += appliance.energy_demand;
-            //data.applianceCarbonCoop.primary_energy_total.appliances += appliance.primary_energy_total;
-            //data.applianceCarbonCoop.primary_energy_m2.appliances += appliance.primary_energy_m2;
-            //data.applianceCarbonCoop.co2_total.appliances += appliance.co2_total;
-            //data.applianceCarbonCoop.co2_m2.appliances += appliance.co2_m2;
             data.applianceCarbonCoop.energy_demand.appliances.electricity += electric_demand;
             data.applianceCarbonCoop.energy_demand.appliances.electricity_after_rating += electric_demand_after_rating;
             data.applianceCarbonCoop.energy_demand.appliances.DHW += DHW_demand;
@@ -1415,8 +1395,7 @@ calc.applianceCarbonCoop = function (data) {
         data.applianceCarbonCoop.gains_W_monthly['Cooking'][m] = data.applianceCarbonCoop.gains_W['Cooking'] * datasets.table_1a[m] / 365.0;
     }
 
-    if (data.use_applianceCarbonCoop) {
-
+    if (data.LAC_calculation_type == 'carboncoop_SAPlighting') {
         if (data.applianceCarbonCoop.energy_demand_total.appliances > 0) {
             data.energy_requirements.appliances = {
                 name: "Appliances",
@@ -1440,35 +1419,12 @@ calc.appliancelist = function (data)
 {
     if (data.appliancelist == undefined)
         data.appliancelist = {list: [{name: "LED Light", power: 6, hours: 12}]};
-    data.appliancelist.totalwh = 0;
-    for (z in data.appliancelist.list) {
-        data.appliancelist.list[z].energy = data.appliancelist.list[z].power * data.appliancelist.list[z].hours;
-        data.appliancelist.totalwh += data.appliancelist.list[z].energy;
-    }
-
-    data.appliancelist.annualkwh = data.appliancelist.totalwh * 365 * 0.001;
-    data.appliancelist.monthlykwh = [];
-    for (m = 0; m < 12; m++)
-        data.appliancelist.monthlykwh[m] = data.appliancelist.annualkwh / 12;
-
-    data.appliancelist.gains_W = data.appliancelist.totalwh / 24.0;
-    data.appliancelist.gains_W_monthly = [];
-    for (var m = 0; m < 12; m++)
-        data.appliancelist.gains_W_monthly[m] = data.appliancelist.gains_W;
-    if (data.use_appliancelist) {
-        data.gains_W["Appliances"] = data.appliancelist.gains_W_monthly;
-        if (data.appliancelist.annualkwh > 0)
-            data.energy_requirements.appliances = {name: "Appliances", quantity: data.appliancelist.annualkwh, monthly: data.appliancelist.monthlykwh};
-    }
-
     if (data.appliancelist.lighting == undefined)
         data.appliancelist.lighting = {};
     if (data.appliancelist.cooking == undefined)
         data.appliancelist.cooking = {};
     if (data.appliancelist.appliances == undefined)
         data.appliancelist.appliances = {};
-    if (data.LAC_choice == undefined)
-        data.LAC_choice = {};
 
     data.appliancelist.lighting.totalwh = 0;
     data.appliancelist.lighting.monthlykwh = [];
@@ -1496,13 +1452,12 @@ calc.appliancelist = function (data)
         data.appliancelist[category].gains_W = data.appliancelist[category].totalwh / 24.0;
         for (var m = 0; m < 12; m++)
             data.appliancelist[category].gains_W_monthly[m] = data.appliancelist[category].gains_W;
-        if (data.LAC_choice == 'appliancelist') {
+        if (data.LAC_calculation_type == 'detailedlist') {
             data.gains_W[category.charAt(0).toUpperCase() + category.slice(1)] = data.appliancelist[category].gains_W_monthly;
             if (data.appliancelist[category].annualkwh > 0)
                 data.energy_requirements[category] = {name: category.charAt(0).toUpperCase() + category.slice(1), quantity: data.appliancelist[category].annualkwh, monthly: data.appliancelist[category].monthlykwh};
         }
     }
-
     return data;
 };
 calc.generation = function (data) {
