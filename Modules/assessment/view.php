@@ -80,7 +80,7 @@ global $reports;
 
                 <div class="menu-content">
                     <div style="padding:10px">
-                        <div class="scenario-nav" style="float:right"><span class="lock"></span></div>
+                        <div class="scenario-nav" style="float:right"><span class="lock">Lock</span></div>
                         <div class="scenario-nav-heading">Core input</div>
                         <div class="scenario-nav"><a href="#template/context">Basic Dwelling Data</a></div>
                         <div class="scenario-nav"><a href="#template/ventilation">Ventilation and Infiltration</a></div>
@@ -507,6 +507,10 @@ global $reports;
         project[s].imagegallery = [];
         project[s].currentenergy = {};
         project[s].fabric.measures = {};
+        project[s].measures = {};
+        
+        // Ensure new scenario is unlocked
+        project[s].locked = false;
 
         var tmp = mastermenu.replace(/template/g, s);
         tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
