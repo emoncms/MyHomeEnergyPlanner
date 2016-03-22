@@ -872,7 +872,7 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     }
     out += '</select></td></tr>';
     out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
-    out += '<tr><td>Description</td><td><input type="text" class="edit-system-description" value="' + item.description + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="edit-system-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="edit-system-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="edit-system-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="edit-system-cost" value="' + item.cost + '" /></td></tr>';
@@ -880,7 +880,7 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     out += '<tr><td>Disruption</td><td><input type="text" class="edit-system-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="edit-system-associated_work" value="' + item.associated_work + '" /></td></tr>';
     out += '<tr><td>Key risks</td><td><input type="text" class="edit-system-key_risks" value="' + item.key_risks + '" /></td></tr>';
-    out += '<tr><td>Notes</td><td><input type="text" class="edit-system-notes" value="' + item.notes + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="edit-system-notes">' + item.notes + '</textarea></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="edit-system-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
     return out;
@@ -947,7 +947,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     }
 
     out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
-    out += '<tr><td>Description</td><td><input type="text" class="create-element-description" value="' + item.description + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="create-element-description" >'+item.description+'</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
@@ -955,7 +955,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<tr><td>Disruption</td><td><input type="text" class="create-element-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="create-element-associated_work" value="' + item.associated_work + '" /></td></tr>';
     out += '<tr><td>Key risks</td><td><input type="text" class="create-element-key_risks" value="' + item.key_risks + '" /></td></tr>';
-    out += '<tr><td>Notes</td><td><input type="text" class="create-element-notes" value="' + item.notes + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="create-element-notes">' + item.notes + '</textarea></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="create-element-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</table>';
     return out;
