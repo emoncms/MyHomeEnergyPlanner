@@ -303,7 +303,7 @@ class Assessment {
             $libresult = $this->mysqli->query("SELECT id,name,type FROM element_library WHERE `id`='$id'");
             $librow = $libresult->fetch_object();
             if (!in_array($id, $loadedlibs))
-                $libraries[] = $librow;
+                $libraries[] = json_encode(json_decode($librow));
             $loadedlibs[] = $id;
         }
 
@@ -317,7 +317,7 @@ class Assessment {
                 $libresult = $this->mysqli->query("SELECT id,name,type FROM element_library WHERE `id`='$id'");      // get library id and name
                 $librow = $libresult->fetch_object();
                 if (!in_array($id, $loadedlibs))
-                    $libraries[] = $librow;
+                    $libraries[] = json_encode(json_decode($librow));
                 $loadedlibs[] = $id;
             }
         }
@@ -336,8 +336,10 @@ class Assessment {
             $id = $row->id;
             $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");
             $librow = $libresult->fetch_object();
-            if (!in_array($id, $loadedlibs))
+            if (!in_array($id, $loadedlibs)) {
+                $librow->data = json_encode(json_decode($librow->data));
                 $libraries[] = $librow;
+            }
             $loadedlibs[] = $id;
         }
 
@@ -350,8 +352,10 @@ class Assessment {
                 $id = $row2->id;
                 $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");      // get library id and name
                 $librow = $libresult->fetch_object();
-                if (!in_array($id, $loadedlibs))
+                if (!in_array($id, $loadedlibs)) {
+                    $librow->data = json_encode(json_decode($librow->data));
                     $libraries[] = $librow;
+                }
                 $loadedlibs[] = $id;
             }
         }
@@ -651,16 +655,19 @@ class Assessment {
             return $result;
         }
     }
-    
+
     public function additemtolibrary($userid, $library_id, $item, $tag) {
         $userid = (int) $userid;
         $library_id = (int) $library_id;
         //$item = preg_replace('/[^\w\s"\':\,{}]/', '', $item);
-        $item=  json_decode($item);
-        $tag=   preg_replace('/[^\w\s]/', '', $tag);
-        if (!$this->has_write_access_library($userid, $library_id))
+        //$item=  json_decode($item);
+        $item = preg_replace('/[^\w\s-.",:{}\'\[\]\\\]/', '', $item);
+        //$item = json_encode(json_decode($item));
+        $item = json_decode($item);
+        $tag = preg_replace('/[^\w\s]/', '', $tag);
+        if (!$this->has_write_access_library($userid, $library_id)) {
             return "You haven't got enough permissions";
-        else {
+        } else {
             $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id` = '$library_id'");
             $row = $result->fetch_object();
             $library = json_decode($row->data, true);
@@ -669,6 +676,11 @@ class Assessment {
             $result = $this->mysqli->query("UPDATE element_library SET `data`='$library' WHERE `id` = '$library_id'");
             return $result;
         }
+    }
+
+    public function edititeminlibrary($userid, $library_id, $item, $tag) {
+        $result = $this->additemtolibrary($userid, $library_id, $item, $tag);
+        return $result;
     }
 
 // ------------------------------------------------------------------------------------------------

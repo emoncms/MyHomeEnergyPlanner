@@ -449,6 +449,11 @@ function assessment_controller() {
         if ($route->action == 'additemtolibrary' && $session['write']) {
             $result = $assessment->additemtolibrary($session['userid'], post('library_id'), $_POST['item'], $_POST['tag']);
         }
+       
+         if ($route->action == 'edititeminlibrary' && $session['write']) {
+            $result = $assessment->edititeminlibrary($session['userid'], post('library_id'), $_POST['item'], $_POST['tag']);
+        }
+        
         if ($route->action == 'loadlibrary' && $session['write'])
             $result = $assessment->loadlibrary($session['userid'], get('id'));
 

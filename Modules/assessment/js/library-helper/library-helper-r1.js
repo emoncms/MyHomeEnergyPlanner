@@ -366,7 +366,7 @@ libraryHelper.prototype.onCreateInLibrary = function (library_id) {
     // Preselect create empty one
     $('input:radio[name=empty_or_copy_item]').val(['empty']);
     $('#copy-item-from').hide();
-    
+
     $('#modal-create-in-library').modal('show');
 };
 libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
@@ -475,17 +475,16 @@ libraryHelper.prototype.onEditLibraryItemOk = function (library_id) {
     // Call to specific function for the type
     var function_name = this.type + '_get_item_to_save';
     item = this[function_name]();
-    // Edit item in library and save it
     for (tag in item) {
-        selected_library.data[tag] = item[tag];
-        $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library.id + "&data=" + JSON.stringify(selected_library.data), success: function (result) {
+        //selected_library.data[tag] = item[tag];
+        $.ajax({type: "POST", url: path + "assessment/edititeminlibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + JSON.stringify(item[tag]), success: function (result) {
                 if (result == true) {
                     $("#edit-item-message").html("Item edited and library saved");
                     $('#modal-edit-item button').hide();
                     $('#edit-item-finish').show();
                 }
                 else
-                    $("#create-in-library-message").html("There were problems saving the library");
+                    $("#edit-item-message").html("There were problems saving the library - " + result);
             }});
     }
 };
@@ -951,7 +950,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     }
 
     out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
-    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="create-element-description" >'+item.description+'</textarea></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="create-element-description" >' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
@@ -996,6 +995,7 @@ libraryHelper.prototype.systems_get_item_to_save = function () {
         notes: $(".edit-system-notes").val(),
         maintenance: $(".edit-system-maintenance").val()
     };
+    console.log(item);
     return item;
 };
 libraryHelper.prototype.elements_get_item_to_save = function () {
@@ -1020,7 +1020,7 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
     // Measures
     if ($('.create-element-name').val() !== "")
         item[tag].name = $(".create-element-name").val();
-    if ($('.create-element-description').val() !== "")
+    if ($('.create-element-description').html() !== "")
         item[tag].description = $(".create-element-description").val();
     if ($('.create-element-performance').val() !== "")
         item[tag].performance = $(".create-element-performance").val();
@@ -1036,7 +1036,7 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
         item[tag]["associated_work"] = $(".create-element-associated_work").val();
     if ($('.create-element-key_risks').val() !== "")
         item[tag]["key_risks"] = $(".create-element-key_risks").val();
-    if ($('.create-element-notes').val() !== "")
+    if ($('.create-element-notes').html() !== "")
         item[tag].notes = $(".create-element-notes").val();
     if ($('.create-element-maintenance').val() !== "")
         item[tag].maintenance = $(".create-element-maintenance").val();
@@ -1058,6 +1058,7 @@ libraryHelper.prototype.load_user_libraries = function (callback) {
     var mylibraries = {};
     var myself = this;
     $.ajax({url: path + "assessment/loaduserlibraries.json", async: false, datatype: "json", success: function (result) {
+            //result = JSON.parse(result);
             for (library in result) {
                 if (mylibraries[result[library].type] === undefined)
                     mylibraries[result[library].type] = [];
