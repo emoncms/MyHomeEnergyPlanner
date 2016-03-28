@@ -354,8 +354,9 @@ calc.ventilation = function (data)
         number_of_sides_sheltered: 0,
         ventilation_type: 'd',
         system_air_change_rate: 0.5,
-        balanced_heat_recovery_efficiency: 65
-    }
+        balanced_heat_recovery_efficiency: 65,
+        structural_infiltration: 0
+    };
 
     if (data.ventilation == undefined)
         data.ventilation = {};
@@ -377,26 +378,28 @@ calc.ventilation = function (data)
         data.ventilation.infiltration_chimeneyes_fires_fans = infiltration;
     }
 
+    // Strucutral infiltration
+    data.ventilation.structural_infiltration = (data.num_of_floors - 1) * 0.1;
+    if (data.ventilation.dwelling_construction == 'timberframe')
+        data.ventilation.structural_infiltration += 0.25;
+    if (data.ventilation.dwelling_construction == 'masonry')
+        data.ventilation.structural_infiltration += 0.35;
+    if (data.ventilation.suspended_wooden_floor == 'unsealed')
+        data.ventilation.structural_infiltration += 0.2;
+    if (data.ventilation.suspended_wooden_floor == 'sealed')
+        data.ventilation.structural_infiltration += 0.1;
+    if (!data.ventilation.draught_lobby)
+        data.ventilation.structural_infiltration += 0.05;
+    data.ventilation.structural_infiltration += (0.25 - (0.2 * data.ventilation.percentage_draught_proofed / 100));
+
+    // Structural infiltration from test
+    data.ventilation.structural_infiltration_from_test = data.ventilation.air_permeability_value / 20.0;
+
     if (data.ventilation.air_permeability_test == false)
-    {
-        infiltration += (data.num_of_floors - 1) * 0.1;
-        if (data.ventilation.dwelling_construction == 'timberframe')
-            infiltration += 0.25;
-        if (data.ventilation.dwelling_construction == 'masonry')
-            infiltration += 0.35;
-        if (data.ventilation.suspended_wooden_floor == 'unsealed')
-            infiltration += 0.2;
-        if (data.ventilation.suspended_wooden_floor == 'sealed')
-            infiltration += 0.1;
-        if (!data.ventilation.draught_lobby)
-            infiltration += 0.05;
-        // Window infiltration
-        infiltration += (0.25 - (0.2 * data.ventilation.percentage_draught_proofed / 100));
-    }
+        infiltration += data.ventilation.structural_infiltration;
     else
-    {
-        infiltration += data.ventilation.air_permeability_value / 20.0;
-    }
+        infiltration += data.ventilation.structural_infiltration_from_test;
+
     data.ventilation.infiltration_rate = infiltration;
     var shelter_factor = 1 - (0.075 * data.ventilation.number_of_sides_sheltered);
     infiltration *= shelter_factor;

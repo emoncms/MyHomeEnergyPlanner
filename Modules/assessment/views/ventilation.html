@@ -21,41 +21,22 @@
         <tbody id="air_permeability_value_tbody">
             <tr>
                 <td style="text-align:left">Air permeability value, q50, expressed in cubic metres per hour per square metre of envelope area:</td>
-                <td><input key="data.ventilation.air_permeability_value" type="text" style="width:60px"/></td>
+                <td><input key="data.ventilation.air_permeability_value" type="text" style="width:60px"/>
+                    <button class="apply-ventilation-measure if-not-master" type="draught-proofing" style="margin-right:25px">Apply Measure</button>
+                    </td>
             </tr>
+        <tr>
+            <td style="text-align:left">Structural infiltration based on test:</td>
+            <td><b><span key="data.ventilation.structural_infiltration_from_test" dp="2"></span> m<sup>3</sup>/h</b></td>
+        </tr>
         </tbody>
-
     </table>
 
     <table class="table">
-        <tbody>
-            <tr>
-                <th style="text-align:left; width:16.6%">Enter number of:</th>
-                <th style="text-align:left; width:16.6%"></th>
-                <th style="text-align:left; width:16.6%"></th>
-                <th style="text-align:left; width:16.6%"></th>
-                <th style="text-align:left; width:16.6%"></th>
-                <th style="text-align:left; width:16.6%"></th>
-            </tr>
-        </tbody>
-
-        <tr>
-            <td style="text-align:left">Chimneys</td><td style="text-align:left"><input key="data.ventilation.number_of_chimneys" type="text" style="width:50px"/></td>
-            <td style="text-align:left">Open flues</td><td style="text-align:left"><input key="data.ventilation.number_of_openflues" type="text" style="width:50px"/></td>
-            <td style="text-align:left">Intermittent fans</td><td style="text-align:left"><input key="data.ventilation.number_of_intermittentfans" type="text" style="width:50px"/></td>
-        </tr>
-
-        <tr>
-            <td style="text-align:left">Passive vents</td><td style="text-align:left"><input key="data.ventilation.number_of_passivevents" type="text" style="width:50px"/></td>
-            <td style="text-align:left">Flueless gas fires</td><td style="text-align:left"><input key="data.ventilation.number_of_fluelessgasfires" type="text" style="width:50px"/></td>    
-            <td></td>
-            <td></td>
-        </tr>
-
         <tbody id="structural">
             <tr>
                 <th style="text-align:left">Structural infiltration</th>
-                <th></th>
+                <th><span key="data.ventilation.structural_infiltration" dp="2"></span> m<sup>3</sup>/h</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -92,6 +73,29 @@
                 <td style="text-align:left">Number of sides sheltered</td><td><input key="data.ventilation.number_of_sides_sheltered" type="text" style="width:50px"/></td>
             </tr>
         </tbody>
+        <tbody>
+            <tr>
+                <th style="text-align:left; width:16.6%">Enter number of:</th>
+                <th style="text-align:left; width:16.6%"></th>
+                <th style="text-align:left; width:16.6%"></th>
+                <th style="text-align:left; width:16.6%"></th>
+                <th style="text-align:left; width:16.6%"></th>
+                <th style="text-align:left; width:16.6%"></th>
+            </tr>
+        </tbody>
+
+        <tr>
+            <td style="text-align:left">Chimneys</td><td style="text-align:left"><input key="data.ventilation.number_of_chimneys" type="text" style="width:50px"/></td>
+            <td style="text-align:left">Open flues</td><td style="text-align:left"><input key="data.ventilation.number_of_openflues" type="text" style="width:50px"/></td>
+            <td style="text-align:left">Intermittent fans</td><td style="text-align:left"><input key="data.ventilation.number_of_intermittentfans" type="text" style="width:50px"/></td>
+        </tr>
+
+        <tr>
+            <td style="text-align:left">Passive vents</td><td style="text-align:left"><input key="data.ventilation.number_of_passivevents" type="text" style="width:50px"/></td>
+            <td style="text-align:left">Flueless gas fires</td><td style="text-align:left"><input key="data.ventilation.number_of_fluelessgasfires" type="text" style="width:50px"/></td>    
+            <td></td>
+            <td></td>
+        </tr>
     </table>
 
     <br>
@@ -120,3 +124,26 @@
     <p>Heat recovery efficiency allowing for in-use factor: <input key="data.ventilation.balanced_heat_recovery_efficiency" type="text" style="width:50px" /> %</p>
 </div>
 
+
+
+<div id="apply-measure-ventilation-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Apply measure</h3>
+        <p id="myModalIntroText">Choose below</p>
+    </div>
+    <div class="modal-body">
+        <div id="apply-measure-draught-proofing"  style="margin: 40px 0 0 25px;display:none">
+            <select id="apply-measure-draught-proofing-from-lib"></select>
+            <select id="apply-measure-draught-proofing-lib-items"></select>
+            <div id="apply-measure-draught-proofing-item-fields" style=";margin-left:25px"></div>
+        </div>
+        
+    </div>
+    <div class="modal-footer">
+        <p id="apply-measure-ventilation-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="apply-measure-ventilation-ok" class="btn btn-primary">Apply measure</button>
+        <button id="apply-measure-ventilation-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+    </div>
+</div>

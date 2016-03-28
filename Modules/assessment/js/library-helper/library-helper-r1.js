@@ -276,6 +276,9 @@ libraryHelper.prototype.onNewLibraryOption = function () {
         case 'elements_measures':
             type = 'Fabric elements measures';
             break;
+        case 'draught_proofing_measures':
+            type = 'Draught proofing measures';
+            break;
         default:
             type = this.type;
     }
@@ -548,6 +551,9 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     // Show/hide modals
     $('#apply-measure-finish').hide();
     $('.modal').modal('hide');
+    $('[name=radio-type-of-measure]').each(function (index) {
+        $(this).parent().show();
+    });
     $('#apply-measure-modal').modal('show');
 };
 libraryHelper.prototype.onApplyMeasureOk = function (origin) {
@@ -582,16 +588,20 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             $('#apply-measure-item-fields').hide();
             break;
         case 'replace':
-            this.populate_selects_in_apply_measure_modal(this.type),
-                    this.onChangeApplyMeasureReplaceFromLib(this.type);
+            this.populate_selects_in_apply_measure_modal(this.type);
+            this.onChangeApplyMeasureReplaceFromLib(this.type);
             this.onChangeApplyMeasureReplaceFromLibItem(this.type);
             $('#apply-measure-replace').show();
             $('#apply-measure-item-fields').show();
             break;
         case 'replace_from_measure_library':
-            this.populate_selects_in_apply_measure_modal(this.type + "_measures")
-            this.onChangeApplyMeasureReplaceFromLib(this.type + "_measures");
-            this.onChangeApplyMeasureReplaceFromLibItem(this.type + "_measures");
+            if (this.type == 'elements')
+                var type = 'elements_measures';
+            else
+                var type = this.type;
+            this.populate_selects_in_apply_measure_modal(type)
+            this.onChangeApplyMeasureReplaceFromLib(type);
+            this.onChangeApplyMeasureReplaceFromLibItem(type);
             $('#apply-measure-replace').show();
             $('#apply-measure-item-fields').show();
             break;
@@ -683,6 +693,9 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
         case 'elements_measures':
             header = 'Fabric elements measures library';
             break;
+        case 'draught_proofing_measures':
+            header = 'Draught proofing measures library';
+            break;
         default:
             header = library.type + ' library';
     }
@@ -768,7 +781,7 @@ libraryHelper.prototype.systems_library_to_html = function (origin, library_id) 
     $('#library-select').attr('eid', eid);
     var out = "";
     for (z in selected_library.data) {
-        out += "<tr><td>" + selected_library.data[z].name + "<br>";
+        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "<br>";
         out += "<span style='font-size:80%'>";
         out += "<b>Efficiency:</b> " + Math.round(selected_library.data[z].efficiency * 100) + "%, ";
         out += "<b>Winter:</b> " + Math.round(selected_library.data[z].winter * 100) + "%, ";
@@ -817,14 +830,14 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     for (z in element_library) {
         if (tag.indexOf(element_library[z].tags[0]) != -1) {
             out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
-            out += "<td style='width:20px;'>" + z + "</td>";
-            out += "<td style='width:200px;'>" + element_library[z].name;
+            out += "<td>" + z + "</td>";
+            out += "<td>" + element_library[z].name;
             out += "<br><span style='font-size:13px'><b>Source:</b> " + element_library[z].source + "</span>";
             /*if (element_library[z].criteria.length)
              out += "<br><span style='font-size:13px'><b>Measure criteria:</b> " + element_library[z].criteria.join(", ") + "</span>";
              */
             out += "</td>";
-            out += "<td style='width:200px; font-size:13px'>";
+            out += "<td style='font-size:13px'>";
             out += "<b>U-value:</b> " + element_library[z].uvalue + " W/K.m2";
             out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/K.m2";
             if (element_library[z].tags[0] == "Window" || element_library[z].tags[0] == "Door" || element_library[z].tags[0] == "Roof_light") {
@@ -833,7 +846,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
                 out += "<b>ff:</b> " + element_library[z].ff;
             }
             out += "</td>";
-            out += "<td style='width:210px' >";
+            out += "<td >";
             out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             // out += "<i class='icon-trash' style='margin-left:20px'></i>";
@@ -849,6 +862,26 @@ libraryHelper.prototype.elements_measures_library_to_html = function (origin, li
     var out = this.elements_library_to_html(origin, library_id);
     return out;
 };
+libraryHelper.prototype.draught_proofing_measures_library_to_html = function (origin, library_id) {
+    var out = "";
+    var selected_library = this.get_library_by_id(library_id);
+
+    for (z in selected_library.data) {
+        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "<br>";
+        out += "<span style='font-size:80%'>";
+        out += "<b>q50:</b> " + selected_library.data[z].q50 + " m<sup>3</sup>/hm<sup>2</sup>";
+        out += "</span></td>";
+        out += "<td></td>";
+        out += "<td style='text-align:right;width:250px'>";
+        out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+        out += "<button style='margin-left:10px' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+        out += "</td>";
+        out += "</tr>";
+    }
+    return out;
+};
+
 
 /**********************************************
  * Items to html
@@ -969,6 +1002,28 @@ libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
         out = out.replace('<tr class="EWI-row" style="display:none">', '<tr class="EWI-row">');
     return out;
 };
+libraryHelper.prototype.draught_proofing_measures_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {name: 'name', q50: 1.0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>q50 (m<sup>3</sup>/hm<sup>2</sup>)</td><td><input type="text" class="item-q50" value="' + item.q50 + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
 /*******************************************************
  * Get item to save in library (when creating new item)
  ******************************************************/
@@ -995,7 +1050,6 @@ libraryHelper.prototype.systems_get_item_to_save = function () {
         notes: $(".edit-system-notes").val(),
         maintenance: $(".edit-system-maintenance").val()
     };
-    console.log(item);
     return item;
 };
 libraryHelper.prototype.elements_get_item_to_save = function () {
@@ -1048,6 +1102,25 @@ libraryHelper.prototype.elements_measures_get_item_to_save = function () {
     var tag = $(".create-element-tag").val();
     if (type = 'Wall')
         item[tag].EWI = $(".create-element-ewi").prop('checked');
+    return item;
+};
+libraryHelper.prototype.draught_proofing_measures_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        q50: $(".item-q50").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
     return item;
 };
 /***************************************************
@@ -1109,7 +1182,8 @@ libraryHelper.prototype.populate_measure_new_item = function (type_of_library) {
     var library = this.get_library_by_id($('#replace-from-lib').val()).data;
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var new_item = library[item_index];
-    new_item.location = original_item.location;
+    if (original_item.location != undefined)
+        new_item.location = original_item.location;
     $('#apply-measure-item-fields').html('');
     var function_name = type_of_library + "_item_to_html";
     var out = this[function_name](new_item, item_index);
@@ -1141,6 +1215,9 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
             break;
         case 'elements_measures':
             header = 'Fabric elements measures library';
+            break;
+        case 'draught_proofing_measures':
+            header = 'Draught proofing measures library';
             break;
         default:
             header = this.type.toUpperCase() + this.type.slice(1) + ' library';
@@ -1181,4 +1258,26 @@ libraryHelper.prototype.delete_library_item = function (library_id, tag) {
                 myself.load_user_libraries();
             }
         }});
-}   
+}
+
+libraryHelper.prototype.get_list_of_libraries_for_select = function (library_type) {
+    var out = ''
+    this.library_list[library_type].forEach(function (library) {
+        out += "<option value=" + library.id + ">" + library.name + "</option>";
+    });
+    return out;
+}
+
+libraryHelper.prototype.get_list_of_items_for_select = function (libraryid) {
+    var out = ''
+    var library = this.get_library_by_id(libraryid);
+    for (item in library.data) {
+        if (library.type == 'elements' || library.type == 'elements_measures') {
+            if (library.data[item].tags[0].toUpperCase() == original_item.type.toUpperCase())
+                out += '<option value="' + item + '">' + item + ': ' + library.data[item].name + '</option>';
+        }
+        else
+            out += '<option value="' + item + '">' + item + ': ' + library.data[item].name + '</option>';
+    }
+    return out;
+}

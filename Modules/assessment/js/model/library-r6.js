@@ -1006,5 +1006,22 @@ var standard_library = {
             "notes": "n/a",
             "maintenance": "Doors should be kept clean, inside and out. Hinges and mechanisms should be maintained regularly with appropriate lubricant. May require re-painting on regular basis - likely to be every 5-10 years for factory-applied finishes. "
         }
+    },
+    draught_proofing_measures:{
+        "DP_TEST": {
+            "name": "Basic Draughtproffoing Measures - TEST ",
+            "q50":10,
+            "description": "DP_TEST",
+            "performance": 3,
+            "benefits": "DP_TEST",
+            "cost": "DP_TEST",
+            "who_by": "DP_TEST",
+            "disruption": "DP_TEST",
+            "associated_work": "DP_TEST",
+            "key_risks": "DP_TEST",
+            "notes": "DP_TEST",
+            "maintenance": "DP_TEST"
+        }
     }
+            
 };  

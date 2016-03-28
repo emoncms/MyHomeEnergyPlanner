@@ -1,6 +1,6 @@
 console.log("debug libraries_manager.js");
 
-    var library_helper = new libraryHelper('', $("#openbem"));
+var library_helper = new libraryHelper('', $("#openbem"));
 
 function librariesmanager_UpdateUI()
 {
@@ -19,6 +19,9 @@ function librariesmanager_UpdateUI()
                 break;
             case 'elements_measures':
                 header = 'Fabric elements measures';
+                break;
+            case 'draught_proofing_measures':
+                header = 'Draught proofing measures';
                 break;
             default:
                 header = t;
