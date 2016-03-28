@@ -1020,7 +1020,7 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
     // Measures
     if ($('.create-element-name').val() !== "")
         item[tag].name = $(".create-element-name").val();
-    if ($('.create-element-description').html() !== "")
+    if ($('.create-element-description').val() !== "")
         item[tag].description = $(".create-element-description").val();
     if ($('.create-element-performance').val() !== "")
         item[tag].performance = $(".create-element-performance").val();
@@ -1036,7 +1036,7 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
         item[tag]["associated_work"] = $(".create-element-associated_work").val();
     if ($('.create-element-key_risks').val() !== "")
         item[tag]["key_risks"] = $(".create-element-key_risks").val();
-    if ($('.create-element-notes').html() !== "")
+    if ($('.create-element-notes').val() !== "")
         item[tag].notes = $(".create-element-notes").val();
     if ($('.create-element-maintenance').val() !== "")
         item[tag].maintenance = $(".create-element-maintenance").val();
