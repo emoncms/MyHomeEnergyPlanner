@@ -431,9 +431,7 @@ class Assessment {
             return false;
 
         $data = json_encode(json_decode($data));
-        $data = $this->mysqli->real_escape_string($data);
-        $data = preg_replace('/[^\w\s-.",:{}\[\]]/', '', $data);
-
+        $data = $this->escape_item($data);
         // $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid' AND ");
         // if ($result->num_rows==0)
         //     $result = $this->mysqli->query("INSERT INTO element_library (`userid`) VALUES ('$userid')");
@@ -660,9 +658,8 @@ class Assessment {
         $userid = (int) $userid;
         $library_id = (int) $library_id;
         //$item = preg_replace('/[^\w\s"\':\,{}]/', '', $item);
-        //$item=  json_decode($item);
-        $item = preg_replace('/[^\w\s-.",:{}\'\[\]\\\]/', '', $item);
-        //$item = json_encode(json_decode($item));
+        //$item=  json_decode($item);//$item = json_encode(json_decode($item));
+        $item = $this->escape_item($item);
         $item = json_decode($item);
         $tag = preg_replace('/[^\w\s]/', '', $tag);
         if (!$this->has_write_access_library($userid, $library_id)) {
@@ -681,6 +678,11 @@ class Assessment {
     public function edititeminlibrary($userid, $library_id, $item, $tag) {
         $result = $this->additemtolibrary($userid, $library_id, $item, $tag);
         return $result;
+    }
+
+    public function escape_item($item) {
+        $item = preg_replace('/[^\w\s-+.",:{}\/\'\[\]\\\]/', '', $item); 
+        return $item;
     }
 
 // ------------------------------------------------------------------------------------------------

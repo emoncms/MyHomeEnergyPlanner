@@ -157,6 +157,21 @@ libraryHelper.prototype.add_events = function () {
         myself.delete_library_item($(this).attr('library-id'), $(this).attr('tag'));
     });
 
+    this.container.on('change', '.item-ventilation_type', function () {
+        var newVS = $('.item-ventilation_type').val();
+        if (newVS == 'DEV' || newVS == 'MEV' || newVS == 'MVHR')
+            $('.item-air_change_rate').parent().parent().show();
+        else {
+            $('.item-air_change_rate').parent().parent().hide();
+            $('.item-air_change_rate').val(0);
+        }
+        if (newVS == 'MVHR')
+            $('.item-heat_recovery_efficiency').parent().parent().show();
+        else {
+            $('.item-heat_recovery_efficiency').parent().parent().hide();
+            $('.item-heat_recovery_efficiency').val(0);
+        }
+    });
 };
 
 libraryHelper.prototype.append_modals = function () {
@@ -279,6 +294,9 @@ libraryHelper.prototype.onNewLibraryOption = function () {
         case 'draught_proofing_measures':
             type = 'Draught proofing measures';
             break;
+        case 'ventilation_systems_measures':
+            type = 'Ventilation system measures library';
+            break;
         default:
             type = this.type;
     }
@@ -383,7 +401,9 @@ libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
     item = this[function_name]();
     // Add item to library and save it
     for (tag in item) {
-        if (selected_library.data[tag] != undefined)
+        if (tag === '')
+            $("#create-in-library-message").html("Tag cannot be empty");
+        else if (selected_library.data[tag] != undefined)
             $("#create-in-library-message").html("Tag already exist, choose another one");
         else {
             //selected_library.data[tag] = item[tag];
@@ -479,8 +499,9 @@ libraryHelper.prototype.onEditLibraryItemOk = function (library_id) {
     var function_name = this.type + '_get_item_to_save';
     item = this[function_name]();
     for (tag in item) {
-        //selected_library.data[tag] = item[tag];
-        $.ajax({type: "POST", url: path + "assessment/edititeminlibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + JSON.stringify(item[tag]), success: function (result) {
+        var item_string = JSON.stringify(item[tag]).replace('+', '/plus'); // For a reason i have not been able to find why the character + becomes a carrier return when it is accesed in $_POST in the controller, because of this we escape + with \plus
+        //item[tag].number_of_intermittentfans="\\+2";
+        $.ajax({type: "POST", url: path + "assessment/edititeminlibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + item_string, success: function (result) {
                 if (result == true) {
                     $("#edit-item-message").html("Item edited and library saved");
                     $('#modal-edit-item button').hide();
@@ -696,6 +717,9 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
         case 'draught_proofing_measures':
             header = 'Draught proofing measures library';
             break;
+        case 'ventilation_systems_measures':
+            header = 'Ventilation system measures library';
+            break;
         default:
             header = library.type + ' library';
     }
@@ -867,11 +891,23 @@ libraryHelper.prototype.draught_proofing_measures_library_to_html = function (or
     var selected_library = this.get_library_by_id(library_id);
 
     for (z in selected_library.data) {
-        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "<br>";
-        out += "<span style='font-size:80%'>";
-        out += "<b>q50:</b> " + selected_library.data[z].q50 + " m<sup>3</sup>/hm<sup>2</sup>";
-        out += "</span></td>";
-        out += "<td></td>";
+        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
+        out += "<td><b>q50:</b> " + selected_library.data[z].q50 + " m<sup>3</sup>/hm<sup>2</sup></td>";
+        out += "<td style='text-align:right;width:250px'>";
+        out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+        out += "<button style='margin-left:10px' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+        out += "</td>";
+        out += "</tr>";
+    }
+    return out;
+};
+libraryHelper.prototype.ventilation_systems_measures_library_to_html = function (origin, library_id) {
+    var out = "";
+    var selected_library = this.get_library_by_id(library_id);
+
+    for (z in selected_library.data) {
+        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
         out += "<td style='text-align:right;width:250px'>";
         out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
         out += "<button style='margin-left:10px' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
@@ -888,7 +924,7 @@ libraryHelper.prototype.draught_proofing_measures_library_to_html = function (or
  **********************************************/
 libraryHelper.prototype.systems_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', fans_and_pumps: 0, combi_keep_hot: 0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+        item = {tag: '', name: 'name', efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric', fans_and_pumps: 0, combi_keep_hot: 0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -923,7 +959,7 @@ libraryHelper.prototype.systems_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: 'New tag', name: 'New name', EWI: false, uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
+        item = {tag: '', name: 'New name', EWI: false, uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
             source: "", description: "", performance: "", benefits: "", cost: "",
             who_by: "", disruption: "", associated_work: "", key_risks: "", notes: "",
             maintenance: "", };
@@ -1004,7 +1040,7 @@ libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.draught_proofing_measures_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {name: 'name', q50: 1.0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+        item = {tag: '', name: 'name', q50: 1.0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -1022,6 +1058,59 @@ libraryHelper.prototype.draught_proofing_measures_item_to_html = function (item,
     out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
+    return out;
+};
+libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: 'name', ventilation_type: 'NV', system_air_change_rate: 0, heat_recovery_balanced_heat_recovery_efficiencyefficiency: 0, number_of_intermittentfans: '', number_of_passivevents: '', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+
+    out += '<tr><td>Ventilation type</td><td><select class="item-ventilation_type">';
+    out += item.ventilation_type == 'NV' ? '<option value="NV" selected>Natural ventilation only (NV)</option>' : '<option value="NV">Natural ventilation only (NV)</option>';
+    out += item.ventilation_type == 'IE' ? '<option value="IE" selected>Intermittent extract ventilation (IE)</option>' : '<option value="IE">Intermittent extract ventilation (IE)</option>';
+    out += item.ventilation_type == 'DEV' ? '<option value="DEV" selected>Continuous decentralised mechanical extract ventilation (DEV)</option>' : '<option value="DEV">Continuous decentralised mechanical extract ventilation (DEV)</option>';
+    out += item.ventilation_type == 'MEV' ? '<option value="MEV" selected>Continuous whole house extract ventilation (MEV)</option>' : '<option value="MEV">Continuous whole house extract ventilation (MEV)</option>';
+    out += item.ventilation_type == 'MV' ? '<option value="MV" selected>Balanced mechanical ventilation without heat recovery (MV)</option>' : '<option value="MV">Balanced mechanical ventilation without heat recovery (MV)</option>';
+    out += item.ventilation_type == 'MVHR' ? '<option value="MVHR" selected>Balanced mechanical ventilation with heat recovery (MVHR)</option>' : '<option value="MVHR">Balanced mechanical ventilation with heat recovery (MVHR)</option>';
+    out += item.ventilation_type == 'PS' ? '<option value="PS" selected>Whole House Passive Stack Ventilation System (PS)</option>' : '<option value="PS">Whole House Passive Stack Ventilation System (PS)</option>';
+    out += '</select></td></tr>';
+    if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR')
+        out += '<tr><td>Air change rate</td><td><input type="text" class="item-air_change_rate" value="' + item.system_air_change_rate + '" /></td></tr>';
+    else
+        out += '<tr style="display:none"><td>Air change rate</td><td><input type="text" class="item-air_change_rate" value="' + item.system_air_change_rate + '" /></td></tr>';
+    if (item.ventilation_type == 'MVHR')
+        out += '<tr><td>Balanced heat recovery efficiency (%)</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
+    else
+        out += '<tr style="display:none"><td>Heat recovery efficiency</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
+    var title_text = 'Number of intermittent fans and Number of passive vents:\n  - Leave it blank if you don\'t want to change them in the assessment\n  - Type an integer to set a new value (0 to remove all of them)\n  - Type first + or - and then a number to increase or decrease the original amount';
+    out += '<tr><td>Number of intermittent fans <i class="icon-question-sign if-not-locked" title="' + title_text + '"></i></td><td><input type="text" class="item-intermitent_fans" value="' + item.number_of_intermittentfans + '" /></td></tr>';
+    out += '<tr><td>Number of passive vents <i class="icon-question-sign if-not-locked" title="' + title_text + '"></i></td><td><input type="text" class="item-passive_vents" value="' + item.number_of_passivevents + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+
+    // Show hide "air change rate" and "heat recovery efficiannecy" accordint to the ventilation system
+    if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR')
+        $('.item-air_change_rate').parent().parent().show();
+    else
+        $('.item-air_change_rate').parent().parent().hide();
+    if (item.ventilation_type == 'MVHR')
+        $('.item-heat_recovery_efficiency').parent().parent().show();
+    else
+        $('.item-heat_recovery_efficiency').parent().parent().hide();
+
     return out;
 };
 /*******************************************************
@@ -1123,6 +1212,29 @@ libraryHelper.prototype.draught_proofing_measures_get_item_to_save = function ()
     };
     return item;
 };
+libraryHelper.prototype.ventilation_systems_measures_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        ventilation_type: $(".item-ventilation_type").val(),
+        system_air_change_rate: $(".item-air_change_rate").val(),
+        balanced_heat_recovery_efficiency: $(".item-heat_recovery_efficiency").val(),
+        number_of_intermittentfans: $(".item-intermitent_fans").val(),
+        number_of_passivevents: $(".item-passive_vents").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
 /***************************************************
  * Other methods
  ***************************************************/
@@ -1135,6 +1247,7 @@ libraryHelper.prototype.load_user_libraries = function (callback) {
             for (library in result) {
                 if (mylibraries[result[library].type] === undefined)
                     mylibraries[result[library].type] = [];
+                result[library].data = result[library].data.replace('\\/plus', '+');  // For a reason i have not been able to find why the character + becomes a carrier return when it is accesed in $_POST in the controller, because of this we escape + with \plus
                 result[library].data = JSON.parse(result[library].data);
                 mylibraries[result[library].type].push(result[library]);
             }
@@ -1218,6 +1331,9 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
             break;
         case 'draught_proofing_measures':
             header = 'Draught proofing measures library';
+            break;
+        case 'ventilation_systems_measures':
+            header = 'Ventilation system measures library';
             break;
         default:
             header = this.type.toUpperCase() + this.type.slice(1) + ' library';

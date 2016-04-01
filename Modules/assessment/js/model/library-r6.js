@@ -1007,10 +1007,10 @@ var standard_library = {
             "maintenance": "Doors should be kept clean, inside and out. Hinges and mechanisms should be maintained regularly with appropriate lubricant. May require re-painting on regular basis - likely to be every 5-10 years for factory-applied finishes. "
         }
     },
-    draught_proofing_measures:{
+    draught_proofing_measures: {
         "DP_TEST": {
             "name": "Basic Draughtproffoing Measures - TEST ",
-            "q50":10,
+            "q50": 10,
             "description": "DP_TEST",
             "performance": 3,
             "benefits": "DP_TEST",
@@ -1022,6 +1022,25 @@ var standard_library = {
             "notes": "DP_TEST",
             "maintenance": "DP_TEST"
         }
+    },
+    ventilation_systems_measures: {
+        VS_test: {
+            "name": "Ventilation Measure - TEST ",
+            "ventilation_type": 'IE',
+            "system_air_change_rate": 50,
+            "balanced_heat_recovery_efficiency": 0.8,
+            "number_of_intermittentfans": 0,
+            "number_of_passivevents": 0,
+            "description": "VS_test",
+            "performance": 3,
+            "benefits": "VS_test",
+            "cost": "VS_test",
+            "who_by": "VS_test",
+            "disruption": "VS_test",
+            "associated_work": "VS_test",
+            "key_risks": "VS_test",
+            "notes": "VS_test",
+            "maintenance": "VS_test"
+        }
     }
-            
 };  

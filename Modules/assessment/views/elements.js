@@ -191,7 +191,6 @@ function add_element(id, z)
 
 function add_floor(z)
 {
-    console.log("hola");
     var id = "#floors";
     var element = data.fabric.elements[z];
     var title = "\nDescription: " + element.description + "\nSource: " + element.source + "\nPerformance: " +

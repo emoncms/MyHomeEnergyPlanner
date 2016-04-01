@@ -431,6 +431,9 @@ function assessment_controller() {
             }
         }
 
+// -------------------------------------------------------------------------------------------------------------
+// Library
+// -------------------------------------------------------------------------------------------------------------        
         if ($route->action == 'listlibrary' && $session['write'])
             $result = $assessment->listlibrary($session['userid']);
 
@@ -439,21 +442,17 @@ function assessment_controller() {
 
         if ($route->action == 'copylibrary' && $session['write'])
             $result = $assessment->copylibrary($session['userid'], get('name'), get('type'), get('id'));
-
-// -------------------------------------------------------------------------------------------------------------
-// Library
-// -------------------------------------------------------------------------------------------------------------        
         if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
             $result = $assessment->savelibrary($session['userid'], post('id'), $_POST['data']);
         }
         if ($route->action == 'additemtolibrary' && $session['write']) {
-            $result = $assessment->additemtolibrary($session['userid'], post('library_id'), $_POST['item'], $_POST['tag']);
+            $result = $assessment->additemtolibrary($session['userid'], post('library_id'), $_POST["item"], $_POST['tag']);
         }
-       
-         if ($route->action == 'edititeminlibrary' && $session['write']) {
-            $result = $assessment->edititeminlibrary($session['userid'], post('library_id'), $_POST['item'], $_POST['tag']);
+
+        if ($route->action == 'edititeminlibrary' && $session['write']) {
+            $result = $assessment->edititeminlibrary($session['userid'], post('library_id'), $_POST["item"], $_POST['tag']);
         }
-        
+
         if ($route->action == 'loadlibrary' && $session['write'])
             $result = $assessment->loadlibrary($session['userid'], get('id'));
 

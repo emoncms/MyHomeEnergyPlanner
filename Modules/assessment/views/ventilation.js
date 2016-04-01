@@ -63,89 +63,123 @@ $("[key='data.ventilation.air_permeability_test']").change(function () {
 
 });
 
-$('#openbem').on('click', '.apply-ventilation-measure', function () {
+$('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     library_helper.init();
+    library_helper.type = $(this).attr('type');
     $('#apply-measure-ventilation-finish').hide();
     $('#apply-measure-ventilation-modal .modal-body > div').hide();
 
-    switch ($(this).attr('type')) {
-        case 'draught-proofing':
+    // Populate selects in modal to choose library and measure
+    var out = library_helper.get_list_of_libraries_for_select(library_helper.type);
+    $("#apply-measure-ventilation-library-select").html(out);
+    var library_id = $('#apply-measure-ventilation-library-select').val();
+    out = library_helper.get_list_of_items_for_select(library_id);
+    $('#apply-measure-ventilation-items-select').html(out);
+
+    // Populate body of modal
+    var tag = $('#apply-measure-ventilation-items-select').val();
+    var function_name = library_helper.type + '_item_to_html';
+    var item = library_helper.get_library_by_id(library_id).data[tag];
+    out = library_helper[function_name](item, tag);
+    $('#apply-measure-ventilation-modal .modal-body').html(out);
+
+    // Specific action for eact type of measure
+    switch (library_helper.type) {
+        case 'draught_proofing_measures':
             $('#apply-measure-ventilation-modal #myModalIntroText').html('Choose a measure from a library and <b>adjust the q50 value</b>');
-
-            var out = library_helper.get_list_of_libraries_for_select('draught_proofing_measures');
-            $("#apply-measure-draught-proofing-from-lib").html(out);
-
-            var library_id = $('#apply-measure-draught-proofing-from-lib').val();
-            out = library_helper.get_list_of_items_for_select(library_id);
-            $('#apply-measure-draught-proofing-lib-items').html(out);
-
-            var tag = $('#apply-measure-draught-proofing-lib-items').val();
-            out = library_helper.draught_proofing_measures_item_to_html(library_helper.get_library_by_id(library_id).data[tag], tag);
-            $('#apply-measure-draught-proofing-item-fields').html(out);
-
-            $('#apply-measure-draught-proofing').show();
+            break;
+        case('ventilation_systems_measures'):
+            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and depending on the Ventilation type adjust the other fields.</p>');
             break;
     }
-    $('#apply-measure-ventilation-ok').attr('type', $(this).attr('type'));
     $('#apply-measure-ventilation-modal').modal('show');
 });
 
-$('#openbem').on('change', '#apply-measure-draught-proofing-from-lib', function () {
-    var library_id = $("#apply-measure-draught-proofing-from-lib").val();
+$('#openbem').on('change', '#apply-measure-ventilation-library-select', function () {
+    var library_id = $("#apply-measure-ventilation-library-select").val();
     out = library_helper.get_list_of_items_for_select(library_id);
-    $('#apply-measure-draught-proofing-lib-items').html(out);
+    $('#apply-measure-ventilation-items-select').html(out);
 
-    var tag = $('#apply-measure-draught-proofing-lib-items').val();
-    out = library_helper.draught_proofing_measures_item_to_html(library_helper.get_library_by_id(library_id).data[tag], tag);
-    $('#apply-measure-draught-proofing-item-fields').html(out);
-
+    var tag = $('#apply-measure-ventilation-items-select').val();
+    var function_name = library_helper.type + '_item_to_html';
+    var item = library_helper.get_library_by_id(library_id).data[tag];
+    out = library_helper[function_name](item, tag);
+    $('#apply-measure-ventilation-modal .modal-body').html(out);
 });
 
-$('#openbem').on('change', '#apply-measure-draught-proofing-lib-items', function () {
-    var library_id = $("#apply-measure-draught-proofing-from-lib").val();
-    var tag = $('#apply-measure-draught-proofing-lib-items').val();
-
-    console.log(library_helper.get_library_by_id(library_id).data[tag]);
-    console.log(tag);
-    out = library_helper.draught_proofing_measures_item_to_html(library_helper.get_library_by_id(library_id).data[tag], tag);
-    $('#apply-measure-draught-proofing-item-fields').html(out);
+$('#openbem').on('change', '#apply-measure-ventilation-items-select', function () {
+    var library_id = $("#apply-measure-ventilation-library-select").val();
+    var tag = $('#apply-measure-ventilation-items-select').val();
+    var function_name = library_helper.type + '_item_to_html';
+    var item = library_helper.get_library_by_id(library_id).data[tag];
+    out = library_helper[function_name](item, tag);
+    $('#apply-measure-ventilation-modal .modal-body').html(out);
 });
 
 $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
-    type_of_measure = $(this).attr('type');
-
     if (data.measures == undefined)
         data.measures = {};
     if (data.measures.ventilation == undefined)
         data.measures.ventilation = {};
-
     // The first time we apply a measure to an element we record its original stage
-    if (data.measures.ventilation[type_of_measure] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
-        data.measures.ventilation[type_of_measure] = {};
+    if (data.measures.ventilation[library_helper.type] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
+        data.measures.ventilation[library_helper.type] = {};
     }
-    switch (type_of_measure) {
-        case 'draught-proofing':
-            if (data.measures.ventilation[type_of_measure].original_structural_infiltration == undefined) // first time
-                data.measures.ventilation[type_of_measure].original_structural_infiltration = data.ventilation.structural_infiltration;
-
+    switch (library_helper.type) {
+        case 'draught_proofing_measures':
+            if (data.measures.ventilation[library_helper.type].original_structural_infiltration == undefined) // first time
+                data.measures.ventilation[library_helper.type].original_structural_infiltration = data.ventilation.structural_infiltration;
             var measure = library_helper.draught_proofing_measures_get_item_to_save();
             for (z in measure)
                 var tag = z;
-            measure.tag = tag;
+            measure[tag].tag = tag;
             data.ventilation.air_permeability_value = measure[tag].q50;
             update();
-            data.measures.ventilation[type_of_measure].measure = measure[tag];
-            data.measures.ventilation[type_of_measure].measure.structural_infiltration = data.ventilation.structural_infiltration_from_test;
+            data.measures.ventilation[library_helper.type].measure = measure[tag];
+            data.measures.ventilation[library_helper.type].measure.structural_infiltration = data.ventilation.structural_infiltration_from_test;
             console.log(data.measures);
             break;
+        case 'ventilation_systems_measures':
+            if (data.measures.ventilation[library_helper.type].original == undefined) // first time
+                data.measures.ventilation[library_helper.type].original = data.ventilation.ventilation_type;
+            var measure = library_helper.ventilation_systems_measures_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            console.log(data.ventilation);
+            data.ventilation.ventilation_type = measure[tag].ventilation_type;
+            data.ventilation.system_air_change_rate = measure[tag].system_air_change_rate;
+            data.ventilation.balanced_heat_recovery_efficiency = measure[tag].balanced_heat_recovery_efficiency;
+            for (z in {'number_of_intermittentfans': {}, 'number_of_passivevents': {}}) {
+                measure[tag][z].replace(' ', '');
+                if (measure[tag][z].charAt(0) === '+') {
+                    var increment_in = 1.0 * measure[tag][z].slice(1);
+                    if (!isNaN(increment_in))
+                        data.ventilation[z] += increment_in;
+                }
+                else if (measure[tag][z].charAt(0) === '-') {
+                    var decrement_in = 1.0 * measure[tag][z].slice(1);
+                    if (!isNaN(decrement_in))
+                        data.ventilation[z] -= decrement_in;
+                }
+                else if (measure[tag][z] == '') {
+                    // Do nothing
+                }
+                else {
+                    var new_value = 1.0 * measure[tag][z];
+                    if (!isNaN(new_value))
+                        data.ventilation[z] = new_value;
+                }
+                data.measures.ventilation[library_helper.type].measure = measure[tag];
+                break;
+            }
     }
+    update();
     $('#apply-measure-ventilation-modal').modal('hide');
 });
-
 function ventilation_initUI()
 {
-    if (data.ventilation.air_permeability_test)
-    {
+    if (data.ventilation.air_permeability_test) {
         $("#structural").hide();
         $("#air_permeability_value_tbody").show();
     } else {
@@ -195,4 +229,7 @@ function ventilation_initUI()
             $("#balanced_heat_recovery_efficiency_div").hide();
             break;
     }
+}
+function ventilation_UpdateUI() {
+    ventilation_initUI();
 }

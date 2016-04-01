@@ -23,6 +23,9 @@ function librariesmanager_UpdateUI()
             case 'draught_proofing_measures':
                 header = 'Draught proofing measures';
                 break;
+            case 'ventilation_systems_measures':
+                header = 'Ventilation system measures library';
+                break;
             default:
                 header = t;
         }

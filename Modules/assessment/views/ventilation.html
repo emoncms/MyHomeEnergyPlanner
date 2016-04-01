@@ -22,13 +22,13 @@
             <tr>
                 <td style="text-align:left">Air permeability value, q50, expressed in cubic metres per hour per square metre of envelope area:</td>
                 <td><input key="data.ventilation.air_permeability_value" type="text" style="width:60px"/>
-                    <button class="apply-ventilation-measure if-not-master" type="draught-proofing" style="margin-right:25px">Apply Measure</button>
-                    </td>
+                    <button class="apply-ventilation-measure-from-lib if-not-master" type="draught_proofing_measures" style="margin:0 0 10px 25px">Apply Measure</button>
+                </td>
             </tr>
-        <tr>
-            <td style="text-align:left">Structural infiltration based on test:</td>
-            <td><b><span key="data.ventilation.structural_infiltration_from_test" dp="2"></span> m<sup>3</sup>/h</b></td>
-        </tr>
+            <tr>
+                <td style="text-align:left">Structural infiltration based on test:</td>
+                <td><b><span key="data.ventilation.structural_infiltration_from_test" dp="2"></span> m<sup>3</sup>/h</b></td>
+            </tr>
         </tbody>
     </table>
 
@@ -100,7 +100,6 @@
 
     <br>
 
-    <p> 
 
     <div class="input-prepend">
         <span class="add-on">Select ventilation type:</span>
@@ -113,37 +112,36 @@
             <option value='MVHR'>Balanced mechanical ventilation with heat recovery (MVHR)</option>
             <option value='PS'>Whole House Passive Stack Ventilation System (PS)</option>
         </select>
+        <button class="apply-ventilation-measure-from-lib if-not-master" type="ventilation_systems_measures" style="margin:0 0 10px 25px">Apply Measure</button>
     </div>
-</p>
 
-<div id="system_air_change_rate_div">
-    <p>Air change rate through the system (If exhaust air heat pump see Appendix N): <input key="data.ventilation.system_air_change_rate" type="text" style="width:50px" /></p>
-</div>
-
-<div id="balanced_heat_recovery_efficiency_div">
-    <p>Heat recovery efficiency allowing for in-use factor: <input key="data.ventilation.balanced_heat_recovery_efficiency" type="text" style="width:50px" /> %</p>
-</div>
-
-
-
-<div id="apply-measure-ventilation-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Apply measure</h3>
-        <p id="myModalIntroText">Choose below</p>
+    <div id="system_air_change_rate_div">
+        <p>Air change rate through the system (If exhaust air heat pump see Appendix N): <input key="data.ventilation.system_air_change_rate" type="text" style="width:50px" /></p>
     </div>
-    <div class="modal-body">
-        <div id="apply-measure-draught-proofing"  style="margin: 40px 0 0 25px;display:none">
-            <select id="apply-measure-draught-proofing-from-lib"></select>
-            <select id="apply-measure-draught-proofing-lib-items"></select>
-            <div id="apply-measure-draught-proofing-item-fields" style=";margin-left:25px"></div>
+
+    <div id="balanced_heat_recovery_efficiency_div">
+        <p>Heat recovery efficiency allowing for in-use factor: <input key="data.ventilation.balanced_heat_recovery_efficiency" type="text" style="width:50px" /> %</p>
+    </div>
+
+
+
+    <div id="apply-measure-ventilation-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Apply measure</h3>
+            <p id="myModalIntroText">Choose below</p>
         </div>
-        
-    </div>
-    <div class="modal-footer">
-        <p id="apply-measure-ventilation-message" style="font-weight: bold"></p>
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button id="apply-measure-ventilation-ok" class="btn btn-primary">Apply measure</button>
-        <button id="apply-measure-ventilation-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+        <div id='apply-measure-ventilation-library-item-selects'>
+            <select id="apply-measure-ventilation-library-select"></select>
+            <select id="apply-measure-ventilation-items-select"></select>            
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <p id="apply-measure-ventilation-message" style="font-weight: bold"></p>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button id="apply-measure-ventilation-ok" class="btn btn-primary">Apply measure</button>
+            <button id="apply-measure-ventilation-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+        </div>
     </div>
 </div>

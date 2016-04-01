@@ -287,7 +287,7 @@ global $reports;
     InitUI();
     UpdateUI(data);
     draw_openbem_graphics();
-    console.log(project[scenario].locked);
+    
     // Lock/unlock
     $('#content button').addClass('if-not-locked');
     $('#content i').addClass('if-not-locked');
