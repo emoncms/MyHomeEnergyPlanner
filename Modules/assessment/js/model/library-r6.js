@@ -1042,5 +1042,21 @@ var standard_library = {
             "notes": "VS_test",
             "maintenance": "VS_test"
         }
+    },
+    extract_ventilation_points_measures: {
+        EV_test: {
+            "name": "Extract Ventilation Point Measure - TEST ",
+            "number_of_intermittentfans_to_add": 1,
+            "description": "EV_test",
+            "performance": 3,
+            "benefits": "EV_test",
+            "cost": "EV_test",
+            "who_by": "EV_test",
+            "disruption": "EV_test",
+            "associated_work": "EV_test",
+            "key_risks": "EV_test",
+            "notes": "EV_test",
+            "maintenance": "EV_test"
+        }
     }
 };  

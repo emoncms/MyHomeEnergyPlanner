@@ -297,6 +297,9 @@ libraryHelper.prototype.onNewLibraryOption = function () {
         case 'ventilation_systems_measures':
             type = 'Ventilation system measures library';
             break;
+        case 'extract_ventilation_points_measures':
+            type = 'Extract ventilation points measures library';
+            break;
         default:
             type = this.type;
     }
@@ -720,6 +723,9 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
         case 'ventilation_systems_measures':
             header = 'Ventilation system measures library';
             break;
+        case 'extract_ventilation_points_measures':
+            header = 'Extract ventilation points measures library';
+            break;
         default:
             header = library.type + ' library';
     }
@@ -917,6 +923,9 @@ libraryHelper.prototype.ventilation_systems_measures_library_to_html = function 
     }
     return out;
 };
+libraryHelper.prototype.extract_ventilation_points_measures_library_to_html = function (origin, library_id) {
+    return this.ventilation_systems_measures_library_to_html(origin, library_id);
+};
 
 
 /**********************************************
@@ -1113,6 +1122,28 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
 
     return out;
 };
+libraryHelper.prototype.extract_ventilation_points_measures_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: 'name', number_of_intermittentfans_to_add: 1, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Number of intermittent fans to add</td><td><input type="number" class="item-intermitent_fans" value="' + item.number_of_intermittentfans_to_add + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
 /*******************************************************
  * Get item to save in library (when creating new item)
  ******************************************************/
@@ -1235,6 +1266,25 @@ libraryHelper.prototype.ventilation_systems_measures_get_item_to_save = function
     };
     return item;
 };
+libraryHelper.prototype.extract_ventilation_points_measures_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        number_of_intermittentfans_to_add: $(".item-intermitent_fans").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
 /***************************************************
  * Other methods
  ***************************************************/
@@ -1334,6 +1384,9 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
             break;
         case 'ventilation_systems_measures':
             header = 'Ventilation system measures library';
+            break;
+        case 'extract_ventilation_points_measures':
+            header = 'Extract ventilation points measures library';
             break;
         default:
             header = this.type.toUpperCase() + this.type.slice(1) + ' library';

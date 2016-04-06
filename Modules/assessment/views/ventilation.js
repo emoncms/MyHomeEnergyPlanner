@@ -88,8 +88,11 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
         case 'draught_proofing_measures':
             $('#apply-measure-ventilation-modal #myModalIntroText').html('Choose a measure from a library and <b>adjust the q50 value</b>');
             break;
-        case('ventilation_systems_measures'):
+        case 'ventilation_systems_measures':
             $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and depending on the Ventilation type adjust the other fields.</p>');
+            break;
+        case 'extract_ventilation_points_measures':
+            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and depending on the number of fans to add.</p>');
             break;
     }
     $('#apply-measure-ventilation-modal').modal('show');
@@ -146,7 +149,6 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            console.log(data.ventilation);
             data.ventilation.ventilation_type = measure[tag].ventilation_type;
             data.ventilation.system_air_change_rate = measure[tag].system_air_change_rate;
             data.ventilation.balanced_heat_recovery_efficiency = measure[tag].balanced_heat_recovery_efficiency;
@@ -171,12 +173,23 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                         data.ventilation[z] = new_value;
                 }
                 data.measures.ventilation[library_helper.type].measure = measure[tag];
-                break;
             }
+            break;
+        case 'extract_ventilation_points_measures':
+            if (data.measures.ventilation[library_helper.type].original == undefined) // first time
+                data.measures.ventilation[library_helper.type].original = data.ventilation.number_of_intermittentfans;
+            var measure = library_helper.extract_ventilation_points_measures_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            data.ventilation.number_of_intermittentfans += 1.0 * measure[tag].number_of_intermittentfans_to_add;
+            data.measures.ventilation[library_helper.type].measure = measure[tag];
+            break;
     }
     update();
     $('#apply-measure-ventilation-modal').modal('hide');
 });
+
 function ventilation_initUI()
 {
     if (data.ventilation.air_permeability_test) {
@@ -230,6 +243,7 @@ function ventilation_initUI()
             break;
     }
 }
+
 function ventilation_UpdateUI() {
     ventilation_initUI();
 }

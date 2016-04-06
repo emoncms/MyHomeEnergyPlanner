@@ -26,6 +26,9 @@ function librariesmanager_UpdateUI()
             case 'ventilation_systems_measures':
                 header = 'Ventilation system measures library';
                 break;
+            case 'extract_ventilation_points_measures':
+                header = 'Extract ventilation points measures library';
+                break;
             default:
                 header = t;
         }
