@@ -9,30 +9,7 @@ function librariesmanager_UpdateUI()
     for (t in library_helper.library_list) {
         // Add header
         $('#libraries-table').append($('#library-table-header-template').html());
-        var header;
-        switch (t) {
-            case 'elements':
-                header = 'Fabric elements';
-                break;
-            case 'systems':
-                header = 'Energy systems';
-                break;
-            case 'elements_measures':
-                header = 'Fabric elements measures';
-                break;
-            case 'draught_proofing_measures':
-                header = 'Draught proofing measures';
-                break;
-            case 'ventilation_systems_measures':
-                header = 'Ventilation system measures library';
-                break;
-            case 'extract_ventilation_points_measures':
-                header = 'Extract ventilation points measures library';
-                break;
-            default:
-                header = t;
-        }
-        $("#libraries-table .header[library-type='template']").html(header);
+        $("#libraries-table .header[library-type='template']").html(library_helper.library_names[t]);
         $("#libraries-table [library-type='template']").attr('library-type', t);
         //Add libraries
         var library = {};

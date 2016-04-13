@@ -6,6 +6,7 @@ function libraryHelper(type, container) {
     // Variables to link the view with the controller
     this.type = type;
     this.library_id = 0;
+    this.library_names = {}; // I know this should not be here :p
     //this.library_html_strings ={};
 
     this.init();
@@ -25,7 +26,16 @@ function libraryHelper(type, container) {
 libraryHelper.prototype.init = function () {
     this.load_user_libraries(); // Populates this.library_list
     this.get_library_permissions(); // Populates this.library_permissions
-    //this.get_html_strings(); // Populates this.library_html_strings
+    this.library_names = {
+        'elements': 'Fabric elements',
+        'systems': 'Energy systems',
+        'elements_measures': 'Fabric elements measures',
+        'draught_proofing_measures': 'Draught proofing measures',
+        'ventilation_systems_measures': 'Ventilation system measures',
+        'extract_ventilation_points_measures': 'Extract ventilation points measures',
+        'intentional_vents_and_flues': 'Intentional vents and flues',
+        'intentional_vents_and_flues_measures': 'Intentional vents and flues measures'
+    };
 };
 libraryHelper.prototype.add_events = function () {
     var myself = this;
@@ -159,7 +169,7 @@ libraryHelper.prototype.add_events = function () {
 
     this.container.on('change', '.item-ventilation_type', function () {
         var newVS = $('.item-ventilation_type').val();
-        if (newVS == 'DEV' || newVS == 'MEV' || newVS == 'MVHR')
+        if (newVS == 'DEV' || newVS == 'MEV' ||newVS == 'MV' || newVS == 'MVHR')
             $('.item-air_change_rate').parent().parent().show();
         else {
             $('.item-air_change_rate').parent().parent().hide();
@@ -170,6 +180,16 @@ libraryHelper.prototype.add_events = function () {
         else {
             $('.item-heat_recovery_efficiency').parent().parent().hide();
             $('.item-heat_recovery_efficiency').val(0);
+        }
+        if (newVS == 'NV' || newVS == 'IE' || newVS == 'PS') {
+            $('.item-intermitent_fans').parent().parent().show();
+            $('.item-passive_vents').parent().parent().show();
+        }
+        else {
+            $('.item-intermitent_fans').parent().parent().hide();
+            $('.item-passive_vents').parent().parent().hide();
+            $('.item-intermitent_fans').val(0);
+            $('.item-passive_vents').val(0);
         }
     });
 };
@@ -279,31 +299,7 @@ libraryHelper.prototype.onSelectingLibraryToShow = function (origin) {
     }
 };
 libraryHelper.prototype.onNewLibraryOption = function () {
-    // Display type of library
-    var type;
-    switch (this.type) {
-        case 'elements':
-            type = 'Fabric elements';
-            break;
-        case 'systems':
-            type = 'Energy systems';
-            break;
-        case 'elements_measures':
-            type = 'Fabric elements measures';
-            break;
-        case 'draught_proofing_measures':
-            type = 'Draught proofing measures';
-            break;
-        case 'ventilation_systems_measures':
-            type = 'Ventilation system measures library';
-            break;
-        case 'extract_ventilation_points_measures':
-            type = 'Extract ventilation points measures library';
-            break;
-        default:
-            type = this.type;
-    }
-    $('#new-library-modal #new-library-type').html(type);
+    $('#new-library-modal #new-library-type').html(this.library_names[this.type]);
     // Populate the select to choose library to copy
     var out = '';
     this.library_list[this.type].forEach(function (library) {
@@ -706,30 +702,7 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
     var library = this.get_library_by_id(library_id);
     this.type = library.type;
     //Header
-    var header;
-    switch (library.type) {
-        case 'elements':
-            header = 'Fabric elements library';
-            break;
-        case 'systems':
-            header = 'Energy systems library';
-            break;
-        case 'elements_measures':
-            header = 'Fabric elements measures library';
-            break;
-        case 'draught_proofing_measures':
-            header = 'Draught proofing measures library';
-            break;
-        case 'ventilation_systems_measures':
-            header = 'Ventilation system measures library';
-            break;
-        case 'extract_ventilation_points_measures':
-            header = 'Extract ventilation points measures library';
-            break;
-        default:
-            header = library.type + ' library';
-    }
-    $("#show-library-items-header").html(header);
+    $("#show-library-items-header").html(this.library_names[this.type]);
     $('#show-library-items-library-name').html(library.name);
 
     // Items
@@ -901,7 +874,7 @@ libraryHelper.prototype.draught_proofing_measures_library_to_html = function (or
         out += "<td><b>q50:</b> " + selected_library.data[z].q50 + " m<sup>3</sup>/hm<sup>2</sup></td>";
         out += "<td style='text-align:right;width:250px'>";
         out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button style='margin-left:10px' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
         out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
@@ -916,7 +889,7 @@ libraryHelper.prototype.ventilation_systems_measures_library_to_html = function 
         out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
         out += "<td style='text-align:right;width:250px'>";
         out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button style='margin-left:10px' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
         out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
@@ -925,6 +898,39 @@ libraryHelper.prototype.ventilation_systems_measures_library_to_html = function 
 };
 libraryHelper.prototype.extract_ventilation_points_measures_library_to_html = function (origin, library_id) {
     return this.ventilation_systems_measures_library_to_html(origin, library_id);
+};
+libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (origin, library_id) {
+    var out = "";
+    var selected_library = this.get_library_by_id(library_id);
+
+    for (z in selected_library.data) {
+        out += "<tr><td>" + z + ': ' + selected_library.data[z].name;
+        out += "<br><span style='font-size:13px'><b>Rate: </b> " + selected_library.data[z].ventilation_rate + " m<sup>3</sup>/h</span>, ";
+        out += "<span style='font-size:13px'><b>Type: </b> " + selected_library.data[z].type + "</span></td>";
+        out += "<td style='text-align:right;width:250px'>";
+        out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-IVF use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+        out += "</td>";
+        out += "</tr>";
+    }
+    return out;
+};
+libraryHelper.prototype.intentional_vents_and_flues_measures_library_to_html = function (origin, library_id) {
+    var out = "";
+    var selected_library = this.get_library_by_id(library_id);
+
+    for (z in selected_library.data) {
+        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
+        out += "<td><b>Ventilation rate:</b> " + selected_library.data[z].ventilation_rate + " m<sup>3</sup>/hm<sup>2</sup></td>";
+        out += "<td style='text-align:right;width:150px'>";
+        out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+        out += "</td>";
+        out += "</tr>";
+    }
+    return out;
 };
 
 
@@ -1144,6 +1150,51 @@ libraryHelper.prototype.extract_ventilation_points_measures_item_to_html = funct
     out += '</tbody></table>';
     return out;
 };
+libraryHelper.prototype.intentional_vents_and_flues_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: 'name', location: '--', source: '--', type: 'Flueless gas fire', ventilation_rate: 40};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Location</td><td><input type="text" class="item-location" value="' + item.location + '" /></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Type</td><td><select class="item-type">';
+    out += item.type === 'Chimney' ? '<option value="Chimney" selected>Chimney</option>' : '<option value="Chimney">Chimney</option>';
+    out += item.type === 'Open flue' ? '<option value="Open flue" selected>Open flue</option>' : '<option value="Open flue">Open flue</option>';
+    out += item.type === 'Intermittent fan' ? '<option value="Intermittent fan" selected>Intermittent fan</option>' : '<option value="Intermittent fan">Intermittent fan</option>';
+    out += item.type === 'Passive vent' ? '<option value="Passive vent" selected>Passive vent</option>' : '<option value="Passive vent">Passive vent</option>';
+    out += item.type === 'Flueless gas fire' ? '<option value="Flueless gas fire" selected>Flueless gas fire</option>' : '<option value="Flueless gas fire">Flueless gas fire</option>';
+    out += '</select></td></tr>';
+    out += '<tr><td>Ventilation rate (m<sup>3</sup>/h)</td><td><input type="number" class="item-ventilation_rate" value="' + item.ventilation_rate + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
+libraryHelper.prototype.intentional_vents_and_flues_measures_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: 'name', source: '--', ventilation_rate: 40, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Ventilation rate (m<sup>3</sup>/h)</td><td><input type="number" class="item-ventilation_rate" value="' + item.ventilation_rate + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
+
 /*******************************************************
  * Get item to save in library (when creating new item)
  ******************************************************/
@@ -1285,6 +1336,39 @@ libraryHelper.prototype.extract_ventilation_points_measures_get_item_to_save = f
     };
     return item;
 };
+libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        source: $(".item-name").val(),
+        location: $(".item-location").val(),
+        type: $(".item-type").val(),
+        ventilation_rate: $(".item-ventilation_rate").val()
+    };
+    return item;
+};
+libraryHelper.prototype.intentional_vents_and_flues_measures_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        ventilation_rate: 1.0 * $(".item-ventilation_rate").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
+
+
 /***************************************************
  * Other methods
  ***************************************************/
@@ -1368,30 +1452,7 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
     out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
     $("#library-select").html(out);
     // Heading of the modal
-    var header = '';
-    switch (this.type) {
-        case 'elements':
-            header = 'Fabric elements library';
-            break;
-        case 'systems':
-            header = 'Energy systems library';
-            break;
-        case 'elements_measures':
-            header = 'Fabric elements measures library';
-            break;
-        case 'draught_proofing_measures':
-            header = 'Draught proofing measures library';
-            break;
-        case 'ventilation_systems_measures':
-            header = 'Ventilation system measures library';
-            break;
-        case 'extract_ventilation_points_measures':
-            header = 'Extract ventilation points measures library';
-            break;
-        default:
-            header = this.type.toUpperCase() + this.type.slice(1) + ' library';
-    }
-    $('#show-library-modal .modal-header h3').html(header);
+    $('#show-library-modal .modal-header h3').html(this.library_names[this.type]);
     // Draw the library
     var id = $('#library-select').val();
     $('#library_table').html('');

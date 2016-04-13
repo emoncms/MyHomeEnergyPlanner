@@ -355,7 +355,8 @@ calc.ventilation = function (data)
         ventilation_type: 'd',
         system_air_change_rate: 0.5,
         balanced_heat_recovery_efficiency: 65,
-        structural_infiltration: 0
+        structural_infiltration: 0,
+        IVF:[]
     };
 
     if (data.ventilation == undefined)
@@ -367,11 +368,12 @@ calc.ventilation = function (data)
     }
 
     var total = 0;
-    total += data.ventilation.number_of_chimneys * 40;
-    total += data.ventilation.number_of_openflues * 20;
+    // Intentional vents and flues (IVF: Chimneys, open flues and flueless gas fires)
+    for (z in data.ventilation.IVF)
+        total+=data.ventilation.IVF[z].ventilation_rate;
+    
     total += data.ventilation.number_of_intermittentfans * 10;
     total += data.ventilation.number_of_passivevents * 10;
-    total += data.ventilation.number_of_fluelessgasfires * 40;
     var infiltration = 0;
     if (data.volume != 0) {
         infiltration = total / data.volume;

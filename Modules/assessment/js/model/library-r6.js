@@ -1058,5 +1058,45 @@ var standard_library = {
             "notes": "EV_test",
             "maintenance": "EV_test"
         }
+    },
+    intentional_vents_and_flues: {
+        IVF_01: {
+            name: 'Standard chimney',
+            location: '',
+            source: 'SAP',
+            type: 'Chimney',
+            ventilation_rate: 40
+        },
+        IVF_02: {
+            name: 'Standard open flue',
+            location: '',
+            source: 'SAP',
+            type: 'Open flue',
+            ventilation_rate: 20
+        },
+        IVF_03: {
+            name: 'Standard flueless gas fire',
+            location: '',
+            source: 'SAP',
+            type: 'Flueless gas fire',
+            ventilation_rate: 40
+        }
+    },
+    intentional_vents_and_flues_measures:{
+        IV_test: {
+            "name": "Intentioanl vents... - TEST ",
+            "ventilation_rate": 5,
+            'source': 'IV_test',
+            "description": "IV_test",
+            "performance": 3,
+            "benefits": "IV_test",
+            "cost": "IV_test",
+            "who_by": "IV_test",
+            "disruption": "IV_test",
+            "associated_work": "IV_test",
+            "key_risks": "IV_test",
+            "notes": "IV_test",
+            "maintenance": "IV_test"
+        }
     }
 };  
