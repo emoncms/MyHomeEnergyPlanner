@@ -22,7 +22,7 @@ function librariesmanager_UpdateUI()
             $('#libraries-table [library-id="template"]').attr('library-id', library.id);
             if (library_helper.library_permissions[library.id].write != 1) {
                 access = "Read";
-                $('.if-write-access[library-id=' + library.id + ']').hide();
+                $('.if-write-access[library-id=' + library.id + ']').hide('fast');
             }
             else {
                 access = 'Write';

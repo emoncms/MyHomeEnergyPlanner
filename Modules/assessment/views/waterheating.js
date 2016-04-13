@@ -3,21 +3,21 @@ console.log("debug waterheating.js");
 function waterheating_UpdateUI()
 {
     if (data.water_heating.instantaneous_hotwater)
-        $(".loss-interface").hide();
+        $(".loss-interface").hide('fast');
     else {
-        $(".loss-interface").show();
+        $(".loss-interface").show('fast');
         if (data.water_heating.storage)
-            $('.storage').show();
+            $('.storage').show('fast');
         else
-            $('.storage').hide();
+            $('.storage').hide('fast');
     }
 
     if (data.water_heating.declared_loss_factor_known) {
-        $(".declared-loss-factor-known").show();
-        $(".declared-loss-factor-not-known").hide();
+        $(".declared-loss-factor-known").show('fast');
+        $(".declared-loss-factor-not-known").hide('fast');
     } else {
-        $(".declared-loss-factor-known").hide();
-        $(".declared-loss-factor-not-known").show();
+        $(".declared-loss-factor-known").hide('fast');
+        $(".declared-loss-factor-not-known").show('fast');
     }
 
     if (data.water_heating.override_annual_energy_content)
@@ -26,14 +26,14 @@ function waterheating_UpdateUI()
         $('#annual_energy_content').html('<span key="data.water_heating.annual_energy_content" dp=0></span>  kWh/year');
 
     if (data.water_heating.system == 'Combi boiler') {
-        $('#combi-boiler').show();
+        $('#combi-boiler').show('fast');
         if (data.water_heating.combi_boiler == 'storage_over55' || data.water_heating.combi_boiler == 'storage_less55')
-            $('#combi-storage-volume').show();
+            $('#combi-storage-volume').show('fast');
         else
-            $('#combi-storage-volume').hide();
+            $('#combi-storage-volume').hide('fast');
     }
     else
-        $('#combi-boiler').hide();
+        $('#combi-boiler').hide('fast');
 
 }
 

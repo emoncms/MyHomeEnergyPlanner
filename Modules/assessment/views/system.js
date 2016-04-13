@@ -41,10 +41,10 @@ function system_UpdateUI()
         $("#energyrequirements [eid=template]").attr('eid', z);
 
         if (z == 'space_heating')
-            $("#energyrequirements .secondary-space-heating.template").show();
+            $("#energyrequirements .secondary-space-heating.template").show('fast');
         $("#energyrequirements .secondary-space-heating.template").removeClass('template');
         //if (z == 'solarpv' || z == 'wind' || z == 'hydro' || z == 'solarpv2')
-        //  $("#energyrequirements [eid='" + z + "']").hide();
+        //  $("#energyrequirements [eid='" + z + "']").hide('fast');
 
         for (x in data.energy_systems[z])
             add_energy_system(z, x);
@@ -52,11 +52,11 @@ function system_UpdateUI()
 
     $('#generation').html("");
     if (data.use_generation != 1) {
-        $('#generation-container').hide();
+        $('#generation-container').hide('fast');
         $("#fit_income").html('£0');
     }
     else {
-        $('#generation-container').show();
+        $('#generation-container').show('fast');
         $("#fit_income").html('<b>£<span key="data.total_income" dp=0></span></b>');
         for (z in data.generation.systems) {
             $('#generation').append($('#suppliedby-generation-template').html());
@@ -117,7 +117,7 @@ function add_energy_system(z, x)
 
     if (z == 'space_heating') {
         $("#energyrequirements [key='data.energy_systems.template.x.secondary']").attr('key', prefixB + '.secondary');
-        $("#energyrequirements .secondary-space-heating.template").show();
+        $("#energyrequirements .secondary-space-heating.template").show('fast');
     }
     $("#energyrequirements .secondary-space-heating.template").removeClass('template');
 
@@ -303,10 +303,10 @@ function apply_measure(measure) {
  $(".edit-system-summer").val(data.systemlibrary[system].summer);
  $(".edit-system-fuel").val(data.systemlibrary[system].fuel);
  
- $("#modal-system-library-table-view").hide();
- $("#modal-system-library-editnew-view").show();
+ $("#modal-system-library-table-view").hide('fast');
+ $("#modal-system-library-editnew-view").show('fast');
  
- $(".save-system").show();
+ $(".save-system").show('fast');
  });
  */
 
@@ -320,10 +320,10 @@ function apply_measure(measure) {
  $(".edit-system-summer").val("1.0");
  $(".edit-system-fuel").val("electric");
  
- $("#modal-system-library-table-view").hide();
- $("#modal-system-library-editnew-view").show();
+ $("#modal-system-library-table-view").hide('fast');
+ $("#modal-system-library-editnew-view").show('fast');
  
- $(".save-system").show();
+ $(".save-system").show('fast');
  });
  */
 
@@ -351,10 +351,10 @@ function apply_measure(measure) {
  }
  $("#system-library-table").html(out);
  
- $("#modal-system-library-table-view").show();
- $("#modal-system-library-editnew-view").hide();
+ $("#modal-system-library-table-view").show('fast');
+ $("#modal-system-library-editnew-view").hide('fast');
  $("#modal-system-library").modal("show");
- $(".save-system").hide();
+ $(".save-system").hide('fast');
  });
  */
 

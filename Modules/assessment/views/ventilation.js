@@ -40,19 +40,19 @@ $("[key='data.ventilation.air_permeability_test']").change(function () {
 
     var val = $(this)[0].checked;
     if (val == true) {
-        $("#structural").hide();
-        $("#air_permeability_value_tbody").show();
+        $("#structural").hide('slow');
+        $("#air_permeability_value_tbody").show('slow');
     } else {
-        $("#structural").show();
-        $("#air_permeability_value_tbody").hide();
+        $("#structural").show('slow');
+        $("#air_permeability_value_tbody").hide('slow');
     }
 
 });
 $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     library_helper.init();
     library_helper.type = $(this).attr('type');
-    $('#apply-measure-ventilation-finish').hide();
-    $('#apply-measure-ventilation-modal .modal-body > div').hide();
+    $('#apply-measure-ventilation-finish').hide('slow');
+    $('#apply-measure-ventilation-modal .modal-body > div').hide('slow');
     // Populate selects in modal to choose library and measure
     var out = library_helper.get_list_of_libraries_for_select(library_helper.type);
     $("#apply-measure-ventilation-library-select").html(out);
@@ -215,11 +215,11 @@ function ventilation_initUI()
         data.measures.ventilation = {};
     // Structural infiltration
     if (data.ventilation.air_permeability_test) {
-        $("#structural").hide();
-        $("#air_permeability_value_tbody").show();
+        $("#structural").hide('slow');
+        $("#air_permeability_value_tbody").show('slow');
     } else {
-        $("#structural").show();
-        $("#air_permeability_value_tbody").hide();
+        $("#structural").show('slow');
+        $("#air_permeability_value_tbody").hide('slow');
     }
 
     // Ventilation system
@@ -249,24 +249,24 @@ function ventilation_initUI()
     switch (ventilation_type)
     {
         case 'a':
-            $("#system_air_change_rate_div").show();
-            $("#balanced_heat_recovery_efficiency_div").show();
-            $('#fans_and_vents_div').hide();
+            $("#system_air_change_rate_div").show('slow');
+            $("#balanced_heat_recovery_efficiency_div").show('slow');
+            $('#fans_and_vents_div').hide('slow');
             break;
         case 'b':
-            $("#system_air_change_rate_div").show();
-            $("#balanced_heat_recovery_efficiency_div").hide();
-            $('#fans_and_vents_div').hide();
+            $("#system_air_change_rate_div").show('slow');
+            $("#balanced_heat_recovery_efficiency_div").hide('slow');
+            $('#fans_and_vents_div').hide('slow');
             break;
         case 'c':
-            $("#system_air_change_rate_div").show();
-            $("#balanced_heat_recovery_efficiency_div").hide();
-            $('#fans_and_vents_div').hide();
+            $("#system_air_change_rate_div").show('slow');
+            $("#balanced_heat_recovery_efficiency_div").hide('slow');
+            $('#fans_and_vents_div').hide('slow');
             break;
         case 'd':
-            $("#system_air_change_rate_div").hide();
-            $("#balanced_heat_recovery_efficiency_div").hide();
-            $('#fans_and_vents_div').show();
+            $("#system_air_change_rate_div").hide('slow');
+            $("#balanced_heat_recovery_efficiency_div").hide('slow');
+            $('#fans_and_vents_div').show('slow');
             break;
     }
 

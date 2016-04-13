@@ -94,9 +94,9 @@ $("#openbem").on("click", '#apply-measure-TB-modal-ok', function () {
  /*$("#create-element-type").change(function () {
  var type = $(this).val();
  if (type == "Window") {
- $(".create-element-window-options").show();
+ $(".create-element-window-options").show('fast');
  } else {
- $(".create-element-window-options").hide();
+ $(".create-element-window-options").hide('fast');
  }
  });
  */
@@ -667,11 +667,11 @@ function edit_item(element, row) {
  }
  $("#element_library").html(out);
  if (element.type == "window") {
- $('.element-window-option').show();
+ $('.element-window-option').show('fast');
  $('#myModal').css({left: 450});
  }
  else {
- $('.element-window-option').hide();
+ $('.element-window-option').hide('fast');
  $('#myModal').css({left: 650});
  }
  
@@ -717,16 +717,16 @@ function edit_item(element, row) {
  $("#create-element-g").val(element_library[lib].g);
  $("#create-element-gL").val(element_library[lib].gL);
  $("#create-element-ff").val(element_library[lib].ff);
- $(".create-element-window-options").show();
+ $(".create-element-window-options").show('fast');
  }
  else
- $(".create-element-window-options").hide();
+ $(".create-element-window-options").hide('fast');
  $("#myModalcreateelement").modal('show');
  $('#myModal').modal('hide');
  });
  $("#openbem").on("click", ".newlibraryoption", function () {
- $(".library-select-view").hide();
- $(".new-library-view").show();
+ $(".library-select-view").hide('fast');
+ $(".new-library-view").show('fast');
  });
  $("#openbem").on("click", "#newlibrary", function () {
  var name = $("#newlibrary-name").val();
@@ -734,8 +734,8 @@ function edit_item(element, row) {
  $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + name, datatype: "json", success: function (result) {
  console.log("result: " + result);
  loadlibrarylist();
- $(".library-select-view").show();
- $(".new-library-view").hide();
+ $(".library-select-view").show('fast');
+ $(".new-library-view").hide('fast');
  }});
  });
  $("#library-select").change(function () {
@@ -749,8 +749,8 @@ function edit_item(element, row) {
  }
  });
  $("#openbem").on("click", "#cancelnewlibrary", function () {
- $(".library-select-view").show();
- $(".new-library-view").hide();
+ $(".library-select-view").show('fast');
+ $(".new-library-view").hide('fast');
  });
  $("#open-share-library").click(function () {
  $("#modal-share-library").modal('show');

@@ -170,24 +170,24 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('change', '.item-ventilation_type', function () {
         var newVS = $('.item-ventilation_type').val();
         if (newVS == 'DEV' || newVS == 'MEV' ||newVS == 'MV' || newVS == 'MVHR')
-            $('.item-air_change_rate').parent().parent().show();
+            $('.item-air_change_rate').parent().parent().show('fast');
         else {
-            $('.item-air_change_rate').parent().parent().hide();
+            $('.item-air_change_rate').parent().parent().hide('fast');
             $('.item-air_change_rate').val(0);
         }
         if (newVS == 'MVHR')
-            $('.item-heat_recovery_efficiency').parent().parent().show();
+            $('.item-heat_recovery_efficiency').parent().parent().show('fast');
         else {
-            $('.item-heat_recovery_efficiency').parent().parent().hide();
+            $('.item-heat_recovery_efficiency').parent().parent().hide('fast');
             $('.item-heat_recovery_efficiency').val(0);
         }
         if (newVS == 'NV' || newVS == 'IE' || newVS == 'PS') {
-            $('.item-intermitent_fans').parent().parent().show();
-            $('.item-passive_vents').parent().parent().show();
+            $('.item-intermitent_fans').parent().parent().show('fast');
+            $('.item-passive_vents').parent().parent().show('fast');
         }
         else {
-            $('.item-intermitent_fans').parent().parent().hide();
-            $('.item-passive_vents').parent().parent().hide();
+            $('.item-intermitent_fans').parent().parent().hide('fast');
+            $('.item-passive_vents').parent().parent().hide('fast');
             $('.item-intermitent_fans').val(0);
             $('.item-passive_vents').val(0);
         }
@@ -293,9 +293,9 @@ libraryHelper.prototype.onSelectingLibraryToShow = function (origin) {
         $('#create-in-library').attr('library-id', id);
         // Hide/show "share" option according to the permissions
         if (this.library_permissions[id].write == 0)
-            $('.if-write').hide();
+            $('.if-write').hide('fast');
         else
-            $('.if-write').show();
+            $('.if-write').show('fast');
     }
 };
 libraryHelper.prototype.onNewLibraryOption = function () {
@@ -309,15 +309,15 @@ libraryHelper.prototype.onNewLibraryOption = function () {
 
     $('#new-library-name').val('New name');
     $(".modal").modal('hide');
-    $('#new-library-modal .btn').show();
-    $('#new-library-modal #finishcreatelibrary').hide();
+    $('#new-library-modal .btn').show('fast');
+    $('#new-library-modal #finishcreatelibrary').hide('fast');
     $("#new-library-modal").modal('show');
 };
 libraryHelper.prototype.onChangeEmptyOrCopyLibrary = function () {
     if ($("input[name=empty_or_copy_library]:checked").val() == 'empty')
-        $('#library-to-copy').hide();
+        $('#library-to-copy').hide('fast');
     else
-        $('#library-to-copy').show();
+        $('#library-to-copy').show('fast');
 };
 libraryHelper.prototype.onCreateNewLibrary = function () {
     $("#create-library-message").html('');
@@ -329,9 +329,9 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
             myself.load_user_libraries();
             myself.get_library_permissions();
             $("#create-library-message").html('Library created');
-            $('#cancelnewlibrary').hide();
-            $('#newlibrary').hide();
-            $('#finishcreatelibrary').show();
+            $('#cancelnewlibrary').hide('fast');
+            $('#newlibrary').hide('fast');
+            $('#finishcreatelibrary').show('fast');
             UpdateUI(data);
         }
         else
@@ -356,8 +356,8 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
 };
 libraryHelper.prototype.onCreateInLibrary = function (library_id) {
     $('#modal-create-in-library .modal-header h3').html('Create ' + page);
-    $('#modal-create-in-library .btn').show();
-    $('#modal-create-in-library #create-in-library-finish').hide();
+    $('#modal-create-in-library .btn').show('fast');
+    $('#modal-create-in-library #create-in-library-finish').hide('fast');
     // Populate the select to choose library to copy from
     var out = '';
     this.library_list[this.type].forEach(function (library) {
@@ -385,7 +385,7 @@ libraryHelper.prototype.onCreateInLibrary = function (library_id) {
         $('#create-in-library-ok').attr('library-id', library_id);
     // Preselect create empty one
     $('input:radio[name=empty_or_copy_item]').val(['empty']);
-    $('#copy-item-from').hide();
+    $('#copy-item-from').hide('fast');
 
     $('#modal-create-in-library').modal('show');
 };
@@ -409,8 +409,8 @@ libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
             $.ajax({type: "POST", url: path + "assessment/additemtolibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + JSON.stringify(item[tag]), success: function (result) {
                     if (result == true) {
                         $("#create-in-library-message").html("Item added to the library");
-                        $('#modal-create-in-library button').hide();
-                        $('#create-in-library-finish').show();
+                        $('#modal-create-in-library button').hide('fast');
+                        $('#create-in-library-finish').show('fast');
                     }
                     else
                         $("#create-in-library-message").html("There were problems saving the library");
@@ -426,10 +426,10 @@ libraryHelper.prototype.onChangeEmptyOrCopyItem = function () {
         var function_name = this.type + '_item_to_html';
         out = this[function_name]();
         $('.new-item-in-library').html(out);
-        $('#copy-item-from').hide();
+        $('#copy-item-from').hide('fast');
     }
     else {
-        $('#copy-item-from').show();
+        $('#copy-item-from').show('fast');
         // Display the item
         var selected_library = this.get_library_by_id($('#origin-library-select').val());
         var selected_item = selected_library.data[$('#item-to-copy-select').val()];
@@ -476,15 +476,15 @@ libraryHelper.prototype.onEditLibraryItem = function (origin) {
     // Call to specific function for the type
     var function_name = this.type + '_item_to_html';
     var out = this[function_name](item, tag);
-    $('#library-to-edit-item').parent().show();
+    $('#library-to-edit-item').parent().show('fast');
     $('.edit-item-in-library').html(out);
     $('#edit-item-ok').attr('class', "btn edit-library-item-ok");
     $('#edit-item-ok').attr('library-id', selected_library.id);
     $('.item-tag').attr('disabled', 'true');
     $('.editable-field').removeAttr("disabled");
     $("#edit-item-message").html('');
-    $('#modal-edit-item button').show();
-    $('#edit-item-finish').hide();
+    $('#modal-edit-item button').show('fast');
+    $('#edit-item-finish').hide('fast');
     $('.modal').modal('hide');
     $('#modal-edit-item').modal('show');
 };
@@ -503,8 +503,8 @@ libraryHelper.prototype.onEditLibraryItemOk = function (library_id) {
         $.ajax({type: "POST", url: path + "assessment/edititeminlibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + item_string, success: function (result) {
                 if (result == true) {
                     $("#edit-item-message").html("Item edited and library saved");
-                    $('#modal-edit-item button').hide();
-                    $('#edit-item-finish').show();
+                    $('#modal-edit-item button').hide('fast');
+                    $('#edit-item-finish').show('fast');
                 }
                 else
                     $("#edit-item-message").html("There were problems saving the library - " + result);
@@ -518,15 +518,15 @@ libraryHelper.prototype.onEditItem = function (origin) {
     var function_name = this.type + '_item_to_html';
     var out = this[function_name](item, tag);
     $('.edit-item-in-library').html(out);
-    $('#library-to-edit-item').parent().hide();
+    $('#library-to-edit-item').parent().hide('fast');
     $('.item-tag').attr('disabled', 'true');
     $('.editable-field').attr('disabled', 'true');
     $('#edit-item-ok').attr('class', "btn edit-item-ok");
     $("#edit-item-message").html('');
     $('#edit-item-ok').attr('row', origin.attr('row'));
     $('#edit-item-ok').attr('type-of-item', origin.attr('type-of-item'));
-    $('#modal-edit-item button').show();
-    $('#edit-item-finish').hide();
+    $('#modal-edit-item button').show('fast');
+    $('#edit-item-finish').hide('fast');
     $('.modal').modal('hide');
     $('#modal-edit-item').modal('show');
 };
@@ -552,11 +552,11 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-ok').attr('type-of-item', origin.attr('type-of-item')); // Used for energy_systems
     //// Check remove item (option by default) and hide item
     $('[name=radio-type-of-measure]').filter('[value=remove]').prop('checked', true);
-    $('#apply-measure-item-fields').hide();
-    $('#apply-measure-replace').hide();
+    $('#apply-measure-item-fields').hide('fast');
+    $('#apply-measure-replace').hide('fast');
     //If we are in fabric Elements show the option to Apply Measure from Measures Library
     if (this.type == 'elements')
-        $('.replace_from_measure_library').show();
+        $('.replace_from_measure_library').show('fast');
 
     // Populate the selects library to choose a library and an item (used when replace the item with one from library)
     //Moved to onChangeApplyMeasureWhatToDo
@@ -569,10 +569,10 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
      */
 
     // Show/hide modals
-    $('#apply-measure-finish').hide();
+    $('#apply-measure-finish').hide('fast');
     $('.modal').modal('hide');
     $('[name=radio-type-of-measure]').each(function (index) {
-        $(this).parent().show();
+        $(this).parent().show('fast');
     });
     $('#apply-measure-modal').modal('show');
 };
@@ -604,15 +604,15 @@ libraryHelper.prototype.onApplyMeasureOk = function (origin) {
 libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
     switch ($('[name=radio-type-of-measure]:checked').val()) {
         case 'remove':
-            $('#apply-measure-replace').hide();
-            $('#apply-measure-item-fields').hide();
+            $('#apply-measure-replace').hide('fast');
+            $('#apply-measure-item-fields').hide('fast');
             break;
         case 'replace':
             this.populate_selects_in_apply_measure_modal(this.type);
             this.onChangeApplyMeasureReplaceFromLib(this.type);
             this.onChangeApplyMeasureReplaceFromLibItem(this.type);
-            $('#apply-measure-replace').show();
-            $('#apply-measure-item-fields').show();
+            $('#apply-measure-replace').show('fast');
+            $('#apply-measure-item-fields').show('fast');
             break;
         case 'replace_from_measure_library':
             if (this.type == 'elements')
@@ -622,8 +622,8 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             this.populate_selects_in_apply_measure_modal(type)
             this.onChangeApplyMeasureReplaceFromLib(type);
             this.onChangeApplyMeasureReplaceFromLibItem(type);
-            $('#apply-measure-replace').show();
-            $('#apply-measure-item-fields').show();
+            $('#apply-measure-replace').show('fast');
+            $('#apply-measure-item-fields').show('fast');
             break;
         case 'edit':
             var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
@@ -633,8 +633,8 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             var out = this[function_name](original_item, tag);
             $('#apply-measure-item-fields').html(out);
             $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
-            $('#apply-measure-replace').hide();
-            $('#apply-measure-item-fields').show();
+            $('#apply-measure-replace').hide('fast');
+            $('#apply-measure-item-fields').show('fast');
             break;
     }
 };
@@ -666,13 +666,13 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
 
     // Show window specific fields for a given type
     if (type == 'Window' || type == 'Door' || type == 'Roof_light')
-        $('.window-element').show();
+        $('.window-element').show('fast');
     else
-        $('.window-element').hide();
+        $('.window-element').hide('fast');
     if (type == "Wall" && this.type == 'elements_measures')
-        $('#modal-create-in-library .EWI-row').show();
+        $('#modal-create-in-library .EWI-row').show('fast');
     else
-        $('#modal-create-in-library .EWI-row').hide();
+        $('#modal-create-in-library .EWI-row').hide('fast');
 
     // Populate elements dropdown
     $('#modal-create-in-library #item-to-copy-select').html('');
@@ -713,15 +713,15 @@ libraryHelper.prototype.onShowLibraryItems = function (library_id) {
     // Add Library id to edit buttons
 
     // Hide the Use buttons
-    $("#show-library-items-modal .use-from-lib").hide();
+    $("#show-library-items-modal .use-from-lib").hide('fast');
 
     // Hide Write options if no write access
     if (this.library_permissions[library.id].write != 1)
-        $("#show-library-items-modal .if-write").hide();
+        $("#show-library-items-modal .if-write").hide('fast');
 
     // Show the select to choose the type of fabric elements when library is "elements"
     if (this.type == 'elements' || this.type == 'elements_measures')
-        $('#show-library-items-modal .element-type').show();
+        $('#show-library-items-modal .element-type').show('fast');
 
     // Add library id to Create new item 
     $('#show-library-items-modal #create-in-library').attr('library-id', library_id);
@@ -741,12 +741,12 @@ libraryHelper.prototype.onChangeTypeOfElementsToShow = function (origin) {
     // Add Library id to edit buttons
 
     // Hide the Use buttons
-    $("#show-library-items-modal .use-from-lib").hide();
+    $("#show-library-items-modal .use-from-lib").hide('fast');
     // Hide Write options if no write access
     if (this.library_permissions[library_id].write != 1)
-        $("#show-library-items-modal .if-write").hide();
+        $("#show-library-items-modal .if-write").hide('fast');
     // Show the select to choose the type of fabric elements when library is "elements"
-    $('#show-library-items-modal .element-type').show();
+    $('#show-library-items-modal .element-type').show('fast');
 };
 libraryHelper.prototype.onManageUsers = function (library_id) {
 
@@ -1118,13 +1118,13 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
 
     // Show hide "air change rate" and "heat recovery efficiannecy" accordint to the ventilation system
     if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR')
-        $('.item-air_change_rate').parent().parent().show();
+        $('.item-air_change_rate').parent().parent().show('fast');
     else
-        $('.item-air_change_rate').parent().parent().hide();
+        $('.item-air_change_rate').parent().parent().hide('fast');
     if (item.ventilation_type == 'MVHR')
-        $('.item-heat_recovery_efficiency').parent().parent().show();
+        $('.item-heat_recovery_efficiency').parent().parent().show('fast');
     else
-        $('.item-heat_recovery_efficiency').parent().parent().hide();
+        $('.item-heat_recovery_efficiency').parent().parent().hide('fast');
 
     return out;
 };
@@ -1463,9 +1463,9 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
     $('#create-in-library').attr('library-id', id);
     // Hide/show "share" option according to the permissions
     if (this.library_permissions[id].write == 0)
-        $('.if-write').hide();
+        $('.if-write').hide('fast');
     else
-        $('.if-write').show();
+        $('.if-write').show('fast');
 };
 
 libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type_of_library) {

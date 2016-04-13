@@ -42,19 +42,19 @@ $('#openbem').on('change', '#LAC_calculation_type', function () {
 });
 
 function show_LAC_divs(type_of_calc) {
-    $('#LAC-container .to-be-hidden').hide();
+    $('#LAC-container .to-be-hidden').hide('fast');
     switch (type_of_calc) {
         case 'detailedlist':
-            $('#detailed-list').show();
+            $('#detailed-list').show('fast');
             break;
         case 'SAP':
-            $('#lighting-SAP').show();
-            $('#appliances-SAP').show();
-            $('#cooking-SAP').show();
+            $('#lighting-SAP').show('fast');
+            $('#appliances-SAP').show('fast');
+            $('#cooking-SAP').show('fast');
             break;
         case 'carboncoop_SAPlighting':
-            $('#lighting-SAP').show();
-            $('#CarbonCoop').show();
+            $('#lighting-SAP').show('fast');
+            $('#CarbonCoop').show('fast');
             break;
     }
 }
