@@ -34,78 +34,70 @@
                 <td width="150px">Intermittent fans</td>
                 <td><input key="data.ventilation.number_of_intermittentfans" type="number" min='0' style="width:50px"/>
                     <button class="apply-ventilation-measure-from-lib if-not-master" type="extract_ventilation_points_measures" style="margin:0 0 10px 15px">Apply Measure</button></td>
-           </tr>
+            </tr>
             <tr>
                 <td>Passive vents</td>
                 <td><input key="data.ventilation.number_of_passivevents" type="number" min='0' style="width:50px"/></td>
-                </tr>
+            </tr>
         </table>
     </div>
-    
+
     <table class="table">
         <tr>
-            <th style="text-align:left"><h4>Air tightness test:</h4></th>
-        <th style="width:60%"></th>
+            <th style="text-align:left" width="20%"><h4>Structural infiltration</h4></th>
+        <th style='padding:0 0 20px 0; vertical-align: bottom' width="15%"><span key="data.ventilation.infiltration_rate_incorp_shelter_factor" dp="2"></span> m<sup>3</sup>/h</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        </tr>
+        <tr><td style="text-align:left">Number of sides sheltered</td>
+            <td colspan="5"><input key="data.ventilation.number_of_sides_sheltered" type="text" style="width:50px"/></td>
         </tr>
         <tr>
             <td style="text-align:left">Calculate infiltration rate based on air tightness test:</td>
-            <td><input key="data.ventilation.air_permeability_test" type="checkbox" /></td>
+            <td colspan="5"><input key="data.ventilation.air_permeability_test" type="checkbox" /></td>
         </tr>
-
         <tbody id="air_permeability_value_tbody">
             <tr>
                 <td style="text-align:left">Air permeability value, q50, expressed in cubic metres per hour per square metre of envelope area:</td>
-                <td><input key="data.ventilation.air_permeability_value" type="text" style="width:60px"/>
+                <td colspan="5"><input key="data.ventilation.air_permeability_value" type="text" style="width:60px"/>
                     <button class="apply-ventilation-measure-from-lib if-not-master" type="draught_proofing_measures" style="margin:0 0 10px 25px">Apply Measure</button>
                 </td>
             </tr>
-            <tr>
-                <td style="text-align:left">Structural infiltration based on test:</td>
-                <td><b><span key="data.ventilation.structural_infiltration_from_test" dp="2"></span> m<sup>3</sup>/h</b></td>
-            </tr>
         </tbody>
-    </table>
-
-    <table class="table">
         <tbody id="structural">
             <tr>
-                <th style="text-align:left"><h4>Structural infiltration</h4></th>
-        <th style='padding:0 0 20px 0; vertical-align: bottom'><span key="data.ventilation.structural_infiltration" dp="2"></span> m<sup>3</sup>/h</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        </tr>
-        <tr>
-            <td style="text-align:left">Walls</td>
-            <td style="text-align:left">
-                <select key="data.ventilation.dwelling_construction" style="width:180px">
-                    <option value='timberframe'>Timber Frame (+0.2)</option>
-                    <option value='masonry'>Masonry (+0.35)</option>
-                </select>
-            </td>
-            <td style="text-align:left">Percentage of windows and<br>doors draught proofed</td>
-            <td style="text-align:left">
-                <div class="input-append">
-                    <input key="data.ventilation.percentage_draught_proofed" type="text" style="width:50px">
-                    <span class="add-on">%</span>
-                </div>
-            </td>  
-            <td style="text-align:left">Number of storeys</td><td><span key="data.num_of_floors"></span></td>
-        </tr>
-        <tr>
-            <td style="text-align:left">Floor</td>
-            <td style="text-align:left">
-                <select key="data.ventilation.suspended_wooden_floor" style="width:180px">
-                    <option value="unsealed" >Suspended unsealed wooden floor (+0.2)</option>
-                    <option value="sealed">Suspended sealed wooden floor (+0.1)</option>
-                    <option value="0">Solid floor (+0)</option>
-                </select>
-            </td>
-            <td style="text-align:left">Draught Lobby</td>
-            <td style="text-align:left"><input key="data.ventilation.draught_lobby" type="checkbox" /></td>
-            <td style="text-align:left">Number of sides sheltered</td><td><input key="data.ventilation.number_of_sides_sheltered" type="text" style="width:50px"/></td>
-        </tr>
+                <td style="text-align:right;padding-left:55px">Walls</td>
+                <td style="text-align:right">
+                    <select key="data.ventilation.dwelling_construction" style="width:180px">
+                        <option value='timberframe'>Timber Frame (+0.2)</option>
+                        <option value='masonry'>Masonry (+0.35)</option>
+                    </select>
+                </td>
+                <td style="text-align:right">Percentage of windows and<br>doors draught proofed</td>
+                <td style="text-align:left">
+                    <div class="input-append">
+                        <input key="data.ventilation.percentage_draught_proofed" type="text" style="width:50px">
+                        <span class="add-on">%</span>
+                    </div>
+                </td>  
+                <td style="text-align:right">Number of storeys</td>
+                <td><span key="data.num_of_floors"></span></td>
+            </tr>
+            <tr>
+                <td style="text-align:right">Floor</td>
+                <td style="text-align:left">
+                    <select key="data.ventilation.suspended_wooden_floor" style="width:180px">
+                        <option value="unsealed" >Suspended unsealed wooden floor (+0.2)</option>
+                        <option value="sealed">Suspended sealed wooden floor (+0.1)</option>
+                        <option value="0">Solid floor (+0)</option>
+                    </select>
+                </td>
+                <td style="text-align:right">Draught Lobby</td>
+                <td style="text-align:left"><input key="data.ventilation.draught_lobby" type="checkbox" /></td>
+                <td colspan="2"></td>
+            </tr>
         </tbody>
     </table>
 
