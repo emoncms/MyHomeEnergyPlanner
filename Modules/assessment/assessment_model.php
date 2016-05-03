@@ -432,6 +432,7 @@ class Assessment {
 
         $data = json_encode(json_decode($data));
         $data = $this->escape_item($data);
+        $data = $this->mysqli->real_escape_string($data);
         // $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid' AND ");
         // if ($result->num_rows==0)
         //     $result = $this->mysqli->query("INSERT INTO element_library (`userid`) VALUES ('$userid')");
@@ -670,6 +671,7 @@ class Assessment {
             $library = json_decode($row->data, true);
             $library[$tag] = $item;
             $library = json_encode($library);
+            $library = $this->mysqli->real_escape_string($library);
             $result = $this->mysqli->query("UPDATE element_library SET `data`='$library' WHERE `id` = '$library_id'");
             return $result;
         }
@@ -681,7 +683,8 @@ class Assessment {
     }
 
     public function escape_item($item) {
-        $item = preg_replace('/[^\w\s-+.",:{}\/\'\[\]\\\]/', '', $item); 
+        $item = preg_replace('/[^\w\s-+.",:{}\/\'\[\]\\\]/', '', $item);
+        //$item = str_replace("'", "\\'", $item);
         return $item;
     }
 
