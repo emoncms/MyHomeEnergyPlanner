@@ -648,6 +648,8 @@ class Assessment {
             $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id` = '$library_id'");
             $row = $result->fetch_object();
             $library = json_decode($row->data, true);
+            if (!isset($library[$tag]))
+                return "Tag could not be found in the library - tag: $tag";
             unset($library[$tag]);
             $library = json_encode($library);
             $result = $this->mysqli->query("UPDATE element_library SET `data`='$library' WHERE `id` = '$library_id'");
