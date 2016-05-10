@@ -356,7 +356,8 @@ calc.ventilation = function (data)
         system_air_change_rate: 0.5,
         balanced_heat_recovery_efficiency: 65,
         structural_infiltration: 0,
-        IVF:[]
+        IVF: [],
+        EVP: []
     };
 
     if (data.ventilation == undefined)
@@ -370,10 +371,15 @@ calc.ventilation = function (data)
     var total = 0;
     // Intentional vents and flues (IVF: Chimneys, open flues and flueless gas fires)
     for (z in data.ventilation.IVF)
-        total+=data.ventilation.IVF[z].ventilation_rate;
-    
-    total += data.ventilation.number_of_intermittentfans * 10;
-    total += data.ventilation.number_of_passivevents * 10;
+        total += 1.0 * data.ventilation.IVF[z].ventilation_rate;
+
+    // Extract ventilation points
+    for (z in data.ventilation.EVP)
+        total += 1.0 * data.ventilation.EVP[z].ventilation_rate;
+    //total += data.ventilation.number_of_intermittentfans * 10;
+    //total += data.ventilation.number_of_passivevents * 10;
+
+
     var infiltration = 0;
     if (data.volume != 0) {
         infiltration = total / data.volume;

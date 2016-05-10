@@ -430,18 +430,12 @@ class Assessment {
         if (!$this->has_write_access_library($userid, $id))
             return false;
 
-        $data = json_encode(json_decode($data));
         $data = $this->escape_item($data);
+        $data = json_decode($data);
+        $data = json_encode($data);
         $data = $this->mysqli->real_escape_string($data);
-        // $result = $this->mysqli->query("SELECT * FROM element_library WHERE `userid`='$userid' AND ");
-        // if ($result->num_rows==0)
-        //     $result = $this->mysqli->query("INSERT INTO element_library (`userid`) VALUES ('$userid')");
-
-        $req = $this->mysqli->prepare("UPDATE element_library SET `data` = ? WHERE `userid` = ? AND `id`= ?");
-        $req->bind_param("sii", $data, $userid, $id);
-        $req->execute();
-
-        return true;
+        $result = $this->mysqli->query("UPDATE element_library SET `data`='$data' WHERE `userid` = '$userid' AND `id` = '$id'");
+        return $result;
     }
 
     public function has_access_library($userid, $id) {

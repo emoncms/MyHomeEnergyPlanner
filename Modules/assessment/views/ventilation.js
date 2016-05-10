@@ -188,6 +188,11 @@ $('#openbem').on('click', '.add-IVF-from-lib', function () {
     library_helper.type = 'intentional_vents_and_flues';
     library_helper.onAddItemFromLib();
 });
+$('#openbem').on('click', '.add-EVP-from-lib', function () {
+    library_helper.init();
+    library_helper.type = 'extract_ventilation_points';
+    library_helper.onAddItemFromLib();
+});
 $('#openbem').on('click', '.add-IVF', function () {
     var tag = $(this).attr('tag');
     var library = library_helper.get_library_by_id($(this).attr('library')).data;
@@ -197,10 +202,28 @@ $('#openbem').on('click', '.add-IVF', function () {
     data.ventilation.IVF.push(item);
     update();
 });
+$('#openbem').on('click', '.add-EVP', function () {
+    var tag = $(this).attr('tag');
+    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    var item = library[tag];
+    item.tag = tag;
+    item.id = get_EVP_max_id() + 1;
+    data.ventilation.EVP.push(item);
+    update();
+});
 $('#openbem').on('click', '.delete-IVF', function () {
     var row = $(this).attr('row');
     data.ventilation.IVF.splice(row, 1);
     update();
+});
+$('#openbem').on('click', '.delete-EVP', function () {
+    var row = $(this).attr('row');
+    data.ventilation.EVP.splice(row, 1);
+    update();
+});
+$('#openbem').on('click', '.edit-item-EVP', function () {
+    library_helper.type = 'extract_ventilation_points';
+    library_helper.onEditItem($(this));
 });
 $('#openbem').on('click', '.edit-item-IVF', function () {
     library_helper.type = 'intentional_vents_and_flues';
@@ -269,6 +292,17 @@ function ventilation_initUI()
             $('#fans_and_vents_div').show('slow');
             break;
     }
+    
+    // Extract ventilation points (intermittent fans and passive vents) -EVP
+    $('#EVP').html('');
+    for (z in data.ventilation.EVP) {
+        var item = data.ventilation.EVP[z];
+        var out = '<tr><td>' + item.tag + ': ' + item.name + '</td><td><input type="text" style="width: 190px" key="data.ventilation.EVP.' + z + '.location"></td><td>' + item.type + '</td><td style="padding-left:100px">' + item.ventilation_rate + '</td>';
+        out += '<td> <button class="apply-ventilation-measure-from-lib if-not-master" type="intentional_vents_and_flues_measures" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
+        out += '<span class="edit-item-EVP" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing a system this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
+        out += '<span class = "delete-EVP" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
+        $('#EVP').append(out);
+    }
 
     // Intentional vents, flues and extraction points (IVF)
     $('#IVF').html('');
@@ -300,6 +334,20 @@ function get_IVF_max_id() {
     return max_id;
 }
 
+function get_EVP_max_id() {
+    var max_id = 0;
+    // Find the max id
+    for (z in data.ventilation.EVP) {
+        if (data.ventilation.EVP[z].id != undefined && data.ventilation.EVP[z].id > max_id)
+            max_id = data.ventilation.EVP[z].id;
+    }
+    for (z in data.measures.ventilation.EVP) {
+        if (z > max_id)
+            max_id = z;
+    }
+    return max_id;
+}
+
 function edit_item(item, index, item_subsystem) {
     for (z in item)
         item = item[z]; // item comes in the format: system = {electric:{bla bla bla}} and we transform it to: system = {bla bla bla}
@@ -317,5 +365,12 @@ function get_IVF_by_id(item_id) {
     for (z in data.ventilation.IVF) {
         if (item_id == data.ventilation.IVF[z].id)
             return data.ventilation.IVF[z];
+    }
+}
+
+function get_EVP_by_id(item_id) {
+    for (z in data.ventilation.EVP) {
+        if (item_id == data.ventilation.EVP[z].id)
+            return data.ventilation.EVP[z];
     }
 }
