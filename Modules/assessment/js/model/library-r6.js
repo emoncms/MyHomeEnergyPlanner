@@ -1061,7 +1061,7 @@ var standard_library = {
             maintenance: "EVP_test"
         }
     },
-    extract_ventilation_points_measures: {
+   /*extract_ventilation_points_measures: {
         EV_test: {
             name: "Extract Ventilation Point Measure - TEST ",
             number_of_intermittentfans_to_add: 1,
@@ -1076,7 +1076,7 @@ var standard_library = {
             notes: "EV_test",
             maintenance: "EV_test"
         }
-    },
+    },*/
     intentional_vents_and_flues: {
         IVF_01: {
             name: 'Standard chimney',

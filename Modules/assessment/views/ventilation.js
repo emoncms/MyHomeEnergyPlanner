@@ -68,17 +68,31 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     // Specific action for eact type of measure
     switch (library_helper.type) {
         case 'draught_proofing_measures':
+            $('#apply-measure-ventilation-what-to-do').hide();
+            $('#apply-measure-ventilation-library-item-selects').show();
+            $('#apply-measure-ventilation-modal .modal-body').show();
             $('#apply-measure-ventilation-modal #myModalIntroText').html('Choose a measure from a library and <b>adjust the q50 value</b>');
             break;
         case 'ventilation_systems_measures':
+            $('#apply-measure-ventilation-what-to-do').hide();
+            $('#apply-measure-ventilation-library-item-selects').show();
+            $('#apply-measure-ventilation-modal .modal-body').show();
             $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and depending on the Ventilation type adjust the other fields.</p>');
             break;
-        case 'extract_ventilation_points_measures':
-            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and depending on the number of fans to add.</p>');
+        case 'extract_ventilation_points':
+            $('#apply-measure-ventilation-what-to-do').show();
+            $('#apply-measure-ventilation-library-item-selects').hide();
+            $('#apply-measure-ventilation-modal .modal-body').hide();
+            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a type of measure.</p>');
+            library_helper.item_id = $(this).attr('item_id');
+            $('[name=apply-measure-ventilation-what-to-do][value=remove]').click();
             break;
         case 'intentional_vents_and_flues_measures':
+            $('#apply-measure-ventilation-what-to-do').hide();
+            $('#apply-measure-ventilation-library-item-selects').show();
+            $('#apply-measure-ventilation-modal .modal-body').show();
             library_helper.item_id = $(this).attr('item_id');
-            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and set the new <i>ventilationn rate</i>.</p>');
+            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and set the new <i>ventilation rate</i>.</p>');
             break;
     }
     $('#apply-measure-ventilation-modal').modal('show');
@@ -153,15 +167,30 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 data.measures.ventilation[library_helper.type].measure = measure[tag];
             }
             break;
-        case 'extract_ventilation_points_measures':
-            if (data.measures.ventilation[library_helper.type].original == undefined) // first time
-                data.measures.ventilation[library_helper.type].original = data.ventilation.number_of_intermittentfans;
-            var measure = library_helper.extract_ventilation_points_measures_get_item_to_save();
-            for (z in measure)
-                var tag = z;
-            measure[tag].tag = tag;
-            data.ventilation.number_of_intermittentfans += 1.0 * measure[tag].number_of_intermittentfans_to_add;
-            data.measures.ventilation[library_helper.type].measure = measure[tag];
+        case 'extract_ventilation_points':
+            var original_item = get_EVP_by_id(library_helper.item_id);
+            if (data.measures.ventilation[library_helper.type][library_helper.item_id] == undefined) { // first time
+                data.measures.ventilation[library_helper.type][library_helper.item_id] = {};
+                data.measures.ventilation[library_helper.type][library_helper.item_id].original = original_item;
+            }
+            switch (library_helper.what_to_do) {
+                case 'remove':
+                    data.ventilation.EVP.splice(original_item.row, 1);
+                    data.measures.ventilation[library_helper.type][library_helper.item_id].measure = 'Removed';
+                    break;
+                case 'replace':
+                    var measure = library_helper.extract_ventilation_points_get_item_to_save();
+                    for (z in measure)
+                        var tag = z;
+                    measure[tag].tag = tag;
+                    for (z in original_item) {
+                        if (measure[tag][z] == undefined)
+                            measure[tag][z] = original_item[z];
+                    }
+                    data.ventilation.EVP[original_item.row] = measure[tag];
+                    data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
+                    break;
+            }
             break;
         case 'intentional_vents_and_flues_measures':
             var original_item = get_IVF_by_id(library_helper.item_id);
@@ -171,17 +200,32 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             measure[tag].tag = tag;
             if (data.measures.ventilation[library_helper.type][library_helper.item_id] == undefined) { // first time
                 data.measures.ventilation[library_helper.type][library_helper.item_id] = {};
-                data.measures.ventilation[library_helper.type][library_helper.item_id].original_ventilation_rate = original_item.ventilation_rate;
+                data.measures.ventilation[library_helper.type][library_helper.item_id].original = original_item;
             }
             for (z in original_item) {
-                if (measure[tag][z] != undefined)
-                    original_item[z] = measure[tag][z];
+                if (measure[tag][z] == undefined)
+                    measure[tag][z] = original_item[z];
             }
+            data.ventilation.IVF[original_item.row] = measure[tag];
             data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
             break;
     }
     update();
     $('#apply-measure-ventilation-modal').modal('hide');
+});
+$('#openbem').on('click', '[name=apply-measure-ventilation-what-to-do]', function () {
+    library_helper.what_to_do = $(this).val();
+    switch (library_helper.what_to_do) {
+        case 'remove':
+            $('#apply-measure-ventilation-library-item-selects').hide('slow');
+            $('#apply-measure-ventilation-modal .modal-body').hide('slow');
+            break;
+        case'replace':
+            $('#apply-measure-ventilation-library-item-selects').show('slow');
+            $('#apply-measure-ventilation-modal .modal-body').show('slow');
+            break;
+    }
+
 });
 $('#openbem').on('click', '.add-IVF-from-lib', function () {
     library_helper.init();
@@ -292,13 +336,13 @@ function ventilation_initUI()
             $('#fans_and_vents_div').show('slow');
             break;
     }
-    
+
     // Extract ventilation points (intermittent fans and passive vents) -EVP
     $('#EVP').html('');
     for (z in data.ventilation.EVP) {
         var item = data.ventilation.EVP[z];
         var out = '<tr><td>' + item.tag + ': ' + item.name + '</td><td><input type="text" style="width: 190px" key="data.ventilation.EVP.' + z + '.location"></td><td>' + item.type + '</td><td style="padding-left:100px">' + item.ventilation_rate + '</td>';
-        out += '<td> <button class="apply-ventilation-measure-from-lib if-not-master" type="intentional_vents_and_flues_measures" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
+        out += '<td> <button class="apply-ventilation-measure-from-lib if-not-master" type="extract_ventilation_points" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
         out += '<span class="edit-item-EVP" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing a system this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
         out += '<span class = "delete-EVP" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
         $('#EVP').append(out);
@@ -363,14 +407,18 @@ function edit_item(item, index, item_subsystem) {
 
 function get_IVF_by_id(item_id) {
     for (z in data.ventilation.IVF) {
-        if (item_id == data.ventilation.IVF[z].id)
+        if (item_id == data.ventilation.IVF[z].id) {
+            data.ventilation.IVF[z].row = z;
             return data.ventilation.IVF[z];
+        }
     }
 }
 
 function get_EVP_by_id(item_id) {
     for (z in data.ventilation.EVP) {
-        if (item_id == data.ventilation.EVP[z].id)
+        if (item_id == data.ventilation.EVP[z].id) {
+            data.ventilation.EVP[z].row = z;
             return data.ventilation.EVP[z];
+        }
     }
 }
