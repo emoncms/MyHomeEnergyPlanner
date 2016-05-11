@@ -902,7 +902,7 @@ libraryHelper.prototype.ventilation_systems_measures_library_to_html = function 
 };
 libraryHelper.prototype.extract_ventilation_points_library_to_html = function (origin, library_id) {
     var out = this.default_library_to_html(origin, library_id);
-    out = out.replace('add-system', 'add-EVP');
+    out = out.replace(/add-system/g, 'add-EVP');
     return out;
 };
 /*libraryHelper.prototype.extract_ventilation_points_measures_library_to_html = function (origin, library_id) {
