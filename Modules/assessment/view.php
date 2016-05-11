@@ -308,10 +308,7 @@ global $reports;
     }
 
     // Disable measures if master
-    if (scenario == 'master')
-        $('#content .if-not-master').hide();
-    else
-        $('#content .if-master').hide();
+    show_hide_if_master();
 
     $("#openbem").on('click', '.lock', function () {
         if (data.locked == false) {
@@ -326,10 +323,8 @@ global $reports;
         }
 
         // Disable measures if master
-        if (scenario == 'master')
-            $('#content .if-not-master').hide();
-        else
-            $('#content .if-master').hide();
+        show_hide_if_master();
+
         update();
     });
 
@@ -368,10 +363,7 @@ global $reports;
         $('#content i').addClass('if-not-locked');
 
         // Disable measures if master
-        if (scenario == 'master')
-            $('#content .if-not-master').hide();
-        else
-            $('#content .if-master').hide();
+        show_hide_if_master();
 
         if (data.locked)
             $('.if-not-locked').hide();
@@ -379,10 +371,7 @@ global $reports;
             $('.if-not-locked').show();
 
         // Disable measures if master
-        if (scenario == 'master')
-            $('#content .if-not-master').hide();
-        else
-            $('#content .if-master').hide();
+        show_hide_if_master();
 
     });
 
@@ -400,6 +389,14 @@ global $reports;
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
         });
+    }
+
+    function show_hide_if_master()
+    {
+        if (scenario == 'master')
+            $('#content .if-not-master').hide();
+        else
+            $('#content .if-master').hide();
     }
 
     function run_backwards_compatibility() {

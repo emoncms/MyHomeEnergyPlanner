@@ -383,6 +383,8 @@ function ventilation_initUI()
         out += '<span class = "delete-IVF" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
         $('#IVF').append(out);
     }
+    
+    show_hide_if_master();
 }
 
 function ventilation_UpdateUI() {
