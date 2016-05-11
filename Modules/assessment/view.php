@@ -395,8 +395,10 @@ global $reports;
     {
         if (scenario == 'master')
             $('#content .if-not-master').hide();
-        else
+        else{
             $('#content .if-master').hide();
+         $('#content .disabled-if-not-master').attr('disabled','true');
+        }
     }
 
     function run_backwards_compatibility() {
