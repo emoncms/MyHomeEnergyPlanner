@@ -33,7 +33,7 @@ libraryHelper.prototype.init = function () {
         'draught_proofing_measures': 'Draught proofing measures',
         'ventilation_systems_measures': 'Ventilation system measures',
         'extract_ventilation_points': 'Extract ventilation points',
-        'extract_ventilation_points_measures': 'Extract ventilation points measures',
+        //'extract_ventilation_points_measures': 'Extract ventilation points measures',
         'intentional_vents_and_flues': 'Intentional vents and flues',
         'intentional_vents_and_flues_measures': 'Intentional vents and flues measures'
     };
@@ -905,9 +905,9 @@ libraryHelper.prototype.extract_ventilation_points_library_to_html = function (o
     out = out.replace('add-system', 'add-EVP');
     return out;
 };
-libraryHelper.prototype.extract_ventilation_points_measures_library_to_html = function (origin, library_id) {
+/*libraryHelper.prototype.extract_ventilation_points_measures_library_to_html = function (origin, library_id) {
     return this.default_library_to_html(origin, library_id);
-}
+}*/
 libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (origin, library_id) {
     var out = "";
     var selected_library = this.get_library_by_id(library_id);
@@ -1164,7 +1164,7 @@ libraryHelper.prototype.extract_ventilation_points_item_to_html = function (item
     out += '</tbody></table>';
     return out;
 };
-libraryHelper.prototype.extract_ventilation_points_measures_item_to_html = function (item, tag) {
+/*libraryHelper.prototype.extract_ventilation_points_measures_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {tag: '', name: 'name', number_of_intermittentfans_to_add: 1, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
@@ -1185,7 +1185,7 @@ libraryHelper.prototype.extract_ventilation_points_measures_item_to_html = funct
     out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
     return out;
-};
+};*/
 libraryHelper.prototype.intentional_vents_and_flues_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {tag: '', name: 'name', location: '--', source: '--', type: 'Flueless gas fire', ventilation_rate: 40};
@@ -1373,7 +1373,7 @@ libraryHelper.prototype.extract_ventilation_points_get_item_to_save = function (
     };
     return item;
 };
-libraryHelper.prototype.extract_ventilation_points_measures_get_item_to_save = function () {
+/*libraryHelper.prototype.extract_ventilation_points_measures_get_item_to_save = function () {
     var item = {};
     var tag = $(".item-tag").val();
     item[tag] = {
@@ -1391,7 +1391,7 @@ libraryHelper.prototype.extract_ventilation_points_measures_get_item_to_save = f
         maintenance: $(".item-maintenance").val()
     };
     return item;
-};
+};*/
 libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function () {
     var item = {};
     var tag = $(".item-tag").val();

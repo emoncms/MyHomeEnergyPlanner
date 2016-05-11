@@ -49,8 +49,14 @@ $("[key='data.ventilation.air_permeability_test']").change(function () {
 
 });
 $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
+    // Set variables in library_helper
     library_helper.init();
-    library_helper.type = $(this).attr('type');
+    library_helper.type_of_measure = $(this).attr('type');
+    if (library_helper.type_of_measure == 'add_extract_ventilation_points')
+        library_helper.type = 'extract_ventilation_points';
+    else
+        library_helper.type = library_helper.type_of_measure;
+    // Prepare modal
     $('#apply-measure-ventilation-finish').hide('slow');
     $('#apply-measure-ventilation-modal .modal-body > div').hide('slow');
     // Populate selects in modal to choose library and measure
@@ -65,8 +71,8 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     var item = library_helper.get_library_by_id(library_id).data[tag];
     out = library_helper[function_name](item, tag);
     $('#apply-measure-ventilation-modal .modal-body').html(out);
-    // Specific action for eact type of measure
-    switch (library_helper.type) {
+    // Specific action for each type of measure
+    switch (library_helper.type_of_measure) {
         case 'draught_proofing_measures':
             $('#apply-measure-ventilation-what-to-do').hide();
             $('#apply-measure-ventilation-library-item-selects').show();
@@ -93,6 +99,12 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
             $('#apply-measure-ventilation-modal .modal-body').show();
             library_helper.item_id = $(this).attr('item_id');
             $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and set the new <i>ventilation rate</i>.</p>');
+            break;
+        case 'add_extract_ventilation_points':
+            $('#apply-measure-ventilation-what-to-do').hide();
+            $('#apply-measure-ventilation-library-item-selects').show();
+            $('#apply-measure-ventilation-modal .modal-body').show();
+            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library.</p>');
             break;
     }
     $('#apply-measure-ventilation-modal').modal('show');
@@ -121,7 +133,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
     if (data.measures.ventilation[library_helper.type] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
         data.measures.ventilation[library_helper.type] = {};
     }
-    switch (library_helper.type) {
+    switch (library_helper.type_of_measure) {
         case 'draught_proofing_measures':
             if (data.measures.ventilation[library_helper.type].original_structural_infiltration == undefined) // first time
                 data.measures.ventilation[library_helper.type].original_structural_infiltration = data.ventilation.structural_infiltration;
@@ -208,6 +220,19 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             }
             data.ventilation.IVF[original_item.row] = measure[tag];
             data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
+            break;
+        case 'add_extract_ventilation_points':
+            var measure = library_helper.extract_ventilation_points_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            measure[tag].id = get_EVP_max_id() + 1;
+            data.ventilation.EVP.push(measure[tag]);
+            if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
+                data.measures.ventilation[library_helper.type][measure[tag].id] = {};
+                data.measures.ventilation[library_helper.type][measure[tag].id].original = 'empty';
+            }
+            data.measures.ventilation[library_helper.type][measure[tag].id].measure = measure[tag];
             break;
     }
     update();

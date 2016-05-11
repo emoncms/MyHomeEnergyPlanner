@@ -28,25 +28,29 @@
     </div>
 
     <div id="fans_and_vents_div" style="margin-left:50px">
-       <!-- <p><b>Extract ventilation points</b></p>
-        <table style="margin-left:50px">
-            <tr>
-                <td width="150px">Intermittent fans</td>
-                <td><input key="data.ventilation.number_of_intermittentfans" type="number" min='0' style="width:50px"/>
-                    <button class="apply-ventilation-measure-from-lib if-not-master" type="extract_ventilation_points_measures" style="margin:0 0 10px 15px">Apply Measure</button></td>
-            </tr>
-            <tr>
-                <td>Passive vents</td>
-                <td><input key="data.ventilation.number_of_passivevents" type="number" min='0' style="width:50px"/></td>
-            </tr>
-        </table>
-       -->
-        
+        <!-- <p><b>Extract ventilation points</b></p>
+         <table style="margin-left:50px">
+             <tr>
+                 <td width="150px">Intermittent fans</td>
+                 <td><input key="data.ventilation.number_of_intermittentfans" type="number" min='0' style="width:50px"/>
+                     <button class="apply-ventilation-measure-from-lib if-not-master" type="extract_ventilation_points_measures" style="margin:0 0 10px 15px">Apply Measure</button></td>
+             </tr>
+             <tr>
+                 <td>Passive vents</td>
+                 <td><input key="data.ventilation.number_of_passivevents" type="number" min='0' style="width:50px"/></td>
+             </tr>
+         </table>
+        -->
+
         <table  style="margin-left:50px" class='table'>
-        <tr><td colspan="5"><b>Extract ventilation points: intermittent fans and passive vents</b><span class="add-EVP-from-lib" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span></td></tr>
-        <tr><th width="150px"></th><th width="220px">Location</th><th width="100px">Type</th><th>Ventilation rate (m<sup>3</sup>/h)</th><th></th></tr>
-        <tbody id="EVP">        </tbody>
-    </table>
+            <tr><td colspan="5"><b>Extract ventilation points: intermittent fans and passive vents</b>
+                    <span class="add-EVP-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
+                    <span class="apply-ventilation-measure-from-lib if-not-master" type="add_extract_ventilation_points" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
+                </td>
+            </tr>
+            <tr><th width="150px"></th><th width="220px">Location</th><th width="100px">Type</th><th>Ventilation rate (m<sup>3</sup>/h)</th><th></th></tr>
+            <tbody id="EVP">        </tbody>
+        </table>
     </div>
 
     <table class="table">

@@ -287,7 +287,7 @@ global $reports;
     InitUI();
     UpdateUI(data);
     draw_openbem_graphics();
-    
+
     // Lock/unlock
     $('#content button').addClass('if-not-locked');
     $('#content i').addClass('if-not-locked');
@@ -310,6 +310,8 @@ global $reports;
     // Disable measures if master
     if (scenario == 'master')
         $('#content .if-not-master').hide();
+    else
+        $('#content .if-master').hide();
 
     $("#openbem").on('click', '.lock', function () {
         if (data.locked == false) {
@@ -326,6 +328,8 @@ global $reports;
         // Disable measures if master
         if (scenario == 'master')
             $('#content .if-not-master').hide();
+        else
+            $('#content .if-master').hide();
         update();
     });
 
@@ -366,6 +370,8 @@ global $reports;
         // Disable measures if master
         if (scenario == 'master')
             $('#content .if-not-master').hide();
+        else
+            $('#content .if-master').hide();
 
         if (data.locked)
             $('.if-not-locked').hide();
@@ -375,6 +381,8 @@ global $reports;
         // Disable measures if master
         if (scenario == 'master')
             $('#content .if-not-master').hide();
+        else
+            $('#content .if-master').hide();
 
     });
 
@@ -508,7 +516,7 @@ global $reports;
         project[s].currentenergy = {};
         project[s].fabric.measures = {};
         project[s].measures = {};
-        
+
         // Ensure new scenario is unlocked
         project[s].locked = false;
 
