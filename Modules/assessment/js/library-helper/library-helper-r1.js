@@ -1191,7 +1191,6 @@ libraryHelper.prototype.intentional_vents_and_flues_item_to_html = function (ite
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
     out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
-    out += '<tr><td>Location</td><td><input type="text" class="item-location" value="' + item.location + '" /></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>Type</td><td><select class="item-type">';
     out += item.type === 'Chimney' ? '<option value="Chimney" selected>Chimney</option>' : '<option value="Chimney">Chimney</option>';
@@ -1393,7 +1392,6 @@ libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function 
     item[tag] = {
         name: $(".item-name").val(),
         source: $(".item-name").val(),
-        location: $(".item-location").val(),
         type: $(".item-type").val(),
         ventilation_rate: $(".item-ventilation_rate").val()
     };

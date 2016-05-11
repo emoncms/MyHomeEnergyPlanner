@@ -48,6 +48,8 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     library_helper.type_of_measure = $(this).attr('type');
     if (library_helper.type_of_measure == 'add_extract_ventilation_points')
         library_helper.type = 'extract_ventilation_points';
+    else if (library_helper.type_of_measure == 'add_intentional_vents_and_flues')
+        library_helper.type = 'intentional_vents_and_flues';
     else
         library_helper.type = library_helper.type_of_measure;
     // Prepare modal
@@ -95,6 +97,12 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
             $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and set the new <i>ventilation rate</i>.</p>');
             break;
         case 'add_extract_ventilation_points':
+            $('#apply-measure-ventilation-what-to-do').hide();
+            $('#apply-measure-ventilation-library-item-selects').show();
+            $('#apply-measure-ventilation-modal .modal-body').show();
+            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library.</p>');
+            break;
+        case 'add_intentional_vents_and_flues':
             $('#apply-measure-ventilation-what-to-do').hide();
             $('#apply-measure-ventilation-library-item-selects').show();
             $('#apply-measure-ventilation-modal .modal-body').show();
@@ -222,6 +230,19 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             measure[tag].tag = tag;
             measure[tag].id = get_EVP_max_id() + 1;
             data.ventilation.EVP.push(measure[tag]);
+            if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
+                data.measures.ventilation[library_helper.type][measure[tag].id] = {};
+                data.measures.ventilation[library_helper.type][measure[tag].id].original = 'empty';
+            }
+            data.measures.ventilation[library_helper.type][measure[tag].id].measure = measure[tag];
+            break;
+        case 'add_intentional_vents_and_flues':
+            var measure = library_helper.intentional_vents_and_flues_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            measure[tag].id = get_IVF_max_id() + 1;
+            data.ventilation.IVF.push(measure[tag]);
             if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
                 data.measures.ventilation[library_helper.type][measure[tag].id] = {};
                 data.measures.ventilation[library_helper.type][measure[tag].id].original = 'empty';

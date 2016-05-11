@@ -1078,21 +1078,18 @@ var standard_library = {
     intentional_vents_and_flues: {
         IVF_01: {
             name: 'Standard chimney',
-            location: '',
             source: 'SAP',
             type: 'Chimney',
             ventilation_rate: 40
         },
         IVF_02: {
             name: 'Standard open flue',
-            location: '',
             source: 'SAP',
             type: 'Open flue',
             ventilation_rate: 20
         },
         IVF_03: {
             name: 'Standard flueless gas fire',
-            location: '',
             source: 'SAP',
             type: 'Flueless gas fire',
             ventilation_rate: 40
