@@ -1029,8 +1029,6 @@ var standard_library = {
             "ventilation_type": 'IE',
             "system_air_change_rate": 50,
             "balanced_heat_recovery_efficiency": 0.8,
-            "number_of_intermittentfans": 0,
-            "number_of_passivevents": 0,
             description: "VS_test",
             performance: 3,
             benefits: "VS_test",

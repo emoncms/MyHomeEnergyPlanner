@@ -1086,7 +1086,7 @@ libraryHelper.prototype.draught_proofing_measures_item_to_html = function (item,
 };
 libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: '', name: 'name', ventilation_type: 'NV', system_air_change_rate: 0, heat_recovery_balanced_heat_recovery_efficiencyefficiency: 0, number_of_intermittentfans: '', number_of_passivevents: '', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+        item = {tag: '', name: 'name', ventilation_type: 'NV', system_air_change_rate: 0, heat_recovery_balanced_heat_recovery_efficiencyefficiency: 0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -1110,9 +1110,6 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
         out += '<tr><td>Balanced heat recovery efficiency (%)</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
     else
         out += '<tr style="display:none"><td>Heat recovery efficiency</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
-    var title_text = 'Number of intermittent fans and Number of passive vents:\n  - Leave it blank if you don\'t want to change them in the assessment\n  - Type an integer to set a new value (0 to remove all of them)\n  - Type first + or - and then a number to increase or decrease the original amount';
-    out += '<tr><td>Number of intermittent fans <i class="icon-question-sign if-not-locked" title="' + title_text + '"></i></td><td><input type="text" class="item-intermitent_fans" value="' + item.number_of_intermittentfans + '" /></td></tr>';
-    out += '<tr><td>Number of passive vents <i class="icon-question-sign if-not-locked" title="' + title_text + '"></i></td><td><input type="text" class="item-passive_vents" value="' + item.number_of_passivevents + '" /></td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
@@ -1336,8 +1333,6 @@ libraryHelper.prototype.ventilation_systems_measures_get_item_to_save = function
         ventilation_type: $(".item-ventilation_type").val(),
         system_air_change_rate: $(".item-air_change_rate").val(),
         balanced_heat_recovery_efficiency: $(".item-heat_recovery_efficiency").val(),
-        number_of_intermittentfans: $(".item-intermitent_fans").val(),
-        number_of_passivevents: $(".item-passive_vents").val(),
         description: $(".item-description").val(),
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),

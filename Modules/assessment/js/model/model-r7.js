@@ -340,11 +340,6 @@ calc.fabric = function (data, solar_acces_factor)
 calc.ventilation = function (data)
 {
     var defaults = {
-        number_of_chimneys: 0,
-        number_of_openflues: 0,
-        number_of_intermittentfans: 0,
-        number_of_passivevents: 0,
-        number_of_fluelessgasfires: 0,
         air_permeability_test: false,
         air_permeability_value: 0,
         dwelling_construction: 'timberframe',
@@ -374,10 +369,10 @@ calc.ventilation = function (data)
         total += 1.0 * data.ventilation.IVF[z].ventilation_rate;
 
     // Extract ventilation points
-    for (z in data.ventilation.EVP)
-        total += 1.0 * data.ventilation.EVP[z].ventilation_rate;
-    //total += data.ventilation.number_of_intermittentfans * 10;
-    //total += data.ventilation.number_of_passivevents * 10;
+    if (data.ventilation.ventilation_type == 'IE' || data.ventilation.ventilation_type == 'PS') {
+        for (z in data.ventilation.EVP)
+            total += 1.0 * data.ventilation.EVP[z].ventilation_rate;
+    }
 
 
     var infiltration = 0;

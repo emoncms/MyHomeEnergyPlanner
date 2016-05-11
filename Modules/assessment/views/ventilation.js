@@ -27,12 +27,6 @@ $("[key='data.ventilation.ventilation_type']").change(function () {
             ventilation_type = 'a'; //Balanced mechanical ventilation with heat recovery (MVHR)
             break;
     }
-    if (v == 'PS')
-        data.ventilation.number_of_intermittentfans = 0;
-    if (ventilation_type == 'a' || ventilation_type == 'b' || ventilation_type == 'c') {
-        data.ventilation.number_of_intermittentfans = 0;
-        data.ventilation.number_of_passivevents = 0;
-    }
     ventilation_initUI();
 
 });
@@ -156,28 +150,28 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             data.ventilation.ventilation_type = measure[tag].ventilation_type;
             data.ventilation.system_air_change_rate = measure[tag].system_air_change_rate;
             data.ventilation.balanced_heat_recovery_efficiency = measure[tag].balanced_heat_recovery_efficiency;
-            for (z in {'number_of_intermittentfans': {}, 'number_of_passivevents': {}}) {
-                measure[tag][z].replace(' ', '');
-                if (measure[tag][z].charAt(0) === '+') {
-                    var increment_in = 1.0 * measure[tag][z].slice(1);
-                    if (!isNaN(increment_in))
-                        data.ventilation[z] += increment_in;
-                }
-                else if (measure[tag][z].charAt(0) === '-') {
-                    var decrement_in = 1.0 * measure[tag][z].slice(1);
-                    if (!isNaN(decrement_in))
-                        data.ventilation[z] -= decrement_in;
-                }
-                else if (measure[tag][z] == '') {
-// Do nothing
-                }
-                else {
-                    var new_value = 1.0 * measure[tag][z];
-                    if (!isNaN(new_value))
-                        data.ventilation[z] = new_value;
-                }
-                data.measures.ventilation[library_helper.type].measure = measure[tag];
-            }
+            /*for (z in {'number_of_intermittentfans': {}, 'number_of_passivevents': {}}) {
+             measure[tag][z].replace(' ', '');
+             if (measure[tag][z].charAt(0) === '+') {
+             var increment_in = 1.0 * measure[tag][z].slice(1);
+             if (!isNaN(increment_in))
+             data.ventilation[z] += increment_in;
+             }
+             else if (measure[tag][z].charAt(0) === '-') {
+             var decrement_in = 1.0 * measure[tag][z].slice(1);
+             if (!isNaN(decrement_in))
+             data.ventilation[z] -= decrement_in;
+             }
+             else if (measure[tag][z] == '') {
+             // Do nothing
+             }
+             else {
+             var new_value = 1.0 * measure[tag][z];
+             if (!isNaN(new_value))
+             data.ventilation[z] = new_value;
+             }
+             }*/
+            data.measures.ventilation[library_helper.type].measure = measure[tag];
             break;
         case 'extract_ventilation_points':
             var original_item = get_EVP_by_id(library_helper.item_id);
@@ -358,7 +352,10 @@ function ventilation_initUI()
         case 'd':
             $("#system_air_change_rate_div").hide('slow');
             $("#balanced_heat_recovery_efficiency_div").hide('slow');
-            $('#fans_and_vents_div').show('slow');
+            if (data.ventilation.ventilation_type == 'NV')
+                $('#fans_and_vents_div').hide('slow');
+            else
+                $('#fans_and_vents_div').show('slow');
             break;
     }
 
@@ -383,7 +380,7 @@ function ventilation_initUI()
         out += '<span class = "delete-IVF" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
         $('#IVF').append(out);
     }
-    
+
     show_hide_if_master();
 }
 

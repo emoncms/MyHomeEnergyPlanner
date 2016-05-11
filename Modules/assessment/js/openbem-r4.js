@@ -138,11 +138,6 @@ var openbem = {
 
 // Ventilation
         inputdata.ventilation = {
-            //number_of_chimneys: data.ventilation.number_of_chimneys,
-            //number_of_openflues: data.ventilation.number_of_openflues,
-            //number_of_intermittentfans: data.ventilation.number_of_intermittentfans,
-            //number_of_passivevents: data.ventilation.number_of_passivevents,
-            //number_of_fluelessgasfires: data.ventilation.number_of_fluelessgasfires,
             air_permeability_test: data.ventilation.air_permeability_test,
             air_permeability_value: data.ventilation.air_permeability_value,
             dwelling_construction: data.ventilation.dwelling_construction,
