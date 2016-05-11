@@ -70,6 +70,7 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     // Specific action for each type of measure
     switch (library_helper.type_of_measure) {
         case 'draught_proofing_measures':
+            data.ventilation.air_permeability_test = true;
             $('#apply-measure-ventilation-what-to-do').hide();
             $('#apply-measure-ventilation-library-item-selects').show();
             $('#apply-measure-ventilation-modal .modal-body').show();

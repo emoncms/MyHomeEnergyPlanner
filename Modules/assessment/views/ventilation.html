@@ -67,14 +67,15 @@
         </tr>
         <tr>
             <td style="text-align:left">Calculate infiltration rate based on air tightness test:</td>
-            <td colspan="5"><input key="data.ventilation.air_permeability_test" type="checkbox" /></td>
+            <td colspan="5">
+                <input key="data.ventilation.air_permeability_test" class="if-master" type="checkbox" />
+                <button class="apply-ventilation-measure-from-lib if-not-master" type="draught_proofing_measures" style="margin:0 0 10px 25px">Apply Measure</button>
+            </td>
         </tr>
         <tbody id="air_permeability_value_tbody">
             <tr>
                 <td style="text-align:left">Air permeability value, q50, expressed in cubic metres per hour per square metre of envelope area:</td>
-                <td colspan="5"><input key="data.ventilation.air_permeability_value" type="text" style="width:60px"/>
-                    <button class="apply-ventilation-measure-from-lib if-not-master" type="draught_proofing_measures" style="margin:0 0 10px 25px">Apply Measure</button>
-                </td>
+                <td colspan="5"><input class="disabled-if-not-master" key="data.ventilation.air_permeability_value" type="text" style="width:60px"/>                </td>
             </tr>
         </tbody>
         <tbody id="structural">
