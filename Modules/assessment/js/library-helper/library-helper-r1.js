@@ -1142,7 +1142,7 @@ libraryHelper.prototype.extract_ventilation_points_item_to_html = function (item
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
     out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
-    out += '<tr><td>Location</td><td><input type="text" class="item-location" value="' + item.location + '" /></td></tr>';
+    //out += '<tr><td>Location</td><td><input type="text" class="item-location" value="' + item.location + '" /></td></tr>';
     out += '<tr><td>Type</td><td><select class="item-type">';
     out += item.type === 'Intermittent fan' ? '<option value="Intermittent fan" selected>Intermittent fan</option>' : '<option value="Intermittent fan">Intermittent fan</option>';
     out += item.type === 'Passive vent' ? '<option value="Passive vent" selected>Passive vent</option>' : '<option value="Passive vent">Passive vent</option>';
@@ -1354,7 +1354,7 @@ libraryHelper.prototype.extract_ventilation_points_get_item_to_save = function (
         name: $(".item-name").val(),
         ventilation_rate: $(".item-ventilation-rate").val(),
         type: $(".item-type").val(),
-        location: $(".item-location").val(),
+        //location: $(".item-location").val(),
         description: $(".item-description").val(),
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
