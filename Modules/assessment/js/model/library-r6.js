@@ -1111,5 +1111,77 @@ var standard_library = {
             notes: "IV_test",
             maintenance: "IV_test"
         }
+    },
+    water_usage:{
+        HW_01: {
+            name: "Standard Water Use",
+            source: '',
+            description: "",
+            performance: '',
+            benefits: "",
+            cost: "",
+            who_by: "",
+            disruption: "l",
+            associated_work: "",
+            key_risks: "",
+            notes: "",
+            maintenance: ""
+        },
+        HW_02: {
+            name: "Spray Taps",
+            source: '',
+            description: "Low flow taps fitted to reduce hot water consumption. Kitchen & utility room taps could allow manual over-ride of low-flow when needed for filling sinks/ buckets etc.",
+            performance: '4 litres/minute',
+            benefits: "Fuel Bills, Carbon Emissions",
+            cost: "£150/unit",
+            who_by: "Plumber/ DIY",
+            disruption: "Minimal",
+            associated_work: "",
+            key_risks: "n/a",
+            notes: "",
+            maintenance: ""
+        },
+        HW_03: {
+            name: "Flow Restrictor for Taps",
+            source: '',
+            description: "Retrofit flow-restrictors to existing hot water taps to reduce hot water cons",
+            performance: '4 litres/minute',
+            benefits: "Fuel Bills, Carbon Emissions",
+            cost: "£15/unit",
+            who_by: "DIY",
+            disruption: "Minimal",
+            associated_work: "",
+            key_risks: "n/a",
+            notes: "",
+            maintenance: ""
+        },
+        HW_04: {
+            name: "Low-Flow Shower Head",
+            source: '',
+            description: "Fit new aerating spray head shower head to reduce water flow and hot water demand.",
+            performance: '8 litres/minute',
+            benefits: "Fuel Bills, Carbon Emissions",
+            cost: "£50/unit",
+            who_by: "DIY",
+            disruption: "Minimal",
+            associated_work: "",
+            key_risks: "n/a",
+            notes: "",
+            maintenance: ""
+        },
+        HW_05: {
+            name: "Replace Electric Shower with Direct Feed from Hot Water supply.",
+            source: '',
+            description: "New direct hot water feed low-flow shower to reduce hot water consumption and energy use (uses mains hot water system rather than own electric heating element).",
+            performance: '8 litres/minute',
+            benefits: "Fuel Bills, Carbon Emissions",
+            cost: "£300/unit",
+            who_by: "Plumber/ DIY",
+            disruption: "Minimal",
+            associated_work: "",
+            key_risks: "n/a",
+            notes: "",
+            maintenance: ""
+        }
     }
 };  

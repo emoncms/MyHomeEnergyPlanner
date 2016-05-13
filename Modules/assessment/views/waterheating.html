@@ -1,15 +1,26 @@
-<h3>SAP Water Heating Gains</h3>
+<h3>Water Heating</h3>
 
+<h4>Hot water use</h4>
 <table class="table">
-    <tr>
-        <td>Do you know how much energy you use for water heating? Checking this box will overwrite SAP calculations</td>
-        <td style="text-align:center"><input key="data.water_heating.override_annual_energy_content" type="checkbox" /></td>
-    </tr>
     <tr>
         <td>Designed water use is not more than 125 litres per person per day (all water use, hot and cold)</td>
         <td style="text-align:center"><input key="data.water_heating.low_water_use_design" type="checkbox" /></td>
     </tr>
 
+    <tr><td colspan="5"><b>Water efficiency measures</b>
+            <span class="add-water-efficiency-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
+            <span class="apply-water-heating-measure if-not-master" type="water_efficiency" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
+        </td>
+    </tr>
+    <tr><th width="150px"></th><th width="220px">Location</th><th width="100px">Type</th><th>Ventilation rate (m<sup>3</sup>/h)</th><th></th></tr>
+    <tbody id="water-efficiency"></tbody>
+
+
+
+    <tr>
+        <td>Do you know how much energy you use for water heating? Checking this box will overwrite SAP calculations</td>
+        <td style="text-align:center"><input key="data.water_heating.override_annual_energy_content" type="checkbox" /></td>
+    </tr>
     <tr>
         <td>Annual average hot water usage V d,average</td>
         <td style="text-align:center"><span key="data.water_heating.Vd_average" dp=2></span> litres/day</td>
