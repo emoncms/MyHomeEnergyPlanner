@@ -189,7 +189,8 @@ var openbem = {
             system: data.water_heating.system,
             storage: data.water_heating.storage,
             combi_boiler: data.water_heating.combi_boiler,
-            Vc: data.water_heating.Vc
+            Vc: data.water_heating.Vc,
+            water_usage: data.water_heating.water_usage
         };
         inputdata.use_SHW = data.use_SHW;
         inputdata.SHW = {

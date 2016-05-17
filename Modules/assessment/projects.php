@@ -205,7 +205,9 @@ $d = $path . "Modules/assessment/";
                     var library_name = "StandardLibrary - " + myusername;
                     $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + library_type, datatype: "json", async: false, success: function (result) {
                             var library_id = result;
-                            $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + JSON.stringify(standard_library[library_type]), success: function (result) {
+                            var library_string = JSON.stringify(standard_library[library_type]);
+                            library_string = library_string.replace(/&/g,'and');
+                            $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + library_string, success: function (result) {
                                     console.log("Library: " + library_type + ' - ' + result);
                                 }});
                         }});

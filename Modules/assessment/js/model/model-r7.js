@@ -1171,6 +1171,8 @@ calc.water_heating = function (data)
         data.water_heating.Vc = 0;
     if (data.water_heating.storage == undefined)
         data.water_heating.storage = false;
+    if (data.water_heating.water_usage == undefined)
+        data.water_heating.water_usage = [];
     data.water_heating.Vd_average = (25 * data.occupancy) + 36;
     if (data.water_heating.low_water_use_design)
         data.water_heating.Vd_average *= 0.95;

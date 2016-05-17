@@ -1044,7 +1044,7 @@ var standard_library = {
     extract_ventilation_points: {
         EVP_test: {
             name: "Extract Ventilation Point - TEST ",
-            location:"--",
+            location: "--",
             type: 'Intermittent fan',
             ventilation_rate: 10,
             description: "EVP_test",
@@ -1059,22 +1059,22 @@ var standard_library = {
             maintenance: "EVP_test"
         }
     },
-   /*extract_ventilation_points_measures: {
-        EV_test: {
-            name: "Extract Ventilation Point Measure - TEST ",
-            number_of_intermittentfans_to_add: 1,
-            description: "EV_test",
-            performance: 3,
-            benefits: "EV_test",
-            cost: "EV_test",
-            who_by: "EV_test",
-            disruption: "EV_test",
-            associated_work: "EV_test",
-            key_risks: "EV_test",
-            notes: "EV_test",
-            maintenance: "EV_test"
-        }
-    },*/
+    /*extract_ventilation_points_measures: {
+     EV_test: {
+     name: "Extract Ventilation Point Measure - TEST ",
+     number_of_intermittentfans_to_add: 1,
+     description: "EV_test",
+     performance: 3,
+     benefits: "EV_test",
+     cost: "EV_test",
+     who_by: "EV_test",
+     disruption: "EV_test",
+     associated_work: "EV_test",
+     key_risks: "EV_test",
+     notes: "EV_test",
+     maintenance: "EV_test"
+     }
+     },*/
     intentional_vents_and_flues: {
         IVF_01: {
             name: 'Standard chimney',
@@ -1112,7 +1112,7 @@ var standard_library = {
             maintenance: "IV_test"
         }
     },
-    water_usage:{
+    water_usage: {
         HW_01: {
             name: "Standard Water Use",
             source: '',

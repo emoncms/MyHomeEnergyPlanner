@@ -35,7 +35,8 @@ libraryHelper.prototype.init = function () {
         'extract_ventilation_points': 'Extract ventilation points',
         //'extract_ventilation_points_measures': 'Extract ventilation points measures',
         'intentional_vents_and_flues': 'Intentional vents and flues',
-        'intentional_vents_and_flues_measures': 'Intentional vents and flues measures'
+        'intentional_vents_and_flues_measures': 'Intentional vents and flues measures',
+        'water_usage': 'Water usage'
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -407,7 +408,9 @@ libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
             $("#create-in-library-message").html("Tag already exist, choose another one");
         else {
             //selected_library.data[tag] = item[tag];
-            $.ajax({type: "POST", url: path + "assessment/additemtolibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + JSON.stringify(item[tag]), success: function (result) {
+            var item_string = JSON.stringify(item[tag]);
+            item_string = item_string.replace(/&/g, 'and');
+            $.ajax({type: "POST", url: path + "assessment/additemtolibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + item_string, success: function (result) {
                     if (result == true) {
                         $("#create-in-library-message").html("Item added to the library");
                         $('#modal-create-in-library button').hide('fast');
@@ -500,6 +503,7 @@ libraryHelper.prototype.onEditLibraryItemOk = function (library_id) {
     item = this[function_name]();
     for (tag in item) {
         var item_string = JSON.stringify(item[tag]).replace('+', '/plus'); // For a reason i have not been able to find why the character + becomes a carrier return when it is accesed in $_POST in the controller, because of this we escape + with \plus
+        item_string = item_string.replace(/&/g, 'and');
         //item[tag].number_of_intermittentfans="\\+2";
         $.ajax({type: "POST", url: path + "assessment/edititeminlibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + item_string, success: function (result) {
                 if (result == true) {
@@ -906,8 +910,8 @@ libraryHelper.prototype.extract_ventilation_points_library_to_html = function (o
     return out;
 };
 /*libraryHelper.prototype.extract_ventilation_points_measures_library_to_html = function (origin, library_id) {
-    return this.default_library_to_html(origin, library_id);
-}*/
+ return this.default_library_to_html(origin, library_id);
+ }*/
 libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (origin, library_id) {
     var out = "";
     var selected_library = this.get_library_by_id(library_id);
@@ -941,9 +945,9 @@ libraryHelper.prototype.intentional_vents_and_flues_measures_library_to_html = f
     }
     return out;
 };
-libraryHelper.prototype.water_use_library_to_html = function (origin, library_id) {
+libraryHelper.prototype.water_usage_library_to_html = function (origin, library_id) {
     var out = this.default_library_to_html(origin, library_id);
-    out = out.replace(/add-system/g, 'add-water-use');
+    out = out.replace(/add-system/g, 'add-water_usage');
     return out;
 };
 
@@ -1167,27 +1171,27 @@ libraryHelper.prototype.extract_ventilation_points_item_to_html = function (item
     return out;
 };
 /*libraryHelper.prototype.extract_ventilation_points_measures_item_to_html = function (item, tag) {
-    if (item == undefined)
-        item = {tag: '', name: 'name', number_of_intermittentfans_to_add: 1, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
-    else if (tag != undefined)
-        item.tag = tag;
-    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
-    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
-    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
-    out += '<tr><td>Number of intermittent fans to add</td><td><input type="number" class="item-intermitent_fans" value="' + item.number_of_intermittentfans_to_add + '" /></td></tr>';
-    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
-    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
-    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
-    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
-    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
-    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
-    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
-    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
-    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
-    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
-    out += '</tbody></table>';
-    return out;
-};*/
+ if (item == undefined)
+ item = {tag: '', name: 'name', number_of_intermittentfans_to_add: 1, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+ else if (tag != undefined)
+ item.tag = tag;
+ var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+ out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+ out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+ out += '<tr><td>Number of intermittent fans to add</td><td><input type="number" class="item-intermitent_fans" value="' + item.number_of_intermittentfans_to_add + '" /></td></tr>';
+ out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+ out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+ out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+ out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+ out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+ out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+ out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+ out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+ out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+ out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+ out += '</tbody></table>';
+ return out;
+ };*/
 libraryHelper.prototype.intentional_vents_and_flues_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {tag: '', name: 'name', location: '--', source: '--', type: 'Flueless gas fire', ventilation_rate: 40};
@@ -1230,25 +1234,25 @@ libraryHelper.prototype.intentional_vents_and_flues_measures_item_to_html = func
     return out;
 };
 
-libraryHelper.prototype.water_use_item_to_html = function (item, tag) {
+libraryHelper.prototype.water_usage_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {tag: '', name: 'name', source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
-    out += '<tr><td>Tag</td><td><input type="text" class="water-use-itemtag" required value="' + item.tag + '"/></td></tr>';
-    out += '<tr><td>Name</td><td><input type="text" class="water-use-itemname" value="' + item.name + '" /></td></tr>';
-    out += '<tr><td>Source</td><td><input type="text" class="water-use-itemsource" value="' + item.source + '" /></td></tr>';
-    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="water-use-itemdescription">' + item.description + '</textarea></td></tr>';
-    out += '<tr><td>Performance</td><td><input type="text" class="water-use-itemperformance" value="' + item.performance + '" /></td></tr>';
-    out += '<tr><td>Benefits</td><td><input type="text" class="water-use-itembenefits" value="' + item.benefits + '" /></td></tr>';
-    out += '<tr><td>Cost</td><td><input type="text" class="water-use-itemcost" value="' + item.cost + '" /></td></tr>';
-    out += '<tr><td>Who by</td><td><input type="text" class="water-use-itemwho_by" value="' + item.who_by + '" /></td></tr>';
-    out += '<tr><td>Disruption</td><td><input type="text" class="water-use-itemdisruption" value="' + item.disruption + '" /></td></tr>';
-    out += '<tr><td>Associated work</td><td><input type="text" class="water-use-itemassociated_work" value="' + item.associated_work + '" /></td></tr>';
-    out += '<tr><td>Key risks</td><td><input type="text" class="water-use-itemkey_risks" value="' + item.key_risks + '" /></td></tr>';
-    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="water-use-itemnotes">' + item.notes + '</textarea></td></tr>';
-    out += '<tr><td>Maintenance</td><td><input type="text" class="water-use-itemmaintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '<tr><td>Tag</td><td><input type="text" class="water-efficiency-item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="water-efficiency-item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="water-efficiency-item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="water-efficiency-item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="water-efficiency-item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="water-efficiency-item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="water-efficiency-item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="water-efficiency-item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="water-efficiency-item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="water-efficiency-item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="water-efficiency-item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="water-efficiency-item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="water-efficiency-item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
     return out;
 };
@@ -1396,24 +1400,24 @@ libraryHelper.prototype.extract_ventilation_points_get_item_to_save = function (
     return item;
 };
 /*libraryHelper.prototype.extract_ventilation_points_measures_get_item_to_save = function () {
-    var item = {};
-    var tag = $(".item-tag").val();
-    item[tag] = {
-        name: $(".item-name").val(),
-        number_of_intermittentfans_to_add: $(".item-intermitent_fans").val(),
-        description: $(".item-description").val(),
-        performance: $(".item-performance").val(),
-        benefits: $(".item-benefits").val(),
-        cost: $(".item-cost").val(),
-        who_by: $(".item-who_by").val(),
-        disruption: $(".item-disruption").val(),
-        associated_work: $(".item-associated_work").val(),
-        key_risks: $(".item-key_risks").val(),
-        notes: $(".item-notes").val(),
-        maintenance: $(".item-maintenance").val()
-    };
-    return item;
-};*/
+ var item = {};
+ var tag = $(".item-tag").val();
+ item[tag] = {
+ name: $(".item-name").val(),
+ number_of_intermittentfans_to_add: $(".item-intermitent_fans").val(),
+ description: $(".item-description").val(),
+ performance: $(".item-performance").val(),
+ benefits: $(".item-benefits").val(),
+ cost: $(".item-cost").val(),
+ who_by: $(".item-who_by").val(),
+ disruption: $(".item-disruption").val(),
+ associated_work: $(".item-associated_work").val(),
+ key_risks: $(".item-key_risks").val(),
+ notes: $(".item-notes").val(),
+ maintenance: $(".item-maintenance").val()
+ };
+ return item;
+ };*/
 libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function () {
     var item = {};
     var tag = $(".item-tag").val();
@@ -1444,22 +1448,22 @@ libraryHelper.prototype.intentional_vents_and_flues_measures_get_item_to_save = 
     };
     return item;
 };
-libraryHelper.prototype.water_use_get_item_to_save = function () {
+libraryHelper.prototype.water_usage_get_item_to_save = function () {
     var item = {};
-    var tag = $(".water-use-itemtag").val();
+    var tag = $(".water-efficiency-item-tag").val();
     item[tag] = {
-        name: $(".water-use-itemname").val(),
-        ventilation_rate: 1.0 * $(".water-use-itemventilation_rate").val(),
-        description: $(".water-use-itemdescription").val(),
-        performance: $(".water-use-itemperformance").val(),
-        benefits: $(".water-use-itembenefits").val(),
-        cost: $(".water-use-itemcost").val(),
-        who_by: $(".water-use-itemwho_by").val(),
-        disruption: $(".water-use-itemdisruption").val(),
-        associated_work: $(".water-use-itemassociated_work").val(),
-        key_risks: $(".water-use-itemkey_risks").val(),
-        notes: $(".water-use-itemnotes").val(),
-        maintenance: $(".water-use-itemmaintenance").val()
+        name: $(".water-efficiency-item-name").val(),
+        ventilation_rate: 1.0 * $(".water-efficiency-item-ventilation_rate").val(),
+        description: $(".water-efficiency-item-description").val(),
+        performance: $(".water-efficiency-item-performance").val(),
+        benefits: $(".water-efficiency-item-benefits").val(),
+        cost: $(".water-efficiency-item-cost").val(),
+        who_by: $(".water-efficiency-item-who_by").val(),
+        disruption: $(".water-efficiency-item-disruption").val(),
+        associated_work: $(".water-efficiency-item-associated_work").val(),
+        key_risks: $(".water-efficiency-item-key_risks").val(),
+        notes: $(".water-efficiency-item-notes").val(),
+        maintenance: $(".water-efficiency-item-maintenance").val()
     };
     return item;
 };

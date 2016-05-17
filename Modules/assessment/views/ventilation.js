@@ -441,13 +441,19 @@ function get_EVP_max_id() {
 function edit_item(item, index, item_subsystem) {
     for (z in item)
         item = item[z]; // item comes in the format: system = {electric:{bla bla bla}} and we transform it to: system = {bla bla bla}
-    if (library_helper.type === 'intentional_vents_and_flues') {
-        for (z in data.ventilation.IVF[index]) { // We copy over all the properties that are not asked when editting an system, like id or tag
-            if (item[z] == undefined)
-                item[z] = data.ventilation.IVF[index][z];
-        }
-        data.ventilation.IVF[index] = item;
+   
+    var object = '';
+    if (library_helper.type === 'intentional_vents_and_flues')
+        object = 'IVF';
+    if (library_helper.type === 'extract_ventilation_points')
+        object = 'EVP';
+    
+    for (z in data.ventilation[object][index]) { // We copy over all the properties that are not asked when editting an system, like id or tag
+        if (item[z] == undefined)
+            item[z] = data.ventilation[object][index][z];
     }
+    
+    data.ventilation[object][index] = item;
     update();
 }
 
