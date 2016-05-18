@@ -51,18 +51,42 @@ function waterheating_initUI() {
     if (data.measures.water_heating == undefined)
         data.measures.water_heating = {};
 
-    $('#solarhotwater-link').prop('href', 'view?id=' + p.id + '#' + scenario + '/solarhotwater');
-
     add_water_usage(); // water efficiency
 
-    show_hide_if_master();
+    $('#solarhotwater-link').prop('href', 'view?id=' + p.id + '#' + scenario + '/solarhotwater');
+
+    // Show the water energy system chosen in Energy Systems
+    if (data.energy_systems.waterheating.length == 0)
+        $('#water_is_heated_by').parent().hide();
+    else {
+        $('#water_is_heated_by').parent().show();
+        var href = 'view?id=' + p.id + '#' + scenario + '/system';
+        $('#water_is_heated_by').html('');
+        $('#water_is_heated_by').html('In the <a  href="' + href + '">Energy Systems page</a> the water is heated by: <table></table>');
+        for (z in data.energy_systems.waterheating) {
+            var system = data.energy_systems.waterheating[z];
+            $('#water_is_heated_by table').append('<tr><td style="padding-left: 75px;border: none">' + system.system + ': ' + system.name + '</td><td style="border: none">Fraction: ' + system.fraction + '</td><td style="border: none">Efficiency: ' + system.efficiency.toFixed(2) + '</td></tr>');
+        }
+    }
+
+    // Show the type of storage
+    $('#type_of_storage').html('');
+    var st = data.water_heating.storage_type;
+    if (st.declared_loss_factor_known == true) {
+        $('#type_of_storage').append('<tr><th>Type of storage</th><th>Volume</th><th>Insulation type</th><th>Manufacturers loss factor</th><th>Temperature factor a</th><th><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Select from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></th></tr>');
+        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td><td>' + st.manufacturer_loss_factor + '</td><td>' + st.temperature_factor_a + '</td></tr>');
+    }
+    else {
+        $('#type_of_storage').append('<tr><th>Type of storage</th><th>Volume</th><th>Insulation type</th><th>Loss factor b</th><th>Volume factor b</th><th>Temperature factor b</th><th><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Select from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></th></tr>');
+        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td><td>' + st.loss_factor_b + '</td><td>' + st.volume_factor_b + '</td><td>' + st.temperature_factor_b + '</td></tr>');
+
+    }
 }
 
 
 $('#openbem').on('click', '[key="data.water_heating.solar_water_heating"]', function () {
     data.use_SHW = !data.water_heating.solar_water_heating; // I don't know why but only works properly coping the negative
 });
-
 $('#openbem').on('change', '[key="data.water_heating.system"]', function () {
     if ($('[key="data.water_heating.system"]').val() == 'Community heating')
         data.water_heating.community_heating = 1;
@@ -75,9 +99,7 @@ $('#openbem').on('click', '.add-water-efficiency-from-lib', function () {
     library_helper.type = 'water_usage';
     library_helper.onAddItemFromLib();
 });
-
 $('#openbem').on('click', '.add-water_usage', function () {
-    console.log('hole');
     var tag = $(this).attr('tag');
     var library = library_helper.get_library_by_id($(this).attr('library')).data;
     var item = library[tag];
@@ -86,7 +108,6 @@ $('#openbem').on('click', '.add-water_usage', function () {
     data.water_heating.water_usage.push(item);
     update();
 });
-
 $('#openbem').on('click', '.delete-water-usage', function () {
     var row = $(this).attr('row');
     data.water_heating.water_usage.splice(row, 1);
@@ -97,13 +118,14 @@ $('#openbem').on('click', '.edit-item-water-usage', function () {
     library_helper.onEditItem($(this));
 });
 
-
 $('#openbem').on('click', '.apply-water-heating-measure', function () {
     // Set variables in library_helper
     library_helper.init();
     library_helper.type_of_measure = $(this).attr('type');
     if (library_helper.type_of_measure == 'water_usage')
         library_helper.type = 'water_usage';
+    if (library_helper.type_of_measure == 'storage_type')
+        library_helper.type = 'storage_type';
     else
         library_helper.type = library_helper.type_of_measure;
     // Prepare modal
@@ -124,6 +146,12 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
     // Specific action for each type of measure
     switch (library_helper.type_of_measure) {
         case 'water_usage':
+            $('#apply-measure-water-heating-what-to-do').hide();
+            $('#apply-measure-water-heating-library-item-selects').show();
+            $('#apply-measure-water-heating-modal .modal-body').show();
+            $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
+            break;
+        case 'storage_type':
             $('#apply-measure-water-heating-what-to-do').hide();
             $('#apply-measure-water-heating-library-item-selects').show();
             $('#apply-measure-water-heating-modal .modal-body').show();
@@ -163,12 +191,36 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            data.measures.water_heating[library_helper.type].measure = measure[tag]; 
+            data.measures.water_heating[library_helper.type].measure = measure[tag];
             data.water_heating.water_usage.push(measure[tag]);
+            break;
+        case 'storage_type':
+            if (data.measures.water_heating[library_helper.type].original == undefined) // first time
+                data.measures.water_heating[library_helper.type].original = data.water_heating.storage_type;
+            var measure = library_helper.storage_type_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            data.measures.water_heating[library_helper.type].measure = measure[tag];
+            data.water_heating.storage_type = measure[tag];
             break;
     }
     update();
     $('#apply-measure-water-heating-modal').modal('hide');
+});
+
+$('#openbem').on('click', '.select-type-of-storage-from-lib', function () {
+    library_helper.init();
+    library_helper.type = 'storage_type';
+    library_helper.onAddItemFromLib();
+});
+$('#openbem').on('click', '.add-storage-type ', function () {
+    var tag = $(this).attr('tag');
+    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    var item = library[tag];
+    item.tag = tag;
+    data.water_heating.storage_type = item;
+    update();
 });
 
 function get_WU_max_id() {

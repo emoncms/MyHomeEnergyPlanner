@@ -1121,7 +1121,7 @@ var standard_library = {
             benefits: "",
             cost: "",
             who_by: "",
-            disruption: "l",
+            disruption: "",
             associated_work: "",
             key_risks: "",
             notes: "",
@@ -1183,5 +1183,30 @@ var standard_library = {
             notes: "",
             maintenance: ""
         }
+    },
+    storage_type: {
+        HWS: {
+            tag: 'HWS',
+            name: "Test hot water storage",
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 0,
+            loss_factor_b: 0,
+            volume_factor_b: 0,
+            temperature_factor_b: 0,
+            insulation_type: 'very thick',
+            declared_loss_factor_known: true,
+            source: '',
+            description: "",
+            performance: '',
+            benefits: "",
+            cost: "",
+            who_by: "",
+            disruption: "l",
+            associated_work: "",
+            key_risks: "",
+            notes: "",
+            maintenance: ""
+        },
     }
 };  

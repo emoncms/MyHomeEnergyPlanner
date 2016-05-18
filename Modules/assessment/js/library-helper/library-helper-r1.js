@@ -36,7 +36,8 @@ libraryHelper.prototype.init = function () {
         //'extract_ventilation_points_measures': 'Extract ventilation points measures',
         'intentional_vents_and_flues': 'Intentional vents and flues',
         'intentional_vents_and_flues_measures': 'Intentional vents and flues measures',
-        'water_usage': 'Water usage'
+        'water_usage': 'Water usage',
+        'storage_type': 'Type of storages'
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -192,6 +193,17 @@ libraryHelper.prototype.add_events = function () {
             $('.item-passive_vents').parent().parent().hide('fast');
             $('.item-intermitent_fans').val(0);
             $('.item-passive_vents').val(0);
+        }
+    });
+    this.container.on('change', '.item-declared_loss_factor_known', function () {
+        var a = $(this).prop("checked");
+        if ($(this).prop('checked') === true) {
+            $('.if-declared-loss-factor').show('slow');
+            $('.if-not-declared-loss-factor').hide('slow');
+        }
+        else {
+            $('.if-declared-loss-factor').hide('slow');
+            $('.if-not-declared-loss-factor').show('slow');
         }
     });
 };
@@ -950,6 +962,11 @@ libraryHelper.prototype.water_usage_library_to_html = function (origin, library_
     out = out.replace(/add-system/g, 'add-water_usage');
     return out;
 };
+libraryHelper.prototype.storage_type_library_to_html = function (origin, library_id) {
+    var out = this.default_library_to_html(origin, library_id);
+    out = out.replace(/add-system/g, 'add-storage-type');
+    return out;
+};
 
 
 /**********************************************
@@ -1233,7 +1250,6 @@ libraryHelper.prototype.intentional_vents_and_flues_measures_item_to_html = func
     out += '</tbody></table>';
     return out;
 };
-
 libraryHelper.prototype.water_usage_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {tag: '', name: 'name', source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
@@ -1254,6 +1270,51 @@ libraryHelper.prototype.water_usage_item_to_html = function (item, tag) {
     out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="water-efficiency-item-notes">' + item.notes + '</textarea></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="water-efficiency-item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
+    return out;
+};
+libraryHelper.prototype.storage_type_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: "name", manufacturer_loss_factor: 0, temperature_factor_a: 0, storage_volume: 0, loss_factor_b: 0, volume_factor_b: 0, temperature_factor_b: 0, insulation_type: 'very thick', declared_loss_factor_known: true, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Storage volume</td><td><input type="number" min="0" class="item-storage_volume" value="' + item.storage_volume + '" /></td></tr>';
+    out += '<tr><td>Insulation type</td><td><input type="text" class="item-insulation_type" value="' + item.insulation_type + '" /></td></tr>';
+    if (item.declared_loss_factor_known === true)
+        out += '<tr><td>Manufacturer\' declared loss factor known</td><td><input type="checkbox" class="item-declared_loss_factor_known" checked  /></td></tr>';
+    else
+        out += '<tr><td>Manufacturer\' declared loss factor known</td><td><input type="checkbox" class="item-declared_loss_factor_known" /></td></tr>';
+
+    out += '<tr class="if-declared-loss-factor"><td>Manufacturer\'s declared loss factor (kWh/day)</td><td><input type="number" min="0" class="item-manufacturer_loss_factor" value="' + item.manufacturer_loss_factor + '" /></td></tr>';
+    out += '<tr class="if-declared-loss-factor"><td>Temperature factor</td><td><input type="number" min="0" class="item-temperature_factor_a" value="' + item.temperature_factor_a + '" /></td></tr>';
+
+    out += '<tr class="if-not-declared-loss-factor"><td>Hot water storage loss factor (kWh/litre/day)</td><td><input type="text" class="item-loss_factor_b" value="' + item.loss_factor_b + '" /></td></tr>';
+    out += '<tr class="if-not-declared-loss-factor"><td>Volume factor</td><td><input type="text" class="item-volume_factor_b" value="' + item.volume_factor_b + '" /></td></tr>';
+    out += '<tr class="if-not-declared-loss-factor"><td>Temperature factor</td><td><input type="text" class="item-temperature_factor_b" value="' + item.temperature_factor_b + '" /></td></tr>';
+
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+
+    if (item.declared_loss_factor_known === true) {
+        out = out.replace(/class="if-declared-loss-factor"/g, ' class="if-declared-loss-factor" style="display:table-row"');
+        out = out.replace(/class="if-not-declared-loss-factor"/g, ' class="if-not-declared-loss-factor" style="display:none"');
+    }
+    else {
+        out = out.replace(/class="if-declared-loss-factor"/g, ' class="if-declared-loss-factor" style="display:none"');
+        out = out.replace(/class="if-not-declared-loss-factor"/g, ' class="if-not-declared-loss-factor" style="display:table-row"');
+    }
     return out;
 };
 
@@ -1464,6 +1525,32 @@ libraryHelper.prototype.water_usage_get_item_to_save = function () {
         key_risks: $(".water-efficiency-item-key_risks").val(),
         notes: $(".water-efficiency-item-notes").val(),
         maintenance: $(".water-efficiency-item-maintenance").val()
+    };
+    return item;
+};
+libraryHelper.prototype.storage_type_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        manufacturer_loss_factor: $(".item-manufacturer_loss_factor").val(),
+        temperature_factor_a: $(".item-temperature_factor_a").val(),
+        storage_volume: $(".item-storage_volume").val(),
+        loss_factor_b: $(".item-loss_factor_b").val(),
+        volume_factor_b: $(".item-volume_factor_b").val(),
+        temperature_factor_b: $(".item-temperature_factor_b").val(),
+        insulation_type: $(".item-insulation_type").val(),
+        declared_loss_factor_known: $(".item-declared_loss_factor_known").prop('checked'),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
     };
     return item;
 };

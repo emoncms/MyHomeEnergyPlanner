@@ -848,11 +848,16 @@ calc.energy_systems = function (data)
 
     // Water heating efficiency adjustment
     for (var a in data.energy_systems["waterheating"]) {
-        // Apply Winter and summer efficiency modification to water heating system if its a shared water + space heating system. SAP2012, 9.2.1, p. 24
+        //Calculation of the monthly efficiency for a hot water only system
+        data.energy_systems["waterheating"][a].efficiency = data.energy_systems["waterheating"][a].summer;
+        data.energy_systems["waterheating"][a].efficiency_monthly = [];
+        for (m = 0; m < 12; m++)
+            data.energy_systems["waterheating"][a].efficiency_monthly[m] = data.energy_systems["waterheating"][a].efficiency;
+
+        // Apply Winter and summer efficiency modification to water heating system if its a shared water + space heating system. SAP2012, 9.2.1, p. 24 - Overwrites hot water efficiency
         var system_water = data.energy_systems["waterheating"][a].system;
         for (var b in data.energy_systems["space_heating"]) {
             var system_space = data.energy_systems["space_heating"][b].system;
-            data.energy_systems["waterheating"][a].efficiency_monthly = [];
             if (system_water == system_space) {
 
                 //var Q_water = data.energy_systems["waterheating"][a].demand;
@@ -873,11 +878,6 @@ calc.energy_systems = function (data)
                 data.energy_systems["waterheating"][a].efficiency_monthly = n_monthly;
                 data.energy_systems["waterheating"][a].efficiency = n / 12;
                 break; // we leave the for for "space_heatiing" systems so that we don't overwrite the adjusted efficiency for the water_heating system
-            }
-            else { // hot water only boiler
-                data.energy_systems["waterheating"][a].efficiency = data.energy_systems["waterheating"][a].summer;
-                for (m = 0; m < 12; m++)
-                    data.energy_systems["waterheating"][a].efficiency_monthly[m] = data.energy_systems["waterheating"][a].efficiency;
             }
         }
     }
@@ -1153,18 +1153,31 @@ calc.water_heating = function (data)
     if (data.water_heating.solar_water_heating == undefined)
         data.water_heating.solar_water_heating = false;
     data.water_heating.pipework_insulated_fraction = 1;
-    if (data.water_heating.manufacturer_loss_factor == undefined)
-        data.water_heating.manufacturer_loss_factor = 0;
-    if (data.water_heating.temperature_factor_a == undefined)
-        data.water_heating.temperature_factor_a = 0;
-    if (data.water_heating.storage_volume == undefined)
-        data.water_heating.storage_volume = 0;
-    if (data.water_heating.loss_factor_b == undefined)
-        data.water_heating.loss_factor_b = 0;
-    if (data.water_heating.volume_factor_b == undefined)
-        data.water_heating.volume_factor_b = 0;
-    if (data.water_heating.temperature_factor_b == undefined)
-        data.water_heating.temperature_factor_b = 0;
+    /*if (data.water_heating.manufacturer_loss_factor == undefined)
+     data.water_heating.manufacturer_loss_factor = 0;
+     if (data.water_heating.temperature_factor_a == undefined)
+     data.water_heating.temperature_factor_a = 0;
+     if (data.water_heating.storage_volume == undefined)
+     data.water_heating.storage_volume = 0;
+     if (data.water_heating.loss_factor_b == undefined)
+     data.water_heating.loss_factor_b = 0;
+     if (data.water_heating.volume_factor_b == undefined)
+     data.water_heating.volume_factor_b = 0;
+     if (data.water_heating.temperature_factor_b == undefined)
+     data.water_heating.temperature_factor_b = 0;*/
+    if (data.water_heating.storage_type == undefined)
+        data.water_heating.storage_type = {
+            tag: 'HWS',
+            name: "Test hot water storage - Ask Carlos to replace this default one",
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 0,
+            loss_factor_b: 0,
+            volume_factor_b: 0,
+            temperature_factor_b: 0,
+            insulation_type: 'very thick',
+            declared_loss_factor_known: true
+        };
     if (data.water_heating.system == undefined)
         data.water_heating.system = 'Other';
     if (data.water_heating.Vc == undefined)
@@ -1207,15 +1220,14 @@ calc.water_heating = function (data)
     {
         // STORAGE LOSS kWh/d
         if (data.water_heating.storage) {
-            if (data.water_heating.declared_loss_factor_known) {
-                energy_lost_from_water_storage = data.water_heating.manufacturer_loss_factor * data.water_heating.temperature_factor_a;
+            if (data.water_heating.storage_type.declared_loss_factor_known) {
+                energy_lost_from_water_storage = data.water_heating.storage_type.manufacturer_loss_factor * data.water_heating.storage_type.temperature_factor_a;
             } else {
-                energy_lost_from_water_storage = data.water_heating.storage_volume * data.water_heating.loss_factor_b * data.water_heating.volume_factor_b * data.water_heating.temperature_factor_b;
+                energy_lost_from_water_storage = data.water_heating.storage_type.storage_volume * data.water_heating.storage_type.loss_factor_b * data.water_heating.storage_type.volume_factor_b * data.water_heating.storage_type.temperature_factor_b;
             }
         }
 
         for (var m = 0; m < 12; m++) {
-
             // DISTRIBUTION LOSSES
             distribution_loss[m] = 0.15 * monthly_energy_content[m];
             // MONTHLY STORAGE LOSSES
