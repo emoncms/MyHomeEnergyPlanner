@@ -1152,7 +1152,8 @@ calc.water_heating = function (data)
         data.water_heating.combi_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     if (data.water_heating.solar_water_heating == undefined)
         data.water_heating.solar_water_heating = false;
-    data.water_heating.pipework_insulated_fraction = 1;
+    if (data.water_heating.pipework_insulation == undefined)
+        data.water_heating.pipework_insulation = 'Fully insulated primary pipework';
     /*if (data.water_heating.manufacturer_loss_factor == undefined)
      data.water_heating.manufacturer_loss_factor = 0;
      if (data.water_heating.temperature_factor_a == undefined)
@@ -1256,6 +1257,16 @@ calc.water_heating = function (data)
 
                 if (data.water_heating.community_heating)
                     data.water_heating.pipework_insulated_fraction = 1.0;
+                else {
+                    if (data.water_heating.pipework_insulation == 'Uninsulated primary pipework')
+                        data.water_heating.pipework_insulated_fraction = 0;
+                    if (data.water_heating.pipework_insulation == 'First 1m from cylinder insulated')
+                        data.water_heating.pipework_insulated_fraction = 0.1;
+                    if (data.water_heating.pipework_insulation == 'All accesible piperwok insulated')
+                        data.water_heating.pipework_insulated_fraction = 0.3;
+                    if (data.water_heating.pipework_insulation == 'Fully insulated primary pipework')
+                        data.water_heating.pipework_insulated_fraction = 1.0;
+                }
                 primary_circuit_loss[m] = datasets.table_1a[m] * 14 * ((0.0091 * data.water_heating.pipework_insulated_fraction + 0.0245 * (1 - data.water_heating.pipework_insulated_fraction)) * hours_per_day + 0.0263);
                 if (data.water_heating.solar_water_heating)
                     primary_circuit_loss[m] *= datasets.table_h4[m];

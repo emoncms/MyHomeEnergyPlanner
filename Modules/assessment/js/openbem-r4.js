@@ -180,6 +180,7 @@ var openbem = {
              loss_factor_b: data.water_heating.loss_factor_b,
              volume_factor_b: data.water_heating.volume_factor_b,
              temperature_factor_b: data.water_heating.temperature_factor_b,*/
+            pipework_insulation: data.water_heating.pipework_insulation,
             storage_type: data.water_heating.storage_type,
             community_heating: data.water_heating.community_heating,
             hot_water_store_in_dwelling: data.water_heating.hot_water_store_in_dwelling,

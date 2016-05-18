@@ -16,12 +16,12 @@
         <td>Designed water use is not more than 125 litres per person per day (all water use, hot and cold)</td>
         <td style="text-align:center"><input key="data.water_heating.low_water_use_design" type="checkbox" /></td>
     </tr>
-    <tr><th colspan="2"><b>Water efficiency</b>
+    <tr><th colspan="2" style="border-bottom:none"><b>Water efficiency</b>
             <span class="add-water-efficiency-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
             <span class="apply-water-heating-measure if-not-master" type="water_usage" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
         </th>
     </tr>
-    <tbody id="water-usage" style="display:none"></tbody>
+    <tbody id="water-usage" style="display:none; border:none"></tbody>
 </table>
 
 <table class="table">    
@@ -122,12 +122,22 @@
                 </select>
             </td>
         </tr>
+        <tr>
+            <td>Is the primary pipework insulated?   <span class="apply-water-heating-measure if-not-master" type="pipework_insulation" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span></td>
+            <td><select class="disabled-if-not-master" key="data.water_heating.pipework_insulation">
+                    <option value="Uninsulated primary pipework">Uninsulated primary pipework</option>
+                    <option value="First 1m from cylinder insulated">First 1m from cylinder insulated</option>
+                    <option value="All accesible piperwok insulated">All accesible piperwok insulated</option>
+                    <option value="Fully insulated primary pipework">Fully insulated primary pipework</option>
+                </select>
+            </td>
+        </tr>
         <tr><td colspan="2"><h4>Hot water energy demand:       <span key="data.water_heating.annual_waterheating_demand" dp="2" /> kWh/year</h4></td></tr>
-    <!--<tr>
-        <td style="padding-left:40px">Energy lost from water storage, kWh/day:</td>
-        <td style="text-align:center; width:100px"><span></span></td>
-    </tr>    
-    -->
+        <!--<tr>
+            <td style="padding-left:40px">Energy lost from water storage, kWh/day:</td>
+            <td style="text-align:center; width:100px"><span></span></td>
+        </tr>    
+        -->
 </table>
 
 <div id="apply-measure-water-heating-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
@@ -145,6 +155,14 @@
         <select id="apply-measure-water-heating-items-select"></select>            
     </div>
     <div class="modal-body">
+    </div>
+    <div style="padding: 15px" id="apply-measure-water-heating-pipework-insulation">
+        <select>
+            <option value="Uninsulated primary pipework">Uninsulated primary pipework</option>
+            <option value="First 1m from cylinder insulated">First 1m from cylinder insulated</option>
+            <option value="All accesible piperwok insulated">All accesible piperwok insulated</option>
+            <option value="Fully insulated primary pipework">Fully insulated primary pipework</option>
+        </select>
     </div>
     <div class="modal-footer">
         <p id="apply-measure-water-heating-message" style="font-weight: bold"></p>

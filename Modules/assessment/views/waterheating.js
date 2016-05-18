@@ -126,6 +126,8 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
         library_helper.type = 'water_usage';
     if (library_helper.type_of_measure == 'storage_type')
         library_helper.type = 'storage_type';
+    if (library_helper.type_of_measure == 'pipework_insulation')
+        library_helper.type = 'storage_type'; // we do this assingment in order to not break the populationn of the library selects in the modal
     else
         library_helper.type = library_helper.type_of_measure;
     // Prepare modal
@@ -149,13 +151,23 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
             $('#apply-measure-water-heating-what-to-do').hide();
             $('#apply-measure-water-heating-library-item-selects').show();
             $('#apply-measure-water-heating-modal .modal-body').show();
+            $('#apply-measure-water-heating-pipework-insulation').hide();
             $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
             break;
         case 'storage_type':
             $('#apply-measure-water-heating-what-to-do').hide();
             $('#apply-measure-water-heating-library-item-selects').show();
             $('#apply-measure-water-heating-modal .modal-body').show();
+            $('#apply-measure-water-heating-pipework-insulation').hide();
             $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
+            break;
+        case 'pipework_insulation':
+            $('#apply-measure-water-heating-pipework-insulation select').val(data.water_heating.pipework_insulation);
+            $('#apply-measure-water-heating-what-to-do').hide();
+            $('#apply-measure-water-heating-library-item-selects').hide();
+            $('#apply-measure-water-heating-modal .modal-body').hide();
+            $('#apply-measure-water-heating-pipework-insulation').show();
+            $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from the drop down');
             break;
     }
     $('#apply-measure-water-heating-modal').modal('show');
@@ -204,6 +216,14 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             data.measures.water_heating[library_helper.type].measure = measure[tag];
             data.water_heating.storage_type = measure[tag];
             break;
+        case 'pipework_insulation':
+            if (data.measures.water_heating['pipework_insulation'] == undefined)
+                data.measures.water_heating['pipework_insulation'] = {};
+            if (data.measures.water_heating['pipework_insulation'].original == undefined) // first time
+                data.measures.water_heating['pipework_insulation'].original = data.water_heating.pipework_insulation;
+            data.measures.water_heating['pipework_insulation'].measure = $('#apply-measure-water-heating-pipework-insulation select').val();
+            data.water_heating.pipework_insulation = $('#apply-measure-water-heating-pipework-insulation select').val();
+            break;
     }
     update();
     $('#apply-measure-water-heating-modal').modal('hide');
@@ -244,7 +264,7 @@ function add_water_usage() {
     $('#water-usage').html('');
     for (z in data.water_heating.water_usage) {
         var item = data.water_heating.water_usage[z];
-        var out = '<tr><td style="padding-left:75px;width:250px">' + item.tag + ': ' + item.name + '</td><td>';
+        var out = '<tr><td style="padding-left:75px;width:250px;border:none">' + item.tag + ': ' + item.name + '</td><td style="border:none">';
         //out += '<button class="apply-water-heating-measure if-not-master" type="water_usage" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
         out += '<span class="edit-item-water-usage" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
         out += '<span class = "delete-water-usage" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
