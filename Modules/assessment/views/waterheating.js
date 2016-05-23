@@ -56,11 +56,11 @@ function waterheating_initUI() {
     $('#solarhotwater-link').prop('href', 'view?id=' + p.id + '#' + scenario + '/solarhotwater');
 
     // Show the water energy system chosen in Energy Systems
+    var href = 'view?id=' + p.id + '#' + scenario + '/system';
     if (data.energy_systems.waterheating.length == 0)
-        $('#water_is_heated_by').parent().hide();
+        $('#water_is_heated_by').html('<i>There is no system for water heating in the <a  href="' + href + '">Energy Systems page</a> </i>');
     else {
         $('#water_is_heated_by').parent().show();
-        var href = 'view?id=' + p.id + '#' + scenario + '/system';
         $('#water_is_heated_by').html('');
         $('#water_is_heated_by').html('In the <a  href="' + href + '">Energy Systems page</a> the water is heated by: <table></table>');
         for (z in data.energy_systems.waterheating) {
