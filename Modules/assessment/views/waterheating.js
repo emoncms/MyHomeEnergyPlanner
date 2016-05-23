@@ -81,6 +81,7 @@ function waterheating_initUI() {
         $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td><td>' + st.loss_factor_b + '</td><td>' + st.volume_factor_b + '</td><td>' + st.temperature_factor_b + '</td></tr>');
 
     }
+    show_hide_if_master();
 }
 
 
@@ -226,6 +227,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             break;
     }
     update();
+    waterheating_initUI();
     $('#apply-measure-water-heating-modal').modal('hide');
 });
 
@@ -241,6 +243,7 @@ $('#openbem').on('click', '.add-storage-type ', function () {
     item.tag = tag;
     data.water_heating.storage_type = item;
     update();
+    waterheating_initUI()
 });
 
 function get_WU_max_id() {
