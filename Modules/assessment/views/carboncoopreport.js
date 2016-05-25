@@ -1,3 +1,4 @@
+console.log('debug carboncoopreport.js');
 
 function carboncoopreport_initUI() {
 
@@ -75,10 +76,8 @@ function carboncoopreport_initUI() {
 
 
     // need to wait until page has loaded so we can use the webfont in our charts.
-    // $(window).load(function(){
+    //$(window).load(function(){
     WebFontConfig.active = function () {
-
-
 
         // $(".home-image").attr("src", project[scenario].household.houseimage);
         if (data.featuredimage) {
@@ -1126,7 +1125,7 @@ function carboncoopreport_initUI() {
             }
             if (project[scenario].measures.water_heating != undefined) {
                 //if (project[scenario].measures.water_heating.water_usage != undefined)
-                 //   addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
+                //   addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
                 if (project[scenario].measures.water_heating.storage_type != undefined)
                     addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector);
 
@@ -1211,7 +1210,7 @@ function carboncoopreport_initUI() {
             $(tableSelector + " tbody").append($(html));
         }
 
-
+        console.log('here');
         if (typeof project["scenario1"] != "undefined") {
             $("#output-scenario1-name").html(project["scenario1"]["scenario_name"]);
             createMeasuresTable("scenario1", "#scenario1-measures", ".js-measures1-summary");
