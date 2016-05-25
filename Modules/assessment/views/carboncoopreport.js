@@ -1124,8 +1124,8 @@ function carboncoopreport_initUI() {
                     addMeasureToSummaryTable(project[scenario].measures.ventilation.ventilation_systems_measures, tableSelector, summaryTableSelector);
             }
             if (project[scenario].measures.water_heating != undefined) {
-                //if (project[scenario].measures.water_heating.water_usage != undefined)
-                //   addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.water_heating.water_usage != undefined)
+                    addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
                 if (project[scenario].measures.water_heating.storage_type != undefined)
                     addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector);
 

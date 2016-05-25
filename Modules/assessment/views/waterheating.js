@@ -198,13 +198,14 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
     }
     switch (library_helper.type_of_measure) {
         case 'water_usage':
-            if (data.measures.water_heating[library_helper.type].original == undefined) // first time
-                data.measures.water_heating[library_helper.type].original = 'empty';
             var measure = library_helper.water_usage_get_item_to_save();
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            data.measures.water_heating[library_helper.type].measure = measure[tag];
+            measure.id = get_WU_max_id(data.water_heating.water_usage) + 1;
+            data.measures.water_heating[library_helper.type][measure.id] = {};
+            data.measures.water_heating[library_helper.type][measure.id].original = 'empty';
+            data.measures.water_heating[library_helper.type][measure.id].measure = measure[tag];
             data.water_heating.water_usage.push(measure[tag]);
             break;
         case 'storage_type':
@@ -260,7 +261,7 @@ function get_WU_max_id() {
     return max_id;
 }
 function add_water_usage() {
-    if (data.water_heating.water_usage[0] != undefined)
+    if (data.water_heating.water_usage.length > 0)
         $('#water-usage').show();
     else
         $('#water-usage').hide();
