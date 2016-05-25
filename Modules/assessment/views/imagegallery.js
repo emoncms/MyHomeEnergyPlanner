@@ -5,6 +5,8 @@ function imagegallery_initUI() {
     if (data.featuredimage == undefined)
         data.featuredimage = '';
 
+    data = project['master'];
+    
     $(document).ready(function () {
         $('#gallery').magnificPopup({
             delegate: 'a', // child items selector, by clicking on it popup will open
@@ -68,7 +70,7 @@ function add_image(z) {
     html += "' width='200' /></a><i class='icon-trash' index='";
     html += z;
     html += "'></i><i class='icon-star";
-    if (data.imagegallery[z] != data.featuredimage){
+    if (data.imagegallery[z] != data.featuredimage) {
         html += "-empty";
     }
     html += "' index='"

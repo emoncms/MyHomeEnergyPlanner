@@ -54,6 +54,8 @@ function householdquestionnaire_UpdateUI() {
         })
         
     }
-}
+};
 
-;
+function householdquestionnaire_initUI(){
+        data = project['master'];
+}

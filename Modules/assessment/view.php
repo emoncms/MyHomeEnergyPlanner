@@ -63,12 +63,12 @@ global $reports;
                 <br><br>
 
                 <div class="scenario-nav-heading">Project</a></div>
-                <div class="scenario-nav"><a href="#master/carboncoopreport">Carbon Coop Report</a></div>
-                <div class="scenario-nav"><a href="#master/householdquestionnaire">Household Questionnaire</a></div>
-                <div class="scenario-nav"><a href="#master/currentenergy">Current Energy</a></div>
-                <div class="scenario-nav"><a href="#master/export">Import/Export</a></div>
-                <div class="scenario-nav"><a href="#master/imagegallery">Image gallery</a></div>
-                <div class="scenario-nav"><a href="#master/librariesmanager">Libraries manager</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/carboncoopreport">Carbon Coop Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
             </div>
         </div>
 
@@ -394,14 +394,14 @@ global $reports;
     {
         if (scenario == 'master')
             $('#content .if-not-master').hide();
-        else{
+        else {
             $('#content .if-master').hide();
-         $('#content .disabled-if-not-master').attr('disabled','true');
+            $('#content .disabled-if-not-master').attr('disabled', 'true');
         }
     }
 
     function run_backwards_compatibility() {
-        // Some old assesments have renewable energy systems that are missing the "summer" and "winter" efficiencies
+        // Some old assesments have renewable energy systems that are misCarbon Coop Reportsing the "summer" and "winter" efficiencies
         for (scenario in project) {
             for (z in project[scenario].energy_systems) {
                 for (index in project[scenario].energy_systems[z]) {
@@ -487,6 +487,10 @@ global $reports;
              draw_openbem_graphics();
              */
         }
+    });
+
+    $('#openbem').on('click', '.project-menu-item', function () {
+        $('.scenario-block[scenario=master]').click();
     });
 
     $("#openbem").on('click', "#create-new", function () {

@@ -2,7 +2,7 @@ console.log('debug carboncoopreport.js');
 
 function carboncoopreport_initUI() {
 
-// console.log(project);
+    data = project['master'];
 
     WebFontConfig = {
         google: {families: ['Karla:400,400italic,700:latin']}
