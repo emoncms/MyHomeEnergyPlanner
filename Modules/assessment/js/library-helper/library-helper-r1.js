@@ -2,7 +2,6 @@ function libraryHelper(type, container) {
     this.container = container;
     this.library_list = {};
     this.library_permissions = {};
-
     // Variables to link the view with the controller
     this.type = type;
     this.library_id = 0;
@@ -159,7 +158,6 @@ libraryHelper.prototype.add_events = function () {
         myself.type = myself.get_library_by_id(library_id).type;
         myself.onCreateInLibrary(library_id);
     });
-
     this.container.on('click', '.delete-library-item', function () {
         $('#delete-library-item-ok').attr('library-id', $(this).attr('library'));
         $('#delete-library-item-ok').attr('tag', $(this).attr('tag'));
@@ -169,7 +167,6 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '#confirm-delete-library-item-modal #delete-library-item-ok', function () {
         myself.delete_library_item($(this).attr('library-id'), $(this).attr('tag'));
     });
-
     this.container.on('change', '.item-ventilation_type', function () {
         var newVS = $('.item-ventilation_type').val();
         if (newVS == 'DEV' || newVS == 'MEV' || newVS == 'MV' || newVS == 'MVHR')
@@ -207,7 +204,6 @@ libraryHelper.prototype.add_events = function () {
         }
     });
 };
-
 libraryHelper.prototype.append_modals = function () {
     var html;
     var myself = this;
@@ -285,7 +281,6 @@ libraryHelper.prototype.onEditLibraryNameOk = function () {
     });
     //this.set_library_name(library_id, library_new_name);
 };
-
 libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove, selected_library) {
     $('#return-message').html('');
     //var selected_library = $('#library-select').val();
@@ -320,7 +315,6 @@ libraryHelper.prototype.onNewLibraryOption = function () {
         out += "<option value=" + library.id + ">" + library.name + "</option>";
     });
     $("#library-to-copy-select").html(out);
-
     $('#new-library-name').val('New name');
     $(".modal").modal('hide');
     $('#new-library-modal .btn').show('fast');
@@ -394,13 +388,11 @@ libraryHelper.prototype.onCreateInLibrary = function (library_id) {
     $('.item-tag').removeAttr("disabled");
     $('.editable-field').removeAttr("disabled");
     $('.modal').modal('hide');
-
     if (library_id != undefined)
         $('#create-in-library-ok').attr('library-id', library_id);
     // Preselect create empty one
     $('input:radio[name=empty_or_copy_item]').val(['empty']);
     $('#copy-item-from').hide('fast');
-
     $('#modal-create-in-library').modal('show');
 };
 libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
@@ -483,7 +475,7 @@ libraryHelper.prototype.onChangeItemToCopySelect = function () {
 }
 
 libraryHelper.prototype.onEditLibraryItem = function (origin) {
-    //var selected_library = this.get_library_by_id($('#library-select').val());
+//var selected_library = this.get_library_by_id($('#library-select').val());
     var selected_library = this.get_library_by_id(origin.attr('library'));
     var library_name = selected_library.name;
     $('#library-to-edit-item').html(library_name);
@@ -557,8 +549,6 @@ libraryHelper.prototype.onEditItemOk = function () {
     edit_item(item, index, item_subsystem); // This function is declared in the view
     $('.modal').modal('hide');
 };
-
-
 libraryHelper.prototype.onApplyMeasure = function (origin) {
     // Add attributes to the "Ok" button
     $('#apply-measure-ok').attr('library', origin.attr('library'));
@@ -574,7 +564,6 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     //If we are in fabric Elements show the option to Apply Measure from Measures Library
     if (this.type == 'elements')
         $('.replace_from_measure_library').show('fast');
-
     // Populate the selects library to choose a library and an item (used when replace the item with one from library)
     //Moved to onChangeApplyMeasureWhatToDo
     /*var out = '';
@@ -615,7 +604,6 @@ libraryHelper.prototype.onApplyMeasureOk = function (origin) {
             break;
     }
     apply_measure(measure);
-
     $('#apply-measure-modal').modal('hide');
 };
 libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
@@ -671,7 +659,6 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_l
     $('#replace-from-lib-items').html(out);
     $("#replace-from-lib-items").attr('library_type', type_of_library);
     this.populate_measure_new_item(type_of_library);
-
 };
 libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function (type_of_library) {
     this.populate_measure_new_item(type_of_library);
@@ -680,7 +667,6 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function (type_
 };
 libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
     var type = $('#modal-create-in-library .create-element-type').val();
-
     // Show window specific fields for a given type
     if (type == 'Window' || type == 'Door' || type == 'Roof_light')
         $('.window-element').show('fast');
@@ -690,7 +676,6 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
         $('#modal-create-in-library .EWI-row').show('fast');
     else
         $('#modal-create-in-library .EWI-row').hide('fast');
-
     // Populate elements dropdown
     $('#modal-create-in-library #item-to-copy-select').html('');
     var library = this.get_library_by_id($('#modal-create-in-library #origin-library-select').val());
@@ -700,10 +685,8 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
             out += '<option value="' + i + '">' + i + '</option>';
     }
     $('#modal-create-in-library #item-to-copy-select').html(out);
-
     if ($('#modal-create-in-library [name="empty_or_copy_item"]:checked').val() == 'empty') {
         out = this.elements_item_to_html();
-
     } else { // Copy from existing one
         // Replace item with the first one in the list
         $('#modal-create-in-library #new-item-in-library').html('');
@@ -711,41 +694,32 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
         out = this.elements_item_to_html(library.data[tag]);
         $('#modal-create-in-library .new-item-in-library').html(out);
         $('#modal-create-in-library .item-tag').val('New tag');
-
     }
 };
-
 libraryHelper.prototype.onShowLibraryItems = function (library_id) {
     var library = this.get_library_by_id(library_id);
     this.type = library.type;
     //Header
     $("#show-library-items-header").html(this.library_names[this.type]);
     $('#show-library-items-library-name').html(library.name);
-
     // Items
     var function_name = library.type + '_library_to_html';
     var out = this[function_name](null, library_id);
     $("#show-library-items-modal #show-library-items-table").html(out);
-
     // Add Library id to edit buttons
 
     // Hide the Use buttons
     $("#show-library-items-modal .use-from-lib").hide('fast');
-
     // Hide Write options if no write access
     if (this.library_permissions[library.id].write != 1)
         $("#show-library-items-modal .if-write").hide('fast');
-
     // Show the select to choose the type of fabric elements when library is "elements"
     if (this.type == 'elements' || this.type == 'elements_measures')
         $('#show-library-items-modal .element-type').show('fast');
-
     // Add library id to Create new item 
     $('#show-library-items-modal #create-in-library').attr('library-id', library_id);
-
     // Show modal
     $("#show-library-items-modal").modal('show');
-
 };
 libraryHelper.prototype.onChangeTypeOfElementsToShow = function (origin) {
     origin.attr('tags', [origin.val()]); //this is the type of elements to display
@@ -783,7 +757,6 @@ libraryHelper.prototype.onDeleteLibraryOk = function (library_id) {
             else
                 $('#confirm-delete-library-modal .message').html('Library could not be deleted - ' + result);
         }});
-
 }
 /**********************************************
  * Libraries to html
@@ -792,6 +765,7 @@ libraryHelper.prototype.onDeleteLibraryOk = function (library_id) {
 libraryHelper.prototype.default_library_to_html = function (origin, library_id) {
     var out = "";
     var selected_library = this.get_library_by_id(library_id);
+    this.orderObjectsByKeys(selected_library.data);
 
     for (z in selected_library.data) {
         out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
@@ -812,7 +786,8 @@ libraryHelper.prototype.systems_library_to_html = function (origin, library_id) 
         eid = '';
     //if ($('#library-select').val() != undefined)
     //library_id = $('#library-select').val();
-    selected_library = this.get_library_by_id(library_id);
+    var selected_library = this.get_library_by_id(library_id);
+    this.orderObjectsByKeys(selected_library.data);
     $('#library-select').attr('eid', eid);
     var out = "";
     for (z in selected_library.data) {
@@ -842,8 +817,8 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     //if ($('#library-select').val() != undefined)
     //library_id = $('#library-select').val();
     var element_library = this.get_library_by_id(library_id).data;
+    this.orderObjectsByKeys(element_library);
     $('#library-select').attr('tags', tag);
-
 
     var out = "";
     //Select to choose the type of element to display, not always used and is hidden by default
@@ -859,7 +834,6 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     out += tag[0] == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
     out += tag[0] == 'Roof_light' ? ' <option value = "Roof_light" selected > Roof light </option>' : '<option value="Roof_light">Roof light</option> ';
     out += '</select></div>';
-
     // Elements
     out += '<table>';
     for (z in element_library) {
@@ -900,7 +874,7 @@ libraryHelper.prototype.elements_measures_library_to_html = function (origin, li
 libraryHelper.prototype.draught_proofing_measures_library_to_html = function (origin, library_id) {
     var out = "";
     var selected_library = this.get_library_by_id(library_id);
-
+    this.orderObjectsByKeys(selected_library.data);
     for (z in selected_library.data) {
         out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
         out += "<td><b>q50:</b> " + selected_library.data[z].q50 + " m<sup>3</sup>/hm<sup>2</sup></td>";
@@ -927,7 +901,7 @@ libraryHelper.prototype.extract_ventilation_points_library_to_html = function (o
 libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (origin, library_id) {
     var out = "";
     var selected_library = this.get_library_by_id(library_id);
-
+    this.orderObjectsByKeys(selected_library.data);
     for (z in selected_library.data) {
         out += "<tr><td>" + z + ': ' + selected_library.data[z].name;
         out += "<br><span style='font-size:13px'><b>Rate: </b> " + selected_library.data[z].ventilation_rate + " m<sup>3</sup>/h</span>, ";
@@ -944,7 +918,7 @@ libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (
 libraryHelper.prototype.intentional_vents_and_flues_measures_library_to_html = function (origin, library_id) {
     var out = "";
     var selected_library = this.get_library_by_id(library_id);
-
+    this.orderObjectsByKeys(selected_library.data);
     for (z in selected_library.data) {
         out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
         out += "<td><b>Ventilation rate:</b> " + selected_library.data[z].ventilation_rate + " m<sup>3</sup>/hm<sup>2</sup></td>";
@@ -967,8 +941,6 @@ libraryHelper.prototype.storage_type_library_to_html = function (origin, library
     out = out.replace(/add-system/g, 'add-storage-type');
     return out;
 };
-
-
 /**********************************************
  * Items to html
  **********************************************/
@@ -1065,7 +1037,6 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
         out += '<tr class="window-element" style="display:none"><td>g</td><td><input type="text" class="create-element-g window-element editable-field" value="1" /></td></tr>';
         out += '<tr class="window-element" style="display:none"><td>gL</td><td><input type="text" class="create-element-gL window-element editable-field" value="1" /></td></tr>';
         out += '<tr class="window-element" style="display:none" ><td>Frame factor (ff)</td><td><input type="text" class="create-element-ff editable-field window-element" value="1" /></td></tr>';
-
     }
 
     out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
@@ -1118,7 +1089,6 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
     out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
-
     out += '<tr><td>Ventilation type</td><td><select class="item-ventilation_type">';
     out += item.ventilation_type == 'NV' ? '<option value="NV" selected>Natural ventilation only (NV)</option>' : '<option value="NV">Natural ventilation only (NV)</option>';
     out += item.ventilation_type == 'IE' ? '<option value="IE" selected>Intermittent extract ventilation (IE)</option>' : '<option value="IE">Intermittent extract ventilation (IE)</option>';
@@ -1147,7 +1117,6 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
     out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
-
     // Show hide "air change rate" and "heat recovery efficiannecy" accordint to the ventilation system
     if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR')
         $('.item-air_change_rate').parent().parent().show('fast');
@@ -1157,7 +1126,6 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
         $('.item-heat_recovery_efficiency').parent().parent().show('fast');
     else
         $('.item-heat_recovery_efficiency').parent().parent().hide('fast');
-
     return out;
 };
 libraryHelper.prototype.extract_ventilation_points_item_to_html = function (item, tag) {
@@ -1286,14 +1254,11 @@ libraryHelper.prototype.storage_type_item_to_html = function (item, tag) {
         out += '<tr><td>Manufacturer\' declared loss factor known</td><td><input type="checkbox" class="item-declared_loss_factor_known" checked  /></td></tr>';
     else
         out += '<tr><td>Manufacturer\' declared loss factor known</td><td><input type="checkbox" class="item-declared_loss_factor_known" /></td></tr>';
-
     out += '<tr class="if-declared-loss-factor"><td>Manufacturer\'s declared loss factor (kWh/day)</td><td><input type="number" min="0" class="item-manufacturer_loss_factor" value="' + item.manufacturer_loss_factor + '" /></td></tr>';
     out += '<tr class="if-declared-loss-factor"><td>Temperature factor</td><td><input type="number" min="0" class="item-temperature_factor_a" value="' + item.temperature_factor_a + '" /></td></tr>';
-
     out += '<tr class="if-not-declared-loss-factor"><td>Hot water storage loss factor (kWh/litre/day)</td><td><input type="text" class="item-loss_factor_b" value="' + item.loss_factor_b + '" /></td></tr>';
     out += '<tr class="if-not-declared-loss-factor"><td>Volume factor</td><td><input type="text" class="item-volume_factor_b" value="' + item.volume_factor_b + '" /></td></tr>';
     out += '<tr class="if-not-declared-loss-factor"><td>Temperature factor</td><td><input type="text" class="item-temperature_factor_b" value="' + item.temperature_factor_b + '" /></td></tr>';
-
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
@@ -1306,7 +1271,6 @@ libraryHelper.prototype.storage_type_item_to_html = function (item, tag) {
     out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
-
     if (item.declared_loss_factor_known === true) {
         out = out.replace(/class="if-declared-loss-factor"/g, ' class="if-declared-loss-factor" style="display:table-row"');
         out = out.replace(/class="if-not-declared-loss-factor"/g, ' class="if-not-declared-loss-factor" style="display:none"');
@@ -1317,7 +1281,6 @@ libraryHelper.prototype.storage_type_item_to_html = function (item, tag) {
     }
     return out;
 };
-
 /*******************************************************
  * Get item to save in library (when creating new item)
  ******************************************************/
@@ -1554,8 +1517,6 @@ libraryHelper.prototype.storage_type_get_item_to_save = function () {
     };
     return item;
 };
-
-
 /***************************************************
  * Other methods
  ***************************************************/
@@ -1568,7 +1529,7 @@ libraryHelper.prototype.load_user_libraries = function (callback) {
             for (library in result) {
                 if (mylibraries[result[library].type] === undefined)
                     mylibraries[result[library].type] = [];
-                result[library].data = result[library].data.replace('\\/plus', '+');  // For a reason i have not been able to find why the character + becomes a carrier return when it is accesed in $_POST in the controller, because of this we escape + with \plus
+                result[library].data = result[library].data.replace('\\/plus', '+'); // For a reason i have not been able to find why the character + becomes a carrier return when it is accesed in $_POST in the controller, because of this we escape + with \plus
                 result[library].data = JSON.parse(result[library].data);
                 mylibraries[result[library].type].push(result[library]);
             }
@@ -1623,13 +1584,11 @@ libraryHelper.prototype.populate_measure_new_item = function (type_of_library) {
     var out = this[function_name](new_item, item_index);
     $('#apply-measure-item-fields').html(out);
 };
-
 libraryHelper.prototype.set_library_name = function (library_id, new_name, callback) {
     $.ajax({url: path + "assessment/setlibraryname.json", data: "library_id=" + library_id + "&new_library_name=" + new_name, async: false, datatype: "json", success: function (result) {
             callback(result);
         }});
 };
-
 libraryHelper.prototype.populate_library_modal = function (origin) {
     // Populate the select to choose library to display
     var out = '';
@@ -1654,7 +1613,6 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
     else
         $('.if-write').show('fast');
 };
-
 libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type_of_library) {
     var out = '';
     this.library_list[type_of_library].forEach(function (library) {
@@ -1664,7 +1622,6 @@ libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type
     $("#replace-from-lib").attr('library_type', type_of_library);
     this.onChangeApplyMeasureReplaceFromLib(type_of_library); // This one to populate the select for items
 };
-
 libraryHelper.prototype.delete_library_item = function (library_id, tag) {
     var myself = this;
     $.ajax({url: path + "assessment/deletelibraryitem.json", data: "library_id=" + library_id + "&tag=" + tag, async: false, datatype: "json", success: function (result) {
@@ -1698,3 +1655,28 @@ libraryHelper.prototype.get_list_of_items_for_select = function (libraryid) {
     }
     return out;
 }
+
+libraryHelper.prototype.orderObjectsByKeys = function (obj, expected) {
+
+    var keys = Object.keys(obj).sort(function keyOrder(k1, k2) {
+        v1 = k1.toUpperCase();
+        v2 = k2.toUpperCase();
+        if (v1 < v2)
+            return -1;
+        else if (v1 > v2)
+            return +1;
+        else
+            return 0;
+    });
+
+    var i, after = {};
+    for (i = 0; i < keys.length; i++) {
+        after[keys[i]] = obj[keys[i]];
+        delete obj[keys[i]];
+    }
+
+    for (i = 0; i < keys.length; i++) {
+        obj[keys[i]] = after[keys[i]];
+    }
+    return obj;
+};
