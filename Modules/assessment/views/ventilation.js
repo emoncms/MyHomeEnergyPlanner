@@ -83,12 +83,12 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
             $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library and depending on the Ventilation type adjust the other fields.</p>');
             break;
         case 'extract_ventilation_points':
-            $('#apply-measure-ventilation-what-to-do').show();
-            $('#apply-measure-ventilation-library-item-selects').hide();
-            $('#apply-measure-ventilation-modal .modal-body').hide();
+            $('#apply-measure-ventilation-what-to-do').hide();
+            $('#apply-measure-ventilation-library-item-selects').show();
+            $('#apply-measure-ventilation-modal .modal-body').show();
             $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a type of measure.</p>');
             library_helper.item_id = $(this).attr('item_id');
-            $('[name=apply-measure-ventilation-what-to-do][value=remove]').click();
+            //$('[name=apply-measure-ventilation-what-to-do][value=remove]').click();
             break;
         case 'intentional_vents_and_flues_measures':
             $('#apply-measure-ventilation-what-to-do').hide();
