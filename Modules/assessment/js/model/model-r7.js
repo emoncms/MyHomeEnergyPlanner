@@ -1741,7 +1741,7 @@ calc.fans_and_pumps = function (data) {
         case 'NV':
         case 'IE':
         case 'PS':
-            ventilation_type = 'd'; // Natural ventilation or whole house positive input ventilation from loft'
+            ventilation_type = 'd'; // Natural ventilation or whole house positive input ventilation from loft or passive stack'
             break;
         case 'DEV':
         case'MEV':
@@ -1759,8 +1759,14 @@ calc.fans_and_pumps = function (data) {
             break;
     }
     switch (ventilation_type) {
-        case 'd':  //Positive input ventilation (from loft space)
-            // Do nothing - In this case annual energy is 0, see SAP2012 2.6.1: The energy used by the fan is taken as counterbalancing the effect of using slightly warmer air from the loft space compared with outside
+        case 'd':  // Natural ventilation or whole house positive input ventilation from loft or passive stack'
+            // According to SAP we should do nothing - In this case annual energy is 0, see SAP2012 2.6.1: The energy used by the fan is taken as counterbalancing the effect of using slightly warmer air from the loft space compared with outside
+            // But we think this is not accurate, so we add 28kWh/year per Extract Ventilation Point (BREDEM)
+            for (z in data.ventilation.EVP) {
+                var v_rate = 1.0 * data.ventilation.EVP[z].ventilation_rate;
+                if (v_rate > 0)
+                    annual_energy += 28;
+            }
             break;
         case 'c':  //Positive input ventilation (from outside) or mechanical extract ventilation   
             annual_energy += 2.5 * 0.8 * 1.22 * data.volume; // annual_energy += IUF * SFP * 1.22 * V;
