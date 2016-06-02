@@ -83,6 +83,12 @@ $("#openbem").on("click", '#apply-measure-TB-modal-ok', function () {
     elements_initUI();
     update();
 });
+$("#openbem").on("change",'.floor-uvalue',function(){
+    if ($(this).val() == 0)
+        $(this).css('color','red');
+    else
+        $(this).css('color','black');
+});
 
 
 /*$("#create-element").click(function () {
@@ -217,6 +223,9 @@ function add_floor(z)
     $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
     $(id + " [title='fabric-template-title']").attr('title', title);
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
+
+    if (data.fabric.elements[z].uvalue == 0)
+        $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color','red');
 }
 
 function add_window(z)
