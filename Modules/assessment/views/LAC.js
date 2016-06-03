@@ -26,15 +26,16 @@ function LAC_initUI() {
 
     // Show divs according o the type of calculation
     show_LAC_divs(data.LAC_calculation_type)
-};
+}
+;
 
 function LAC_UpdateUI() {
     for (z in data.applianceCarbonCoop.list) {
         data.applianceCarbonCoop.list[z].energy_demand = data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
     }
-    data.applianceCarbonCoop.energy_demand_total.total = data.applianceCarbonCoop.energy_demand_total.total.toFixed(2);
-    data.applianceCarbonCoop.energy_demand_total.cooking = data.applianceCarbonCoop.energy_demand_total.cooking.toFixed(2);
-    data.applianceCarbonCoop.energy_demand_total.appliances = data.applianceCarbonCoop.energy_demand_total.appliances.toFixed(2);
+    data.applianceCarbonCoop.energy_demand_total.total = 1.0 * data.applianceCarbonCoop.energy_demand_total.total.toFixed(2);
+    data.applianceCarbonCoop.energy_demand_total.cooking = 1.0 * data.applianceCarbonCoop.energy_demand_total.cooking.toFixed(2);
+    data.applianceCarbonCoop.energy_demand_total.appliances = 1.0 * data.applianceCarbonCoop.energy_demand_total.appliances.toFixed(2);
 }
 
 $('#openbem').on('change', '#LAC_calculation_type', function () {
