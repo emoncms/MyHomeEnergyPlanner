@@ -288,8 +288,10 @@ global $reports;
     draw_openbem_graphics();
 
     // Lock/unlock
-    $('#content button').addClass('if-not-locked');
-    $('#content i').addClass('if-not-locked');
+    if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
+        $('#content button').addClass('if-not-locked');
+        $('#content i').addClass('if-not-locked');
+    }
     if (project[scenario].locked != undefined && project[scenario].locked == true)
         $('.if-not-locked').hide();
     else
@@ -358,8 +360,10 @@ global $reports;
         draw_openbem_graphics();
 
         // Add lock functionality to buttons and icons
-        $('#content button').addClass('if-not-locked');
-        $('#content i').addClass('if-not-locked');
+        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
+            $('#content button').addClass('if-not-locked');
+            $('#content i').addClass('if-not-locked');
+        }
 
         // Disable measures if master
         show_hide_if_master();
@@ -446,7 +450,7 @@ global $reports;
     }
 
     $("#openbem").on("change", '[key]', function () {
-        if (data.locked == true)
+        if (data.locked == true && page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy')
             $('#modal-scenario-locked').modal('show');
         else {
             var key = $(this).attr('key');
