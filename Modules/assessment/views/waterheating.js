@@ -203,6 +203,11 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
                 var tag = z;
             measure[tag].tag = tag;
             measure.id = get_WU_max_id(data.water_heating.water_usage) + 1;
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
             data.measures.water_heating[library_helper.type][measure.id] = {};
             data.measures.water_heating[library_helper.type][measure.id].original = 'empty';
             data.measures.water_heating[library_helper.type][measure.id].measure = measure[tag];
@@ -214,7 +219,12 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             var measure = library_helper.storage_type_get_item_to_save();
             for (z in measure)
                 var tag = z;
-            measure[tag].tag = tag;
+            measure[tag].tag = tag;                       
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
             data.measures.water_heating[library_helper.type].measure = measure[tag];
             data.water_heating.storage_type = measure[tag];
             break;

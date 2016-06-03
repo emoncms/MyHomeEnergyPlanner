@@ -144,6 +144,11 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
             data.ventilation.air_permeability_value = measure[tag].q50;
             update();
             data.measures.ventilation[library_helper.type].measure = measure[tag];
@@ -156,30 +161,14 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
             data.ventilation.ventilation_type = measure[tag].ventilation_type;
             data.ventilation.system_air_change_rate = measure[tag].system_air_change_rate;
             data.ventilation.balanced_heat_recovery_efficiency = measure[tag].balanced_heat_recovery_efficiency;
-            /*for (z in {'number_of_intermittentfans': {}, 'number_of_passivevents': {}}) {
-             measure[tag][z].replace(' ', '');
-             if (measure[tag][z].charAt(0) === '+') {
-             var increment_in = 1.0 * measure[tag][z].slice(1);
-             if (!isNaN(increment_in))
-             data.ventilation[z] += increment_in;
-             }
-             else if (measure[tag][z].charAt(0) === '-') {
-             var decrement_in = 1.0 * measure[tag][z].slice(1);
-             if (!isNaN(decrement_in))
-             data.ventilation[z] -= decrement_in;
-             }
-             else if (measure[tag][z] == '') {
-             // Do nothing
-             }
-             else {
-             var new_value = 1.0 * measure[tag][z];
-             if (!isNaN(new_value))
-             data.ventilation[z] = new_value;
-             }
-             }*/
             data.measures.ventilation[library_helper.type].measure = measure[tag];
             break;
         case 'extract_ventilation_points':
@@ -202,6 +191,11 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                         if (measure[tag][z] == undefined)
                             measure[tag][z] = original_item[z];
                     }
+                    // Add extra properties to measure 
+                    measure[tag].cost_units = '/unit';
+                    measure[tag].quantity = 1;
+                    measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+                    // Update data object and add measure
                     data.ventilation.EVP[original_item.row] = measure[tag];
                     data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
                     break;
@@ -221,6 +215,11 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 if (measure[tag][z] == undefined)
                     measure[tag][z] = original_item[z];
             }
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
             data.ventilation.IVF[original_item.row] = measure[tag];
             data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
             break;
@@ -230,6 +229,11 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 var tag = z;
             measure[tag].tag = tag;
             measure[tag].id = get_EVP_max_id() + 1;
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
             data.ventilation.EVP.push(measure[tag]);
             if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
                 data.measures.ventilation[library_helper.type][measure[tag].id] = {};
@@ -242,7 +246,12 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            measure[tag].id = get_IVF_max_id() + 1;
+            measure[tag].id = get_IVF_max_id() + 1;           
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
             data.ventilation.IVF.push(measure[tag]);
             if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
                 data.measures.ventilation[library_helper.type][measure[tag].id] = {};
@@ -441,18 +450,18 @@ function get_EVP_max_id() {
 function edit_item(item, index, item_subsystem) {
     for (z in item)
         item = item[z]; // item comes in the format: system = {electric:{bla bla bla}} and we transform it to: system = {bla bla bla}
-   
+
     var object = '';
     if (library_helper.type === 'intentional_vents_and_flues')
         object = 'IVF';
     if (library_helper.type === 'extract_ventilation_points')
         object = 'EVP';
-    
+
     for (z in data.ventilation[object][index]) { // We copy over all the properties that are not asked when editting an system, like id or tag
         if (item[z] == undefined)
             item[z] = data.ventilation[object][index][z];
     }
-    
+
     data.ventilation[object][index] = item;
     update();
 }

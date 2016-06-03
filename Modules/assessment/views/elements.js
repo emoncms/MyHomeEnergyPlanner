@@ -83,11 +83,11 @@ $("#openbem").on("click", '#apply-measure-TB-modal-ok', function () {
     elements_initUI();
     update();
 });
-$("#openbem").on("change",'.floor-uvalue',function(){
+$("#openbem").on("change", '.floor-uvalue', function () {
     if ($(this).val() == 0)
-        $(this).css('color','red');
+        $(this).css('color', 'red');
     else
-        $(this).css('color','black');
+        $(this).css('color', 'black');
 });
 
 
@@ -225,7 +225,7 @@ function add_floor(z)
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
 
     if (data.fabric.elements[z].uvalue == 0)
-        $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color','red');
+        $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color', 'red');
 }
 
 function add_window(z)
@@ -466,10 +466,13 @@ function apply_measure(measure) {
                 if (measure.item[lib][z] == undefined)
                     measure.item[lib][z] = data.fabric.elements[measure.row][z];
             }
-            //console.log(data.fabric.elements[measure.row]);
+            // Add extra properties to measure 
+            measure.item[lib].cost_units = '/sq m';
+            measure.item[lib].quantity = measure.item[lib].area;
+            measure.item[lib].cost_total = measure.item[lib].quantity * measure.item[lib].cost;
+            // Update element and add measure
             data.fabric.elements[measure.row] = measure.item[lib];
             data.fabric.measures[measure.item_id].measure = measure.item[lib];
-            //data.fabric.elements[measure.row] = measure.item[lib];
             break;
     }
 

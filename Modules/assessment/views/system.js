@@ -257,7 +257,6 @@ function apply_measure(measure) {
             break;
         case 'replace':
         case 'edit':
-            console.log(measure);
             for (z in measure.item) // measure.item only has one element, we do it this way to the "property", in this case somemthing like "CV1" oof "ROOF1"
                 var system = z;
             measure.item[system].system = system;
@@ -265,10 +264,13 @@ function apply_measure(measure) {
                 if (measure.item[system][z] == undefined)
                     measure.item[system][z] = data.energy_systems[requirement][measure.row][z];
             }
-            //console.log(data.energy_systems.elements[measure.row]);
+             // Add extra properties to measure 
+            measure.item[system].cost_units = '/unit';
+            measure.item[system].quantity = 1;
+            measure.item[system].cost_total = measure.item[system].quantity * measure.item[system].cost;
+            // Update element and add measure
             data.measures.energy_systems[measure.item_id].measure = measure.item[system];
             data.energy_systems[requirement][measure.row] = measure.item[system];
-            //console.log(data.energy_systems.elements[measure.row]);
             break;
     }
 

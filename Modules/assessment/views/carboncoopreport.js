@@ -170,7 +170,7 @@ function compareCarbonCoop(scenario, outputElement) {
     out += "</table>";
     // Changes to elements
     var listA = project.master.fabric.elements;
-    console.log(scenario);
+    //console.log(scenario);
     var listB = project[scenario].fabric.elements;
     var elements_html = "";
     for (z in listA)
@@ -258,8 +258,8 @@ function compareCarbonCoop(scenario, outputElement) {
     // Changes to elements
     var listA = project.master.energy_requirements;
     var listB = project[scenario].energy_requirements;
-    console.log(listA);
-    console.log(listB);
+    //console.log(listA);
+    //console.log(listB);
     out += "<table class='table table-striped'>";
     for (z in listA)
     {
@@ -394,10 +394,11 @@ function compareCarbonCoop(scenario, outputElement) {
     out += "</tr>";
     out += "</table>";
     $(outputElement).html(out);
-};
+}
+;
 
 function carboncoopreport_UpdateUI() {
-    
+
     var scenarios = ["master", "scenario1", "scenario2", "scenario3"];
     // $(".home-image").attr("src", project[scenario].household.houseimage);
     if (data.featuredimage) {
@@ -1417,38 +1418,41 @@ function carboncoopreport_UpdateUI() {
         "name",
         "description",
         "performance",
-        "performance_units",
         "benefits",
         "cost",
         "cost_units",
-        "who_by_quantity",
-        "who_by_total",
+        "quantity",
+        "cost_total",
         "who_by",
+        "key_risks",
         "disruption",
         "associated_work",
-        "notes",
+        "maintenance",
+        "notes"
     ];
     function populateMeasuresTable(scenario, tableSelector, summaryTableSelector) {
         if (project[scenario].fabric.measures != undefined)
             addListOfMeasuresByIdToSummaryTable(project[scenario].fabric.measures, tableSelector, summaryTableSelector);
-        if (project[scenario].measures.energy_systems != undefined)
-            addListOfMeasuresByIdToSummaryTable(project[scenario].measures.energy_systems, tableSelector, summaryTableSelector);
-        if (project[scenario].measures.ventilation != undefined) {
-            if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
-                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.extract_ventilation_points, tableSelector, summaryTableSelector);
-            if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
-                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.intentional_vents_and_flues_measures, tableSelector, summaryTableSelector);
-            if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
-                addMeasureToSummaryTable(project[scenario].measures.ventilation.draught_proofing_measures, tableSelector, summaryTableSelector);
-            if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
-                addMeasureToSummaryTable(project[scenario].measures.ventilation.ventilation_systems_measures, tableSelector, summaryTableSelector);
-        }
-        if (project[scenario].measures.water_heating != undefined) {
-            if (project[scenario].measures.water_heating.water_usage != undefined)
-                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
-            if (project[scenario].measures.water_heating.storage_type != undefined)
-                addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector);
+        if (project[scenario].measures != undefined) {
+            if (project[scenario].measures.energy_systems != undefined)
+                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.energy_systems, tableSelector, summaryTableSelector);
+            if (project[scenario].measures.ventilation != undefined) {
+                if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
+                    addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.extract_ventilation_points, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
+                    addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.intentional_vents_and_flues_measures, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.ventilation.draught_proofing_measures, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.ventilation.ventilation_systems_measures, tableSelector, summaryTableSelector);
+            }
+            if (project[scenario].measures.water_heating != undefined) {
+                if (project[scenario].measures.water_heating.water_usage != undefined)
+                    addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.water_heating.storage_type != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector);
 
+            }
         }
     }
 
@@ -1469,30 +1473,36 @@ function carboncoopreport_UpdateUI() {
             row.append(cell);
         }
         $(tableSelector).append(row);
-        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description, measure.measure.benefits, measure.measure.cost, measure.measure.who_by, measure.measure.disruption);
+        var type = measure.measure.type;
+        var cost = 0;
+        if (type == 'Wall' || type == 'wall' || type == 'Roof' || type == 'roof' || type == 'Window' || type == 'window' || type == 'Floor' || type == 'floor' || type == 'party_wall' || type == 'Door' || type == 'Roof_light')
+            cost = measure.measure.cost * measure.measure.area;
+        else
+            cost = measure.measure.cost;
+        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description, measure.measure.benefits, cost, measure.measure.who_by, measure.measure.disruption);
     }
 
     function initialiseMeasuresTable(tableSelector) {
         var html = '<tr>\
             <th class="tg-yw4l" rowspan="2">Measure</th>\
-						    <th class="tg-yw4l" rowspan="2">Description</th>\
-            <th class="tg-yw4l" colspan="2">Performance Target</th>\
-        <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
+            <th class="tg-yw4l" rowspan="2">Description</th>\
+            <th class="tg-yw4l" rowspan="2">Performance Target</th>\
+            <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
             <th class="tg-yw4l" colspan="4">How Much?</th>\
-						    <th class="tg-yw4l" rowspan="2">Who by?</th>\
-						    <th class="tg-yw4l" rowspan="2">Dirt and disruption?</th>\
-						    <th class="tg-yw4l" rowspan="2">Associated work?</th>\
-						    <th class="tg-yw4l" rowspan="2">Special and other considerations</th>\
+            <th class="tg-yw4l" rowspan="2">Who by?</th>\
+            <th class="tg-yw4l" rowspan="2">Key risks</th>\
+            <th class="tg-yw4l" rowspan="2">Dirt and disruption?</th>\
+            <th class="tg-yw4l" rowspan="2">Associated work?</th>\
+            <th class="tg-yw4l" rowspan="2">Maintenace</th>\
+            <th class="tg-yw4l" rowspan="2">Special and other considerations</th>\
 						  </tr>\
 						  <tr>\
-						    <td class="th">Value</td>\
-						    <td class="th">Unit</td>\
 						    <td class="th">Rate</td>\
 						    <td class="th">Unit</td>\
 						    <td class="th">Quantity</td>\
 						    <td class="th">Total</td>\
 						  </tr>';
-        return $(tableSelector).append(html);
+        return $(tableSelector).html(html);
     }
 
     function createMeasuresTable(scenario, tableSelector, summaryTableSelector) {
@@ -1514,7 +1524,7 @@ function carboncoopreport_UpdateUI() {
 			</thead>\
 	 	<tbody>\
 			</tbody>";
-        return $(summaryTableSelector).append(html);
+        return $(summaryTableSelector).html(html);
     }
 
 
@@ -1523,14 +1533,13 @@ function carboncoopreport_UpdateUI() {
         html += '<td><div class="text-width-limiter">' + description + '</div>';
         html += '</td>';
         html += '<td>' + benefits + '</td>';
-        html += '<td class="cost">' + cost + '</td>';
+        html += '<td class="cost">£' + cost + '</td>';
         html += '<td>' + who_by + '</td>';
         html += '<td>' + disruption + '</td>';
         html += '</tr>';
         $(tableSelector + " tbody").append($(html));
     }
 
-    console.log('here');
     if (typeof project["scenario1"] != "undefined") {
         $("#output-scenario1-name").html(project["scenario1"]["scenario_name"]);
         createMeasuresTable("scenario1", "#scenario1-measures", ".js-measures1-summary");
