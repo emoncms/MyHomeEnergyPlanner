@@ -1439,6 +1439,8 @@ function carboncoopreport_UpdateUI() {
             if (project[scenario].measures.ventilation != undefined) {
                 if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
                     addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.extract_ventilation_points, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined)
+                    addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.intentional_vents_and_flues, tableSelector, summaryTableSelector);
                 if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
                     addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.intentional_vents_and_flues_measures, tableSelector, summaryTableSelector);
                 if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
