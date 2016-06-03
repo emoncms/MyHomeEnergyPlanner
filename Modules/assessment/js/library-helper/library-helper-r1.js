@@ -557,13 +557,8 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-ok').attr('item_id', origin.attr('item_id'));
     $('#apply-measure-ok').attr('item', origin.attr('item'));
     $('#apply-measure-ok').attr('type-of-item', origin.attr('type-of-item')); // Used for energy_systems
-    //// Check remove item (option by default) and hide item
-    $('[name=radio-type-of-measure]').filter('[value=remove]').prop('checked', true);
-    $('#apply-measure-item-fields').hide('fast');
-    $('#apply-measure-replace').hide('fast');
-    //If we are in fabric Elements show the option to Apply Measure from Measures Library
-    if (this.type == 'elements')
-        $('.replace_from_measure_library').show('fast');
+    //// Check edit manually (option by default)
+    $('[name=radio-type-of-measure]').filter('[value=edit]').click();    
     // Populate the selects library to choose a library and an item (used when replace the item with one from library)
     //Moved to onChangeApplyMeasureWhatToDo
     /*var out = '';
@@ -580,6 +575,9 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('[name=radio-type-of-measure]').each(function (index) {
         $(this).parent().show('fast');
     });
+    //If we are in fabric Systems remove show the option to Apply Measure from Measures Library
+    if (this.type == 'systems')
+        $('.replace_from_measure_library').hide();
     $('#apply-measure-modal').modal('show');
 };
 libraryHelper.prototype.onApplyMeasureOk = function (origin) {
