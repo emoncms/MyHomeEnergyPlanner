@@ -396,7 +396,9 @@ calc.ventilation = function (data)
     data.ventilation.structural_infiltration += (0.25 - (0.2 * data.ventilation.percentage_draught_proofed / 100));
 
     // Structural infiltration from test
-    data.ventilation.structural_infiltration_from_test = data.ventilation.air_permeability_value / 20.0;
+    //data.ventilation.structural_infiltration_from_test = data.ventilation.air_permeability_value / 20.0; // This is the formula used in SAP, but it is wrong the units here are "m3/h/m2 of envelope area" but should be ACH
+    var m3m2Ea_to_ACH_coefficient = (data.fabric.total_external_area + data.fabric.total_party_wall_area) / data.volume; // = Envelope area / dwelling volume
+    data.ventilation.structural_infiltration_from_test = m3m2Ea_to_ACH_coefficient * data.ventilation.air_permeability_value / 20.0;
 
     if (data.ventilation.air_permeability_test == false)
         infiltration += data.ventilation.structural_infiltration;
