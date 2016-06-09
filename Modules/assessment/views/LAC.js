@@ -31,7 +31,7 @@ function LAC_initUI() {
 
 function LAC_UpdateUI() {
     for (z in data.applianceCarbonCoop.list) {
-        data.applianceCarbonCoop.list[z].energy_demand = data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
+        data.applianceCarbonCoop.list[z].energy_demand = 1.0 * data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
     }
     data.applianceCarbonCoop.energy_demand_total.total = 1.0 * data.applianceCarbonCoop.energy_demand_total.total.toFixed(2);
     data.applianceCarbonCoop.energy_demand_total.cooking = 1.0 * data.applianceCarbonCoop.energy_demand_total.cooking.toFixed(2);
