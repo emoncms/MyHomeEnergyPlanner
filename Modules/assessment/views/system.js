@@ -128,85 +128,12 @@ function add_energy_system(z, x)
     }
     $('#energyrequirements .fraction.template').removeClass('template');
     $('#energyrequirements .suppliedby-template-buttons').removeClass('suppliedby-template-buttons');
-
-
-
-
-
-
 }
 
 function system_initUI()
 {
     if (data.measures.energy_systems == undefined) // Normally this is done in model-rX.js. The model is intended for calculations so i prefer to initialize data.measures.energy_systems here
         data.measures.energy_systems = {};
-
-    /**************************************************************************
-     /* FOR BACKWARDS COMPATIBILITY
-     * We have just added "id" to the systems so 
-     * that we can track measures applied to a specific system. The following 
-     * code will allow us create id for systems that were in the data object before
-     ***************************************************************************/
-    var max_id = get_systems_max_id();
-    // Add "id" to the elemments that have not got it
-    for (z in data.energy_systems) {
-        for (i in data.energy_systems[z]) {
-            if (data.energy_systems[z][i].id == undefined) {
-                data.energy_systems[z][i].id = max_id++;
-            }
-        }
-    }
-    // End backwards compatibility for "ids"
-
-    /**************************************************************************
-     /* FOR BACKWARDS COMPATIBILITY
-     * We have just added "description","performance","benefits","cost","who_by",
-     * "who_by","disruption","associated_work","key_risks","notes" and "maintenance" 
-     * to the systems. We initialize them if they are empty (systems that were 
-     * created before the addition)
-     ***************************************************************************/
-    for (z in data.energy_systems) {
-        for (i in data.energy_systems[z]) {
-            if (data.energy_systems[z][i].description == undefined)
-                data.energy_systems[z][i].description = '--';
-            if (data.energy_systems[z][i].performance == undefined)
-                data.energy_systems[z][i].performance = '--';
-            if (data.energy_systems[z][i].benefits == undefined)
-                data.energy_systems[z][i].benefits = '--';
-            if (data.energy_systems[z][i].cost == undefined)
-                data.energy_systems[z][i].cost = '--';
-            if (data.energy_systems[z][i].who_by == undefined)
-                data.energy_systems[z][i].who_by = '--';
-            if (data.energy_systems[z][i].disruption == undefined)
-                data.energy_systems[z][i].disruption = '--';
-            if (data.energy_systems[z][i].associated_work == undefined)
-                data.energy_systems[z][i].associated_work = '--';
-            if (data.energy_systems[z][i].key_risks == undefined)
-                data.energy_systems[z][i].key_risks = '--';
-            if (data.energy_systems[z][i].notes == undefined)
-                data.energy_systems[z][i].notes = '--';
-            if (data.energy_systems[z][i].maintenance == undefined)
-                data.energy_systems[z][i].maintenance = '--';
-        }
-    }
-    // End backwards compatibility for "description","performance","benefits","cost","who_by",
-    //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
-
-
-
-    // Add different types of fuel to the Add/edit system modal 
-    /*
-     for (z in data.fuels) {
-     $(".edit-system-fuel").append($('<option>', {
-     value: z,
-     text: z
-     }));
-     }
-     */
-
-    //var out = "";
-    //for (z in datasets.energysystems) out += "<option value='"+z+"'>"+datasets.energysystems[z].name+"</option>";
-    //$(".heating_system_selector").html(out);
 }
 
 function edit_item(system, row, type_of_item) {
@@ -264,7 +191,7 @@ function apply_measure(measure) {
                 if (measure.item[system][z] == undefined)
                     measure.item[system][z] = data.energy_systems[requirement][measure.row][z];
             }
-             // Add extra properties to measure 
+            // Add extra properties to measure 
             measure.item[system].cost_units = '/unit';
             measure.item[system].quantity = 1;
             measure.item[system].cost_total = measure.item[system].quantity * measure.item[system].cost;

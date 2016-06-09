@@ -287,68 +287,6 @@ function elements_initUI()
     if (data.fabric.measures == undefined) // Normally this is done in model-rX.js. The model is intended for calculations so i prefer to initialize data.fabric.measures here
         data.fabric.measures = {};
 
-    /**************************************************************************
-     /* FOR BACKWARDS COMPATIBILITY
-     * We have just added "id" to the elements so 
-     * that we can track measures applied to a specific element. The following 
-     * code will allow us create id for elements that were in the data object 
-     ***************************************************************************/
-    var max_id = get_elements_max_id();
-    // Add "id" to the elemments that have not got it
-    for (z in data.fabric.elements) {
-        if (data.fabric.elements[z].id == undefined) {
-            data.fabric.elements[z].id = max_id++;
-        }
-    }
-    // End backwards compatibility for "ids"
-
-    /**************************************************************************
-     /* FOR BACKWARDS COMPATIBILITY
-     * We have just added "description","performance","benefits","cost","who_by",
-     * "who_by","disruption","associated_work","key_risks","notes" and "maintenance" 
-     * to the measures. We initialize them if they are empty (measures that were 
-     * applied before the addition)
-     ***************************************************************************/
-    //This is breaking when there are measures like "Element deleted". So go away theis back compatibility
-
-    /*for (z in data.fabric.measures) {
-     check_and_add_measure_fields(data.fabric.measures[z].measure);
-     }*/
-    // End backwards compatibility for "description","performance","benefits","cost","who_by",
-    //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
-
-    /**************************************************************************
-     /* FOR BACKWARDS COMPATIBILITY
-     * We have just added "description","performance","benefits","cost","who_by",
-     * "who_by","disruption","associated_work","key_risks","notes" and "maintenance" 
-     * to the elements. We initialize them if they are empty (elements that were 
-     * created before the addition)
-     ***************************************************************************/
-    for (z in data.fabric.elements) {
-        if (data.fabric.elements[z].description == undefined)
-            data.fabric.elements[z].description = '--';
-        if (data.fabric.elements[z].performance == undefined)
-            data.fabric.elements[z].performance = '--';
-        if (data.fabric.elements[z].benefits == undefined)
-            data.fabric.elements[z].benefits = '--';
-        if (data.fabric.elements[z].cost == undefined)
-            data.fabric.elements[z].cost = '--';
-        if (data.fabric.elements[z].who_by == undefined)
-            data.fabric.elements[z].who_by = '--';
-        if (data.fabric.elements[z].disruption == undefined)
-            data.fabric.elements[z].disruption = '--';
-        if (data.fabric.elements[z].associated_work == undefined)
-            data.fabric.elements[z].associated_work = '--';
-        if (data.fabric.elements[z].key_risks == undefined)
-            data.fabric.elements[z].key_risks = '--';
-        if (data.fabric.elements[z].notes == undefined)
-            data.fabric.elements[z].notes = '--';
-        if (data.fabric.elements[z].maintenance == undefined)
-            data.fabric.elements[z].maintenance = '--';
-    }
-    // End backwards compatibility for "description","performance","benefits","cost","who_by",
-    //  "who_by","disruption","associated_work","key_risks","notes" and "maintenance"
-
     $("#elements").html("");
     $("#roofs").html("");
     $("#floors").html("");

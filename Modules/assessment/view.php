@@ -405,48 +405,7 @@ global $reports;
     }
 
     function run_backwards_compatibility() {
-        // Some old assesments have renewable energy systems that are misCarbon Coop Reportsing the "summer" and "winter" efficiencies
-        for (scenario in project) {
-            for (z in project[scenario].energy_systems) {
-                for (index in project[scenario].energy_systems[z]) {
-                    if (project[scenario].energy_systems[z][index].efficiency != undefined && project[scenario].energy_systems[z][index].summer == undefined) {
-                        project[scenario].energy_systems[z][index].summer = 1;
-                        project[scenario].energy_systems[z][index].winter = 1;
-                    }
-                }
-            }
-        }
-
-        // Before the library_helper was implemented, systems in data.energy_systems[z][x] were not 
-        // a full copy of the item in the library, they only had the "system" and 
-        // "fraction" properties and the other ones were copied in the modelr5.js from data.systemlibrary.
-        // With the changes required to use the library helper we needto add the 
-        // missing property to the systems
-        for (scenario in project) {
-            for (z in project[scenario].energy_systems) {
-                for (index in project[scenario].energy_systems[z]) {
-                    if (project[scenario].energy_systems[z][index].summer == undefined) {
-                        var system = project[scenario].energy_systems[z][index].system;
-                        project[scenario].energy_systems[z][index].summer = project[scenario].systemlibrary[system].summer;
-                        project[scenario].energy_systems[z][index].winter = project[scenario].systemlibrary[system].winter;
-                        project[scenario].energy_systems[z][index].fuel = project[scenario].systemlibrary[system].fuel;
-                        project[scenario].energy_systems[z][index].name = project[scenario].systemlibrary[system].name;
-                    }
-                }
-            }
-        }
-
-        //Dom
-        /*for (scenario in project) {
-         for (z in project[scenario].energy_systems) {
-         for (index in project[scenario].energy_systems[z]) {
-         if (p.id == 12) {
-         var system = project[scenario].energy_systems[z][index].system;
-         project[scenario].energy_systems[z][index].fuel = project[scenario].systemlibrary[system].fuel;
-         }
-         }
-         }
-         }*/
+       // NOthing to do tight now       
     }
 
     $("#openbem").on("change", '[key]', function () {
