@@ -13,7 +13,7 @@ global $reports;
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r7.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r8.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesCarbonCoop-r1.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
@@ -87,6 +87,7 @@ global $reports;
                         <div class="scenario-nav"><a href="#template/elements">Fabric</a></div>
                         <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
                         <div class="scenario-nav"><a href="#template/waterheating">Water Heating</a></div>                        
+                        <div class="scenario-nav"><a href="#template/fuel_requirements">Fuel requirements</a></div>                        
                         <div class="scenario-nav"><a href="#template/system">Energy Systems</a></div>
                         <div class="scenario-nav-heading">Extended input</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>

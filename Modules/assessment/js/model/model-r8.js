@@ -52,7 +52,8 @@ calc.run = function (datain)
     calc.temperature(calc.data);
     calc.fans_and_pumps(calc.data);
     calc.space_heating(calc.data);
-    calc.energy_systems(calc.data);
+    //calc.energy_systems(calc.data);
+    calc.fuel_requirements(calc.data);
     calc.SAP(calc.data);
     calc.data.totalWK = calc.data.fabric.total_heat_loss_WK + calc.data.ventilation.average_WK;
     calc.data.primary_energy_use_m2 = calc.data.primary_energy_use / calc.data.TFA;
@@ -85,6 +86,8 @@ calc.start = function (data)
     data.annual_useful_gains_kWh_m2 = {};
     data.annual_losses_kWh_m2 = {};
     data.energy_requirements = {};
+    data.fuel_requirements = {};
+    data.fuel_totals = {};
     data.mean_internal_temperature = {};
     data.total_cost = 0;
     data.total_income = 0;
@@ -827,6 +830,7 @@ calc.energy_systems = function (data)
         }
     }
     data.fuels = tmpfuels;
+
     data.fuel_totals = {};
     for (z in data.energy_requirements)
     {
@@ -920,7 +924,7 @@ calc.energy_systems = function (data)
     data.energy_delivered = 0
     for (z in data.fuel_totals)
     {
-        data.fuel_totals[z].annualcost = data.fuel_totals[z].quantity * data.fuels[z].fuelcost + data.fuels[z].standingcharge * 365;
+        data.fuel_totals[z].annualcost = data.fuel_totals[z].quantity * data.fuels[z].fuelcost + data.fuels[z].standingcharge;
         data.fuel_totals[z].fuelcost = data.fuels[z].fuelcost;
         data.fuel_totals[z].primaryenergy = data.fuel_totals[z].quantity * data.fuels[z].primaryenergyfactor;
         data.fuel_totals[z].annualco2 = data.fuel_totals[z].quantity * data.fuels[z].co2factor;
@@ -947,6 +951,87 @@ calc.energy_systems = function (data)
 
     data.net_cost = data.use_generation == 1 ? data.total_cost - data.total_income : data.total_cost;
     return data;
+};
+
+//---------------------------------------------------------------------------------------------
+// FUEL REQUIREMENTS
+// Module Inputs: 
+// Global Inputs: 
+// Global Outputs: 
+// Datasets: 
+//---------------------------------------------------------------------------------------------
+calc.fuel_requirements = function (data) {
+    if (data.fuels == undefined)
+        data.fuels = datasets.fuels;
+
+    for (z in data.energy_requirements)
+    {
+        var quantity = data.energy_requirements[z].quantity;
+        var quantity_monthly = data.energy_requirements[z].monthly;
+        for (x in data.fuel_requirements[z]) {
+            data.fuel_requirements[z][x].demand = quantity * data.fuel_requirements[z][x].fraction;
+            data.fuel_requirements[z][x].demand_monthly = [];
+            for (m = 0; m < 12; m++)
+                data.fuel_requirements[z][x].demand_monthly[m] = quantity_monthly[m] * data.fuel_requirements[z][x].fraction;
+        }
+    }
+
+// Fuel totals
+    data.fuel_totals = {}; // remove this line when we get rif of energy_systems
+    for (z in data.energy_requirements)
+    {
+        for (x in data.fuel_requirements[z])
+        {
+            data.fuel_requirements[z][x].fuelinput_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            for (m = 0; m < 12; m++) {
+                if (z == 'waterheating')
+                    data.fuel_requirements[z][x].fuelinput_monthly[m] = data.fuel_requirements[z][x].demand_monthly[m] / data.fuel_requirements[z][x].system_efficiency_monthly[m];
+                else
+                    data.fuel_requirements[z][x].fuelinput_monthly[m] = data.fuel_requirements[z][x].demand_monthly[m] / data.fuel_requirements[z][x].system_efficiency;
+            }
+
+            data.fuel_requirements[z][x].fuelinput = data.fuel_requirements[z][x].demand / data.fuel_requirements[z][x].system_efficiency;
+            var fuel = data.fuel_requirements[z][x].fuel;
+            if (data.fuel_totals[fuel] == undefined)
+                data.fuel_totals[fuel] = {name: fuel, quantity: 0};
+            data.fuel_totals[fuel].quantity += data.fuel_requirements[z][x].fuelinput;
+        }
+    }
+
+// Total energy use, fuel costs, Annual CO2 and primary energy due to the energy requirements
+    data.energy_use = 0;
+    data.annualco2 = 0;
+    data.energy_delivered = 0
+    for (z in data.fuel_totals)
+    {
+        data.fuel_totals[z].annualcost = data.fuel_totals[z].quantity * data.fuels[z].fuelcost + data.fuels[z].standingcharge;
+        //data.fuel_totals[z].fuelcost = data.fuels[z].fuelcost;
+        data.fuel_totals[z].primaryenergy = data.fuel_totals[z].quantity * data.fuels[z].primaryenergyfactor;
+        data.fuel_totals[z].annualco2 = data.fuel_totals[z].quantity * data.fuels[z].co2factor;
+        data.total_cost += data.fuel_totals[z].annualcost;
+        data.energy_use += data.fuel_totals[z].quantity;
+        data.primary_energy_use += data.fuel_totals[z].primaryenergy;
+        data.annualco2 += data.fuel_totals[z].annualco2;
+    }
+    data.energy_delivered = data.energy_use;
+    // Annual CO2, primary energy and cost saved due to generation. Be aware generation is not used for the calculation of Energy use
+    if (data.use_generation == 1) {
+        data.fuel_totals['generation'] = {
+            name: 'generation',
+            quantity: -data.generation.total_generation,
+            annualco2: -data.generation.total_CO2,
+            primaryenergy: -data.generation.total_primaryenergy,
+            annualcost: -data.generation.total_generation * data.fuels.generation.fuelcost
+        };
+        data.primary_energy_use += data.fuel_totals['generation'].primaryenergy;
+        data.annualco2 += data.fuel_totals['generation'].annualco2;
+        data.total_cost += data.fuel_totals['generation'].annualcost;
+        data.energy_delivered += data.fuel_totals['generation'].quantity;
+    }
+
+    data.net_cost = data.use_generation == 1 ? data.total_cost - data.total_income : data.total_cost;
+    return data;
+
 };
 //---------------------------------------------------------------------------------------------
 // SAP
@@ -1001,6 +1086,7 @@ calc.LAC_SAP = function (data)
     if (data.LAC.reduced_heat_gains_lighting == undefined)
         data.LAC.reduced_heat_gains_lighting = false;
 
+    /*  LIGHTING     */
     // average annual energy consumption for lighting if no low-energy lighting is used is:
     data.LAC.EB = 59.73 * Math.pow((data.TFA * data.occupancy), 0.4714);
     if (data.LAC.L != 0)
@@ -1029,14 +1115,11 @@ calc.LAC_SAP = function (data)
             data.gains_W["Lighting"] = GL_monthly;
             data.gains_W["Lighting"] = [97.18, 86.32, 70.2, 53.14, 39.73, 33.54, 36.24, 47.11, 63.22, 80.28, 93.7, 99.08];
             data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum, monthly: EL_monthly};
+            data.fuel_requirements.lighting = [{fuel: 'electric', fraction: 1, system_efficiency: 1}];
         }
     }
 
-    /*
-     
-     Electrical appliances
-     
-     */
+    /*  Electrical appliances   */
 
     // The initial value of the annual energy use in kWh for electrical appliances is
     var EA_initial = 207.8 * Math.pow((data.TFA * data.occupancy), 0.4714);
@@ -1061,6 +1144,7 @@ calc.LAC_SAP = function (data)
     if (EA > 0 && data.LAC_calculation_type == 'SAP') {
         data.gains_W["Appliances"] = GA_monthly;
         data.energy_requirements.appliances = {name: "Appliances", quantity: EA, monthly: EA_monthly};
+        data.fuel_requirements.appliances = [{fuel: 'electric', fraction: 1, system_efficiency: 1}];
     }
 
     data.LAC.EA = EA;
@@ -1085,6 +1169,8 @@ calc.LAC_SAP = function (data)
     if (GC > 0 && data.LAC_calculation_type == 'SAP') {
         data.gains_W["Cooking"] = GC_monthly;
         data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC, monthly: data.LAC.EC_monthly};
+        data.fuel_requirements.cooking = [{fuel: 'electric', fraction: 0.75, system_efficiency: 1},
+            {fuel: 'gas', fraction: 0.25, system_efficiency: 1}];
     }
 
     data.LAC.GC = data.LAC.EC;
@@ -1729,12 +1815,13 @@ calc.fans_and_pumps = function (data) {
     var monthly_energy = [];
 
     // From heating systems
-    if (data.energy_systems != undefined && data.energy_systems.space_heating != undefined) {
+    console.log('CARLOS REMEMBER!!!  Energy systems not taken into account for fans and pumps');
+    /*if (data.energy_systems != undefined && data.energy_systems.space_heating != undefined) {
         for (system in data.energy_systems.space_heating) {
             annual_energy += 1 * data.energy_systems.space_heating[system].fans_and_pumps;
             annual_energy += 1 * data.energy_systems.space_heating[system].combi_keep_hot; // I assume that if there is a combi boiler, it is used for water and space heating. We only want to check if there is a "combi keep hot facility" once, so i do it in space heating but not in water heating
         }
-    }
+    }*/
 
     // From Ventilation (SAP2012 document page 213)
     var ventilation_type = '';

@@ -12,47 +12,7 @@
     .fc td:nth-of-type(4) { width:20%;}
 </style>
 
-<div id="systems" class="page">
-
-    <hr>
-    <h3>Mean Internal Temperature</h3>
-    <hr>
-
-    <table class="table">
-        <tr>
-            <td>
-                <h4>Heating system</h4>
-                <div class="input-prepend input-append">
-                    <span class="add-on">Responsiveness:</span>
-                    <input key="data.temperature.responsiveness" type="text" style="width:40px" />
-                    <span class="add-on">Control type:</span>
-                    <select key="data.temperature.control_type" style="width:80px">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
-                    <span class="add-on">Temperature adjustment (table 4e):</span>
-                    <input key="data.temperature.temperature_adjustment" value='0.0' type="text" style="width:40px" />
-                    <br />
-                </div>
-                <p><input key="data.temperature.heating_off_summer" type="checkbox" /> Heating off for the whole summer</p>
-
-            </td><td>
-
-                <h4>Living area and target temperature</h4>
-                <div class="input-prepend input-append">
-                    <span class="add-on">Living area:</span>
-                    <input key="data.temperature.living_area" type="text" style="width:40px" />
-                    <span class="add-on">m2</span>
-
-                    <span class="add-on">Target temperature:</span>
-                    <input key="data.temperature.target" type="text" style="width:40px" />
-                    <span class="add-on">C</span>
-                </div>
-
-            </td>
-        </tr>
-    </table>
+<div id="fuel_requirements" class="page">
 
     <hr>
     <h3>Energy Requirements</h3>
@@ -75,45 +35,21 @@
 
             <tr>
                 <td style="text-align:left">Supplied by:</td>
-                <td>Notes</td>
-                <td>Fraction<span style="display:none;" class="secondary-space-heating template" >  <i class="icon-question-sign" title="SAP2012 fractions for secondary heating system
-                                                                                                       - All gas, oil and solid fuel systems- 0.10
-                                                                                                       - Heat pump - 0.10
-                                                                                                       - Electric storage heaters (not integrated)
-                                                                                                       - not fan-assisted - 0.15
-                                                                                                       - fan-assisted - 0.1
-                                                                                                       - high heat retention - 0.1
-                                                                                                       - Integrated storage/direct-acting electric systems- 0.10
-                                                                                                       - Electric CPSU- 0.10
-                                                                                                       - Electric room heaters- 0.20
-                                                                                                       - Other electric systems- 0.10
-                                                                                                       - Community heating- 0.10"></i></td>
+                <td>Fraction</td>
                 <td>Demand</td>
-                <td>Efficiency</td>
+                <td>System efficiency</td>
                 <td>Fuel input</td>
-                <td style=" width:120px;text-align: center"><span style="display:none;" class="secondary-space-heating template" >Secondary </span></td>
-                <td></td>
             </tr>
 
         </tbody>
 
         <tbody id="suppliedby-template" style="display:none">
             <tr>
-                <td style="text-align:left">
-                    <span key="data.energy_systems.template.x.system"></span>: <span key="data.energy_systems.template.x.name"></span>
-                    <!--<select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>-->
-                </td>
-                <td><input type="text" key="data.energy_systems.template.x.description" style="width:120px"/></td>
-                <td class="fraction template"><input type="number" min="0.01" max="1" step="0.01" key="data.energy_systems.template.x.fraction" dp=2 style="width:60px"/></td>
-                <td><span key="data.energy_systems.template.x.demand" dp=0></span> kWh/year</td>
-                <td><span key="data.energy_systems.template.x.efficiency" dp=3></span></td>
-                <td><span key="data.energy_systems.template.x.fuelinput" dp=0></span> kWh/year</td>
-                <td style="text-align: center"><input class="secondary-space-heating template" style="display:none;" type="checkbox" key="data.energy_systems.template.x.secondary"/></td>
-                <td style="text-align:center" class="suppliedby-template-buttons">
-                    <button class="apply-measure if-not-master" tag="template" row="template" item="template" type-of-item='template' item_id="template" style="margin-right:25px">Apply Measure</button>
-                    <span class="edit-item"  eid="eid" sid="sid" row="template" type-of-item="template" tag="template" style="cursor:pointer; margin-right:15px" item="template" title="Editing a system this way is not considered a Measure"><a><i class="icon-edit"></i></a></span>
-                    <span class="delete-system" eid="eid" sid="sid" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span>
-                </td>
+                <td style="text-align:left"><span key="data.fuel_requirements.template.x.fuel"></span></td>
+                <td class="fraction template"><span key="data.fuel_requirements.template.x.fraction" dp=2 style="width:60px"/></td>
+                <td><span key="data.fuel_requirements.template.x.demand" dp=0></span> kWh/year</td>
+                <td><span key="data.fuel_requirements.template.x.system_efficiency" dp=2></span></td>
+                <td><span key="data.fuel_requirements.template.x.fuelinput" dp=0></span> kWh/year</td>
             </tr>
         </tbody>
 
@@ -124,7 +60,7 @@
         <div id="generation-container" style="display:none">
             <br>
             <hr>
-            <h3>Generation <i class="icon-question-sign" title="This table is autogenerated with data from the Generation page"></i></h3>
+            <h3>Generation</h3>
             <hr>
             <table class="table">
                 <tbody>
@@ -148,7 +84,6 @@
                     <tr>
                         <td style="text-align:left">
                             <span key="data.generation.template.x.name"></span>
-                            <!--<select class="heating_system_selector" z=tmp x=tmp key="data.energy_systems.template.x.system"></select>-->
                         </td>
                         <td><span key="data.generation.template.x.quantity" dp=0></span> kWh/year</td>
                         <td><span type="text" key="data.generation.template.x.CO2" dp="0" style="width:120px"/></td>
