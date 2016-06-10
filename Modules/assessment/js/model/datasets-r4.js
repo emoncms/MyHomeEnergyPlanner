@@ -1,17 +1,25 @@
 
 var datasets = {
-    
     fuels: {
-        'oil': {fuelcost: 0.0544, standingcharge: 0, co2factor: 0.298, primaryenergyfactor: 1.10},
-        'gas': {fuelcost: 0.0348, standingcharge: 0, co2factor: 0.216, primaryenergyfactor: 1.22},
-        'wood': {fuelcost: 0.0423, standingcharge: 0, co2factor: 0.019, primaryenergyfactor: 1.04},
-        'electric': {fuelcost: 0.1319, standingcharge: 0, co2factor: 0.519, primaryenergyfactor: 3.07},
-        //'greenelectric': {fuelcost: 0.145, standingcharge: 0, co2factor: 0.020, primaryenergyfactor: 1.5}, We have removed this as a fuel to avoid double counting: SAP uses total generation (not only onsite fraction) to calculate CO2 and Primary energy savings. Also the CO2factor of electric already takes into account renewable contribution to the grid
-        'electric-high': {fuelcost: 0.1529, standingcharge: 0, co2factor: 0.519, primaryenergyfactor: 3.07},
-        'electric-low': {fuelcost: 0.055, standingcharge: 0, co2factor: 0.519, primaryenergyfactor: 3.07},
-        'generation': {fuelcost: 0.145, standingcharge: 0, co2factor: 0.519, primaryenergyfactor: 3.07}
+        'Mains Gas': {standingcharge: 101, fuelcost: 4.25, co2factor: 0.216, primaryenergyfactor: 1.22, SAP_code: 1},
+        'Bulk LPG': {standingcharge: 70, fuelcost: 8.46, co2factor: 0.241, primaryenergyfactor: 1.09, SAP_code: 2},
+        'Bottled LPG ': {standingcharge: 0, fuelcost: 10.61, co2factor: 0.241, primaryenergyfactor: 1.09, SAP_code: 3},
+        'Heating Oil': {standingcharge: 0, fuelcost: 5.43, co2factor: 0.298, primaryenergyfactor: 1.1, SAP_code: 4},
+        'House Coal': {standingcharge: 0, fuelcost: 4.01, co2factor: 0.394, primaryenergyfactor: 1, SAP_code: 11},
+        'Anthracite': {standingcharge: 0, fuelcost: 4.02, co2factor: 0.394, primaryenergyfactor: 1, SAP_code: 15},
+        'Manufactured smokeless fuel': {standingcharge: 0, fuelcost: 5.04, co2factor: 0.433, primaryenergyfactor: 1.21, SAP_code: 12},
+        'Wood Logs': {standingcharge: 0, fuelcost: 4.65, co2factor: 0.019, primaryenergyfactor: 1.04, SAP_code: 20},
+        'Wood Pellets (secondary heating/ in bags)': {standingcharge: 0, fuelcost: 6.3, co2factor: 0.039, primaryenergyfactor: 1.26, SAP_code: 22},
+        'Wood pellets (main heating/ bulk supply)': {standingcharge: 0, fuelcost: 5.7, co2factor: 0.039, primaryenergyfactor: 1.26, SAP_code: 23},
+        'Wood chips': {standingcharge: 0, fuelcost: 3.36, co2factor: 0.016, primaryenergyfactor: 1.12, SAP_code: 21},
+        'Dual Fuel Appliance': {standingcharge: 0, fuelcost: 4.36, co2factor: 0.226, primaryenergyfactor: 1.02, SAP_code: 10},
+        'Standard Tariff': {standingcharge: 66, fuelcost: 15.06, co2factor: 0.519, primaryenergyfactor: 3.07, SAP_code: 30},
+        '7-Hour Tariff - High Rate': {standingcharge: 13, fuelcost: 17.81, co2factor: 0.519, primaryenergyfactor: 3.07, SAP_code: 32},
+        '7 Hour Tariff - Low Rate': {standingcharge: 0, fuelcost: 6.67, co2factor: 0.519, primaryenergyfactor: 3.07, SAP_code: 31},
+        '10-hour tariff - High Rate': {standingcharge: 12, fuelcost: 17.1, co2factor: 0.519, primaryenergyfactor: 3.07, SAP_code: 34},
+        '10-hour tariff - Low Rate': {standingcharge: 0, fuelcost: 9.25, co2factor: 0.519, primaryenergyfactor: 3.07, SAP_code: 33},
+        '24-hour heating tariff': {standingcharge: 40, fuelcost: 7.75, co2factor: 0.519, primaryenergyfactor: 3.07, SAP_code: 35}
     },
-    
     regions: [
         "UK average",
         "Thames",
@@ -36,7 +44,6 @@ var datasets = {
         "Shetland",
         "Northern Ireland"
     ],
-    
     table_u1: [
         [4.3, 4.9, 6.5, 8.9, 11.7, 14.6, 16.6, 16.4, 14.1, 10.6, 7.1, 4.2],
         [5.1, 5.6, 7.4, 9.9, 13.0, 16.0, 17.9, 17.8, 15.2, 11.6, 8.0, 5.1],
@@ -86,7 +93,6 @@ var datasets = {
         [9.5, 9.4, 8.7, 7.5, 6.6, 6.4, 5.7, 6.0, 7.2, 8.5, 8.9, 8.5],
         [5.4, 5.3, 5.0, 4.7, 4.5, 4.1, 3.9, 3.7, 4.2, 4.6, 5.0, 5.0]
     ],
-    
     // Table U3: Mean global solar irradiance (W/m2) on a horizontal plane, and solar declination
     // Row corresponds to region id in SAP specification 0:UK average etc..
     // 2nd dimention row index corresponds to month
@@ -142,22 +148,21 @@ var datasets = {
         [60.1, 50],
         [54.6, 72]
     ],
-    
     // Table U5: Constants for calculation of solar flux on vertical and inclined surfaces
     // 2nd dimention index: 0:North 1:NE/NW 2:East/West 3:SE/SW 4:South
     /*
-    k: {
-        1: [0.056, -2.85, -0.241, 0.839, 2.35],
-        2: [-5.79, 2.89, -0.024, -0.604, -2.97],
-        3: [6.23, 0.298, 0.351, 0.989, 2.4],
-        4: [3.32, 4.52, 0.604, -0.554, -3.04],
-        5: [-0.159, -6.28, -0.494, 0.251, 3.88],
-        6: [-3.74, 1.47, -0.502, -2.49, -4.97],
-        7: [-2.7, -2.58, -1.79, -2.0, -1.31],
-        8: [3.45, 3.96, 2.06, 2.28, 1.27],
-        9: [-1.21, -1.88, -0.405, 0.807, 1.83]
-    },*/
-    
+     k: {
+     1: [0.056, -2.85, -0.241, 0.839, 2.35],
+     2: [-5.79, 2.89, -0.024, -0.604, -2.97],
+     3: [6.23, 0.298, 0.351, 0.989, 2.4],
+     4: [3.32, 4.52, 0.604, -0.554, -3.04],
+     5: [-0.159, -6.28, -0.494, 0.251, 3.88],
+     6: [-3.74, 1.47, -0.502, -2.49, -4.97],
+     7: [-2.7, -2.58, -1.79, -2.0, -1.31],
+     8: [3.45, 3.96, 2.06, 2.28, 1.27],
+     9: [-1.21, -1.88, -0.405, 0.807, 1.83]
+     },*/
+
     // Angles may need to be converted to radians depending on the software implementation of the sine and cosine functions
     k: {
         1: [26.3, 0.165, 1.44, -2.95, -0.66],
@@ -170,9 +175,6 @@ var datasets = {
         8: [0.0872, 4.89, -0.757, -0.25, -0.991],
         9: [-0.191, -1.99, 0.604, 3.07, 4.59]
     },
-    
-    
-    
     table_1a: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
     table_1c: [1.1, 1.06, 1.02, 0.98, 0.94, 0.90, 0.90, 0.94, 0.98, 1.02, 1.06, 1.10],
     // Table 1d: Temperature rise of hot water drawn off (∆Tm, in K)
@@ -188,7 +190,6 @@ var datasets = {
         {start: 21, end: 38, letter: 'F', color: "#fd8130"},
         {start: 1, end: 20, letter: 'G', color: "#fd001a"}
     ],
-    
     energysystems: {
         'electric': {name: "Standard Electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'},
         'gasboiler': {name: "Standard Gas boiler", efficiency: 0.90, winter: 0.90, summer: 0.80, fuel: 'gas'},
@@ -202,5 +203,5 @@ var datasets = {
         'electricimmersion': {name: "Electric immersion heater", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'},
         'electric-high': {name: "High rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-high'},
         'electric-low': {name: "Low rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-low'},
-    }    
+    }
 }

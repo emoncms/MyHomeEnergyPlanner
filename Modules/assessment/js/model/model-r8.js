@@ -1115,7 +1115,7 @@ calc.LAC_SAP = function (data)
             data.gains_W["Lighting"] = GL_monthly;
             data.gains_W["Lighting"] = [97.18, 86.32, 70.2, 53.14, 39.73, 33.54, 36.24, 47.11, 63.22, 80.28, 93.7, 99.08];
             data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum, monthly: EL_monthly};
-            data.fuel_requirements.lighting = [{fuel: 'electric', fraction: 1, system_efficiency: 1}];
+            data.fuel_requirements.lighting = [{fuel: 'electric', fraction: 0.5, system_efficiency: 0.5}];
         }
     }
 
