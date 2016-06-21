@@ -152,13 +152,7 @@ var openbem = {
             EVP: data.ventilation.EVP
         };
         // LAC
-        inputdata.LAC = {
-            LLE: data.LAC.LLE,
-            L: data.LAC.L,
-            energy_efficient_appliances: data.LAC.energy_efficient_appliances,
-            energy_efficient_cooking: data.LAC.energy_efficient_cooking,
-            reduced_heat_gains_lighting: data.LAC.reduced_heat_gains_lighting
-        };
+        inputdata.LAC = data.LAC;
         inputdata.LAC_calculation_type = data.LAC_calculation_type;
         inputdata.use_generation = data.use_generation;
         inputdata.generation = data.generation;
@@ -283,9 +277,11 @@ var openbem = {
 
         // Fuels
         inputdata.fuels = data.fuels;
+
         //Images
         inputdata.imagegallery = data.imagegallery;
         inputdata.featuredimage = data.featuredimage;
+
         //Measures
         inputdata.measures = data.measures;
         return inputdata;

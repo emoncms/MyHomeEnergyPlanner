@@ -20,7 +20,8 @@
             <tr><td>The number of fixed low energy lighting outlets (LLE)</td><td><input key="data.LAC.LLE" type="text" style="width:80px" /></td></tr>
             <tr><td>The total number of fixed lighting outlets (L)</td><td><input key="data.LAC.L" type="text" style="width:80px" /></td></tr>
             <tr><td>The initial value of the annual energy used for lighting:</td><td><span key="data.LAC.EL" dp=0></span> kWh/year</td></tr>
-            
+            <tr><td>Fuel:</td><td><select key="data.LAC.fuels_lighting.0.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type='number' style="width:55px" step='0.01' max='1' key='data.LAC.fuels_lighting.0.fraction' default='1'> <button style="margin-left:15px" class='add_LAC_fuel' type='lighting'>Add fuel</button></td></tr>
+            <tbody id="LAC-lighting-fuels"></tbody>
         </table>
     </div>
 
@@ -31,6 +32,8 @@
         <table class="table">
             <tr><td>Energy efficient appliances and reduced internal heat gains: </td><td><input key="data.LAC.energy_efficient_appliances" type="checkbox" /></td></tr>
             <tr><td>Annual electrical appliances energy use:</td><td><span key="data.LAC.EA" dp=0></span> kWh/year</td></tr>
+            <tr><td>Fuel:</td><td><select key="data.LAC.fuels_appliances.0.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type='number' style="width:55px" step='0.01' max='1' key='data.LAC.fuels_appliances.0.fraction' default='1'> <button style="margin-left:15px" class='add_LAC_fuel' type='appliances'>Add fuel</button></td></tr>
+            <tbody id="LAC-appliances-fuels"></tbody>
         </table>
     </div>
 
@@ -39,6 +42,8 @@
         <table class="table">
             <tr><td>Reduced internal heat gains for cooking: </td><td><input key="data.LAC.energy_efficient_cooking" type="checkbox" /></td></tr>
             <tr><td>Annual cooking energy use:</td><td><span key="data.LAC.EC" dp=0></span> kWh/year</td></tr>
+            <tr><td>Fuel  <i class="icon-question-sign" title="SAP calculations for cooking are very limited, in order to calculate annual fuel input we need the assumption of fuel to be electric" />:</td><td><select key="data.LAC.fuels_cooking.0.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type='number' style="width:55px" step='0.01' max='1' key='data.LAC.fuels_cooking.0.fraction' default='1'> <button style="margin-left:15px" class='add_LAC_fuel' type='cooking'>Add fuel</button></td></tr>
+            <tbody id="LAC-cooking-fuels"></tbody>
         </table>
     </div>
 

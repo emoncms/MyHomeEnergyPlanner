@@ -1,6 +1,30 @@
 console.log('debug lac.js');
 
 function LAC_initUI() {
+
+    //LAC SAP
+    $('#LAC-lighting-fuels').html('');
+    for (index in data.LAC.fuels_lighting) {
+        if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_lighting.' + index + '.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_lighting.' + index + '.fraction" default="0">    </td></tr>'
+            $('#LAC-lighting-fuels').append(out);
+        }
+    }
+    $('#LAC-appliances-fuels').html('');
+    for (index in data.LAC.fuels_appliances) {
+        if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_appliances.' + index + '.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_appliances.' + index + '.fraction" default="0">    </td></tr>'
+            $('#LAC-appliances-fuels').append(out);
+        }
+    }
+    $('#LAC-cooking-fuels').html('');
+    for (index in data.LAC.fuels_cooking) {
+        if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_cooking.' + index + '.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_cooking.' + index + '.fraction" default="0">    </td></tr>'
+            $('#LAC-cooking-fuels').append(out);
+        }
+    }
+
     // Detailed list
     for (z in data.appliancelist.list)
         add_applianceDetailedList(z);
@@ -24,6 +48,15 @@ function LAC_initUI() {
 
     //Nothing to do to init the SAP div
 
+    //For all of them
+    $('select.electric-fuels').each(function () {
+        $(this).html(get_electric_fuels_for_select());
+    });
+
+    $('select.fuels').each(function () {
+        $(this).html(get_fuels_for_select());
+    });
+
     // Show divs according o the type of calculation
     show_LAC_divs(data.LAC_calculation_type)
 }
@@ -43,19 +76,19 @@ $('#openbem').on('change', '#LAC_calculation_type', function () {
 });
 
 function show_LAC_divs(type_of_calc) {
-    $('#LAC-container .to-be-hidden').hide('fast');
+    $('#LAC-container .to-be-hidden').hide();
     switch (type_of_calc) {
         case 'detailedlist':
-            $('#detailed-list').show('fast');
+            $('#detailed-list').show();
             break;
         case 'SAP':
-            $('#lighting-SAP').show('fast');
-            $('#appliances-SAP').show('fast');
-            $('#cooking-SAP').show('fast');
+            $('#lighting-SAP').show();
+            $('#appliances-SAP').show();
+            $('#cooking-SAP').show();
             break;
         case 'carboncoop_SAPlighting':
-            $('#lighting-SAP').show('fast');
-            $('#CarbonCoop').show('fast');
+            $('#lighting-SAP').show();
+            $('#CarbonCoop').show();
             break;
     }
 }
@@ -136,3 +169,55 @@ $("#applianceCarbonCoop").on('click', '.delete-appliance', function () {
     //appliannceCarbonCoop_initUI();
     update();
 });
+
+$('#openbem').on('click', '.add_LAC_fuel', function () { // Fix index
+    var type = $(this).attr('type');
+    var array_name = 'fuels_' + type;
+    data.LAC[array_name].push({fuel: 'Standard Tariff', fraction: 0});
+    var index = data.LAC[array_name].length - 1;
+    if (type == 'cooking') // The only difference is the class in the select
+        var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0">    </td></tr>'
+    else
+        var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0">    </td></tr>'
+    $('#LAC-' + type + '-fuels').append(out);
+
+    // Update
+    update();
+    $('select.electric-fuels').each(function () {
+        $(this).html(get_electric_fuels_for_select());
+    });
+
+    $('select.fuels').each(function () {
+        $(this).html(get_fuels_for_select());
+    });
+});
+
+function get_electric_fuels_for_select() {
+    var options = '';
+    for (fuel in data.fuels) {
+        if (data.fuels[fuel].category == 'Electricity')
+            options += '<option value="' + fuel + '">' + fuel + '</option>';
+    }
+    return options;
+}
+
+function get_fuels_for_select() {
+    var options = '';
+    var fuels_by_category = {};
+    // Group fuels by category
+    for (var fuel in data.fuels) {
+        var category = data.fuels[fuel].category;
+        if (fuels_by_category[category] == undefined)
+            fuels_by_category[category] = [];
+        fuels_by_category[category].push(fuel);
+    }
+    // Generate output string
+    for (category in fuels_by_category) {
+        options += '<optgroup label="' + category + '">';
+        for (index in fuels_by_category[category])
+            options += '<option value="' + fuels_by_category[category][index] + '">' + fuels_by_category[category][index] + '</option>';
+        options += '</optgroup>';
+    }
+    return options;
+}
+
