@@ -1208,5 +1208,316 @@ var standard_library = {
             notes: "",
             maintenance: ""
         },
+    },
+    appliances_and_cooking: {
+        /*"Clothes washing - hot feed": {
+            category: "Laundry",
+            "Norm demand": 1.1,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 55,
+            "Reference quantity": 3,
+            "Electric fraction": 0.55,
+            "DHW fraction": 0.45,
+            "GAS fraction": 0
+        },*/
+        "LAU1": {
+            name:"Clothes washing - cold feed",
+            category: "Laundry",
+            "Norm demand": 1.1,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 55,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "LAU2": {
+            name:"Clothes Drying - electric dryer",
+            category: "Laundry",
+            "Norm demand": 4,
+            "Units": "kWh per use",
+            "Utilisation factor": 0.88,
+            "Frequency": 57,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "FST1": {
+            name:"Refrigerator",
+            category: "Food storage",
+            "Norm demand": 0.65,
+            "Units": "kWh per day",
+            "Utilisation factor": 1,
+            "Frequency": 365,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "FST2": {
+            name:"Upright Freezer",
+            category: "Food storage",
+            "Norm demand": 0.89,
+            "Units": "kWh per day",
+            "Utilisation factor": 1,
+            "Frequency": 365,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "FST3": {
+            name:"Chest Freezer",
+            category: "Food storage",
+            "Norm demand": 1,
+            "Units": "kWh per day",
+            "Utilisation factor": 1,
+            "Frequency": 365,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "FST4": {
+            name:"Fridge/Freezer",
+            category: "Food storage",
+            "Norm demand": 1.16,
+            "Units": "kWh per day",
+            "Utilisation factor": 1,
+            "Frequency": 365,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "COOK1": {
+            name:"gas hob, gas oven",
+            category: "Cooking",
+            "Norm demand": 0.25,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 500,
+            "Reference quantity": 3,
+            "Type of fuel": "Gas",
+            "Efficiency":1
+        },
+        "COOK2": {
+            name:"gas hob",
+            category: "Cooking",
+            "Norm demand": 0.25,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 500,
+            "Reference quantity": 3,
+            "Type of fuel": "Gas",
+            "Efficiency":1
+        },
+        "COOK3": {
+            name:"electric oven",
+            category: "Cooking",
+            "Norm demand": 0.25,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 500,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "COOK4": {
+            name:"electric hob, electric oven (standard)",
+            category: "Cooking",
+            "Norm demand": 0.22,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 500,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "COOK5": {
+            name:"electric hob, electric oven (induction)",
+            category: "Cooking",
+            "Norm demand": 0.2,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 500,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "COOK6": {
+            name:"range/aga - oil",
+            category: "Cooking",
+            "Norm demand": 425,
+            "Units": "KWh per week",
+            "Utilisation factor": 1,
+            "Frequency": 52,
+            "Reference quantity": 1,
+            "Type of fuel": "Oil",
+            "Efficiency":1
+        },
+        "COOK7": {
+            name:"range/aga - gas",
+            category: "Cooking",
+            "Norm demand": 425,
+            "Units": "KWh per week",
+            "Utilisation factor": 1,
+            "Frequency": 52,
+            "Reference quantity": 1,
+            "Type of fuel": "Gas",
+            "Efficiency":1
+        },
+        "COOK8": {
+            name:"range/aga - electric",
+            category: "Cooking",
+            "Norm demand": 220,
+            "Units": "KWh per week",
+            "Utilisation factor": 1,
+            "Frequency": 52,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "COOK9": {
+            name:"microwave",
+            category: "Cooking",
+            "Norm demand": 14,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "KTC1": {
+            name:"electric kettle",
+            category: "Other kitchen / cleaning",
+            "Norm demand": 20,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        /*"Dishwasher - hot feed": {
+            category: "Other kitchen / cleaning",
+            "Norm demand": 1.5,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 65,
+            "Reference quantity": 3,
+            "Electric fraction": 0.5,
+            "DHW fraction": 0.5,
+            "GAS fraction": 0,
+        },*/
+        "KTC2": {
+            name:"Dishwasher - cold feed",
+            category: "Other kitchen / cleaning",
+            "Norm demand": 1.5,
+            "Units": "kWh per use",
+            "Utilisation factor": 1,
+            "Frequency": 65,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "TV1": {
+            name:"TV - CRT",
+            category: "TV",
+            "Norm demand": 118,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "TV2": {
+            name:"TV - LCD/LED",
+            category: "TV",
+            "Norm demand": 199,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "TV3": {
+            name:"TV - Plasma",
+            category: "TV",
+            "Norm demand": 658,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "CMP1": {
+            name:"Desktop",
+            category: "Computing",
+            "Norm demand": 166,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "CMP2": {
+            name:"Laptop",
+            category: "Computing",
+            "Norm demand": 29,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "CMP3": {
+            name:"Computer Peripherals",
+            category: "Computing",
+            "Norm demand": 50,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "MSC1": {
+            name:"Small Consumer Electronics",
+            category: "Miscelanea",
+            "Norm demand": 0.080,
+            "Units": "kW",
+            "Utilisation factor": 1,
+            "Frequency": 0.55,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "MSC2": {
+            name:"Other Small Appliances",
+            category: "Miscelanea",
+            "Norm demand": 50,
+            "Units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 3,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        },
+        "MSC3": {
+            name:"Standby",
+            category: "Miscelanea",
+            "Norm demand": 343,
+            "units": "kWh",
+            "Utilisation factor": 1,
+            "Frequency": 1,
+            "Reference quantity": 1,
+            "Type of fuel": "Electricity",
+            "Efficiency":1
+        }
     }
+
 };  

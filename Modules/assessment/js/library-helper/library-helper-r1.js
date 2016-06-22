@@ -36,7 +36,8 @@ libraryHelper.prototype.init = function () {
         'intentional_vents_and_flues': 'Intentional vents and flues',
         'intentional_vents_and_flues_measures': 'Intentional vents and flues measures',
         'water_usage': 'Water usage',
-        'storage_type': 'Type of storages'
+        'storage_type': 'Type of storages',
+        'appliances_and_cooking': 'Appliances and Cooking'
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -558,7 +559,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-ok').attr('item', origin.attr('item'));
     $('#apply-measure-ok').attr('type-of-item', origin.attr('type-of-item')); // Used for energy_systems
     //// Check edit manually (option by default)
-    $('[name=radio-type-of-measure]').filter('[value=edit]').click();    
+    $('[name=radio-type-of-measure]').filter('[value=edit]').click();
     // Populate the selects library to choose a library and an item (used when replace the item with one from library)
     //Moved to onChangeApplyMeasureWhatToDo
     /*var out = '';
@@ -939,6 +940,35 @@ libraryHelper.prototype.storage_type_library_to_html = function (origin, library
     out = out.replace(/add-system/g, 'add-storage-type');
     return out;
 };
+libraryHelper.prototype.appliances_and_cooking_library_to_html = function (origin, library_id) {
+    var out = "";
+    var selected_library = this.get_library_by_id(library_id);
+    this.orderObjectsByKeys(selected_library.data);
+    // order by category
+    var ordered_by_categories = {};
+    for (z in selected_library.data) {
+        var category = selected_library.data[z].category;
+        if (ordered_by_categories[category] == undefined)
+            ordered_by_categories[category] = {};
+        ordered_by_categories[category][z] = selected_library.data[z];
+    }
+
+    // Prepare the output string
+    for (category in ordered_by_categories) {
+        out += "<tr><th colspan='2'>" + category + "</th></tr>";
+        for (z in ordered_by_categories[category]) {
+            out += "<tr><td style='padding-left:50px'>" + z + ': ' + selected_library.data[z].name + "</td>";
+            out += "<td style='text-align:right;width:250px'>";
+            out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+            out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+            out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+            out += "</td>";
+            out += "</tr>";
+        }
+    }
+    return out;
+};
+
 /**********************************************
  * Items to html
  **********************************************/
@@ -1289,10 +1319,45 @@ libraryHelper.prototype.storage_type_item_to_html = function (item, tag) {
     }
     return out;
 };
-/*******************************************************
- * Get item to save in library (when creating new item)
- ******************************************************/
+libraryHelper.prototype.appliances_and_cooking_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: "name", category: "Miscelanea", "Norm demand": 0, "Units": "kWh", "Utilisation factor": 1, "Frequency": 1, "Reference quantity": 1, "Type of fuel": "Electricity", "Efficiency": 1};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Category</td><td><select class="item-category">';
+    var categories = ['Computing', 'Cooking', 'Food storage', 'Other kitchen / cleaning', 'Laundry', 'Miscelanea', 'TV'];
+    for (index in categories) {
+        if (item.category == categories[index])
+            out += '<option value="' + categories[index] + '" selected>' + categories[index] + '</option>';
+        else
+            out += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
+    }
+    out += '</select></td></tr>';
+    out += '<tr><td>Norm demand</td><td><input type="number" min="0" class="item-norm-demand" value="' + item['Norm demand'] + '" /></td></tr>';
+    out += '<tr><td>Units</td><td><input type="text" min="0" class="item-units" value="' + item.Units + '" /></td></tr>';
+    out += '<tr><td>Utilisation factor</td><td><input type="number" class="item-utilisation-factor" value="' + item['Utilisation factor'] + '" /></td></tr>';
+    out += '<tr><td>Frequency</td><td><input type="number" min="0" class="item-frequency" value="' + item.Frequency + '" /></td></tr>';
+    out += '<tr><td>Reference quantity</td><td><input type="number" min="0" class="item-reference-quantity" value="' + item['Reference quantity'] + '" /></td></tr>';
+    out += '<tr><td>Type of fuel</td><td><select class="item-type-of-fuel">';
+    var types_of_fuel = ['Gas', 'Oil', 'Solid fuel', 'Electricity'];
+    for (index in types_of_fuel) {
+        if (item['Type of fuel'] == types_of_fuel[index])
+            out += '<option value="' + types_of_fuel[index] + '" selected>' + types_of_fuel[index] + '</option>';
+        else
+            out += '<option value="' + types_of_fuel[index] + '">' + types_of_fuel[index] + '</option>';
+    }
+    out += '</select></td></tr>';
+    out += '<tr><td>Efficiency</td><td><input type="number" min="0" max="1" step="0.01" class="item-efficiency" value="' + item.Efficiency + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
 
+/*****************************************************************
+ * Get item to save in library (when editing or creating new item)
+ *****************************************************************/
 libraryHelper.prototype.systems_get_item_to_save = function () {
     var item = {};
     var system = $(".edit-system-tag").val();
@@ -1468,7 +1533,7 @@ libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function 
         key_risks: $(".item-key_risks").val(),
         notes: $(".item-notes").val(),
         maintenance: $(".item-maintenance").val()
-    
+
     };
     return item;
 };
@@ -1536,10 +1601,27 @@ libraryHelper.prototype.storage_type_get_item_to_save = function () {
     };
     return item;
 };
+libraryHelper.prototype.appliances_and_cooking_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        category: $(".item-category").val(),
+        "Norm demand": $(".item-norm-demand").val(),
+        Units: $(".item-units").val(),
+        "Utilisation factor": $(".item-utilisation-factor").val(),
+        Frequency: $(".item-frequency").val(),
+        "Reference quantity": $(".item-reference-quantity").val(),
+        'Type of fuel': $(".item-type-of-fuel").val(),
+        Efficiency: $(".item-efficiency").val()
+    };
+    return item;
+};
+
+
 /***************************************************
  * Other methods
  ***************************************************/
-
 libraryHelper.prototype.load_user_libraries = function (callback) {
     var mylibraries = {};
     var myself = this;
