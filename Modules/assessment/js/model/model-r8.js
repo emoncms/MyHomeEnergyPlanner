@@ -103,6 +103,8 @@ calc.start = function (data)
     data.fabric_energy_efficiency = 0;
     data.primary_energy_use_by_fuels = {};
     data.totalWK = 0;
+    if(data.fuels == undefined)
+        data.fuels = [];
     // data.fuels -> Copy dataset over to user data without overwritting user changed properties (useful when a new fuel is added to the dataset)
     var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
     for (fuel in tmpfuels) {
@@ -1052,8 +1054,8 @@ calc.SAP = function (data)
     var dataSAP = JSON.parse(JSON.stringify(data));
     dataSAP.total_cost = 0;
     dataSAP.primary_energy_use = 0;
-    dataSAP.energy_systems.appliances = [];
-    dataSAP.energy_systems.cooking = [];
+    dataSAP.fuel_requirements.appliances = [];
+    dataSAP.fuel_requirements.cooking = [];
     dataSAP = calc.fuel_requirements(dataSAP);
 
     // SAP
@@ -1461,7 +1463,7 @@ calc.water_heating = function (data)
 };
 calc.applianceCarbonCoop = function (data) {
     if (data.applianceCarbonCoop == undefined)
-        data.applianceCarbonCoop = {list: {}};
+        data.applianceCarbonCoop = {list: []};
     // "Constants" to be used in the calculations
     //var primary_energy_multiplier = {electricity: 3.07, DHW: 1.22, gas: 1.22};
     //var co2_multiplier = {electricity: 0.519, DHW: 0.216, gas: 0.216};

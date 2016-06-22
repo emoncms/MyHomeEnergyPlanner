@@ -1,6 +1,13 @@
 console.log('debug lac.js');
 
+if (typeof library_helper != "undefined")
+    library_helper.type = 'appliances_and_cooking';
+else
+    var library_helper = new libraryHelper('appliances_and_cooking', $("#openbem"));
+
 function LAC_initUI() {
+    //data.applianceCarbonCoop.list = [];
+    //update();
 
     //LAC SAP
     $('#LAC-lighting-fuels').html('');
@@ -30,21 +37,23 @@ function LAC_initUI() {
         add_applianceDetailedList(z);
 
     // Carbon Coop
+    $('.carbonCoop-appliance').remove();
+    $('.appliances-Carbon-Coop-category').hide();
     for (z in data.applianceCarbonCoop.list)
         add_applianceCarbonCoop(z);
-    var library = appliancesCarbonCoop; // in path/assesment/js/model/appliancesCarbonCoop-r1.js
-    for (category in library) {
-        var first = true;
-        for (appliance in library[category]) {
-            if (first === true) {
-                var row = "<tr><td>" + category + "</td><td>" + appliance + "</td><td><button class='add-element-CarbonCoop btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
-                first = false;
-            }
-            else
-                var row = "<tr><td></td><td>" + appliance + "</td><td><button class='add-element-CarbonCoop btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
-            $("#library_table-CarbonCoop").append(row);
-        }
-    }
+    /*var library = appliancesCarbonCoop; // in path/assesment/js/model/appliancesCarbonCoop-r1.js
+     for (category in library) {
+     var first = true;
+     for (appliance in library[category]) {
+     if (first === true) {
+     var row = "<tr><td>" + category + "</td><td>" + appliance + "</td><td><button class='add-element-CarbonCoop btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
+     first = false;
+     }
+     else
+     var row = "<tr><td></td><td>" + appliance + "</td><td><button class='add-element-CarbonCoop btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
+     $("#library_table-CarbonCoop").append(row);
+     }
+     }*/
 
     //Nothing to do to init the SAP div
 
@@ -60,7 +69,6 @@ function LAC_initUI() {
     // Show divs according o the type of calculation
     show_LAC_divs(data.LAC_calculation_type)
 }
-;
 
 function LAC_UpdateUI() {
     for (z in data.applianceCarbonCoop.list) {
@@ -120,27 +128,62 @@ function add_applianceDetailedList(z)
 /*********************
  * Carbon Coop       *
  ********************/
-function add_applianceCarbonCoop(z)
-{
-    $("#applianceCarbonCoop").append($("#template-CarbonCoop").html());
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.category']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.category');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.name']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.name');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.number_used']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.number_used');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.a_plus_rated']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.a_plus_rated');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.norm_demand']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.norm_demand');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.units']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.units');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.utilisation_factor']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.utilisation_factor');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.frequency']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.frequency');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.reference_quantity']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.reference_quantity');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.electric_fraction']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.electric_fraction');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.dhw_fraction']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.dhw_fraction');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.gas_fraction']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.gas_fraction');
-    $("#applianceCarbonCoop [key='data.applianceCarbonCoop.list.z.energy_demand']").attr('key', 'data.applianceCarbonCoop.list.' + z + '.energy_demand');
-    $("#applianceCarbonCoop [index='z']").attr('index', z);
+function add_applianceCarbonCoop(z) {
+    var category = data.applianceCarbonCoop.list[z].category;
+    var table_selector = '';
+    switch (category) {
+        case 'Food storage':
+            table_selector = '#applianceCarbonCoop-' + 'Food-storage';
+            break;
+        case 'Other kitchen / cleaning':
+            table_selector = '#applianceCarbonCoop-' + 'Other-kitchen-cleaning';
+            break;
+        default:
+            table_selector = '#applianceCarbonCoop-' + category;
+            break;
+    }
+    $(table_selector).show();
+    var out = '<tr class="carbonCoop-appliance">';
+    out += '<td style="text-align:left"><input style="text-align:left; width:100px" type="text" key="data.applianceCarbonCoop.list.' + z + '.name" style="width:50px" /></td>';
+    out += '<td><input type="number" key="data.applianceCarbonCoop.list.' + z + '.number_used" style="width:30px" /></td>';
+    if (data.applianceCarbonCoop.list[z].type_of_fuel == "Electricity")
+        out += '<td><input type="checkbox" key="data.applianceCarbonCoop.list.' + z + '.a_plus_rated" /></td>';
+    else
+        out += '<td/>';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.norm_demand"  style="width:40px" /> </td>';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.units" style="width:40px" /> </td>';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.utilisation_factor" style="width:40px" /> </td>';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.frequency" style="width:40px" /> </td>';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.reference_quantity" style="width:40px" /> </td>';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.type_of_fuel" style="width:40px" /> </td>';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.efficiency" style="width:40px" /> </td>';
+    out += '<!--<td><span key="data.applianceCarbonCoop.list.' + z + '.electric_fraction" style="width:40px" /> </td>';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.dhw_fraction" style="width:40px" /> </td>';
+    out += ' <td><span key="data.applianceCarbonCoop.list.' + z + '.gas_fraction" style="width:40px" /> </td>-->';
+    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.energy_demand" style="width:40px" /></td>';
+    out += '<td><i index="' + z + '" class="delete-appliance icon-trash" style="cursor:pointer"></i></td>';
+    out += '</tr>';
+    $(table_selector).append(out);
 }
-$("#add-item-CarbonCoop").click(function () {
-    $("#myModal_applianceCarbonCooplibrary").modal('show');
+/*$("#add-item-CarbonCoop").click(function () {
+ $("#myModal_applianceCarbonCooplibrary").modal('show');
+ });*/
+
+
+$('#openbem').on('click', '.add-item-CarbonCoop', function () {
+    var tag = $(this).attr('tag');
+    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    var item = library[tag];
+    item.tag = tag;
+    if (item.type_of_fuel == "Electricity")
+        item.a_plus_rated = false;
+    // Do we need to add to the item:  primary_energy_total: 0, primary_energy_m2: 0, co2_total: 0, co2_m2: 0
+    data.applianceCarbonCoop.list.push(item);
+    // Add appliance to the view and update
+    add_applianceCarbonCoop(data.applianceCarbonCoop.list.length - 1);
+    update();
 });
+
 $("#library_table-CarbonCoop").on('click', '.add-element-CarbonCoop', function () {
     var category = $(this).attr("cat");
     var appliance = $(this).attr("app");
@@ -164,9 +207,9 @@ $("#library_table-CarbonCoop").on('click', '.add-element-CarbonCoop', function (
 
 $("#applianceCarbonCoop").on('click', '.delete-appliance', function () {
     index = $(this).attr('index');
-    $(this).closest('tr').remove();
     data.applianceCarbonCoop.list.splice(index, 1);
     //appliannceCarbonCoop_initUI();
+    LAC_initUI();
     update();
 });
 

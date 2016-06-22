@@ -961,7 +961,7 @@ libraryHelper.prototype.appliances_and_cooking_library_to_html = function (origi
             out += "<td style='text-align:right;width:250px'>";
             out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
             out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
-            out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+            out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-item-CarbonCoop use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
             out += "</td>";
             out += "</tr>";
         }
@@ -1321,7 +1321,7 @@ libraryHelper.prototype.storage_type_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.appliances_and_cooking_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: '', name: "name", category: "Miscelanea", "Norm demand": 0, "Units": "kWh", "Utilisation factor": 1, "Frequency": 1, "Reference quantity": 1, "Type of fuel": "Electricity", "Efficiency": 1};
+        item = {tag: '', name: "name", category: "Miscelanea", "norm_demand": 0, "units": "kWh", "utilisation_factor": 1, "frequency": 1, "reference_quantity": 1, "type_of_fuel": "Electricity", "efficiency": 1};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -1336,21 +1336,21 @@ libraryHelper.prototype.appliances_and_cooking_item_to_html = function (item, ta
             out += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
     }
     out += '</select></td></tr>';
-    out += '<tr><td>Norm demand</td><td><input type="number" min="0" class="item-norm-demand" value="' + item['Norm demand'] + '" /></td></tr>';
-    out += '<tr><td>Units</td><td><input type="text" min="0" class="item-units" value="' + item.Units + '" /></td></tr>';
-    out += '<tr><td>Utilisation factor</td><td><input type="number" class="item-utilisation-factor" value="' + item['Utilisation factor'] + '" /></td></tr>';
-    out += '<tr><td>Frequency</td><td><input type="number" min="0" class="item-frequency" value="' + item.Frequency + '" /></td></tr>';
-    out += '<tr><td>Reference quantity</td><td><input type="number" min="0" class="item-reference-quantity" value="' + item['Reference quantity'] + '" /></td></tr>';
+    out += '<tr><td>Norm demand</td><td><input type="number" min="0" class="item-norm-demand" value="' + item['norm_demand'] + '" /></td></tr>';
+    out += '<tr><td>Units</td><td><input type="text" min="0" class="item-units" value="' + item.units + '" /></td></tr>';
+    out += '<tr><td>Utilisation factor</td><td><input type="number" class="item-utilisation-factor" value="' + item['utilisation_factor'] + '" /></td></tr>';
+    out += '<tr><td>Frequency</td><td><input type="number" min="0" class="item-frequency" value="' + item.frequency + '" /></td></tr>';
+    out += '<tr><td>Reference quantity</td><td><input type="number" min="0" class="item-reference-quantity" value="' + item['reference_quantity'] + '" /></td></tr>';
     out += '<tr><td>Type of fuel</td><td><select class="item-type-of-fuel">';
     var types_of_fuel = ['Gas', 'Oil', 'Solid fuel', 'Electricity'];
     for (index in types_of_fuel) {
-        if (item['Type of fuel'] == types_of_fuel[index])
+        if (item['type_of_fuel'] == types_of_fuel[index])
             out += '<option value="' + types_of_fuel[index] + '" selected>' + types_of_fuel[index] + '</option>';
         else
             out += '<option value="' + types_of_fuel[index] + '">' + types_of_fuel[index] + '</option>';
     }
     out += '</select></td></tr>';
-    out += '<tr><td>Efficiency</td><td><input type="number" min="0" max="1" step="0.01" class="item-efficiency" value="' + item.Efficiency + '" /></td></tr>';
+    out += '<tr><td>Efficiency</td><td><input type="number" min="0" max="1" step="0.01" class="item-efficiency" value="' + item.efficiency + '" /></td></tr>';
     out += '</tbody></table>';
     return out;
 };
@@ -1607,13 +1607,13 @@ libraryHelper.prototype.appliances_and_cooking_get_item_to_save = function () {
     item[tag] = {
         name: $(".item-name").val(),
         category: $(".item-category").val(),
-        "Norm demand": $(".item-norm-demand").val(),
-        Units: $(".item-units").val(),
-        "Utilisation factor": $(".item-utilisation-factor").val(),
-        Frequency: $(".item-frequency").val(),
-        "Reference quantity": $(".item-reference-quantity").val(),
-        'Type of fuel': $(".item-type-of-fuel").val(),
-        Efficiency: $(".item-efficiency").val()
+        "norm_demand": $(".item-norm-demand").val(),
+        units: $(".item-units").val(),
+        "utilisation_factor": $(".item-utilisation-factor").val(),
+        frequency: $(".item-frequency").val(),
+        "reference_quantity": $(".item-reference-quantity").val(),
+        'type_of_fuel': $(".item-type-of-fuel").val(),
+        efficiency: $(".item-efficiency").val()
     };
     return item;
 };

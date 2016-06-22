@@ -92,7 +92,6 @@ var openbem = {
         inputdata.custom_occupancy = data.custom_occupancy;
         inputdata.floors = [];
         inputdata.locked = data.locked;
-
         for (z in data.floors) {
             inputdata.floors[z] = {name: data.floors[z].name, area: data.floors[z].area, height: data.floors[z].height};
         }
@@ -220,14 +219,16 @@ var openbem = {
                 name: data.applianceCarbonCoop.list[z].name,
                 number_used: data.applianceCarbonCoop.list[z].number_used,
                 a_plus_rated: data.applianceCarbonCoop.list[z].a_plus_rated,
-                norm_demand: data.applianceCarbonCoop.list[z].norm_demand,
+                "norm_demand": data.applianceCarbonCoop.list[z]["norm_demand"],
                 units: data.applianceCarbonCoop.list[z].units,
-                utilisation_factor: data.applianceCarbonCoop.list[z].utilisation_factor,
+                "utilisation_factor": data.applianceCarbonCoop.list[z]["utilisation_factor"],
                 frequency: data.applianceCarbonCoop.list[z].frequency,
-                reference_quantity: data.applianceCarbonCoop.list[z].reference_quantity,
-                electric_fraction: data.applianceCarbonCoop.list[z].electric_fraction,
-                dhw_fraction: data.applianceCarbonCoop.list[z].dhw_fraction,
-                gas_fraction: data.applianceCarbonCoop.list[z].gas_fraction
+                "reference_quantity": data.applianceCarbonCoop.list[z]["reference_quantity"],
+                'type_of_fuel': data.applianceCarbonCoop.list[z]['type_of_fuel'],
+                efficiency: data.applianceCarbonCoop.list[z].efficiency
+                        //electric_fraction: data.applianceCarbonCoop.list[z].electric_fraction,
+                        //dhw_fraction: data.applianceCarbonCoop.list[z].dhw_fraction,
+                        //gas_fraction: data.applianceCarbonCoop.list[z].gas_fraction
                         /*primary_energy_total: data.applianceCarbonCoop.list[z].primary_energy_total,
                          primary_energy_m2: data.applianceCarbonCoop.list[z].primary_energy_m2,
                          co2_total: data.applianceCarbonCoop.list[z].co2_total,
@@ -277,11 +278,9 @@ var openbem = {
 
         // Fuels
         inputdata.fuels = data.fuels;
-
         //Images
         inputdata.imagegallery = data.imagegallery;
         inputdata.featuredimage = data.featuredimage;
-
         //Measures
         inputdata.measures = data.measures;
         return inputdata;
