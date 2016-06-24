@@ -69,7 +69,6 @@ function LAC_initUI() {
     // Show divs according o the type of calculation
     show_LAC_divs(data.LAC_calculation_type)
 }
-
 function LAC_UpdateUI() {
     for (z in data.applianceCarbonCoop.list) {
         data.applianceCarbonCoop.list[z].energy_demand = 1.0 * data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
@@ -81,6 +80,55 @@ function LAC_UpdateUI() {
 
 $('#openbem').on('change', '#LAC_calculation_type', function () {
     show_LAC_divs($('#LAC_calculation_type').val());
+});
+$("#add-item-detailedlist").click(function () {
+    var size = data.appliancelist.list.length;
+    var name = "Item " + (size + 1);
+    data.appliancelist.list.push({name: name, category: 'lighting', power: 0, hours: 0, energy: 0});
+    add_applianceDetailedList(size);
+
+    update();
+});
+$('#openbem').on('click', '.add-item-CarbonCoop', function () {
+    var tag = $(this).attr('tag');
+    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    var item = library[tag];
+    item.tag = tag;
+    if (item.type_of_fuel == "Electricity")
+        item.a_plus_rated = false;
+    // Do we need to add to the item:  primary_energy_total: 0, primary_energy_m2: 0, co2_total: 0, co2_m2: 0
+    data.applianceCarbonCoop.list.push(item);
+    // Add appliance to the view and update
+    add_applianceCarbonCoop(data.applianceCarbonCoop.list.length - 1);
+    update();
+});
+$("#applianceCarbonCoop").on('click', '.delete-appliance', function () {
+    index = $(this).attr('index');
+    data.applianceCarbonCoop.list.splice(index, 1);
+    //appliannceCarbonCoop_initUI();
+    LAC_initUI();
+    update();
+});
+$('#openbem').on('click', '.add_LAC_fuel', function () { // Fix index
+    var type = $(this).attr('type');
+    var array_name = 'fuels_' + type;
+    data.LAC[array_name].push({fuel: 'Standard Tariff', fraction: 0});
+    var index = data.LAC[array_name].length - 1;
+    if (type == 'cooking') // The only difference is the class in the select
+        var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0">    </td></tr>'
+    else
+        var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0">    </td></tr>'
+    $('#LAC-' + type + '-fuels').append(out);
+
+    // Update
+    update();
+    $('select.electric-fuels').each(function () {
+        $(this).html(get_electric_fuels_for_select());
+    });
+
+    $('select.fuels').each(function () {
+        $(this).html(get_fuels_for_select());
+    });
 });
 
 function show_LAC_divs(type_of_calc) {
@@ -100,22 +148,7 @@ function show_LAC_divs(type_of_calc) {
             break;
     }
 }
-
-
-/*********************
- *  Detailed list    *
- *  *****************/
-$("#add-item-detailedlist").click(function () {
-    var size = data.appliancelist.list.length;
-    var name = "Item " + (size + 1);
-    data.appliancelist.list.push({name: name, category: 'lighting', power: 0, hours: 0, energy: 0});
-    add_applianceDetailedList(size);
-
-    update();
-});
-
-function add_applianceDetailedList(z)
-{
+function add_applianceDetailedList(z){
     $("#appliancelist").append($("#template-detailedlist").html());
     $("#appliancelist [key='data.appliancelist.list.z.name']").attr('key', 'data.appliancelist.list.' + z + '.name');
     $("#appliancelist [key='data.appliancelist.list.z.category']").attr('key', 'data.appliancelist.list.' + z + '.category');
@@ -123,11 +156,6 @@ function add_applianceDetailedList(z)
     $("#appliancelist [key='data.appliancelist.list.z.hours']").attr('key', 'data.appliancelist.list.' + z + '.hours');
     $("#appliancelist [key='data.appliancelist.list.z.energy']").attr('key', 'data.appliancelist.list.' + z + '.energy');
 }
-
-
-/*********************
- * Carbon Coop       *
- ********************/
 function add_applianceCarbonCoop(z) {
     var category = data.applianceCarbonCoop.list[z].category;
     var table_selector = '';
@@ -165,76 +193,6 @@ function add_applianceCarbonCoop(z) {
     out += '</tr>';
     $(table_selector).append(out);
 }
-/*$("#add-item-CarbonCoop").click(function () {
- $("#myModal_applianceCarbonCooplibrary").modal('show');
- });*/
-
-
-$('#openbem').on('click', '.add-item-CarbonCoop', function () {
-    var tag = $(this).attr('tag');
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    var item = library[tag];
-    item.tag = tag;
-    if (item.type_of_fuel == "Electricity")
-        item.a_plus_rated = false;
-    // Do we need to add to the item:  primary_energy_total: 0, primary_energy_m2: 0, co2_total: 0, co2_m2: 0
-    data.applianceCarbonCoop.list.push(item);
-    // Add appliance to the view and update
-    add_applianceCarbonCoop(data.applianceCarbonCoop.list.length - 1);
-    update();
-});
-
-$("#library_table-CarbonCoop").on('click', '.add-element-CarbonCoop', function () {
-    var category = $(this).attr("cat");
-    var appliance = $(this).attr("app");
-
-    // Add appliance to data
-    var library = appliancesCarbonCoop; // in path/assesment/js/model/appliancesCarbonCoop-r1.js/
-    var appliance_to_add = {category: category, name: appliance, number_used: 0, a_plus_rated: false, units: "", utilisation_factor: 0, frequency: 0, reference_quantity: 0, electric_fraction: 0, dhw_fraction: 0, gas_fraction: 0, primary_energy_total: 0, primary_energy_m2: 0, co2_total: 0, co2_m2: 0};
-    for (z in library[category][appliance]) {
-        z_for_data = z.replace(" ", "_").toLowerCase();
-        appliance_to_add[z_for_data] = library[category][appliance][z];
-    }
-
-    data.applianceCarbonCoop.list.push(appliance_to_add);
-
-    $("#myModal_applianceCarbonCooplibrary").modal('hide');
-
-    // Add appliance to the view and update
-    add_applianceCarbonCoop(data.applianceCarbonCoop.list.length - 1);
-    update();
-});
-
-$("#applianceCarbonCoop").on('click', '.delete-appliance', function () {
-    index = $(this).attr('index');
-    data.applianceCarbonCoop.list.splice(index, 1);
-    //appliannceCarbonCoop_initUI();
-    LAC_initUI();
-    update();
-});
-
-$('#openbem').on('click', '.add_LAC_fuel', function () { // Fix index
-    var type = $(this).attr('type');
-    var array_name = 'fuels_' + type;
-    data.LAC[array_name].push({fuel: 'Standard Tariff', fraction: 0});
-    var index = data.LAC[array_name].length - 1;
-    if (type == 'cooking') // The only difference is the class in the select
-        var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0">    </td></tr>'
-    else
-        var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="electric-fuels"></select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fraction&nbsp;&nbsp;<input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0">    </td></tr>'
-    $('#LAC-' + type + '-fuels').append(out);
-
-    // Update
-    update();
-    $('select.electric-fuels').each(function () {
-        $(this).html(get_electric_fuels_for_select());
-    });
-
-    $('select.fuels').each(function () {
-        $(this).html(get_fuels_for_select());
-    });
-});
-
 function get_electric_fuels_for_select() {
     var options = '';
     for (fuel in data.fuels) {
@@ -243,7 +201,6 @@ function get_electric_fuels_for_select() {
     }
     return options;
 }
-
 function get_fuels_for_select() {
     var options = '';
     var fuels_by_category = {};
