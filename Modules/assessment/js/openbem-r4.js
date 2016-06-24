@@ -207,6 +207,8 @@ var openbem = {
                 name: data.appliancelist.list[z].name,
                 category: data.appliancelist.list[z].category,
                 power: data.appliancelist.list[z].power,
+                fuel: data.appliancelist.list[z].fuel,
+                efficiency: data.appliancelist.list[z].efficiency,
                 hours: data.appliancelist.list[z].hours
             }
         }

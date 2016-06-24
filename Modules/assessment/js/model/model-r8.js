@@ -374,7 +374,6 @@ calc.ventilation = function (data)
         IVF: [],
         EVP: []
     };
-
     if (data.ventilation == undefined)
         data.ventilation = {};
     for (z in defaults)
@@ -387,7 +386,6 @@ calc.ventilation = function (data)
     // Intentional vents and flues (IVF: Chimneys, open flues and flueless gas fires)
     for (z in data.ventilation.IVF)
         total += 1.0 * data.ventilation.IVF[z].ventilation_rate;
-
     // Extract ventilation points
     if (data.ventilation.ventilation_type == 'IE' || data.ventilation.ventilation_type == 'PS') {
         for (z in data.ventilation.EVP)
@@ -414,17 +412,14 @@ calc.ventilation = function (data)
     if (!data.ventilation.draught_lobby)
         data.ventilation.structural_infiltration += 0.05;
     data.ventilation.structural_infiltration += (0.25 - (0.2 * data.ventilation.percentage_draught_proofed / 100));
-
     // Structural infiltration from test
     //data.ventilation.structural_infiltration_from_test = data.ventilation.air_permeability_value / 20.0; // This is the formula used in SAP, but it is wrong the units here are "m3/h/m2 of envelope area" but should be ACH
     var m3m2Ea_to_ACH_coefficient = (data.fabric.total_external_area + data.fabric.total_party_wall_area) / data.volume; // = Envelope area / dwelling volume
     data.ventilation.structural_infiltration_from_test = m3m2Ea_to_ACH_coefficient * data.ventilation.air_permeability_value / 20.0;
-
     if (data.ventilation.air_permeability_test == false)
         infiltration += data.ventilation.structural_infiltration;
     else
         infiltration += data.ventilation.structural_infiltration_from_test;
-
     data.ventilation.infiltration_rate = infiltration;
     var shelter_factor = 1 - (0.075 * data.ventilation.number_of_sides_sheltered);
     infiltration *= shelter_factor;
@@ -847,7 +842,6 @@ calc.energy_systems = function (data)
         }
     }
     data.fuels = tmpfuels;
-
     data.fuel_totals = {};
     for (z in data.energy_requirements)
     {
@@ -876,7 +870,6 @@ calc.energy_systems = function (data)
         data.energy_systems["waterheating"][a].efficiency_monthly = [];
         for (m = 0; m < 12; m++)
             data.energy_systems["waterheating"][a].efficiency_monthly[m] = data.energy_systems["waterheating"][a].efficiency;
-
         // Apply Winter and summer efficiency modification to water heating system if its a shared water + space heating system. SAP2012, 9.2.1, p. 24 - Overwrites hot water efficiency
         var system_water = data.energy_systems["waterheating"][a].system;
         for (var b in data.energy_systems["space_heating"]) {
@@ -891,7 +884,6 @@ calc.energy_systems = function (data)
                 //var n_summer = data.data.energy_systems[eid][system_water].summer;
                 var n_winter = data.energy_systems["waterheating"][a].winter;
                 var n_summer = data.energy_systems["waterheating"][a].summer;
-
                 var n = 0;
                 var n_monthly = [];
                 for (m = 0; m < 12; m++) {
@@ -963,7 +955,6 @@ calc.energy_systems = function (data)
     data.net_cost = data.use_generation == 1 ? data.total_cost - data.total_income : data.total_cost;
     return data;
 };
-
 //---------------------------------------------------------------------------------------------
 // FUEL REQUIREMENTS
 // Module Inputs: 
@@ -1040,7 +1031,6 @@ calc.fuel_requirements = function (data) {
 
     data.net_cost = data.use_generation == 1 ? data.total_cost - data.total_income : data.total_cost;
     return data;
-
 };
 //---------------------------------------------------------------------------------------------
 // SAP
@@ -1057,7 +1047,6 @@ calc.SAP = function (data)
     dataSAP.fuel_requirements.appliances = [];
     dataSAP.fuel_requirements.cooking = [];
     dataSAP = calc.fuel_requirements(dataSAP);
-
     // SAP
     data.SAP = {};
     data.SAP.total_costSAP = dataSAP.total_cost;
@@ -1077,7 +1066,6 @@ calc.SAP = function (data)
         data.SAP.EI_rating = 200 - 95 * (Math.log(CF) / Math.LN10);
     else
         data.SAP.EI_rating = 100 - 1.34 * CF;
-
     return data;
 };
 calc.LAC_SAP = function (data)
@@ -1100,7 +1088,6 @@ calc.LAC_SAP = function (data)
         data.LAC.fuels_cooking = [{fuel: 'Standard Tariff', fraction: 1}];
     if (data.LAC.fuels_appliances == undefined)
         data.LAC.fuels_appliances = [{fuel: 'Standard Tariff', fraction: 1}];
-
     /*  LIGHTING     */
     // average annual energy consumption for lighting if no low-energy lighting is used is:
     data.LAC.EB = 59.73 * Math.pow((data.TFA * data.occupancy), 0.4714);
@@ -1172,7 +1159,6 @@ calc.LAC_SAP = function (data)
     }
 
     data.LAC.EA = EA;
-
     /*     
      Cooking     
      */
@@ -1462,26 +1448,22 @@ calc.water_heating = function (data) {
 calc.applianceCarbonCoop = function (data) {
     if (data.applianceCarbonCoop == undefined)
         data.applianceCarbonCoop = {list: []};
-
     // Variables in the data object that hold the results
     data.applianceCarbonCoop.energy_demand_total = {appliances: 0, cooking: 0, total: 0};
     data.applianceCarbonCoop.energy_demand_monthly = {appliances: [], cooking: [], total: []};
     data.applianceCarbonCoop.energy_demand_by_type_of_fuel = {cooking: {}, appliances: {}, total: {}};
     data.applianceCarbonCoop.gains_W = [];
     data.applianceCarbonCoop.gains_W_monthly = {};
-
     // 1. Energy demand
     // We do the calculations for each appliance in the list
     for (z in data.applianceCarbonCoop.list) {
         var item = data.applianceCarbonCoop.list[z];
         if (item.energy_demand == undefined)
             item.energy_demand = 0;
-
         // Energy demand calculation
         item.energy_demand = item.number_used * item.norm_demand * item.utilisation_factor * item.reference_quantity * item.frequency;
         if (item.type_of_fuel == "Electricity" && item.a_plus_rated === 1)
             item.energy_demand = 0.75 * item.energy_demand;
-
         // Results: totals from all the appliances
         data.applianceCarbonCoop.energy_demand_total.total += item.energy_demand;
         if (data.applianceCarbonCoop.energy_demand_by_type_of_fuel[item.type_of_fuel] == undefined)
@@ -1550,23 +1532,22 @@ calc.applianceCarbonCoop = function (data) {
         }
     }
     // Copy over to data.fuel_requirements
-    for (var category in f_requirements){
-        for (fuel in f_requirements[category]){
+    for (var category in f_requirements) {
+        for (fuel in f_requirements[category]) {
             data.fuel_requirements[category].push(f_requirements[category][fuel]);
-            
         }
     }
 };
 calc.appliancelist = function (data) {
+    //data.appliancelist={};
     if (data.appliancelist == undefined)
-        data.appliancelist = {list: [{name: "LED Light", power: 6, hours: 12}]};
+        data.appliancelist = {list: [{name: "LED Light", power: 6, hours: 12, category: 'lighting', fuel: 'Standard Tariff', efficiency: 1}]};
     if (data.appliancelist.lighting == undefined)
         data.appliancelist.lighting = {};
     if (data.appliancelist.cooking == undefined)
         data.appliancelist.cooking = {};
     if (data.appliancelist.appliances == undefined)
         data.appliancelist.appliances = {};
-
     data.appliancelist.lighting.totalwh = 0;
     data.appliancelist.lighting.monthlykwh = [];
     data.appliancelist.lighting.gains_W_monthly = [];
@@ -1576,7 +1557,6 @@ calc.appliancelist = function (data) {
     data.appliancelist.appliances.totalwh = 0;
     data.appliancelist.appliances.monthlykwh = [];
     data.appliancelist.appliances.gains_W_monthly = [];
-
     for (z in data.appliancelist.list) {
         if (data.appliancelist.list[z].category != undefined)
             var category = data.appliancelist.list[z].category;
@@ -1599,6 +1579,32 @@ calc.appliancelist = function (data) {
                 data.energy_requirements[category] = {name: category.charAt(0).toUpperCase() + category.slice(1), quantity: data.appliancelist[category].annualkwh, monthly: data.appliancelist[category].monthlykwh};
         }
     }
+
+    // Fuel requirements
+    if (data.LAC_calculation_type == 'detailedlist') {
+        var f_requirements = {'lighting': {}, 'appliances': {}, 'cooking': {}};
+        data.appliancelist.list.forEach(function (item) {
+            if (f_requirements[item.category][item.fuel] == undefined)
+                f_requirements[item.category][item.fuel] = {demand: 0, fraction: 0, fuel: item.fuel, system_efficiency: item.efficiency};
+            f_requirements[item.category][item.fuel].demand += 365 * item.energy / 1000;
+        });
+        // Add fractions
+        for (category in {appliances: {}, cooking: {}, lighting: {}}) {
+            for (var fuel in f_requirements[category]) {
+                f_requirements[category][fuel].fraction = f_requirements[category][fuel].demand / data.energy_requirements[category].quantity;
+            }
+        }
+        // Copy over to data.fuel_requirements
+        for (var category in f_requirements) {
+            for (fuel in f_requirements[category]) {
+                data.fuel_requirements[category].push(f_requirements[category][fuel]);
+            }
+        }
+    }
+
+
+
+
     return data;
 };
 calc.generation = function (data) {
@@ -1834,7 +1840,6 @@ calc.fans_and_pumps = function (data) {
     // 1.- Annual energy requirements for pumps, fans and electric keep-hot
     var annual_energy = 0;
     var monthly_energy = [];
-
     // From heating systems
     console.log('CARLOS REMEMBER!!!  Energy systems not taken into account for fans and pumps');
     /*if (data.energy_systems != undefined && data.energy_systems.space_heating != undefined) {
@@ -1897,7 +1902,6 @@ calc.fans_and_pumps = function (data) {
 
     for (m = 0; m < 12; m++)
         monthly_energy[m] = annual_energy / 12;
-
     if (annual_energy > 0)
         data.energy_requirements.fans_and_pumps = {name: "Fans and pumps", quantity: annual_energy, monthly: monthly_energy};
 };

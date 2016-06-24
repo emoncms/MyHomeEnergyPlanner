@@ -6,8 +6,8 @@ else
     var library_helper = new libraryHelper('appliances_and_cooking', $("#openbem"));
 
 function LAC_initUI() {
-    //data.applianceCarbonCoop.list = [];
-    //update();
+    //data.appliancelist.list = [];
+   //update();
 
     //LAC SAP
     $('#LAC-lighting-fuels').html('');
@@ -80,7 +80,7 @@ $('#openbem').on('change', '#LAC_calculation_type', function () {
 $("#add-item-detailedlist").click(function () {
     var size = data.appliancelist.list.length;
     var name = "Item " + (size + 1);
-    data.appliancelist.list.push({name: name, category: 'lighting', power: 0, hours: 0, energy: 0});
+    data.appliancelist.list.push({name: name, category: 'lighting', power: 0, hours: 0, energy: 0, fuel: 'Standard Tariff', efficiency: 1});
     add_applianceDetailedList(size);
 
     update();
@@ -145,6 +145,8 @@ function add_applianceDetailedList(z) {
     $("#appliancelist [key='data.appliancelist.list.z.category']").attr('key', 'data.appliancelist.list.' + z + '.category');
     $("#appliancelist [key='data.appliancelist.list.z.power']").attr('key', 'data.appliancelist.list.' + z + '.power');
     $("#appliancelist [key='data.appliancelist.list.z.hours']").attr('key', 'data.appliancelist.list.' + z + '.hours');
+    $("#appliancelist [key='data.appliancelist.list.z.fuel']").attr('key', 'data.appliancelist.list.' + z + '.fuel');
+    $("#appliancelist [key='data.appliancelist.list.z.efficiency']").attr('key', 'data.appliancelist.list.' + z + '.efficiency');
     $("#appliancelist [key='data.appliancelist.list.z.energy']").attr('key', 'data.appliancelist.list.' + z + '.energy');
 }
 function add_applianceCarbonCoop(z) {
@@ -211,8 +213,8 @@ function get_fuels_for_select(category_to_show) {
     return options;
 }
 
-function get_a_fuel(type_of_fuel){ // Returns the first fuel for a specific type found in data.fuels for a specific type
-    for (var fuel in data.fuels){
+function get_a_fuel(type_of_fuel) { // Returns the first fuel for a specific type found in data.fuels for a specific type
+    for (var fuel in data.fuels) {
         if (data.fuels[fuel].category == type_of_fuel)
             return fuel;
     }
