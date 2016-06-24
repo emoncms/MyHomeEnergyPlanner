@@ -225,14 +225,8 @@ var openbem = {
                 frequency: data.applianceCarbonCoop.list[z].frequency,
                 "reference_quantity": data.applianceCarbonCoop.list[z]["reference_quantity"],
                 'type_of_fuel': data.applianceCarbonCoop.list[z]['type_of_fuel'],
-                efficiency: data.applianceCarbonCoop.list[z].efficiency
-                        //electric_fraction: data.applianceCarbonCoop.list[z].electric_fraction,
-                        //dhw_fraction: data.applianceCarbonCoop.list[z].dhw_fraction,
-                        //gas_fraction: data.applianceCarbonCoop.list[z].gas_fraction
-                        /*primary_energy_total: data.applianceCarbonCoop.list[z].primary_energy_total,
-                         primary_energy_m2: data.applianceCarbonCoop.list[z].primary_energy_m2,
-                         co2_total: data.applianceCarbonCoop.list[z].co2_total,
-                         co2_m2: data.applianceCarbonCoop.list[z].co2_m2*/
+                efficiency: data.applianceCarbonCoop.list[z].efficiency,
+                fuel:data.applianceCarbonCoop.list[z].fuel
             };
         }
 
