@@ -1117,9 +1117,11 @@ calc.LAC_SAP = function (data)
             data.gains_W["Lighting"] = GL_monthly;
             data.gains_W["Lighting"] = [97.18, 86.32, 70.2, 53.14, 39.73, 33.54, 36.24, 47.11, 63.22, 80.28, 93.7, 99.08];
             data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum, monthly: EL_monthly};
+            data.LAC.fuels_lighting.forEach(function (fuel_item) {
+                fuel_item.system_efficiency = 1;
+                fuel_item.fuel_input = data.energy_requirements.lighting.quantity * fuel_item.fraction * fuel_item.system_efficiency;
+            });
             data.fuel_requirements.lighting = data.LAC.fuels_lighting;
-            for (index in data.fuel_requirements.lighting)
-                data.fuel_requirements.lighting[index].system_efficiency = 1;
         }
 
         /*   if (data.fuel_requirements.lighting == undefined) {
@@ -1153,9 +1155,11 @@ calc.LAC_SAP = function (data)
     if (EA > 0 && data.LAC_calculation_type == 'SAP') {
         data.gains_W["Appliances"] = GA_monthly;
         data.energy_requirements.appliances = {name: "Appliances", quantity: EA, monthly: EA_monthly};
+        data.LAC.fuels_appliances.forEach(function (fuel_item) {
+            fuel_item.system_efficiency = 1;
+            fuel_item.fuel_input = data.energy_requirements.appliances.quantity * fuel_item.fraction * fuel_item.system_efficiency;
+        });
         data.fuel_requirements.appliances = data.LAC.fuels_appliances;
-        for (index in data.fuel_requirements.appliances)
-            data.fuel_requirements.appliances[index].system_efficiency = 1;
     }
 
     data.LAC.EA = EA;
@@ -1179,9 +1183,11 @@ calc.LAC_SAP = function (data)
     if (GC > 0 && data.LAC_calculation_type == 'SAP') {
         data.gains_W["Cooking"] = GC_monthly;
         data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC, monthly: data.LAC.EC_monthly};
+        data.LAC.fuels_cooking.forEach(function (fuel_item) {
+            fuel_item.system_efficiency = 1;
+            fuel_item.fuel_input = data.energy_requirements.cooking.quantity * fuel_item.fraction * fuel_item.system_efficiency;
+        });
         data.fuel_requirements.cooking = data.LAC.fuels_cooking;
-        for (index in data.fuel_requirements.cooking)
-            data.fuel_requirements.cooking[index].system_efficiency = 1;
     }
 
     data.LAC.GC = data.LAC.EC;
