@@ -15,7 +15,7 @@
 <div id="fuel_requirements" class="page">
 
     <hr>
-    <h3>Energy Requirements</h3>
+    <h3>Fuel Requirements</h3>
     <hr>
 
     <table class="table">
@@ -25,28 +25,26 @@
             <tr style="background-color:#eee">
                 <th><span key="data.energy_requirements.template.name"></span></th>
                 <th></th>
-                <th><span key="data.energy_requirements.template.quantity" dp=0></span> kWh/year</th>
+                <th></th>
                 <th></th>
                 <th></th>
             </tr>
 
             <tr>
-                <td style="text-align:left">Supplied by:</td>
-                <td>Fraction</td>
-                <td>Demand</td>
-                <td>System efficiency</td>
-                <td>Fuel input</td>
+                <th style="text-align:left">Supplied by:</th>
+                <th>Fraction</th>
+                <th>Demand: <span key="data.energy_requirements.template.quantity" dp=2></span> kWh/year</th>
+                <th>Fuel input: <span key="data.fuel_requirements.template.quantity" dp=2></span> kWh/year</th>
             </tr>
 
         </tbody>
 
         <tbody id="suppliedby-template" style="display:none">
             <tr>
-                <td style="text-align:left"><span key="data.fuel_requirements.template.x.fuel"></span></td>
-                <td class="fraction template"><span key="data.fuel_requirements.template.x.fraction" dp=2 style="width:60px"/></td>
-                <td><span key="data.fuel_requirements.template.x.demand" dp=0></span> kWh/year</td>
-                <td><span key="data.fuel_requirements.template.x.system_efficiency" dp=2></span></td>
-                <td><span key="data.fuel_requirements.template.x.fuelinput" dp=0></span> kWh/year</td>
+                <td style="text-align:left"><span key="data.fuel_requirements.template.list.x.fuel"></span></td>
+                <td class="fraction template.list"><span key="data.fuel_requirements.template.list.x.fraction" dp=2 style="width:60px"/></td>
+                <td><span key="data.fuel_requirements.template.list.x.demand" dp=2></span> kWh/year</td>
+                <td><span key="data.fuel_requirements.template.list.x.fuelinput" dp=2></span> kWh/year</td>
             </tr>
         </tbody>
 
@@ -64,7 +62,7 @@
 
                     <tr style="background-color:#eee">
                         <th>Renewable Generation</th>
-                        <th><span key="data.generation.total_generation" dp=0></span> kWh/year</th>
+                        <th><span key="data.generation.total_generation" dp=2></span> kWh/year</th>
                         <th style="text-align:right"></th>
                     </tr>
 
@@ -82,8 +80,8 @@
                         <td style="text-align:left">
                             <span key="data.generation.template.x.name"></span>
                         </td>
-                        <td><span key="data.generation.template.x.quantity" dp=0></span> kWh/year</td>
-                        <td><span type="text" key="data.generation.template.x.CO2" dp="0" style="width:120px"/></td>
+                        <td><span key="data.generation.template.x.quantity" dp=2></span> kWh/year</td>
+                        <td><span type="text" key="data.generation.template.x.CO2" dp="2" style="width:120px"/></td>
 
                     </tr>
                 </tbody>
@@ -112,17 +110,17 @@
             <tbody id="fuel_totals_template" style="display:none">
                 <tr>
                     <td style="text-align:left"><span key="data.fuel_totals.z.name"></span></td>
-                    <td><span key="data.fuel_totals.z.quantity" dp=0></span> kWh</td>
+                    <td><span key="data.fuel_totals.z.quantity" dp=2></span> kWh</td>
 
                     <td>x<input type="text" key="data.fuels.f.co2factor" value=0 style="width:60px"/></td>
-                    <td><span key="data.fuel_totals.z.annualco2" dp=0></span> kg</td>
+                    <td><span key="data.fuel_totals.z.annualco2" dp=2></span> kg</td>
 
                     <td>x<input type="text" key="data.fuels.f.primaryenergyfactor" value=0 style="width:60px"/></td>
-                    <td><span key="data.fuel_totals.z.primaryenergy" dp=0></span> kWh</td>
+                    <td><span key="data.fuel_totals.z.primaryenergy" dp=2></span> kWh</td>
 
                     <td><input type="text" key="data.fuels.f.fuelcost" value=0 style="width:60px"/>  p/kWh</td>
                     <td><input type="text" key="data.fuels.f.standingcharge" value=0 style="width:60px"/>  £</td>
-                    <td><span key="data.fuel_totals.z.annualcost" dp=0></span>  £</td>
+                    <td><span key="data.fuel_totals.z.annualcost" dp=2></span>  £</td>
                 </tr>
             </tbody>
 
@@ -137,7 +135,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><b>£<span key="data.total_cost" dp=0></span></b> (<span key="data.SAP.rating" dp=0></span>)</td>
+                <td><b>£<span key="data.total_cost" dp=2></span></b> (<span key="data.SAP.rating" dp=2></span>)</td>
             </tr>
 
             <tr>
@@ -149,7 +147,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td id="fit_income"><b>£<span key="data.total_income" dp=0></span></b></td>
+                <td id="fit_income"><b>£<span key="data.total_income" dp=2></span></b></td>
             </tr>
 
             <tr>
@@ -161,7 +159,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td><b>£<span key="data.net_cost" dp=0></span></b></td>
+                <td><b>£<span key="data.net_cost" dp=2></span></b></td>
             </tr>
         </table>    
 </div>

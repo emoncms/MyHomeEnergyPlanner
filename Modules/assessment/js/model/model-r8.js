@@ -87,11 +87,11 @@ calc.start = function (data)
     data.annual_losses_kWh_m2 = {};
     data.energy_requirements = {};
     data.fuel_requirements = {
-        lighting: [],
-        cooking: [],
-        appliances: [],
-        waterheating: [],
-        space_heating: []
+        lighting: {quantity: 0, list: []},
+        cooking: {quantity: 0, list: []},
+        appliances: {quantity: 0, list: []},
+        waterheating: {quantity: 0, list: []},
+        space_heating: {quantity: 0, list: []}
     };
     data.fuel_totals = {};
     data.mean_internal_temperature = {};
@@ -964,37 +964,37 @@ calc.energy_systems = function (data)
 //---------------------------------------------------------------------------------------------
 calc.fuel_requirements = function (data) {
     //Calculate fuel requirements
-    for (z in data.energy_requirements)
+    for (z in data.fuel_requirements)
     {
-        var quantity = data.energy_requirements[z].quantity;
-        var quantity_monthly = data.energy_requirements[z].monthly;
-        for (x in data.fuel_requirements[z]) {
-            data.fuel_requirements[z][x].demand = quantity * data.fuel_requirements[z][x].fraction;
-            data.fuel_requirements[z][x].demand_monthly = [];
-            for (m = 0; m < 12; m++)
-                data.fuel_requirements[z][x].demand_monthly[m] = quantity_monthly[m] * data.fuel_requirements[z][x].fraction;
+        var quantity = data.fuel_requirements[z].quantity;
+        //var quantity_monthly = data.energy_requirements[z].monthly;
+        for (x in data.fuel_requirements[z].list) {
+            //data.fuel_requirements[z].list[x].demand = quantity * data.fuel_requirements[z].list[x].fraction;
+            data.fuel_requirements[z].list[x].demand_monthly = [];
+            // for (m = 0; m < 12; m++)
+            // data.fuel_requirements[z].list[x].demand_monthly[m] = quantity_monthly[m] * data.fuel_requirements[z].list[x].fraction;
         }
     }
 
 // Fuel totals
     data.fuel_totals = {}; // remove this line when we get rif of energy_systems
-    for (z in data.energy_requirements)
+    for (z in data.fuel_requirements)
     {
-        for (x in data.fuel_requirements[z])
+        for (x in data.fuel_requirements[z].list)
         {
-            data.fuel_requirements[z][x].fuelinput_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            data.fuel_requirements[z].list[x].fuelinput_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             for (m = 0; m < 12; m++) {
                 if (z == 'waterheating')
-                    data.fuel_requirements[z][x].fuelinput_monthly[m] = data.fuel_requirements[z][x].demand_monthly[m] / data.fuel_requirements[z][x].system_efficiency_monthly[m];
+                    data.fuel_requirements[z].list[x].fuelinput_monthly[m] = data.fuel_requirements[z].list[x].demand_monthly[m] / data.fuel_requirements[z].list[x].system_efficiency_monthly[m];
                 else
-                    data.fuel_requirements[z][x].fuelinput_monthly[m] = data.fuel_requirements[z][x].demand_monthly[m] / data.fuel_requirements[z][x].system_efficiency;
+                    data.fuel_requirements[z].list[x].fuelinput_monthly[m] = data.fuel_requirements[z].list[x].demand_monthly[m] / data.fuel_requirements[z].list[x].system_efficiency;
             }
 
-            data.fuel_requirements[z][x].fuelinput = data.fuel_requirements[z][x].demand / data.fuel_requirements[z][x].system_efficiency;
-            var fuel = data.fuel_requirements[z][x].fuel;
+            data.fuel_requirements[z].list[x].fuelinput = data.fuel_requirements[z].list[x].demand / data.fuel_requirements[z].list[x].system_efficiency;
+            var fuel = data.fuel_requirements[z].list[x].fuel;
             if (data.fuel_totals[fuel] == undefined)
                 data.fuel_totals[fuel] = {name: fuel, quantity: 0};
-            data.fuel_totals[fuel].quantity += data.fuel_requirements[z][x].fuelinput;
+            data.fuel_totals[fuel].quantity += data.fuel_requirements[z].list[x].fuelinput;
         }
     }
 
@@ -1044,8 +1044,8 @@ calc.SAP = function (data)
     var dataSAP = JSON.parse(JSON.stringify(data));
     dataSAP.total_cost = 0;
     dataSAP.primary_energy_use = 0;
-    dataSAP.fuel_requirements.appliances = [];
-    dataSAP.fuel_requirements.cooking = [];
+    dataSAP.fuel_requirements.appliances = {quantity: {}, list: []};
+    dataSAP.fuel_requirements.cooking = {quantity: {}, list: []};
     dataSAP = calc.fuel_requirements(dataSAP);
     // SAP
     data.SAP = {};
@@ -1068,8 +1068,7 @@ calc.SAP = function (data)
         data.SAP.EI_rating = 100 - 1.34 * CF;
     return data;
 };
-calc.LAC_SAP = function (data)
-{
+calc.LAC_SAP = function (data) {
     if (data.LAC == undefined)
         data.LAC = {};
     if (data.LAC.LLE == undefined)
@@ -1117,11 +1116,14 @@ calc.LAC_SAP = function (data)
             data.gains_W["Lighting"] = GL_monthly;
             data.gains_W["Lighting"] = [97.18, 86.32, 70.2, 53.14, 39.73, 33.54, 36.24, 47.11, 63.22, 80.28, 93.7, 99.08];
             data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum, monthly: EL_monthly};
+            var total_fuel_input = 0;
             data.LAC.fuels_lighting.forEach(function (fuel_item) {
                 fuel_item.system_efficiency = 1;
-                fuel_item.fuel_input = data.energy_requirements.lighting.quantity * fuel_item.fraction * fuel_item.system_efficiency;
+                fuel_item.fuel_input = data.energy_requirements.lighting.quantity * fuel_item.fraction / fuel_item.system_efficiency;
+                total_fuel_input += fuel_item.fuel_input;
             });
-            data.fuel_requirements.lighting = data.LAC.fuels_lighting;
+            data.fuel_requirements.lighting.list = data.LAC.fuels_lighting;
+            data.fuel_requirements.lighting.quantity = total_fuel_input;
         }
 
         /*   if (data.fuel_requirements.lighting == undefined) {
@@ -1155,11 +1157,14 @@ calc.LAC_SAP = function (data)
     if (EA > 0 && data.LAC_calculation_type == 'SAP') {
         data.gains_W["Appliances"] = GA_monthly;
         data.energy_requirements.appliances = {name: "Appliances", quantity: EA, monthly: EA_monthly};
+        var total_fuel_input = 0;
         data.LAC.fuels_appliances.forEach(function (fuel_item) {
             fuel_item.system_efficiency = 1;
-            fuel_item.fuel_input = data.energy_requirements.appliances.quantity * fuel_item.fraction * fuel_item.system_efficiency;
+            fuel_item.fuel_input = data.energy_requirements.appliances.quantity * fuel_item.fraction / fuel_item.system_efficiency;
+            total_fuel_input += fuel_item.fuel_input;
         });
-        data.fuel_requirements.appliances = data.LAC.fuels_appliances;
+        data.fuel_requirements.appliances.list = data.LAC.fuels_appliances;
+        data.fuel_requirements.appliances.quantity = total_fuel_input;
     }
 
     data.LAC.EA = EA;
@@ -1183,11 +1188,14 @@ calc.LAC_SAP = function (data)
     if (GC > 0 && data.LAC_calculation_type == 'SAP') {
         data.gains_W["Cooking"] = GC_monthly;
         data.energy_requirements.cooking = {name: "Cooking", quantity: data.LAC.EC, monthly: data.LAC.EC_monthly};
+        var total_fuel_input = 0;
         data.LAC.fuels_cooking.forEach(function (fuel_item) {
             fuel_item.system_efficiency = 1;
-            fuel_item.fuel_input = data.energy_requirements.cooking.quantity * fuel_item.fraction * fuel_item.system_efficiency;
+            fuel_item.fuel_input = data.energy_requirements.cooking.quantity * fuel_item.fraction / fuel_item.system_efficiency;
+            total_fuel_input += fuel_item.fuel_input;
         });
-        data.fuel_requirements.cooking = data.LAC.fuels_cooking;
+        data.fuel_requirements.cooking.list = data.LAC.fuels_cooking;
+        data.fuel_requirements.cooking.quantity = total_fuel_input;
     }
 
     data.LAC.GC = data.LAC.EC;
@@ -1460,7 +1468,8 @@ calc.applianceCarbonCoop = function (data) {
     data.applianceCarbonCoop.energy_demand_by_type_of_fuel = {cooking: {}, appliances: {}, total: {}};
     data.applianceCarbonCoop.gains_W = [];
     data.applianceCarbonCoop.gains_W_monthly = {};
-    // 1. Energy demand
+    data.applianceCarbonCoop.fuel_input_total = {appliances: 0, cooking: 0};
+    // 1. Energy demand and fuel_input
     // We do the calculations for each appliance in the list
     for (z in data.applianceCarbonCoop.list) {
         var item = data.applianceCarbonCoop.list[z];
@@ -1468,6 +1477,7 @@ calc.applianceCarbonCoop = function (data) {
             item.energy_demand = 0;
         // Energy demand calculation
         item.energy_demand = item.number_used * item.norm_demand * item.utilisation_factor * item.reference_quantity * item.frequency;
+        item.fuel_input = item.energy_demand / item.efficiency;
         if (item.type_of_fuel == "Electricity" && item.a_plus_rated === 1)
             item.energy_demand = 0.75 * item.energy_demand;
         // Results: totals from all the appliances
@@ -1524,23 +1534,27 @@ calc.applianceCarbonCoop = function (data) {
     // Add fuels
     var f_requirements = {cooking: {}, appliances: {}};
     if (data.LAC_calculation_type == 'carboncoop_SAPlighting') {
+        // Sor them by 'cooking' or 'appliances' and 'fuel'
         data.applianceCarbonCoop.list.forEach(function (item) {
             var category = item.category == 'Cooking' ? 'cooking' : 'appliances';
             if (f_requirements[category][item.fuel] == undefined)
-                f_requirements[category][item.fuel] = {demand: 0, fraction: 0, fuel: item.fuel, system_efficiency: item.efficiency};
+                f_requirements[category][item.fuel] = {demand: 0, fraction: 0, fuel: item.fuel, system_efficiency: item.efficiency, fuel_input: 0};
             f_requirements[category][item.fuel].demand += item.energy_demand;
+            f_requirements[category][item.fuel].fuel_input += item.fuel_input;
+            data.applianceCarbonCoop.fuel_input_total[category] += item.fuel_input;
         });
     }
     // Add fractions
     for (category in ({appliances: {}, cooking: {}})) {
         for (var fuel in f_requirements[category]) {
-            f_requirements[category][fuel].fraction = f_requirements[category][fuel].demand / data.energy_requirements[category].quantity;
+            f_requirements[category][fuel].fraction = f_requirements[category][fuel].demand / data.applianceCarbonCoop.fuel_input_total[category];
         }
     }
     // Copy over to data.fuel_requirements
     for (var category in f_requirements) {
+        data.fuel_requirements[category].quantity = data.applianceCarbonCoop.fuel_input_total[category];
         for (fuel in f_requirements[category]) {
-            data.fuel_requirements[category].push(f_requirements[category][fuel]);
+            data.fuel_requirements[category].list.push(f_requirements[category][fuel]);
         }
     }
 };
@@ -1555,12 +1569,15 @@ calc.appliancelist = function (data) {
     if (data.appliancelist.appliances == undefined)
         data.appliancelist.appliances = {};
     data.appliancelist.lighting.totalwh = 0;
+    data.appliancelist.lighting.total_fuel_input = 0;
     data.appliancelist.lighting.monthlykwh = [];
     data.appliancelist.lighting.gains_W_monthly = [];
     data.appliancelist.cooking.totalwh = 0;
+    data.appliancelist.cooking.total_fuel_input = 0;
     data.appliancelist.cooking.monthlykwh = [];
     data.appliancelist.cooking.gains_W_monthly = [];
     data.appliancelist.appliances.totalwh = 0;
+    data.appliancelist.appliances.total_fuel_input = 0;
     data.appliancelist.appliances.monthlykwh = [];
     data.appliancelist.appliances.gains_W_monthly = [];
     for (z in data.appliancelist.list) {
@@ -1569,11 +1586,14 @@ calc.appliancelist = function (data) {
         else
             var category = 'appliances';
         data.appliancelist.list[z].energy = data.appliancelist.list[z].power * data.appliancelist.list[z].hours;
+        data.appliancelist.list[z].fuel_input = data.appliancelist.list[z].energy / data.appliancelist.list[z].efficiency;
         data.appliancelist[category].totalwh += data.appliancelist.list[z].energy;
+        data.appliancelist[category].total_fuel_input += data.appliancelist.list[z].fuel_input;
     }
 
     for (category in {'lighting': '', 'appliances': '', 'cooking': ''}) {
         data.appliancelist[category].annualkwh = data.appliancelist[category].totalwh * 365 * 0.001;
+        data.appliancelist[category].annual_fuel_input_kwh = data.appliancelist[category].total_fuel_input * 365 * 0.001;
         for (m = 0; m < 12; m++)
             data.appliancelist[category].monthlykwh[m] = data.appliancelist[category].annualkwh * datasets.table_1a[m] / 365;
         data.appliancelist[category].gains_W = data.appliancelist[category].totalwh / 24.0;
@@ -1589,21 +1609,25 @@ calc.appliancelist = function (data) {
     // Fuel requirements
     if (data.LAC_calculation_type == 'detailedlist') {
         var f_requirements = {'lighting': {}, 'appliances': {}, 'cooking': {}};
+        var fuel_input_total = {'lighting': 0, 'appliances': 0, 'cooking': 0};
         data.appliancelist.list.forEach(function (item) {
             if (f_requirements[item.category][item.fuel] == undefined)
-                f_requirements[item.category][item.fuel] = {demand: 0, fraction: 0, fuel: item.fuel, system_efficiency: item.efficiency};
+                f_requirements[item.category][item.fuel] = {demand: 0, fraction: 0, fuel: item.fuel, system_efficiency: item.efficiency, fuel_input: 0};
             f_requirements[item.category][item.fuel].demand += 365 * item.energy / 1000;
+            f_requirements[item.category][item.fuel].fuel_input += 365 * item.fuel_input / 1000;
+            fuel_input_total[item.category] += 365 * item.fuel_input / 1000;
         });
         // Add fractions
         for (category in {appliances: {}, cooking: {}, lighting: {}}) {
             for (var fuel in f_requirements[category]) {
-                f_requirements[category][fuel].fraction = f_requirements[category][fuel].demand / data.energy_requirements[category].quantity;
+                f_requirements[category][fuel].fraction = f_requirements[category][fuel].fuel_input / fuel_input_total[category];
             }
         }
         // Copy over to data.fuel_requirements
         for (var category in f_requirements) {
             for (fuel in f_requirements[category]) {
-                data.fuel_requirements[category].push(f_requirements[category][fuel]);
+                data.fuel_requirements[category].list.push(f_requirements[category][fuel]);
+                data.fuel_requirements[category].quantity = fuel_input_total[category];
             }
         }
     }

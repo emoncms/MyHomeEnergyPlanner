@@ -7,7 +7,7 @@ else
 
 function LAC_initUI() {
     //data.appliancelist.list = [];
-   //update();
+    //update();
 
     //LAC SAP
     $('#LAC-lighting-fuels').html('');
@@ -41,19 +41,6 @@ function LAC_initUI() {
     $('.appliances-Carbon-Coop-category').hide();
     for (z in data.applianceCarbonCoop.list)
         add_applianceCarbonCoop(z);
-    /*var library = appliancesCarbonCoop; // in path/assesment/js/model/appliancesCarbonCoop-r1.js
-     for (category in library) {
-     var first = true;
-     for (appliance in library[category]) {
-     if (first === true) {
-     var row = "<tr><td>" + category + "</td><td>" + appliance + "</td><td><button class='add-element-CarbonCoop btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
-     first = false;
-     }
-     else
-     var row = "<tr><td></td><td>" + appliance + "</td><td><button class='add-element-CarbonCoop btn' style='margin-left:20px' cat='" + category + "' app='" + appliance + "' >use</button></td></tr>";
-     $("#library_table-CarbonCoop").append(row);
-     }
-     }*/
 
     //Nothing to do to init the SAP div
 
@@ -75,13 +62,13 @@ function LAC_UpdateUI() {
 }
 
 $('#openbem').on('change', '#LAC_calculation_type', function () {
-    show_LAC_divs($('#LAC_calculation_type').val());    
+    show_LAC_divs($('#LAC_calculation_type').val());
     library_helper.type = 'appliances_and_cooking';
 });
 $("#add-item-detailedlist").click(function () {
     var size = data.appliancelist.list.length;
     var name = "Item " + (size + 1);
-    data.appliancelist.list.push({name: name, category: 'lighting', power: 0, hours: 0, energy: 0, fuel: 'Standard Tariff', efficiency: 1});
+    data.appliancelist.list.push({name: name, category: 'lighting', power: 0, hours: 0, energy: 0, fuel: 'Standard Tariff', efficiency: 1, fuel_input: 0});
     add_applianceDetailedList(size);
 
     update();
@@ -113,7 +100,7 @@ $("#applianceCarbonCoop").on('click', '.delete-appliance', function () {
 $('#openbem').on('click', '.add_LAC_fuel', function () { // Fix index
     var type = $(this).attr('type');
     var array_name = 'fuels_' + type;
-    data.LAC[array_name].push({fuel: 'Standard Tariff', fraction: 0,fuel_input:0});
+    data.LAC[array_name].push({fuel: 'Standard Tariff', fraction: 0, fuel_input: 0});
     var index = data.LAC[array_name].length - 1;
     var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0"></td><td><span key="data.LAC.fuels_' + type + '.' + index + 'fuel_input"/>    </td></tr>'
     $('#LAC-' + type + '-fuels').append(out);
@@ -149,6 +136,7 @@ function add_applianceDetailedList(z) {
     $("#appliancelist [key='data.appliancelist.list.z.fuel']").attr('key', 'data.appliancelist.list.' + z + '.fuel');
     $("#appliancelist [key='data.appliancelist.list.z.efficiency']").attr('key', 'data.appliancelist.list.' + z + '.efficiency');
     $("#appliancelist [key='data.appliancelist.list.z.energy']").attr('key', 'data.appliancelist.list.' + z + '.energy');
+    $("#appliancelist [key='data.appliancelist.list.z.fuel_input']").attr('key', 'data.appliancelist.list.' + z + '.fuel_input');
 }
 function add_applianceCarbonCoop(z) {
     var category = data.applianceCarbonCoop.list[z].category;
@@ -179,8 +167,12 @@ function add_applianceCarbonCoop(z) {
     out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.reference_quantity" style="width:40px" /> </td>';
     out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.type_of_fuel" style="width:40px" /> </td>';
     out += '<td><select key="data.applianceCarbonCoop.list.' + z + '.fuel" class="fuels" category="' + data.applianceCarbonCoop.list[z].type_of_fuel + '" style="width:150px" /> </td>';
-    out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.efficiency" style="width:40px" /> </td>';
     out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.energy_demand" style="width:40px" /></td>';
+    if (data.applianceCarbonCoop.list[z].type_of_fuel == "Electricity")
+        out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.efficiency" style="width:40px" /> </td>';
+    else
+        out += '<td><input type="number" max="1" step="0.01" key="data.applianceCarbonCoop.list.' + z + '.efficiency" style="width:40px" /> </td>';
+    out += '<td><span dp="2" key="data.applianceCarbonCoop.list.' + z + '.fuel_input" style="width:40px" /></td>';
     out += '<td><i index="' + z + '" class="delete-appliance icon-trash" style="cursor:pointer"></i></td>';
     out += '</tr>';
     $(table_selector).append(out);

@@ -64,8 +64,9 @@
                 <th>Power (W)</th>
                 <th>Use time (hours per day)</th>
                 <th>Fuel</th>
-                <th>Efficiency</th>
                 <th>Daily energy (Wh)</th>
+                <th>Efficiency</th>
+                <th>Daily fuel input (Wh)</th>
             </tr>
             <tbody id="template-detailedlist" style="display:none">
                 <tr>
@@ -78,8 +79,9 @@
                     <td><input type="number" value="0" key="data.appliancelist.list.z.power" style="width:60px" /></td>
                     <td><input type="number" value="0" key="data.appliancelist.list.z.hours" style="width:60px" /></td>
                     <td><select class="fuels" key="data.appliancelist.list.z.fuel"></select></td>
-                    <td><input type="number" value="1" max="1" step="0.01" key="data.appliancelist.list.z.efficiency" style="width:60px" /></td>
                     <td><span key="data.appliancelist.list.z.energy"></span> Wh</th>
+                    <td><input type="number" value="1" max="1" step="0.01" key="data.appliancelist.list.z.efficiency" style="width:60px" /></td>
+                    <td><span dp="2" key="data.appliancelist.list.z.fuel_input"/></td>
                 </tr>
             </tbody>
             <tbody id="appliancelist"></tbody>
@@ -97,10 +99,10 @@
 
         <h4>Totals</h4>
         <table class="table">
-            <tr><th></th><th>Total annual energy demand (kWh)</th></tr>
-            <tr><td>Appliances: </td><td><span key="data.appliancelist.appliances.annualkwh" dp="2"></span></td></tr>
-            <tr><td>Cooking: </td><td><span key="data.appliancelist.cooking.annualkwh"></span></td></tr>
-            <tr><td>Lighting: </td><td><span key="data.appliancelist.lighting.annualkwh"></span></td></tr></table>
+            <tr><th></th><th>Total annual energy demand (kWh)</th><th>Total annual fuel input (kWh)</th></tr>
+            <tr><td>Appliances: </td><td><span key="data.appliancelist.appliances.annualkwh" dp="2"></span></td><td><span key="data.appliancelist.appliances.annual_fuel_input_kwh" dp="2"></span></td></tr>
+            <tr><td>Cooking: </td><td><span key="data.appliancelist.cooking.annualkwh"></span></td><td><span key="data.appliancelist.cooking.annual_fuel_input_kwh" dp="2"></span></td></tr>
+            <tr><td>Lighting: </td><td><span key="data.appliancelist.lighting.annualkwh"></span></td><td><span dp="2" key="data.appliancelist.lighting.annual_fuel_input_kwh" dp="2"></span></td></tr></table>
     </div>
 
 
@@ -122,34 +124,13 @@
                 <th>Reference quantity</th>
                 <th>Type of fuel</th>
                 <th>Fuel</th>
-                <th>Efficiency</th>
-                <!--<th>Electric fraction</th>
-                <th>DHW fraction</th>
-                <th>GAS fraction</th>-->
-                <th>Energy demand (kWh)</th>      
+                <th>Energy demand (kWh)</th>  
+                <th>Efficiency  <i class="icon-question-sign" title="For electric items efficiency set to 1"/></th>
+                <th>Fuel input (kWh)</th>
                 <th></th>
             </tr>
 
-            <tbody id="template-CarbonCoop" style="display:none">
-
-                <tr>
-                    <td style="text-align:left"><input style="text-align:left; width:100px" type="text" key="data.applianceCarbonCoop.list.z.name" style="width:50px" /></td>
-                    <td><input type="number" key="data.applianceCarbonCoop.list.z.number_used" style="width:30px" /></td>
-                    <td><input type="checkbox" key="data.applianceCarbonCoop.list.z.a_plus_rated" /></td>
-                    <td><span key="data.applianceCarbonCoop.list.z.norm_demand"  style="width:40px" /> </td>
-                    <td><span key="data.applianceCarbonCoop.list.z.units" style="width:40px" /> </td>
-                    <td><span key="data.applianceCarbonCoop.list.z.utilisation_factor" style="width:40px" /> </td>
-                    <td><span key="data.applianceCarbonCoop.list.z.frequency" style="width:40px" /> </td>
-                    <td><span key="data.applianceCarbonCoop.list.z.reference_quantity" style="width:40px" /> </td>
-                    <td><span key="data.applianceCarbonCoop.list.z.type_of_fuel" style="width:40px" /> </td>
-                    <td><span key="data.applianceCarbonCoop.list.z.efficiency" style="width:40px" /> </td>
-                    <!--<td><span key="data.applianceCarbonCoop.list.z.electric_fraction" style="width:40px" /> </td>
-                    <td><span key="data.applianceCarbonCoop.list.z.dhw_fraction" style="width:40px" /> </td>
-                    <td><span key="data.applianceCarbonCoop.list.z.gas_fraction" style="width:40px" /> </td>-->
-                    <td><span key="data.applianceCarbonCoop.list.z.energy_demand" style="width:40px" /></td>
-                    <td><i index="z" class="delete-appliance icon-trash" style="cursor:pointer"></i>ToDo</td>
-                </tr>
-            </tbody>
+            
             <tbody id="applianceCarbonCoop-Computing" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Computing</b></td></tr></tbody>
             <tbody id="applianceCarbonCoop-Cooking" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Cooking</b></td></tr></tbody>
             <tbody id="applianceCarbonCoop-Food-storage" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Food storage</b></td></tr></tbody>
@@ -168,9 +149,9 @@
         </table>
         <h4>Totals</h4>
         <table class="table">
-            <tr><th></th><th>Total annual energy demand (kWh)</th></tr>
-            <tr><td>Appliances: </td><td><span key="data.applianceCarbonCoop.energy_demand_total.appliances" dp="2"></span></td></tr>
-            <tr><td>Cooking: </td><td><span key="data.applianceCarbonCoop.energy_demand_total.cooking"></span></td></tr>
+            <tr><th></th><th>Total annual energy demand (kWh)</th><th>Total annual fuel input (kWh)</th></tr>
+            <tr><td>Appliances: </td><td><span key="data.applianceCarbonCoop.energy_demand_total.appliances" dp="2"></span></td><td><span key="data.applianceCarbonCoop.fuel_input_total.appliances" dp="2"></span></td></tr>
+            <tr><td>Cooking: </td><td><span key="data.applianceCarbonCoop.energy_demand_total.cooking"></span></td><td><span key="data.applianceCarbonCoop.fuel_input_total.cooking" dp="2"></span></td></tr>
         </table>
 
     </div>

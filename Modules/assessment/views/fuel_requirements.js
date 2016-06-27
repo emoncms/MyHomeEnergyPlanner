@@ -8,9 +8,10 @@ function fuel_requirements_UpdateUI()
         $("#energyrequirements").append($("#energyrequirement-template").html());
         $("#energyrequirements [key='data.energy_requirements.template.name']").attr('key', 'data.energy_requirements.' + z + '.name');
         $("#energyrequirements [key='data.energy_requirements.template.quantity']").attr('key', 'data.energy_requirements.' + z + '.quantity');
+        $("#energyrequirements [key='data.fuel_requirements.template.quantity']").attr('key', 'data.fuel_requirements.' + z + '.quantity');
         $("#energyrequirements [eid=template]").attr('eid', z);
 
-        for (x in data.fuel_requirements[z])
+        for (x in data.fuel_requirements[z].list)
             add_fuel_requirement(z, x);
     }
 
@@ -21,7 +22,7 @@ function fuel_requirements_UpdateUI()
     }
     else {
         $('#generation-container').show();
-        $("#fit_income").html('<b>£<span key="data.total_income" dp=0></span></b>');
+        $("#fit_income").html('<b>£<span key="data.total_income" dp="2"></span></b>');
         for (z in data.generation.systems) {
             $('#generation').append($('#suppliedby-generation-template').html());
             $("#generation [key='data.generation.template.x.name']").attr('key', 'data.generation.systems.' + z + '.name');
@@ -56,13 +57,12 @@ function fuel_requirements_initUI()
 function add_fuel_requirement(z, x) // z = energy_requirement  --  x = fuel_requirement
 {
     $("#energyrequirements").append($("#suppliedby-template").html());
-    var prefixA = "#energyrequirements [key='data.fuel_requirements.template.x";
-    var prefixB = 'data.fuel_requirements.' + z + '.' + x;
+    var prefixA = "#energyrequirements [key='data.fuel_requirements.template.list.x";
+    var prefixB = 'data.fuel_requirements.' + z + '.list.' + x;
     
     $(prefixA + ".fuel']").attr('key', prefixB + '.fuel');
     $(prefixA + ".fraction']").attr('key', prefixB + '.fraction');
     $(prefixA + ".demand']").attr('key', prefixB + '.demand');
-    $(prefixA + ".system_efficiency']").attr('key', prefixB + '.system_efficiency');
     $(prefixA + ".fuelinput']").attr('key', prefixB + '.fuelinput');
 
     if (z == 'solarpv' || z == 'wind' || z == 'hydro' || z == 'solarpv2') {
