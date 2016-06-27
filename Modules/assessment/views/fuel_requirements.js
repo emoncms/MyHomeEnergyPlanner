@@ -63,7 +63,7 @@ function add_fuel_requirement(z, x) // z = energy_requirement  --  x = fuel_requ
     $(prefixA + ".fuel']").attr('key', prefixB + '.fuel');
     $(prefixA + ".fraction']").attr('key', prefixB + '.fraction');
     $(prefixA + ".demand']").attr('key', prefixB + '.demand');
-    $(prefixA + ".fuelinput']").attr('key', prefixB + '.fuelinput');
+    $(prefixA + ".fuel_input']").attr('key', prefixB + '.fuel_input');
 
     if (z == 'solarpv' || z == 'wind' || z == 'hydro' || z == 'solarpv2') {
         $('#energyrequirements .fraction.template').html('');

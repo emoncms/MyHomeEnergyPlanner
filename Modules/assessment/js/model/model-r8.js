@@ -982,19 +982,19 @@ calc.fuel_requirements = function (data) {
     {
         for (x in data.fuel_requirements[z].list)
         {
-            data.fuel_requirements[z].list[x].fuelinput_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            data.fuel_requirements[z].list[x].fuel_input_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             for (m = 0; m < 12; m++) {
                 if (z == 'waterheating')
-                    data.fuel_requirements[z].list[x].fuelinput_monthly[m] = data.fuel_requirements[z].list[x].demand_monthly[m] / data.fuel_requirements[z].list[x].system_efficiency_monthly[m];
+                    data.fuel_requirements[z].list[x].fuel_input_monthly[m] = data.fuel_requirements[z].list[x].demand_monthly[m] / data.fuel_requirements[z].list[x].system_efficiency_monthly[m];
                 else
-                    data.fuel_requirements[z].list[x].fuelinput_monthly[m] = data.fuel_requirements[z].list[x].demand_monthly[m] / data.fuel_requirements[z].list[x].system_efficiency;
+                    data.fuel_requirements[z].list[x].fuel_input_monthly[m] = data.fuel_requirements[z].list[x].demand_monthly[m] / data.fuel_requirements[z].list[x].system_efficiency;
             }
 
-            data.fuel_requirements[z].list[x].fuelinput = data.fuel_requirements[z].list[x].demand / data.fuel_requirements[z].list[x].system_efficiency;
+            data.fuel_requirements[z].list[x].fuel_input = data.fuel_requirements[z].list[x].demand / data.fuel_requirements[z].list[x].system_efficiency;
             var fuel = data.fuel_requirements[z].list[x].fuel;
             if (data.fuel_totals[fuel] == undefined)
                 data.fuel_totals[fuel] = {name: fuel, quantity: 0};
-            data.fuel_totals[fuel].quantity += data.fuel_requirements[z].list[x].fuelinput;
+            data.fuel_totals[fuel].quantity += data.fuel_requirements[z].list[x].fuel_input;
         }
     }
 
@@ -1119,6 +1119,7 @@ calc.LAC_SAP = function (data) {
             var total_fuel_input = 0;
             data.LAC.fuels_lighting.forEach(function (fuel_item) {
                 fuel_item.system_efficiency = 1;
+                fuel_item.demand = data.energy_requirements.lighting.quantity * fuel_item.fraction;
                 fuel_item.fuel_input = data.energy_requirements.lighting.quantity * fuel_item.fraction / fuel_item.system_efficiency;
                 total_fuel_input += fuel_item.fuel_input;
             });
@@ -1128,7 +1129,7 @@ calc.LAC_SAP = function (data) {
 
         /*   if (data.fuel_requirements.lighting == undefined) {
          data.fuel_requirements.lighting = [];
-         data.fuel_requirements.lighting[0] = {fuel: 'Standard Tariff', fraction: 1, fuelinput: 0, sytem_efficiency: 1};
+         data.fuel_requirements.lighting[0] = {fuel: 'Standard Tariff', fraction: 1, fuel_input: 0, sytem_efficiency: 1};
          }*/
     }
 
@@ -1160,6 +1161,7 @@ calc.LAC_SAP = function (data) {
         var total_fuel_input = 0;
         data.LAC.fuels_appliances.forEach(function (fuel_item) {
             fuel_item.system_efficiency = 1;
+            fuel_item.demand = data.energy_requirements.appliances.quantity * fuel_item.fraction;
             fuel_item.fuel_input = data.energy_requirements.appliances.quantity * fuel_item.fraction / fuel_item.system_efficiency;
             total_fuel_input += fuel_item.fuel_input;
         });
@@ -1191,6 +1193,7 @@ calc.LAC_SAP = function (data) {
         var total_fuel_input = 0;
         data.LAC.fuels_cooking.forEach(function (fuel_item) {
             fuel_item.system_efficiency = 1;
+            fuel_item.demand = data.energy_requirements.cooking.quantity * fuel_item.fraction;
             fuel_item.fuel_input = data.energy_requirements.cooking.quantity * fuel_item.fraction / fuel_item.system_efficiency;
             total_fuel_input += fuel_item.fuel_input;
         });
