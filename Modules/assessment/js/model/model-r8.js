@@ -1480,9 +1480,9 @@ calc.applianceCarbonCoop = function (data) {
             item.energy_demand = 0;
         // Energy demand calculation
         item.energy_demand = item.number_used * item.norm_demand * item.utilisation_factor * item.reference_quantity * item.frequency;
-        item.fuel_input = item.energy_demand / item.efficiency;
         if (item.type_of_fuel == "Electricity" && item.a_plus_rated === 1)
             item.energy_demand = 0.75 * item.energy_demand;
+        item.fuel_input = item.energy_demand / item.efficiency;
         // Results: totals from all the appliances
         data.applianceCarbonCoop.energy_demand_total.total += item.energy_demand;
         if (data.applianceCarbonCoop.energy_demand_by_type_of_fuel[item.type_of_fuel] == undefined)
