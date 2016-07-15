@@ -48,14 +48,33 @@ function householdquestionnaire_UpdateUI() {
         }
         $('.remove-shower').on('click', function () {
             console.log(data.household['3b_extra_showers']);
-            data.household['3b_extra_showers'].splice($(this).attr('shower-id'),1);
+            data.household['3b_extra_showers'].splice($(this).attr('shower-id'), 1);
             console.log(data.household['3b_extra_showers']);
             update();
         })
-        
+
+    }
+}
+;
+
+function householdquestionnaire_initUI() {
+    data = project['master'];
+    if (data.household['3a_heatinghours_weekday_on1_hours'] == undefined) { // First time, we set deafualt SAP values
+        data.household['3a_heatinghours_weekday_on1_hours'] = 7;
+        data.household['3a_heatinghours_weekday_on1_mins'] = 0;
+        data.household['3a_heatinghours_weekday_off1_hours'] = 9;
+        data.household['3a_heatinghours_weekday_off1_mins'] = 0;
+    }
+    if (data.household['3a_heatinghours_weekday_on2_hours'] == undefined) { // First time, we set deafualt SAP values
+        data.household['3a_heatinghours_weekday_on2_hours'] = 16;
+        data.household['3a_heatinghours_weekday_on2_mins'] = 0;
+        data.household['3a_heatinghours_weekday_off2_hours'] = 23;
+        data.household['3a_heatinghours_weekday_off2_mins'] = 0;
+    }
+    if (data.household['3a_heatinghours_weekend_on1_hours'] == undefined) { // First time, we set deafualt SAP values
+        data.household['3a_heatinghours_weekend_on1_hours'] = 7;
+        data.household['3a_heatinghours_weekend_on1_mins'] = 0;
+        data.household['3a_heatinghours_weekend_off1_hours'] = 23;
+        data.household['3a_heatinghours_weekend_off1_mins'] = 0;
     }
 };
-
-function householdquestionnaire_initUI(){
-        data = project['master'];
-}
