@@ -18,20 +18,28 @@ function heating_UpdateUI()
 }
 
 function heating_initUI() {
+    console.log(data.measures);
     // Measures
     if (data.measures == undefined)
         data.measures = {};
     if (data.measures.water_heating == undefined)
         data.measures.water_heating = {};
+    if (data.measures.space_heating == undefined)
+        data.measures.space_heating = {};
 
     // Water heating
     add_water_usage(); // water efficiency
 
     $('#solarhotwater-link').prop('href', 'view?id=' + p.id + '#' + scenario + '/solarhotwater');
-    
+
     // Space heating
-    
-    
+    for (var day_type in data.temperature.hours_off) {
+        var total_hours = 0;
+        for (i in data.temperature.hours_off[day_type])
+            total_hours += data.temperature.hours_off[day_type][i];
+        $('#hours-off-' + day_type).html(total_hours);
+    }
+
     show_hide_if_master();
 }
 
@@ -65,7 +73,7 @@ $('#openbem').on('click', '.edit-item-water-usage', function () {
 });
 
 $('#openbem').on('click', '.apply-water-heating-measure', function () {
-    // Set variables in library_helper
+    //1. Set variables in library_helper
     library_helper.init();
     library_helper.type_of_measure = $(this).attr('type');
     if (library_helper.type_of_measure == 'water_usage')
@@ -76,7 +84,8 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
         library_helper.type = 'storage_type'; // we do this assingment in order to not break the populationn of the library selects in the modal
     else
         library_helper.type = library_helper.type_of_measure;
-    // Prepare modal
+
+    // 2. Prepare modal
     $('#apply-measure-water-heating-finish').hide();
     $('#apply-measure-water-heating-modal .modal-body > div').hide();
     // Populate selects in modal to choose library and measure
@@ -91,7 +100,8 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
     var item = library_helper.get_library_by_id(library_id).data[tag];
     out = library_helper[function_name](item, tag);
     $('#apply-measure-water-heating-modal .modal-body').html(out);
-    // Specific action for each type of measure
+
+    // 3. Specific action for each type of measure
     switch (library_helper.type_of_measure) {
         case 'water_usage':
             $('#apply-measure-water-heating-what-to-do').hide();
@@ -115,6 +125,12 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
             $('#apply-measure-water-heating-pipework-insulation').show();
             $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from the drop down');
             break;
+        default:
+            $('#apply-measure-water-heating-what-to-do').hide();
+            $('#apply-measure-water-heating-library-item-selects').show();
+            $('#apply-measure-water-heating-modal .modal-body').show();
+            $('#apply-measure-water-heating-pipework-insulation').hide();
+            $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
     }
     $('#apply-measure-water-heating-modal').modal('show');
 });
@@ -138,6 +154,11 @@ $('#openbem').on('change', '#apply-measure-water-heating-items-select', function
 });
 $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
 // The first time we apply a measure to an element we record its original stage
+    if (library_helper.type === 'heating_control') {
+        if (data.measures.space_heating[library_helper.type] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
+            data.measures.space_heating[library_helper.type] = {};
+        }
+    }
     if (data.measures.water_heating[library_helper.type] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
         data.measures.water_heating[library_helper.type] = {};
     }
@@ -181,9 +202,27 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             data.measures.water_heating['pipework_insulation'].measure = $('#apply-measure-water-heating-pipework-insulation select').val();
             data.water_heating.pipework_insulation = $('#apply-measure-water-heating-pipework-insulation select').val();
             break;
+        case 'heating_control':
+            if (data.measures.space_heating['heating_control'] == undefined)
+                data.measures.space_heating['heating_control'] = {};
+            if (data.measures.space_heating['heating_control'].original == undefined) // first time
+                data.measures.space_heating['heating_control'].original = data.temperature.control_type;
+            var measure = library_helper.heating_control_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
+            data.measures.space_heating[library_helper.type].measure = measure[tag];
+            data.temperature.control_type = measure[tag].heating_control_type;
+
+            break;
     }
     update();
-    waterheating_initUI();
+    heating_initUI();
     $('#apply-measure-water-heating-modal').modal('hide');
 });
 
@@ -199,7 +238,7 @@ $('#openbem').on('click', '.add-storage-type ', function () {
     item.tag = tag;
     data.water_heating.storage_type = item;
     update();
-    waterheating_initUI()
+    heating_initUI()
 });
 
 function get_WU_max_id() {

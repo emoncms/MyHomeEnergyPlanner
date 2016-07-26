@@ -1518,6 +1518,23 @@ var standard_library = {
             "type_of_fuel": "Electricity",
             "efficiency":1
         }
+    },
+    heating_control:{
+        "HC1": {
+            name:"Heating Control Measure test I",
+            "heating_control_type": 3,
+            source: 'HC test',
+            description: "HC test",
+            performance: 'HC test',
+            benefits: "HC test",
+            cost: 1,
+            who_by: "HC test",
+            disruption: "HC test",
+            associated_work: "HC test",
+            key_risks: "HC test",
+            notes: "HC test",
+            maintenance: "HC test"
+        }
     }
 
 };  

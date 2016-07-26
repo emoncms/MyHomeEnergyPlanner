@@ -1455,6 +1455,11 @@ function carboncoopreport_UpdateUI() {
                     addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector);
 
             }
+            if (project[scenario].measures.space_heating != undefined) {
+                if (project[scenario].measures.space_heating.heating_control != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.space_heating.heating_control, tableSelector, summaryTableSelector);
+
+            }
         }
     }
 
@@ -1481,7 +1486,8 @@ function carboncoopreport_UpdateUI() {
             cost = measure.measure.cost * measure.measure.area;
         else
             cost = measure.measure.cost;
-        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description, measure.measure.benefits, cost, measure.measure.who_by, measure.measure.disruption);
+        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description,
+                measure.measure.benefits, cost, measure.measure.who_by, measure.measure.disruption);
     }
 
     function initialiseMeasuresTable(tableSelector) {

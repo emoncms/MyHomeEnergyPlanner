@@ -37,7 +37,8 @@ libraryHelper.prototype.init = function () {
         'intentional_vents_and_flues_measures': 'Intentional vents and flues measures',
         'water_usage': 'Water usage',
         'storage_type': 'Type of storages',
-        'appliances_and_cooking': 'Appliances and Cooking'
+        'appliances_and_cooking': 'Appliances and Cooking',
+        'heating_control': "Heating controls"
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -968,6 +969,11 @@ libraryHelper.prototype.appliances_and_cooking_library_to_html = function (origi
     }
     return out;
 };
+libraryHelper.prototype.heating_control_library_to_html = function (origin, library_id) {
+    var out = this.default_library_to_html(origin, library_id);
+    out = out.replace(/add-system/g, 'add-heating-control');
+    return out;
+};
 
 /**********************************************
  * Items to html
@@ -1354,6 +1360,34 @@ libraryHelper.prototype.appliances_and_cooking_item_to_html = function (item, ta
     out += '</tbody></table>';
     return out;
 };
+libraryHelper.prototype.heating_control_item_to_html = function (item, tag) {
+    console.log(item);
+    if (item == undefined)
+        item = {tag: '', name: "--", heating_control_type: 1, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" required value="' + item.name + '"/></td></tr>';
+    out += '<tr><td>Heating control type</td><td><select class="item-heating_control_type">';
+    out += item.heating_control_type == 1 ? '<option value="1" selected>1</option>' : '<option value="1">1</option>';
+    out += item.heating_control_type == 2 ? '<option value="2" selected>2</option>' : '<option value="2">2</option>';
+    out += item.heating_control_type == 3 ? '<option value="3" selected>3</option>' : '<option value="3">3</option>';
+    out += '</select></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
 
 /*****************************************************************
  * Get item to save in library (when editing or creating new item)
@@ -1614,6 +1648,26 @@ libraryHelper.prototype.appliances_and_cooking_get_item_to_save = function () {
         "reference_quantity": $(".item-reference-quantity").val(),
         'type_of_fuel': $(".item-type-of-fuel").val(),
         efficiency: $(".item-efficiency").val()
+    };
+    return item;
+};
+libraryHelper.prototype.heating_control_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        heating_control_type: $(".item-heating_control_type").val(),
+        source: $(".item-source").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
     };
     return item;
 };
