@@ -33,7 +33,10 @@
 <h4>Space heating demand</h4>
 <table class="table">
     <tr><td>Living area</td><td><input key="data.temperature.living_area" type="text" style="width:40px; margin-right:15px" />m<sup>2</sup></td></tr>
-    <tr><td>Target temperature:</td><td><input key="data.temperature.target" type="text" style="width:40px; margin-right: 15px" /><sup>o</sup>C</td></tr>
+    <tr>
+        <td>Target temperature: <i class="icon-question-sign" title="The target temperature will usually be based on the householder's normal thermostat setting. If the thermostat is in the living room, its setting would be the demand temperature. If it is outside the living room (e.g. hall), add 3ºC to the thermostat setting to estimate the temperature achieved in the living room." /></td>
+        <td><input key="data.temperature.target" type="text" style="width:40px; margin-right: 15px" /><sup>o</sup>C</td>
+    </tr>
     <tr><td>Hours of heating off weekday <i class="icon-question-sign" title="Calculated from household questionaire"></i></td><td></td></tr>
     <tr><td>Hours of heating off weekend</td><td></td></tr>
     <tr><td></td><td></td></tr>
