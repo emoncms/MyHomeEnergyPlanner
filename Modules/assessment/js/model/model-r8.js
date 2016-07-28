@@ -53,6 +53,7 @@ calc.run = function (datain)
     calc.fans_and_pumps_and_combi_keep_hot(calc.data);
     calc.space_heating(calc.data);
     //calc.energy_systems(calc.data);
+    calc.heating_systems(calc.data);
     calc.fuel_requirements(calc.data);
     calc.SAP(calc.data);
     calc.data.totalWK = calc.data.fabric.total_heat_loss_WK + calc.data.ventilation.average_WK;
@@ -823,6 +824,12 @@ calc.space_heating = function (data)
     data.fabric_energy_efficiency = (annual_heating_demand + annual_cooling_demand) / data.TFA;
     return data;
 };
+
+
+calc.heating_systems = function(data){
+    if (data.heating_systems == undefined)
+        data.heating_systems = {};
+}
 //---------------------------------------------------------------------------------------------
 // ENERGY SYSTEMS, FUEL COSTS
 // Module Inputs: data.energy_systems

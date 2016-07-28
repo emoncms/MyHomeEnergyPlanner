@@ -974,6 +974,34 @@ libraryHelper.prototype.heating_control_library_to_html = function (origin, libr
     out = out.replace(/add-system/g, 'add-heating-control');
     return out;
 };
+libraryHelper.prototype.heating_systems_library_to_html = function (origin, library_id) {
+    var out = "";
+    var selected_library = this.get_library_by_id(library_id);
+    this.orderObjectsByKeys(selected_library.data);
+    // order by category
+    var ordered_by_categories = {};
+    for (z in selected_library.data) {
+        var category = selected_library.data[z].category;
+        if (ordered_by_categories[category] == undefined)
+            ordered_by_categories[category] = {};
+        ordered_by_categories[category][z] = selected_library.data[z];
+    }
+
+    // Prepare the output string
+    for (category in ordered_by_categories) {
+        out += "<tr><th colspan='2'>" + category + "</th></tr>";
+        for (z in ordered_by_categories[category]) {
+            out += "<tr><td style='padding-left:50px'>" + z + ': ' + selected_library.data[z].name + "</td>";
+            out += "<td style='text-align:right;width:250px'>";
+            out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+            out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+            out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-heating-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+            out += "</td>";
+            out += "</tr>";
+        }
+    }
+    return out;
+};
 
 /**********************************************
  * Items to html
@@ -1388,6 +1416,44 @@ libraryHelper.prototype.heating_control_item_to_html = function (item, tag) {
     out += '</tbody></table>';
     return out;
 };
+libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: "--", category: 'Combi boiler', winter_efficiency: 100, summer_efficiency: 100, central_heating_pump: 0, fans_and_supply_pumps: 0, responsiveness: 1, combi_loss: 0, primary_circuit_loss: 0, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" required value="' + item.name + '"/></td></tr>';
+    out += '<tr><td>Category </td><td><select class="item-category">';
+    var categories = ['Combi boilers', 'System boilers', 'Heat pumps', 'Room heaters', 'Warm air systems', 'Hot water only'];
+    for (index in categories) {
+        if (item.category == categories[index])
+            out += '<option value="' + categories[index] + '" selected>' + categories[index] + '</option>';
+        else
+            out += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
+    }
+    out += '</select></td></tr>';
+    out += '<tr><td>Winter efficiency</td><td><input type="text" class="item-winter_efficiency" required value="' + item.winter_efficiency + '"/></td></tr>';
+    out += '<tr><td>Summer efficiency</td><td><input type="text" class="item-summer_efficiency " required value="' + item.summer_efficiency + '"/></td></tr>';
+    out += '<tr><td>Central heating pump (kWh/year)</td><td><input type="text" class="item-central_heating_pump" required value="' + item.central_heating_pump + '"/></td></tr>';
+    out += '<tr><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
+    out += '<tr><td>Responsiveness</td><td><input type="text" class="item-responsiveness" required value="' + item.responsiveness + '"/></td></tr>';
+    out += '<tr><td>Commbi loss</td><td><input type="text" class="item-combi_loss" required value="' + item.combi_loss + '"/></td></tr>';
+    out += '<tr><td>Primary circuit loss</td><td><input type="text" class="item-primary_circuit_loss" required value="' + item.primary_circuit_loss + '"/></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
 
 /*****************************************************************
  * Get item to save in library (when editing or creating new item)
@@ -1657,6 +1723,33 @@ libraryHelper.prototype.heating_control_get_item_to_save = function () {
     item[tag] = {
         name: $(".item-name").val(),
         heating_control_type: $(".item-heating_control_type").val(),
+        source: $(".item-source").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
+libraryHelper.prototype.heating_systems_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        category: $('.item-category').val(),
+        winter_efficiency: $('.item-winter_efficiency').val(),
+        summer_efficiency: $('.item-summer_efficiency').val(),
+        central_heating_pump: $('.item-central_heating_pump').val(),
+        fans_and_supply_pumps: $('.item-fans_and_supply_pumps').val(),
+        responsiveness: $('.item-responsiveness').val(),
+        combi_loss: $('.item-combi_loss').val(),
+        primary_circuit_loss: $('.item-primary_circuit_loss').val(),
         source: $(".item-source").val(),
         description: $(".item-description").val(),
         performance: $(".item-performance").val(),

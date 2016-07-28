@@ -2614,7 +2614,7 @@ var standard_library = {
             key_risks: "---",
             notes: "---",
             maintenance: "---"
-        },
+        }
     }
 
 };  

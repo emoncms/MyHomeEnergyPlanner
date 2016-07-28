@@ -53,6 +53,11 @@ $('#openbem').on('click', '.add-water-efficiency-from-lib', function () {
     library_helper.type = 'water_usage';
     library_helper.onAddItemFromLib();
 });
+$('#openbem').on('click', '.add-heating-system-from-lib', function () {
+    library_helper.init();
+    library_helper.type = 'heating_systems';
+    library_helper.onAddItemFromLib();
+});
 $('#openbem').on('click', '.add-water_usage', function () {
     var tag = $(this).attr('tag');
     var library = library_helper.get_library_by_id($(this).attr('library')).data;
