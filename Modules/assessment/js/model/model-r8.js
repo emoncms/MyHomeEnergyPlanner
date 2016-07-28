@@ -50,7 +50,7 @@ calc.run = function (datain)
     calc.currentenergy(calc.data);
     calc.gains(calc.data);
     calc.temperature(calc.data);
-    calc.fans_and_pumps(calc.data);
+    calc.fans_and_pumps_and_combi_keep_hot(calc.data);
     calc.space_heating(calc.data);
     //calc.energy_systems(calc.data);
     calc.fuel_requirements(calc.data);
@@ -1878,7 +1878,7 @@ calc.currentenergy = function (data) {
 /************************************************************************/
 /* "Pumps and fans" and "electric keep-hot faciliity for combi boilers" */
 /************************************************************************/
-calc.fans_and_pumps = function (data) {
+calc.fans_and_pumps_and_combi_keep_hot = function (data) {
 
     // 1.- Annual energy requirements for pumps, fans and electric keep-hot
     var annual_energy = 0;
