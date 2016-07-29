@@ -228,7 +228,7 @@ var openbem = {
                 "reference_quantity": data.applianceCarbonCoop.list[z]["reference_quantity"],
                 'type_of_fuel': data.applianceCarbonCoop.list[z]['type_of_fuel'],
                 efficiency: data.applianceCarbonCoop.list[z].efficiency,
-                fuel:data.applianceCarbonCoop.list[z].fuel
+                fuel: data.applianceCarbonCoop.list[z].fuel
             };
         }
 
@@ -247,6 +247,8 @@ var openbem = {
         }
 
 // Energy systems
+        inputdata.heating_systems = data.heating_systems;
+        
         inputdata.systemlibrary = data.systemlibrary;
         inputdata.energy_systems = {}
         for (z in data.energy_systems) {

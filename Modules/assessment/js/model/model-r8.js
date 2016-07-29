@@ -828,8 +828,8 @@ calc.space_heating = function (data)
 
 calc.heating_systems = function(data){
     if (data.heating_systems == undefined)
-        data.heating_systems = {};
-}
+        data.heating_systems = [];
+};
 //---------------------------------------------------------------------------------------------
 // ENERGY SYSTEMS, FUEL COSTS
 // Module Inputs: data.energy_systems

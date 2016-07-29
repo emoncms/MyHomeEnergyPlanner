@@ -38,7 +38,8 @@ libraryHelper.prototype.init = function () {
         'water_usage': 'Water usage',
         'storage_type': 'Type of storages',
         'appliances_and_cooking': 'Appliances and Cooking',
-        'heating_control': "Heating controls"
+        'heating_control': "Heating controls",
+        'heating_systems': "Heating systems"
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -1433,8 +1434,8 @@ libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
             out += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
     }
     out += '</select></td></tr>';
-    out += '<tr><td>Winter efficiency</td><td><input type="text" class="item-winter_efficiency" required value="' + item.winter_efficiency + '"/></td></tr>';
-    out += '<tr><td>Summer efficiency</td><td><input type="text" class="item-summer_efficiency " required value="' + item.summer_efficiency + '"/></td></tr>';
+    out += '<tr><td>Winter efficiency (space heating)</td><td><input type="text" class="item-winter_efficiency" required value="' + item.winter_efficiency + '"/></td></tr>';
+    out += '<tr><td>Summer efficiency (water heating)</td><td><input type="text" class="item-summer_efficiency " required value="' + item.summer_efficiency + '"/></td></tr>';
     out += '<tr><td>Central heating pump (kWh/year)</td><td><input type="text" class="item-central_heating_pump" required value="' + item.central_heating_pump + '"/></td></tr>';
     out += '<tr><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
     out += '<tr><td>Responsiveness</td><td><input type="text" class="item-responsiveness" required value="' + item.responsiveness + '"/></td></tr>';

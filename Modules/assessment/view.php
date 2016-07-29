@@ -407,7 +407,7 @@ global $reports;
     }
 
     function run_backwards_compatibility() {
-       // NOthing to do tight now       
+        // NOthing to do tight now       
     }
 
     $("#openbem").on("change", '[key]', function () {
