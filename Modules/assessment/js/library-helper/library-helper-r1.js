@@ -1439,11 +1439,20 @@ libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
     out += '<tr><td>Central heating pump (kWh/year)</td><td><input type="text" class="item-central_heating_pump" required value="' + item.central_heating_pump + '"/></td></tr>';
     out += '<tr><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
     out += '<tr><td>Responsiveness</td><td><input type="text" class="item-responsiveness" required value="' + item.responsiveness + '"/></td></tr>';
-    out += '<tr><td>Commbi loss</td><td><input type="text" class="item-combi_loss" required value="' + item.combi_loss + '"/></td></tr>';
-    out += '<tr><td>Primary circuit loss</td><td><input type="text" class="item-primary_circuit_loss" required value="' + item.primary_circuit_loss + '"/></td></tr>';
+    out += '<tr><td>Commbi loss</td><td><select class="item-combi_loss" required>';
+    var options = ['0', 'Instantaneous, without keep hot-facility', 'Instantaneous, with keep-hot facility controlled by time clock', 'Instantaneous, with keep-hot facility not controlled by time clock', 'Storage combi boiler >= 55 litres', 'Storage combi boiler < 55 litres'];
+    for (index in options) {
+        if (item.instantaneous_water_heating == options[index])
+            out += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
+        else
+            out += '<option value="' + options[index] + '">' + options[index] + '</option>';
+    }
+    out += '</select></td></tr>';
+    out += '<tr><td>Primary circuit loss (kWh/month) <i class="icon-question-sign" title="Primary loss is set to zero for the following:\n\   - Electric inmersion heater.\n\   - Combi boiler\n\   - CPSU(including electric CPSU)\n\   - Boiler and thermal store within a single casing\n\   - Separate boiler and thermal store connected by no more than 1.5m of insulated pipework\n\ \n\For other cases (indirect cylinders and thermal stores connected by unsinsulated pipework or more than 1.5m of insulated pipework) the loss is calculated in SAP2012 table 3, p. 199" /></td>\n\
+<td><input type="text" class="item-primary_circuit_loss" required value="' + item.primary_circuit_loss + '"/></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
-    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performancstorage_volumee" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';

@@ -9,6 +9,7 @@ function heating_UpdateUI()
 {
     add_water_usage();
     add_heating_systems();
+    add_storage();
 
     if (data.water_heating.override_annual_energy_content)
         $('#annual_energy_content').html('<input type="text"  dp=0 style="width:35px; margin-right:10px" key="data.water_heating.annual_energy_content" /> kWh/year');
@@ -42,6 +43,10 @@ function heating_initUI() {
     //Heating systems
     add_heating_systems();
 
+    // Storage
+    add_storage();
+
+    // Other things
     show_hide_if_master();
 }
 
@@ -166,12 +171,12 @@ $('#openbem').on('change', '#apply-measure-water-heating-items-select', function
 $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
 // The first time we apply a measure to an element we record its original stage
     if (library_helper.type === 'heating_control') {
-        if (data.measures.space_heating[library_helper.type] == undefined) { 
+        if (data.measures.space_heating[library_helper.type] == undefined) {
             data.measures.space_heating[library_helper.type] = {};
         }
     }
     else if (library_helper.type === 'heating_systems') {
-        if (data.measures.heating_systems == undefined) { 
+        if (data.measures.heating_systems == undefined) {
             data.measures.heating_systems = {};
         }
     }
@@ -286,14 +291,15 @@ $('#openbem').on('click', '.add-heating-system', function () {
     item.tag = tag;
     item.id = get_HS_max_id() + 1;
     item.fuel = 'Standard Tariff';
-    item.fraction = 1;
-    item.main_space_heating_system = false;
-    item.provides_water_heating = false;
+    item.fraction_space = 1;
+    item.fraction_water_heating = 1;
+    item.main_space_heating_system = 'No';
+    item.provides = 'heating_and_water';
     item.instantaneous_water_heating = false;
     item.storage = false;
     item.combi_keep_hot = 'No';
+    item.heating_controls = 1;
     data.heating_systems.push(item);
-    console.log(data.heating_systems);
     update();
 });
 $('#openbem').on('click', '.delete-heating-system', function () {
@@ -353,18 +359,71 @@ function add_heating_systems() {
     else
         $('#heating-systems').hide();
     $('#heating-systems').html('');
-    var out = "<tr><th>Tag</th><th>Name</th><th>Winter efficiency (space heating)</th><th>Summer efficiency (water heating)</th>\n\
-<th>Fuel</th><th>Fraction</th><th>Responsiveness</th><th>Main heating system <i class='icon-question-sign' title='If more than one main system it is assumed that both heat the heat house and have same heating control type (SAP2012, p221)' /></th><th>Provides water heating?</th><th>Instantaneoud water heating?</th><th>Storage</th><th></th></tr>"
+    var out = "<tr><th>Tag</th><th>Name</th><th>Provides</th><th>Space heating / Winter efficiency</th><th>Water heating / Summer efficiency</th>\n\
+<th>Fuel</th><th>Fraction</th><th>Main heating system <i class='icon-question-sign' title='If more than one main system heating for the whole house it is assumed that both have same heating control type (SAP2012, p221). If they are different, the highest one will be used' /></th><th>Responsiveness</th><th>Space heating controls</th><th>Instantaneous water heating?</th><th>Storage</th><th></th></tr>"
+    $('#heating-systems').append(out);
+
     for (z in data.heating_systems) {
         var item = data.heating_systems[z];
-        out += '<tr><td>' + item.tag + '</td><td>' + item.name + '</td><td>' + item.winter_efficiency + '</td><td>' + item.summer_efficiency + '</td>\n\
-<td><select key="data.heating_systems.' + z + '.fuel">' + get_fuels_for_select() + '</select></td><td><input style="width:55px" type="number" key="data.heating_systems.' + z + '.fraction" max="1" step="0.01" min="0" /></td><td><input style="width:40px" type="number" key="data.heating_systems.' + z + '.responsiveness" max="3" step="1" min="1" /></td><td><input type="checkbox" key="data.heating_systems.' + z + '.main_space_heating_system" /></td><td><input type="checkbox" key="data.heating_systems.' + z + '.provides_water_heating" /></td><td><input type="checkbox" key="data.heating_systems.' + z + '.instantaneous_water_heating" /></td><td><input type="checkbox" key="data.heating_systems.' + z + '.storage" /></td>';
+        out = '<tr><td>' + item.tag + '</td><td>' + item.name + '</td>\n\
+<td><select style="width:100px" key="data.heating_systems.' + z + '.provides"><option value="heating">Space heating</option><option value="water">Water heating</option><option value="heating_and_water">Space and water heating</option></select></td>\n\
+<td class="if-SH">' + item.winter_efficiency + '</td><td class="if-WH">' + item.summer_efficiency + '</td>\n\
+<td><select key="data.heating_systems.' + z + '.fuel">' + get_fuels_for_select() + '</select></td>\n\
+<td><p class="if-SH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.fraction_space" max="1" step="0.01" min="0" /></p>\n\
+<p class="if-WH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.fraction_water_heating" max="1" step="0.01" min="0" /></td>\n\
+<td class="if-SH"><select style="width:100px" key="data.heating_systems.' + z + '.main_space_heating_system"><option value="mainHS1">Main heating system</option><option value="mainHS2_whole_house">2<sup>nd</sup> Main heating system - whole house</option><option value="mainHS2_part_of_the_house">2<sup>nd</sup> Main heating system - different part of the house</option><option value="secondaryHS">Secondary heating system</option></select></td>\n\
+<td class="if-SH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.responsiveness" max="1" step="0.01" min="0" /></td>\n\
+<td class="if-SH"><input style="width:40px" type="number" key="data.heating_systems.' + z + '.heating_controls" max="3" step="1" min="1" /></td>\n\
+<td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.instantaneous_water_heating" /></td>\n\
+<td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.storage" /></td>';
         //out += '<button class="apply-water-heating-measure if-not-master" type="water_usage" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
         out += '<td style="width:255px; text-align: center"><span class="edit-item-heating-system" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
         out += '<span class = "delete-heating-system" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
         out += '<span class="apply-water-heating-measure if-not-master" type="heating_systems" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked" style="margin-left: 20px">Apply measure</button></span></td></tr> ';
+
+        $('#heating-systems').append(out);
+
+        switch (data.heating_systems[z].provides) {
+            case 'heating':
+                $('.if-WH').html('');
+                $('p.if-WH').hide();
+                break;
+            case 'water':
+                $('.if-SH').html('');
+                $('p.if-SH').hide();
+                break;
+            case 'heating_and_water':
+                $('[key="data.heating_systems.' + z + '.fraction_space"]').parent().html('Space: ' + $('[key="data.heating_systems.' + z + '.fraction_space"]').parent().html());
+                $('[key="data.heating_systems.' + z + '.fraction_water_heating"]').parent().html('Water: ' + $('[key="data.heating_systems.' + z + '.fraction_water_heating"]').parent().html());
+                break;
+        }
+        $('.if-WH').removeClass('if-WH');
+        $('.if-SH').removeClass('if-SH');
     }
-    $('#heating-systems').append(out);
+
+}
+function add_storage() {
+    $('#type_of_storage').html('');
+    var st = data.water_heating.storage_type;
+    if (st == undefined) {
+        $('#type_of_storage').append('<tr><th>Type of storage <span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Add from library</button></span></th></tr>');
+    }
+    else {
+        var specific_header = '';
+        var specific_st_info = '';
+        if (st.declared_loss_factor_known == true) {
+            specific_header = '<th>Manufacturers loss factor</th><th>Temperature factor a</th>';
+            specific_st_info = '<td>' + st.manufacturer_loss_factor + '</td><td>' + st.temperature_factor_a + '</td>';
+        }
+        else {
+            specific_header = '<th>Loss factor b</th><th>Volume factor b</th><th>Temperature factor b</th>';
+            specific_st_info = '<td>' + st.loss_factor_b + '</td><td>' + st.volume_factor_b + '</td><td>' + st.temperature_factor_b + '</td>';
+        }
+        $('#type_of_storage').append('<tr><th>Type of storage <span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></th><th>Volume</th><th>Insulation type</th>' + specific_header + '<th>Inside dwelling?</th><th style="width:150px">Contains dedicated solar storage or WWHRS volume?</th></tr>');
+        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td></tr>');
+
+    }
+
 }
 function edit_item(item, index, item_subsystem) {
     for (z in item)

@@ -169,9 +169,9 @@ function add_applianceCarbonCoop(z) {
     out += '<td><select key="data.applianceCarbonCoop.list.' + z + '.fuel" class="fuels" category="' + data.applianceCarbonCoop.list[z].type_of_fuel + '" style="width:150px" /> </td>';
     out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.energy_demand" style="width:40px" /></td>';
     if (data.applianceCarbonCoop.list[z].type_of_fuel == "Electricity")
-        out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.efficiency" style="width:40px" /> </td>';
+        out += '<td><span key="data.applianceCarbonCoop.list.' + z + '.efficiency" style="width:50px" /> </td>';
     else
-        out += '<td><input type="number" max="1" step="0.01" key="data.applianceCarbonCoop.list.' + z + '.efficiency" style="width:40px" /> </td>';
+        out += '<td><input type="number" max="1" step="0.01" key="data.applianceCarbonCoop.list.' + z + '.efficiency" style="width:50px" /> </td>';
     out += '<td><span dp="2" key="data.applianceCarbonCoop.list.' + z + '.fuel_input" style="width:40px" /></td>';
     out += '<td><i index="' + z + '" class="delete-appliance icon-trash" style="cursor:pointer"></i></td>';
     out += '</tr>';

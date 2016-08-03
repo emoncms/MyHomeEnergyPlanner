@@ -10,9 +10,12 @@ function fuel_requirements_UpdateUI()
         $("#energyrequirements [key='data.energy_requirements.template.quantity']").attr('key', 'data.energy_requirements.' + z + '.quantity');
         $("#energyrequirements [key='data.fuel_requirements.template.quantity']").attr('key', 'data.fuel_requirements.' + z + '.quantity');
         $("#energyrequirements [eid=template]").attr('eid', z);
+        
+         console.log(z)
 
-        for (x in data.fuel_requirements[z].list)
+        for (x in data.fuel_requirements[z].list){
             add_fuel_requirement(z, x);
+        }
     }
 
     $('#generation').html("");
@@ -59,7 +62,7 @@ function add_fuel_requirement(z, x) // z = energy_requirement  --  x = fuel_requ
     $("#energyrequirements").append($("#suppliedby-template").html());
     var prefixA = "#energyrequirements [key='data.fuel_requirements.template.list.x";
     var prefixB = 'data.fuel_requirements.' + z + '.list.' + x;
-    
+
     $(prefixA + ".fuel']").attr('key', prefixB + '.fuel');
     $(prefixA + ".fraction']").attr('key', prefixB + '.fraction');
     $(prefixA + ".demand']").attr('key', prefixB + '.demand');

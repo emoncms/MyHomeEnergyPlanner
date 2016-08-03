@@ -52,9 +52,17 @@
 <span class="apply-heating-system-measure if-not-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
 <table id="heating-systems" class="table" style="display:none"></table>
 
+<h4>Hot Water system</h4>
+<table class="table">
+    <tr><td>Include solar hot water?</td><td><input type="checkbox" key="data.water_heating.solar_water_heating" /> </td></tr>
+    <tbody class="table" id="type_of_storage">
+        <tr></tr>
+    </tbody>
+</table>
 
 <h4>Heating requirements</h4>
 <p>Hot water energy requirement       <span key="data.water_heating.annual_waterheating_demand" dp="2" /> kWh/year</p>
+<p>Space heating energy requirement       <span key="data.space_heating.annual_heating_demand" dp="2" /> kWh/year</p>
 
 
 
