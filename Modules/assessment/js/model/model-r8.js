@@ -1416,7 +1416,6 @@ calc.water_heating = function (data) {
     var monthly_energy_content = [];
     var total_distribution_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var energy_lost_from_water_storage = 0;
-    var total_monthly_storage_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var total_primary_circuit_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var total_combi_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     var total_heat_required = [];
@@ -1441,17 +1440,16 @@ calc.water_heating = function (data) {
     }
 
     //////////////////////////////////////
-    // Total heat required (and losses) //
+    // Total heat required              //
     // ///////////////////////////////////
     total_heat_required = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    // Total heat required due to water heating systems: Calculate losses for distribution, primary circuit and combi for every heating system if not instantaneous heating at point of use
     total_distribution_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     total_primary_circuit_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    total_monthly_storage_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     total_combi_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    // Calculate losses for distribution and primary circuit for every heating system if not instantaneous heating at point of use
     data.heating_systems.forEach(function (system) {
-
         if ((system.provides == 'water' || system.provides == "heating_and_water") && system.fraction_water_heating > 0) {
             if (system.instantaneous_water_heating) {
                 for (var m = 0; m < 12; m++)
@@ -1460,28 +1458,11 @@ calc.water_heating = function (data) {
             else {
                 var distribution_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var primary_circuit_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                var monthly_storage_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 var combi_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-                // DAILY STORAGE LOSS kWh/d
-                if (system.storage && data.water_heating.storage_type != undefined) {
-                    if (data.water_heating.storage_type.declared_loss_factor_known) {
-                        energy_lost_from_water_storage = data.water_heating.storage_type.manufacturer_loss_factor * data.water_heating.storage_type.temperature_factor_a;
-                    } else {
-                        energy_lost_from_water_storage = data.water_heating.storage_type.storage_volume * data.water_heating.storage_type.loss_factor_b * data.water_heating.storage_type.volume_factor_b * data.water_heating.storage_type.temperature_factor_b;
-                    }
-                }
 
                 for (var m = 0; m < 12; m++) {
                     // DISTRIBUTION LOSSES
                     distribution_loss[m] = 0.15 * system.fraction_water_heating * monthly_energy_content[m];
-                    // MONTHLY STORAGE LOSSES
-                    if (system.storage && data.water_heating.storage_type != undefined) {
-                        monthly_storage_loss[m] = datasets.table_1a[m] * energy_lost_from_water_storage;
-                        if (data.water_heating.contains_dedicated_solar_storage_or_WWHRS > 0 && data.water_heating.storage_type.storage_volume > 0) {
-                            monthly_storage_loss[m] = monthly_storage_loss[m] * ((1.0 * data.water_heating.storage_type.storage_volume - data.water_heating.contains_dedicated_solar_storage_or_WWHRS) / (data.water_heating.storage_type.storage_volume));
-                        }
-                    }
 
                     // PRIMARY CIRCUIT LOSSES
                     primary_circuit_loss[m] = 1.0 * system.primary_circuit_loss; //In SAP2012 table 3 p199 it does a proper calcualtion, taking into account number of hours of use in summer and winter, we have simplified it addid this loss as a system property, inputting an average value
@@ -1547,11 +1528,10 @@ calc.water_heating = function (data) {
                         }
                     }
 
-                    // Total heat required
-                    total_heat_required[m] += 0.85 * system.fraction_water_heating * monthly_energy_content[m] + distribution_loss[m] + monthly_storage_loss[m] + primary_circuit_loss[m] + data.water_heating.combi_loss[m];
+                    // Total heat required due to water heating system losses
+                    total_heat_required[m] += 0.85 * system.fraction_water_heating * monthly_energy_content[m] + distribution_loss[m] + primary_circuit_loss[m] + combi_loss[m];
                     total_distribution_loss[m] += distribution_loss[m];
                     total_primary_circuit_loss[m] += primary_circuit_loss[m];
-                    total_monthly_storage_loss[m] += monthly_storage_loss[m];
                     total_combi_loss[m] += combi_loss[m];
                 }
                 //----------------------------------------------------------------------------------------
@@ -1559,11 +1539,31 @@ calc.water_heating = function (data) {
         }
     });
 
+    // Storage losses are calculated if there is a Storage added
+    var monthly_storage_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    if (data.water_heating.storage_type != undefined) {
+        //Daily loss
+        if (data.water_heating.storage_type.declared_loss_factor_known) {
+            energy_lost_from_water_storage = data.water_heating.storage_type.manufacturer_loss_factor * data.water_heating.storage_type.temperature_factor_a;
+        } else {
+            energy_lost_from_water_storage = data.water_heating.storage_type.storage_volume * data.water_heating.storage_type.loss_factor_b * data.water_heating.storage_type.volume_factor_b * data.water_heating.storage_type.temperature_factor_b;
+        }
+        // Monthly 
+        for (m = 0; m < 12; m++) {
+            monthly_storage_loss[m] = datasets.table_1a[m] * energy_lost_from_water_storage;
+            if (data.water_heating.contains_dedicated_solar_storage_or_WWHRS > 0 && data.water_heating.storage_type.storage_volume > 0) {
+                monthly_storage_loss[m] = monthly_storage_loss[m] * ((1.0 * data.water_heating.storage_type.storage_volume - data.water_heating.contains_dedicated_solar_storage_or_WWHRS) / (data.water_heating.storage_type.storage_volume));
+            }
+        }
+        // Add the loss to the total_heat_required
+        for (m = 0; m < 12; m++)
+            total_heat_required[m] += monthly_storage_loss[m];
+    }
 
     data.water_heating.monthly_energy_content = monthly_energy_content;
     data.water_heating.distribution_loss = total_distribution_loss;
     data.water_heating.energy_lost_from_water_storage = energy_lost_from_water_storage;
-    data.water_heating.monthly_storage_loss = total_monthly_storage_loss;
+    data.water_heating.monthly_storage_loss = monthly_storage_loss;
     data.water_heating.primary_circuit_loss = total_primary_circuit_loss;
     data.water_heating.combi_loss = total_combi_loss;
     data.water_heating.total_heat_required = total_heat_required;
@@ -2084,12 +2084,12 @@ calc.fans_and_pumps_and_combi_keep_hot = function (data) {
         monthly_energy[m] = annual_energy / 12;
     if (annual_energy > 0) {
         data.energy_requirements.fans_and_pumps = {name: "Fans and pumps", quantity: annual_energy, monthly: monthly_energy};
-        
+
         if (data.fans_and_pumps == undefined)
             data.fans_and_pumps = [{fuel: 'Standard Tariff', fraction: 1}];
-        
+
         data.fuel_requirements.fans_and_pumps.quantity = 0;
-        
+
         data.fans_and_pumps.forEach(function (fuel_requirement, index) {
             fuel_requirement.demand = annual_energy * fuel_requirement.fraction;
             fuel_requirement.fuel_input = annual_energy * fuel_requirement.fraction; // We assume efficiency of Electrical system is 1
