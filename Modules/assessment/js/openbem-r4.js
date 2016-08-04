@@ -187,6 +187,7 @@ var openbem = {
             Vc: data.water_heating.Vc,
             water_usage: data.water_heating.water_usage
         };
+        inputdata.fans_and_pumps = data.fans_and_pumps;
         inputdata.use_SHW = data.use_SHW;
         inputdata.SHW = {
             A: data.SHW.A,
@@ -238,17 +239,17 @@ var openbem = {
             target: data.temperature.target,
             control_type: data.temperature.control_type,
             living_area: data.temperature.living_area,
-            temperature_adjustment: data.temperature.temperature_adjustment,
-            heating_off_summer: data.temperature.heating_off_summer
+            temperature_adjustment: data.temperature.temperature_adjustment
         };
         // Space heating
         inputdata.space_heating = {
-            use_utilfactor_forgains: data.space_heating.use_utilfactor_forgains
-        }
+            use_utilfactor_forgains: data.space_heating.use_utilfactor_forgains,
+            heating_off_summer: data.space_heating.heating_off_summer
+        };
 
 // Energy systems
         inputdata.heating_systems = data.heating_systems;
-        
+
         inputdata.systemlibrary = data.systemlibrary;
         inputdata.energy_systems = {}
         for (z in data.energy_systems) {

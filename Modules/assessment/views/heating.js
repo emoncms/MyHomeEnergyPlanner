@@ -297,7 +297,6 @@ $('#openbem').on('click', '.add-heating-system', function () {
     item.provides = 'heating_and_water';
     item.instantaneous_water_heating = false;
     item.storage = false;
-    item.combi_keep_hot = 'No';
     item.heating_controls = 1;
     data.heating_systems.push(item);
     update();
@@ -360,12 +359,14 @@ function add_heating_systems() {
         $('#heating-systems').hide();
     $('#heating-systems').html('');
     var out = "<tr><th>Tag</th><th>Name</th><th>Provides</th><th>Space heating / Winter efficiency</th><th>Water heating / Summer efficiency</th>\n\
-<th>Fuel</th><th>Fraction</th><th>Main heating system <i class='icon-question-sign' title='If more than one main system heating for the whole house it is assumed that both have same heating control type (SAP2012, p221). If they are different, the highest one will be used' /></th><th>Responsiveness</th><th>Space heating controls</th><th>Instantaneous water heating?</th><th>Storage</th><th></th></tr>"
+<th>Fuel</th><th>Fraction</th><th>Main heating system <!--<i class='icon-question-sign' title='' />--></th><th>Responsiveness</th><th>Space heating controls</th><th>Instantaneous water heating?</th><th>Storage</th><th></th></tr>"
     $('#heating-systems').append(out);
 
     for (z in data.heating_systems) {
         var item = data.heating_systems[z];
-        out = '<tr><td>' + item.tag + '</td><td>' + item.name + '</td>\n\
+        out = '<tr><td style="text-align:center">' + item.tag + '<br /><br /><span class="edit-item-heating-system" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
+        out += '<span class = "delete-heating-system" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
+        out += '<span class="apply-water-heating-measure if-not-master" type="heating_systems" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked" style="margin-left: 20px">Apply measure</button></span></td><td>' + item.name + '</td>\n\
 <td><select style="width:100px" key="data.heating_systems.' + z + '.provides"><option value="heating">Space heating</option><option value="water">Water heating</option><option value="heating_and_water">Space and water heating</option></select></td>\n\
 <td class="if-SH">' + item.winter_efficiency + '</td><td class="if-WH">' + item.summer_efficiency + '</td>\n\
 <td><select key="data.heating_systems.' + z + '.fuel">' + get_fuels_for_select() + '</select></td>\n\
@@ -375,11 +376,7 @@ function add_heating_systems() {
 <td class="if-SH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.responsiveness" max="1" step="0.01" min="0" /></td>\n\
 <td class="if-SH"><input style="width:40px" type="number" key="data.heating_systems.' + z + '.heating_controls" max="3" step="1" min="1" /></td>\n\
 <td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.instantaneous_water_heating" /></td>\n\
-<td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.storage" /></td>';
-        //out += '<button class="apply-water-heating-measure if-not-master" type="water_usage" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
-        out += '<td style="width:255px; text-align: center"><span class="edit-item-heating-system" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
-        out += '<span class = "delete-heating-system" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
-        out += '<span class="apply-water-heating-measure if-not-master" type="heating_systems" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked" style="margin-left: 20px">Apply measure</button></span></td></tr> ';
+<td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.storage" /></td></tr>';
 
         $('#heating-systems').append(out);
 

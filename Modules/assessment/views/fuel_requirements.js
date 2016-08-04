@@ -10,13 +10,15 @@ function fuel_requirements_UpdateUI()
         $("#energyrequirements [key='data.energy_requirements.template.quantity']").attr('key', 'data.energy_requirements.' + z + '.quantity');
         $("#energyrequirements [key='data.fuel_requirements.template.quantity']").attr('key', 'data.fuel_requirements.' + z + '.quantity');
         $("#energyrequirements [eid=template]").attr('eid', z);
-        
-         console.log(z)
 
-        for (x in data.fuel_requirements[z].list){
+        for (x in data.fuel_requirements[z].list) {
             add_fuel_requirement(z, x);
         }
     }
+
+    // Add buttons to 'fans_and_pumps
+    var button = '<button style="margin-left:25px" class="btn add-fans-and-pumps-fuel"><i class="icon-plus if-not-locked"></i> Add</button>';
+    $('[key="data.energy_requirements.fans_and_pumps.name"]').parent().append(button);
 
     $('#generation').html("");
     if (data.use_generation != 1) {
@@ -68,6 +70,11 @@ function add_fuel_requirement(z, x) // z = energy_requirement  --  x = fuel_requ
     $(prefixA + ".demand']").attr('key', prefixB + '.demand');
     $(prefixA + ".fuel_input']").attr('key', prefixB + '.fuel_input');
 
+    if (z == 'fans_and_pumps') {
+        $("#energyrequirements [key='data.fuel_requirements.fans_and_pumps.list." + x + ".fuel']").parent().html('<select key="data.fans_and_pumps.' + x + '.fuel">' + get_fuels_for_select('Electricity') + '</select>');
+        $("#energyrequirements [key='data.fuel_requirements.fans_and_pumps.list." + x + ".fraction']").parent().html('<input key="data.fans_and_pumps.' + x + '.fraction" type="number" min="0" max="1" step="0.01" style="width: 55px" />');
+    }
+
     if (z == 'solarpv' || z == 'wind' || z == 'hydro' || z == 'solarpv2') {
         $('#energyrequirements .fraction.template').html('');
         $('#energyrequirements .fraction.template').html('<span key="' + prefixB + '.fraction" style="margin-left:0px" dp="2" />');
@@ -75,3 +82,9 @@ function add_fuel_requirement(z, x) // z = energy_requirement  --  x = fuel_requ
     }
     $('#energyrequirements .fraction.template').removeClass('template');
 }
+
+
+$('#openbem').on('click', '.add-fans-and-pumps-fuel', function () {
+    data.fans_and_pumps.push({fuel: 'Standard Tariff', fraction: 1});
+    update();
+});

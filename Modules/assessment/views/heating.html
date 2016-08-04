@@ -36,16 +36,17 @@
     <tr>
         <td>Target temperature: <i class="icon-question-sign" title="The target temperature will usually be based on the householder's normal thermostat setting. If the thermostat is in the living room, its setting would be the demand temperature. If it is outside the living room (e.g. hall), add 3ºC to the thermostat setting to estimate the temperature achieved in the living room." /></td>
         <td><input key="data.temperature.target" type="text" style="width:40px; margin-right: 15px" /><sup>o</sup>C</td>
-    </tr>
-    <tr><td>Hours of heating off per week day <i class="icon-question-sign" title="Calculated from household questionaire"></i></td><td id="hours-off-weekday"></td></tr>
-    <tr><td>Hours of heating off per weekend day</td><td id="hours-off-weekend"></td></tr>
-    <tr><td>Space heating controls</td><td><select key="data.temperature.control_type" style="width:80px">
+    </tr>    
+    <tr><td>Space heating controls (Not in use now, using the one of the heating system)</td><td><select key="data.temperature.control_type" style="width:80px">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
             </select>
             <span class="apply-water-heating-measure if-not-master" type="heating_control" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>        
         </td></tr>
+    <tr><td>Heating off for the whole summer</td><td><input key="data.space_heating.heating_off_summer" type="checkbox" /> </td></tr>
+    <tr><td>Hours of heating off per week day <i class="icon-question-sign" title="Calculated from household questionaire"></i></td><td id="hours-off-weekday"></td></tr>
+    <tr><td>Hours of heating off per weekend day</td><td id="hours-off-weekend"></td></tr>
 </table>
 
 <h4>Heating systems<span class="add-heating-system-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span></h4>

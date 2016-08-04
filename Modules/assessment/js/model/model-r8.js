@@ -92,7 +92,8 @@ calc.start = function (data)
         cooking: {quantity: 0, list: []},
         appliances: {quantity: 0, list: []},
         waterheating: {quantity: 0, list: []},
-        space_heating: {quantity: 0, list: []}
+        space_heating: {quantity: 0, list: []},
+        fans_and_pumps: {quantity: 0, list: []}
     };
     data.fuel_totals = {};
     data.mean_internal_temperature = {};
@@ -741,6 +742,8 @@ calc.space_heating = function (data)
         data.space_heating = {};
     if (data.space_heating.use_utilfactor_forgains == undefined)
         data.space_heating.use_utilfactor_forgains = true;
+    if (data.space_heating.heating_off_summer == undefined)
+        data.space_heating.heating_off_summer = true;
     // These might all need to be defined within the space_heating namespace to be accessible in the ui.
     var delta_T = [];
     var total_losses = [];
@@ -790,7 +793,7 @@ calc.space_heating = function (data)
             heat_demand[m] = 0;
         }
 
-        if (data.temperature.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
+        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
             heat_demand[m] = 0;
         heat_demand_kwh[m] = 0.024 * heat_demand[m] * datasets.table_1a[m];
         cooling_demand_kwh[m] = 0.024 * cooling_demand[m] * datasets.table_1a[m];
@@ -866,6 +869,8 @@ calc.heating_systems = function (data) {
                     break;
                 case 'heating_and_water':
                     var Q_water = system.fraction_water_heating * data.energy_requirements.waterheating.quantity;
+                    if (data.energy_requirements.space_heating == undefined)
+                        data.energy_requirements.space_heating = {quantity: 0};
                     var Q_space = system.fraction_space * data.energy_requirements.space_heating.quantity;
                     var n_winter = system.summer_efficiency / 100;
                     var n_summer = system.winter_efficiency / 100;
@@ -926,8 +931,8 @@ calc.energy_systems = function (data)
         data.energy_systems = {};
     if (data.fuels == undefined)
         data.fuels = {};
-    if (data.temperature.heating_off_summer == undefined)
-        data.temperature.heating_off_summer = true;
+    if (data.space_heating.heating_off_summer == undefined)
+        data.space_heating.heating_off_summer = true;
     //if (data.systemlibrary == undefined) {
     //  data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
     //}
@@ -2007,18 +2012,22 @@ calc.currentenergy = function (data) {
 /************************************************************************/
 calc.fans_and_pumps_and_combi_keep_hot = function (data) {
 
-    // 1.- Annual energy requirements for pumps, fans and electric keep-hot
+// 1.- Annual energy requirements for pumps, fans and electric keep-hot
     var annual_energy = 0;
     var monthly_energy = [];
-    // From heating systems
-    console.log('CARLOS REMEMBER!!!  Energy systems not taken into account for fans and pumps');
-    /*if (data.energy_systems != undefined && data.energy_systems.space_heating != undefined) {
-     for (system in data.energy_systems.space_heating) {
-     annual_energy += 1 * data.energy_systems.space_heating[system].fans_and_pumps;
-     annual_energy += 1 * data.energy_systems.space_heating[system].combi_keep_hot; // I assume that if there is a combi boiler, it is used for water and space heating. We only want to check if there is a "combi keep hot facility" once, so i do it in space heating but not in water heating
-     }
-     }*/
-
+    // From heating systems (Central heating pump, fans and supply pumps, keep hot facility
+    data.heating_systems.forEach(function (system) {
+        annual_energy += 1.0 * system.central_heating_pump;
+        annual_energy += 1.0 * system.fans_and_supply_pumps;
+        switch (system.combi_loss) {
+            case 'Instantaneous, with keep-hot facility controlled by time clock':
+                annual_energy += 600;
+                break;
+            case 'Instantaneous, with keep-hot facility not controlled by time clock':
+                annual_energy += 900;
+                break;
+        }
+    });
     // From Ventilation (SAP2012 document page 213)
     var ventilation_type = '';
     switch (data.ventilation.ventilation_type)
@@ -2064,16 +2073,30 @@ calc.fans_and_pumps_and_combi_keep_hot = function (data) {
             break;
     }
 
-    // From Solar Hot Water
+// From Solar Hot Water
     if (data.use_SHW == 1) {
         if (data.SHW.pump != undefined && data.SHW.pump == 'electric')
             annual_energy += 50;
     }
 
+    // Energy and fuel requirements
     for (m = 0; m < 12; m++)
         monthly_energy[m] = annual_energy / 12;
-    if (annual_energy > 0)
+    if (annual_energy > 0) {
         data.energy_requirements.fans_and_pumps = {name: "Fans and pumps", quantity: annual_energy, monthly: monthly_energy};
+        
+        if (data.fans_and_pumps == undefined)
+            data.fans_and_pumps = [{fuel: 'Standard Tariff', fraction: 1}];
+        
+        data.fuel_requirements.fans_and_pumps.quantity = 0;
+        
+        data.fans_and_pumps.forEach(function (fuel_requirement, index) {
+            fuel_requirement.demand = annual_energy * fuel_requirement.fraction;
+            fuel_requirement.fuel_input = annual_energy * fuel_requirement.fraction; // We assume efficiency of Electrical system is 1
+            data.fuel_requirements.fans_and_pumps.quantity += fuel_requirement.fuel_input;
+            data.fuel_requirements.fans_and_pumps.list.push(fuel_requirement);
+        });
+    }
 };
 // Internal and solar gains
 calc.gains = function (data) {
@@ -2375,7 +2398,6 @@ get_hours_off_weekday = function () {
         hours_off.push(0);
     return hours_off;
 };
-
 get_hours_off_weekend = function () {
     var hours_off = [];
     if (project.master.household['3a_heatinghours_weekend_off3_hours'] != undefined
@@ -2440,10 +2462,8 @@ get_hours_off_weekend = function () {
         hours_off.push(0);
     return hours_off;
 };
-
 function calc_Th2(control_type, Th, HLP) {
     var temp = [];
-
     for (var m = 0; m < 12; m++) {
         var tmpHLP = HLP[m];
         if (tmpHLP > 6.0)
