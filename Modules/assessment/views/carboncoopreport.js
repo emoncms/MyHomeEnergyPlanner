@@ -1453,6 +1453,10 @@ function carboncoopreport_UpdateUI() {
                     addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
                 if (project[scenario].measures.water_heating.storage_type != undefined)
                     addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.water_heating.pipework_insulation, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.water_heating.hot_water_control_type, tableSelector, summaryTableSelector);
 
             }
             if (project[scenario].measures.space_heating != undefined) {

@@ -1464,45 +1464,41 @@ calc.water_heating = function (data) {
                     // DISTRIBUTION LOSSES
                     distribution_loss[m] = 0.15 * system.fraction_water_heating * monthly_energy_content[m];
 
-                    // PRIMARY CIRCUIT LOSSES
-                    primary_circuit_loss[m] = 1.0 * system.primary_circuit_loss; //In SAP2012 table 3 p199 it does a proper calcualtion, taking into account number of hours of use in summer and winter, we have simplified it addid this loss as a system property, inputting an average value
-                    if (data.water_heating.solar_water_heating)
-                        primary_circuit_loss[m] *= datasets.table_h4[m];
-                    /*
-                     var hours_per_day = 0;
-                     if (data.water_heating.system == 'Other') { // Table 3 
-                     if (m >= 5 && m <= 8) {
-                     hours_per_day = 3;
-                     } else {
-                     if (data.water_heating.hot_water_control_type == "no_cylinder_thermostat")
-                     hours_per_day = 11;
-                     if (data.water_heating.hot_water_control_type == "cylinder_thermostat_without_timer")
-                     hours_per_day = 5;
-                     if (data.water_heating.hot_water_control_type == "cylinder_thermostat_with_timer")
-                     hours_per_day = 3;
-                     if (data.water_heating.community_heating)
-                     hours_per_day = 3;
-                     }
-                     
-                     if (data.water_heating.community_heating)
-                     data.water_heating.pipework_insulated_fraction = 1.0;
-                     else {
-                     if (data.water_heating.pipework_insulation == 'Uninsulated primary pipework')
-                     data.water_heating.pipework_insulated_fraction = 0;
-                     if (data.water_heating.pipework_insulation == 'First 1m from cylinder insulated')
-                     data.water_heating.pipework_insulated_fraction = 0.1;
-                     if (data.water_heating.pipework_insulation == 'All accesible piperwok insulated')
-                     data.water_heating.pipework_insulated_fraction = 0.3;
-                     if (data.water_heating.pipework_insulation == 'Fully insulated primary pipework')
-                     data.water_heating.pipework_insulated_fraction = 1.0;
-                     }
-                     primary_circuit_loss[m] = datasets.table_1a[m] * 14 * ((0.0091 * data.water_heating.pipework_insulated_fraction + 0.0245 * (1 - data.water_heating.pipework_insulated_fraction)) * hours_per_day + 0.0263);
-                     
-                     if (data.water_heating.solar_water_heating)
-                     primary_circuit_loss[m] *= datasets.table_h4[m];
-                     }*/
+                    // PRIMARY CIRCUIT LOSSES - SAP2012, table 3, p.199
+                    if (system.primary_circuit_loss == 'Yes') {
+                        var hours_per_day = 0;
+                        if (m >= 5 && m <= 8) {
+                            hours_per_day = 3;
+                        } else {
+                            if (data.water_heating.hot_water_control_type == "no_cylinder_thermostat")
+                                hours_per_day = 11;
+                            if (data.water_heating.hot_water_control_type == "Cylinder thermostat, water heating not separately timed")
+                                hours_per_day = 5;
+                            if (data.water_heating.hot_water_control_type == "Cylinder thermostat, water heating separately timed")
+                                hours_per_day = 3;
+                            /*if (data.water_heating.community_heating)
+                             hours_per_day = 3;*/
+                        }
 
-                    // Combi loss for each month from Table 3a, 3b or 3c (enter “0” if not a combi boiler)
+                        if (data.water_heating.pipework_insulation == 'Uninsulated primary pipework')
+                            data.water_heating.pipework_insulated_fraction = 0;
+                        if (data.water_heating.pipework_insulation == 'First 1m from cylinder insulated')
+                            data.water_heating.pipework_insulated_fraction = 0.1;
+                        if (data.water_heating.pipework_insulation == 'All accesible piperwok insulated')
+                            data.water_heating.pipework_insulated_fraction = 0.3;
+                        if (data.water_heating.pipework_insulation == 'Fully insulated primary pipework')
+                            data.water_heating.pipework_insulated_fraction = 1.0;
+
+                        /*if (data.water_heating.community_heating)
+                         data.water_heating.pipework_insulated_fraction = 1.0;*/
+
+                        primary_circuit_loss[m] = datasets.table_1a[m] * 14 * ((0.0091 * data.water_heating.pipework_insulated_fraction + 0.0245 * (1 - data.water_heating.pipework_insulated_fraction)) * hours_per_day + 0.0263);
+
+                        if (data.water_heating.solar_water_heating)
+                            primary_circuit_loss[m] *= datasets.table_h4[m];
+                    }
+
+                    // COMBI LOSS-  for each month from Table 3a, 3b or 3c (enter “0” if not a combi boiler)
                     if (system.combi_loss != "0") {
                         if (Vd_m[m] < 100)
                             var fu = Vd_m[m] / 100;

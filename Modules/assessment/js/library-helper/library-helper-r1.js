@@ -39,7 +39,9 @@ libraryHelper.prototype.init = function () {
         'storage_type': 'Type of storages',
         'appliances_and_cooking': 'Appliances and Cooking',
         'heating_control': "Heating controls",
-        'heating_systems': "Heating systems"
+        'heating_systems': "Heating systems",
+        'pipework_insulation': "Pipework insulation measures",
+        'hot_water_control_type': "Storage control types"
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -1003,6 +1005,17 @@ libraryHelper.prototype.heating_systems_library_to_html = function (origin, libr
     }
     return out;
 };
+libraryHelper.prototype.pipework_insulation_library_to_html = function (origin, library_id) {
+    var out = this.default_library_to_html(origin, library_id);
+    out = out.replace(/add-system/g, 'add-pipework-insulation');
+    return out;
+};
+libraryHelper.prototype.hot_water_control_type_library_to_html = function (origin, library_id) {
+    var out = this.default_library_to_html(origin, library_id);
+    out = out.replace(/add-system/g, 'add-storage-control-type');
+    return out;
+};
+
 
 /**********************************************
  * Items to html
@@ -1439,7 +1452,7 @@ libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
     out += '<tr><td>Central heating pump (kWh/year)</td><td><input type="text" class="item-central_heating_pump" required value="' + item.central_heating_pump + '"/></td></tr>';
     out += '<tr><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
     out += '<tr><td>Responsiveness</td><td><input type="text" class="item-responsiveness" required value="' + item.responsiveness + '"/></td></tr>';
-    out += '<tr><td>Commbi loss</td><td><select class="item-combi_loss" required>';
+    out += '<tr><td>Combi loss</td><td><select class="item-combi_loss" required>';
     var options = ['0', 'Instantaneous, without keep hot-facility', 'Instantaneous, with keep-hot facility controlled by time clock', 'Instantaneous, with keep-hot facility not controlled by time clock', 'Storage combi boiler >= 55 litres', 'Storage combi boiler < 55 litres'];
     for (index in options) {
         if (item.instantaneous_water_heating == options[index])
@@ -1448,11 +1461,69 @@ libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
             out += '<option value="' + options[index] + '">' + options[index] + '</option>';
     }
     out += '</select></td></tr>';
-    out += '<tr><td>Primary circuit loss (kWh/month) <i class="icon-question-sign" title="Primary loss is set to zero for the following:\n\   - Electric inmersion heater.\n\   - Combi boiler\n\   - CPSU(including electric CPSU)\n\   - Boiler and thermal store within a single casing\n\   - Separate boiler and thermal store connected by no more than 1.5m of insulated pipework\n\ \n\For other cases (indirect cylinders and thermal stores connected by unsinsulated pipework or more than 1.5m of insulated pipework) the loss is calculated in SAP2012 table 3, p. 199" /></td>\n\
-<td><input type="text" class="item-primary_circuit_loss" required value="' + item.primary_circuit_loss + '"/></td></tr>';
+    out += '<tr><td>Primary circuit loss <i class="icon-question-sign" title="No primary loss for the following:\n\   - Electric inmersion heater.\n\   - Combi boiler\n\   - CPSU(including electric CPSU)\n\   - Boiler and thermal store within a single casing\n\   - Separate boiler and thermal store connected by no more than 1.5m of insulated pipework\n\ \n\For other cases (indirect cylinders and thermal stores connected by unsinsulated pipework or more than 1.5m of insulated pipework) the loss is calculated according to the amount of insulated pipework and the type of storage heating controls (in the Hot Water System section) - SAP2012 table 3, p. 199" /></td><td><select class="item-primary_circuit_loss">';
+    var options = ['Yes', 'No'];
+    for (index in options) {
+        if (item.primary_circuit_loss == options[index])
+            out += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
+        else
+            out += '<option value="' + options[index] + '">' + options[index] + '</option>';
+    }
+    out += '</select></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
-    out += '<tr><td>Performance</td><td><input type="text" class="item-performancstorage_volumee" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
+libraryHelper.prototype.pipework_insulation_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: "--", source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Amount of pipework insulation</td><td><select class="item-name">';
+    out += item.name == 'First 1m from cylinder insulated' ? '<option value="First 1m from cylinder insulated" selected>First 1m from cylinder insulated</option>' : '<option value="First 1m from cylinder insulated">First 1m from cylinder insulated</option>';
+    out += item.name == 'All accesible piperwok insulated' ? '<option value="All accesible piperwok insulated" selected>All accesible piperwok insulated</option>' : '<option value="All accesible piperwok insulated">All accesible piperwok insulated</option>';
+    out += item.name == 'Fully insulated primary pipework' ? '<option value="Fully insulated primary pipework" selected>Fully insulated primary pipework</option>' : '<option value="Fully insulated primary pipework">Fully insulated primary pipework</option>';
+    out += '</select></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
+libraryHelper.prototype.hot_water_control_type_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: "--", source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Hot water storage control type</td><td><select class="item-name">';
+    out += item.name == 'Cylinder thermostat, water heating not separately timed' ? '<option value="Cylinder thermostat, water heating not separately timed" selected>Cylinder thermostat, water heating not separately timed</option>' : '<option value="Cylinder thermostat, water heating not separately timed">Cylinder thermostat, water heating not separately timed</option>';
+    out += item.name == 'Cylinder thermostat, water heating separately timed' ? '<option value="Cylinder thermostat, water heating separately timed" selected>Cylinder thermostat, water heating separately timed</option>' : '<option value="Cylinder thermostat, water heating separately timed">Cylinder thermostat, water heating separately timed</option>';
+    out += '</select></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
@@ -1727,6 +1798,33 @@ libraryHelper.prototype.appliances_and_cooking_get_item_to_save = function () {
     };
     return item;
 };
+libraryHelper.prototype.heating_systems_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        category: $(".item-category").val(),
+        winter_efficiency: $(".item-winter_efficiency").val(),
+        summer_efficiency: $(".item-summer_efficiency").val(),
+        central_heating_pump: $(".item-central_heating_pump").val(),
+        fans_and_supply_pumps: $(".item-fans_and_supply_pumps").val(),
+        responsiveness: $(".item-responsiveness").val(),
+        combi_loss: $(".item-combi_loss").val(),
+        primary_circuit_loss: $(".item-primary_circuit_loss").val(),
+        source: $(".item-source").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
 libraryHelper.prototype.heating_control_get_item_to_save = function () {
     var item = {};
     var tag = $(".item-tag").val();
@@ -1747,19 +1845,30 @@ libraryHelper.prototype.heating_control_get_item_to_save = function () {
     };
     return item;
 };
-libraryHelper.prototype.heating_systems_get_item_to_save = function () {
+libraryHelper.prototype.pipework_insulation_get_item_to_save = function () {
     var item = {};
     var tag = $(".item-tag").val();
     item[tag] = {
         name: $(".item-name").val(),
-        category: $('.item-category').val(),
-        winter_efficiency: $('.item-winter_efficiency').val(),
-        summer_efficiency: $('.item-summer_efficiency').val(),
-        central_heating_pump: $('.item-central_heating_pump').val(),
-        fans_and_supply_pumps: $('.item-fans_and_supply_pumps').val(),
-        responsiveness: $('.item-responsiveness').val(),
-        combi_loss: $('.item-combi_loss').val(),
-        primary_circuit_loss: $('.item-primary_circuit_loss').val(),
+        source: $(".item-source").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
+libraryHelper.prototype.hot_water_control_type_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
         source: $(".item-source").val(),
         description: $(".item-description").val(),
         performance: $(".item-performance").val(),

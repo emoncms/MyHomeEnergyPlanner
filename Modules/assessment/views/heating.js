@@ -16,6 +16,14 @@ function heating_UpdateUI()
     else
         $('#annual_energy_content').html('<span key="data.water_heating.annual_energy_content" dp=0></span>  kWh/year');
 
+    //Add "Hot water storage control type" and "Pipework insulation" if any of the systems requires it
+    data.heating_systems.forEach(function (system) {
+        if (system.primary_circuit_loss == 'Yes')
+            $('.if-primary-circuit-loss').show();
+        else
+            $('.if-primary-circuit-loss').hide();
+    });
+
     show_hide_if_master();
 }
 
@@ -29,7 +37,6 @@ function heating_initUI() {
         data.measures.space_heating = {};
 
     // Water heating
-    add_water_usage(); // water efficiency
     $('#solarhotwater-link').prop('href', 'view?id=' + p.id + '#' + scenario + '/solarhotwater');
 
     // Space heating
@@ -39,15 +46,7 @@ function heating_initUI() {
             total_hours += data.temperature.hours_off[day_type][i];
         $('#hours-off-' + day_type).html(total_hours);
     }
-
-    //Heating systems
-    add_heating_systems();
-
-    // Storage
-    add_storage();
-
-    // Other things
-    show_hide_if_master();
+    heating_UpdateUI();
 }
 
 
@@ -89,14 +88,7 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
     //1. Set variables in library_helper
     library_helper.init();
     library_helper.type_of_measure = $(this).attr('type');
-    if (library_helper.type_of_measure == 'water_usage')
-        library_helper.type = 'water_usage';
-    if (library_helper.type_of_measure == 'storage_type')
-        library_helper.type = 'storage_type';
-    if (library_helper.type_of_measure == 'pipework_insulation')
-        library_helper.type = 'storage_type'; // we do this assingment in order to not break the populationn of the library selects in the modal
-    else
-        library_helper.type = library_helper.type_of_measure;
+    library_helper.type = library_helper.type_of_measure;
 
     // 2. Prepare modal
     $('#apply-measure-water-heating-finish').hide();
@@ -120,23 +112,20 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
             $('#apply-measure-water-heating-what-to-do').hide();
             $('#apply-measure-water-heating-library-item-selects').show();
             $('#apply-measure-water-heating-modal .modal-body').show();
-            $('#apply-measure-water-heating-pipework-insulation').hide();
             $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
             break;
         case 'storage_type':
             $('#apply-measure-water-heating-what-to-do').hide();
             $('#apply-measure-water-heating-library-item-selects').show();
             $('#apply-measure-water-heating-modal .modal-body').show();
-            $('#apply-measure-water-heating-pipework-insulation').hide();
             $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
             break;
         case 'pipework_insulation':
             $('#apply-measure-water-heating-pipework-insulation select').val(data.water_heating.pipework_insulation);
             $('#apply-measure-water-heating-what-to-do').hide();
-            $('#apply-measure-water-heating-library-item-selects').hide();
-            $('#apply-measure-water-heating-modal .modal-body').hide();
-            $('#apply-measure-water-heating-pipework-insulation').show();
-            $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from the drop down');
+            $('#apply-measure-water-heating-library-item-selects').show();
+            $('#apply-measure-water-heating-modal .modal-body').show();
+            $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
             break;
         case 'heating_systems':
             var item_index = $(this).attr('item-index');
@@ -145,7 +134,6 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
             $('#apply-measure-water-heating-what-to-do').hide();
             $('#apply-measure-water-heating-library-item-selects').show();
             $('#apply-measure-water-heating-modal .modal-body').show();
-            $('#apply-measure-water-heating-pipework-insulation').hide();
             $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
     }
     $('#apply-measure-water-heating-modal').modal('show');
@@ -220,8 +208,36 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
                 data.measures.water_heating['pipework_insulation'] = {};
             if (data.measures.water_heating['pipework_insulation'].original == undefined) // first time
                 data.measures.water_heating['pipework_insulation'].original = data.water_heating.pipework_insulation;
-            data.measures.water_heating['pipework_insulation'].measure = $('#apply-measure-water-heating-pipework-insulation select').val();
-            data.water_heating.pipework_insulation = $('#apply-measure-water-heating-pipework-insulation select').val();
+
+            var measure = library_helper.pipework_insulation_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
+            data.measures.water_heating['pipework_insulation'].measure = measure[tag];
+            data.water_heating.pipework_insulation = measure[tag].name;
+            break;
+        case 'hot_water_control_type':
+            if (data.measures.water_heating['hot_water_control_type'] == undefined)
+                data.measures.water_heating['hot_water_control_type'] = {};
+            if (data.measures.water_heating['hot_water_control_type'].original == undefined) // first time
+                data.measures.water_heating['hot_water_control_type'].original = data.water_heating.hot_water_control_type;
+
+            var measure = library_helper.hot_water_control_type_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
+            data.measures.water_heating['hot_water_control_type'].measure = measure[tag];
+            data.water_heating.hot_water_control_type = measure[tag].name;
             break;
         case 'heating_control':
             if (data.measures.space_heating['heating_control'] == undefined)
@@ -261,7 +277,6 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             // Update data object and add measure
             data.measures.heating_systems[item.id].measure = measure[tag];
             data.heating_systems[item_index] = measure[tag];
-            console.log(data.heating_systems[item_index]);
             break;
     }
     heating_initUI();
@@ -422,8 +437,8 @@ function add_storage() {
             specific_header = '<th>Loss factor b</th><th>Volume factor b</th><th>Temperature factor b</th>';
             specific_st_info = '<td>' + st.loss_factor_b + '</td><td>' + st.volume_factor_b + '</td><td>' + st.temperature_factor_b + '</td>';
         }
-        $('#type_of_storage').append('<tr><th>Type of storage <span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></th><th>Volume</th><th>Insulation type</th>' + specific_header + '<th>Inside dwelling?</th><th style="width:150px">Contains dedicated solar storage or WWHRS volume?</th><th></th></tr>');
-        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span></td></tr>');
+        $('#type_of_storage').append('<tr><th>Type of storage </th><th>Volume</th><th>Insulation type</th>' + specific_header + '<th>Inside dwelling?</th><th style="width:150px">Contains dedicated solar storage or WWHRS volume?</th><th></th></tr>');
+        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></td></tr>');
 
     }
 
