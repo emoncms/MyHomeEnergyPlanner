@@ -163,16 +163,8 @@ var openbem = {
         //inputdata.use_water_heating = data.use_water_heating;
         inputdata.water_heating = {
             low_water_use_design: data.water_heating.low_water_use_design,
-            instantaneous_hotwater: data.water_heating.instantaneous_hotwater,
             solar_water_heating: data.water_heating.solar_water_heating,
             pipework_insulated_fraction: data.water_heating.pipework_insulated_fraction,
-            /*declared_loss_factor_known: data.water_heating.declared_loss_factor_known,
-             manufacturer_loss_factor: data.water_heating.manufacturer_loss_factor,
-             storage_volume: data.water_heating.storage_volume,
-             temperature_factor_a: data.water_heating.temperature_factor_a,
-             loss_factor_b: data.water_heating.loss_factor_b,
-             volume_factor_b: data.water_heating.volume_factor_b,
-             temperature_factor_b: data.water_heating.temperature_factor_b,*/
             pipework_insulation: data.water_heating.pipework_insulation,
             storage_type: data.water_heating.storage_type,
             community_heating: data.water_heating.community_heating,
@@ -181,9 +173,6 @@ var openbem = {
             hot_water_control_type: data.water_heating.hot_water_control_type,
             override_annual_energy_content: data.water_heating.override_annual_energy_content,
             annual_energy_content: data.water_heating.annual_energy_content,
-            system: data.water_heating.system,
-            storage: data.water_heating.storage,
-            combi_boiler: data.water_heating.combi_boiler,
             Vc: data.water_heating.Vc,
             water_usage: data.water_heating.water_usage
         };
@@ -237,7 +226,6 @@ var openbem = {
         inputdata.temperature = {
             responsiveness: data.temperature.responsiveness,
             target: data.temperature.target,
-            control_type: data.temperature.control_type,
             living_area: data.temperature.living_area,
             temperature_adjustment: data.temperature.temperature_adjustment
         };
@@ -247,33 +235,8 @@ var openbem = {
             heating_off_summer: data.space_heating.heating_off_summer
         };
 
-// Energy systems
         inputdata.heating_systems = data.heating_systems;
 
-        inputdata.systemlibrary = data.systemlibrary;
-        inputdata.energy_systems = {}
-        for (z in data.energy_systems) {
-            inputdata.energy_systems[z] = [];
-            for (i in data.energy_systems[z])
-            {
-                inputdata.energy_systems[z].push({
-                    system: data.energy_systems[z][i].system,
-                    description: data.energy_systems[z][i].description,
-                    fraction: data.energy_systems[z][i].fraction,
-                    efficiency: data.energy_systems[z][i].efficiency,
-                    name: data.energy_systems[z][i].name,
-                    summer: data.energy_systems[z][i].summer,
-                    winter: data.energy_systems[z][i].winter,
-                    fuel: data.energy_systems[z][i].fuel,
-                    id: 1.0 * data.energy_systems[z][i].id,
-                    fans_and_pumps: data.energy_systems[z][i].fans_and_pumps,
-                    combi_keep_hot: data.energy_systems[z][i].combi_keep_hot
-                });
-                if (data.energy_systems[z][i].secondary != undefined) // Secondary heating system
-                    inputdata.energy_systems[z][i].secondary = data.energy_systems[z][i].secondary;
-            }
-
-        }
 
         // Fuels
         inputdata.fuels = data.fuels;
@@ -284,4 +247,4 @@ var openbem = {
         inputdata.measures = data.measures;
         return inputdata;
     }
-}
+};

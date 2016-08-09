@@ -52,7 +52,6 @@ calc.run = function (datain)
     calc.temperature(calc.data);
     calc.fans_and_pumps_and_combi_keep_hot(calc.data);
     calc.space_heating(calc.data);
-    //calc.energy_systems(calc.data);
     calc.heating_systems(calc.data);
     calc.fuel_requirements(calc.data);
     calc.SAP(calc.data);
@@ -548,7 +547,7 @@ calc.ventilation = function (data)
 
 //---------------------------------------------------------------------------------------------
 // TEMPERATURE
-// Module Inputs: data.temperature.responsiveness, data.temperature.target, data.temperature.living_area, data.temperature.control_type
+// Module Inputs: data.temperature.responsiveness, data.temperature.target, data.temperature.living_area
 // Global Inputs: data.TFA, data.TMP, data.losses_WK, data.gains_W, data.altitude, data.region
 // Global Outputs: data.internal_temperature, data.external_temperature
 // Datasets: datasets.table_u1
@@ -558,8 +557,6 @@ calc.temperature = function (data)
 {
     if (data.temperature == undefined)
         data.temperature = {};
-    if (data.temperature.control_type == undefined)
-        data.temperature.control_type = 1;
     if (data.temperature.living_area == undefined)
         data.temperature.living_area = data.TFA;
     if (data.temperature.target == undefined)
@@ -928,148 +925,7 @@ calc.heating_systems = function (data) {
     }
 
 };
-//---------------------------------------------------------------------------------------------
-// ENERGY SYSTEMS, FUEL COSTS
-// Module Inputs: data.energy_systems
-// Global Inputs: data.energy_requirements
-// Global Outputs: data.fuel_totals, data.total_cost
-// Datasets: datasets.fuels
-//---------------------------------------------------------------------------------------------
 
-calc.energy_systems = function (data)
-{
-    if (data.energy_systems == undefined)
-        data.energy_systems = {};
-    if (data.fuels == undefined)
-        data.fuels = {};
-    if (data.space_heating.heating_off_summer == undefined)
-        data.space_heating.heating_off_summer = true;
-    //if (data.systemlibrary == undefined) {
-    //  data.systemlibrary = JSON.parse(JSON.stringify(datasets.energysystems));
-    //}
-
-    // Copy dataset over to user data without overwritting user changed properties
-    var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
-    for (fuel in tmpfuels) {
-        for (prop in tmpfuels[fuel]) {
-            if (data.fuels[fuel] != undefined && data.fuels[fuel][prop] != undefined)
-                tmpfuels[fuel][prop] = data.fuels[fuel][prop]
-        }
-    }
-    data.fuels = tmpfuels;
-    data.fuel_totals = {};
-    for (z in data.energy_requirements)
-    {
-        var quantity = data.energy_requirements[z].quantity;
-        var quantity_monthly = data.energy_requirements[z].monthly;
-        if (data.energy_systems[z] == undefined)
-            data.energy_systems[z] = [];
-        for (x in data.energy_systems[z])
-        {
-            data.energy_systems[z][x].demand = quantity * data.energy_systems[z][x].fraction;
-            data.energy_systems[z][x].demand_monthly = [];
-            for (m = 0; m < 12; m++)
-                data.energy_systems[z][x].demand_monthly[m] = quantity_monthly[m] * data.energy_systems[z][x].fraction;
-            /*var system = data.energy_systems[z][x].system;
-             if (data.systemlibrary[system] != undefined) {
-             data.energy_systems[z][x].name = data.systemlibrary[system].name;
-             data.energy_systems[z][x].efficiency = data.systemlibrary[system].efficiency;
-             }*/
-        }
-    }
-
-    // Water heating efficiency adjustment
-    for (var a in data.energy_systems["waterheating"]) {
-        //Calculation of the monthly efficiency for a hot water only system
-        data.energy_systems["waterheating"][a].efficiency = data.energy_systems["waterheating"][a].summer;
-        data.energy_systems["waterheating"][a].efficiency_monthly = [];
-        for (m = 0; m < 12; m++)
-            data.energy_systems["waterheating"][a].efficiency_monthly[m] = data.energy_systems["waterheating"][a].efficiency;
-        // Apply Winter and summer efficiency modification to water heating system if its a shared water + space heating system. SAP2012, 9.2.1, p. 24 - Overwrites hot water efficiency
-        var system_water = data.energy_systems["waterheating"][a].system;
-        for (var b in data.energy_systems["space_heating"]) {
-            var system_space = data.energy_systems["space_heating"][b].system;
-            if (system_water == system_space) {
-
-                //var Q_water = data.energy_systems["waterheating"][a].demand;
-                //var Q_space = data.energy_systems["space_heating"][b].demand;
-                var Q_water = data.energy_systems["waterheating"][a].demand_monthly;
-                var Q_space = data.energy_systems["space_heating"][b].demand_monthly;
-                //var n_winter = data.systemlibrary[system_water].winter;
-                //var n_summer = data.data.energy_systems[eid][system_water].summer;
-                var n_winter = data.energy_systems["waterheating"][a].winter;
-                var n_summer = data.energy_systems["waterheating"][a].summer;
-                var n = 0;
-                var n_monthly = [];
-                for (m = 0; m < 12; m++) {
-                    n_monthly[m] = (Q_water[m] + Q_space[m]) / ((Q_space[m] / n_winter) + (Q_water[m] / n_summer));
-                    n += n_monthly[m];
-                }
-                data.energy_systems["waterheating"][a].efficiency_monthly = n_monthly;
-                data.energy_systems["waterheating"][a].efficiency = n / 12;
-                break; // we leave the for for "space_heatiing" systems so that we don't overwrite the adjusted efficiency for the water_heating system
-            }
-        }
-    }
-
-    // Fuel totals
-    for (z in data.energy_requirements)
-    {
-        for (x in data.energy_systems[z])
-        {
-            data.energy_systems[z][x].fuelinput_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            for (m = 0; m < 12; m++) {
-                if (z == 'waterheating')
-                    data.energy_systems[z][x].fuelinput_monthly[m] = data.energy_systems[z][x].demand_monthly[m] / data.energy_systems[z][x].efficiency_monthly[m];
-                else
-                    data.energy_systems[z][x].fuelinput_monthly[m] = data.energy_systems[z][x].demand_monthly[m] / data.energy_systems[z][x].efficiency;
-            }
-
-            data.energy_systems[z][x].fuelinput = data.energy_systems[z][x].demand / data.energy_systems[z][x].efficiency;
-            var system = data.energy_systems[z][x].system;
-            var fuel = data.energy_systems[z][x].fuel;
-            if (data.fuel_totals[fuel] == undefined)
-                data.fuel_totals[fuel] = {name: fuel, quantity: 0};
-            data.fuel_totals[fuel].quantity += data.energy_systems[z][x].fuelinput;
-        }
-    }
-
-
-
-    // Total energy use, fuel costs, Annual CO2 and primary energy due to the energy requirements
-    data.energy_use = 0;
-    data.annualco2 = 0;
-    data.energy_delivered = 0
-    for (z in data.fuel_totals)
-    {
-        data.fuel_totals[z].annualcost = data.fuel_totals[z].quantity * data.fuels[z].fuelcost + data.fuels[z].standingcharge;
-        data.fuel_totals[z].fuelcost = data.fuels[z].fuelcost;
-        data.fuel_totals[z].primaryenergy = data.fuel_totals[z].quantity * data.fuels[z].primaryenergyfactor;
-        data.fuel_totals[z].annualco2 = data.fuel_totals[z].quantity * data.fuels[z].co2factor;
-        data.total_cost += data.fuel_totals[z].annualcost;
-        data.energy_use += data.fuel_totals[z].quantity;
-        data.primary_energy_use += data.fuel_totals[z].primaryenergy;
-        data.annualco2 += data.fuel_totals[z].annualco2;
-    }
-    data.energy_delivered = data.energy_use;
-    // Annual CO2, primary energy and cost saved due to generation. Be aware generation is not used for the calculation of Energy use
-    if (data.use_generation == 1) {
-        data.fuel_totals['generation'] = {
-            name: 'generation',
-            quantity: -data.generation.total_generation,
-            annualco2: -data.generation.total_CO2,
-            primaryenergy: -data.generation.total_primaryenergy,
-            annualcost: -data.generation.total_generation * data.fuels.generation.fuelcost
-        };
-        data.primary_energy_use += data.fuel_totals['generation'].primaryenergy;
-        data.annualco2 += data.fuel_totals['generation'].annualco2;
-        data.total_cost += data.fuel_totals['generation'].annualcost;
-        data.energy_delivered += data.fuel_totals['generation'].quantity;
-    }
-
-    data.net_cost = data.use_generation == 1 ? data.total_cost - data.total_income : data.total_cost;
-    return data;
-};
 //---------------------------------------------------------------------------------------------
 // FUEL REQUIREMENTS
 // Module Inputs: 
@@ -1098,14 +954,7 @@ calc.fuel_requirements = function (data) {
         for (x in data.fuel_requirements[z].list)
         {
             data.fuel_requirements[z].list[x].fuel_input_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            /*for (m = 0; m < 12; m++) {
-             if (z == 'waterheating')
-             data.fuel_requirements[z].list[x].fuel_input_monthly[m] = data.fuel_requirements[z].list[x].demand_monthly[m] / data.fuel_requirements[z].list[x].system_efficiency_monthly[m];
-             else
-             data.fuel_requirements[z].list[x].fuel_input_monthly[m] = data.fuel_requirements[z].list[x].demand_monthly[m] / data.fuel_requirements[z].list[x].system_efficiency;
-             }*/
-
-            //data.fuel_requirements[z].list[x].fuel_input = data.fuel_requirements[z].list[x].demand / data.fuel_requirements[z].list[x].system_efficiency;
+            
             var fuel = data.fuel_requirements[z].list[x].fuel;
             if (data.fuel_totals[fuel] == undefined)
                 data.fuel_totals[fuel] = {name: fuel, quantity: 0};
@@ -1383,37 +1232,8 @@ calc.water_heating = function (data) {
         data.water_heating.solar_water_heating = false;
     if (data.water_heating.pipework_insulation == undefined)
         data.water_heating.pipework_insulation = 'Fully insulated primary pipework';
-    /*if (data.water_heating.manufacturer_loss_factor == undefined)
-     data.water_heating.manufacturer_loss_factor = 0;
-     if (data.water_heating.temperature_factor_a == undefined)
-     data.water_heating.temperature_factor_a = 0;
-     if (data.water_heating.storage_volume == undefined)
-     data.water_heating.storage_volume = 0;
-     if (data.water_heating.loss_factor_b == undefined)
-     data.water_heating.loss_factor_b = 0;
-     if (data.water_heating.volume_factor_b == undefined)
-     data.water_heating.volume_factor_b = 0;
-     if (data.water_heating.temperature_factor_b == undefined)
-     data.water_heating.temperature_factor_b = 0;*/
-    /* if (data.water_heating.storage_type == undefined)
-     data.water_heating.storage_type = {
-     tag: 'HWS',
-     name: "Test hot water storage - Ask Carlos to replace this default one",
-     manufacturer_loss_factor: 0,
-     temperature_factor_a: 0,
-     storage_volume: 0,
-     loss_factor_b: 0,
-     volume_factor_b: 0,
-     temperature_factor_b: 0,
-     insulation_type: 'very thick',
-     declared_loss_factor_known: true
-     };*/
-    if (data.water_heating.system == undefined)
-        data.water_heating.system = 'Other';
     if (data.water_heating.Vc == undefined)
         data.water_heating.Vc = 0;
-    if (data.water_heating.storage == undefined)
-        data.water_heating.storage = false;
     if (data.water_heating.water_usage == undefined)
         data.water_heating.water_usage = [];
     if (data.water_heating.contains_dedicated_solar_storage_or_WWHRS == undefined)
@@ -1832,33 +1652,24 @@ calc.generation = function (data) {
     if (data.generation.solar_annual_kwh > 0)
     {
         data.generation.systems.solarpv = {name: "Solar PV", quantity: data.generation.solar_annual_kwh, fraction_used_onsite: data.generation.solar_fraction_used_onsite, CO2: data.generation.solar_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.solar_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
-        //data.energy_systems.solarpv = [];
-        //data.energy_systems.solarpv[0] = {name: "Solar PV", system: "electric", fraction: 1, efficiency: 1, winter: 1.0, summer: 1.0, fuel: "electric"};
         data.total_income += data.generation.solar_annual_kwh * data.generation.solar_FIT;
     }
 
     if (data.generation.wind_annual_kwh > 0)
     {
         data.generation.systems.wind = {name: "Wind", quantity: data.generation.wind_annual_kwh, fraction_used_onsite: data.generation.wind_fraction_used_onsite, CO2: data.generation.wind_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.wind_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
-        //data.energy_systems.wind = [];
-        //data.energy_systems.wind[0] = {name: "Wind", system: "electric", fraction: 1, efficiency: 1, winter: 1.0, summer: 1.0, fuel: "electric"};
         data.total_income += data.generation.wind_annual_kwh * data.generation.wind_FIT;
     }
 
     if (data.generation.hydro_annual_kwh > 0)
     {
         data.generation.systems.hydro = {name: "Hydro", quantity: data.generation.hydro_annual_kwh, fraction_used_onsite: data.generation.hydro_fraction_used_onsite, CO2: data.generation.hydro_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.hydro_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
-        //data.energy_systems.hydro = [];
-        //data.energy_systems.hydro[0] = {name: "Hydro", system: "electric", fraction: 1, efficiency: 1, winter: 1.0, summer: 1.0, fuel: "electric"};
         data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT;
     }
 
     if (data.generation.solarpv_annual_kwh > 0)
     {
         data.generation.systems.solarpv2 = {name: "Solar PV from calculator", quantity: data.generation.solarpv_annual_kwh, fraction_used_onsite: data.generation.solarpv_fraction_used_onsite, CO2: data.generation.solarpv_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.solarpv_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
-        //if (data.energy_systems.solarpv2 == undefined) {
-        //    data.energy_systems.solarpv2 = [{name: "Solar PV from calculator", system: "electric", fraction: 1, efficiency: 1, winter: 1.0, summer: 1.0, fuel: "electric"}];
-        //}
         data.total_income += data.generation.solarpv_annual_kwh * data.generation.solarpv_FIT;
     }
 
