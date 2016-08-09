@@ -1519,23 +1519,6 @@ var standard_library = {
             "efficiency": 1
         }
     },
-    heating_control: {
-        "HC1": {
-            name: "Heating Control Measure test I",
-            "heating_control_type": 3,
-            source: 'HC test',
-            description: "HC test",
-            performance: 'HC test',
-            benefits: "HC test",
-            cost: 1,
-            who_by: "HC test",
-            disruption: "HC test",
-            associated_work: "HC test",
-            key_risks: "HC test",
-            notes: "HC test",
-            maintenance: "HC test"
-        }
-    },
     heating_systems: {
         "CMBB1": {
             name: "Old Gas/LPG Combi Boiler with rads/underfloor heating pipes in timber floor, with storage",

@@ -41,7 +41,8 @@ libraryHelper.prototype.init = function () {
         'heating_control': "Heating controls",
         'heating_systems': "Heating systems",
         'pipework_insulation': "Pipework insulation measures",
-        'hot_water_control_type': "Storage control types"
+        'hot_water_control_type': "Storage control types",
+        space_heating_control_type:'Spacce heating control types'
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -1015,6 +1016,11 @@ libraryHelper.prototype.hot_water_control_type_library_to_html = function (origi
     out = out.replace(/add-system/g, 'add-storage-control-type');
     return out;
 };
+libraryHelper.prototype.space_heating_control_type_library_to_html = function (origin, library_id) {
+    var out = this.default_library_to_html(origin, library_id);
+    out = out.replace(/add-system/g, 'add-space-heating-control-type');
+    return out;
+};
 
 
 /**********************************************
@@ -1486,7 +1492,7 @@ libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.pipework_insulation_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: '', name: "--", source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+        item = {tag: '', name: "--", source: '--', pipework_insulation: 'First 1m from cylinder insulated', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -1513,7 +1519,7 @@ libraryHelper.prototype.pipework_insulation_item_to_html = function (item, tag) 
 };
 libraryHelper.prototype.hot_water_control_type_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: '', name: "--", source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+        item = {tag: '', name: "--", control_type: 'Cylinder thermostat, water heating separately timed', source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -1523,6 +1529,29 @@ libraryHelper.prototype.hot_water_control_type_item_to_html = function (item, ta
     out += item.control_type == 'Cylinder thermostat, water heating not separately timed' ? '<option value="Cylinder thermostat, water heating not separately timed" selected>Cylinder thermostat, water heating not separately timed</option>' : '<option value="Cylinder thermostat, water heating not separately timed">Cylinder thermostat, water heating not separately timed</option>';
     out += item.control_type == 'Cylinder thermostat, water heating separately timed' ? '<option value="Cylinder thermostat, water heating separately timed" selected>Cylinder thermostat, water heating separately timed</option>' : '<option value="Cylinder thermostat, water heating separately timed">Cylinder thermostat, water heating separately timed</option>';
     out += '</select></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
+libraryHelper.prototype.space_heating_control_type_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: "--", control_type: 1, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" required value="' + item.name + '"/></td></tr>';
+    out += '<tr><td>Space heating control type</td><td><input class="item-control_type" type="number" min="1" max="3" step="1" value="' + item.control_type + '" /></td>';
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
@@ -1868,6 +1897,26 @@ libraryHelper.prototype.pipework_insulation_get_item_to_save = function () {
     return item;
 };
 libraryHelper.prototype.hot_water_control_type_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        control_type: $(".item-control_type").val(),
+        source: $(".item-source").val(),
+        description: $(".item-description").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
+libraryHelper.prototype.space_heating_control_type_get_item_to_save = function () {
     var item = {};
     var tag = $(".item-tag").val();
     item[tag] = {

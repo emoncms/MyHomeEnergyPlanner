@@ -1461,6 +1461,7 @@ function carboncoopreport_UpdateUI() {
                  addMeasureToSummaryTable(project[scenario].measures.water_heating.hot_water_control_type, tableSelector, summaryTableSelector);*/
 
             }
+            // Change this one project[scenario].measures.space_heating_control_type
             if (project[scenario].measures.space_heating != undefined) {
                 if (project[scenario].measures.space_heating.heating_control != undefined)
                     addMeasureToSummaryTable(project[scenario].measures.space_heating.heating_control, tableSelector, summaryTableSelector);
