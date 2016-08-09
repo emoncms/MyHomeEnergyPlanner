@@ -565,7 +565,7 @@ calc.temperature = function (data)
     if (data.temperature.target == undefined)
         data.temperature.target = 21;
     if (data.temperature.temperature_adjustment == undefined)
-        data.temperature.temperature_adjustment = 1;
+        data.temperature.temperature_adjustment = 0;
 
 
     // Calculate hours of heating off from household questionnaire
@@ -719,6 +719,17 @@ calc.temperature = function (data)
     data.mean_internal_temperature.fLA = fLA;
     data.mean_internal_temperature.m_i_t_whole_dwelling = JSON.parse(JSON.stringify(data.internal_temperature));
     data.external_temperature = Te;
+
+    // Temperature adjustment
+    if (mainHSs.mainHS1 != undefined && mainHSs.mainHS2 == undefined)  // if there is only one main system
+        data.temperature.temperature_adjustment = mainHSs.mainHS1.temperature_adjustment;
+    else if (mainHSs.mainHS1 != undefined && mainHSs.mainHS2 != undefined) { // if there are two
+        if (mainHSs.mainHS2.whole_house == true)
+            data.temperature.temperature_adjustment = mainHSs.mainHS1.temperature_adjustment;
+        else
+            data.temperature.temperature_adjustment = mainHSs.mainHS1.fraction_space * mainHSs.mainHS1.temperature_adjustment + mainHSs.mainHS2.fraction_space * mainHSs.mainHS2.temperature_adjustment
+    }
+
     for (var m = 0; m < 12; m++)
     {
         data.internal_temperature[m] = data.internal_temperature[m] + data.temperature.temperature_adjustment;

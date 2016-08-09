@@ -315,10 +315,10 @@ $('#openbem').on('click', '.add-heating-system', function () {
     item.fuel = 'Standard Tariff';
     item.fraction_space = 1;
     item.fraction_water_heating = 1;
-    item.main_space_heating_system = 'No';
+    item.main_space_heating_system = 'secondaryHS';
+    item.temperature_adjustment = 0;
     item.provides = 'heating_and_water';
     item.instantaneous_water_heating = false;
-    item.storage = false;
     item.heating_controls = 1;
     data.heating_systems.push(item);
     update();
@@ -381,7 +381,7 @@ function add_heating_systems() {
         $('#heating-systems').hide();
     $('#heating-systems').html('');
     var out = "<tr><th>Tag</th><th>Name</th><th>Provides</th><th>Space heating / Winter efficiency</th><th>Water heating / Summer efficiency</th>\n\
-<th>Fuel</th><th>Fraction</th><th>Main heating system <!--<i class='icon-question-sign' title='' />--></th><th>Responsiveness</th><th>Space heating controls</th><th>Instantaneous water heating?</th><th>Storage</th><th></th></tr>"
+<th>Fuel</th><th>Fraction</th><th>Main heating system <!--<i class='icon-question-sign' title='' />--></th><th>Responsiveness</th><th>Temperature adjustment <i class='icon-question-sign' title='SAP2012, table 4e, p.210'></i></th><th>Space heating controls</th><th>Instantaneous water heating?</th></tr>"
     $('#heating-systems').append(out);
 
     for (z in data.heating_systems) {
@@ -391,15 +391,15 @@ function add_heating_systems() {
         out += '<span class="apply-water-heating-measure if-not-master" type="heating_systems" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked" style="margin-left: 20px">Apply measure</button></span></td><td>' + item.name + '</td>\n\
 <td><select style="width:100px" key="data.heating_systems.' + z + '.provides"><option value="heating">Space heating</option><option value="water">Water heating</option><option value="heating_and_water">Space and water heating</option></select></td>\n\
 <td class="if-SH">' + item.winter_efficiency + '</td><td class="if-WH">' + item.summer_efficiency + '</td>\n\
-<td><select key="data.heating_systems.' + z + '.fuel">' + get_fuels_for_select() + '</select></td>\n\
+<td><select style="width:150px" key="data.heating_systems.' + z + '.fuel">' + get_fuels_for_select() + '</select></td>\n\
 <td><p class="if-SH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.fraction_space" max="1" step="0.01" min="0" /></p>\n\
 <p class="if-WH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.fraction_water_heating" max="1" step="0.01" min="0" /></td>\n\
 <td class="if-SH"><select style="width:100px" key="data.heating_systems.' + z + '.main_space_heating_system"><option value="mainHS1">Main heating system</option><option value="mainHS2_whole_house">2<sup>nd</sup> Main heating system - whole house</option><option value="mainHS2_part_of_the_house">2<sup>nd</sup> Main heating system - different part of the house</option><option value="secondaryHS">Secondary heating system</option></select></td>\n\
 <td class="if-SH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.responsiveness" max="1" step="0.01" min="0" /></td>\n\
+<td class="if-SH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.temperature_adjustment" max="1" step="0.01" min="0" /></td>\n\
 <td class="if-SH" style="text-align:center"><input style="width:40px" type="number" key="data.heating_systems.' + z + '.heating_controls" max="3" step="1" min="1" />\n\
     <br /><span class="apply-water-heating-measure if-not-master" type="space_heating_control_type" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked">Apply measure</button></span></td>\n\
-<td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.instantaneous_water_heating" /></td>\n\
-<td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.storage" /></td></tr>';
+<td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.instantaneous_water_heating" /></td></tr>';
 
         $('#heating-systems').append(out);
 
