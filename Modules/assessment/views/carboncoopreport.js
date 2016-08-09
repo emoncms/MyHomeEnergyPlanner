@@ -323,6 +323,8 @@ function compareCarbonCoop(scenario, outputElement) {
     var listA = project.master.fuel_totals;
     var listB = project[scenario].fuel_totals;
     //out += "<table class='table table-striped'>";
+    console.log(listA);
+    console.log(listB);
 
     for (z in listA)
     {
@@ -331,7 +333,7 @@ function compareCarbonCoop(scenario, outputElement) {
             out += "<tr><td>";
             out += "<b>" + z + ": </b><br>";
             out += "Fuel quantity: " + listA[z].quantity.toFixed(0) + " kWh<br>";
-            out += "Fuel cost: £" + listA[z].fuelcost.toFixed(2) + "<br>";
+            out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
             out += "Annual cost: £" + listA[z].annualcost.toFixed(0) + "<br>";
             out += "</td><td><br><b>Deleted in scenario B</b></td></tr>";
         }
@@ -344,7 +346,7 @@ function compareCarbonCoop(scenario, outputElement) {
             out += "<tr><td><br><b>New to scenario B</b></td><td>";
             out += "<b>" + z + ": </b><br>";
             out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
-            out += "Fuel cost: £" + listB[z].fuelcost.toFixed(2) + "<br>";
+            out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
             out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
             out += "</td></tr>";
         }
@@ -356,12 +358,12 @@ function compareCarbonCoop(scenario, outputElement) {
                 out += "<tr><td>";
                 out += "<b>" + z + ": </b><br>";
                 out += "Fuel quantity: " + listA[z].quantity.toFixed(0) + " kWh<br>";
-                out += "Fuel cost: £" + listA[z].fuelcost.toFixed(2) + "<br>";
+                out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
                 out += "Annual cost: £" + listA[z].annualcost.toFixed(0) + "<br>";
                 out += "</td><td>";
                 out += "<b>" + z + ": </b><br>";
                 out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
-                out += "Fuel cost: £" + listB[z].fuelcost.toFixed(2) + "<br>";
+                out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
                 out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
                 out += "</td>";
                 out += "<td><br>";
@@ -1453,10 +1455,10 @@ function carboncoopreport_UpdateUI() {
                     addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
                 if (project[scenario].measures.water_heating.storage_type != undefined)
                     addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector);
-                if (project[scenario].measures.water_heating.pipework_insulation != undefined)
-                    addMeasureToSummaryTable(project[scenario].measures.water_heating.pipework_insulation, tableSelector, summaryTableSelector);
-                if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
-                    addMeasureToSummaryTable(project[scenario].measures.water_heating.hot_water_control_type, tableSelector, summaryTableSelector);
+                /* if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+                 addMeasureToSummaryTable(project[scenario].measures.water_heating.pipework_insulation, tableSelector, summaryTableSelector);
+                 if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+                 addMeasureToSummaryTable(project[scenario].measures.water_heating.hot_water_control_type, tableSelector, summaryTableSelector);*/
 
             }
             if (project[scenario].measures.space_heating != undefined) {

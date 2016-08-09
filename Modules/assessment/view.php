@@ -440,7 +440,7 @@ global $reports;
 
     $("#openbem").on('click', ".scenario-block", function () {
         var s = $(this).attr('scenario');
-        if (s != scenario) {
+      //  if (s != scenario) {
             window.location = '#' + s + '/' + page;
             $(".menu-content").hide();
             $(this).find(".menu-content").show();
@@ -451,7 +451,7 @@ global $reports;
              UpdateUI(data);
              draw_openbem_graphics();
              */
-        }
+       // }
     });
 
     $('#openbem').on('click', '.project-menu-item', function () {
@@ -514,7 +514,7 @@ global $reports;
         $(".scenario-block[scenario=" + s + "]").hide();
 
         scenario = "master";
-        $(".scenario-block[scenario=master]").find(".menu-content").show();
+        $(".scenario-block[scenario=master]").find(".menu-content").click();
 
         update();
         $("#modal-delete-scenario").modal("hide");

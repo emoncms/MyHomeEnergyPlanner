@@ -2616,9 +2616,10 @@ var standard_library = {
             maintenance: "---"
         }
     },
-    pipework_insulation:{
+    pipework_insulation: {
         "PWINS1": {
             name: "First 1m from cylinder insulated",
+            pipework_insulation: 'First 1m from cylinder insulated',
             source: '---',
             description: "---",
             performance: '---',
@@ -2633,6 +2634,7 @@ var standard_library = {
         },
         "PWINS2": {
             name: "All accesible piperwok insulated",
+            pipework_insulation: 'All accesible piperwok insulated',
             source: '---',
             description: "---",
             performance: '---',
@@ -2647,6 +2649,7 @@ var standard_library = {
         },
         "PWINS3": {
             name: "Fully insulated primary pipework",
+            pipework_insulation: 'Fully insulated primary pipework',
             source: '---',
             description: "---",
             performance: '---',
@@ -2660,9 +2663,10 @@ var standard_library = {
             maintenance: "---"
         }
     },
-    hot_water_control_type:{
+    hot_water_control_type: {
         "STGCTR1": {
             name: "Cylinder thermostat, water heating not separately timed",
+            control_type: "Cylinder thermostat, water heating not separately timed",
             source: '---',
             description: "---",
             performance: '---',
@@ -2677,6 +2681,39 @@ var standard_library = {
         },
         "STGCTR2": {
             name: "Cylinder thermostat, water heating separately timed",
+            control_type: "Cylinder thermostat, water heating separately timed",
+            source: '---',
+            description: "---",
+            performance: '---',
+            benefits: "---",
+            cost: 3,
+            who_by: "---",
+            disruption: "---",
+            associated_work: "---",
+            key_risks: "---",
+            notes: "---",
+            maintenance: "---"
+        }
+    },
+    space_heating_control_type: {
+        "SPCTR2": {
+            name: "Control type 2",
+            control_type: 2,
+            source: '---',
+            description: "---",
+            performance: '---',
+            benefits: "---",
+            cost: 3,
+            who_by: "---",
+            disruption: "---",
+            associated_work: "---",
+            key_risks: "---",
+            notes: "---",
+            maintenance: "---"
+        },
+        "SPCTR3": {
+            name: "Control type 3",
+            control_type: 3,
             source: '---',
             description: "---",
             performance: '---',
@@ -2691,4 +2728,4 @@ var standard_library = {
         }
     }
 
-}; 
+};

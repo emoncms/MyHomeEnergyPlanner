@@ -219,7 +219,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
             // Update data object and add measure
             data.measures.water_heating['pipework_insulation'].measure = measure[tag];
-            data.water_heating.pipework_insulation = measure[tag].name;
+            data.water_heating.pipework_insulation = measure[tag].pipework_insulation;
             break;
         case 'hot_water_control_type':
             if (data.measures.water_heating['hot_water_control_type'] == undefined)
@@ -237,7 +237,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
             // Update data object and add measure
             data.measures.water_heating['hot_water_control_type'].measure = measure[tag];
-            data.water_heating.hot_water_control_type = measure[tag].name;
+            data.water_heating.hot_water_control_type = measure[tag].control_type;
             break;
         case 'heating_control':
             if (data.measures.space_heating['heating_control'] == undefined)
@@ -395,7 +395,8 @@ function add_heating_systems() {
 <p class="if-WH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.fraction_water_heating" max="1" step="0.01" min="0" /></td>\n\
 <td class="if-SH"><select style="width:100px" key="data.heating_systems.' + z + '.main_space_heating_system"><option value="mainHS1">Main heating system</option><option value="mainHS2_whole_house">2<sup>nd</sup> Main heating system - whole house</option><option value="mainHS2_part_of_the_house">2<sup>nd</sup> Main heating system - different part of the house</option><option value="secondaryHS">Secondary heating system</option></select></td>\n\
 <td class="if-SH"><input style="width:55px" type="number" key="data.heating_systems.' + z + '.responsiveness" max="1" step="0.01" min="0" /></td>\n\
-<td class="if-SH"><input style="width:40px" type="number" key="data.heating_systems.' + z + '.heating_controls" max="3" step="1" min="1" /></td>\n\
+<td class="if-SH" style="text-align:center"><input style="width:40px" type="number" key="data.heating_systems.' + z + '.heating_controls" max="3" step="1" min="1" />\n\
+    <br /><span class="apply-water-heating-measure if-not-master" type="space_heating_controls" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked">Apply measure</button></span></td>\n\
 <td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.instantaneous_water_heating" /></td>\n\
 <td class="if-WH"><input type="checkbox" key="data.heating_systems.' + z + '.storage" /></td></tr>';
 
