@@ -34,7 +34,6 @@ libraryHelper.prototype.init = function () {
         'extract_ventilation_points': 'Extract ventilation points',
         //'extract_ventilation_points_measures': 'Extract ventilation points measures',
         'intentional_vents_and_flues': 'Intentional vents and flues',
-        'intentional_vents_and_flues_measures': 'Intentional vents and flues measures',
         'water_usage': 'Water usage',
         'storage_type': 'Type of storages',
         'appliances_and_cooking': 'Appliances and Cooking',
@@ -42,7 +41,7 @@ libraryHelper.prototype.init = function () {
         'heating_systems': "Heating systems",
         'pipework_insulation': "Pipework insulation measures",
         'hot_water_control_type': "Storage control types",
-        space_heating_control_type:'Spacce heating control types'
+        space_heating_control_type: 'Spacce heating control types'
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -563,8 +562,8 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-ok').attr('item_id', origin.attr('item_id'));
     $('#apply-measure-ok').attr('item', origin.attr('item'));
     $('#apply-measure-ok').attr('type-of-item', origin.attr('type-of-item')); // Used for energy_systems
-    //// Check edit manually (option by default)
-    $('[name=radio-type-of-measure]').filter('[value=edit]').click();
+    //// Check replacefrom library manually (option by default)
+    $('[name=radio-type-of-measure]').filter('[value=replace_from_measure_library]').click();
     // Populate the selects library to choose a library and an item (used when replace the item with one from library)
     //Moved to onChangeApplyMeasureWhatToDo
     /*var out = '';
@@ -579,7 +578,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-finish').hide('fast');
     $('.modal').modal('hide');
     $('[name=radio-type-of-measure]').each(function (index) {
-        $(this).parent().show('fast');
+       // $(this).parent().show('fast');
     });
     //If we are in fabric Systems remove show the option to Apply Measure from Measures Library
     if (this.type == 'systems')
@@ -899,27 +898,7 @@ libraryHelper.prototype.extract_ventilation_points_library_to_html = function (o
     out = out.replace(/add-system/g, 'add-EVP');
     return out;
 };
-/*libraryHelper.prototype.extract_ventilation_points_measures_library_to_html = function (origin, library_id) {
- return this.default_library_to_html(origin, library_id);
- }*/
 libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (origin, library_id) {
-    var out = "";
-    var selected_library = this.get_library_by_id(library_id);
-    this.orderObjectsByKeys(selected_library.data);
-    for (z in selected_library.data) {
-        out += "<tr><td>" + z + ': ' + selected_library.data[z].name;
-        out += "<br><span style='font-size:13px'><b>Rate: </b> " + selected_library.data[z].ventilation_rate + " m<sup>3</sup>/h</span>, ";
-        out += "<span style='font-size:13px'><b>Type: </b> " + selected_library.data[z].type + "</span></td>";
-        out += "<td style='text-align:right;width:250px'>";
-        out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
-        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-IVF use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
-        out += "</td>";
-        out += "</tr>";
-    }
-    return out;
-};
-libraryHelper.prototype.intentional_vents_and_flues_measures_library_to_html = function (origin, library_id) {
     var out = "";
     var selected_library = this.get_library_by_id(library_id);
     this.orderObjectsByKeys(selected_library.data);
@@ -1102,7 +1081,8 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<table class="table">';
     out += '<tr><td>Tag</td><td><input type="text" class="create-element-tag item-tag" value="' + item.tag + '" /></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="create-element-name" value="' + item.name + '" /></td></tr>';
-    out += '<tr><td>Location</td><td><input type="text" class="create-element-location" value="' + item.location + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><input type="text" class="create-element-description" value="' + item.description + '" /></td></tr>';
+    //out += '<tr><td>Location</td><td><input type="text" class="create-element-location" value="' + item.location + '" /></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="create-element-source" value="' + item.source + '" /></td></tr>';
     if (item.EWI == true)
         out += '<tr class="EWI-row" style="display:none" title="Ticking this box will increase the area of the wall by 1.15"><td>EWI</td><td><input type="checkbox" class="create-element-ewi" checked /></td></tr>';
@@ -1120,8 +1100,13 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
         out += '<tr class="window-element" style="display:none"><td>gL</td><td><input type="text" class="create-element-gL window-element editable-field" value="1" /></td></tr>';
         out += '<tr class="window-element" style="display:none" ><td>Frame factor (ff)</td><td><input type="text" class="create-element-ff editable-field window-element" value="1" /></td></tr>';
     }
+    out += '</table>';
+    return out;
+};
+libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
+    var out = this.elements_item_to_html(item, tag);
 
-    out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
+    out += '<table><tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="create-element-description" >' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
@@ -1133,10 +1118,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="create-element-notes">' + item.notes + '</textarea></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="create-element-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</table>';
-    return out;
-};
-libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
-    var out = this.elements_item_to_html(item, tag);
+
     if (item == undefined || item.tags[0] == 'Wall')
         out = out.replace('<tr class="EWI-row" style="display:none">', '<tr class="EWI-row">');
     return out;
@@ -1188,6 +1170,7 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
         out += '<tr><td>Balanced heat recovery efficiency (%)</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
     else
         out += '<tr style="display:none"><td>Heat recovery efficiency</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
+    out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
@@ -1270,33 +1253,12 @@ libraryHelper.prototype.intentional_vents_and_flues_item_to_html = function (ite
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>Type</td><td><select class="item-type">';
     out += item.type === 'Chimney' ? '<option value="Chimney" selected>Chimney</option>' : '<option value="Chimney">Chimney</option>';
-    out += item.type === 'Open flue' ? '<option value="Open flue" selected>Open flue</option>' : '<option value="Open flue">Open flue</option>';
+    out += item.type === 'Open Flue' ? '<option value="Open flue" selected>Open Flue</option>' : '<option value="Open Flue">Open Flue</option>';
     out += item.type === 'Flueless gas fire' ? '<option value="Flueless gas fire" selected>Flueless gas fire</option>' : '<option value="Flueless gas fire">Flueless gas fire</option>';
+    out += item.type === 'Measure' ? '<option value="Measure" selected>Measure</option>' : '<option value="Measure">Measure</option>';
     out += '</select></td></tr>';
     out += '<tr><td>Ventilation rate (m<sup>3</sup>/h)</td><td><input type="number" class="item-ventilation_rate" value="' + item.ventilation_rate + '" /></td></tr>';
-    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
-    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
-    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
-    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
-    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
-    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
-    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
-    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
-    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
-    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
-    out += '</tbody></table>';
-    return out;
-};
-libraryHelper.prototype.intentional_vents_and_flues_measures_item_to_html = function (item, tag) {
-    if (item == undefined)
-        item = {tag: '', name: 'name', source: '--', ventilation_rate: 40, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
-    else if (tag != undefined)
-        item.tag = tag;
-    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
-    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
-    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
-    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
-    out += '<tr><td>Ventilation rate (m<sup>3</sup>/h)</td><td><input type="number" class="item-ventilation_rate" value="' + item.ventilation_rate + '" /></td></tr>';
+    out += '<tr><td colspan="2">Fields to be taken into account when using the item as a Measure</td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
@@ -1600,7 +1562,53 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
     var tag = $(".create-element-tag").val();
     item[tag] = {};
     item[tag].name = $(".create-element-name").val();
-    item[tag].location = $(".create-element-location").val();
+    item[tag].description = $(".create-element-description").val();
+    //item[tag].location = $(".create-element-location").val();
+    item[tag].source = $(".create-element-source").val();
+    item[tag].uvalue = 1.0 * $(".create-element-uvalue").val();
+    item[tag].kvalue = 1.0 * $(".create-element-kvalue").val();
+    if (type == "Window" || type == "Door" || type == "Roof_light")
+        item[tag].g = $(".create-element-g").val();
+    if (type == "Window" || type == "Door" || type == "Roof_light")
+        item[tag].gL = $(".create-element-gL").val();
+    if (type == "Window" || type == "Door" || type == "Roof_light")
+        item[tag].ff = $(".create-element-ff").val();
+    item[tag].tags = [type];
+    //item[tag].criteria = $(".create-element-criteria").val().split(",");
+
+    // Measures
+    /*if ($('.create-element-name').val() !== "")
+     item[tag].name = $(".create-element-name").val();
+     if ($('.create-element-description').val() !== "")
+     item[tag].description = $(".create-element-description").val();
+     if ($('.create-element-performance').val() !== "")
+     item[tag].performance = $(".create-element-performance").val();
+     if ($('.create-element-benefits').val() !== "")
+     item[tag].benefits = $(".create-element-benefits").val();
+     if ($('.create-element-cost').val() !== "")
+     item[tag].cost = $(".create-element-cost").val();
+     if ($('.create-element-who_by').val() !== "")
+     item[tag]["who_by"] = $(".create-element-who_by").val();
+     if ($('.create-element-disruption').val() !== "")
+     item[tag].disruption = $(".create-element-disruption").val();
+     if ($('.create-element-associated_work').val() !== "")
+     item[tag]["associated_work"] = $(".create-element-associated_work").val();
+     if ($('.create-element-key_risks').val() !== "")
+     item[tag]["key_risks"] = $(".create-element-key_risks").val();
+     if ($('.create-element-notes').val() !== "")
+     item[tag].notes = $(".create-element-notes").val();
+     if ($('.create-element-maintenance').val() !== "")
+     item[tag].maintenance = $(".create-element-maintenance").val();*/
+    return item;
+};
+libraryHelper.prototype.elements_measures_get_item_to_save = function () {
+    var item = {};
+    var type = $(".create-element-type").val();
+    var tag = $(".create-element-tag").val();
+    item[tag] = {};
+    item[tag].name = $(".create-element-name").val();
+    item[tag].description = $(".create-element-description").val();
+    //item[tag].location = $(".create-element-location").val();
     item[tag].source = $(".create-element-source").val();
     item[tag].uvalue = 1.0 * $(".create-element-uvalue").val();
     item[tag].kvalue = 1.0 * $(".create-element-kvalue").val();
@@ -1636,13 +1644,8 @@ libraryHelper.prototype.elements_get_item_to_save = function () {
         item[tag].notes = $(".create-element-notes").val();
     if ($('.create-element-maintenance').val() !== "")
         item[tag].maintenance = $(".create-element-maintenance").val();
-    return item;
-};
-libraryHelper.prototype.elements_measures_get_item_to_save = function () {
-    var item = this.elements_get_item_to_save();
-    var type = $(".create-element-type").val();
-    var tag = $(".create-element-tag").val();
-    if (type = 'Wall')
+
+    if (type == 'Wall')
         item[tag].EWI = $(".create-element-ewi").prop('checked');
     return item;
 };
@@ -1746,25 +1749,6 @@ libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function 
         notes: $(".item-notes").val(),
         maintenance: $(".item-maintenance").val()
 
-    };
-    return item;
-};
-libraryHelper.prototype.intentional_vents_and_flues_measures_get_item_to_save = function () {
-    var item = {};
-    var tag = $(".item-tag").val();
-    item[tag] = {
-        name: $(".item-name").val(),
-        ventilation_rate: 1.0 * $(".item-ventilation_rate").val(),
-        description: $(".item-description").val(),
-        performance: $(".item-performance").val(),
-        benefits: $(".item-benefits").val(),
-        cost: $(".item-cost").val(),
-        who_by: $(".item-who_by").val(),
-        disruption: $(".item-disruption").val(),
-        associated_work: $(".item-associated_work").val(),
-        key_risks: $(".item-key_risks").val(),
-        notes: $(".item-notes").val(),
-        maintenance: $(".item-maintenance").val()
     };
     return item;
 };
