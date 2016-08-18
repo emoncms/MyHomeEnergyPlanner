@@ -48,7 +48,7 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     library_helper.type_of_measure = $(this).attr('type');
     if (library_helper.type_of_measure == 'add_extract_ventilation_points')
         library_helper.type = 'extract_ventilation_points';
-    else if (library_helper.type_of_measure == 'add_intentional_vents_and_flues' ||library_helper.type_of_measure == 'intentional_vents_and_flues_measures')
+    else if (library_helper.type_of_measure == 'add_intentional_vents_and_flues' || library_helper.type_of_measure == 'intentional_vents_and_flues_measures')
         library_helper.type = 'intentional_vents_and_flues';
     else
         library_helper.type = library_helper.type_of_measure;
@@ -149,7 +149,10 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             measure[tag].quantity = 1;
             measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
             // Update data object and add measure
-            data.ventilation.air_permeability_value = measure[tag].q50;
+            if (measure[tag].q50 < 0) // Draught lobby
+                data.ventilation.air_permeability_value -= measure[tag].q50;
+            else
+                data.ventilation.air_permeability_value = measure[tag].q50;
             update();
             data.measures.ventilation[library_helper.type].measure = measure[tag];
             data.measures.ventilation[library_helper.type].measure.structural_infiltration = data.ventilation.structural_infiltration_from_test;
@@ -169,6 +172,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             data.ventilation.ventilation_type = measure[tag].ventilation_type;
             data.ventilation.system_air_change_rate = measure[tag].system_air_change_rate;
             data.ventilation.balanced_heat_recovery_efficiency = measure[tag].balanced_heat_recovery_efficiency;
+            data.ventilation.system_specific_fan_power = measure[tag].specific_fan_power;
             data.measures.ventilation[library_helper.type].measure = measure[tag];
             break;
         case 'extract_ventilation_points':
@@ -246,7 +250,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            measure[tag].id = get_IVF_max_id() + 1;           
+            measure[tag].id = get_IVF_max_id() + 1;
             // Add extra properties to measure 
             measure[tag].cost_units = '/unit';
             measure[tag].quantity = 1;

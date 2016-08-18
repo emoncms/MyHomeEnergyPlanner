@@ -147,6 +147,7 @@ var openbem = {
             ventilation_type: data.ventilation.ventilation_type,
             system_air_change_rate: data.ventilation.system_air_change_rate,
             balanced_heat_recovery_efficiency: data.ventilation.balanced_heat_recovery_efficiency,
+            system_specific_fan_power: data.ventilation.system_specific_fan_power,
             IVF: data.ventilation.IVF,
             EVP: data.ventilation.EVP
         };

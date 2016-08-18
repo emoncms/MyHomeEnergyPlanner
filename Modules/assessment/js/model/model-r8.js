@@ -370,6 +370,7 @@ calc.ventilation = function (data)
         number_of_sides_sheltered: 0,
         ventilation_type: 'd',
         system_air_change_rate: 0.5,
+        system_specific_fan_power: 3,
         balanced_heat_recovery_efficiency: 65,
         structural_infiltration: 0,
         IVF: [],
@@ -954,7 +955,7 @@ calc.fuel_requirements = function (data) {
         for (x in data.fuel_requirements[z].list)
         {
             data.fuel_requirements[z].list[x].fuel_input_monthly = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            
+
             var fuel = data.fuel_requirements[z].list[x].fuel;
             if (data.fuel_totals[fuel] == undefined)
                 data.fuel_totals[fuel] = {name: fuel, quantity: 0};
@@ -1836,7 +1837,10 @@ calc.fans_and_pumps_and_combi_keep_hot = function (data) {
     // From heating systems (Central heating pump, fans and supply pumps, keep hot facility
     data.heating_systems.forEach(function (system) {
         annual_energy += 1.0 * system.central_heating_pump;
-        annual_energy += 1.0 * system.fans_and_supply_pumps;
+        if (system.category != 'Warm air system')
+            annual_energy += 1.0 * system.fans_and_supply_pumps;
+        else
+            annual_energy += 0.4 * 1.5 * data.volume;
         switch (system.combi_loss) {
             case 'Instantaneous, with keep-hot facility controlled by time clock':
                 annual_energy += 600;
@@ -1881,13 +1885,13 @@ calc.fans_and_pumps_and_combi_keep_hot = function (data) {
             }
             break;
         case 'c':  //Positive input ventilation (from outside) or mechanical extract ventilation   
-            annual_energy += 2.5 * 0.8 * 1.22 * data.volume; // annual_energy += IUF * SFP * 1.22 * V;
+            annual_energy += 2.5 * data.ventilation.system_specific_fan_power * 1.22 * data.volume; // annual_energy += IUF * SFP * 1.22 * V;
             break;
         case 'a':  //Balanced mechanical ventilation with heat recovery (MVHR)
-            annual_energy += 2.5 * 2 * 2.44 * data.ventilation.system_air_change_rate * data.volume; //annual_energy += IUF * SFP * 2.44 * nmech * V;
+            annual_energy += 2.5 * data.ventilation.system_specific_fan_power * 2.44 * data.ventilation.system_air_change_rate * data.volume; //annual_energy += IUF * SFP * 2.44 * nmech * V;
             break;
         case 'b':  //Balanced mechanical ventilation without heat recovery (MV)
-            annual_energy += 2.5 * 2 * 2.44 * data.ventilation.system_air_change_rate * data.volume; //annual_energy += IUF * SFP * 2.44 * nmech * V;
+            annual_energy += 2.5 * data.ventilation.system_specific_fan_power * 2.44 * data.ventilation.system_air_change_rate * data.volume; //annual_energy += IUF * SFP * 2.44 * nmech * V;
             break;
     }
 
@@ -1972,10 +1976,10 @@ calc.gains = function (data) {
             // Do nothing 
             break;
         case 'c':  //Positive input ventilation (from outside) or mechanical extract ventilation   
-            monthly_heat_gains += 2.5 * 0.8 * 0.12 * data.volume; // monthly_heat_gains += IUF * SFP *  0.12 *  V;
+            monthly_heat_gains += 2.5 * data.ventilation.system_specific_fan_power * 0.12 * data.volume; // monthly_heat_gains += IUF * SFP *  0.12 *  V;
             break;
         case 'b':  //Balanced mechanical ventilation without heat recovery (MV)
-            monthly_heat_gains += 2.5 * 2 * 0.06 * data.volume; //monthly_heat_gains += IUF * SFP *  0.06 *  V;
+            monthly_heat_gains += 2.5 * data.ventilation.system_specific_fan_power * 0.06 * data.volume; //monthly_heat_gains += IUF * SFP *  0.06 *  V;
             break;
     }
 

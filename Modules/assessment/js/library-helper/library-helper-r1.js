@@ -31,6 +31,7 @@ libraryHelper.prototype.init = function () {
         'elements_measures': 'Fabric elements measures',
         'draught_proofing_measures': 'Draught proofing measures',
         'ventilation_systems_measures': 'Ventilation system measures',
+        'ventilation_systems': 'Ventilation systems',
         'extract_ventilation_points': 'Extract ventilation points',
         //'extract_ventilation_points_measures': 'Extract ventilation points measures',
         'intentional_vents_and_flues': 'Intentional vents and flues',
@@ -175,10 +176,15 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('change', '.item-ventilation_type', function () {
         var newVS = $('.item-ventilation_type').val();
         if (newVS == 'DEV' || newVS == 'MEV' || newVS == 'MV' || newVS == 'MVHR')
+        {
             $('.item-air_change_rate').parent().parent().show('fast');
+            $('.item-specific_fan_power').parent().parent().show('fast');
+        }
         else {
             $('.item-air_change_rate').parent().parent().hide('fast');
             $('.item-air_change_rate').val(0);
+            $('.item-specific_fan_power').parent().parent().hide('fast');
+            $('.item-specific_fan_power').val(0);
         }
         if (newVS == 'MVHR')
             $('.item-heat_recovery_efficiency').parent().parent().show('fast');
@@ -578,7 +584,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-finish').hide('fast');
     $('.modal').modal('hide');
     $('[name=radio-type-of-measure]').each(function (index) {
-       // $(this).parent().show('fast');
+        // $(this).parent().show('fast');
     });
     //If we are in fabric Systems remove show the option to Apply Measure from Measures Library
     if (this.type == 'systems')
@@ -893,6 +899,11 @@ libraryHelper.prototype.draught_proofing_measures_library_to_html = function (or
 libraryHelper.prototype.ventilation_systems_measures_library_to_html = function (origin, library_id) {
     return this.default_library_to_html(origin, library_id);
 };
+libraryHelper.prototype.ventilation_systems_library_to_html = function (origin, library_id) {
+    var out = this.default_library_to_html(origin, library_id);
+    out = out.replace(/add-system/g, 'add-ventilation-system');
+    return out;
+};
 libraryHelper.prototype.extract_ventilation_points_library_to_html = function (origin, library_id) {
     var out = this.default_library_to_html(origin, library_id);
     out = out.replace(/add-system/g, 'add-EVP');
@@ -1147,7 +1158,7 @@ libraryHelper.prototype.draught_proofing_measures_item_to_html = function (item,
 };
 libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: '', name: 'name', ventilation_type: 'NV', system_air_change_rate: 0, heat_recovery_balanced_heat_recovery_efficiencyefficiency: 0, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+        item = {tag: '', name: 'name', ventilation_type: 'NV', system_air_change_rate: 0, heat_recovery_efficiency: 0, specific_fan_power: 3, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
@@ -1162,14 +1173,20 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
     out += item.ventilation_type == 'MVHR' ? '<option value="MVHR" selected>Balanced mechanical ventilation with heat recovery (MVHR)</option>' : '<option value="MVHR">Balanced mechanical ventilation with heat recovery (MVHR)</option>';
     out += item.ventilation_type == 'PS' ? '<option value="PS" selected>Whole House Passive Stack Ventilation System (PS)</option>' : '<option value="PS">Whole House Passive Stack Ventilation System (PS)</option>';
     out += '</select></td></tr>';
-    if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR')
-        out += '<tr><td>Air change rate</td><td><input type="text" class="item-air_change_rate" value="' + item.system_air_change_rate + '" /></td></tr>';
+    if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR' || item.ventilation_type == 'MV') {
+        out += '<tr><td>Air change rate - ach</td><td><input type="text" class="item-air_change_rate" value="' + item.system_air_change_rate + '" /></td></tr>';
+        out += '<tr><td>Specific Fan Power - W/(litre.sec)</td><td><input type="text" class="item-specific_fan_power" value="' + item.specific_fan_power + '" /></td></tr>';
+    }
     else
-        out += '<tr style="display:none"><td>Air change rate</td><td><input type="text" class="item-air_change_rate" value="' + item.system_air_change_rate + '" /></td></tr>';
+    {
+        out += '<tr style="display:none"><td>Air change rate - ach</td><td><input type="text" class="item-air_change_rate" value="' + item.system_air_change_rate + '" /></td></tr>';
+        out += '<tr style="display:none"><td>Specific Fan Power - W/(litre.sec)</td><td><input type="text" class="item-specific_fan_power" value="' + item.specific_fan_power + '" /></td></tr>';
+    }
     if (item.ventilation_type == 'MVHR')
         out += '<tr><td>Balanced heat recovery efficiency (%)</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
     else
         out += '<tr style="display:none"><td>Heat recovery efficiency</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" required value="' + item.source + '"/></td></tr>';
     out += '<tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
@@ -1182,11 +1199,68 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
     out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
     out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
-    // Show hide "air change rate" and "heat recovery efficiannecy" accordint to the ventilation system
-    if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR')
+    // Show hide "air change rate", "specific fan power" and "heat recovery efficiannecy" accordint to the ventilation system
+    if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR' || item.ventilation_type == 'MV')
+    {
         $('.item-air_change_rate').parent().parent().show('fast');
+        $('.item-specific_fan_power').parent().parent().show('fast');
+    }
     else
+    {
         $('.item-air_change_rate').parent().parent().hide('fast');
+        $('.item-specific_fan_power').parent().parent().hide('fast');
+    }
+    if (item.ventilation_type == 'MVHR')
+        $('.item-heat_recovery_efficiency').parent().parent().show('fast');
+    else
+        $('.item-heat_recovery_efficiency').parent().parent().hide('fast');
+    return out;
+};
+libraryHelper.prototype.ventilation_systems_item_to_html = function (item, tag) {
+    console.log('asd');
+    if (item == undefined)
+        item = {tag: '', name: 'name', ventilation_type: 'NV', system_air_change_rate: 0, heat_recovery_efficiency: 0, specific_fan_power: 3, source: '--', };
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Ventilation type</td><td><select class="item-ventilation_type">';
+    out += item.ventilation_type == 'NV' ? '<option value="NV" selected>Natural ventilation only (NV)</option>' : '<option value="NV">Natural ventilation only (NV)</option>';
+    out += item.ventilation_type == 'IE' ? '<option value="IE" selected>Intermittent extract ventilation (IE)</option>' : '<option value="IE">Intermittent extract ventilation (IE)</option>';
+    out += item.ventilation_type == 'DEV' ? '<option value="DEV" selected>Continuous decentralised mechanical extract ventilation (DEV)</option>' : '<option value="DEV">Continuous decentralised mechanical extract ventilation (DEV)</option>';
+    out += item.ventilation_type == 'MEV' ? '<option value="MEV" selected>Continuous whole house extract ventilation (MEV)</option>' : '<option value="MEV">Continuous whole house extract ventilation (MEV)</option>';
+    out += item.ventilation_type == 'MV' ? '<option value="MV" selected>Balanced mechanical ventilation without heat recovery (MV)</option>' : '<option value="MV">Balanced mechanical ventilation without heat recovery (MV)</option>';
+    out += item.ventilation_type == 'MVHR' ? '<option value="MVHR" selected>Balanced mechanical ventilation with heat recovery (MVHR)</option>' : '<option value="MVHR">Balanced mechanical ventilation with heat recovery (MVHR)</option>';
+    out += item.ventilation_type == 'PS' ? '<option value="PS" selected>Whole House Passive Stack Ventilation System (PS)</option>' : '<option value="PS">Whole House Passive Stack Ventilation System (PS)</option>';
+    out += '</select></td></tr>';
+    if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR' || item.ventilation_type == 'MV')
+    {
+        out += '<tr><td>Air change rate - ach</td><td><input type="text" class="item-air_change_rate" value="' + item.system_air_change_rate + '" /></td></tr>';
+        out += '<tr><td>Specific Fan Power - W/(litre.sec)</td><td><input type="text" class="item-specific_fan_power" value="' + item.specific_fan_power + '" /></td></tr>';
+    }
+    else
+    {
+        out += '<tr style="display:none"><td>Air change rate - ach</td><td><input type="text" class="item-air_change_rate" value="' + item.system_air_change_rate + '" /></td></tr>';
+        out += '<tr style="display:none"><td>Specific Fan Power - W/(litre.sec)</td><td><input type="text" class="item-specific_fan_power" value="' + item.specific_fan_power + '" /></td></tr>';
+    }
+    if (item.ventilation_type == 'MVHR')
+        out += '<tr><td>Balanced heat recovery efficiency (%)</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
+    else
+        out += '<tr style="display:none"><td>Heat recovery efficiency</td><td><input type="text" class="item-heat_recovery_efficiency" value="' + item.balanced_heat_recovery_efficiency + '" /></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" required value="' + item.source + '"/></td></tr>';
+    out += '</tbody></table>';
+    // Show hide "air change rate" and "heat recovery efficiannecy" accordint to the ventilation system
+    if (item.ventilation_type == 'DEV' || item.ventilation_type == 'MEV' || item.ventilation_type == 'MVHR' || item.ventilation_type == 'MV')
+    {
+       // $('.item-air_change_rate').parent().parent().show('fast');
+        $('.item-specific_fan_power').parent().parent().show('fast');
+    }
+    else
+    {
+        //$('.item-air_change_rate').parent().parent().hide('fast');
+        $('.item-specific_fan_power').parent().parent().hide('fast');
+    }
     if (item.ventilation_type == 'MVHR')
         $('.item-heat_recovery_efficiency').parent().parent().show('fast');
     else
@@ -1676,7 +1750,9 @@ libraryHelper.prototype.ventilation_systems_measures_get_item_to_save = function
         ventilation_type: $(".item-ventilation_type").val(),
         system_air_change_rate: $(".item-air_change_rate").val(),
         balanced_heat_recovery_efficiency: $(".item-heat_recovery_efficiency").val(),
+        specific_fan_power: $(".item-specific_fan_power").val(),
         description: $(".item-description").val(),
+        source: $(".item-source").val(),
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
@@ -1686,6 +1762,19 @@ libraryHelper.prototype.ventilation_systems_measures_get_item_to_save = function
         key_risks: $(".item-key_risks").val(),
         notes: $(".item-notes").val(),
         maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
+libraryHelper.prototype.ventilation_systems_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        ventilation_type: $(".item-ventilation_type").val(),
+        system_air_change_rate: $(".item-air_change_rate").val(),
+        balanced_heat_recovery_efficiency: $(".item-heat_recovery_efficiency").val(),
+        specific_fan_power: $(".item-specific_fan_power").val(),
+        source: $(".item-source").val(),
     };
     return item;
 };

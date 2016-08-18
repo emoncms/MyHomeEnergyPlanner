@@ -404,7 +404,7 @@ function add_heating_systems() {
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.responsiveness" max = "1" step = "0.01" min = "0" /> </td>';
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.temperature_adjustment" max = "1" step = "0.01" min = "0" /> </td>';
         out += '<td class = "if-SH" style = "text-align:center" > <input style = "width:40px" type = "number" key = "data.heating_systems.' + z + '.heating_controls" max = "3" step = "1" min = "1" /> \n\
-        <br /> <span class = "apply-water-heating-measure if-not-master" type = "space_heating_control_type" item - index = "' + z + '" style = "cursor:pointer" > < button class = "btn if-not-locked" > Apply measure </button></span > </td>';
+        <br /> <span class = "apply-water-heating-measure if-not-master" type = "space_heating_control_type" item - index = "' + z + '" style = "cursor:pointer" > <button class = "btn if-not-locked" > Apply measure </button></span > </td>';
         out += '<td class = "if-WH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.instantaneous_water_heating" /> </td></tr > ';
 
         $('#heating-systems').append(out);
