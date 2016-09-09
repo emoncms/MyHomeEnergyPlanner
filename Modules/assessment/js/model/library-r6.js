@@ -2109,7 +2109,7 @@ var standard_library = {
             maintenance: "MINIMAL - ensure continuous and that is replaced properly if ever disturbed, for example by PV installers."
         },
         "LRA_01": {
-            tags: ['Loft'],
+            tags: ['Hatch'],
             name: "New insulated loft hatch (1.2m x 0.6m)",
             location: "Manufacturer (Welhofer)/ SAP table 1e, p.195",
             source: "URBED/ SAP table 1e, p.195",
@@ -2131,7 +2131,7 @@ var standard_library = {
             maintenance: "MINIMAL - ensure any ladders are properly maintained for safety. Air-tight seals may need to be replaced over time. "
         },
         "LRA_02": {
-            tags: ['Loft'],
+            tags: ['Hatch'],
             name: "Insulate existing ceiling loft hatch. ",
             location: "",
             source: "URBED/ SAP table 1e, p.195",
@@ -2153,7 +2153,7 @@ var standard_library = {
             maintenance: "MINIMAL - ensure any ladders are properly maintained for safety. Air-tight seals may need to be replaced over time. "
         },
         "LRA_03": {
-            tags: ['Loft'],
+            tags: ['Hatch'],
             name: "New insulated wall hatch to loft space. ",
             location: "",
             source: "URBED/ SAP table 1e, p.195",
@@ -2175,7 +2175,7 @@ var standard_library = {
             maintenance: "MINIMAL - Air-tight seals may need to be replaced over time. "
         },
         "LRA_04": {
-            tags: ['Loft'],
+            tags: ['Hatch'],
             name: "Insulate existing wall hatch to loft space. ",
             location: "",
             source: "URBED/ SAP table 1e, p.195",

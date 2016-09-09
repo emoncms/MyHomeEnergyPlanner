@@ -222,7 +222,7 @@ calc.fabric = function (data, solar_acces_factor)
             data.fabric.elements[z].area = data.fabric.elements[z]['l'] * data.fabric.elements[z]['h'];
         }
         data.fabric.elements[z].netarea = data.fabric.elements[z].area;
-        if (data.fabric.elements[z].type != 'window' && data.fabric.elements[z].type != 'Window' && data.fabric.elements[z].type != 'Door' && data.fabric.elements[z].type != 'Roof_light') {
+        if (data.fabric.elements[z].type != 'window' && data.fabric.elements[z].type != 'Window' && data.fabric.elements[z].type != 'Door' && data.fabric.elements[z].type != 'Roof_light' && data.fabric.elements[z].type != 'Hatch') {
             data.fabric.elements[z].windowarea = 0;
         }
 
@@ -230,7 +230,7 @@ calc.fabric = function (data, solar_acces_factor)
 
         for (w in data.fabric.elements)
         {
-            if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window' || data.fabric.elements[w].type == 'Door' || data.fabric.elements[w].type == 'Roof_light')
+            if (data.fabric.elements[w].type == 'window' || data.fabric.elements[w].type == 'Window' || data.fabric.elements[w].type == 'Door' || data.fabric.elements[w].type == 'Roof_light' || data.fabric.elements[w].type == 'Hatch')
             {
 //if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == z)
                 if (data.fabric.elements[w].subtractfrom != undefined && data.fabric.elements[w].subtractfrom == data.fabric.elements[z].id)
@@ -268,11 +268,11 @@ calc.fabric = function (data, solar_acces_factor)
             data.fabric.total_wall_WK += data.fabric.elements[z].wk;
             data.fabric.total_wall_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'roof' || data.fabric.elements[z].type == 'Roof') {
+        if (data.fabric.elements[z].type == 'roof' || data.fabric.elements[z].type == 'Roof'|| data.fabric.elements[z].type == 'Loft') {
             data.fabric.total_roof_WK += data.fabric.elements[z].wk;
             data.fabric.total_roof_area += data.fabric.elements[z].netarea;
         }
-        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window' || data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light') {
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window' || data.fabric.elements[z].type == 'Door' || data.fabric.elements[z].type == 'Roof_light' || data.fabric.elements[z].type == 'Hatch') {
             data.fabric.total_window_WK += data.fabric.elements[z].wk;
             data.fabric.total_window_area += data.fabric.elements[z].netarea;
         }
@@ -280,6 +280,7 @@ calc.fabric = function (data, solar_acces_factor)
             data.fabric.total_party_wall_WK += data.fabric.elements[z].wk;
             data.fabric.total_party_wall_area += data.fabric.elements[z].netarea;
         }
+        
 // Calculate total thermal capacity
         if (data.fabric.elements[z].kvalue != undefined) {
             data.fabric.total_thermal_capacity += data.fabric.elements[z].kvalue * data.fabric.elements[z].area;

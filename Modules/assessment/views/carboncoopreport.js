@@ -1489,7 +1489,7 @@ function carboncoopreport_UpdateUI() {
         $(tableSelector).append(row);
         var type = measure.measure.type;
         var cost = 0;
-        if (type == 'Wall' || type == 'wall' || type == 'Roof' || type == 'roof' || type == 'Window' || type == 'window' || type == 'Floor' || type == 'floor' || type == 'party_wall' || type == 'Door' || type == 'Roof_light')
+        if (type == 'Wall' || type == 'wall' || type == 'Roof' || type == 'roof' || type == 'Window' || type == 'window' || type == 'Floor' || type == 'floor' || type == 'party_wall' || type == 'Door' || type == 'Roof_light' || type == 'Hatch')
             cost = measure.measure.cost * measure.measure.area;
         else
             cost = measure.measure.cost;

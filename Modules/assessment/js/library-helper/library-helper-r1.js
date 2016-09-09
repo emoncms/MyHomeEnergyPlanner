@@ -842,6 +842,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     out += tag[0] == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
     out += tag[0] == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
     out += tag[0] == 'Roof_light' ? ' <option value = "Roof_light" selected > Roof light </option>' : '<option value="Roof_light">Roof light</option> ';
+    out += tag[0] == 'Hatch' ? ' <option value = "Hatch" selected > Hatch </option>' : '<option value="Hatch">Hatch</option> ';
     out += '</select></div>';
     // Elements
     out += '<table>';
@@ -1088,6 +1089,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
     out += type == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
     out += type == 'Roof_light' ? ' <option value = "Roof_light" selected > Roof light </option>' : '<option value="Roof_light">Roof light</option> ';
+    out += type == 'Hatch' ? ' <option value = "Hatch" selected > Hatch </option>' : '<option value="Hatch">Hatch</option> ';
     out += '</select></div>';
     out += '<table class="table">';
     out += '<tr><td>Tag</td><td><input type="text" class="create-element-tag item-tag" value="' + item.tag + '" /></td></tr>';
