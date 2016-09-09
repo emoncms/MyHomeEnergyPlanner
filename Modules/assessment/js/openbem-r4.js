@@ -111,6 +111,7 @@ var openbem = {
                 subtractfrom: data.fabric.elements[z].subtractfrom,
                 l: data.fabric.elements[z].l,
                 h: data.fabric.elements[z].h,
+                perimeter: data.fabric.elements[z].perimeter,
                 area: data.fabric.elements[z].area,
                 uvalue: 1.0 * data.fabric.elements[z].uvalue,
                 id: 1.0 * data.fabric.elements[z].id,
