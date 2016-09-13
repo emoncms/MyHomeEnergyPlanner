@@ -1461,10 +1461,20 @@ libraryHelper.prototype.heating_control_item_to_html = function (item, tag) {
     out += item.heating_control_type == 3 ? '<option value="3" selected>3</option>' : '<option value="3">3</option>';
     out += '</select></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
     return out;
 };
-libraryHelper.prototype.heating_systems_measures_item_to_html = function (item, tag) {
+libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {tag: '', name: "--", category: 'Combi boiler', winter_efficiency: 100, summer_efficiency: 100, central_heating_pump: 0, fans_and_supply_pumps: 0, responsiveness: 1, combi_loss: 0, primary_circuit_loss: 0, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
@@ -1505,20 +1515,10 @@ libraryHelper.prototype.heating_systems_measures_item_to_html = function (item, 
     }
     out += '</select></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
-    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
-    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
-    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
-    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
-    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
-    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
-    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
-    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
-    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
-    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</tbody></table>';
     return out;
 };
-libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
+libraryHelper.prototype.heating_systems_measures_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {tag: '', name: "--", category: 'Combi boiler', winter_efficiency: 100, summer_efficiency: 100, central_heating_pump: 0, fans_and_supply_pumps: 0, responsiveness: 1, combi_loss: 0, primary_circuit_loss: 0, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
@@ -1949,6 +1949,23 @@ libraryHelper.prototype.appliances_and_cooking_get_item_to_save = function () {
     return item;
 };
 libraryHelper.prototype.heating_systems_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        category: $(".item-category").val(),
+        winter_efficiency: $(".item-winter_efficiency").val(),
+        summer_efficiency: $(".item-summer_efficiency").val(),
+        central_heating_pump: $(".item-central_heating_pump").val(),
+        fans_and_supply_pumps: $(".item-fans_and_supply_pumps").val(),
+        responsiveness: $(".item-responsiveness").val(),
+        combi_loss: $(".item-combi_loss").val(),
+        primary_circuit_loss: $(".item-primary_circuit_loss").val(),
+        source: $(".item-source").val()
+    };
+    return item;
+};
+libraryHelper.prototype.heating_systems_measures_get_item_to_save = function () {
     var item = {};
     var tag = $(".item-tag").val();
     item[tag] = {
