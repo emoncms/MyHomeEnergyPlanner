@@ -116,7 +116,7 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
             $('#apply-measure-water-heating-modal #myModalIntroText').html('Choose a measure from a library');
             break;
         case'space_heating_control_type':
-        case 'heating_systems':
+        case 'heating_systems_measures':
             var item_index = $(this).attr('item-index');
             $('#apply-measure-water-heating-ok').attr('item-index', item_index);
         default:
@@ -152,7 +152,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             data.measures.space_heating_control_type = {};
         }
     }
-    else if (library_helper.type === 'heating_systems') {
+    else if (library_helper.type === 'heating_systems_measures') {
         if (data.measures.heating_systems == undefined) {
             data.measures.heating_systems = {};
         }
@@ -243,7 +243,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             data.measures.space_heating_control_type[item.id].measure = measure[tag];
             data.heating_systems[item_index].heating_controls = measure[tag].control_type;
             break;
-        case 'heating_systems':
+        case 'heating_systems_measures':
             var item_index = $(this).attr('item-index');
             var item = data.heating_systems[item_index];
             if (data.measures.heating_systems[item.id] == undefined) //if first time we apply a measure to this system
