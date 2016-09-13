@@ -1461,6 +1461,50 @@ libraryHelper.prototype.heating_control_item_to_html = function (item, tag) {
     out += item.heating_control_type == 3 ? '<option value="3" selected>3</option>' : '<option value="3">3</option>';
     out += '</select></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
+libraryHelper.prototype.heating_systems_measures_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: "--", category: 'Combi boiler', winter_efficiency: 100, summer_efficiency: 100, central_heating_pump: 0, fans_and_supply_pumps: 0, responsiveness: 1, combi_loss: 0, primary_circuit_loss: 0, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" required value="' + item.name + '"/></td></tr>';
+    out += '<tr><td>Category </td><td><select class="item-category">';
+    var categories = ['Combi boilers', 'System boilers', 'Heat pumps', 'Room heaters', 'Warm air systems', 'Hot water only'];
+    for (index in categories) {
+        if (item.category == categories[index])
+            out += '<option value="' + categories[index] + '" selected>' + categories[index] + '</option>';
+        else
+            out += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
+    }
+    out += '</select></td></tr>';
+    out += '<tr><td>Winter efficiency (space heating)</td><td><input type="text" class="item-winter_efficiency" required value="' + item.winter_efficiency + '"/></td></tr>';
+    out += '<tr><td>Summer efficiency (water heating)</td><td><input type="text" class="item-summer_efficiency " required value="' + item.summer_efficiency + '"/></td></tr>';
+    out += '<tr><td>Central heating pump (kWh/year)</td><td><input type="text" class="item-central_heating_pump" required value="' + item.central_heating_pump + '"/></td></tr>';
+    out += '<tr><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
+    out += '<tr><td>Responsiveness</td><td><input type="text" class="item-responsiveness" required value="' + item.responsiveness + '"/></td></tr>';
+    out += '<tr><td>Combi loss</td><td><select class="item-combi_loss" required>';
+    var options = ['0', 'Instantaneous, without keep hot-facility', 'Instantaneous, with keep-hot facility controlled by time clock', 'Instantaneous, with keep-hot facility not controlled by time clock', 'Storage combi boiler >= 55 litres', 'Storage combi boiler < 55 litres'];
+    for (index in options) {
+        if (item.instantaneous_water_heating == options[index])
+            out += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
+        else
+            out += '<option value="' + options[index] + '">' + options[index] + '</option>';
+    }
+    out += '</select></td></tr>';
+    out += '<tr><td>Primary circuit loss <i class="icon-question-sign" title="No primary loss for the following:\n\   - Electric inmersion heater.\n\   - Combi boiler\n\   - CPSU(including electric CPSU)\n\   - Boiler and thermal store within a single casing\n\   - Separate boiler and thermal store connected by no more than 1.5m of insulated pipework\n\ \n\For other cases (indirect cylinders and thermal stores connected by unsinsulated pipework or more than 1.5m of insulated pipework) the loss is calculated according to the amount of insulated pipework and the type of storage heating controls (in the Hot Water System section) - SAP2012 table 3, p. 199" /></td><td><select class="item-primary_circuit_loss">';
+    var options = ['Yes', 'No'];
+    for (index in options) {
+        if (item.primary_circuit_loss == options[index])
+            out += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
+        else
+            out += '<option value="' + options[index] + '">' + options[index] + '</option>';
+    }
+    out += '</select></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
