@@ -42,6 +42,24 @@ $("[key='data.ventilation.air_permeability_test']").change(function () {
     }
 
 });
+$('#openbem').on('click', '.add-ventilation-system-from-lib', function () {
+    library_helper.init();
+    library_helper.type = 'ventilation_systems';
+    library_helper.onAddItemFromLib();
+});
+$('#openbem').on('click', '.add-ventilation-system', function () {
+    var tag = $(this).attr('tag');
+    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    var item = library[tag];
+    item.tag = tag;
+    data.ventilation.ventilation_type = item.ventilation_type;
+    data.ventilation.ventilation_name = item.name;
+    data.ventilation.ventilation_tag = tag;
+    data.ventilation.system_air_change_rate = item.system_air_change_rate;
+    data.ventilation.system_specific_fan_power = item.specific_fan_power;
+    data.ventilation.balanced_heat_recovery_efficiency = item.balanced_heat_recovery_efficiency;
+    update();
+});
 $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     // Set variables in library_helper
     library_helper.init();
@@ -370,23 +388,23 @@ function ventilation_initUI()
     switch (ventilation_type)
     {
         case 'a':
-            $("#system_air_change_rate_div").show('slow');
-            $("#balanced_heat_recovery_efficiency_div").show('slow');
+            $(".system_air_change_rate_input").show('slow');
+            $(".balanced_heat_recovery_efficiency_input").show('slow');
             $('#fans_and_vents_div').hide('slow');
             break;
         case 'b':
-            $("#system_air_change_rate_div").show('slow');
-            $("#balanced_heat_recovery_efficiency_div").hide('slow');
+            $(".system_air_change_rate_input").show('slow');
+            $(".balanced_heat_recovery_efficiency_input").hide('slow');
             $('#fans_and_vents_div').hide('slow');
             break;
         case 'c':
-            $("#system_air_change_rate_div").show('slow');
-            $("#balanced_heat_recovery_efficiency_div").hide('slow');
+            $(".system_air_change_rate_input").show('slow');
+            $(".balanced_heat_recovery_efficiency_input").hide('slow');
             $('#fans_and_vents_div').hide('slow');
             break;
         case 'd':
-            $("#system_air_change_rate_div").hide('slow');
-            $("#balanced_heat_recovery_efficiency_div").hide('slow');
+            $(".system_air_change_rate_input").hide('slow');
+            $(".balanced_heat_recovery_efficiency_input").hide('slow');
             if (data.ventilation.ventilation_type == 'NV')
                 $('#fans_and_vents_div').hide('slow');
             else

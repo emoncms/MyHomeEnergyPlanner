@@ -5,45 +5,25 @@
     <h3>Ventilation & Infiltration</h3>
     <hr>
     <br>
-    <div class="input-prepend">
-        <span class="add-on">Select ventilation type:</span>
-        <select class="disabled-if-not-master" key="data.ventilation.ventilation_type" style="width:560px">
-            <option value='NV'>Natural ventilation only (NV)</option>
-            <option value='IE'>Intermittent extract ventilation (IE)</option>
-            <option value='DEV'>Continuous decentralised mechanical extract ventilation (DEV)</option>
-            <option value='MEV'>Continuous whole house extract ventilation (MEV)</option>
-            <option value='MV'>Balanced mechanical ventilation without heat recovery (MV)</option>
-            <option value='MVHR'>Balanced mechanical ventilation with heat recovery (MVHR)</option>
-            <option value='PS'>Whole House Passive Stack Ventilation System (PS)</option>
-        </select>
-        <button class="apply-ventilation-measure-from-lib if-not-master" type="ventilation_systems_measures" style="margin:0 0 10px 25px">Apply Measure</button>
-    </div>
-
-    <div id="system_air_change_rate_div" style="margin-left:50px">
-        <p>Air change rate through the system (If exhaust air heat pump see Appendix N): <input key="data.ventilation.system_air_change_rate" type="number" style="width:50px" min="0" step="0.1" />   ach</p>
-        <p>Specific fan power: <input key="data.ventilation.system_specific_fan_power" type="number" min="0" max="100" step="0.1" style="width:50px" />  W/(litre.sec)</p>
-    </div>
-
-    <div id="balanced_heat_recovery_efficiency_div" style="margin-left:50px">
-        <p>Heat recovery efficiency allowing for in-use factor: <input key="data.ventilation.balanced_heat_recovery_efficiency" type="text" style="width:50px" /> %</p>
-    </div>
-
-    <div id="fans_and_vents_div" style="margin-left:50px">
-        <!-- <p><b>Extract ventilation points</b></p>
-         <table style="margin-left:50px">
-             <tr>
-                 <td width="150px">Intermittent fans</td>
-                 <td><input key="data.ventilation.number_of_intermittentfans" type="number" min='0' style="width:50px"/>
-                     <button class="apply-ventilation-measure-from-lib if-not-master" type="extract_ventilation_points_measures" style="margin:0 0 10px 15px">Apply Measure</button></td>
-             </tr>
-             <tr>
-                 <td>Passive vents</td>
-                 <td><input key="data.ventilation.number_of_passivevents" type="number" min='0' style="width:50px"/></td>
-             </tr>
-         </table>
-        -->
-
-        <table  style="margin-left:50px" class='table'>
+    
+    <h4>Ventilation type</h4>
+   
+    <table class="table">
+        <tr><th>System</th><th>Air change rate <i class="icon-question-sign" title="If exhaust air heat pump see Appendix N SAP21012"></i></th><th>Specific Fan Power</th><th>Heat recovery efficiency allowing for in-use factor</th><th></th></tr>
+        <tr>
+            <td><span key="data.ventilation.ventilation_tag" /> - <span key="data.ventilation.ventilation_type" /></br><span key="data.ventilation.ventilation_name" /></td>
+            <td><span class="system_air_change_rate_input"><input key="data.ventilation.system_air_change_rate" type="number" style="width:50px" min="0" step="0.1" /> ACH</span></td>
+            <td><span class="system_air_change_rate_input"><input key="data.ventilation.system_specific_fan_power" type="number" min="0" max="100" step="0.1" style="width:50px" /> W/(litre.sec)</span></td>
+            <td><span class="balanced_heat_recovery_efficiency_input"><input key="data.ventilation.balanced_heat_recovery_efficiency" type="text" style="width:50px" /> %</span></td>
+            <td>
+                <button class="add-ventilation-system-from-lib if-master" style="margin:0 0 10px 25px">Change system</button>
+                <button class="apply-ventilation-measure-from-lib if-not-master" type="ventilation_systems_measures" style="margin:0 0 10px 25px">Apply Measure</button>
+            </td>
+        </tr>
+    </table>
+    
+    <div id="fans_and_vents_div">
+        <table class='table'>
             <tr><td colspan="5"><b>Extract ventilation points: intermittent fans and passive vents</b>
                     <span class="add-EVP-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
                     <span class="apply-ventilation-measure-from-lib if-not-master" type="add_extract_ventilation_points" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
@@ -54,7 +34,7 @@
         </table>
     </div>
 
-    <table class="table">
+    <table class="table"  style="margin-top:75px">
         <tr>
             <th style="text-align:left" width="20%"><h4>Structural infiltration</h4></th>
         <th style='padding:0 0 20px 0; vertical-align: bottom' width="15%"><span key="data.ventilation.infiltration_rate_incorp_shelter_factor" dp="2"></span> ACH</th>

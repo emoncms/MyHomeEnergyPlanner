@@ -2429,13 +2429,29 @@ var standard_library = {
         }
     },
     ventilation_systems: {
-        VS_01: {
+        VS_01_1: {
             name: "Natural Ventilation (NV)",
             "ventilation_type": 'NV',
             "system_air_change_rate": 'n\/a',
             "balanced_heat_recovery_efficiency": 'n\/a',
             specific_fan_power: 'n\/a',
             source: "SFP derived from tables 4g and 4h - p. 214"
+        },
+        VS_01_2: {
+            name: "Intermittent Extract Ventilation (IE)",
+            "ventilation_type": 'IE',
+            "system_air_change_rate": 'n\/a',
+            "balanced_heat_recovery_efficiency": 'n\/a',
+            specific_fan_power: 'n\/a',
+            source: "n\/a",
+    },
+        VS_01_3: {
+            name: "Whole house passive stack ventilation (PS)",
+            "ventilation_type": 'PS',
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": 'n\/a',
+            specific_fan_power: 'n\/a',
+            source: "n\/a",
         },
         VS_08: {
             name: "Whole house continuous mechanical extract ventilation - centralised (MEV)  (flexible duct, non-approved install)",
@@ -3593,7 +3609,7 @@ var standard_library = {
             notes: "Make sure the tank is well insulated and installed in a way that makes it accessible for controls and future maintenance. ",
             maintenance: "MINIMAL - ensure not leaks and take action immediately if any corrosion noticed"
         }
-    }
+    },
     appliances_and_cooking: {
         /*"Clothes washing - hot feed": {
          category: "Laundry",
