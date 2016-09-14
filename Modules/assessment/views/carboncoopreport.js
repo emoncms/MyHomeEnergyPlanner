@@ -323,8 +323,6 @@ function compareCarbonCoop(scenario, outputElement) {
     var listA = project.master.fuel_totals;
     var listB = project[scenario].fuel_totals;
     //out += "<table class='table table-striped'>";
-    console.log(listA);
-    console.log(listB);
 
     for (z in listA)
     {

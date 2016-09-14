@@ -950,7 +950,7 @@ libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (
         out += "<td style='text-align:right;width:150px'>";
         out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
         out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
-        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-IVF use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
@@ -1140,7 +1140,8 @@ libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="create-element-description" >' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
-    out += '<tr><td>Cost per area</td><td><input type="text" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="create-element-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="create-element-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="create-element-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1166,6 +1167,7 @@ libraryHelper.prototype.draught_proofing_measures_item_to_html = function (item,
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1211,6 +1213,7 @@ libraryHelper.prototype.ventilation_systems_measures_item_to_html = function (it
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1304,6 +1307,7 @@ libraryHelper.prototype.extract_ventilation_points_item_to_html = function (item
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1356,6 +1360,7 @@ libraryHelper.prototype.intentional_vents_and_flues_item_to_html = function (ite
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1378,6 +1383,7 @@ libraryHelper.prototype.water_usage_item_to_html = function (item, tag) {
     out += '<tr><td>Performance</td><td><input type="text" class="water-efficiency-item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="water-efficiency-item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="water-efficiency-item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="water-efficiency-item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="water-efficiency-item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="water-efficiency-item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1460,6 +1466,7 @@ libraryHelper.prototype.storage_type_measures_item_to_html = function (item, tag
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1531,6 +1538,7 @@ libraryHelper.prototype.heating_control_item_to_html = function (item, tag) {
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1629,6 +1637,7 @@ libraryHelper.prototype.heating_systems_measures_item_to_html = function (item, 
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1656,6 +1665,7 @@ libraryHelper.prototype.pipework_insulation_item_to_html = function (item, tag) 
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1682,6 +1692,7 @@ libraryHelper.prototype.hot_water_control_type_item_to_html = function (item, ta
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1705,6 +1716,7 @@ libraryHelper.prototype.space_heating_control_type_item_to_html = function (item
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
     out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
@@ -1818,6 +1830,7 @@ libraryHelper.prototype.elements_measures_get_item_to_save = function () {
         item[tag].benefits = $(".create-element-benefits").val();
     if ($('.create-element-cost').val() !== "")
         item[tag].cost = $(".create-element-cost").val();
+    item[tag].cost_units = $(".item-cost-units").val();
     if ($('.create-element-who_by').val() !== "")
         item[tag]["who_by"] = $(".create-element-who_by").val();
     if ($('.create-element-disruption').val() !== "")
@@ -1845,6 +1858,7 @@ libraryHelper.prototype.draught_proofing_measures_get_item_to_save = function ()
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -1868,6 +1882,7 @@ libraryHelper.prototype.ventilation_systems_measures_get_item_to_save = function
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -1903,6 +1918,7 @@ libraryHelper.prototype.extract_ventilation_points_get_item_to_save = function (
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -1943,6 +1959,7 @@ libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function 
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -1963,6 +1980,7 @@ libraryHelper.prototype.water_usage_get_item_to_save = function () {
         performance: $(".water-efficiency-item-performance").val(),
         benefits: $(".water-efficiency-item-benefits").val(),
         cost: $(".water-efficiency-item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".water-efficiency-item-who_by").val(),
         disruption: $(".water-efficiency-item-disruption").val(),
         associated_work: $(".water-efficiency-item-associated_work").val(),
@@ -2009,6 +2027,7 @@ libraryHelper.prototype.storage_type_measures_get_item_to_save = function () {
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -2069,6 +2088,7 @@ libraryHelper.prototype.heating_systems_measures_get_item_to_save = function () 
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -2089,6 +2109,7 @@ libraryHelper.prototype.heating_control_get_item_to_save = function () {
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -2109,6 +2130,7 @@ libraryHelper.prototype.pipework_insulation_get_item_to_save = function () {
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -2129,6 +2151,7 @@ libraryHelper.prototype.hot_water_control_type_get_item_to_save = function () {
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -2149,6 +2172,7 @@ libraryHelper.prototype.space_heating_control_type_get_item_to_save = function (
         performance: $(".item-performance").val(),
         benefits: $(".item-benefits").val(),
         cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
         who_by: $(".item-who_by").val(),
         disruption: $(".item-disruption").val(),
         associated_work: $(".item-associated_work").val(),
@@ -2300,7 +2324,7 @@ libraryHelper.prototype.get_list_of_items_for_select = function (libraryid) {
 
 libraryHelper.prototype.get_list_of_items_for_select_by_category = function (libraryid, category_to_show) {
     var library = this.get_library_by_id(libraryid).data;
-    
+
     // Group items by category
     var items_by_category = {};
     for (var item in library) {
@@ -2352,4 +2376,20 @@ libraryHelper.prototype.orderObjectsByKeys = function (obj, expected) {
         obj[keys[i]] = after[keys[i]];
     }
     return obj;
+};
+
+libraryHelper.prototype.get_cost_units_select = function (item) {
+    var units = ['sqm', 'unit', 'ln m'];
+    var out = '<select class="item-cost-units">';
+
+    for (index in units) {
+        if (item.cost_units != units[index])
+            out += '<option value=' + units[index] + '>' + units[index] + '</option>';
+        else
+            out += '<option value=' + units[index] + ' selected>' + units[index] + '</option>';
+    }
+
+    out += '</select>';
+
+    return out;
 };
