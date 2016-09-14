@@ -43,14 +43,6 @@ $("#openbem").on("click", '.add-element', function () {
         add_element("#party_walls", newelementid);
     update();
 
-    if (type != "Window" && type != "Door" && type != "Roof_light" && type != "Floor" && type != "Hatch") {
-        for (z in data.fabric.elements) {
-            if (data.fabric.elements[z].type == "Window" || data.fabric.elements[z].type == "Door" || data.fabric.elements[z].type == "Roof_light" || data.fabric.elements[z].type == "Hatch") {
-                $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").append("<option value='" + newelementid + "'>" + data.fabric.elements[newelementid].name + "</option>");
-            }
-        }
-    }
-
     $('#myModal').modal('hide');
 });
 $("#openbem").on("click", '.delete-element', function () {
@@ -352,6 +344,19 @@ function elements_UpdateUI()
          }*/
 
     }
+
+    // populate the subtractfrom selects in windows, doors (etc). We do it everytime we update just in case the key that has changed is one of Label/Location
+    // Get all the locations (walls, party walls, roofs and lofts
+    var options = '';
+    for (z in data.fabric.elements) {
+        if (data.fabric.elements[z].type != "Window" && data.fabric.elements[z].type != "Door" && data.fabric.elements[z].type != "Roof_light" && data.fabric.elements[z].type != "Hatch")
+            options += "<option value='" + data.fabric.elements[z].id + "'>" + data.fabric.elements[z].location + "</option>";
+    }
+
+    // Fill up the substractfrom selects
+    $('.subtractfrom').each(function (i, obj) {
+        $(this).html(options);
+    });
 }
 
 function get_elements_max_id() {
