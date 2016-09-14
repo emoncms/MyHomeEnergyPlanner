@@ -20,6 +20,7 @@ function librariesmanager_UpdateUI()
             $('#libraries-table td[library-name="template"]').html(library.name);
             $('#libraries-table [library-name="template"]').attr('library-name', library.name);
             $('#libraries-table [library-id="template"]').attr('library-id', library.id);
+            $("#libraries-table [library-type='template']").attr('library-type', t);
             if (library_helper.library_permissions[library.id].write != 1) {
                 access = "Read";
                 $('.if-write-access[library-id=' + library.id + ']').hide('fast');

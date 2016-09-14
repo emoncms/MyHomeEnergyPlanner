@@ -4755,7 +4755,7 @@ var standard_library = {
         }
     },
     hot_water_control_type: {
-        "STGCTR1": {
+        "STGCTR3": {
             name: "Add advanced controls to hot water store",
             control_type: "Cylinder thermostat, water heating separately timed",
             source: '---',

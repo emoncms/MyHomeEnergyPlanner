@@ -86,7 +86,10 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
     var out = library_helper.get_list_of_libraries_for_select(library_helper.type);
     $("#apply-measure-water-heating-library-select").html(out);
     var library_id = $('#apply-measure-water-heating-library-select').val();
-    out = library_helper.get_list_of_items_for_select(library_id);
+    if (library_helper.type == 'heating_systems_measures' || library_helper.type == 'storage_type_measures')
+        out = library_helper.get_list_of_items_for_select_by_category(library_id);
+    else
+        out = library_helper.get_list_of_items_for_select(library_id);
     $('#apply-measure-water-heating-items-select').html(out);
     // Populate body of modal
     var tag = $('#apply-measure-water-heating-items-select').val();
@@ -177,7 +180,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             data.measures.water_heating[library_helper.type][measure.id].measure = measure[tag];
             data.water_heating.water_usage.push(measure[tag]);
             break;
-        case 'storage_type':
+        case 'storage_type_measures':
             if (data.measures.water_heating[library_helper.type].original == undefined) // first time
                 data.measures.water_heating[library_helper.type].original = data.water_heating.storage_type;
             var measure = library_helper.storage_type_get_item_to_save();
@@ -445,7 +448,7 @@ function add_storage() {
             specific_st_info = '<td>' + st.loss_factor_b + '</td><td>' + st.volume_factor_b + '</td><td>' + st.temperature_factor_b + '</td>';
         }
         $('#type_of_storage').append('<tr><th>Type of storage </th><th>Volume</th><th>Insulation type</th>' + specific_header + '<th>Inside dwelling?</th><th style="width:150px">Contains dedicated solar storage or WWHRS volume?</th><th></th></tr>');
-        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></td></tr>');
+        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type_measures" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></td></tr>');
     }
 
 }
