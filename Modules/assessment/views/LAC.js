@@ -70,7 +70,7 @@ $('#openbem').on('click', ".add-CarbonCoop-from-lib", function () {
     library_helper.type = 'appliances_and_cooking';
     library_helper.onAddItemFromLib();
 });
-$("#add-item-detailedlist").click(function () {
+$('#openbem').on('click', "#add-item-detailedlist", function () {
     var size = data.appliancelist.list.length;
     var name = "Item " + (size + 1);
     data.appliancelist.list.push({name: name, category: 'lighting', power: 0, hours: 0, energy: 0, fuel: 'Standard Tariff', efficiency: 1, fuel_input: 0});
