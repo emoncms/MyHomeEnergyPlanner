@@ -35,6 +35,7 @@ libraryHelper.prototype.init = function () {
         'extract_ventilation_points': 'Extract ventilation points',
         //'extract_ventilation_points_measures': 'Extract ventilation points measures',
         'intentional_vents_and_flues': 'Intentional vents and flues',
+        'intentional_vents_and_flues_measures': 'Intentional vents and flues measures',
         'water_usage': 'Water usage',
         'storage_type': 'Type of storages',
         'storage_type_measures': 'Type of storage measure',
@@ -956,6 +957,22 @@ libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (
     }
     return out;
 };
+libraryHelper.prototype.intentional_vents_and_flues_measures_library_to_html = function (origin, library_id) {
+    var out = "";
+    var selected_library = this.get_library_by_id(library_id);
+    this.orderObjectsByKeys(selected_library.data);
+    for (z in selected_library.data) {
+        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
+        out += "<td><b>Ventilation rate:</b> " + selected_library.data[z].ventilation_rate + " m<sup>3</sup>/hm<sup>2</sup></td>";
+        out += "<td style='text-align:right;width:150px'>";
+        out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-IVF-measure use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
+        out += "</td>";
+        out += "</tr>";
+    }
+    return out;
+};
 libraryHelper.prototype.water_usage_library_to_html = function (origin, library_id) {
     var out = this.default_library_to_html(origin, library_id);
     out = out.replace(/add-system/g, 'add-water_usage');
@@ -1340,6 +1357,25 @@ libraryHelper.prototype.extract_ventilation_points_item_to_html = function (item
  return out;
  };*/
 libraryHelper.prototype.intentional_vents_and_flues_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: 'name', source: '--', type: 'Chimney', ventilation_rate: 40, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" value="' + item.name + '" /></td></tr>';
+    out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
+    out += '<tr><td>Type</td><td><select class="item-type">';
+    out += item.type === 'Chimney' ? '<option value="Chimney" selected>Chimney</option>' : '<option value="Chimney">Chimney</option>';
+    out += item.type === 'Open Flue' ? '<option value="Open flue" selected>Open Flue</option>' : '<option value="Open Flue">Open Flue</option>';
+    out += item.type === 'Flueless gas fire' ? '<option value="Flueless gas fire" selected>Flueless gas fire</option>' : '<option value="Flueless gas fire">Flueless gas fire</option>';
+    out += item.type === 'Measure' ? '<option value="Measure" selected>Measure</option>' : '<option value="Measure">Measure</option>';
+    out += '</select></td></tr>';
+    out += '<tr><td>Ventilation rate (m<sup>3</sup>/h)</td><td><input type="number" class="item-ventilation_rate" value="' + item.ventilation_rate + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
+libraryHelper.prototype.intentional_vents_and_flues_measures_item_to_html = function (item, tag) {
     if (item == undefined)
         item = {tag: '', name: 'name', source: '--', type: 'Chimney', ventilation_rate: 40, description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
@@ -1954,6 +1990,17 @@ libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function 
         name: $(".item-name").val(),
         source: $(".item-name").val(),
         type: $(".item-type").val(),
+        ventilation_rate: $(".item-ventilation_rate").val()
+    };
+    return item;
+};
+libraryHelper.prototype.intentional_vents_and_flues_measures_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        source: $(".item-name").val(),
+        type: $(".item-type").val(),
         ventilation_rate: $(".item-ventilation_rate").val(),
         description: $(".item-description").val(),
         performance: $(".item-performance").val(),
@@ -1966,7 +2013,6 @@ libraryHelper.prototype.intentional_vents_and_flues_get_item_to_save = function 
         key_risks: $(".item-key_risks").val(),
         notes: $(".item-notes").val(),
         maintenance: $(".item-maintenance").val()
-
     };
     return item;
 };

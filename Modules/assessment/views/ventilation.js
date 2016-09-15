@@ -66,7 +66,7 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
     library_helper.type_of_measure = $(this).attr('type');
     if (library_helper.type_of_measure == 'add_extract_ventilation_points')
         library_helper.type = 'extract_ventilation_points';
-    else if (library_helper.type_of_measure == 'add_intentional_vents_and_flues' || library_helper.type_of_measure == 'intentional_vents_and_flues_measures')
+    else if (library_helper.type_of_measure == 'add_intentional_vents_and_flues')
         library_helper.type = 'intentional_vents_and_flues';
     else
         library_helper.type = library_helper.type_of_measure;

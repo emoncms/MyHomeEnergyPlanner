@@ -2750,99 +2750,40 @@ var standard_library = {
             name: 'Open Chimney',
             source: 'Updated SAP (not yet released)',
             type: 'Chimney',
-            ventilation_rate: 80,
-            description: "n\/a", performance: 'n\/a',
-            benefits: "n\/a",
-            cost_units: 'n\/a',
-            cost: 0,
-            who_by: "n\/a",
-            disruption: "n\/a",
-            associated_work: "n\/a",
-            key_risks: "n\/a",
-            notes: "n\/a",
-            maintenance: "n\/a"
+            ventilation_rate: 80
         },
         IV_02: {
             name: 'Gas Fire with Flue',
             source: 'SAP',
             type: 'Open Flue',
-            ventilation_rate: 20,
-            description: "n\/a", performance: 'n\/a',
-            benefits: "n\/a",
-            cost_units: 'change',
-            cost: 0,
-            who_by: "n\/a",
-            disruption: "n\/a",
-            associated_work: "n\/a",
-            key_risks: "n\/a",
-            notes: "n\/a",
-            maintenance: "n\/a"
+            ventilation_rate: 20
         },
         IV_03: {
             name: 'Flueless Gas fire',
             source: 'SAP',
             type: 'Flueless gas fire',
-            ventilation_rate: 40,
-            description: "n\/a", performance: 'n\/a',
-            benefits: "n\/a",
-            cost_units: 'change',
-            cost: 0,
-            who_by: "n\/a",
-            disruption: "n\/a",
-            associated_work: "n\/a",
-            key_risks: "n\/a",
-            notes: "n\/a",
-            maintenance: "n\/a"
+            ventilation_rate: 40
         },
         IV_04: {
             name: 'Wood Burning Stove with Flue',
             source: 'SAP',
             type: 'Open Flue',
-            ventilation_rate: 20,
-            description: "n\/a",
-            performance: 'n\/a',
-            benefits: "n\/a",
-            cost_units: 'change',
-            cost: 0,
-            who_by: "n\/a",
-            disruption: "n\/a",
-            associated_work: "n\/a",
-            key_risks: "n\/a",
-            notes: "n\/a",
-            maintenance: "n\/a"
+            ventilation_rate: 20
         },
         IV_05: {
             name: 'Vented Chimney',
             source: 'SAP',
             type: 'Open Flue',
-            ventilation_rate: 20,
-            description: "n\/a", performance: 'n\/a',
-            benefits: "n\/a",
-            cost_units: 'change',
-            cost: 0,
-            who_by: "n\/a",
-            disruption: "n\/a",
-            associated_work: "n\/a",
-            key_risks: "n\/a",
-            notes: "n\/a",
-            maintenance: "n\/a"
+            ventilation_rate: 20
         },
         IV_06: {
             name: 'Other Gas appliance with Flue (eg Old Boiler)',
             source: 'SAP',
             type: 'Open Flue',
-            ventilation_rate: 20,
-            description: "n\/a", performance: 'n\/a',
-            benefits: "n\/a",
-            cost_units: 'change',
-            cost: 0,
-            who_by: "n\/a",
-            disruption: "n\/a",
-            associated_work: "n\/a",
-            key_risks: "n\/a",
-            notes: "n\/a",
-            maintenance: "n\/a"
-        },
+            ventilation_rate: 20
+        }
+    },
+    intentional_vents_and_flues_measures: {
         IV_07: {
             name: 'Chimney Balloon\/Pillow (low level)',
             source: 'SAP (inferred)',

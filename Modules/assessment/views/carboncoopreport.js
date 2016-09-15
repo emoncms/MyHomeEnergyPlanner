@@ -255,7 +255,12 @@ function compareCarbonCoop(scenario, outputElement) {
 
 
     out += "<hr><h3>Energy Requirements</h3><hr>";
-    // Changes to elements
+    /* Commented because energy systems are breaking 
+     * 
+     * 
+     * 
+     * 
+     * // Changes to elements
     var listA = project.master.energy_requirements;
     var listB = project[scenario].energy_requirements;
     //console.log(listA);
@@ -313,7 +318,7 @@ function compareCarbonCoop(scenario, outputElement) {
             }
 
         }
-    }
+    }*/
 
     // out += "</table>";
     out += "<tr><td><hr><h3>Fuel costs</h3><hr></td><td></td><td></td></tr>";
