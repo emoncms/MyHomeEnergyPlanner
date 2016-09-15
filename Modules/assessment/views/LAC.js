@@ -65,6 +65,11 @@ $('#openbem').on('change', '#LAC_calculation_type', function () {
     show_LAC_divs($('#LAC_calculation_type').val());
     library_helper.type = 'appliances_and_cooking';
 });
+$('#openbem').on('click', ".add-CarbonCoop-from-lib", function () {
+    library_helper.init();
+    library_helper.type = 'appliances_and_cooking';
+    library_helper.onAddItemFromLib();
+});
 $("#add-item-detailedlist").click(function () {
     var size = data.appliancelist.list.length;
     var name = "Item " + (size + 1);
