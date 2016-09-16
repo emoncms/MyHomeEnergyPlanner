@@ -176,6 +176,7 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '#confirm-delete-library-item-modal #delete-library-item-ok', function () {
         myself.delete_library_item($(this).attr('library-id'), $(this).attr('tag'));
     });
+
     this.container.on('change', '.item-ventilation_type', function () {
         var newVS = $('.item-ventilation_type').val();
         if (newVS == 'DEV' || newVS == 'MEV' || newVS == 'MV' || newVS == 'MVHR')
@@ -217,6 +218,17 @@ libraryHelper.prototype.add_events = function () {
             $('.if-not-declared-loss-factor').show('slow');
         }
     });
+    this.container.on('change', '.heating_systems.item-category', function () {
+        if ($('.item-category').val() != 'Warm air systems') {
+            $('.item-fans_and_supply_pumps').parent().parent().show();
+            $('.item-sfp').parent().parent().hide();
+        }
+        else{
+            $('.item-fans_and_supply_pumps').parent().parent().hide();
+            $('.item-sfp').parent().parent().show();
+        }
+    });
+
 };
 libraryHelper.prototype.append_modals = function () {
     var html;
@@ -1586,13 +1598,13 @@ libraryHelper.prototype.heating_control_item_to_html = function (item, tag) {
 };
 libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
     if (item == undefined)
-        item = {tag: '', name: "--", category: 'Combi boiler', winter_efficiency: 100, summer_efficiency: 100, central_heating_pump: 0, fans_and_supply_pumps: 0, responsiveness: 1, combi_loss: 0, primary_circuit_loss: 0, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+        item = {tag: '', name: "--", category: 'Combi boiler', winter_efficiency: 100, summer_efficiency: 100, central_heating_pump: 0, fans_and_supply_pumps: 0, sfp: 1.5, responsiveness: 1, combi_loss: 0, primary_circuit_loss: 0, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
     else if (tag != undefined)
         item.tag = tag;
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
     out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="item-name" required value="' + item.name + '"/></td></tr>';
-    out += '<tr><td>Category </td><td><select class="item-category">';
+    out += '<tr><td>Category </td><td><select class="heating_systems item-category">';
     var categories = ['Combi boilers', 'System boilers', 'Heat pumps', 'Room heaters', 'Warm air systems', 'Hot water only'];
     for (index in categories) {
         if (item.category == categories[index])
@@ -1604,7 +1616,14 @@ libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
     out += '<tr><td>Winter efficiency (space heating)</td><td><input type="text" class="item-winter_efficiency" required value="' + item.winter_efficiency + '"/></td></tr>';
     out += '<tr><td>Summer efficiency (water heating)</td><td><input type="text" class="item-summer_efficiency " required value="' + item.summer_efficiency + '"/></td></tr>';
     out += '<tr><td>Central heating pump (kWh/year)</td><td><input type="text" class="item-central_heating_pump" required value="' + item.central_heating_pump + '"/></td></tr>';
-    out += '<tr><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
+    if (item.category != 'Warm air systems') {
+        out += '<tr><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
+        out += '<tr style="display: none"><td>Specific fan power (kW) <i class="icon-question-sign" title="For the calculation of fans and supply pumps energy" /></td><td><input type="text" class="item-sfp" required value="' + item.sfp + '"/></td></tr>';
+    }
+    else {
+        out += '<tr style="display: none"><td>Fans and supply pumps (kWh/year) <i class="icon-question-sign" title="For the calculation of fans and supply pumps energy" /></td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
+        out += '<tr><td>Specific fan power (kW)</td><td><input type="text" class="item-sfp" required value="' + item.sfp + '"/></td></tr>';
+    }
     out += '<tr><td>Responsiveness</td><td><input type="text" class="item-responsiveness" required value="' + item.responsiveness + '"/></td></tr>';
     out += '<tr><td>Combi loss</td><td><select class="item-combi_loss" required>';
     var options = ['0', 'Instantaneous, without keep hot-facility', 'Instantaneous, with keep-hot facility controlled by time clock', 'Instantaneous, with keep-hot facility not controlled by time clock', 'Storage combi boiler >= 55 litres', 'Storage combi boiler < 55 litres'];
@@ -2109,6 +2128,7 @@ libraryHelper.prototype.heating_systems_get_item_to_save = function () {
         summer_efficiency: $(".item-summer_efficiency").val(),
         central_heating_pump: $(".item-central_heating_pump").val(),
         fans_and_supply_pumps: $(".item-fans_and_supply_pumps").val(),
+        sfp: $(".item-sfp").val(),
         responsiveness: $(".item-responsiveness").val(),
         combi_loss: $(".item-combi_loss").val(),
         primary_circuit_loss: $(".item-primary_circuit_loss").val(),
@@ -2126,6 +2146,7 @@ libraryHelper.prototype.heating_systems_measures_get_item_to_save = function () 
         summer_efficiency: $(".item-summer_efficiency").val(),
         central_heating_pump: $(".item-central_heating_pump").val(),
         fans_and_supply_pumps: $(".item-fans_and_supply_pumps").val(),
+        sfp: $(".item-sfp").val(),
         responsiveness: $(".item-responsiveness").val(),
         combi_loss: $(".item-combi_loss").val(),
         primary_circuit_loss: $(".item-primary_circuit_loss").val(),

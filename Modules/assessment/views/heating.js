@@ -255,6 +255,8 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
+            if (measure[tag].category == 'Warm air systems')
+                measure[tag].fans_and_supply_pumps = 0.4 * measure[tag].sfp * data.volume;
             // Add extra properties to measure 
             measure[tag].cost_units = '/unit';
             measure[tag].quantity = 1;
@@ -297,6 +299,8 @@ $('#openbem').on('click', '.add-heating-system', function () {
     var library = library_helper.get_library_by_id($(this).attr('library')).data;
     var item = library[tag];
     item.tag = tag;
+    if (item.category = 'Warm air systems')
+        item.fans_and_supply_pumps = 0.4 * item.sfp * data.volume;
     item.id = get_HS_max_id() + 1;
     item.fuel = 'Standard Tariff';
     item.fraction_space = 1;
