@@ -1932,7 +1932,7 @@ var standard_library = {
             notes: "This method of insulating floors is particularly suited to solid floors, as it reduces the heat loss where it is greatest at the floor edge, without no internal disruption. It requires a trench to be dug at the external wall/floor junction. If required to improve thermal performance, the backfill drainage layer can also be an insulative material (expanded clay or recycled glass granuals). Care should be taken to ensure the wall is protected from rising damp, and advice should be taken on the treatment of any existing damp proof courses. The perimeter insulation itself should be an effective protection against damp. ",
             maintenance: "MINIMAL"
         },
-        "WWTD_06": {
+        "WWTD_06_2": {
             tags: ['Window'],
             name: "Double glazed window, post-2010 (timber)",
             location: "",
@@ -1946,7 +1946,7 @@ var standard_library = {
             performance: '1.6',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
-            cost: 200,
+            cost: 350,
             who_by: "General Contractor/ Window Fitter",
             disruption: "HIGH",
             associated_work: "Ventilation, external wall insulation, internal wall insulation, draught-proofing.  ",
@@ -1968,7 +1968,7 @@ var standard_library = {
             performance: '1.6',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
-            cost: 0, // Marianne
+            cost: 250,
             who_by: "General Contractor/ Window Fitter",
             disruption: "HIGH",
             associated_work: "Ventilation, external wall insulation, internal wall insulation, draught-proofing.  ",
@@ -1990,7 +1990,7 @@ var standard_library = {
             performance: '1.4',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
-            cost: 400,
+            cost: 450,
             who_by: "General Contractor/ Window Fitter",
             disruption: "HIGH",
             associated_work: "Ventilation, external wall insulation, internal wall insulation, draught-proofing.  ",
@@ -2012,7 +2012,7 @@ var standard_library = {
             performance: '1.2',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
-            cost: 0, // Marianne
+            cost: 300,
             who_by: "General Contractor/ Window Fitter",
             disruption: "HIGH",
             associated_work: "Ventilation, external wall insulation, internal wall insulation, draught-proofing.  ",
@@ -2034,7 +2034,7 @@ var standard_library = {
             performance: '0.85',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
-            cost: 550,
+            cost: 500,
             who_by: "General Contractor/ Window Fitter",
             disruption: "HIGH",
             associated_work: "Ventilation, external wall insulation, internal wall insulation, draught-proofing.  ",
@@ -2056,7 +2056,7 @@ var standard_library = {
             performance: '0.8',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
-            cost: 0, // Marianne
+            cost: 350, 
             who_by: "General Contractor/ Window Fitter",
             disruption: "HIGH",
             associated_work: "Ventilation, external wall insulation, internal wall insulation, draught-proofing.  ",
@@ -2670,7 +2670,7 @@ var standard_library = {
             notes: "The ventilation strategy for your whole house should be carefully considered from the start of your retrofit. Noise should be a criteria when specifying the make model and control method especially for fans close to bedrooms - it is now possible to obtain fans with a rating below 30dB (the level of a whisper). How the boost for the fans is controlled should also be carefully considered to match your needs - whether by simple attachment to a light-switch, or more sophisticatedly via a humidistat or motion sensor. Aesthetics and the level of disruption and disturbance may be a consideration for you, as well as functioning and cost. ",
             maintenance: "MINIMAL - Regular cleaning of fans and replacement required when parts wear out. "
         },
-        VS_06: {
+        /*VS_06: {
             name: "Whole house balanced mechanical ventilation (MV) ",
             "ventilation_type": 'MV',
             "system_air_change_rate": 0.5,
@@ -2688,7 +2688,7 @@ var standard_library = {
             key_risks: "", // Marianne
             notes: "", // Marianne
             maintenance: "" // Marianne
-        },
+        },*/
         VS_07: {
             name: "Whole house balanced mechanical ventilation with heat recovery (MVHR) (insulated rigid or semi-rigid duct, approved install) - high quality effcienct system (Passive House Certified or similar system)  ",
             "ventilation_type": 'MVHR',
