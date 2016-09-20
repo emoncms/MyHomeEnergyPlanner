@@ -78,7 +78,10 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
 //1. Set variables in library_helper
     library_helper.init();
     library_helper.type_of_measure = $(this).attr('type');
-    library_helper.type = library_helper.type_of_measure;
+    if (library_helper.type_of_measure == 'add_heating_systems_measure')
+        library_helper.type = 'heating_systems_measures';
+    else
+        library_helper.type = library_helper.type_of_measure;
     // 2. Prepare modal
     $('#apply-measure-water-heating-finish').hide();
     $('#apply-measure-water-heating-modal .modal-body > div').hide();
@@ -269,6 +272,31 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
 // Update data object and add measure
             data.measures.heating_systems[item.id].measure = measure[tag];
             data.heating_systems[item_index] = measure[tag];
+            break;
+        case 'add_heating_systems_measure':
+            var item_id = get_HS_max_id() + 1;
+            if (data.measures.heating_systems[item_id] == undefined) //if first time we apply a measure to this system
+                data.measures.heating_systems[item_id] = {original: 'empty', measure: {}};
+            var measure = library_helper.heating_systems_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            measure[tag].id = item_id;
+            if (measure[tag].category == 'Warm air systems')
+                measure[tag].fans_and_supply_pumps = 0.4 * measure[tag].sfp * data.volume;
+            // Add extra properties to measure 
+            measure[tag].id = get_HS_max_id() + 1;
+            measure[tag].fuel = 'Standard Tariff';
+            measure[tag].fraction_space = 1;
+            measure[tag].fraction_water_heating = 1;
+            measure[tag].main_space_heating_system = 'secondaryHS';
+            measure[tag].temperature_adjustment = 0;
+            measure[tag].provides = 'heating_and_water';
+            measure[tag].instantaneous_water_heating = false;
+            measure[tag].heating_controls = 1;
+            // Update data object and add measure
+            data.measures.heating_systems[item_id].measure = measure[tag];
+            data.heating_systems.push(measure[tag]);
             break;
     }
     heating_initUI();
