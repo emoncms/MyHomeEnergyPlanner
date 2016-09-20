@@ -385,20 +385,25 @@ calc.ventilation = function (data)
             data.ventilation[z] = defaults[z];
     }
 
-    var total = 0;
+    var total_IVF = 0;
+    var total_EVP = 0;
     // Intentional vents and flues (IVF: Chimneys, open flues and flueless gas fires)
     for (z in data.ventilation.IVF)
-        total += 1.0 * data.ventilation.IVF[z].ventilation_rate;
-    // Extract ventilation points
+        total_IVF += 1.0 * data.ventilation.IVF[z].ventilation_rate;
+    // According to SAP2012 the loses due to EVP are "infiltration loses" but after 
+    // discussion (GIT issue 177: https://github.com/emoncms/MyHomeEnergyPlanner/issues/177)
+    // we have decided to consider them "ventilation losses"
     if (data.ventilation.ventilation_type == 'IE' || data.ventilation.ventilation_type == 'PS') {
         for (z in data.ventilation.EVP)
-            total += 1.0 * data.ventilation.EVP[z].ventilation_rate;
+            total_EVP += 1.0 * data.ventilation.EVP[z].ventilation_rate;
     }
 
-
     var infiltration = 0;
+    var EVP_air_changes = 0;
+
     if (data.volume != 0) {
-        infiltration = total / data.volume;
+        infiltration = total_IVF / data.volume;
+        EVP_air_changes = total_EVP / data.volume;
         data.ventilation.infiltration_chimeneyes_fires_fans = infiltration;
     }
 
@@ -424,19 +429,25 @@ calc.ventilation = function (data)
     else
         infiltration += data.ventilation.structural_infiltration_from_test;
     data.ventilation.infiltration_rate = infiltration;
+    data.ventilation.EVP_air_changes = EVP_air_changes;
     var shelter_factor = 1 - (0.075 * data.ventilation.number_of_sides_sheltered);
     infiltration *= shelter_factor;
+    EVP_air_changes *= shelter_factor;
     data.ventilation.infiltration_rate_incorp_shelter_factor = infiltration;
     var adjusted_infiltration = [];
+    var adjusted_EVP_air_changes = [];
     data.ventilation.windfactor = [];
     data.ventilation.adjusted_infiltration = [];
+    data.ventilation.adjusted_EVP_air_changes = [];
     for (var m = 0; m < 12; m++)
     {
         var windspeed = datasets.table_u2[data.region][m];
         var windfactor = windspeed / 4;
         adjusted_infiltration[m] = infiltration * windfactor;
+        adjusted_EVP_air_changes[m] = EVP_air_changes * windfactor;
         data.ventilation.windfactor[m] = windfactor;
         data.ventilation.adjusted_infiltration[m] = adjusted_infiltration[m];
+        data.ventilation.adjusted_EVP_air_changes[m] = adjusted_EVP_air_changes[m];
     }
 
     // (24a)m effective_air_change_rate
@@ -469,6 +480,8 @@ calc.ventilation = function (data)
             ventilation_type = 'd';
             break;
     }
+
+    // Calculation of infiltration and ventilation looses (SAP2012 only adds both together and call them "ventilation looses", confusing
     switch (ventilation_type)
     {
         case 'a':
@@ -509,14 +522,14 @@ calc.ventilation = function (data)
             for (var m = 0; m < 12; m++)
             {
                 // if (22b)m ≥ 1, then (24d)m = (22b)m otherwise (24d)m = 0.5 + [(22b)m2 × 0.5]
-                if (adjusted_infiltration[m] >= 1) {
-                    effective_air_change_rate[m] = adjusted_infiltration[m];
+                if ((adjusted_infiltration[m] + adjusted_EVP_air_changes[m]) >= 1) {
+                    effective_air_change_rate[m] = adjusted_infiltration[m] + adjusted_EVP_air_changes[m];
                     infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
-                    ventilation_WK[m] = 0;
+                    ventilation_WK[m] = data.volume * 0.33 * adjusted_EVP_air_changes[m];
                 } else {
                     effective_air_change_rate[m] = 0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5;
-                    infiltration_WK[m] = data.volume * 0.33 * (0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5);
-                    ventilation_WK[m] = 0;
+                    infiltration_WK[m] = data.volume * 0.33 * (0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5 + adjusted_infiltration[m] * adjusted_EVP_air_changes[m]);
+                    ventilation_WK[m] = data.volume * 0.33 * Math.pow(adjusted_EVP_air_changes[m], 2) * 0.5;
                 }
             }
             break;
