@@ -3259,6 +3259,84 @@ var standard_library = {
             temperature_factor_b: 0.6,
             declared_loss_factor_known: false,
             source: '--'
+        },
+        HWS37: {
+            tag: 'HWS',
+            name: "Storage Combi, primary store",
+            category: 'Combis with storage',
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 115,
+            loss_factor_b: 0.152,
+            volume_factor_b: 1,
+            temperature_factor_b: 2.54,
+            declared_loss_factor_known: false,
+            source: '--'
+        },
+        HWS38: {
+            tag: 'HWS',
+            name: "Storage Combi, secondary store",
+            category: 'Combis with storage',
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 115,
+            loss_factor_b: 0.152,
+            volume_factor_b: 1,
+            temperature_factor_b: 1.86,
+            declared_loss_factor_known: false,
+            source: '--'
+        },
+        HWS39: {
+            tag: 'HWS',
+            name: "Instantaneous combi with close coupled external store",
+            category: 'Combis with storage',
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 115,
+            loss_factor_b: 0.152,
+            volume_factor_b: 1,
+            temperature_factor_b: 0.6,
+            declared_loss_factor_known: false,
+            source: '--'
+        },
+        /*HWS40: {
+            tag: 'HWS',
+            name: "",
+            category: 'Thermal store',
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 115,
+            loss_factor_b: ,
+            volume_factor_b: ,
+            temperature_factor_b: ,
+            declared_loss_factor_known: false,
+            source: '--'
+        },*/
+        HWS41: {
+            tag: 'HWS',
+            name: "Integrated thermal store and gas-fired CPSU",
+            category: 'CPSUs',
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 80,
+            loss_factor_b: 0.306,
+            volume_factor_b: 1.145,
+            temperature_factor_b: 1,
+            declared_loss_factor_known: false,
+            source: '--'
+        },
+        HWS42: {
+            tag: 'HWS',
+            name: "Electric CPSU",
+            category: 'CPSUs',
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 300,
+            loss_factor_b: 0.011,
+            volume_factor_b: 0.737,
+            temperature_factor_b: 1,
+            declared_loss_factor_known: false,
+            source: '--'
         }
     },
     storage_type_measures: {
