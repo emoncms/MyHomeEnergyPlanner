@@ -375,7 +375,8 @@ calc.ventilation = function (data)
         balanced_heat_recovery_efficiency: 65,
         structural_infiltration: 0,
         IVF: [],
-        EVP: []
+        EVP: [],
+        CDF: []
     };
     if (data.ventilation == undefined)
         data.ventilation = {};

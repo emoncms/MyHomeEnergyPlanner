@@ -4765,6 +4765,83 @@ var standard_library = {
             notes: "Consider usability in choosing your programmer. It needs to work with your central heating system, but should also be readable and understanable. ",
             maintenance: "MINIMAL"
         }
+    },
+    clothes_drying_facilities:{
+        "OHV_01": {
+            name: "Stack ventliation to rooflight or clerestorey window - reduced overheating risk",
+            source: '---',
+            description: "Fit opener to high level clerestory window/ rooflight to help prevent summer overheating. Could be linked to clothes drying strategy if positioned above airer.  ",
+            performance: 'n/a',
+            benefits: "Reduced overheating risk in summer",
+            cost_units: 'unit',
+            cost: 100,
+            who_by: "DIY/ General Contractor",
+            disruption: "MINIMAL",
+            associated_work: "Advanced air-tightness works, insulation works",
+            key_risks: "---",
+            notes: "Allows ventilation through stack effect, so reducing overheating risk in summer. ",
+            maintenance: "MINIMAL"
+        },
+        "OHV_02": {
+            name: "Stack ventliation to loft hatch - reduced overheating risk",
+            source: '---',
+            description: "Fit opener to loft hatch to help prevent summer overheating. Could be linked to clothes drying strategy if positioned above airer. ",
+            performance: 'n/a',
+            benefits: "Reduced overheating risk in summer",
+            cost_units: 'unit',
+            cost: 100,
+            who_by: "DIY/ General Contractor",
+            disruption: "MINIMAL",
+            associated_work: "Advanced air-tightness works, insulation works",
+            key_risks: "---",
+            notes: "Allows ventilation through stack effect, so reducing overheating risk in summer. ",
+            maintenance: "MINIMAL"
+        },
+        "LD_01": {
+            name: "Clothes Drying Cupboard",
+            source: '---',
+            description: "Create dedicated indoor clothes drying cupboard linked to heating and ventilation system (e.g. positioned near to thermal store and/or extract vent). Reduces need for use of tumble dryer and improves indoor air quality. ",
+            performance: 'n/a',
+            benefits: "Indoor air quality, reducing risk of condensation and mould, reduced energy use for drying",
+            cost_units: 'unit',
+            cost: 400,
+            who_by: "General Contractor",
+            disruption: "MINIMAL",
+            associated_work: "Ventilation system, draught-proofing works",
+            key_risks: "---",
+            notes: "Creating a ventilated space for clothes drying will help to improve indoor air quality and dry your clothes more quickly, whilst reducing or avoiding the need to use a tumble-dryer.",
+            maintenance: "MINIMAL"
+        },
+        "LD_02": {
+            name: "Clothes Drying Rack",
+            source: '---',
+            description: "Fit ceiling mounted wooden clothes drying rack in appropriate location  (e.g. above stairs, near rooflight or next to extract in bathroom/ utility room). Reduces need for use of tumble dryer and improves indoor air quality. ",
+            performance: 'n/a',
+            benefits: "Indoor air quality, reducing risk of condensation and mould, reduced energy use for drying",
+            cost_units: 'unit',
+            cost: 100,
+            who_by: "DIY/ General Contractor",
+            disruption: "MINIMAL",
+            associated_work: "Ventilation system, draught-proofing works",
+            key_risks: "---",
+            notes: "Creating a ventilated space for clothes drying will help to improve indoor air quality and dry your clothes more quickly, whilst reducing or avoiding the need to use a tumble-dryer.",
+            maintenance: "MINIMAL"
+        },
+        "LD_03": {
+            name: "Clothes Drying Line (Outside)",
+            source: '---',
+            description: "Provide external clothes line or airer in garden or yard. Can be covered with temporary or permanent awning or shelter.   ",
+            performance: 'n/a',
+            benefits: "Indoor air quality, reducing risk of condensation and mould, reduced energy use for drying",
+            cost_units: 'unit',
+            cost: 100,
+            who_by: "DIY/ General Contractor",
+            disruption: "MINIMAL",
+            associated_work: "Ventilation system, draught-proofing works",
+            key_risks: "---",
+            notes: "Drying clothes in a dedicated, rain-shelters outside space helps to preserve good indoor air-quality whilst reducing or avoiding the neeed to use a tumber dryer. ",
+            maintenance: "MINIMAL"
+        }
     }
 
 };

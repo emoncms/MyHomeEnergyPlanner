@@ -152,7 +152,8 @@ var openbem = {
             balanced_heat_recovery_efficiency: data.ventilation.balanced_heat_recovery_efficiency,
             system_specific_fan_power: data.ventilation.system_specific_fan_power,
             IVF: data.ventilation.IVF,
-            EVP: data.ventilation.EVP
+            EVP: data.ventilation.EVP,
+            CDF: data.ventilation.CDF
         };
         // LAC
         inputdata.LAC = data.LAC;

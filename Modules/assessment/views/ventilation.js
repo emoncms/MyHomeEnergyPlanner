@@ -68,6 +68,8 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
         library_helper.type = 'extract_ventilation_points';
     else if (library_helper.type_of_measure == 'add_intentional_vents_and_flues')
         library_helper.type = 'intentional_vents_and_flues';
+    else if (library_helper.type_of_measure == 'add_CDF')
+        library_helper.type = 'clothes_drying_facilities';
     else
         library_helper.type = library_helper.type_of_measure;
     // Prepare modal
@@ -122,6 +124,12 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
             $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library.</p>');
             break;
         case 'add_intentional_vents_and_flues':
+            $('#apply-measure-ventilation-what-to-do').hide();
+            $('#apply-measure-ventilation-library-item-selects').show();
+            $('#apply-measure-ventilation-modal .modal-body').show();
+            $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library.</p>');
+            break;
+            case 'add_CDF':
             $('#apply-measure-ventilation-what-to-do').hide();
             $('#apply-measure-ventilation-library-item-selects').show();
             $('#apply-measure-ventilation-modal .modal-body').show();
@@ -281,6 +289,24 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             }
             data.measures.ventilation[library_helper.type][measure[tag].id].measure = measure[tag];
             break;
+        case 'add_CDF':
+            var measure = library_helper.clothes_drying_facilities_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            measure[tag].id = get_CDF_max_id() + 1;
+            // Add extra properties to measure 
+            measure[tag].cost_units = '/unit';
+            measure[tag].quantity = 1;
+            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            // Update data object and add measure
+            data.ventilation.CDF.push(measure[tag]);
+            if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
+                data.measures.ventilation[library_helper.type][measure[tag].id] = {};
+                data.measures.ventilation[library_helper.type][measure[tag].id].original = 'empty';
+            }
+            data.measures.ventilation[library_helper.type][measure[tag].id].measure = measure[tag];
+            break;
     }
     update();
     $('#apply-measure-ventilation-modal').modal('hide');
@@ -309,6 +335,11 @@ $('#openbem').on('click', '.add-EVP-from-lib', function () {
     library_helper.type = 'extract_ventilation_points';
     library_helper.onAddItemFromLib();
 });
+$('#openbem').on('click', '.add-CDF-from-lib', function () {
+    library_helper.init();
+    library_helper.type = 'clothes_drying_facilities';
+    library_helper.onAddItemFromLib();
+});
 $('#openbem').on('click', '.add-IVF', function () {
     var tag = $(this).attr('tag');
     var library = library_helper.get_library_by_id($(this).attr('library')).data;
@@ -327,6 +358,15 @@ $('#openbem').on('click', '.add-EVP', function () {
     data.ventilation.EVP.push(item);
     update();
 });
+$('#openbem').on('click', '.add-clothes-drying-facilities', function () {
+    var tag = $(this).attr('tag');
+    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    var item = library[tag];
+    item.tag = tag;
+    item.id = get_CDF_max_id() + 1;
+    data.ventilation.CDF.push(item);
+    update();
+});
 $('#openbem').on('click', '.delete-IVF', function () {
     var row = $(this).attr('row');
     data.ventilation.IVF.splice(row, 1);
@@ -335,6 +375,11 @@ $('#openbem').on('click', '.delete-IVF', function () {
 $('#openbem').on('click', '.delete-EVP', function () {
     var row = $(this).attr('row');
     data.ventilation.EVP.splice(row, 1);
+    update();
+});
+$('#openbem').on('click', '.delete-CDF', function () {
+    var row = $(this).attr('row');
+    data.ventilation.CDF.splice(row, 1);
     update();
 });
 $('#openbem').on('click', '.edit-item-EVP', function () {
@@ -433,6 +478,15 @@ function ventilation_initUI()
         out += '<span class = "delete-IVF" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
         $('#IVF').append(out);
     }
+    
+    // Clothes drying facilities (CDF)
+    $('#CDF').html('');
+    for (z in data.ventilation.CDF) {
+        var item = data.ventilation.CDF[z];
+        var out = '<tr><td style="padding-left:75px;width:5px;border:none"><span class = "delete-CDF" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td>'
+        out += '<td>' + item.tag + ': ' + item.name + '</td></tr>';
+        $('#CDF').append(out);
+    }
 
     show_hide_if_master();
 }
@@ -463,6 +517,20 @@ function get_EVP_max_id() {
             max_id = data.ventilation.EVP[z].id;
     }
     for (z in data.measures.ventilation.EVP) {
+        if (z > max_id)
+            max_id = z;
+    }
+    return max_id;
+}
+
+function get_CDF_max_id() {
+    var max_id = 0;
+    // Find the max id
+    for (z in data.ventilation.CDF) {
+        if (data.ventilation.CDF[z].id != undefined && data.ventilation.CDF[z].id > max_id)
+            max_id = data.ventilation.CDF[z].id;
+    }
+    for (z in data.measures.ventilation.CDF) {
         if (z > max_id)
             max_id = z;
     }
