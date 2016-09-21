@@ -585,6 +585,7 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     $('#apply-measure-ok').attr('item', origin.attr('item'));
     $('#apply-measure-ok').attr('type-of-item', origin.attr('type-of-item')); // Used for energy_systems
     //// Check replacefrom library manually (option by default)
+    $('[name=radio-type-of-measure]').filter('[value=replace]').click();
     $('[name=radio-type-of-measure]').filter('[value=replace_from_measure_library]').click();
     // Populate the selects library to choose a library and an item (used when replace the item with one from library)
     //Moved to onChangeApplyMeasureWhatToDo
@@ -649,7 +650,7 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
                 var type = 'elements_measures';
             else
                 var type = this.type;
-            this.populate_selects_in_apply_measure_modal(type)
+            this.populate_selects_in_apply_measure_modal(type);
             this.onChangeApplyMeasureReplaceFromLib(type);
             this.onChangeApplyMeasureReplaceFromLibItem(type);
             $('#apply-measure-replace').show('fast');
@@ -1149,10 +1150,6 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<tr><td>Description</td><td><input type="text" class="create-element-description" value="' + item.description + '" /></td></tr>';
     //out += '<tr><td>Location</td><td><input type="text" class="create-element-location" value="' + item.location + '" /></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="create-element-source" value="' + item.source + '" /></td></tr>';
-    if (item.EWI == true)
-        out += '<tr class="EWI-row" style="display:none" title="Ticking this box will increase the area of the wall by 1.15"><td>EWI</td><td><input type="checkbox" class="create-element-ewi" checked /></td></tr>';
-    else
-        out += '<tr class="EWI-row" style="display:none"><td>EWI</td><td><input type="checkbox" class="create-element-ewi"  /></td></tr>';
     out += '<tr><td>U-value</td><td><input type="text" class="create-element-uvalue editable-field" value="' + item.uvalue + '" /></td></tr>';
     out += '<tr><td>K-value</td><td><input type="text" class="create-element-kvalue editable-field" value="' + item.kvalue + '" /></td></tr>';
     if (type == 'Window' || type == 'Door' || type == 'Roof_light') {
@@ -1173,6 +1170,12 @@ libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
 
     out += '<table><tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="create-element-description" >' + item.description + '</textarea></td></tr>';
+    if (item.tags[0] == 'Wall' || item.tags[0] == 'wall') {
+        if (item.EWI === true)
+            out += '<tr class="EWI-row"><td>EWI <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" /></td><td><input style="margin-bottom:10px" type="checkbox" class="create-element-ewi" checked /></td></tr>';
+        else
+            out += '<tr class="EWI-row"><td>EWI <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" /></td><td><input style="margin-bottom:10px type="checkbox" class="create-element-ewi"  /></td></tr>';
+    }
     out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
     out += '<tr><td>Cost</td><td><input type="text" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
@@ -1185,8 +1188,6 @@ libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
     out += '<tr><td>Maintenance</td><td><input type="text" class="create-element-maintenance" value="' + item.maintenance + '" /></td></tr>';
     out += '</table>';
 
-    if (item == undefined || item.tags[0] == 'Wall')
-        out = out.replace('<tr class="EWI-row" style="display:none">', '<tr class="EWI-row">');
     return out;
 };
 libraryHelper.prototype.draught_proofing_measures_item_to_html = function (item, tag) {
@@ -1796,7 +1797,7 @@ libraryHelper.prototype.clothes_drying_facilities_item_to_html = function (item,
     out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="item-name" required value="' + item.name + '"/></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="item-source" value="' + item.source + '" /></td></tr>';
-    out+='<tr><td colspan="2"><br />Fields to be used when applying a measure</td></tr>'
+    out += '<tr><td colspan="2"><br />Fields to be used when applying a measure</td></tr>'
     out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
     out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
