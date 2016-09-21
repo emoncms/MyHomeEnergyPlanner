@@ -261,64 +261,64 @@ function compareCarbonCoop(scenario, outputElement) {
      * 
      * 
      * // Changes to elements
-    var listA = project.master.energy_requirements;
-    var listB = project[scenario].energy_requirements;
-    //console.log(listA);
-    //console.log(listB);
-    out += "<table class='table table-striped'>";
-    for (z in listA)
-    {
-        if (listB[z] == undefined)
-        {
-            out += "<tr><td>";
-            out += "<b>" + listA[z].name + ": </b>";
-            out += listA[z].quantity.toFixed(0) + " kWh";
-            out += "</td><td><b>Deleted in scenario B</b></td><td></td></tr>";
-        }
-    }
-
-    for (z in listB)
-    {
-        if (listA[z] == undefined)
-        {
-            out += "<tr><td><b>New to scenario B</b></td><td>";
-            out += "<b>" + listB[z].name + ": </b>";
-            out += listB[z].quantity.toFixed(0) + " kWh <b>(New)</b>";
-            out += "</td><td></td></tr>";
-        }
-        else
-        {
-            if (JSON.stringify(project.master.energy_systems[z]) != JSON.stringify(project[scenario].energy_systems[z]))
-            {
-                out += "<tr><td>";
-                out += "<b>" + listA[z].name + ": </b>";
-                out += listA[z].quantity.toFixed(0) + " kWh<br>";
-                out += "  Supplied by:<br>";
-                for (i in project.master.energy_systems[z])
-                {
-                    out += "  - Type: " + project.master.energy_systems[z][i].system + ", ";
-                    out += "Fraction: " + (project.master.energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
-                    out += "Efficiency: " + (project.master.energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
-                    out += "<br>";
-                }
-
-                out += "</td><td>";
-                out += "<b>" + listB[z].name + ": </b>";
-                out += listB[z].quantity.toFixed(0) + " kWh<br>";
-                out += "  Supplied by:<br>";
-                for (i in project[scenario].energy_systems[z])
-                {
-                    out += "  - Type: " + project[scenario].energy_systems[z][i].system + ", ";
-                    out += "Fraction: " + (project[scenario].energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
-                    out += "Efficiency: " + (project[scenario].energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
-                    out += "<br>";
-                }
-
-                out += "</td><td></td></tr>";
-            }
-
-        }
-    }*/
+     var listA = project.master.energy_requirements;
+     var listB = project[scenario].energy_requirements;
+     //console.log(listA);
+     //console.log(listB);
+     out += "<table class='table table-striped'>";
+     for (z in listA)
+     {
+     if (listB[z] == undefined)
+     {
+     out += "<tr><td>";
+     out += "<b>" + listA[z].name + ": </b>";
+     out += listA[z].quantity.toFixed(0) + " kWh";
+     out += "</td><td><b>Deleted in scenario B</b></td><td></td></tr>";
+     }
+     }
+     
+     for (z in listB)
+     {
+     if (listA[z] == undefined)
+     {
+     out += "<tr><td><b>New to scenario B</b></td><td>";
+     out += "<b>" + listB[z].name + ": </b>";
+     out += listB[z].quantity.toFixed(0) + " kWh <b>(New)</b>";
+     out += "</td><td></td></tr>";
+     }
+     else
+     {
+     if (JSON.stringify(project.master.energy_systems[z]) != JSON.stringify(project[scenario].energy_systems[z]))
+     {
+     out += "<tr><td>";
+     out += "<b>" + listA[z].name + ": </b>";
+     out += listA[z].quantity.toFixed(0) + " kWh<br>";
+     out += "  Supplied by:<br>";
+     for (i in project.master.energy_systems[z])
+     {
+     out += "  - Type: " + project.master.energy_systems[z][i].system + ", ";
+     out += "Fraction: " + (project.master.energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
+     out += "Efficiency: " + (project.master.energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
+     out += "<br>";
+     }
+     
+     out += "</td><td>";
+     out += "<b>" + listB[z].name + ": </b>";
+     out += listB[z].quantity.toFixed(0) + " kWh<br>";
+     out += "  Supplied by:<br>";
+     for (i in project[scenario].energy_systems[z])
+     {
+     out += "  - Type: " + project[scenario].energy_systems[z][i].system + ", ";
+     out += "Fraction: " + (project[scenario].energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
+     out += "Efficiency: " + (project[scenario].energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
+     out += "<br>";
+     }
+     
+     out += "</td><td></td></tr>";
+     }
+     
+     }
+     }*/
 
     // out += "</table>";
     out += "<tr><td><hr><h3>Fuel costs</h3><hr></td><td></td><td></td></tr>";
@@ -418,6 +418,10 @@ function carboncoopreport_UpdateUI() {
         $(".js-printer-friendly-link").attr("href", "/assessment/print?id=" + projectid + "#master/carboncoopreport");
     }
 
+    // Report date
+    var date = new Date();
+    console.log(date);
+    $('#report_date').html(date.getDate() + ' - ' + date.getMonth() + ' - ' + date.getFullYear());
 
 
     /* Figure 1: Retrofit Priorities
@@ -485,6 +489,7 @@ function carboncoopreport_UpdateUI() {
         return parseInt(a[1]) - parseInt(b[1])
     })
 
+    $("#retrofit-priorities").html('');
     for (var i = 0; i < sortedPriorities.length; i++) {
         $("#retrofit-priorities").append("<li>" + sortedPriorities[i][1] + ". " + sortedPriorities[i][2] + "</li>");
     }
