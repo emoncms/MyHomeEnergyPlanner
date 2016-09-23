@@ -3,7 +3,7 @@ function oemreport_initUI() {
     console.log(project);
 
     var graphdata = [
-        [0,project[scenario].fabric_energy_efficiency,""]
+        [0,project[scenario].space_heating_demand_m2,""]
     ];
     graph.width = 300;
     graph.height = 500;

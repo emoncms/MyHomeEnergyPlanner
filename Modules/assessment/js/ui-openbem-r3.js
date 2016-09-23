@@ -55,7 +55,7 @@ function draw_openbem_graphics()
     // ---------------------------------------------------------------------------------
     var options = {
         name: "Space heating demand",
-        value: Math.round(data.fabric_energy_efficiency),
+        value: Math.round(data.space_heating_demand_m2),
         units: "kWh/m2",
         targets: {
             //"Passivhaus": 15,

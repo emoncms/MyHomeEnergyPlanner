@@ -101,7 +101,7 @@ calc.start = function (data)
     data.primary_energy_use = 0;
     data.kgco2perm2 = 0;
     data.primary_energy_use_bills = 0;
-    data.fabric_energy_efficiency = 0;
+    data.space_heating_demand_m2 = 0;
     data.primary_energy_use_by_fuels = {};
     data.totalWK = 0;
     if (data.fuels == undefined)
@@ -784,8 +784,7 @@ calc.space_heating = function (data)
     var annual_heating_demand = 0;
     var annual_cooling_demand = 0;
 
-    for (m = 0; m < 12; m++)
-    {
+    for (m = 0; m < 12; m++) {
 // DeltaT (Difference between Internal and External temperature)
         delta_T[m] = data.internal_temperature[m] - data.external_temperature[m];
         // Monthly heat loss totals
@@ -793,11 +792,15 @@ calc.space_heating = function (data)
         for (z in data.losses_WK)
             H += data.losses_WK[z][m];
         total_losses[m] = H * delta_T[m];
+        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
+            total_losses[m] = 0;
         // Monthly heat gains total
         var G = 0;
         for (z in data.gains_W)
             G += data.gains_W[z][m];
         total_gains[m] = G;
+        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
+            total_gains[m] = 0;
         // Calculate overall utilisation factor for gains
         var HLP = H / data.TFA;
         utilisation_factor[m] = calc_utilisation_factor(data.TMP, HLP, H, data.internal_temperature[m], data.external_temperature[m], total_gains[m]);
@@ -828,25 +831,27 @@ calc.space_heating = function (data)
         ///////////////////////////////////////////////////////
         //Annual useful gains and losses. Units: kwh/m2/year //
         ///////////////////////////////////////////////////////
-        var gains_source = "";
-        for (z in data.gains_W) {
-            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps' || z === 'metabolic' || z === 'losses')
-                gains_source = "Internal";
-            if (z === "solar")
-                gains_source = "Solar";
-            // Apply utilisation factor if chosen:
-            if (data.space_heating.use_utilfactor_forgains) {
-                annual_useful_gains_kWh_m2[gains_source] += (utilisation_factor[m] * data.gains_W[z][m] * 0.024 * datasets.table_1a[m]) / data.TFA;
-            } else {
-                annual_useful_gains_kWh_m2[gains_source] += data.gains_W[z][m] * 0.024 / data.TFA;
+        if (data.space_heating.heating_off_summer == 0 || (m < 5 || m > 9)) {
+            var gains_source = "";
+            for (z in data.gains_W) {
+                if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps' || z === 'metabolic' || z === 'losses')
+                    gains_source = "Internal";
+                if (z === "solar")
+                    gains_source = "Solar";
+                // Apply utilisation factor if chosen:
+                if (data.space_heating.use_utilfactor_forgains) {
+                    annual_useful_gains_kWh_m2[gains_source] += (utilisation_factor[m] * data.gains_W[z][m] * 0.024 * datasets.table_1a[m]) / data.TFA;
+                } else {
+                    annual_useful_gains_kWh_m2[gains_source] += data.gains_W[z][m] * 0.024 / data.TFA;
+                }
             }
-        }
-        annual_useful_gains_kWh_m2['Space heating'] += heat_demand_kwh[m] / data.TFA;
-        // Annual losses. Units: kwh/m2/year
-        for (z in data.losses_WK) {
-            if (annual_losses_kWh_m2[z] == undefined)
-                annual_losses_kWh_m2[z] = 0;
-            annual_losses_kWh_m2[z] += (data.losses_WK[z][m] * 0.024 * delta_T[m] * datasets.table_1a[m]) / data.TFA;
+            annual_useful_gains_kWh_m2['Space heating'] += heat_demand_kwh[m] / data.TFA;
+            // Annual losses. Units: kwh/m2/year
+            for (z in data.losses_WK) {
+                if (annual_losses_kWh_m2[z] == undefined)
+                    annual_losses_kWh_m2[z] = 0;
+                annual_losses_kWh_m2[z] += (data.losses_WK[z][m] * 0.024 * delta_T[m] * datasets.table_1a[m]) / data.TFA;
+            }
         }
     }
 
@@ -869,7 +874,7 @@ calc.space_heating = function (data)
         data.energy_requirements.space_heating = {name: "Space Heating", quantity: annual_heating_demand, monthly: heat_demand_kwh};
     if (annual_cooling_demand > 0)
         data.energy_requirements.space_cooling = {name: "Space Cooling", quantity: annual_cooling_demand, monthly: cooling_demand_kwh};
-    data.fabric_energy_efficiency = (annual_heating_demand + annual_cooling_demand) / data.TFA;
+    data.space_heating_demand_m2 = (annual_heating_demand + annual_cooling_demand) / data.TFA;
     return data;
 };
 
@@ -1002,7 +1007,7 @@ calc.fuel_requirements = function (data) {
             quantity: -data.generation.total_generation,
             annualco2: -data.generation.total_CO2,
             primaryenergy: -data.generation.total_primaryenergy,
-            annualcost: -data.generation.total_generation * data.fuels['Standard Tariff'].fuelcost
+            annualcost: -data.generation.total_generation * data.fuels.generation.fuelcost
         };
         data.primary_energy_use += data.fuel_totals['generation'].primaryenergy;
         data.annualco2 += data.fuel_totals['generation'].annualco2;
@@ -1668,25 +1673,25 @@ calc.generation = function (data) {
     data.generation.systems = {};
     if (data.generation.solar_annual_kwh > 0)
     {
-        data.generation.systems.solarpv = {name: "Solar PV", quantity: data.generation.solar_annual_kwh, fraction_used_onsite: data.generation.solar_fraction_used_onsite, CO2: data.generation.solar_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.solar_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
+        data.generation.systems.solarpv = {name: "Solar PV", quantity: data.generation.solar_annual_kwh, fraction_used_onsite: data.generation.solar_fraction_used_onsite, CO2: data.generation.solar_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.solar_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.solar_annual_kwh * data.generation.solar_FIT;
     }
 
     if (data.generation.wind_annual_kwh > 0)
     {
-        data.generation.systems.wind = {name: "Wind", quantity: data.generation.wind_annual_kwh, fraction_used_onsite: data.generation.wind_fraction_used_onsite, CO2: data.generation.wind_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.wind_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
+        data.generation.systems.wind = {name: "Wind", quantity: data.generation.wind_annual_kwh, fraction_used_onsite: data.generation.wind_fraction_used_onsite, CO2: data.generation.wind_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.wind_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.wind_annual_kwh * data.generation.wind_FIT;
     }
 
     if (data.generation.hydro_annual_kwh > 0)
     {
-        data.generation.systems.hydro = {name: "Hydro", quantity: data.generation.hydro_annual_kwh, fraction_used_onsite: data.generation.hydro_fraction_used_onsite, CO2: data.generation.hydro_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.hydro_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
+        data.generation.systems.hydro = {name: "Hydro", quantity: data.generation.hydro_annual_kwh, fraction_used_onsite: data.generation.hydro_fraction_used_onsite, CO2: data.generation.hydro_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.hydro_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT;
     }
 
     if (data.generation.solarpv_annual_kwh > 0)
     {
-        data.generation.systems.solarpv2 = {name: "Solar PV from calculator", quantity: data.generation.solarpv_annual_kwh, fraction_used_onsite: data.generation.solarpv_fraction_used_onsite, CO2: data.generation.solarpv_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.solarpv_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
+        data.generation.systems.solarpv2 = {name: "Solar PV from calculator", quantity: data.generation.solarpv_annual_kwh, fraction_used_onsite: data.generation.solarpv_fraction_used_onsite, CO2: data.generation.solarpv_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.solarpv_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.solarpv_annual_kwh * data.generation.solarpv_FIT;
     }
 

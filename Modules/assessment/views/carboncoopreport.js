@@ -34,8 +34,8 @@ function carboncoopreport_initUI() {
     // 		};
     // 	}
 
-    // 	if (typeof project[scenarioName].fabric_energy_efficiency === "undefined"){
-    // 		project[scenarioName].fabric_energy_efficiency = 0;
+    // 	if (typeof project[scenarioName].space_heating_demand_m2 === "undefined"){
+    // 		project[scenarioName].space_heating_demand_m2 = 0;
     // 	}
 
     // 	if (typeof project[scenarioName].fabric === "undefined"){
@@ -261,64 +261,64 @@ function compareCarbonCoop(scenario, outputElement) {
      * 
      * 
      * // Changes to elements
-    var listA = project.master.energy_requirements;
-    var listB = project[scenario].energy_requirements;
-    //console.log(listA);
-    //console.log(listB);
-    out += "<table class='table table-striped'>";
-    for (z in listA)
-    {
-        if (listB[z] == undefined)
-        {
-            out += "<tr><td>";
-            out += "<b>" + listA[z].name + ": </b>";
-            out += listA[z].quantity.toFixed(0) + " kWh";
-            out += "</td><td><b>Deleted in scenario B</b></td><td></td></tr>";
-        }
-    }
-
-    for (z in listB)
-    {
-        if (listA[z] == undefined)
-        {
-            out += "<tr><td><b>New to scenario B</b></td><td>";
-            out += "<b>" + listB[z].name + ": </b>";
-            out += listB[z].quantity.toFixed(0) + " kWh <b>(New)</b>";
-            out += "</td><td></td></tr>";
-        }
-        else
-        {
-            if (JSON.stringify(project.master.energy_systems[z]) != JSON.stringify(project[scenario].energy_systems[z]))
-            {
-                out += "<tr><td>";
-                out += "<b>" + listA[z].name + ": </b>";
-                out += listA[z].quantity.toFixed(0) + " kWh<br>";
-                out += "  Supplied by:<br>";
-                for (i in project.master.energy_systems[z])
-                {
-                    out += "  - Type: " + project.master.energy_systems[z][i].system + ", ";
-                    out += "Fraction: " + (project.master.energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
-                    out += "Efficiency: " + (project.master.energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
-                    out += "<br>";
-                }
-
-                out += "</td><td>";
-                out += "<b>" + listB[z].name + ": </b>";
-                out += listB[z].quantity.toFixed(0) + " kWh<br>";
-                out += "  Supplied by:<br>";
-                for (i in project[scenario].energy_systems[z])
-                {
-                    out += "  - Type: " + project[scenario].energy_systems[z][i].system + ", ";
-                    out += "Fraction: " + (project[scenario].energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
-                    out += "Efficiency: " + (project[scenario].energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
-                    out += "<br>";
-                }
-
-                out += "</td><td></td></tr>";
-            }
-
-        }
-    }*/
+     var listA = project.master.energy_requirements;
+     var listB = project[scenario].energy_requirements;
+     //console.log(listA);
+     //console.log(listB);
+     out += "<table class='table table-striped'>";
+     for (z in listA)
+     {
+     if (listB[z] == undefined)
+     {
+     out += "<tr><td>";
+     out += "<b>" + listA[z].name + ": </b>";
+     out += listA[z].quantity.toFixed(0) + " kWh";
+     out += "</td><td><b>Deleted in scenario B</b></td><td></td></tr>";
+     }
+     }
+     
+     for (z in listB)
+     {
+     if (listA[z] == undefined)
+     {
+     out += "<tr><td><b>New to scenario B</b></td><td>";
+     out += "<b>" + listB[z].name + ": </b>";
+     out += listB[z].quantity.toFixed(0) + " kWh <b>(New)</b>";
+     out += "</td><td></td></tr>";
+     }
+     else
+     {
+     if (JSON.stringify(project.master.energy_systems[z]) != JSON.stringify(project[scenario].energy_systems[z]))
+     {
+     out += "<tr><td>";
+     out += "<b>" + listA[z].name + ": </b>";
+     out += listA[z].quantity.toFixed(0) + " kWh<br>";
+     out += "  Supplied by:<br>";
+     for (i in project.master.energy_systems[z])
+     {
+     out += "  - Type: " + project.master.energy_systems[z][i].system + ", ";
+     out += "Fraction: " + (project.master.energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
+     out += "Efficiency: " + (project.master.energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
+     out += "<br>";
+     }
+     
+     out += "</td><td>";
+     out += "<b>" + listB[z].name + ": </b>";
+     out += listB[z].quantity.toFixed(0) + " kWh<br>";
+     out += "  Supplied by:<br>";
+     for (i in project[scenario].energy_systems[z])
+     {
+     out += "  - Type: " + project[scenario].energy_systems[z][i].system + ", ";
+     out += "Fraction: " + (project[scenario].energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
+     out += "Efficiency: " + (project[scenario].energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
+     out += "<br>";
+     }
+     
+     out += "</td><td></td></tr>";
+     }
+     
+     }
+     }*/
 
     // out += "</table>";
     out += "<tr><td><hr><h3>Fuel costs</h3><hr></td><td></td><td></td></tr>";
@@ -349,6 +349,7 @@ function compareCarbonCoop(scenario, outputElement) {
             out += "<tr><td><br><b>New to scenario B</b></td><td>";
             out += "<b>" + z + ": </b><br>";
             out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
+            console.log(z);
             out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
             out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
             out += "</td></tr>";
@@ -418,6 +419,9 @@ function carboncoopreport_UpdateUI() {
         $(".js-printer-friendly-link").attr("href", "/assessment/print?id=" + projectid + "#master/carboncoopreport");
     }
 
+    // Report date
+    var date = new Date();
+    $('#report_date').html(date.getDate() + ' - ' + date.getMonth() + ' - ' + date.getFullYear());
 
 
     /* Figure 1: Retrofit Priorities
@@ -485,6 +489,7 @@ function carboncoopreport_UpdateUI() {
         return parseInt(a[1]) - parseInt(b[1])
     })
 
+    $("#retrofit-priorities").html('');
     for (var i = 0; i < sortedPriorities.length; i++) {
         $("#retrofit-priorities").append("<li>" + sortedPriorities[i][1] + ". " + sortedPriorities[i][2] + "</li>");
     }
@@ -500,8 +505,8 @@ function carboncoopreport_UpdateUI() {
 
     var values = [];
     for (var i = 0; i < scenarios.length; i++) {
-        if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].fabric_energy_efficiency != "undefined") {
-            values[i] = Math.round(project[scenarios[i]].fabric_energy_efficiency);
+        if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].space_heating_demand_m2 != "undefined") {
+            values[i] = Math.round(project[scenarios[i]].space_heating_demand_m2);
         } else {
             values[i] = 0;
         }
@@ -518,7 +523,7 @@ function carboncoopreport_UpdateUI() {
         name: "Space heating demand",
         font: "Karla",
         colors: colors,
-        value: Math.round(data.fabric_energy_efficiency),
+        value: Math.round(data.space_heating_demand_m2),
         values: values,
         units: "kWh/m2.a",
         targets: {
@@ -610,7 +615,8 @@ function carboncoopreport_UpdateUI() {
         if (typeof project[scenario] != "undefined" && typeof project[scenario].fabric != "undefined") {
             return {
                 floorwk: Math.round(project[scenario].fabric.total_floor_WK),
-                ventilationwk: Math.round(project[scenario].ventilation.average_WK),
+                ventilationwk: Math.round(project[scenario].ventilation.average_ventilation_WK),
+                infiltrationwk: Math.round(project[scenario].ventilation.average_infiltration_WK),
                 windowswk: Math.round(project[scenario].fabric.total_window_WK),
                 wallswk: Math.round(project[scenario].fabric.total_wall_WK),
                 roofwk: Math.round(project[scenario].fabric.total_roof_WK),
@@ -621,6 +627,7 @@ function carboncoopreport_UpdateUI() {
             return {
                 floorwk: 0,
                 ventilationwk: 0,
+                infiltrationwk: 0,
                 windowswk: 0,
                 wallswk: 0,
                 roofwk: 0,
@@ -661,6 +668,7 @@ function carboncoopreport_UpdateUI() {
         var uscale = 30;
         var sFloor = Math.sqrt(heatlossData.floorwk / uscale);
         var sVentilation = Math.sqrt(heatlossData.ventilationwk / uscale);
+        var sInfiltration = Math.sqrt(heatlossData.infiltrationwk / uscale);
         var sWindows = Math.sqrt(heatlossData.windowswk / uscale);
         var sWalls = Math.sqrt(heatlossData.wallswk / uscale);
         var sRoof = Math.sqrt(heatlossData.roofwk / uscale);
@@ -678,6 +686,7 @@ function carboncoopreport_UpdateUI() {
 				<polygon id="roof" fill="#F0533C" transform="translate(270,60) scale(' + sRoof + ')" points="6.9,-23.6 -6.9,-5.4 7.7,5.6 21.5,-12.7 28.5,-7.4 24.9,-32.3 -0.1,-28.9 "/>\
 				<polygon id="windows" transform="translate(92,144) scale(-' + sWindows + ')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
 				<polygon id="ventilation" transform="translate(92,235) scale(-' + sVentilation + ')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
+				<polygon id="infiltration" transform="translate(140,65) scale(-' + sInfiltration + ') rotate(52)" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
 				<polygon id="wall" transform="translate(330,242) scale(' + sWalls + ')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
 				<polygon id="thermal-bridging" transform="translate(330,144) scale(' + sThermal + ')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
 				<polygon id="floor" transform="translate(213,278) scale(' + sFloor + ')" fill="#F0533C" points="9.1,22.9 9.1,0 -9.1,0 -9.1,22.9 -17.9,22.9 0,40.6 17.9,22.9 "/>\
@@ -686,6 +695,7 @@ function carboncoopreport_UpdateUI() {
 				<text transform="matrix(1 0 0 1 230.624 21.1785)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Roof</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.roofwk + ' W/K</tspan></text>\
 				<text transform="matrix(1 0 0 1 330.5875 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Walls</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.wallswk + ' W/K</tspan></text>\
 				<text transform="matrix(1 0 0 1 53.3572 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Ventilation</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.ventilationwk + ' W/K</tspan></text>\
+				<text transform="matrix(1 0 0 1 150.0000 21)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Infiltration</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.infiltrationwk + ' W/K</tspan></text>\
 				<text transform="matrix(1 0 0 1 48.0902 90.1215)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Windows</tspan><tspan x="11.2" y="12" fill="#F0533C" font-size="11">' + heatlossData.windowswk + ' W/K</tspan></text>\
 				<text transform="matrix(1 0 0 1 248.466 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Floor</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.floorwk + ' W/K</tspan></text>\
 				<g opacity="0.4">\
@@ -728,6 +738,7 @@ function carboncoopreport_UpdateUI() {
     }
 
     var dataFig4 = [];
+    var max_value = 0; // used to set the height of the chart
     if (typeof project['master'] != "undefined" && typeof project["master"].annual_useful_gains_kWh_m2 != "undefined") {
         dataFig4.push({
             label: 'Your Home Now',
@@ -736,9 +747,11 @@ function carboncoopreport_UpdateUI() {
                 {value: project["master"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
                 {value: project["master"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
                 {value: -project["master"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -project["master"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
+                {value: -(project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
+        if (max_value < (project["master"].annual_losses_kWh_m2["fabric"] + project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]))
+            max_value = project["master"].annual_losses_kWh_m2["fabric"] + project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario1'] != "undefined" && typeof project["scenario1"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -749,9 +762,11 @@ function carboncoopreport_UpdateUI() {
                 {value: project["scenario1"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
                 {value: project["scenario1"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
                 {value: -project["scenario1"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -project["scenario1"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
+                {value: -(project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
+        if (max_value < (project["scenario1"].annual_losses_kWh_m2["fabric"] + project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]))
+            max_value = project["scenario1"].annual_losses_kWh_m2["fabric"] + project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario2'] != "undefined" && typeof project["scenario2"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -762,9 +777,11 @@ function carboncoopreport_UpdateUI() {
                 {value: project["scenario2"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
                 {value: project["scenario2"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
                 {value: -project["scenario2"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -project["scenario2"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
+                {value: -(project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
+        if (max_value < (project["scenario2"].annual_losses_kWh_m2["fabric"] + project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]))
+            max_value = project["scenario2"].annual_losses_kWh_m2["fabric"] + project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario3'] != "undefined" && typeof project["scenario3"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -775,9 +792,11 @@ function carboncoopreport_UpdateUI() {
                 {value: project["scenario3"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
                 {value: project["scenario3"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
                 {value: -project["scenario3"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -project["scenario3"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
+                {value: -(project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
+        if (max_value < (project["scenario3"].annual_losses_kWh_m2["fabric"] + project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]))
+            max_value = project["scenario3"].annual_losses_kWh_m2["fabric"] + project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"];
     }
 
     var EnergyDemand = new BarChart({
@@ -786,11 +805,11 @@ function carboncoopreport_UpdateUI() {
         fontSize: 22,
         width: 1200,
         chartHeight: 600,
-        division: 50,
+        division: 100,
         barWidth: 110,
         barGutter: 120,
-        chartHigh: 400,
-        chartLow: -400,
+        chartHigh: max_value + 50,
+        chartLow: -max_value - 50,
         font: "Karla",
         defaultBarColor: 'rgb(231,37,57)',
         barColors: {
@@ -798,19 +817,21 @@ function carboncoopreport_UpdateUI() {
             'Solar': 'rgb(240,212,156)',
             'Space heating': 'rgb(236,102,79)',
             'Fabric': 'rgb(246,167,7)',
-            'Ventilation': 'rgb(157, 213, 203)',
+            'Ventilation & Infiltration': 'rgb(157, 213, 203)',
         },
         data: dataFig4,
     });
+    $('#heat-balance').html('');
     EnergyDemand.draw('heat-balance');
+
     /* Figure 5: Space Heating Demand
      // 
      */
 
     var values = [];
     for (var i = 0; i < scenarios.length; i++) {
-        if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].fabric_energy_efficiency != "undefined") {
-            values[i] = Math.round(project[scenarios[i]].fabric_energy_efficiency);
+        if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].space_heating_demand_m2 != "undefined") {
+            values[i] = Math.round(project[scenarios[i]].space_heating_demand_m2);
         } else {
             values[i] = 0;
         }
@@ -866,6 +887,7 @@ function carboncoopreport_UpdateUI() {
             {label: 'Scenario 3', value: values[3]},
         ]
     });
+    $('#fig-5-space-heating-demand').html('');
     SpaceHeatingDemand.draw('fig-5-space-heating-demand');
     /* Figure 6: Energy Demand
      //
@@ -939,11 +961,12 @@ function carboncoopreport_UpdateUI() {
             {label: 'Scenario 3', value: energyDemandData.scenario3},
         ]
     });
+    $('#energy-demand').html('');
     EnergyDemand.draw('energy-demand');
+    
     /* Figure 7:
      //
      */
-
     function getPrimaryEnergyUseData() {
         var primaryEnergyUseData = {};
         for (var i = 0; i < scenarios.length; i++) {
@@ -996,7 +1019,6 @@ function carboncoopreport_UpdateUI() {
         font: "Karla",
         width: 1200,
         chartHeight: 600,
-        chartHigh: 400,
         division: 'auto',
         barWidth: 110,
         barGutter: 80,
@@ -1030,11 +1052,12 @@ function carboncoopreport_UpdateUI() {
             }
         ],
     });
+    $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
+   
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
      */
-
     var carbonDioxideEmissionsData = [];
     if (typeof project["master"] !== "undefined" && typeof project["master"].kgco2perm2 !== "undefined") {
         carbonDioxideEmissionsData.push({label: "Your home now", value: project["master"].kgco2perm2});
@@ -1061,7 +1084,6 @@ function carboncoopreport_UpdateUI() {
         chartHeight: 600,
         barWidth: 110,
         barGutter: 80,
-        chartHigh: 100,
         defaultBarColor: 'rgb(157,213,203)',
         data: carbonDioxideEmissionsData,
         targets: [
@@ -1077,11 +1099,12 @@ function carboncoopreport_UpdateUI() {
             },
         ],
     });
+    $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
+    
     /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
      //
      */
-
     var carbonDioxideEmissionsPerPersonData = [];
     if (typeof project["master"] != "undefined" && typeof project["master"].annualco2 !== "undefined" && typeof project["master"].occupancy !== "undefined") {
         carbonDioxideEmissionsPerPersonData.push({label: "Your home now", value: project["master"].annualco2 / project["master"].occupancy});
@@ -1117,11 +1140,12 @@ function carboncoopreport_UpdateUI() {
         // },
         data: carbonDioxideEmissionsPerPersonData
     });
+    $('#carbon-dioxide-emissions-per-person').html('');
     CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
+   
     /* Figure 10: Estimated Energy cost comparison 
      // Bar chart showing annual fuel cost. Waiting on Trystan for data
      */
-
     var estimatedEnergyCostsData = [];
     if (typeof project["master"] != "undefined" && typeof project["master"].net_cost !== "undefined") {
         estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost, variance: project["master"].net_cost * 0.3});
@@ -1151,6 +1175,7 @@ function carboncoopreport_UpdateUI() {
         defaultBarColor: 'rgb(157,213,203)',
         data: estimatedEnergyCostsData
     });
+    $('#estimated-energy-cost-comparison').html('');
     EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
     /* Figure 11: Your home compared with the average home.
      // Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
@@ -1600,7 +1625,7 @@ function carboncoopreport_UpdateUI() {
     // Figure 5
     // var options = {
     //       name: "Space heating demand Master",
-    //       value: Math.round(project["master"].fabric_energy_efficiency),
+    //       value: Math.round(project["master"].space_heating_demand_m2),
     //       units: "kWh/m2",     //       targets: {
     //           //"Passivhaus": 15,
     //           "Passivhaus retrofit": 25,
@@ -1611,7 +1636,7 @@ function carboncoopreport_UpdateUI() {
 
     //   	 var options = {
     //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario1"].fabric_energy_efficiency),
+    //       value: Math.round(project["scenario1"].space_heating_demand_m2),
     //       units: "kWh/m2",
     //       targets: {
     //           //"Passivhaus": 15,
@@ -1623,7 +1648,7 @@ function carboncoopreport_UpdateUI() {
 
     //   	 var options = {
     //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario2"].fabric_energy_efficiency),
+    //       value: Math.round(project["scenario2"].space_heating_demand_m2),
     //       units: "kWh/m2",
     //       targets: {
     //           //"Passivhaus": 15,
@@ -1635,7 +1660,7 @@ function carboncoopreport_UpdateUI() {
 
     //   	 var options = {
     //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario3"].fabric_energy_efficiency),
+    //       value: Math.round(project["scenario3"].space_heating_demand_m2),
     //       units: "kWh/m2",
     //       targets: {
     //           //"Passivhaus": 15,

@@ -207,10 +207,12 @@ function get_fuels_for_select(category_to_show) {
     }
     else {
         for (category in fuels_by_category) {
-            options += '<optgroup label="' + category + '">';
-            for (index in fuels_by_category[category])
-                options += '<option value="' + fuels_by_category[category][index] + '">' + fuels_by_category[category][index] + '</option>';
-            options += '</optgroup>';
+            if (category != 'generation') {
+                options += '<optgroup label="' + category + '">';
+                for (index in fuels_by_category[category])
+                    options += '<option value="' + fuels_by_category[category][index] + '">' + fuels_by_category[category][index] + '</option>';
+                options += '</optgroup>';
+            }
         }
     }
     return options;
