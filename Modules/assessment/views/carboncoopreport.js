@@ -746,7 +746,7 @@ function carboncoopreport_UpdateUI() {
                 {value: project["master"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
                 {value: project["master"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
                 {value: -project["master"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -project["master"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
+                {value: -(project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
     }
@@ -759,7 +759,7 @@ function carboncoopreport_UpdateUI() {
                 {value: project["scenario1"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
                 {value: project["scenario1"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
                 {value: -project["scenario1"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -project["scenario1"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
+                {value: -(project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
     }
@@ -772,7 +772,7 @@ function carboncoopreport_UpdateUI() {
                 {value: project["scenario2"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
                 {value: project["scenario2"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
                 {value: -project["scenario2"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -project["scenario2"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
+                {value: -(project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
     }
@@ -785,7 +785,7 @@ function carboncoopreport_UpdateUI() {
                 {value: project["scenario3"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
                 {value: project["scenario3"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
                 {value: -project["scenario3"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -project["scenario3"].annual_losses_kWh_m2["ventilation"], label: 'Ventilation'},
+                {value: -(project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
     }
@@ -808,7 +808,7 @@ function carboncoopreport_UpdateUI() {
             'Solar': 'rgb(240,212,156)',
             'Space heating': 'rgb(236,102,79)',
             'Fabric': 'rgb(246,167,7)',
-            'Ventilation': 'rgb(157, 213, 203)',
+            'Ventilation & Infiltration': 'rgb(157, 213, 203)',
         },
         data: dataFig4,
     });
