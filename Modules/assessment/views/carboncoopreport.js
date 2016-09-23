@@ -887,6 +887,7 @@ function carboncoopreport_UpdateUI() {
             {label: 'Scenario 3', value: values[3]},
         ]
     });
+    $('#fig-5-space-heating-demand').html('');
     SpaceHeatingDemand.draw('fig-5-space-heating-demand');
     /* Figure 6: Energy Demand
      //
@@ -960,6 +961,7 @@ function carboncoopreport_UpdateUI() {
             {label: 'Scenario 3', value: energyDemandData.scenario3},
         ]
     });
+    $('#energy-demand').html('');
     EnergyDemand.draw('energy-demand');
     /* Figure 7:
      //
@@ -1051,6 +1053,7 @@ function carboncoopreport_UpdateUI() {
             }
         ],
     });
+    $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
@@ -1098,6 +1101,7 @@ function carboncoopreport_UpdateUI() {
             },
         ],
     });
+    $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
     /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
      //
@@ -1138,6 +1142,7 @@ function carboncoopreport_UpdateUI() {
         // },
         data: carbonDioxideEmissionsPerPersonData
     });
+    $('#carbon-dioxide-emissions-per-person').html('');
     CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
     /* Figure 10: Estimated Energy cost comparison 
      // Bar chart showing annual fuel cost. Waiting on Trystan for data
@@ -1172,6 +1177,7 @@ function carboncoopreport_UpdateUI() {
         defaultBarColor: 'rgb(157,213,203)',
         data: estimatedEnergyCostsData
     });
+    $('#estimated-energy-cost-comparison').html('');
     EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
     /* Figure 11: Your home compared with the average home.
      // Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
