@@ -784,8 +784,7 @@ calc.space_heating = function (data)
     var annual_heating_demand = 0;
     var annual_cooling_demand = 0;
 
-    for (m = 0; m < 12; m++)
-    {
+    for (m = 0; m < 12; m++) {
 // DeltaT (Difference between Internal and External temperature)
         delta_T[m] = data.internal_temperature[m] - data.external_temperature[m];
         // Monthly heat loss totals
@@ -793,11 +792,15 @@ calc.space_heating = function (data)
         for (z in data.losses_WK)
             H += data.losses_WK[z][m];
         total_losses[m] = H * delta_T[m];
+        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
+            total_losses[m] = 0;
         // Monthly heat gains total
         var G = 0;
         for (z in data.gains_W)
             G += data.gains_W[z][m];
         total_gains[m] = G;
+        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
+            total_gains[m] = 0;
         // Calculate overall utilisation factor for gains
         var HLP = H / data.TFA;
         utilisation_factor[m] = calc_utilisation_factor(data.TMP, HLP, H, data.internal_temperature[m], data.external_temperature[m], total_gains[m]);
@@ -828,25 +831,27 @@ calc.space_heating = function (data)
         ///////////////////////////////////////////////////////
         //Annual useful gains and losses. Units: kwh/m2/year //
         ///////////////////////////////////////////////////////
-        var gains_source = "";
-        for (z in data.gains_W) {
-            if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps' || z === 'metabolic' || z === 'losses')
-                gains_source = "Internal";
-            if (z === "solar")
-                gains_source = "Solar";
-            // Apply utilisation factor if chosen:
-            if (data.space_heating.use_utilfactor_forgains) {
-                annual_useful_gains_kWh_m2[gains_source] += (utilisation_factor[m] * data.gains_W[z][m] * 0.024 * datasets.table_1a[m]) / data.TFA;
-            } else {
-                annual_useful_gains_kWh_m2[gains_source] += data.gains_W[z][m] * 0.024 / data.TFA;
+        if (data.space_heating.heating_off_summer == 0 || (m < 5 || m > 9)) {
+            var gains_source = "";
+            for (z in data.gains_W) {
+                if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps' || z === 'metabolic' || z === 'losses')
+                    gains_source = "Internal";
+                if (z === "solar")
+                    gains_source = "Solar";
+                // Apply utilisation factor if chosen:
+                if (data.space_heating.use_utilfactor_forgains) {
+                    annual_useful_gains_kWh_m2[gains_source] += (utilisation_factor[m] * data.gains_W[z][m] * 0.024 * datasets.table_1a[m]) / data.TFA;
+                } else {
+                    annual_useful_gains_kWh_m2[gains_source] += data.gains_W[z][m] * 0.024 / data.TFA;
+                }
             }
-        }
-        annual_useful_gains_kWh_m2['Space heating'] += heat_demand_kwh[m] / data.TFA;
-        // Annual losses. Units: kwh/m2/year
-        for (z in data.losses_WK) {
-            if (annual_losses_kWh_m2[z] == undefined)
-                annual_losses_kWh_m2[z] = 0;
-            annual_losses_kWh_m2[z] += (data.losses_WK[z][m] * 0.024 * delta_T[m] * datasets.table_1a[m]) / data.TFA;
+            annual_useful_gains_kWh_m2['Space heating'] += heat_demand_kwh[m] / data.TFA;
+            // Annual losses. Units: kwh/m2/year
+            for (z in data.losses_WK) {
+                if (annual_losses_kWh_m2[z] == undefined)
+                    annual_losses_kWh_m2[z] = 0;
+                annual_losses_kWh_m2[z] += (data.losses_WK[z][m] * 0.024 * delta_T[m] * datasets.table_1a[m]) / data.TFA;
+            }
         }
     }
 
