@@ -615,7 +615,8 @@ function carboncoopreport_UpdateUI() {
         if (typeof project[scenario] != "undefined" && typeof project[scenario].fabric != "undefined") {
             return {
                 floorwk: Math.round(project[scenario].fabric.total_floor_WK),
-                ventilationwk: Math.round(project[scenario].ventilation.average_WK),
+                ventilationwk: Math.round(project[scenario].ventilation.average_ventilation_WK),
+                infiltrationwk: Math.round(project[scenario].ventilation.average_infiltration_WK),
                 windowswk: Math.round(project[scenario].fabric.total_window_WK),
                 wallswk: Math.round(project[scenario].fabric.total_wall_WK),
                 roofwk: Math.round(project[scenario].fabric.total_roof_WK),
@@ -626,6 +627,7 @@ function carboncoopreport_UpdateUI() {
             return {
                 floorwk: 0,
                 ventilationwk: 0,
+                infiltrationwk: 0,
                 windowswk: 0,
                 wallswk: 0,
                 roofwk: 0,
@@ -666,6 +668,7 @@ function carboncoopreport_UpdateUI() {
         var uscale = 30;
         var sFloor = Math.sqrt(heatlossData.floorwk / uscale);
         var sVentilation = Math.sqrt(heatlossData.ventilationwk / uscale);
+        var sInfiltration = Math.sqrt(heatlossData.infiltrationwk / uscale);
         var sWindows = Math.sqrt(heatlossData.windowswk / uscale);
         var sWalls = Math.sqrt(heatlossData.wallswk / uscale);
         var sRoof = Math.sqrt(heatlossData.roofwk / uscale);
@@ -683,6 +686,7 @@ function carboncoopreport_UpdateUI() {
 				<polygon id="roof" fill="#F0533C" transform="translate(270,60) scale(' + sRoof + ')" points="6.9,-23.6 -6.9,-5.4 7.7,5.6 21.5,-12.7 28.5,-7.4 24.9,-32.3 -0.1,-28.9 "/>\
 				<polygon id="windows" transform="translate(92,144) scale(-' + sWindows + ')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
 				<polygon id="ventilation" transform="translate(92,235) scale(-' + sVentilation + ')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
+				<polygon id="infiltration" transform="translate(140,65) scale(-' + sInfiltration + ') rotate(52)" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
 				<polygon id="wall" transform="translate(330,242) scale(' + sWalls + ')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
 				<polygon id="thermal-bridging" transform="translate(330,144) scale(' + sThermal + ')" fill="#F0533C" points="22.9,-9.1 0,-9.1 0,9.1 22.9,9.1 22.9,17.9 40.6,0 22.9,-17.9 "/>\
 				<polygon id="floor" transform="translate(213,278) scale(' + sFloor + ')" fill="#F0533C" points="9.1,22.9 9.1,0 -9.1,0 -9.1,22.9 -17.9,22.9 0,40.6 17.9,22.9 "/>\
@@ -691,6 +695,7 @@ function carboncoopreport_UpdateUI() {
 				<text transform="matrix(1 0 0 1 230.624 21.1785)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Roof</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.roofwk + ' W/K</tspan></text>\
 				<text transform="matrix(1 0 0 1 330.5875 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Walls</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.wallswk + ' W/K</tspan></text>\
 				<text transform="matrix(1 0 0 1 53.3572 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Ventilation</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.ventilationwk + ' W/K</tspan></text>\
+				<text transform="matrix(1 0 0 1 150.0000 21)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Infiltration</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.infiltrationwk + ' W/K</tspan></text>\
 				<text transform="matrix(1 0 0 1 48.0902 90.1215)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Windows</tspan><tspan x="11.2" y="12" fill="#F0533C" font-size="11">' + heatlossData.windowswk + ' W/K</tspan></text>\
 				<text transform="matrix(1 0 0 1 248.466 283.9302)"><tspan x="0" y="0" fill="#F0533C" font-family="Karla-Bold" font-size="11">Floor</tspan><tspan x="0" y="12" fill="#F0533C" font-size="11">' + heatlossData.floorwk + ' W/K</tspan></text>\
 				<g opacity="0.4">\
