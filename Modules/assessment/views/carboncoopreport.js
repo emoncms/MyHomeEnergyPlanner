@@ -804,7 +804,7 @@ function carboncoopreport_UpdateUI() {
         yAxisLabel: 'kWh/m2.year',
         fontSize: 22,
         width: 1200,
-        chartHeight: max_value,
+        chartHeight: 600,
         division: 100,
         barWidth: 110,
         barGutter: 120,
@@ -963,10 +963,10 @@ function carboncoopreport_UpdateUI() {
     });
     $('#energy-demand').html('');
     EnergyDemand.draw('energy-demand');
+    
     /* Figure 7:
      //
      */
-
     function getPrimaryEnergyUseData() {
         var primaryEnergyUseData = {};
         for (var i = 0; i < scenarios.length; i++) {
@@ -1019,7 +1019,6 @@ function carboncoopreport_UpdateUI() {
         font: "Karla",
         width: 1200,
         chartHeight: 600,
-        chartHigh: 400,
         division: 'auto',
         barWidth: 110,
         barGutter: 80,
@@ -1055,10 +1054,10 @@ function carboncoopreport_UpdateUI() {
     });
     $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
+   
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
      */
-
     var carbonDioxideEmissionsData = [];
     if (typeof project["master"] !== "undefined" && typeof project["master"].kgco2perm2 !== "undefined") {
         carbonDioxideEmissionsData.push({label: "Your home now", value: project["master"].kgco2perm2});
@@ -1085,7 +1084,6 @@ function carboncoopreport_UpdateUI() {
         chartHeight: 600,
         barWidth: 110,
         barGutter: 80,
-        chartHigh: 100,
         defaultBarColor: 'rgb(157,213,203)',
         data: carbonDioxideEmissionsData,
         targets: [
@@ -1103,10 +1101,10 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
+    
     /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
      //
      */
-
     var carbonDioxideEmissionsPerPersonData = [];
     if (typeof project["master"] != "undefined" && typeof project["master"].annualco2 !== "undefined" && typeof project["master"].occupancy !== "undefined") {
         carbonDioxideEmissionsPerPersonData.push({label: "Your home now", value: project["master"].annualco2 / project["master"].occupancy});
@@ -1144,10 +1142,10 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions-per-person').html('');
     CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
+   
     /* Figure 10: Estimated Energy cost comparison 
      // Bar chart showing annual fuel cost. Waiting on Trystan for data
      */
-
     var estimatedEnergyCostsData = [];
     if (typeof project["master"] != "undefined" && typeof project["master"].net_cost !== "undefined") {
         estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost, variance: project["master"].net_cost * 0.3});
