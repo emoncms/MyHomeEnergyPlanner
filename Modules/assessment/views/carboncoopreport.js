@@ -738,6 +738,7 @@ function carboncoopreport_UpdateUI() {
     }
 
     var dataFig4 = [];
+    var max_value = 0; // used to set the height of the chart
     if (typeof project['master'] != "undefined" && typeof project["master"].annual_useful_gains_kWh_m2 != "undefined") {
         dataFig4.push({
             label: 'Your Home Now',
@@ -749,6 +750,8 @@ function carboncoopreport_UpdateUI() {
                 {value: -(project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
+        if (max_value < (project["master"].annual_losses_kWh_m2["fabric"] + project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]))
+            max_value = project["master"].annual_losses_kWh_m2["fabric"] + project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario1'] != "undefined" && typeof project["scenario1"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -762,6 +765,8 @@ function carboncoopreport_UpdateUI() {
                 {value: -(project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
+        if (max_value < (project["scenario1"].annual_losses_kWh_m2["fabric"] + project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]))
+            max_value = project["scenario1"].annual_losses_kWh_m2["fabric"] + project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario2'] != "undefined" && typeof project["scenario2"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -775,6 +780,8 @@ function carboncoopreport_UpdateUI() {
                 {value: -(project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
+        if (max_value < (project["scenario2"].annual_losses_kWh_m2["fabric"] + project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]))
+            max_value = project["scenario2"].annual_losses_kWh_m2["fabric"] + project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario3'] != "undefined" && typeof project["scenario3"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -788,6 +795,8 @@ function carboncoopreport_UpdateUI() {
                 {value: -(project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
             ]
         });
+        if (max_value < (project["scenario3"].annual_losses_kWh_m2["fabric"] + project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]))
+            max_value = project["scenario3"].annual_losses_kWh_m2["fabric"] + project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"];
     }
 
     var EnergyDemand = new BarChart({
@@ -795,12 +804,12 @@ function carboncoopreport_UpdateUI() {
         yAxisLabel: 'kWh/m2.year',
         fontSize: 22,
         width: 1200,
-        chartHeight: 600,
-        division: 50,
+        chartHeight: max_value,
+        division: 100,
         barWidth: 110,
         barGutter: 120,
-        chartHigh: 400,
-        chartLow: -400,
+        chartHigh: max_value + 50,
+        chartLow: -max_value - 50,
         font: "Karla",
         defaultBarColor: 'rgb(231,37,57)',
         barColors: {
@@ -812,7 +821,9 @@ function carboncoopreport_UpdateUI() {
         },
         data: dataFig4,
     });
+    $('#heat-balance').html('');
     EnergyDemand.draw('heat-balance');
+
     /* Figure 5: Space Heating Demand
      // 
      */
