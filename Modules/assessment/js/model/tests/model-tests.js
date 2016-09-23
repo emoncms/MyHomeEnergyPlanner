@@ -26,7 +26,7 @@ describe("The start function", function () {
         expect(data.total_income).toEqual(0);
         expect(data.primary_energy_use).toEqual(0);
         expect(data.primary_energy_use_bills).toEqual(0);
-        expect(data.fabric_energy_efficiency).toEqual(0);
+        expect(data.space_heating_demand_m2).toEqual(0);
         expect(data.totalWK).toEqual(0);
     };
 
@@ -51,7 +51,7 @@ describe("The start function", function () {
                 "energy_requirements", "total_cost",
                 "total_income", "primary_energy_use",
                 "kgco2perm2", "primary_energy_use_bills",
-                "fabric_energy_efficiency", "totalWK",
+                "space_heating_demand_m2", "totalWK",
                 "gains_W"
             ].sort()
         );
@@ -67,7 +67,7 @@ describe("The start function", function () {
             internal_temperature: 1, external_temperature: 1,
             losses_WK: 1, gains_W: 1, energy_requirements: 1,
             total_cost: 1, total_income: 1, primary_energy_use: 1,
-            primary_energy_use_bills: 1, kgco2perm2: 1, fabric_energy_efficiency: 1,
+            primary_energy_use_bills: 1, kgco2perm2: 1, space_heating_demand_m2: 1,
             totalWK: 1
         });
 

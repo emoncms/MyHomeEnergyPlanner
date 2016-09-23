@@ -34,8 +34,8 @@ function carboncoopreport_initUI() {
     // 		};
     // 	}
 
-    // 	if (typeof project[scenarioName].fabric_energy_efficiency === "undefined"){
-    // 		project[scenarioName].fabric_energy_efficiency = 0;
+    // 	if (typeof project[scenarioName].space_heating_demand_m2 === "undefined"){
+    // 		project[scenarioName].space_heating_demand_m2 = 0;
     // 	}
 
     // 	if (typeof project[scenarioName].fabric === "undefined"){
@@ -505,8 +505,8 @@ function carboncoopreport_UpdateUI() {
 
     var values = [];
     for (var i = 0; i < scenarios.length; i++) {
-        if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].fabric_energy_efficiency != "undefined") {
-            values[i] = Math.round(project[scenarios[i]].fabric_energy_efficiency);
+        if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].space_heating_demand_m2 != "undefined") {
+            values[i] = Math.round(project[scenarios[i]].space_heating_demand_m2);
         } else {
             values[i] = 0;
         }
@@ -523,7 +523,7 @@ function carboncoopreport_UpdateUI() {
         name: "Space heating demand",
         font: "Karla",
         colors: colors,
-        value: Math.round(data.fabric_energy_efficiency),
+        value: Math.round(data.space_heating_demand_m2),
         values: values,
         units: "kWh/m2.a",
         targets: {
@@ -814,8 +814,8 @@ function carboncoopreport_UpdateUI() {
 
     var values = [];
     for (var i = 0; i < scenarios.length; i++) {
-        if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].fabric_energy_efficiency != "undefined") {
-            values[i] = Math.round(project[scenarios[i]].fabric_energy_efficiency);
+        if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].space_heating_demand_m2 != "undefined") {
+            values[i] = Math.round(project[scenarios[i]].space_heating_demand_m2);
         } else {
             values[i] = 0;
         }
@@ -1605,7 +1605,7 @@ function carboncoopreport_UpdateUI() {
     // Figure 5
     // var options = {
     //       name: "Space heating demand Master",
-    //       value: Math.round(project["master"].fabric_energy_efficiency),
+    //       value: Math.round(project["master"].space_heating_demand_m2),
     //       units: "kWh/m2",     //       targets: {
     //           //"Passivhaus": 15,
     //           "Passivhaus retrofit": 25,
@@ -1616,7 +1616,7 @@ function carboncoopreport_UpdateUI() {
 
     //   	 var options = {
     //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario1"].fabric_energy_efficiency),
+    //       value: Math.round(project["scenario1"].space_heating_demand_m2),
     //       units: "kWh/m2",
     //       targets: {
     //           //"Passivhaus": 15,
@@ -1628,7 +1628,7 @@ function carboncoopreport_UpdateUI() {
 
     //   	 var options = {
     //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario2"].fabric_energy_efficiency),
+    //       value: Math.round(project["scenario2"].space_heating_demand_m2),
     //       units: "kWh/m2",
     //       targets: {
     //           //"Passivhaus": 15,
@@ -1640,7 +1640,7 @@ function carboncoopreport_UpdateUI() {
 
     //   	 var options = {
     //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario3"].fabric_energy_efficiency),
+    //       value: Math.round(project["scenario3"].space_heating_demand_m2),
     //       units: "kWh/m2",
     //       targets: {
     //           //"Passivhaus": 15,

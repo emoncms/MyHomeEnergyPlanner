@@ -101,7 +101,7 @@ calc.start = function (data)
     data.primary_energy_use = 0;
     data.kgco2perm2 = 0;
     data.primary_energy_use_bills = 0;
-    data.fabric_energy_efficiency = 0;
+    data.space_heating_demand_m2 = 0;
     data.primary_energy_use_by_fuels = {};
     data.totalWK = 0;
     if (data.fuels == undefined)
@@ -869,7 +869,7 @@ calc.space_heating = function (data)
         data.energy_requirements.space_heating = {name: "Space Heating", quantity: annual_heating_demand, monthly: heat_demand_kwh};
     if (annual_cooling_demand > 0)
         data.energy_requirements.space_cooling = {name: "Space Cooling", quantity: annual_cooling_demand, monthly: cooling_demand_kwh};
-    data.fabric_energy_efficiency = (annual_heating_demand + annual_cooling_demand) / data.TFA;
+    data.space_heating_demand_m2 = (annual_heating_demand + annual_cooling_demand) / data.TFA;
     return data;
 };
 
