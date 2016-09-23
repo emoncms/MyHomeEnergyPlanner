@@ -58,7 +58,6 @@ function targetbarCarboncoop(element, options)
         ctx.fillStyle = "rgba(99,86,71,1.0)";
         ctx.fillText(options.targets[z] + " " + options.units, xpos + 5, barheight - 18 - i);
         ctx.fillText(z, xpos + 5, barheight - 8 - i);
-        console.log(barheight);
         i = i - 60;
     }
 

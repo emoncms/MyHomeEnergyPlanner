@@ -349,6 +349,7 @@ function compareCarbonCoop(scenario, outputElement) {
             out += "<tr><td><br><b>New to scenario B</b></td><td>";
             out += "<b>" + z + ": </b><br>";
             out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
+            console.log(z);
             out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
             out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
             out += "</td></tr>";
@@ -420,7 +421,6 @@ function carboncoopreport_UpdateUI() {
 
     // Report date
     var date = new Date();
-    console.log(date);
     $('#report_date').html(date.getDate() + ' - ' + date.getMonth() + ' - ' + date.getFullYear());
 
 

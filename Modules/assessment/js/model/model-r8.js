@@ -1007,7 +1007,7 @@ calc.fuel_requirements = function (data) {
             quantity: -data.generation.total_generation,
             annualco2: -data.generation.total_CO2,
             primaryenergy: -data.generation.total_primaryenergy,
-            annualcost: -data.generation.total_generation * data.fuels['Standard Tariff'].fuelcost
+            annualcost: -data.generation.total_generation * data.fuels.generation.fuelcost
         };
         data.primary_energy_use += data.fuel_totals['generation'].primaryenergy;
         data.annualco2 += data.fuel_totals['generation'].annualco2;
@@ -1673,25 +1673,25 @@ calc.generation = function (data) {
     data.generation.systems = {};
     if (data.generation.solar_annual_kwh > 0)
     {
-        data.generation.systems.solarpv = {name: "Solar PV", quantity: data.generation.solar_annual_kwh, fraction_used_onsite: data.generation.solar_fraction_used_onsite, CO2: data.generation.solar_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.solar_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
+        data.generation.systems.solarpv = {name: "Solar PV", quantity: data.generation.solar_annual_kwh, fraction_used_onsite: data.generation.solar_fraction_used_onsite, CO2: data.generation.solar_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.solar_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.solar_annual_kwh * data.generation.solar_FIT;
     }
 
     if (data.generation.wind_annual_kwh > 0)
     {
-        data.generation.systems.wind = {name: "Wind", quantity: data.generation.wind_annual_kwh, fraction_used_onsite: data.generation.wind_fraction_used_onsite, CO2: data.generation.wind_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.wind_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
+        data.generation.systems.wind = {name: "Wind", quantity: data.generation.wind_annual_kwh, fraction_used_onsite: data.generation.wind_fraction_used_onsite, CO2: data.generation.wind_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.wind_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.wind_annual_kwh * data.generation.wind_FIT;
     }
 
     if (data.generation.hydro_annual_kwh > 0)
     {
-        data.generation.systems.hydro = {name: "Hydro", quantity: data.generation.hydro_annual_kwh, fraction_used_onsite: data.generation.hydro_fraction_used_onsite, CO2: data.generation.hydro_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.hydro_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
+        data.generation.systems.hydro = {name: "Hydro", quantity: data.generation.hydro_annual_kwh, fraction_used_onsite: data.generation.hydro_fraction_used_onsite, CO2: data.generation.hydro_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.hydro_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT;
     }
 
     if (data.generation.solarpv_annual_kwh > 0)
     {
-        data.generation.systems.solarpv2 = {name: "Solar PV from calculator", quantity: data.generation.solarpv_annual_kwh, fraction_used_onsite: data.generation.solarpv_fraction_used_onsite, CO2: data.generation.solarpv_annual_kwh * data.fuels['Standard Tariff'].co2factor, primaryenergy: data.generation.solarpv_annual_kwh * data.fuels['Standard Tariff'].primaryenergyfactor};
+        data.generation.systems.solarpv2 = {name: "Solar PV from calculator", quantity: data.generation.solarpv_annual_kwh, fraction_used_onsite: data.generation.solarpv_fraction_used_onsite, CO2: data.generation.solarpv_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.solarpv_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.solarpv_annual_kwh * data.generation.solarpv_FIT;
     }
 
