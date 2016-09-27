@@ -349,7 +349,6 @@ function compareCarbonCoop(scenario, outputElement) {
             out += "<tr><td><br><b>New to scenario B</b></td><td>";
             out += "<b>" + z + ": </b><br>";
             out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
-            console.log(z);
             out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
             out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
             out += "</td></tr>";
@@ -955,6 +954,7 @@ function carboncoopreport_UpdateUI() {
         barWidth: 110,
         barGutter: 80,
         defaultBarColor: 'rgb(231,37,57)',
+        defaultVarianceColor: 'rgb(2,37,57)',
         barColors: {
             'Gas': 'rgb(236,102,79)',
             'Electric': 'rgb(240,212,156)',
@@ -979,29 +979,29 @@ function carboncoopreport_UpdateUI() {
         for (var i = 0; i < scenarios.length; i++) {
             primaryEnergyUseData[scenarios[i]] = [];
             if (typeof project[scenarios[i]] !== "undefined") {
-                if (typeof project[scenarios[i]].energy_requirements !== "undefined") {
-                    if (typeof project[scenarios[i]].energy_requirements['lighting'] !== "undefined") {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['lighting'].quantity / data.TFA, label: 'Lighting'});
+                if (typeof project[scenarios[i]].primary_energy_use_by_requirement !== "undefined") {
+                    if (typeof project[scenarios[i]].primary_energy_use_by_requirement['lighting'] !== "undefined") {
+                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['lighting'] / data.TFA, label: 'Lighting'});
                     }
 
-                    if (typeof project[scenarios[i]].energy_requirements['appliances'] !== "undefined") {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['appliances'].quantity / data.TFA, label: 'Appliances'});
+                    if (typeof project[scenarios[i]].primary_energy_use_by_requirement['appliances'] !== "undefined") {
+                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['appliances'] / data.TFA, label: 'Appliances'});
                     }
 
-                    if (typeof project[scenarios[i]].energy_requirements['cooking'] !== "undefined") {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['cooking'].quantity / data.TFA, label: 'Cooking'});
+                    if (typeof project[scenarios[i]].primary_energy_use_by_requirement['cooking'] !== "undefined") {
+                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['cooking'] / data.TFA, label: 'Cooking'});
                     }
 
-                    if (typeof project[scenarios[i]].energy_requirements['waterheating'] !== "undefined") {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['waterheating'].quantity / data.TFA, label: 'Water Heating'});
+                    if (typeof project[scenarios[i]].primary_energy_use_by_requirement['waterheating'] !== "undefined") {
+                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['waterheating'] / data.TFA, label: 'Water Heating'});
                     }
 
-                    if (typeof project[scenarios[i]].energy_requirements['space_heating'] !== "undefined") {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['space_heating'].quantity / data.TFA, label: 'Space Heating'});
+                    if (typeof project[scenarios[i]].primary_energy_use_by_requirement['space_heating'] !== "undefined") {
+                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['space_heating'] / data.TFA, label: 'Space Heating'});
                     }
 
-                    if (typeof project[scenarios[i]].energy_requirements['fans_and_pumps'] !== "undefined") {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].energy_requirements['fans_and_pumps'].quantity / data.TFA, label: 'Fans and Pumps'});
+                    if (typeof project[scenarios[i]].primary_energy_use_by_requirement['fans_and_pumps'] !== "undefined") {
+                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['fans_and_pumps'] / data.TFA, label: 'Fans and Pumps'});
                     }
 
                 }
