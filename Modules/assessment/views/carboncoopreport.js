@@ -975,12 +975,12 @@ function carboncoopreport_UpdateUI() {
             primaryEnergyUseData[scenarios[i]] = [];
             if (typeof project[scenarios[i]] !== "undefined") {
                 if (typeof project[scenarios[i]].primary_energy_use_by_requirement !== "undefined") {
-                    if (typeof project[scenarios[i]].primary_energy_use_by_requirement['space_heating'] !== "undefined") {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['space_heating'] / data.TFA, label: 'Space Heating'});
-                    }
-
                     if (typeof project[scenarios[i]].primary_energy_use_by_requirement['waterheating'] !== "undefined") {
                         primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['waterheating'] / data.TFA, label: 'Water Heating'});
+                    }
+
+                    if (typeof project[scenarios[i]].primary_energy_use_by_requirement['space_heating'] !== "undefined") {
+                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['space_heating'] / data.TFA, label: 'Space Heating'});
                     }
 
                     if (typeof project[scenarios[i]].primary_energy_use_by_requirement['cooking'] !== "undefined") {
@@ -998,9 +998,9 @@ function carboncoopreport_UpdateUI() {
                     if (typeof project[scenarios[i]].primary_energy_use_by_requirement['fans_and_pumps'] !== "undefined") {
                         primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['fans_and_pumps'] / data.TFA, label: 'Fans and Pumps'});
                     }
-                    if (project[scenarios[i]].fuel_totals['generation'] !== undefined) {
+                    if (project[scenarios[i]].use_generation == 1) {
                         primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA, label: 'Offset'});
-                        primaryEnergyUseData[scenarios[i]][0].value += project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA; // We substract the offset (generation) from the first stack (space heating)
+                        primaryEnergyUseData[scenarios[i]][0].value += project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA; // We substract the offset (generation) from the first stack (water heating)
                     }
                     else
                         primaryEnergyUseData[scenarios[i]].push({value: 0, label: 'Offset'});
@@ -1008,7 +1008,7 @@ function carboncoopreport_UpdateUI() {
             }
             if (project[scenarios[i]].primary_energy_use_m2 > primaryEnergyUseData.max)
                 primaryEnergyUseData.max = project[scenarios[i]].primary_energy_use_m2;
-            if (project[scenarios[i]].fuel_totals['generation'] !== undefined && project[scenarios[i]].fuel_totals['generation'].primaryenergy < primaryEnergyUseData.min)  // fuel_totals['generation'] is negative
+            if (project[scenarios[i]].use_generation == 1 && project[scenarios[i]].fuel_totals['generation'].primaryenergy < primaryEnergyUseData.min)  // fuel_totals['generation'] is negative
                 primaryEnergyUseData.min = project[scenarios[i]].fuel_totals['generation'].primaryenergy / project[scenarios[i]].TFA;
         }
 
@@ -1037,10 +1037,10 @@ function carboncoopreport_UpdateUI() {
         barGutter: 80,
         chartHigh: primaryEnergyUseData.max + 50,
         chartLow: primaryEnergyUseData.min - 50,
-        defaultBarColor: 'rgb(231,37,57)',
+        defaultBarColor: 'rgb(157,213,203)',
         barColors: {
-            'Space Heating': 'rgb(231,37,57)',
             'Water Heating': 'rgb(157,213,203)',
+            'Space Heating': 'rgb(231,37,57)',
             'Cooking': 'rgb(24,86,62)',
             'Appliances': 'rgb(240,212,156)',
             'Lighting': 'rgb(236,102,79)',
