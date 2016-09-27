@@ -1115,6 +1115,7 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
+    
     /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
      //
      */
@@ -1136,7 +1137,7 @@ function carboncoopreport_UpdateUI() {
 
     var CarbonDioxideEmissionsPerPerson = new BarChart({
         chartTitle: 'Carbon Dioxide Emissions Per Person',
-        yAxisLabel: 'kgCO2/year',
+        yAxisLabel: 'kgCO2/person/year',
         fontSize: 22,
         font: "Karla",
         division: 1000,
