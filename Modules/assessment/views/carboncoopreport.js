@@ -889,6 +889,8 @@ function carboncoopreport_UpdateUI() {
     });
     $('#fig-5-space-heating-demand').html('');
     SpaceHeatingDemand.draw('fig-5-space-heating-demand');
+
+
     /* Figure 6: Energy Demand
      //
      */
@@ -897,41 +899,46 @@ function carboncoopreport_UpdateUI() {
         var data = {};
         for (var i = 0; i < scenarios.length; i++) {
             data[scenarios[i]] = [];
+            var electric = 0;
+            var gas = 0;
+            var other = 0;
             if (typeof project[scenarios[i]] !== "undefined") {
                 if (typeof project[scenarios[i]].fuel_totals !== "undefined") {
-                    if (typeof project[scenarios[i]].fuel_totals['gas'] !== "undefined") {
-                        data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['gas'].quantity, label: 'Gas', variance: project[scenarios[i]].fuel_totals['gas'].quantity * 0.3});
+                    for (var fuel in project[scenarios[i]].fuel_totals) {
+                        if (project[scenarios[i]].fuels[fuel].category == 'Electricity')
+                            electric += project[scenarios[i]].fuel_totals[fuel].quantity;
+                        else if (project[scenarios[i]].fuels[fuel].category == 'Gas')
+                            gas += project[scenarios[i]].fuel_totals[fuel].quantity;
+                        else if (fuel != 'generation')
+                            other += project[scenarios[i]].fuel_totals[fuel].quantity;
                     }
-                    if (typeof project[scenarios[i]].fuel_totals['electric'] !== "undefined") {
-                        data[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['electric'].quantity, label: 'Electric', variance: project[scenarios[i]].fuel_totals['electric'].quantity * 0.3});
-                    }
-                    // other fuel types
-                    var otherTotal = 0;
-                    for (var fuelType in project[scenarios[i]].fuel_totals) {
-                        if (fuelType != "gas" && fuelType != "electric") {
-                            otherTotal += project[scenarios[i]].fuel_totals[fuelType].quantity;
-                        }
-                    }
-                    data[scenarios[i]].push({value: otherTotal, label: 'Other', variance: otherTotal * 0.3});
+                    data[scenarios[i]].push({value: gas, label: 'Gas', variance: gas * 0.3});
+                    data[scenarios[i]].push({value: electric, label: 'Electric', variance: electric * 0.3});
+                    data[scenarios[i]].push({value: other, label: 'Other', variance: other * 0.3});
                 }
             }
-
         }
 
+        var energyitems = project['master'].currentenergy.energyitems;
         data.bills = [
             {
-                value: project['master'].currentenergy.energyitems["gas-kwh"].annual_kwh,
+                value: energyitems["gas-kwh"].annual_kwh + energyitems.bottledgas.annual_kwh
+                        + energyitems.gas.annual_kwh + energyitems.lpg.annual_kwh,
                 label: 'Gas',
             },
             {
-                value: project['master'].currentenergy.energyitems.electric.annual_kwh,
+                value: energyitems.electric.annual_kwh + energyitems['electric-heatpump'].annual_kwh +
+                        energyitems['electric-heatpump'].annual_kwh + energyitems['electric-waterheating'].annual_kwh
+                        + energyitems['electric-car'].annual_kwh + energyitems['electric-e7-day'].annual_kwh
+                        + energyitems['electric-e7-night'].annual_kwh,
                 label: 'Electric',
             },
             {
-                value: project['master'].currentenergy.primaryenergy_annual_kwh - project['master'].currentenergy.energyitems.electric.annual_kwh - project['master'].currentenergy.energyitems["gas-kwh"].annual_kwh,
+                value: energyitems['wood-logs'].annual_kwh + energyitems['wood-pellets'].annual_kwh
+                        + energyitems['oil'].annual_kwh,
                 label: "Other"
             }
-        ]
+        ];
 
         return data;
     }
@@ -963,7 +970,7 @@ function carboncoopreport_UpdateUI() {
     });
     $('#energy-demand').html('');
     EnergyDemand.draw('energy-demand');
-    
+
     /* Figure 7:
      //
      */
@@ -1054,7 +1061,7 @@ function carboncoopreport_UpdateUI() {
     });
     $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
-   
+
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
      */
@@ -1101,7 +1108,7 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
-    
+
     /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
      //
      */
@@ -1142,7 +1149,7 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions-per-person').html('');
     CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
-   
+
     /* Figure 10: Estimated Energy cost comparison 
      // Bar chart showing annual fuel cost. Waiting on Trystan for data
      */
