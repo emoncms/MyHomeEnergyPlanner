@@ -54,6 +54,7 @@ calc.run = function (datain)
     calc.space_heating(calc.data);
     calc.heating_systems(calc.data);
     calc.fuel_requirements(calc.data);
+    calc.primary_energy_by_requirement(calc.data);
     calc.SAP(calc.data);
     calc.data.totalWK = calc.data.fabric.total_heat_loss_WK + calc.data.ventilation.average_WK;
     calc.data.primary_energy_use_m2 = calc.data.primary_energy_use / calc.data.TFA;
@@ -102,7 +103,7 @@ calc.start = function (data)
     data.kgco2perm2 = 0;
     data.primary_energy_use_bills = 0;
     data.space_heating_demand_m2 = 0;
-    data.primary_energy_use_by_fuels = {};
+    data.primary_energy_use_by_requirement = {};
     data.totalWK = 0;
     if (data.fuels == undefined)
         data.fuels = [];
@@ -956,18 +957,6 @@ calc.heating_systems = function (data) {
 // Datasets: 
 //---------------------------------------------------------------------------------------------
 calc.fuel_requirements = function (data) {
-    //Calculate fuel requirements
-    for (z in data.fuel_requirements)
-    {
-        var quantity = data.fuel_requirements[z].quantity;
-        //var quantity_monthly = data.energy_requirements[z].monthly;
-        for (x in data.fuel_requirements[z].list) {
-            //data.fuel_requirements[z].list[x].demand = quantity * data.fuel_requirements[z].list[x].fraction;
-            data.fuel_requirements[z].list[x].demand_monthly = [];
-            // for (m = 0; m < 12; m++)
-            // data.fuel_requirements[z].list[x].demand_monthly[m] = quantity_monthly[m] * data.fuel_requirements[z].list[x].fraction;
-        }
-    }
 
     // Fuel totals
     data.fuel_totals = {}; // remove this line when we get rif of energy_systems
@@ -1018,6 +1007,27 @@ calc.fuel_requirements = function (data) {
     data.net_cost = data.use_generation == 1 ? data.total_cost - data.total_income : data.total_cost;
     return data;
 };
+
+//---------------------------------------------------------------------------------------------
+// PRIMARY ENERGY BY REQUIREMENT
+// Module Inputs: 
+// Global Inputs: 
+// Global Outputs: 
+// Datasets: 
+//---------------------------------------------------------------------------------------------
+calc.primary_energy_by_requirement = function (data) {
+    for (var req in data.fuel_requirements) {
+        data.primary_energy_use_by_requirement[req] = 0;
+        for (z in data.fuel_requirements[req].list) {
+            var fuel_input = data.fuel_requirements[req].list[z].fuel_input;
+            var fuel = data.fuel_requirements[req].list[z].fuel;
+            
+            data.primary_energy_use_by_requirement[req] += fuel_input * data.fuels[fuel].primaryenergyfactor;
+        }
+    }
+};
+
+
 //---------------------------------------------------------------------------------------------
 // SAP
 // Module Inputs: data.SAP.energy_cost_deflator
