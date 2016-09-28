@@ -224,3 +224,15 @@ function get_a_fuel(type_of_fuel) { // Returns the first fuel for a specific typ
             return fuel;
     }
 }
+
+function add_quantity_and_cost_to_measure(measure) {
+    // Add extra properties to measure 
+    if (measure.cost_units == 'sqm')
+        measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
+    else if (measure.cost_units == 'ln m')
+        measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
+    else if (measure.cost_units == 'unit')
+        measure.quantity = 1;
+    measure.cost_total = measure.quantity * measure.cost;
+
+}
