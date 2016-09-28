@@ -885,6 +885,8 @@ function carboncoopreport_UpdateUI() {
     });
     $('#fig-5-space-heating-demand').html('');
     SpaceHeatingDemand.draw('fig-5-space-heating-demand');
+
+
     /* Figure 6: Energy Demand
      //
      */
@@ -964,6 +966,8 @@ function carboncoopreport_UpdateUI() {
     });
     $('#energy-demand').html('');
     EnergyDemand.draw('energy-demand');
+
+
     /* Figure 7:
      //
      */
@@ -1022,9 +1026,7 @@ function carboncoopreport_UpdateUI() {
         return primaryEnergyUseData;
     }
 
-
     var primaryEnergyUseData = getPrimaryEnergyUseData();
-    console.log(primaryEnergyUseData);
     var primaryEneryUse = new BarChart({
         chartTitle: 'Primary Energy Use',
         yAxisLabel: 'kWh/m2.year',
@@ -1166,13 +1168,13 @@ function carboncoopreport_UpdateUI() {
     var estimatedEnergyCostsData = [];
     var max = 0;
     if (typeof project["master"] != "undefined" && typeof project["master"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost, variance:30});
+        estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost, variance: 30});
         if (max < project["master"].net_cost + 0.3 * project["master"].net_cost)
             max = project["master"].net_cost + 0.3 * project["master"].net_cost;
     }
 
     estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost, variance: 30});
-        if (max < project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost)
+    if (max < project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost)
         max = project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost;
 
     if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].net_cost !== "undefined") {
@@ -1186,12 +1188,11 @@ function carboncoopreport_UpdateUI() {
             max = project["scenario2"].net_cost + 0.3 * project["scenario2"].net_cost;
     }
     if (typeof project["scenario3"] != "undefined" && typeof project["scenario3"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].net_cost, variance:30});
+        estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].net_cost, variance: 30});
         if (max < project["scenario3"].net_cost + 0.3 * project["scenario3"].net_cost)
             max = project["scenario3"].net_cost + 0.3 * project["scenario3"].net_cost;
     }
 
-    console.log(max);
     var EstimatedEnergyCosts = new BarChart({
         chartTitle: 'Estimate Energy Costs (Net) Comparison',
         yAxisLabel: '£/year',
@@ -1216,9 +1217,20 @@ function carboncoopreport_UpdateUI() {
      */
 
     $(".js-occupancy-comparison").html(compare(2.9, data.occupancy));
-    var normalDayHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on1"], data.household["3a_heatinghours_normal_off1"]);
-    var altDayHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on2"], data.household["3a_heatinghours_normal_off2"]);
-    var totalHeatingHours = normalDayHeatingHours + altDayHeatingHours;
+    //var normalDayHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on1"], data.household["3a_heatinghours_normal_off1"]);
+    //var altDayHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on2"], data.household["3a_heatinghours_normal_off2"]);
+    var hours_off = 0;
+    for (var period in data.temperature.weekday)
+        hours_off += data.temperature.weekday[period];
+    var normalDayHeatingHours = 24 - hours_off;
+
+    hours_off = 0;
+    for (var period in data.temperature.weekend)
+        hours_off += data.temperature.weekend[period];
+    var altDayHeatingHours = 24 - hours_off;
+
+    var totalHeatingHours = normalDayHeatingHours; // Right now we only take into account weekdays hours, there is an issue open about if we need to take into account weekends as well
+    
     function compare(num1, num2) {
         if (num1 > num2) {
             return "Lower";
@@ -1258,9 +1270,11 @@ function carboncoopreport_UpdateUI() {
     $(".js-average-heating-hours").html(totalHeatingHours);
     $(".js-average-heating-hours-comparison").html(compare(9, totalHeatingHours));
     $(".js-thermostat-comparison").html(compare(21, parseFloat(data.household["3a_roomthermostat"])));
-    $(".js-unheated-rooms-comparison").html(compare(0, data.household["3a_habitable_not_heated_rooms"]));
-    $(".js-appliance-energy-use").html(Math.round(data.LAC.EA));
-    $(".js-appliance-energy-use-comparison").html(compare(3880, Math.round(data.LAC.EA)));
+    console.log(project['master'].household["3a_habitable_rooms_not_heated"]);
+    $('#js-habitable-not-heated-rooms').html(project['master'].household["3a_habitable_rooms_not_heated"])
+    $(".js-unheated-rooms-comparison").html(compare(0, project['master'].household["3a_habitable_rooms_not_heated"]));
+    $(".js-appliance-energy-use").html(Math.round(project.master.energy_requirements.appliances.quantity));
+    $(".js-appliance-energy-use-comparison").html(compare(3880, Math.round(project.master.energy_requirements.appliances.quantity)));
     /* Figure 12: SAP chart
      //
      */
