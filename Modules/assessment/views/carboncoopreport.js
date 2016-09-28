@@ -1069,6 +1069,8 @@ function carboncoopreport_UpdateUI() {
     });
     $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
+
+
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
      */
@@ -1115,7 +1117,7 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
-    
+
     /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
      //
      */
@@ -1156,32 +1158,47 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions-per-person').html('');
     CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
+
+
     /* Figure 10: Estimated Energy cost comparison 
      // Bar chart showing annual fuel cost. Waiting on Trystan for data
      */
     var estimatedEnergyCostsData = [];
+    var max = 0;
     if (typeof project["master"] != "undefined" && typeof project["master"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost, variance: project["master"].net_cost * 0.3});
+        estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost, variance:30});
+        if (max < project["master"].net_cost + 0.3 * project["master"].net_cost)
+            max = project["master"].net_cost + 0.3 * project["master"].net_cost;
     }
 
-    estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost, variance: project["master"].currentenergy.total_cost * 0.3});
+    estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost, variance: 30});
+        if (max < project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost)
+        max = project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost;
+
     if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].net_cost, variance: project["scenario1"].net_cost * 0.3});
+        estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].net_cost, variance: 30});
+        if (max < project["scenario1"].net_cost + 0.3 * project["scenario1"].net_cost)
+            max = project["scenario1"].net_cost + 0.3 * project["scenario1"].net_cost;
     }
     if (typeof project["scenario2"] != "undefined" && typeof project["scenario2"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Scenario 2", value: project["scenario2"].net_cost, variance: project["scenario2"].net_cost * 0.3});
+        estimatedEnergyCostsData.push({label: "Scenario 2", value: project["scenario2"].net_cost, variance: 30});
+        if (max < project["scenario2"].net_cost + 0.3 * project["scenario2"].net_cost)
+            max = project["scenario2"].net_cost + 0.3 * project["scenario2"].net_cost;
     }
     if (typeof project["scenario3"] != "undefined" && typeof project["scenario3"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].net_cost, variance: project["scenario3"].net_cost * 0.3});
+        estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].net_cost, variance:30});
+        if (max < project["scenario3"].net_cost + 0.3 * project["scenario3"].net_cost)
+            max = project["scenario3"].net_cost + 0.3 * project["scenario3"].net_cost;
     }
 
+    console.log(max);
     var EstimatedEnergyCosts = new BarChart({
         chartTitle: 'Estimate Energy Costs (Net) Comparison',
         yAxisLabel: '£/year',
         fontSize: 22,
         font: "Karla",
-        chartLow: 0,
         division: 'auto',
+        chartHigh: max + 50,
         width: 1200,
         chartHeight: 600,
         barGutter: 80,
@@ -1190,6 +1207,8 @@ function carboncoopreport_UpdateUI() {
     });
     $('#estimated-energy-cost-comparison').html('');
     EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
+
+
     /* Figure 11: Your home compared with the average home.
      // Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
      // Would be useful to have total hours of heating (currently only given times heating is on - see question 3a)
