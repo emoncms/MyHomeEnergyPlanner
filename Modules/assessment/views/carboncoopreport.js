@@ -1010,9 +1010,9 @@ function carboncoopreport_UpdateUI() {
                         primaryEnergyUseData[scenarios[i]].push({value: 0, label: 'Offset'});
                 }
             }
-            if (project[scenarios[i]].primary_energy_use_m2 > primaryEnergyUseData.max)
+            if (typeof project[scenarios[i]] !== "undefined" && project[scenarios[i]].primary_energy_use_m2 > primaryEnergyUseData.max)
                 primaryEnergyUseData.max = project[scenarios[i]].primary_energy_use_m2;
-            if (project[scenarios[i]].use_generation == 1 && project[scenarios[i]].fuel_totals['generation'].primaryenergy < primaryEnergyUseData.min)  // fuel_totals['generation'] is negative
+            if (typeof project[scenarios[i]] !== "undefined" && project[scenarios[i]].use_generation == 1 && project[scenarios[i]].fuel_totals['generation'].primaryenergy < primaryEnergyUseData.min)  // fuel_totals['generation'] is negative
                 primaryEnergyUseData.min = project[scenarios[i]].fuel_totals['generation'].primaryenergy / project[scenarios[i]].TFA;
         }
 
@@ -1128,7 +1128,7 @@ function carboncoopreport_UpdateUI() {
         carbonDioxideEmissionsPerPersonData.push({label: "Your home now", value: project["master"].annualco2 / project["master"].occupancy});
     }
 
-    carbonDioxideEmissionsPerPersonData.push({label: "Bills data", value: project["master"].TFA * project["master"].currentenergy.total_co2m2 / project["scenario1"].occupancy});
+    carbonDioxideEmissionsPerPersonData.push({label: "Bills data", value: project["master"].TFA * project["master"].currentenergy.total_co2m2 / project["master"].occupancy});
     if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].annualco2 !== "undefined" && typeof project["scenario1"].occupancy !== "undefined") {
         carbonDioxideEmissionsPerPersonData.push({label: "Scenario 1", value: project["scenario1"].annualco2 / project["scenario1"].occupancy});
     }
@@ -1230,7 +1230,7 @@ function carboncoopreport_UpdateUI() {
     var altDayHeatingHours = 24 - hours_off;
 
     var totalHeatingHours = normalDayHeatingHours; // Right now we only take into account weekdays hours, there is an issue open about if we need to take into account weekends as well
-    
+
     function compare(num1, num2) {
         if (num1 > num2) {
             return "Lower";
@@ -1270,11 +1270,12 @@ function carboncoopreport_UpdateUI() {
     $(".js-average-heating-hours").html(totalHeatingHours);
     $(".js-average-heating-hours-comparison").html(compare(9, totalHeatingHours));
     $(".js-thermostat-comparison").html(compare(21, parseFloat(data.household["3a_roomthermostat"])));
-    console.log(project['master'].household["3a_habitable_rooms_not_heated"]);
     $('#js-habitable-not-heated-rooms').html(project['master'].household["3a_habitable_rooms_not_heated"])
     $(".js-unheated-rooms-comparison").html(compare(0, project['master'].household["3a_habitable_rooms_not_heated"]));
     $(".js-appliance-energy-use").html(Math.round(project.master.energy_requirements.appliances.quantity));
     $(".js-appliance-energy-use-comparison").html(compare(3880, Math.round(project.master.energy_requirements.appliances.quantity)));
+
+
     /* Figure 12: SAP chart
      //
      */
@@ -1341,10 +1342,13 @@ function carboncoopreport_UpdateUI() {
     $(".js-sap-rating-2050").html(calculateSapRatingFromScore(sap2050));
     $(".js-sap-score-average").html(sapAverage);
     $(".js-sap-rating-average").html(calculateSapRatingFromScore(sapAverage));
+
+
     /* Figure 13: Comfort Tables.
      //	
      */
     function createComforTable(options, tableID, chosenValue) {
+        $("#" + tableID + " .comfort-table-td").remove();
 
         for (var i = options.length - 1; i >= 0; i--) {
 
@@ -1353,7 +1357,7 @@ function carboncoopreport_UpdateUI() {
             } else {
                 var background = 'transparent';
             }
-            $("#" + tableID + " .extreme-left").after($("<td class='comfort-table-option " + i + "'  style='background:" + background + "'></td>"));
+            $("#" + tableID + " .extreme-left").after($("<td class='comfort-table-td comfort-table-option " + i + "'  style='background:" + background + "'></td>"));
         }
 
     }
@@ -1373,7 +1377,7 @@ function carboncoopreport_UpdateUI() {
             color: red
         }
     ];
-    createComforTable(options, "comfort-table-winter-temp", data.household["6a_temperature_winter"]);
+    createComforTable(options, "comfort-table-winter-temp", project.master.household["6a_temperature_winter"]);
     // Air quality in winter
 
     var options = [
@@ -1388,7 +1392,7 @@ function carboncoopreport_UpdateUI() {
             color: red
         }
     ];
-    createComforTable(options, "comfort-table-winter-air", data.household["6a_airquality_winter"]);
+    createComforTable(options, "comfort-table-winter-air", project.master.household["6a_airquality_winter"]);
     // Temperature in Summer
 
     var options = [
@@ -1403,7 +1407,7 @@ function carboncoopreport_UpdateUI() {
             color: red
         }
     ];
-    createComforTable(options, "comfort-table-summer-temp", data.household["6a_temperature_summer"]);
+    createComforTable(options, "comfort-table-summer-temp", project.master.household["6a_temperature_summer"]);
     // Air quality in Summer
 
     var options = [
@@ -1418,7 +1422,7 @@ function carboncoopreport_UpdateUI() {
             color: red
         }
     ];
-    createComforTable(options, "comfort-table-summer-air", data.household["6a_airquality_summer"]);
+    createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
     var options = [
         {
             title: "Too little",
@@ -1431,7 +1435,7 @@ function carboncoopreport_UpdateUI() {
             color: red
         }
     ];
-    createComforTable(options, "comfort-table-daylight-amount", data.household["6b_daylightamount"]);
+    createComforTable(options, "comfort-table-daylight-amount", project.master.household["6b_daylightamount"]);
     var options = [
         {
             title: "Too little",
@@ -1444,7 +1448,9 @@ function carboncoopreport_UpdateUI() {
             color: red
         }
     ];
-    createComforTable(options, "comfort-table-artificial-light-amount", data.household["6b_artificallightamount"]);
+    createComforTable(options, "comfort-table-artificial-light-amount", project.master.household["6b_artificallightamount"]);
+
+
     /* Figure 14: Humidity Data
      // 
      */
