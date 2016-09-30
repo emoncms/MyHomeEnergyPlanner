@@ -1516,8 +1516,6 @@ function carboncoopreport_UpdateUI() {
         if (project[scenario].fabric.measures != undefined)
             addListOfMeasuresByIdToSummaryTable(project[scenario].fabric.measures, tableSelector, summaryTableSelector);
         if (project[scenario].measures != undefined) {
-            if (project[scenario].measures.energy_systems != undefined)
-                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.energy_systems, tableSelector, summaryTableSelector);
             if (project[scenario].measures.ventilation != undefined) {
                 if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
                     addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.extract_ventilation_points, tableSelector, summaryTableSelector);
@@ -1529,18 +1527,24 @@ function carboncoopreport_UpdateUI() {
                     addMeasureToSummaryTable(project[scenario].measures.ventilation.draught_proofing_measures, tableSelector, summaryTableSelector);
                 if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
                     addMeasureToSummaryTable(project[scenario].measures.ventilation.ventilation_systems_measures, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined)
+                    addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.clothes_drying_facilities, tableSelector, summaryTableSelector);
             }
             if (project[scenario].measures.water_heating != undefined) {
                 if (project[scenario].measures.water_heating.water_usage != undefined)
                     addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector);
                 if (project[scenario].measures.water_heating.storage_type != undefined)
                     addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector);
-                /* if (project[scenario].measures.water_heating.pipework_insulation != undefined)
-                 addMeasureToSummaryTable(project[scenario].measures.water_heating.pipework_insulation, tableSelector, summaryTableSelector);
-                 if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
-                 addMeasureToSummaryTable(project[scenario].measures.water_heating.hot_water_control_type, tableSelector, summaryTableSelector);*/
-
+                if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.water_heating.pipework_insulation, tableSelector, summaryTableSelector);
+                if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.water_heating.hot_water_control_type, tableSelector, summaryTableSelector);
             }
+            if (project[scenario].measures.space_heating_control_type != undefined)
+                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.space_heating_control_type, tableSelector, summaryTableSelector);
+            if (project[scenario].measures.heating_systems != undefined)
+                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.heating_systems, tableSelector, summaryTableSelector);
+
             // Change this one project[scenario].measures.space_heating_control_type
             if (project[scenario].measures.space_heating != undefined) {
                 if (project[scenario].measures.space_heating.heating_control != undefined)
