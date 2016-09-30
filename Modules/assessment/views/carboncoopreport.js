@@ -1566,6 +1566,7 @@ function carboncoopreport_UpdateUI() {
         var row = $('<tr></tr>');
         for (var i = 0; i < measuresTableColumns.length; i++) {
             var cell = $('<td></td>');
+            console.log(measure);
             cell.html(measure.measure[measuresTableColumns[i]]);
             row.append(cell);
         }

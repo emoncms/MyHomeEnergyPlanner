@@ -201,26 +201,18 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 data.measures.ventilation[library_helper.type][library_helper.item_id] = {};
                 data.measures.ventilation[library_helper.type][library_helper.item_id].original = original_item;
             }
-            switch (library_helper.what_to_do) {
-                case 'remove':
-                    data.ventilation.EVP.splice(original_item.row, 1);
-                    data.measures.ventilation[library_helper.type][library_helper.item_id].measure = 'Removed';
-                    break;
-                case 'replace':
-                    var measure = library_helper.extract_ventilation_points_get_item_to_save();
-                    for (z in measure)
-                        var tag = z;
-                    measure[tag].tag = tag;
-                    for (z in original_item) {
-                        if (measure[tag][z] == undefined)
-                            measure[tag][z] = original_item[z];
-                    }
-                    add_quantity_and_cost_to_measure(measure[tag]);
-                    // Update data object and add measure
-                    data.ventilation.EVP[original_item.row] = measure[tag];
-                    data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
-                    break;
+            var measure = library_helper.extract_ventilation_points_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            for (z in original_item) {
+                if (measure[tag][z] == undefined)
+                    measure[tag][z] = original_item[z];
             }
+            add_quantity_and_cost_to_measure(measure[tag]);
+            // Update data object and add measure
+            data.ventilation.EVP[original_item.row] = measure[tag];
+            data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
             break;
         case 'intentional_vents_and_flues_measures':
             var original_item = get_IVF_by_id(library_helper.item_id);
