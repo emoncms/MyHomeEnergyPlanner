@@ -1570,14 +1570,8 @@ function carboncoopreport_UpdateUI() {
             row.append(cell);
         }
         $(tableSelector).append(row);
-        var type = measure.measure.type;
-        var cost = 0;
-        if (type == 'Wall' || type == 'wall' || type == 'Roof' || type == 'roof' || type == 'Window' || type == 'window' || type == 'Floor' || type == 'floor' || type == 'party_wall' || type == 'Door' || type == 'Roof_light' || type == 'Hatch')
-            cost = measure.measure.cost * measure.measure.area;
-        else
-            cost = measure.measure.cost;
         addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description,
-                measure.measure.benefits, cost, measure.measure.who_by, measure.measure.disruption);
+                measure.measure.benefits, measure.measure.cost_total, measure.measure.who_by, measure.measure.disruption);
     }
 
     function initialiseMeasuresTable(tableSelector) {
