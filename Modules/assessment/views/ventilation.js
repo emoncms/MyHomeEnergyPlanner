@@ -190,6 +190,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.ventilation_type = measure[tag].ventilation_type;
+            data.ventilation.ventilation_name = measure[tag].name;
             data.ventilation.system_air_change_rate = measure[tag].system_air_change_rate;
             data.ventilation.balanced_heat_recovery_efficiency = measure[tag].balanced_heat_recovery_efficiency;
             data.ventilation.system_specific_fan_power = measure[tag].specific_fan_power;
