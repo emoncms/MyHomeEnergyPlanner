@@ -240,6 +240,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 var tag = z;
             measure[tag].tag = tag;
             measure[tag].id = get_EVP_max_id() + 1;
+            measure[tag].location = '--';
             add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.EVP.push(measure[tag]);
@@ -255,6 +256,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 var tag = z;
             measure[tag].tag = tag;
             measure[tag].id = get_IVF_max_id() + 1;
+            measure[tag].location = '--';
             add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.IVF.push(measure[tag]);
