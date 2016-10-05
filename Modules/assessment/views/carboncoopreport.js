@@ -1,9 +1,7 @@
 console.log('debug carboncoopreport.js');
-
 function carboncoopreport_initUI() {
 
     data = project['master'];
-
     WebFontConfig = {
         google: {families: ['Karla:400,400italic,700:latin']}
     };
@@ -81,326 +79,6 @@ function carboncoopreport_initUI() {
         carboncoopreport_UpdateUI();
     };
 }
-
-function compareCarbonCoop(scenario, outputElement) {
-
-    var out = "";
-    var changes = [
-        ["Region", 'region'],
-        ["Altitude", 'altitude'],
-        ["use_custom_occupancy", 'use_custom_occupancy'],
-        ["custom_occupancy", 'custom_occupancy'],
-        ["Number of chimney's", 'ventilation.number_of_chimneys'],
-        ["Number of open flue's", 'ventilation.number_of_openflues'],
-        ["Number of intermittent fans", 'ventilation.number_of_intermittentfans'],
-        ["Number of passive vents", 'ventilation.number_of_passivevents'],
-        ["Number of flueless gas fires", 'ventilation.number_of_fluelessgasfires'],
-        ["Dwelling construction", 'ventilation.dwelling_construction'],
-        ["Suspended wooden floor", 'ventilation.suspended_wooden_floor'],
-        ["Draught lobby", 'ventilation.draught_lobby'],
-        ["Percentage draught proofed", 'ventilation.percentage_draught_proofed'],
-        ["Air permeability test", 'ventilation.air_permeability_test'],
-        ["Air permeability value", 'ventilation.air_permeability_value'],
-        ["Number of sides sheltered", 'ventilation.number_of_sides_sheltered'],
-        ["Ventilation type", 'ventilation.ventilation_type'],
-        ["System air change rate", 'ventilation.system_air_change_rate'],
-        ["Balanced heat recovery efficiency", 'ventilation.balanced_heat_recovery_efficiency'],
-        ["<b>Lighting, Appliances & Cooking:</b> enabled", 'use_LAC'],
-        ["<b>Lighting, Appliances & Cooking:</b> Number of low energy light fittings", 'LAC.LLE'],
-        ["<b>Lighting, Appliances & Cooking:</b> Number of light fittings", 'LAC.L'],
-        ["<b>Lighting, Appliances & Cooking:</b> reduced internal heat gains", 'LAC.energy_efficient_cooking'],
-        ["<b>Water Heating:</b> Low water use design", "water_heating.low_water_use_design"],
-        ["<b>Water Heating:</b> Instantaneous hotwater", "water_heating.instantaneous_hotwater"],
-        ["<b>Water Heating:</b> Solar water heating", "water_heating.solar_water_heating"],
-        ["<b>Water Heating:</b> Pipework insulated fraction", "water_heating.pipework_insulated_fraction"],
-        ["<b>Water Heating:</b> Declared loss factor known", "water_heating.declared_loss_factor_known"],
-        ["<b>Water Heating:</b> Manufacturer loss factor", "water_heating.manufacturer_loss_factor"],
-        ["<b>Water Heating:</b> Storage Volume", "water_heating.storage_volume"],
-        ["<b>Water Heating:</b> temperature_factor_a", "water_heating.temperature_factor_a"],
-        ["<b>Water Heating:</b> loss_factor_b", "water_heating.loss_factor_b"],
-        ["<b>Water Heating:</b> volume_factor_b", "water_heating.volume_factor_b"],
-        ["<b>Water Heating:</b> temperature_factor_b", "water_heating.temperature_factor_b"],
-        ["<b>Water Heating:</b> community_heating", "water_heating.community_heating"],
-        ["<b>Water Heating:</b> hot_water_store_in_dwelling", "water_heating.hot_water_store_in_dwelling"],
-        ["<b>Water Heating:</b> Contains dedicated solar storage or WWHRS", "water_heating.contains_dedicated_solar_storage_or_WWHRS"],
-        ["<b>Water Heating:</b> hot_water_control_type", "water_heating.hot_water_control_type"],
-        ["<b>Solar Hot Water:</b> Aperture area of solar collector", "SHW.A"],
-        ["<b>Solar Hot Water:</b> Zero-loss collector efficiency, η0", "SHW.n0"],
-        ["<b>Solar Hot Water:</b> Collector linear heat loss coefficient, a1", "SHW.a1"],
-        ["<b>Solar Hot Water:</b> Collector 2nd order heat loss coefficient, a2", "SHW.a2"],
-        ["<b>Solar Hot Water:</b> Collector Orientation", "SHW.orientation"],
-        ["<b>Solar Hot Water:</b> Collector Inclination", "SHW.inclination"],
-        ["<b>Solar Hot Water:</b> Overshading factor", "SHW.overshading"],
-        ["<b>Solar Hot Water:</b> Dedicated solar storage volume, Vs, (litres)", "SHW.Vs"],
-        ["<b>Solar Hot Water:</b> Total volume of combined cylinder (litres)", "SHW.combined_cylinder_volume"],
-        ["<b>Heating system:</b> Responsiveness", "temperature.responsiveness"],
-        ["<b>Heating system:</b> Control type", "temperature.control_type"],
-        ["Target living area temperature", "temperature.target"],
-        ["Living area", "temperature.living_area"],
-        ["<b>Custom model:</b> Use utilisation factor for gains", "space_heating.use_utilfactor_forgains"]
-
-
-    ];
-    out += "<table class='table table-striped'>";
-    for (z in changes)
-    {
-        var keystr = changes[z][1];
-        var description = changes[z][0];
-        var keys = keystr.split(".");
-        var subA = project.master;
-        var subB = project[scenario];
-        for (z in keys)
-        {
-            if (subA != undefined) {
-                subA = subA[keys[z]];
-            }
-
-            if (subB != undefined) {
-                subB = subB[keys[z]];
-            }
-        }
-
-        var valA = subA;
-        var valB = subB;
-        if (valA != valB) {
-            out += "<tr><td>" + description + " changed from " + valA + " to " + valB + "</td></tr>";
-        }
-    }
-
-    out += "</table>";
-    // Changes to elements
-    var listA = project.master.fabric.elements;
-    //console.log(scenario);
-    var listB = project[scenario].fabric.elements;
-    var elements_html = "";
-    for (z in listA)
-    {
-        if (listB[z] == undefined)
-        {
-            elements_html += "<tr><td>Element: <b>'" + z + "'</b> in scenario A has been deleted</td></tr>";
-        }
-    }
-
-    for (z in listB)
-    {
-        if (listA[z] == undefined)
-        {
-            elements_html += "<tr><td>New Element: <b>'" + z + "'</b> added to scenario B</td></tr>";
-        }
-        else
-        {
-
-            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
-            {
-                elements_html += "<tr><td><b>" + listA[z].name + ":</b><br><i>";
-                for (x in listA[z])
-                {
-                    if (x == 'description')
-                        elements_html += listA[z][x] + ", ";
-                    if (x == 'area')
-                        elements_html += "Area: " + listA[z][x].toFixed(1) + "m<sup>2</sup>, ";
-                    if (x == 'uvalue')
-                        elements_html += "U-value: " + listA[z][x] + ", ";
-                    if (x == 'kvalue')
-                        elements_html += "k-value: " + listA[z][x];
-                    if (x == 'g')
-                        elements_html += "g: " + listA[z][x] + ", ";
-                    if (x == 'gL')
-                        elements_html += "gL: " + listA[z][x] + ", ";
-                    if (x == 'ff')
-                        elements_html += "Frame factor: " + listA[z][x];
-                }
-                elements_html += "</i></td>";
-                elements_html += "<td>" + (listA[z].uvalue * listA[z].area).toFixed(1) + " W/K</td>";
-                elements_html += "<td><b>" + listB[z].name + ":</b><br><i>";
-                for (x in listB[z])
-                {
-                    if (x == 'description')
-                        elements_html += listA[z][x] + ", ";
-                    if (x == 'area')
-                        elements_html += "Area: " + listA[z][x].toFixed(1) + "m<sup>2</sup>, ";
-                    if (x == 'uvalue')
-                        elements_html += "U-value: " + listB[z][x] + ", ";
-                    if (x == 'kvalue')
-                        elements_html += "k-value: " + listB[z][x];
-                    if (x == 'g')
-                        elements_html += "g: " + listB[z][x] + ", ";
-                    if (x == 'gL')
-                        elements_html += "gL: " + listB[z][x] + ", ";
-                    if (x == 'ff')
-                        elements_html += "Frame factor: " + listB[z][x];
-                }
-                elements_html += "</i></td>";
-                elements_html += "<td>" + (listB[z].uvalue * listB[z].area).toFixed(1) + " W/K</td>";
-                var saving = (listA[z].uvalue * listA[z].area) - (listB[z].uvalue * listB[z].area);
-                elements_html += "<td>";
-                if (saving > 0)
-                    elements_html += "<span style='color:#00aa00'>-";
-                if (saving < 0)
-                    elements_html += "<span style='color:#aa0000'>+";
-                elements_html += (saving).toFixed(1) + " W/K</span></td>";
-                elements_html += "</tr>";
-            }
-        }
-    }
-
-    if (elements_html != "") {
-        out += "<hr><h3>Building Elements</h3><hr>";
-        out += "<p>Changes to Floor's, Wall's, Windows and Roof elements</p>";
-        out += "<table class='table table-striped'>";
-        out += "<tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>";
-        out += elements_html;
-        out += "</table>";
-    }
-
-
-    out += "<hr><h3>Energy Requirements</h3><hr>";
-    /* Commented because energy systems are breaking 
-     * 
-     * 
-     * 
-     * 
-     * // Changes to elements
-     var listA = project.master.energy_requirements;
-     var listB = project[scenario].energy_requirements;
-     //console.log(listA);
-     //console.log(listB);
-     out += "<table class='table table-striped'>";
-     for (z in listA)
-     {
-     if (listB[z] == undefined)
-     {
-     out += "<tr><td>";
-     out += "<b>" + listA[z].name + ": </b>";
-     out += listA[z].quantity.toFixed(0) + " kWh";
-     out += "</td><td><b>Deleted in scenario B</b></td><td></td></tr>";
-     }
-     }
-     
-     for (z in listB)
-     {
-     if (listA[z] == undefined)
-     {
-     out += "<tr><td><b>New to scenario B</b></td><td>";
-     out += "<b>" + listB[z].name + ": </b>";
-     out += listB[z].quantity.toFixed(0) + " kWh <b>(New)</b>";
-     out += "</td><td></td></tr>";
-     }
-     else
-     {
-     if (JSON.stringify(project.master.energy_systems[z]) != JSON.stringify(project[scenario].energy_systems[z]))
-     {
-     out += "<tr><td>";
-     out += "<b>" + listA[z].name + ": </b>";
-     out += listA[z].quantity.toFixed(0) + " kWh<br>";
-     out += "  Supplied by:<br>";
-     for (i in project.master.energy_systems[z])
-     {
-     out += "  - Type: " + project.master.energy_systems[z][i].system + ", ";
-     out += "Fraction: " + (project.master.energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
-     out += "Efficiency: " + (project.master.energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
-     out += "<br>";
-     }
-     
-     out += "</td><td>";
-     out += "<b>" + listB[z].name + ": </b>";
-     out += listB[z].quantity.toFixed(0) + " kWh<br>";
-     out += "  Supplied by:<br>";
-     for (i in project[scenario].energy_systems[z])
-     {
-     out += "  - Type: " + project[scenario].energy_systems[z][i].system + ", ";
-     out += "Fraction: " + (project[scenario].energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
-     out += "Efficiency: " + (project[scenario].energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
-     out += "<br>";
-     }
-     
-     out += "</td><td></td></tr>";
-     }
-     
-     }
-     }*/
-
-    // out += "</table>";
-    out += "<tr><td><hr><h3>Fuel costs</h3><hr></td><td></td><td></td></tr>";
-    // out += "<h3>Fuel costs</h3>";
-
-    // Changes to elements
-    var listA = project.master.fuel_totals;
-    var listB = project[scenario].fuel_totals;
-    //out += "<table class='table table-striped'>";
-
-    for (z in listA)
-    {
-        if (listB[z] == undefined)
-        {
-            out += "<tr><td>";
-            out += "<b>" + z + ": </b><br>";
-            out += "Fuel quantity: " + listA[z].quantity.toFixed(0) + " kWh<br>";
-            out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
-            out += "Annual cost: £" + listA[z].annualcost.toFixed(0) + "<br>";
-            out += "</td><td><br><b>Deleted in scenario B</b></td></tr>";
-        }
-    }
-
-    for (z in listB)
-    {
-        if (listA[z] == undefined)
-        {
-            out += "<tr><td><br><b>New to scenario B</b></td><td>";
-            out += "<b>" + z + ": </b><br>";
-            out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
-            out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
-            out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
-            out += "</td></tr>";
-        }
-        else
-        {
-
-            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
-            {
-                out += "<tr><td>";
-                out += "<b>" + z + ": </b><br>";
-                out += "Fuel quantity: " + listA[z].quantity.toFixed(0) + " kWh<br>";
-                out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
-                out += "Annual cost: £" + listA[z].annualcost.toFixed(0) + "<br>";
-                out += "</td><td>";
-                out += "<b>" + z + ": </b><br>";
-                out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
-                out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
-                out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
-                out += "</td>";
-                out += "<td><br>";
-                out += (100 * (listA[z].quantity - listB[z].quantity) / listA[z].quantity).toFixed(0) + "% Energy saving<br><br>";
-                out += (100 * (listA[z].annualcost - listB[z].annualcost) / listA[z].annualcost).toFixed(0) + "% Cost saving<br>";
-                out += "</td></tr>";
-            }
-        }
-    }
-
-    out += "<tr><td><hr><h3>Totals</h3><hr></td><td></td><td></td></tr>";
-    out += "<tr>";
-    out += "<td><b>Total Annual Cost:</b><br>";
-    out += "£" + project.master.total_cost.toFixed(0) + "</td>";
-    out += "<td><b>Total Annual Cost:</b><br>"
-    out += "£" + project[scenario].total_cost.toFixed(0) + "</td>";
-    out += "<td></td>";
-    out += "</tr>";
-    out += "<tr>";
-    out += "<td><b>SAP Rating:</b><br>";
-    out += "" + project.master.SAP.rating.toFixed(0) + "</td>";
-    out += "<td><b>SAP Rating:</b><br>"
-    out += "" + project[scenario].SAP.rating.toFixed(0) + "</td>";
-    var sapinc = (project[scenario].SAP.rating - project.master.SAP.rating);
-    if (sapinc > 0)
-        out += "<td><br><span style='color:#00aa00'>+";
-    if (sapinc < 0)
-        out += "<td><br><span style='color:#aa0000'>";
-    out += sapinc.toFixed(0) + "</span></td>";
-    out += "</tr>";
-    out += "</table>";
-    $(outputElement).html(out);
-}
-;
 
 function carboncoopreport_UpdateUI() {
 
@@ -885,8 +563,6 @@ function carboncoopreport_UpdateUI() {
     });
     $('#fig-5-space-heating-demand').html('');
     SpaceHeatingDemand.draw('fig-5-space-heating-demand');
-
-
     /* Figure 6: Energy Demand
      //
      */
@@ -966,8 +642,6 @@ function carboncoopreport_UpdateUI() {
     });
     $('#energy-demand').html('');
     EnergyDemand.draw('energy-demand');
-
-
     /* Figure 7:
      //
      */
@@ -1071,8 +745,6 @@ function carboncoopreport_UpdateUI() {
     });
     $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
-
-
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
      */
@@ -1119,7 +791,6 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
-
     /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
      //
      */
@@ -1160,8 +831,6 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions-per-person').html('');
     CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
-
-
     /* Figure 10: Estimated Energy cost comparison 
      // Bar chart showing annual fuel cost. Waiting on Trystan for data
      */
@@ -1176,7 +845,6 @@ function carboncoopreport_UpdateUI() {
     estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost, variance: 30});
     if (max < project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost)
         max = project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost;
-
     if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].net_cost !== "undefined") {
         estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].net_cost, variance: 30});
         if (max < project["scenario1"].net_cost + 0.3 * project["scenario1"].net_cost)
@@ -1208,8 +876,6 @@ function carboncoopreport_UpdateUI() {
     });
     $('#estimated-energy-cost-comparison').html('');
     EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
-
-
     /* Figure 11: Your home compared with the average home.
      // Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
      // Would be useful to have total hours of heating (currently only given times heating is on - see question 3a)
@@ -1223,12 +889,10 @@ function carboncoopreport_UpdateUI() {
     for (var period in data.temperature.weekday)
         hours_off += data.temperature.weekday[period];
     var normalDayHeatingHours = 24 - hours_off;
-
     hours_off = 0;
     for (var period in data.temperature.weekend)
         hours_off += data.temperature.weekend[period];
     var altDayHeatingHours = 24 - hours_off;
-
     var totalHeatingHours = normalDayHeatingHours; // Right now we only take into account weekdays hours, there is an issue open about if we need to take into account weekends as well
 
     function compare(num1, num2) {
@@ -1274,8 +938,6 @@ function carboncoopreport_UpdateUI() {
     $(".js-unheated-rooms-comparison").html(compare(0, project['master'].household["3a_habitable_rooms_not_heated"]));
     $(".js-appliance-energy-use").html(Math.round(project.master.energy_requirements.appliances.quantity));
     $(".js-appliance-energy-use-comparison").html(compare(3880, Math.round(project.master.energy_requirements.appliances.quantity)));
-
-
     /* Figure 12: SAP chart
      //
      */
@@ -1342,14 +1004,11 @@ function carboncoopreport_UpdateUI() {
     $(".js-sap-rating-2050").html(calculateSapRatingFromScore(sap2050));
     $(".js-sap-score-average").html(sapAverage);
     $(".js-sap-rating-average").html(calculateSapRatingFromScore(sapAverage));
-
-
     /* Figure 13: Comfort Tables.
      //	
      */
     function createComforTable(options, tableID, chosenValue) {
         $("#" + tableID + " .comfort-table-td").remove();
-
         for (var i = options.length - 1; i >= 0; i--) {
 
             if (options[i].title == chosenValue) {
@@ -1449,8 +1108,6 @@ function carboncoopreport_UpdateUI() {
         }
     ];
     createComforTable(options, "comfort-table-artificial-light-amount", project.master.household["6b_artificallightamount"]);
-
-
     /* Figure 14: Humidity Data
      // 
      */
@@ -1544,7 +1201,6 @@ function carboncoopreport_UpdateUI() {
                 addListOfMeasuresByIdToSummaryTable(project[scenario].measures.space_heating_control_type, tableSelector, summaryTableSelector);
             if (project[scenario].measures.heating_systems != undefined)
                 addListOfMeasuresByIdToSummaryTable(project[scenario].measures.heating_systems, tableSelector, summaryTableSelector);
-
             // Change this one project[scenario].measures.space_heating_control_type
             if (project[scenario].measures.space_heating != undefined) {
                 if (project[scenario].measures.space_heating.heating_control != undefined)
@@ -1566,7 +1222,6 @@ function carboncoopreport_UpdateUI() {
         var row = $('<tr></tr>');
         for (var i = 0; i < measuresTableColumns.length; i++) {
             var cell = $('<td></td>');
-            console.log(measure);
             cell.html(measure.measure[measuresTableColumns[i]]);
             row.append(cell);
         }
@@ -1720,3 +1375,491 @@ function carboncoopreport_UpdateUI() {
     //   };
     //   targetbarCarboncoop("space-heating-demand-4", options);
 }
+
+function compareCarbonCoop(scenario, outputElement) {
+
+    var out = "";
+    var changes = [
+        ["Region", 'region'],
+        ["Altitude", 'altitude'],
+        ['Total floor area', 'TFA'],
+        ['Total dwelling volume', 'volume'],
+        ["Occupancy", 'occupancy'],
+        ["Number of chimney's", 'ventilation.number_of_chimneys'],
+        ["Number of open flue's", 'ventilation.number_of_openflues'],
+        ["Number of intermittent fans", 'ventilation.number_of_intermittentfans'],
+        ["Number of passive vents", 'ventilation.number_of_passivevents'],
+        ["Number of flueless gas fires", 'ventilation.number_of_fluelessgasfires'],
+        ["Dwelling construction", 'ventilation.dwelling_construction'],
+        ["Suspended wooden floor", 'ventilation.suspended_wooden_floor'],
+        ["Draught lobby", 'ventilation.draught_lobby'],
+        ["Percentage draught proofed", 'ventilation.percentage_draught_proofed'],
+        ["Air permeability test", 'ventilation.air_permeability_test'],
+        ["Air permeability value", 'ventilation.air_permeability_value'],
+        ["Number of sides sheltered", 'ventilation.number_of_sides_sheltered'],
+        ["Ventilation type", 'ventilation.ventilation_type'],
+        ["System air change rate", 'ventilation.system_air_change_rate'],
+        ["Balanced heat recovery efficiency", 'ventilation.balanced_heat_recovery_efficiency'],
+        ["<b>Lighting, Appliances & Cooking:</b> enabled", 'use_LAC'],
+        ["<b>Lighting, Appliances & Cooking:</b> Number of low energy light fittings", 'LAC.LLE'],
+        ["<b>Lighting, Appliances & Cooking:</b> Number of light fittings", 'LAC.L'],
+        ["<b>Lighting, Appliances & Cooking:</b> reduced internal heat gains", 'LAC.energy_efficient_cooking'],
+        ["<b>Water Heating:</b> Low water use design", "water_heating.low_water_use_design"],
+        ["<b>Water Heating:</b> Instantaneous hotwater", "water_heating.instantaneous_hotwater"],
+        ["<b>Water Heating:</b> Solar water heating", "water_heating.solar_water_heating"],
+        ["<b>Water Heating:</b> Pipework insulated fraction", "water_heating.pipework_insulated_fraction"],
+        ["<b>Water Heating:</b> Declared loss factor known", "water_heating.declared_loss_factor_known"],
+        ["<b>Water Heating:</b> Manufacturer loss factor", "water_heating.manufacturer_loss_factor"],
+        ["<b>Water Heating:</b> Storage Volume", "water_heating.storage_volume"],
+        ["<b>Water Heating:</b> temperature_factor_a", "water_heating.temperature_factor_a"],
+        ["<b>Water Heating:</b> loss_factor_b", "water_heating.loss_factor_b"],
+        ["<b>Water Heating:</b> volume_factor_b", "water_heating.volume_factor_b"],
+        ["<b>Water Heating:</b> temperature_factor_b", "water_heating.temperature_factor_b"],
+        ["<b>Water Heating:</b> community_heating", "water_heating.community_heating"],
+        ["<b>Water Heating:</b> hot_water_store_in_dwelling", "water_heating.hot_water_store_in_dwelling"],
+        ["<b>Water Heating:</b> Contains dedicated solar storage or WWHRS", "water_heating.contains_dedicated_solar_storage_or_WWHRS"],
+        ["<b>Water Heating:</b> hot_water_control_type", "water_heating.hot_water_control_type"],
+        ["<b>Solar Hot Water:</b> Aperture area of solar collector", "SHW.A"],
+        ["<b>Solar Hot Water:</b> Zero-loss collector efficiency, η0", "SHW.n0"],
+        ["<b>Solar Hot Water:</b> Collector linear heat loss coefficient, a1", "SHW.a1"],
+        ["<b>Solar Hot Water:</b> Collector 2nd order heat loss coefficient, a2", "SHW.a2"],
+        ["<b>Solar Hot Water:</b> Collector Orientation", "SHW.orientation"],
+        ["<b>Solar Hot Water:</b> Collector Inclination", "SHW.inclination"],
+        ["<b>Solar Hot Water:</b> Overshading factor", "SHW.overshading"],
+        ["<b>Solar Hot Water:</b> Dedicated solar storage volume, Vs, (litres)", "SHW.Vs"],
+        ["<b>Solar Hot Water:</b> Total volume of combined cylinder (litres)", "SHW.combined_cylinder_volume"],
+        ["<b>Heating system:</b> Responsiveness", "temperature.responsiveness"],
+        ["<b>Heating system:</b> Control type", "temperature.control_type"],
+        ["Target living area temperature", "temperature.target"],
+        ["Living area", "temperature.living_area"],
+        ["<b>Custom model:</b> Use utilisation factor for gains", "space_heating.use_utilfactor_forgains"]
+    ];
+    // Basic dwelling data
+    var properties_to_check = [
+        ["Region", 'region'],
+        ["Altitude", 'altitude'],
+        ['Total floor area', 'TFA'],
+        ['Total dwelling volume', 'volume'],
+        ["Occupancy", 'occupancy']
+    ];
+    var BDD = comparePropertiesInArray(scenario, properties_to_check);
+    if (BDD.changed === true)
+        out += '<h3>Basic dwelling data</h3><table class="table table-striped">' + BDD.html + '</table></br>';
+    // Ventilation
+    var Vent = compareVentilation(scenario);
+    if (Vent.changed === true)
+        out += '<h3>Ventilation</h3><table class="table table-striped">' + Vent.html + '</table></br>';
+    // Infiltration
+    var Inf = compareInfiltration(scenario);
+    if (Inf.changed === true)
+        out += '<h3>Infiltration</h3><table class="table table-striped">' + Inf.html + '</table></br>';
+    // Changes to elements
+    var listA = project.master.fabric.elements;
+    //console.log(scenario);
+    var listB = project[scenario].fabric.elements;
+    var elements_html = "";
+    for (z in listA)
+    {
+        if (listB[z] == undefined)
+        {
+            elements_html += "<tr><td>Element: <b>'" + z + "'</b> in scenario A has been deleted</td></tr>";
+        }
+    }
+
+    for (z in listB)
+    {
+        if (listA[z] == undefined)
+        {
+            elements_html += "<tr><td>New Element: <b>'" + z + "'</b> added to scenario B</td></tr>";
+        }
+        else
+        {
+
+            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
+            {
+                elements_html += "<tr><td><b>" + listA[z].name + ":</b><br><i>";
+                for (x in listA[z])
+                {
+                    if (x == 'description')
+                        elements_html += listA[z][x] + ", ";
+                    if (x == 'area')
+                        elements_html += "Area: " + listA[z][x].toFixed(1) + "m<sup>2</sup>, ";
+                    if (x == 'uvalue')
+                        elements_html += "U-value: " + listA[z][x] + ", ";
+                    if (x == 'kvalue')
+                        elements_html += "k-value: " + listA[z][x];
+                    if (x == 'g')
+                        elements_html += "g: " + listA[z][x] + ", ";
+                    if (x == 'gL')
+                        elements_html += "gL: " + listA[z][x] + ", ";
+                    if (x == 'ff')
+                        elements_html += "Frame factor: " + listA[z][x];
+                }
+                elements_html += "</i></td>";
+                elements_html += "<td>" + (listA[z].uvalue * listA[z].area).toFixed(1) + " W/K</td>";
+                elements_html += "<td><b>" + listB[z].name + ":</b><br><i>";
+                for (x in listB[z])
+                {
+                    if (x == 'description')
+                        elements_html += listA[z][x] + ", ";
+                    if (x == 'area')
+                        elements_html += "Area: " + listA[z][x].toFixed(1) + "m<sup>2</sup>, ";
+                    if (x == 'uvalue')
+                        elements_html += "U-value: " + listB[z][x] + ", ";
+                    if (x == 'kvalue')
+                        elements_html += "k-value: " + listB[z][x];
+                    if (x == 'g')
+                        elements_html += "g: " + listB[z][x] + ", ";
+                    if (x == 'gL')
+                        elements_html += "gL: " + listB[z][x] + ", ";
+                    if (x == 'ff')
+                        elements_html += "Frame factor: " + listB[z][x];
+                }
+                elements_html += "</i></td>";
+                elements_html += "<td>" + (listB[z].uvalue * listB[z].area).toFixed(1) + " W/K</td>";
+                var saving = (listA[z].uvalue * listA[z].area) - (listB[z].uvalue * listB[z].area);
+                elements_html += "<td>";
+                if (saving > 0)
+                    elements_html += "<span style='color:#00aa00'>-";
+                if (saving < 0)
+                    elements_html += "<span style='color:#aa0000'>+";
+                elements_html += (saving).toFixed(1) + " W/K</span></td>";
+                elements_html += "</tr>";
+            }
+        }
+    }
+
+    if (elements_html != "") {
+        out += "<hr><h3>Building Elements</h3><hr>";
+        out += "<p>Changes to Floor's, Wall's, Windows and Roof elements</p>";
+        out += "<table class='table table-striped'>";
+        out += "<tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>";
+        out += elements_html;
+        out += "</table>";
+    }
+
+
+    out += "<hr><h3>Energy Requirements</h3><hr>";
+    /* Commented because energy systems are breaking 
+     * 
+     * 
+     * 
+     * 
+     * // Changes to elements
+     var listA = project.master.energy_requirements;
+     var listB = project[scenario].energy_requirements;
+     //console.log(listA);
+     //console.log(listB);
+     out += "<table class='table table-striped'>";
+     for (z in listA)
+     {
+     if (listB[z] == undefined)
+     {
+     out += "<tr><td>";
+     out += "<b>" + listA[z].name + ": </b>";
+     out += listA[z].quantity.toFixed(0) + " kWh";
+     out += "</td><td><b>Deleted in scenario B</b></td><td></td></tr>";
+     }
+     }
+     
+     for (z in listB)
+     {
+     if (listA[z] == undefined)
+     {
+     out += "<tr><td><b>New to scenario B</b></td><td>";
+     out += "<b>" + listB[z].name + ": </b>";
+     out += listB[z].quantity.toFixed(0) + " kWh <b>(New)</b>";
+     out += "</td><td></td></tr>";
+     }
+     else
+     {
+     if (JSON.stringify(project.master.energy_systems[z]) != JSON.stringify(project[scenario].energy_systems[z]))
+     {
+     out += "<tr><td>";
+     out += "<b>" + listA[z].name + ": </b>";
+     out += listA[z].quantity.toFixed(0) + " kWh<br>";
+     out += "  Supplied by:<br>";
+     for (i in project.master.energy_systems[z])
+     {
+     out += "  - Type: " + project.master.energy_systems[z][i].system + ", ";
+     out += "Fraction: " + (project.master.energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
+     out += "Efficiency: " + (project.master.energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
+     out += "<br>";
+     }
+     
+     out += "</td><td>";
+     out += "<b>" + listB[z].name + ": </b>";
+     out += listB[z].quantity.toFixed(0) + " kWh<br>";
+     out += "  Supplied by:<br>";
+     for (i in project[scenario].energy_systems[z])
+     {
+     out += "  - Type: " + project[scenario].energy_systems[z][i].system + ", ";
+     out += "Fraction: " + (project[scenario].energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
+     out += "Efficiency: " + (project[scenario].energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
+     out += "<br>";
+     }
+     
+     out += "</td><td></td></tr>";
+     }
+     
+     }
+     }*/
+
+    // out += "</table>";
+    out += "<tr><td><hr><h3>Fuel costs</h3><hr></td><td></td><td></td></tr>";
+    // out += "<h3>Fuel costs</h3>";
+
+    // Changes to elements
+    var listA = project.master.fuel_totals;
+    var listB = project[scenario].fuel_totals;
+    //out += "<table class='table table-striped'>";
+
+    for (z in listA)
+    {
+        if (listB[z] == undefined)
+        {
+            out += "<tr><td>";
+            out += "<b>" + z + ": </b><br>";
+            out += "Fuel quantity: " + listA[z].quantity.toFixed(0) + " kWh<br>";
+            out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
+            out += "Annual cost: £" + listA[z].annualcost.toFixed(0) + "<br>";
+            out += "</td><td><br><b>Deleted in scenario B</b></td></tr>";
+        }
+    }
+
+    for (z in listB)
+    {
+        if (listA[z] == undefined)
+        {
+            out += "<tr><td><br><b>New to scenario B</b></td><td>";
+            out += "<b>" + z + ": </b><br>";
+            out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
+            out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
+            out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
+            out += "</td></tr>";
+        }
+        else
+        {
+
+            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
+            {
+                out += "<tr><td>";
+                out += "<b>" + z + ": </b><br>";
+                out += "Fuel quantity: " + listA[z].quantity.toFixed(0) + " kWh<br>";
+                out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
+                out += "Annual cost: £" + listA[z].annualcost.toFixed(0) + "<br>";
+                out += "</td><td>";
+                out += "<b>" + z + ": </b><br>";
+                out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
+                out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
+                out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
+                out += "</td>";
+                out += "<td><br>";
+                out += (100 * (listA[z].quantity - listB[z].quantity) / listA[z].quantity).toFixed(0) + "% Energy saving<br><br>";
+                out += (100 * (listA[z].annualcost - listB[z].annualcost) / listA[z].annualcost).toFixed(0) + "% Cost saving<br>";
+                out += "</td></tr>";
+            }
+        }
+    }
+
+    out += "<tr><td><hr><h3>Totals</h3><hr></td><td></td><td></td></tr>";
+    out += "<tr>";
+    out += "<td><b>Total Annual Cost:</b><br>";
+    out += "£" + project.master.total_cost.toFixed(0) + "</td>";
+    out += "<td><b>Total Annual Cost:</b><br>"
+    out += "£" + project[scenario].total_cost.toFixed(0) + "</td>";
+    out += "<td></td>";
+    out += "</tr>";
+    out += "<tr>";
+    out += "<td><b>SAP Rating:</b><br>";
+    out += "" + project.master.SAP.rating.toFixed(0) + "</td>";
+    out += "<td><b>SAP Rating:</b><br>"
+    out += "" + project[scenario].SAP.rating.toFixed(0) + "</td>";
+    var sapinc = (project[scenario].SAP.rating - project.master.SAP.rating);
+    if (sapinc > 0)
+        out += "<td><br><span style='color:#00aa00'>+";
+    if (sapinc < 0)
+        out += "<td><br><span style='color:#aa0000'>";
+    out += sapinc.toFixed(0) + "</span></td>";
+    out += "</tr>";
+    out += "</table>";
+    $(outputElement).html(out);
+}
+;
+function comparePropertiesInArray(scenario, changes) {
+    var out = "<tbody>";
+    var changed = false;
+    for (z in changes)
+    {
+        var keystr = changes[z][1];
+        var description = changes[z][0];
+        var keys = keystr.split(".");
+        var subA = project.master;
+        var subB = project[scenario];
+        for (z in keys)
+        {
+            if (subA != undefined) {
+                subA = subA[keys[z]];
+            }
+            if (subB != undefined) {
+                subB = subB[keys[z]];
+            }
+        }
+        var valA = subA;
+        var valB = subB;
+        if (valA != valB) {
+            if (typeof valA == 'number')
+                valA = valA.toFixed(2);
+            if (typeof valB == 'number')
+                valB = valB.toFixed(2);
+            out += "<tr><td><b>" + description + "</b> changed from <i>" + valA + "</i> to <i>" + valB + "</i></td></tr>";
+            changed = true;
+        }
+    }
+    out += "</tbody>";
+    return {html: out, changed: changed};
+}
+
+function compareVentilation(scenario) {
+    var out = "";
+    var changed = false;
+    var properties_to_check = [
+        ['Ventilation system type', 'ventilation.ventilation_type']
+    ];
+    var VSystem = comparePropertiesInArray(scenario, properties_to_check);
+    if (VSystem.changed === true) {
+        out += VSystem.html;
+        changed = true;
+        out += "<tbody>";
+        // Add specific fields for current Ventilation system
+        if (project[scenario].ventilation.ventilation_type == 'IE' || project[scenario].ventilation.ventilation_type == 'PS') {
+            for (z in project[scenario].ventilation.EVP)
+                out += '<tr><td><i>' + project[scenario].ventilation.EVP[z].name + '</i> added to <i>'
+                        + project[scenario].ventilation.EVP[z].location + '</i> - Ventilation rate: <i>'
+                        + project[scenario].ventilation.EVP[z].ventilation_rate + ' m<sup>3</sup>/h</i></td></tr>';
+        }
+        else if (project[scenario].ventilation.ventilation_type == 'DEV' || project[scenario].ventilation.ventilation_type == 'MEV' || project[scenario].ventilation.ventilation_type == 'MV')
+            out += '<tr><td>Air change rate: <i>' + project[scenario].ventilation.system_air_change_rate
+                    + ' ACH</i> - Specific fan power:  <i>' + project[scenario].ventilation.system_specific_fan_power
+                    + ' W/(litre.sec)</i> </td></tr>';
+        else if (project[scenario].ventilation.ventilation_type == 'MVHR')
+            out += '<tr><td>Air change rate: <i>' + project[scenario].ventilation.system_air_change_rate
+                    + ' ACH</i> - Specific fan power:  <i>' + project[scenario].ventilation.system_specific_fan_power
+                    + ' W/(litre.sec)</i> - Heat recovery efficiency: <i>' +
+                    project[scenario].ventilation.balanced_heat_recovery_efficiency + ' %</i></td></tr>';
+        out += "</tbody>";
+        //out += '<tr><td><i>' + project[scenario].ventilation. + '</i></td></tr>';
+    }
+    else {  // It can be the case the system has not changed but maybe we have applied some mesaures to it
+        out += '<tbody>';
+        out += '<tr><td>The ventilation system has not changed - Type: <i>' + project[scenario].ventilation.ventilation_type + '</i></td></tr>';
+        if ((project[scenario].ventilation.ventilation_type == 'IE'
+                || project[scenario].ventilation.ventilation_type == 'PS')
+                && project[scenario].measures.ventilation.extract_ventilation_points != undefined) {
+            changed = true;
+            for (z in project[scenario].measures.ventilation.extract_ventilation_points) {
+                var EVP = project[scenario].measures.ventilation.extract_ventilation_points[z];
+                if (EVP.original == 'empty')
+                    out += '<tr><td>A new <i>' + EVP.measure.name + ' (' + EVP.measure.ventilation_rate + ' m<sup>3</sup>/h)</i> has been added to <i>'
+                            + EVP.measure.location + '</i> </td></tr>';
+                else {
+                    out += '<tr><td>The <i>' + EVP.original.name + ' (' + EVP.original.ventilation_rate
+                            + ' m<sup>3</sup>/h)</i> in <i>' + EVP.original.location
+                            + '</i> has been replaced with <i>' + EVP.measure.name + ' (' + EVP.measure.ventilation_rate
+                            + ' m<sup>3</sup>/h)</i></td></tr>';
+                }
+            }
+        }
+        else { // DEV, MV, MEV, MVHR
+            properties_to_check = [
+                ['Air change rate', 'ventilation.system_air_change_rate'],
+                ['Specific Fan Power', 'ventilation.system_specific_fan_power'],
+                ['Heat recovery efficiency', 'ventilation.balanced_heat_recovery_efficiency']
+            ];
+            var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
+            if (possible_changes.changed === true) {
+                changed = true;
+                out += possible_changes.html;
+            }
+        }
+
+        // Totals
+        properties_to_check = [
+            ['Ventilation looses (WK)', 'ventilation.average_WK']
+        ];
+        var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
+        if (possible_changes.changed === true) {
+            changed = true;
+            out += possible_changes.html;
+        }
+
+        out += '</tbody>';
+    }
+
+    return {html: out, changed: changed};
+}
+
+function compareInfiltration(scenario) {
+    var out = "";
+    var changed = false;
+    if (project.master.ventilation.air_permeability_test === false && project[scenario].ventilation.air_permeability_test === false) {
+        var properties_to_check = [
+            ['Number of sides sheltered', 'ventilation.number_of_sides_sheltered'],
+            ['Walls', 'ventilation.dwelling_construction'],
+            ['Floors', 'ventilation.suspended_wooden_floor'],
+            ['Percentage of windows and doors draught proofed', 'ventilation.percentage_draught_proofed'],
+            ['Draught Lobby', 'ventilation.draught_lobby']
+        ];
+        var changes = comparePropertiesInArray(scenario, properties_to_check);
+        if (changes.changed === true) {
+            changed = true;
+            out += changes.html;
+        }
+    }
+    else if (project.master.ventilation.air_permeability_test === false && project[scenario].ventilation.air_permeability_test === true) {
+        changed = true;
+        out += '<tr><td>The structural infiltration due to dwelling construction was changed applying <i>'
+                + project[scenario].measures.ventilation.draught_proofing_measures.measure.name
+                + '</i> with q50 = <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.q50
+                + ' cubic metres per hour per square metre of envelope</i> </td></tr>';
+        out += '<tr><td>The structural infiltration due to dwelling construction was <i>'
+                + project[scenario].measures.ventilation.draught_proofing_measures.original_structural_infiltration
+                + ' ACH</i>, after applying the measures: <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.structural_infiltration
+                + ' ACH</i></td></tr>';
+        +'</i></td></tr>';
+    }
+    else if (project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
+        changed = true;
+        out += '<tr><td>The original Infiltration due to dweling construction was calculated \n\
+                based on air tightness test with q50 = <i>' + project.master.ventilation.air_permeability_value
+                + ' cubic metres per hour per square metre of envelope area</i>. \n\
+                After applying <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.name
+                + '</i>,  q50 = <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.q50
+                + '</i></td></tr>';
+        out += '<tr><td>The structural infiltration due to dwelling construction was <i>'
+                + project[scenario].measures.ventilation.draught_proofing_measures.original_structural_infiltration
+                + ' ACH</i>, after applying the measures: <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.structural_infiltration
+                + ' ACH</i></td></tr>';
+        +'</i></td></tr>';
+    }
+    if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined) {
+        changed = true;
+        for (z in project[scenario].measures.ventilation.intentional_vents_and_flues) {
+            var IVF = project[scenario].measures.ventilation.intentional_vents_and_flues[z];
+            out += '<tr><td>A new <i>' + IVF.measure.name + ' (' + IVF.measure.ventilation_rate + ' m<sup>3</sup>/h)</i> has been added to <i>'
+                    + IVF.measure.location + '</i> </td></tr>';
+        }
+    }
+    if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined) {
+        for (z in project[scenario].measures.ventilation.intentional_vents_and_flues_measures) {
+            var IVF = project[scenario].measures.ventilation.intentional_vents_and_flues_measures[z];
+            out += '<tr><td>The <i>' + IVF.original.name + ' (' + IVF.original.ventilation_rate
+                    + ' m<sup>3</sup>/h)</i> in <i>' + IVF.original.location
+                    + '</i> has been replaced with <i>' + IVF.measure.name + ' (' + IVF.measure.ventilation_rate
+                    + ' m<sup>3</sup>/h)</i></td></tr>';
+        }
+    }
+
+    return {html: out, changed: changed};
+}
+    
