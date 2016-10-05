@@ -173,10 +173,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
                 var tag = z;
             measure[tag].tag = tag;
             measure.id = get_WU_max_id(data.water_heating.water_usage) + 1;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.measures.water_heating[library_helper.type][measure.id] = {};
             data.measures.water_heating[library_helper.type][measure.id].original = 'empty';
@@ -190,10 +187,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.measures.water_heating[library_helper.type].measure = measure[tag];
             data.water_heating.storage_type = measure[tag];
@@ -207,10 +201,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.measures.water_heating['pipework_insulation'].measure = measure[tag];
             data.water_heating.pipework_insulation = measure[tag].pipework_insulation;
@@ -224,10 +215,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.measures.water_heating['hot_water_control_type'].measure = measure[tag];
             data.water_heating.hot_water_control_type = measure[tag].control_type;
@@ -241,10 +229,7 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.measures.space_heating_control_type[item.id].measure = measure[tag];
             data.heating_systems[item_index].heating_controls = measure[tag].control_type;
@@ -254,16 +239,13 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             var item = data.heating_systems[item_index];
             if (data.measures.heating_systems[item.id] == undefined) //if first time we apply a measure to this system
                 data.measures.heating_systems[item.id] = {original: item, measure: {}};
-            var measure = library_helper.heating_systems_get_item_to_save();
+            var measure = library_helper.heating_systems_measures_get_item_to_save();
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
             if (measure[tag].category == 'Warm air systems')
                 measure[tag].fans_and_supply_pumps = 0.4 * measure[tag].sfp * data.volume;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Add properties that were in the original item
             for (z in item) {
                 if (measure[tag][z] == undefined)

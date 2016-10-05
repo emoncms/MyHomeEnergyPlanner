@@ -2502,9 +2502,9 @@ libraryHelper.prototype.get_cost_units_select = function (item) {
 
     for (index in units) {
         if (item.cost_units != units[index])
-            out += '<option value=' + units[index] + '>' + units[index] + '</option>';
+            out += '<option value="' + units[index] + '">' + units[index] + '</option>';
         else
-            out += '<option value=' + units[index] + ' selected>' + units[index] + '</option>';
+            out += '<option value="' + units[index] + '" selected>' + units[index] + '</option>';
     }
 
     out += '</select>';

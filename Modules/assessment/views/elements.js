@@ -407,10 +407,7 @@ function apply_measure(measure) {
                 if (measure.item[lib][z] == undefined)
                     measure.item[lib][z] = data.fabric.elements[measure.row][z];
             }
-            // Add extra properties to measure 
-            measure.item[lib].cost_units = '/sq m';
-            measure.item[lib].quantity = measure.item[lib].area;
-            measure.item[lib].cost_total = measure.item[lib].quantity * measure.item[lib].cost;
+            add_quantity_and_cost_to_measure(measure.item[lib]);
             // Update element and add measure
             data.fabric.elements[measure.row] = measure.item[lib];
             data.fabric.measures[measure.item_id].measure = measure.item[lib];

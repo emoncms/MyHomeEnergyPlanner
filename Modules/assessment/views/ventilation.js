@@ -129,7 +129,7 @@ $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
             $('#apply-measure-ventilation-modal .modal-body').show();
             $('#apply-measure-ventilation-modal #myModalIntroText').html('<p>Choose a measure from a library.</p>');
             break;
-            case 'add_CDF':
+        case 'add_CDF':
             $('#apply-measure-ventilation-what-to-do').hide();
             $('#apply-measure-ventilation-library-item-selects').show();
             $('#apply-measure-ventilation-modal .modal-body').show();
@@ -170,10 +170,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             if (measure[tag].q50 < 0) // Draught lobby
                 data.ventilation.air_permeability_value -= measure[tag].q50;
@@ -190,12 +187,10 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.ventilation_type = measure[tag].ventilation_type;
+            data.ventilation.ventilation_name = measure[tag].name;
             data.ventilation.system_air_change_rate = measure[tag].system_air_change_rate;
             data.ventilation.balanced_heat_recovery_efficiency = measure[tag].balanced_heat_recovery_efficiency;
             data.ventilation.system_specific_fan_power = measure[tag].specific_fan_power;
@@ -207,29 +202,18 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 data.measures.ventilation[library_helper.type][library_helper.item_id] = {};
                 data.measures.ventilation[library_helper.type][library_helper.item_id].original = original_item;
             }
-            switch (library_helper.what_to_do) {
-                case 'remove':
-                    data.ventilation.EVP.splice(original_item.row, 1);
-                    data.measures.ventilation[library_helper.type][library_helper.item_id].measure = 'Removed';
-                    break;
-                case 'replace':
-                    var measure = library_helper.extract_ventilation_points_get_item_to_save();
-                    for (z in measure)
-                        var tag = z;
-                    measure[tag].tag = tag;
-                    for (z in original_item) {
-                        if (measure[tag][z] == undefined)
-                            measure[tag][z] = original_item[z];
-                    }
-                    // Add extra properties to measure 
-                    measure[tag].cost_units = '/unit';
-                    measure[tag].quantity = 1;
-                    measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
-                    // Update data object and add measure
-                    data.ventilation.EVP[original_item.row] = measure[tag];
-                    data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
-                    break;
+            var measure = library_helper.extract_ventilation_points_get_item_to_save();
+            for (z in measure)
+                var tag = z;
+            measure[tag].tag = tag;
+            for (z in original_item) {
+                if (measure[tag][z] == undefined)
+                    measure[tag][z] = original_item[z];
             }
+            add_quantity_and_cost_to_measure(measure[tag]);
+            // Update data object and add measure
+            data.ventilation.EVP[original_item.row] = measure[tag];
+            data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
             break;
         case 'intentional_vents_and_flues_measures':
             var original_item = get_IVF_by_id(library_helper.item_id);
@@ -245,10 +229,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 if (measure[tag][z] == undefined)
                     measure[tag][z] = original_item[z];
             }
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.IVF[original_item.row] = measure[tag];
             data.measures.ventilation[library_helper.type][library_helper.item_id].measure = measure[tag];
@@ -259,10 +240,8 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 var tag = z;
             measure[tag].tag = tag;
             measure[tag].id = get_EVP_max_id() + 1;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            measure[tag].location = '--';
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.EVP.push(measure[tag]);
             if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
@@ -277,10 +256,8 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 var tag = z;
             measure[tag].tag = tag;
             measure[tag].id = get_IVF_max_id() + 1;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            measure[tag].location = '--';
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.IVF.push(measure[tag]);
             if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
@@ -295,10 +272,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 var tag = z;
             measure[tag].tag = tag;
             measure[tag].id = get_CDF_max_id() + 1;
-            // Add extra properties to measure 
-            measure[tag].cost_units = '/unit';
-            measure[tag].quantity = 1;
-            measure[tag].cost_total = measure[tag].quantity * measure[tag].cost;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.CDF.push(measure[tag]);
             if (data.measures.ventilation[library_helper.type][measure[tag].id] == undefined) { // first time
@@ -478,7 +452,7 @@ function ventilation_initUI()
         out += '<span class = "delete-IVF" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
         $('#IVF').append(out);
     }
-    
+
     // Clothes drying facilities (CDF)
     $('#CDF').html('');
     for (z in data.ventilation.CDF) {
