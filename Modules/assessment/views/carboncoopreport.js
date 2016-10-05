@@ -1445,176 +1445,33 @@ function compareCarbonCoop(scenario, outputElement) {
     var BDD = comparePropertiesInArray(scenario, properties_to_check);
     if (BDD.changed === true)
         out += '<h3>Basic dwelling data</h3><table class="table table-striped">' + BDD.html + '</table></br>';
-
     // Ventilation
     var Vent = compareVentilation(scenario);
     if (Vent.changed === true)
         out += '<h3>Ventilation</h3><table class="table table-striped">' + Vent.html + '</table></br>';
-
     // Infiltration
     var Inf = compareInfiltration(scenario);
     if (Inf.changed === true)
         out += '<h3>Infiltration</h3><table class="table table-striped">' + Inf.html + '</table></br>';
-
     // Clothes drying facilities
     var CDF = compareClothesDryingFacilities(scenario);
     if (CDF.changed === true)
         out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>';
+    //Fabric
+    var Fabric = compareFabric(scenario);
+    if (Fabric.changed === true)
+        out += '<h3>Fabric</h3><p>Changes to Floor\'s, Wall\'s, Windows and Roof elements</p>\n\
+            <table class="table table-striped"><tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>'
+                + Fabric.html + '</table></br>';
+
+    
 
 
-    // Changes to elements
-    var listA = project.master.fabric.elements;
-    //console.log(scenario);
-    var listB = project[scenario].fabric.elements;
-    var elements_html = "";
-    for (z in listA)
-    {
-        if (listB[z] == undefined)
-        {
-            elements_html += "<tr><td>Element: <b>'" + z + "'</b> in scenario A has been deleted</td></tr>";
-        }
-    }
-
-    for (z in listB)
-    {
-        if (listA[z] == undefined)
-        {
-            elements_html += "<tr><td>New Element: <b>'" + z + "'</b> added to scenario B</td></tr>";
-        }
-        else
-        {
-
-            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
-            {
-                elements_html += "<tr><td><b>" + listA[z].name + ":</b><br><i>";
-                for (x in listA[z])
-                {
-                    if (x == 'description')
-                        elements_html += listA[z][x] + ", ";
-                    if (x == 'area')
-                        elements_html += "Area: " + listA[z][x].toFixed(1) + "m<sup>2</sup>, ";
-                    if (x == 'uvalue')
-                        elements_html += "U-value: " + listA[z][x] + ", ";
-                    if (x == 'kvalue')
-                        elements_html += "k-value: " + listA[z][x];
-                    if (x == 'g')
-                        elements_html += "g: " + listA[z][x] + ", ";
-                    if (x == 'gL')
-                        elements_html += "gL: " + listA[z][x] + ", ";
-                    if (x == 'ff')
-                        elements_html += "Frame factor: " + listA[z][x];
-                }
-                elements_html += "</i></td>";
-                elements_html += "<td>" + (listA[z].uvalue * listA[z].area).toFixed(1) + " W/K</td>";
-                elements_html += "<td><b>" + listB[z].name + ":</b><br><i>";
-                for (x in listB[z])
-                {
-                    if (x == 'description')
-                        elements_html += listA[z][x] + ", ";
-                    if (x == 'area')
-                        elements_html += "Area: " + listA[z][x].toFixed(1) + "m<sup>2</sup>, ";
-                    if (x == 'uvalue')
-                        elements_html += "U-value: " + listB[z][x] + ", ";
-                    if (x == 'kvalue')
-                        elements_html += "k-value: " + listB[z][x];
-                    if (x == 'g')
-                        elements_html += "g: " + listB[z][x] + ", ";
-                    if (x == 'gL')
-                        elements_html += "gL: " + listB[z][x] + ", ";
-                    if (x == 'ff')
-                        elements_html += "Frame factor: " + listB[z][x];
-                }
-                elements_html += "</i></td>";
-                elements_html += "<td>" + (listB[z].uvalue * listB[z].area).toFixed(1) + " W/K</td>";
-                var saving = (listA[z].uvalue * listA[z].area) - (listB[z].uvalue * listB[z].area);
-                elements_html += "<td>";
-                if (saving > 0)
-                    elements_html += "<span style='color:#00aa00'>-";
-                if (saving < 0)
-                    elements_html += "<span style='color:#aa0000'>+";
-                elements_html += (saving).toFixed(1) + " W/K</span></td>";
-                elements_html += "</tr>";
-            }
-        }
-    }
-
-    if (elements_html != "") {
-        out += "<hr><h3>Building Elements</h3><hr>";
-        out += "<p>Changes to Floor's, Wall's, Windows and Roof elements</p>";
-        out += "<table class='table table-striped'>";
-        out += "<tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>";
-        out += elements_html;
-        out += "</table>";
-    }
 
 
     out += "<hr><h3>Energy Requirements</h3><hr>";
-    /* Commented because energy systems are breaking 
-     * 
-     * 
-     * 
-     * 
-     * // Changes to elements
-     var listA = project.master.energy_requirements;
-     var listB = project[scenario].energy_requirements;
-     //console.log(listA);
-     //console.log(listB);
-     out += "<table class='table table-striped'>";
-     for (z in listA)
-     {
-     if (listB[z] == undefined)
-     {
-     out += "<tr><td>";
-     out += "<b>" + listA[z].name + ": </b>";
-     out += listA[z].quantity.toFixed(0) + " kWh";
-     out += "</td><td><b>Deleted in scenario B</b></td><td></td></tr>";
-     }
-     }
-     
-     for (z in listB)
-     {
-     if (listA[z] == undefined)
-     {
-     out += "<tr><td><b>New to scenario B</b></td><td>";
-     out += "<b>" + listB[z].name + ": </b>";
-     out += listB[z].quantity.toFixed(0) + " kWh <b>(New)</b>";
-     out += "</td><td></td></tr>";
-     }
-     else
-     {
-     if (JSON.stringify(project.master.energy_systems[z]) != JSON.stringify(project[scenario].energy_systems[z]))
-     {
-     out += "<tr><td>";
-     out += "<b>" + listA[z].name + ": </b>";
-     out += listA[z].quantity.toFixed(0) + " kWh<br>";
-     out += "  Supplied by:<br>";
-     for (i in project.master.energy_systems[z])
-     {
-     out += "  - Type: " + project.master.energy_systems[z][i].system + ", ";
-     out += "Fraction: " + (project.master.energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
-     out += "Efficiency: " + (project.master.energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
-     out += "<br>";
-     }
-     
-     out += "</td><td>";
-     out += "<b>" + listB[z].name + ": </b>";
-     out += listB[z].quantity.toFixed(0) + " kWh<br>";
-     out += "  Supplied by:<br>";
-     for (i in project[scenario].energy_systems[z])
-     {
-     out += "  - Type: " + project[scenario].energy_systems[z][i].system + ", ";
-     out += "Fraction: " + (project[scenario].energy_systems[z][i].fraction * 100).toFixed(0) + "%, ";
-     out += "Efficiency: " + (project[scenario].energy_systems[z][i].efficiency * 100).toFixed(0) + "%";
-     out += "<br>";
-     }
-     
-     out += "</td><td></td></tr>";
-     }
-     
-     }
-     }*/
 
-    // out += "</table>";
+
     out += "<tr><td><hr><h3>Fuel costs</h3><hr></td><td></td><td></td></tr>";
     // out += "<h3>Fuel costs</h3>";
 
@@ -1694,7 +1551,6 @@ function compareCarbonCoop(scenario, outputElement) {
     out += "</table>";
     $(outputElement).html(out);
 }
-;
 
 function comparePropertiesInArray(scenario, changes) {
     var out = "<tbody>";
@@ -1885,7 +1741,6 @@ function compareInfiltration(scenario) {
 function compareClothesDryingFacilities(scenario) {
     var out = "";
     var changed = false;
-
     // Check if any has been deleted
     project.master.ventilation.CDF.forEach(function (facility_in_master, key) {
         var found = false;
@@ -1899,12 +1754,51 @@ function compareClothesDryingFacilities(scenario) {
         }
 
     });
-
     // Check if any has been added
     if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined) {
         for (z in project[scenario].measures.ventilation.clothes_drying_facilities) {
             changed = true;
             out += '<tr><td>A new <i>' + project[scenario].measures.ventilation.clothes_drying_facilities[z].measure.name + '</i> has been added</td></tr>';
+        }
+    }
+
+    return {html: out, changed: changed};
+}
+
+function compareFabric(scenario) {
+    var out = "";
+    var changed = false;
+    if (project[scenario].fabric.measures != undefined && Object.keys(project[scenario].fabric.measures).length > 0) {
+        changed = true;
+        for (z in project[scenario].fabric.measures) {
+            var element = project[scenario].fabric.measures[z];
+
+            out += "<tr><td>" + element.original_element.name + "<br><i>Area: " + element.original_element.area
+                    + "m<sup>2</sup>, U-value " + element.original_element.uvalue + ":, k-value: "
+                    + element.original_element.kvalue;
+            if (element.original_element.type == "Window" || element.original_element.type == "window"
+                    || element.original_element.type == "Door" || element.original_element.type == "Roof_light")
+                out += 'g: ' + element.original_element.g + ', gL: ' + element.original_element.gL + ', ff:' + element.original_element.ff;
+            out += '</i></td>';
+            out += "<td style='padding-left:3px;padding-right:5px'>" + (element.original_element.uvalue * element.original_element.area).toFixed(2) + " W/K</td>";
+
+            out += "<td>" + element.measure.name + "<br><i>Area: " + element.measure.area
+                    + "m<sup>2</sup>, U-value " + element.measure.uvalue + ":, k-value: "
+                    + element.measure.kvalue;
+            if (element.measure.type == "Window" || element.measure.type == "window"
+                    || element.measure.type == "Door" || element.measure.type == "Roof_light")
+                out += 'g: ' + element.measure.g + ', gL: ' + element.measure.gL + ', ff:' + element.measure.ff;
+            out += '</i></td>';
+            out += "<td style='padding-left:3px;padding-right:5px'>" + (element.measure.uvalue * element.measure.area).toFixed(2) + " W/K</td>";
+
+            var saving = (element.original_element.uvalue * element.original_element.area) - (element.measure.uvalue * element.measure.area);
+            out += "<td>";
+            if (saving > 0)
+                out += "<span style='color:#00aa00'>-";
+            if (saving < 0)
+                out += "<span style='color:#aa0000'>+";
+            out += (saving).toFixed(2) + " W/K</span></td>";
+            out += "</tr>";
         }
     }
 
