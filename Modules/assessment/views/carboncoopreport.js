@@ -1445,14 +1445,23 @@ function compareCarbonCoop(scenario, outputElement) {
     var BDD = comparePropertiesInArray(scenario, properties_to_check);
     if (BDD.changed === true)
         out += '<h3>Basic dwelling data</h3><table class="table table-striped">' + BDD.html + '</table></br>';
+
     // Ventilation
     var Vent = compareVentilation(scenario);
     if (Vent.changed === true)
         out += '<h3>Ventilation</h3><table class="table table-striped">' + Vent.html + '</table></br>';
+
     // Infiltration
     var Inf = compareInfiltration(scenario);
     if (Inf.changed === true)
         out += '<h3>Infiltration</h3><table class="table table-striped">' + Inf.html + '</table></br>';
+
+    // Clothes drying facilities
+    var CDF = compareClothesDryingFacilities(scenario);
+    if (CDF.changed === true)
+        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>';
+
+
     // Changes to elements
     var listA = project.master.fabric.elements;
     //console.log(scenario);
@@ -1686,6 +1695,7 @@ function compareCarbonCoop(scenario, outputElement) {
     $(outputElement).html(out);
 }
 ;
+
 function comparePropertiesInArray(scenario, changes) {
     var out = "<tbody>";
     var changed = false;
@@ -1860,6 +1870,43 @@ function compareInfiltration(scenario) {
         }
     }
 
+    var properties_to_check = [
+        ['Structural infiltration', 'ventilation.infiltration_rate_incorp_shelter_factor']
+    ];
+    var changes = comparePropertiesInArray(scenario, properties_to_check);
+    if (changes.changed === true) {
+        changed = true;
+        out += changes.html;
+    }
+
     return {html: out, changed: changed};
 }
-    
+
+function compareClothesDryingFacilities(scenario) {
+    var out = "";
+    var changed = false;
+
+    // Check if any has been deleted
+    project.master.ventilation.CDF.forEach(function (facility_in_master, key) {
+        var found = false;
+        project[scenario].ventilation.CDF.forEach(function (facility_in_scenario, key) {
+            if (facility_in_master.id === facility_in_scenario.id && facility_in_master.tag === facility_in_scenario.tag)
+                found = true;
+        });
+        if (found === false) {
+            changed = true;
+            out += '<tr><td><i>' + facility_in_master.name + '</i> has been removed</td></tr>';
+        }
+
+    });
+
+    // Check if any has been added
+    if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined) {
+        for (z in project[scenario].measures.ventilation.clothes_drying_facilities) {
+            changed = true;
+            out += '<tr><td>A new <i>' + project[scenario].measures.ventilation.clothes_drying_facilities[z].measure.name + '</i> has been added</td></tr>';
+        }
+    }
+
+    return {html: out, changed: changed};
+}
