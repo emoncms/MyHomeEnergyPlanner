@@ -1469,68 +1469,15 @@ function compareCarbonCoop(scenario, outputElement) {
     if (Heating.changed === true)
         out += '<h3>Heating</h3><table class="table table-striped">' + Heating.html + '</table></br>';
 
+    // Energy requirements
+    var ER = compareEnergyRequirements(scenario);
+    if (ER.changed === true)
+        out += '<h3>Energy requirements</h3><table class="table table-striped">' + ER.html + '</table></br>';
 
-
-
-
-    out += "<hr><h3>Energy Requirements</h3><hr>";
-
-
-    out += "<tr><td><hr><h3>Fuel costs</h3><hr></td><td></td><td></td></tr>";
-    // out += "<h3>Fuel costs</h3>";
-
-    // Changes to elements
-    var listA = project.master.fuel_totals;
-    var listB = project[scenario].fuel_totals;
-    //out += "<table class='table table-striped'>";
-
-    for (z in listA)
-    {
-        if (listB[z] == undefined)
-        {
-            out += "<tr><td>";
-            out += "<b>" + z + ": </b><br>";
-            out += "Fuel quantity: " + listA[z].quantity.toFixed(0) + " kWh<br>";
-            out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
-            out += "Annual cost: £" + listA[z].annualcost.toFixed(0) + "<br>";
-            out += "</td><td><br><b>Deleted in scenario B</b></td></tr>";
-        }
-    }
-
-    for (z in listB)
-    {
-        if (listA[z] == undefined)
-        {
-            out += "<tr><td><br><b>New to scenario B</b></td><td>";
-            out += "<b>" + z + ": </b><br>";
-            out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
-            out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
-            out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
-            out += "</td></tr>";
-        }
-        else
-        {
-
-            if (JSON.stringify(listA[z]) != JSON.stringify(listB[z]))
-            {
-                out += "<tr><td>";
-                out += "<b>" + z + ": </b><br>";
-                out += "Fuel quantity: " + listA[z].quantity.toFixed(0) + " kWh<br>";
-                out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
-                out += "Annual cost: £" + listA[z].annualcost.toFixed(0) + "<br>";
-                out += "</td><td>";
-                out += "<b>" + z + ": </b><br>";
-                out += "Fuel quantity: " + listB[z].quantity.toFixed(0) + " kWh<br>";
-                out += "Fuel cost: £" + data.fuels[z].fuelcost.toFixed(2) + "  -  Annual standing charge: £" + data.fuels[z].standingcharge.toFixed(2) + "<br>";
-                out += "Annual cost: £" + listB[z].annualcost.toFixed(0) + "<br>";
-                out += "</td>";
-                out += "<td><br>";
-                out += (100 * (listA[z].quantity - listB[z].quantity) / listA[z].quantity).toFixed(0) + "% Energy saving<br><br>";
-                out += (100 * (listA[z].annualcost - listB[z].annualcost) / listA[z].annualcost).toFixed(0) + "% Cost saving<br>";
-                out += "</td></tr>";
-            }
-        }
-    }
+    // Fuel requirements
+    var FR = compareFuelRequirements(scenario);
+    if (FR.changed === true)
+        out += '<h3>Fuel requirements</h3><table class="table table-striped">' + FR.html + '</table></br>';
 
     out += "<tr><td><hr><h3>Totals</h3><hr></td><td></td><td></td></tr>";
     out += "<tr>";
@@ -1918,7 +1865,7 @@ function compareHeating(scenario) {
                 + '</i> to <i>' + project[scenario].measures.water_heating.hot_water_control_type.measure.control_type
                 + '</i></td></tr>';
     }
-    
+
     // Check if the primary pipework insulation has changed 
     if (project[scenario].measures.water_heating != undefined
             && project[scenario].measures.water_heating.pipework_insulation != undefined) {
@@ -1938,6 +1885,80 @@ function compareHeating(scenario) {
                 + '</i> to <i>' + project[scenario].measures.water_heating.storage_type_measures.measure.name
                 + '</i></td></tr>';
     }
+
+    return {html: out, changed: changed};
+}
+
+function compareEnergyRequirements(scenario) {
+    var out = "";
+    var changed = false;
+
+    var ER_list = ['appliances', 'cooking', 'fans_and_pumps', 'lighting', 'space_heating', 'waterheating'];
+    var ER_names = ['appliances', 'cooking', 'fans and pumps', 'lighting', 'space heating', 'water heating'];
+    ER_list.forEach(function (ER, index) {
+        if (project.master.energy_requirements[ER] != undefined && project.master.energy_requirements[ER].quantity
+                != project[scenario].energy_requirements[ER].quantity) {
+            changed = true;
+            out += '<tr><td>The demand for <i>' + ER_names[index] + '</i> has changed from <i>'
+                    + project.master.energy_requirements[ER].quantity.toFixed(2) + '</i> kWh/year to <i>'
+                    + project[scenario].energy_requirements[ER].quantity.toFixed(2) + '</i> kWh/year</td></tr>';
+        }
+    });
+    if (project.master.generation.total_generation != project[scenario].generation.total_generation) {
+        changed = true;
+        out += '<tr><td>The total generation has changed from <i>'
+                + project.master.generation.total_generation.toFixed(2) + '</i> kWh/year to <i>'
+                + project[scenario].generation.total_generation.toFixed(2) + '</i> kWh/year</td></tr>';
+    }
+
+    return {html: out, changed: changed};
+}
+
+function compareFuelRequirements(scenario) {
+    var out = "";
+    var changed = false;
+
+    for (var fuel in project.master.fuel_totals) {
+        if (project[scenario].fuel_totals[fuel] == undefined) {
+            changed = true;
+            out += '<tr><td style="padding-right:10px">' + fuel + '</td><td style="padding-right:10px"><i>Quantity: ' + project.master.fuel_totals[fuel].quantity.toFixed(2)
+                    + ' kWh, CO<sub>2</sub>: ' + project.master.fuel_totals[fuel].annualco2.toFixed(2)
+                    + ' kg, Primary energy: ' + project.master.fuel_totals[fuel].primaryenergy.toFixed(2)
+                    + ' kWh, Annual cost: £' + project.master.fuel_totals[fuel].annualcost.toFixed(2)
+                    + '</i></td><td style="padding-right:10px" style="padding-right:10px"><i>Quantity: 0 kWh, CO<sub>2</sub>: 0 kg, Primary energy: 0 kWh, \n\
+                        Annual cost: £0</i></td><td style="padding-right:10px">100%</td><td>100%</td></tr>';
+        }
+        else if (project.master.fuel_totals[fuel].quantity != project[scenario].fuel_totals[fuel].quantity) {
+            changed = true;
+            out += '<tr><td style="padding-right:10px">' + fuel + '</td><td style="padding-right:10px"><i>Quantity: ' + project.master.fuel_totals[fuel].quantity.toFixed(2)
+                    + ' kWh, CO<sub>2</sub>: ' + project.master.fuel_totals[fuel].annualco2.toFixed(2)
+                    + ' kg, Primary energy: ' + project.master.fuel_totals[fuel].primaryenergy.toFixed(2)
+                    + ' kWh, Annual cost: £' + project.master.fuel_totals[fuel].annualcost.toFixed(2)
+                    + '</i></td><td style="padding-right:10px"><i>Quantity: ' + project[scenario].fuel_totals[fuel].quantity.toFixed(2)
+                    + ' kWh, CO<sub>2</sub>: ' + project[scenario].fuel_totals[fuel].annualco2.toFixed(2)
+                    + ' kg, Primary energy: ' + project[scenario].fuel_totals[fuel].primaryenergy.toFixed(2)
+                    + ' kWh, Annual cost: £' + project[scenario].fuel_totals[fuel].annualcost.toFixed(2)
+                    + '</i></td><td style="padding-right:10px">' + (100 * (project.master.fuel_totals[fuel].quantity - project[scenario].fuel_totals[fuel].quantity) / project.master.fuel_totals[fuel].quantity).toFixed(2)
+                    + '%</td><td>' + (100 * (project.master.fuel_totals[fuel].annualcost - project[scenario].fuel_totals[fuel].annualcost) / project.master.fuel_totals[fuel].annualcost).toFixed(2)
+                    + '%</td></tr>';
+        }
+    }
+    for (var fuel in project[scenario].fuel_totals) {
+        if (project.master.fuel_totals[fuel] == undefined) {
+            changed = true;
+            out += '<tr><td style="padding-right:10px">' + fuel + '</td><td style="padding-right:10px"><i>Quantity: 0 kWh, \n\
+                    CO<sub>2</sub>: 0 kg, Primary energy: 0 kWh, Annual cost: £0</i></td><td style="padding-right:10px"><i>Quantity: '
+                    + project[scenario].fuel_totals[fuel].quantity.toFixed(2)
+                    + ' kWh, CO<sub>2</sub>: ' + project[scenario].fuel_totals[fuel].annualco2.toFixed(2)
+                    + ' kg, Primary energy: ' + project[scenario].fuel_totals[fuel].primaryenergy.toFixed(2)
+                    + ' kWh, Annual cost: £' + project[scenario].fuel_totals[fuel].annualcost.toFixed(2)
+                    + '</i></td><td style="padding-right:10px">0%</td><td>0%</td></tr>';
+        }
+    }
+
+    if (changed === true)
+        out = '<tr><td></td><td>Before</td><td>After</td><td>Energy savings</td><td>Cost saving</td></tr>' + out;
+    // out+='<tr><td></td></tr>';
 
     return {html: out, changed: changed};
 }
