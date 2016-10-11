@@ -1464,7 +1464,11 @@ function compareCarbonCoop(scenario, outputElement) {
             <table class="table table-striped"><tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>'
                 + Fabric.html + '</table></br>';
 
-    
+    // Heating
+    var Heating = compareHeating(scenario);
+    if (Heating.changed === true)
+        out += '<h3>Heating</h3><table class="table table-striped">' + Heating.html + '</table></br>';
+
 
 
 
@@ -1621,6 +1625,7 @@ function compareVentilation(scenario) {
         out += '<tr><td>The ventilation system has not changed - Type: <i>' + project[scenario].ventilation.ventilation_type + '</i></td></tr>';
         if ((project[scenario].ventilation.ventilation_type == 'IE'
                 || project[scenario].ventilation.ventilation_type == 'PS')
+                && project[scenario].measures.ventilation != undefined
                 && project[scenario].measures.ventilation.extract_ventilation_points != undefined) {
             changed = true;
             for (z in project[scenario].measures.ventilation.extract_ventilation_points) {
@@ -1708,7 +1713,8 @@ function compareInfiltration(scenario) {
                 + ' ACH</i></td></tr>';
         +'</i></td></tr>';
     }
-    if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined) {
+    if (project[scenario].measures.ventilation != undefined
+            && project[scenario].measures.ventilation.intentional_vents_and_flues != undefined) {
         changed = true;
         for (z in project[scenario].measures.ventilation.intentional_vents_and_flues) {
             var IVF = project[scenario].measures.ventilation.intentional_vents_and_flues[z];
@@ -1716,7 +1722,8 @@ function compareInfiltration(scenario) {
                     + IVF.measure.location + '</i> </td></tr>';
         }
     }
-    if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined) {
+    if (project[scenario].measures.ventilation != undefined
+            && project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined) {
         for (z in project[scenario].measures.ventilation.intentional_vents_and_flues_measures) {
             var IVF = project[scenario].measures.ventilation.intentional_vents_and_flues_measures[z];
             out += '<tr><td>The <i>' + IVF.original.name + ' (' + IVF.original.ventilation_rate
@@ -1755,7 +1762,8 @@ function compareClothesDryingFacilities(scenario) {
 
     });
     // Check if any has been added
-    if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined) {
+    if (project[scenario].measures.ventilation != undefined
+            && project[scenario].measures.ventilation.clothes_drying_facilities != undefined) {
         for (z in project[scenario].measures.ventilation.clothes_drying_facilities) {
             changed = true;
             out += '<tr><td>A new <i>' + project[scenario].measures.ventilation.clothes_drying_facilities[z].measure.name + '</i> has been added</td></tr>';
@@ -1803,4 +1811,141 @@ function compareFabric(scenario) {
     }
 
     return {html: out, changed: changed};
+}
+
+function compareHeating(scenario) {
+    var out = "";
+    var changed = false;
+
+    // Hot water demand
+    var properties_to_check = [
+        ["Designed water use is not more than 125 litres per person per day", 'water_heating.low_water_use_design'],
+        ['Do you know how much energy you use for water heating?', 'water_heating.override_annual_energy_content'],
+        ['Annual average hot water usage', 'water_heating.Vd_average'],
+        ['Annual energy content', 'water_heating.annual_energy_content']
+    ];
+    var DWU = comparePropertiesInArray(scenario, properties_to_check);
+    if (DWU.changed === true) {
+        changed = true;
+        out += DWU.html;
+    }
+
+    // Check if any water usage has been deleted
+    project.master.water_heating.water_usage.forEach(function (wu_in_master, key) {
+        var found = false;
+        project[scenario].water_heating.water_usage.forEach(function (wu_in_scenario, key) {
+            if (wu_in_master.id === wu_in_scenario.id && wu_in_master.tag === wu_in_scenario.tag)
+                found = true;
+        });
+        if (found === false) {
+            changed = true;
+            out += '<tr><td><i>' + wu_in_master.name + '</i> has been removed</td></tr>';
+        }
+    });
+
+    // Check if any water usage has been added
+    if (project[scenario].measures.water_heating != undefined
+            && project[scenario].measures.water_heating.water_usage != undefined
+            && Object.keys(project[scenario].measures.water_heating.water_usage).length > 0) {
+        changed = true;
+        for (var key in project[scenario].measures.water_heating.water_usage)
+            out += '<tr><td>A new <i>' + project[scenario].measures.water_heating.water_usage[key].measure.name + '</i> has been added</td></tr>';
+    }
+
+    // Space heating demand
+    var properties_to_check = [
+        ['Living area', 'temperature.living_area'],
+        ['Target temperature', 'temperature.target'],
+        ['Heating off for the whole summer', 'space_heating.heating_off_summer']
+    ];
+    var SHD = comparePropertiesInArray(scenario, properties_to_check);
+    if (SHD.changed === true) {
+        changed = true;
+        out += SHD.html;
+    }
+
+    // Heating systems
+    if (project[scenario].measures.heating_systems != undefined
+            && Object.keys(project[scenario].measures.heating_systems).length > 0) {
+        changed = true;
+        for (id in project[scenario].measures.heating_systems) {
+            var heating_system = project[scenario].measures.heating_systems[id];
+            if (heating_system.original != 'empty')
+                out += '<tr><td><i>' + heating_system.original.name + '</i> has been replaced with <i>' + heating_system.measure.name + '</i></td></tr>';
+            else
+                out += '<tr><td>A new heating system has been added: <i>' + heating_system.measure.name + '</i></td></tr>';
+        }
+    }
+
+    //Heating systems deleted and change on their parameters
+    /*project.master.heating_systems.forEach(function (hs_in_master, index) {
+     var hs_in_scenario = getHeatingSystemById(hs_in_master.id, scenario);
+     for (var parameter in hs_in_master) {
+     if (hs_in_master[parameter] != hs_in_scenario[parameter]) {
+     changed = true;
+     out += '<tr><td>The <i>' + parameter + '</i> of <i>' + hs_in_master.name + '</i> has changed from <i>'
+     + hs_in_master[parameter] + '</i> to <i>' + hs_in_scenario[parameter] + '</i> </td></tr>';
+     }
+     }
+     });*/
+
+    // Space heating system controls
+    if (project[scenario].measures.space_heating_control_type != undefined
+            && Object.keys(project[scenario].measures.space_heating_control_type).length > 0) {
+        changed = true;
+        for (var id in project[scenario].measures.space_heating_control_type) {
+            var heating_system_control = project[scenario].measures.space_heating_control_type[id];
+            out += '<tr><td>The control of <i>' + getHeatingSystemById(id, scenario).name + '</i> has been replaced with <i>' + heating_system_control.measure.name + '</i></td></tr>';
+        }
+    }
+
+    //Hot water systems
+    var properties_to_check = [
+        ['Include solar hot water?', 'water_heating.solar_water_heating']
+    ];
+    var SHW = comparePropertiesInArray(scenario, properties_to_check);
+    if (SHW.changed === true) {
+        changed = true;
+        out += SHW.html;
+    }
+
+    // Check if the hot water storage control type has changed 
+    if (project[scenario].measures.water_heating != undefined
+            && project[scenario].measures.water_heating.hot_water_control_type != undefined) {
+        changed = true;
+        out += '<tr><td>The hot water storage control type has changed from <i>'
+                + project[scenario].measures.water_heating.hot_water_control_type.original
+                + '</i> to <i>' + project[scenario].measures.water_heating.hot_water_control_type.measure.control_type
+                + '</i></td></tr>';
+    }
+    
+    // Check if the primary pipework insulation has changed 
+    if (project[scenario].measures.water_heating != undefined
+            && project[scenario].measures.water_heating.pipework_insulation != undefined) {
+        changed = true;
+        out += '<tr><td>The primary circuit pipework insulation has changed from <i>'
+                + project[scenario].measures.water_heating.pipework_insulation.original
+                + '</i> to <i>' + project[scenario].measures.water_heating.pipework_insulation.measure.pipework_insulation
+                + '</i></td></tr>';
+    }
+
+    // Storage type
+    if (project[scenario].measures.water_heating != undefined
+            && project[scenario].measures.water_heating.storage_type_measures != undefined) {
+        changed = true;
+        out += '<tr><td>The type of storage has changed from <i>'
+                + project[scenario].measures.water_heating.storage_type_measures.original.name
+                + '</i> to <i>' + project[scenario].measures.water_heating.storage_type_measures.measure.name
+                + '</i></td></tr>';
+    }
+
+    return {html: out, changed: changed};
+}
+
+function getHeatingSystemById(id, scenario) {
+    for (var index in project[scenario].heating_systems) {
+        if (id == project[scenario].heating_systems[index].id)
+            return project[scenario].heating_systems[index];
+    }
+    return false;
 }
