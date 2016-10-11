@@ -389,8 +389,9 @@ function add_heating_systems() {
 
     for (z in data.heating_systems) {
         var item = data.heating_systems[z];
-        out = '<tr><td style="text-align:center">' + item.tag + '<br /><br /><span class="edit-item-heating-system" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
-        out += '<span class = "delete-heating-system" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
+        out = '<tr><td style="text-align:center">' + item.tag + '<br /><br />';
+        out += '<span class="edit-item-heating-system if-master" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
+        out += '<span class = "delete-heating-system if-master" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
         out += '<span class="apply-water-heating-measure if-not-master" type="heating_systems_measures" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked" style="margin-left: 20px">Apply measure</button></span></td><td>' + item.name + '</td>';
         out += '<td><select style="width:100px" key="data.heating_systems.' + z + '.provides"><option value="heating">Space heating</option><option value="water">Water heating</option><option value="heating_and_water">Space and water heating</option></select></td>';
         out += '<td class="if-SH">' + item.winter_efficiency + '</td><td class="if-WH">' + item.summer_efficiency + '</td>';
