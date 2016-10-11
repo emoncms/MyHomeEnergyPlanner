@@ -1479,6 +1479,13 @@ function compareCarbonCoop(scenario, outputElement) {
     if (FR.changed === true)
         out += '<h3>Fuel requirements</h3><table class="table table-striped">' + FR.html + '</table></br>';
 
+    // Totals
+    out += '<h3>Totals</h3><table class="table table-striped"><tr><td></td><td>Before</td><td>After</td></tr>';
+    out += '<tr><td>Annual cost</td><td><i>£' + project.master.total_cost.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_cost.toFixed(0) + '</i></td></tr>';
+    out += '<tr><td>Total income</td><td><i>£' + project.master.total_income.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_income.toFixed(0) + '</i></td></tr>';
+    out += '<tr><td>SAP rating</td><td><i>' + project.master.SAP.rating.toFixed(0) + '</i></td><td><i>' + project[scenario].SAP.rating.toFixed(0) + '</i></td></tr>';
+    out += '</table></br>';
+
     out += "<tr><td><hr><h3>Totals</h3><hr></td><td></td><td></td></tr>";
     out += "<tr>";
     out += "<td><b>Total Annual Cost:</b><br>";
