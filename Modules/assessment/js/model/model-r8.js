@@ -1262,8 +1262,10 @@ calc.water_heating = function (data) {
         data.water_heating.combi_loss = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     if (data.water_heating.solar_water_heating == undefined)
         data.water_heating.solar_water_heating = false;
+    if (data.water_heating.hot_water_control_type == undefined)
+        data.water_heating.hot_water_control_type = 'no_cylinder_thermostat';
     if (data.water_heating.pipework_insulation == undefined)
-        data.water_heating.pipework_insulation = 'Fully insulated primary pipework';
+        data.water_heating.pipework_insulation = 'Fully insulated primary pipework';    
     if (data.water_heating.Vc == undefined)
         data.water_heating.Vc = 0;
     if (data.water_heating.water_usage == undefined)
