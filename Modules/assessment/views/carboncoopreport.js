@@ -1486,27 +1486,6 @@ function compareCarbonCoop(scenario, outputElement) {
     out += '<tr><td>SAP rating</td><td><i>' + project.master.SAP.rating.toFixed(0) + '</i></td><td><i>' + project[scenario].SAP.rating.toFixed(0) + '</i></td></tr>';
     out += '</table></br>';
 
-    out += "<tr><td><hr><h3>Totals</h3><hr></td><td></td><td></td></tr>";
-    out += "<tr>";
-    out += "<td><b>Total Annual Cost:</b><br>";
-    out += "£" + project.master.total_cost.toFixed(0) + "</td>";
-    out += "<td><b>Total Annual Cost:</b><br>"
-    out += "£" + project[scenario].total_cost.toFixed(0) + "</td>";
-    out += "<td></td>";
-    out += "</tr>";
-    out += "<tr>";
-    out += "<td><b>SAP Rating:</b><br>";
-    out += "" + project.master.SAP.rating.toFixed(0) + "</td>";
-    out += "<td><b>SAP Rating:</b><br>"
-    out += "" + project[scenario].SAP.rating.toFixed(0) + "</td>";
-    var sapinc = (project[scenario].SAP.rating - project.master.SAP.rating);
-    if (sapinc > 0)
-        out += "<td><br><span style='color:#00aa00'>+";
-    if (sapinc < 0)
-        out += "<td><br><span style='color:#aa0000'>";
-    out += sapinc.toFixed(0) + "</span></td>";
-    out += "</tr>";
-    out += "</table>";
     $(outputElement).html(out);
 }
 
