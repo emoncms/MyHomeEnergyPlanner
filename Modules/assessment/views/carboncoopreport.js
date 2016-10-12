@@ -1469,6 +1469,11 @@ function compareCarbonCoop(scenario, outputElement) {
     if (Heating.changed === true)
         out += '<h3>Heating</h3><table class="table table-striped">' + Heating.html + '</table></br>';
 
+    // Solar hot water
+    var SHW = compareSolarHotWater(scenario);
+    if (SHW.changed === true)
+        out += '<h3>Solar hot water</h3><table class="table table-striped">' + SHW.html + '</table></br>';
+
     // Energy requirements
     var ER = compareEnergyRequirements(scenario);
     if (ER.changed === true)
@@ -1510,7 +1515,7 @@ function comparePropertiesInArray(scenario, changes) {
         }
         var valA = subA;
         var valB = subB;
-        if (valA != valB) {
+        if (valA != valB && (isNaN(valA) == false || isNaN(valB) == false)) {
             if (typeof valA == 'number')
                 valA = valA.toFixed(2);
             if (typeof valB == 'number')
@@ -1948,6 +1953,38 @@ function compareFuelRequirements(scenario) {
 
     return {html: out, changed: changed};
 }
+
+function compareSolarHotWater(scenario) {
+    var out = "";
+    var changed = false;
+
+    var properties_to_check = [
+        ['Solar water heating pump', 'SHW.pump'],
+        ['Aperture area of solar collector, m2', 'SHW.A'],
+        ['Zero-loss collector efficiency, η0, from test certificate or Table H1', 'SHW.n0'],
+        ['Collector linear heat loss coefficient, a1, from test certificate', 'SHW.a1'],
+        ['Collector 2nd order heat loss coefficient, a2, from test certificate', 'SHW.a2'],
+        ['Collector Orientation', 'SHW.orientation'],
+        ['Collector Inclination', 'SHW.inclination'],
+        ['Overshading factor', 'SHW.overshading'],
+        ['Solar energy available', 'SHW.solar_energy_available'],
+        ['Collector performance factor', 'SHW.collector_performance_factor'],
+        ['Dedicated solar storage volume, Vs, (litres)', 'SHW.Vs'],
+        ['If combined cylinder, total volume of cylinder (litres)', 'SHW.combined_cylinder_volume'],
+        ['Volume ratio Veff/Vd,average', 'SHW.volume_ratio'],
+        ['Solar storage volume factor', 'SHW.f2'],
+        ['Annual solar input Qs (kWh)', 'SHW.Qs']
+    ];
+
+    var DWU = comparePropertiesInArray(scenario, properties_to_check);
+    if (DWU.changed === true) {
+        changed = true;
+        out += DWU.html;
+    }
+
+    return {html: out, changed: changed};
+}
+
 
 function getHeatingSystemById(id, scenario) {
     for (var index in project[scenario].heating_systems) {
