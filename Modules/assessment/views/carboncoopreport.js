@@ -1419,6 +1419,11 @@ function compareCarbonCoop(scenario, outputElement) {
     var SHW = compareSolarHotWater(scenario);
     if (SHW.changed === true)
         out += '<h3>Solar hot water</h3><table class="table table-striped">' + SHW.html + '</table></br>';
+    
+    // Generation
+    var GEN = compareGeneration(scenario);
+    if (GEN.changed === true)
+        out += '<h3>Generation</h3><table class="table table-striped">' + GEN.html + '</table></br>';
 
     // Energy requirements
     var ER = compareEnergyRequirements(scenario);
@@ -1920,6 +1925,38 @@ function compareSolarHotWater(scenario) {
         ['Volume ratio Veff/Vd,average', 'SHW.volume_ratio'],
         ['Solar storage volume factor', 'SHW.f2'],
         ['Annual solar input Qs (kWh)', 'SHW.Qs']
+    ];
+
+    var DWU = comparePropertiesInArray(scenario, properties_to_check);
+    if (DWU.changed === true) {
+        changed = true;
+        out += DWU.html;
+    }
+
+    return {html: out, changed: changed};
+}
+
+function compareGeneration(scenario) {
+    var out = "";
+    var changed = false;
+
+    var properties_to_check = [
+        ['Solar PV Annual Generation','generation.solar_annual_kwh'],
+        ['Solar PV Fraction used on-site','generation.solar_fraction_used_onsite'],
+        ['Solar PV Feed in tariff (£/kWh)','generation.solar_FIT'],
+        ['Wind Annual Generation','generation.wind_annual_kwh'],
+        ['Wind Fraction used on-site','generation.wind_fraction_used_onsite'],
+        ['Wind Feed in tariff (£/kWh)','generation.wind_FIT'],
+        ['Hydro Annual Generation','generation.hydro_annual_kwh'],
+        ['Hydro Fraction used on-site','generation.hydro_fraction_used_onsite'],
+        ['Hydro Feed in tariff (£/kWh)','generation.hydro_FIT'],
+        ['Array Installed Capacity kWp (PV calculator)','generation.solarpv_kwp_installed'],
+        ['Array Orientation (PV calculator)','generation.solarpv_orientation'],
+        ['Array Inclination (PV calculator)','generation.solarpv_inclination'],
+        ['Overshading factor (PV calculator)','generation.solarpv_overshading'],
+        ['Annual generation (PV calculator)','generation.solarpv_annual_kwh'],
+        ['Fraction used on-site (PV calculator)','generation.solarpv_fraction_used_onsite'],
+        ['Feed in tariff (£/kWh) (PV calculator)','generation.solarpv_FIT']
     ];
 
     var DWU = comparePropertiesInArray(scenario, properties_to_check);
