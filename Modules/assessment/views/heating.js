@@ -389,8 +389,9 @@ function add_heating_systems() {
 
     for (z in data.heating_systems) {
         var item = data.heating_systems[z];
-        out = '<tr><td style="text-align:center">' + item.tag + '<br /><br /><span class="edit-item-heating-system" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
-        out += '<span class = "delete-heating-system" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
+        out = '<tr><td style="text-align:center">' + item.tag + '<br /><br />';
+        out += '<span class="edit-item-heating-system if-master" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
+        out += '<span class = "delete-heating-system if-master" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
         out += '<span class="apply-water-heating-measure if-not-master" type="heating_systems_measures" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked" style="margin-left: 20px">Apply measure</button></span></td><td>' + item.name + '</td>';
         out += '<td><select style="width:100px" key="data.heating_systems.' + z + '.provides"><option value="heating">Space heating</option><option value="water">Water heating</option><option value="heating_and_water">Space and water heating</option></select></td>';
         out += '<td class="if-SH">' + item.winter_efficiency + '</td><td class="if-WH">' + item.summer_efficiency + '</td>';
@@ -420,11 +421,13 @@ function add_heating_systems() {
         out += '<option value="secondaryHS">Secondary heating system</option > </select></td >';
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.responsiveness" max = "1" step = "0.01" min = "0" /> </td>';
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.temperature_adjustment" max = "1" step = "0.01" min = "0" /> </td>';
-        out += '<td class = "if-SH" style = "text-align:center" > <input style = "width:40px" type = "number" key = "data.heating_systems.' + z + '.heating_controls" max = "3" step = "1" min = "1" /> \n\
+        out += '<td class = "if-SH" style = "text-align:center" > <input class="controls-input" style = "width:40px" type = "number" key = "data.heating_systems.' + z + '.heating_controls" max = "3" step = "1" min = "1" /> \n\
         <br /> <span class = "apply-water-heating-measure if-not-master" type = "space_heating_control_type" item - index = "' + z + '" style = "cursor:pointer" > <button class = "btn if-not-locked" > Apply measure </button></span > </td>';
         out += '<td class = "if-WH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.instantaneous_water_heating" /> </td></tr > ';
 
         $('#heating-systems').append(out);
+        if(scenario != 'master')
+            $('.controls-input').attr("disabled",true);
         switch (data.heating_systems[z].provides) {
             case 'heating':
                 $('.if-WH').html('');
@@ -461,8 +464,8 @@ function add_storage() {
             specific_header = '<th>Loss factor b</th><th>Volume factor b</th><th>Temperature factor b</th>';
             specific_st_info = '<td>' + st.loss_factor_b + '</td><td>' + st.volume_factor_b + '</td><td>' + st.temperature_factor_b + '</td>';
         }
-        $('#type_of_storage').append('<tr><th>Type of storage </th><th>Volume</th><th>Insulation type</th>' + specific_header + '<th>Inside dwelling?</th><th style="width:150px">Contains dedicated solar storage or WWHRS volume?</th><th></th></tr>');
-        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td><td>' + st.insulation_type + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type_measures" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></td></tr>');
+        $('#type_of_storage').append('<tr><th>Type of storage </th><th>Volume</th>' + specific_header + '<th>Inside dwelling?</th><th style="width:150px">Contains dedicated solar storage or WWHRS volume?</th><th></th></tr>');
+        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td>'+ specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type_measures" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></td></tr>');
     }
 
 }
