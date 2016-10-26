@@ -33,7 +33,7 @@ $("#openbem").on("click", '.add-element', function () {
     var newelementid = data.fabric.elements.length - 1;
     if (type == "Wall")
         add_element("#elements", newelementid);
-    if (type == "Roof")
+    if (type == "Roof" || type == "Loft")
         add_element("#roofs", newelementid);
     if (type == "Floor")
         add_floor(newelementid);
@@ -287,7 +287,7 @@ function elements_initUI()
             add_element("#elements", z);
         } else if (type == 'Floor' || type == 'floor') {
             add_floor(z);
-        } else if (type == 'Roof' || type == 'roof') {
+        } else if (type == 'Roof' || type == 'roof' || type == 'Loft') {
             add_element("#roofs", z);
         } else if (type == 'Window' || type == 'window' || type == 'Door' || type == 'Roof_light' || type == 'Hatch') {
             add_window(z);

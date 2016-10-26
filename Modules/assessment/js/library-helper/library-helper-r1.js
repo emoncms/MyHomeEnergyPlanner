@@ -883,6 +883,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     else
         out += '<option value="Party_wall">Party wall</option>';
     out += tag[0] == 'Roof' ? '<option value="Roof" selected>Roof</option>' : '<option value="Roof">Roof</option>';
+    out += tag[0] == 'Loft' ? '<option value="Loft" selected>Loft</option>' : '<option value="Loft">Loft</option>';
     out += tag[0] == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
     out += tag[0] == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
     out += tag[0] == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
@@ -1138,6 +1139,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     else
         out += '<option value="Party_wall">Party wall</option>';
     out += type == 'Roof' ? '<option value="Roof" selected>Roof</option>' : '<option value="Roof">Roof</option>';
+    out += type == 'Loft' ? '<option value="Loft" selected>Loft</option>' : '<option value="Loft">Loft</option>';
     out += type == 'Floor' ? '<option value="Floor" selected>Floor</option>' : '<option value="Floor">Floor</option>';
     out += type == 'Window' ? ' <option value = "Window" selected > Window </option>' : '<option value="Window">Window</option> ';
     out += type == 'Door' ? ' <option value = "Door" selected > Door </option>' : '<option value="Door">Door</option> ';
