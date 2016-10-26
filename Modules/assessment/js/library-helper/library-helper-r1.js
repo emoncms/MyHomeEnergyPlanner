@@ -1166,6 +1166,25 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     return out;
 };
 libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
+        if (item == undefined)
+        item = {tag: '', name: 'New name', EWI: false, uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
+            source: "", description: "", performance: "", benefits: "", cost: "",
+            who_by: "", disruption: "", associated_work: "", key_risks: "", notes: "",
+            maintenance: "", };
+    else if (tag != undefined)
+        item.tag = tag;
+    var type = "";
+    if (item.tags != undefined)
+        type = item.tags[0];
+    else if (item.type != undefined) {
+        type = item.type.charAt(0).toUpperCase() + item.type.slice(1); // Ensure first letter is capital
+        item.tags = [type];
+    }
+    else {
+        item.tags = ['Wall'];
+        type = 'Wall';
+    }
+    
     var out = this.elements_item_to_html(item, tag);
 
     out += '<table><tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
@@ -1174,7 +1193,7 @@ libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
         if (item.EWI === true)
             out += '<tr class="EWI-row"><td>EWI <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" /></td><td><input style="margin-bottom:10px" type="checkbox" class="create-element-ewi" checked /></td></tr>';
         else
-            out += '<tr class="EWI-row"><td>EWI <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" /></td><td><input style="margin-bottom:10px type="checkbox" class="create-element-ewi"  /></td></tr>';
+            out += '<tr class="EWI-row"><td>EWI <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" /></td><td><input style="margin-bottom:10px" type="checkbox" class="create-element-ewi"  /></td></tr>';
     }
     out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
