@@ -904,7 +904,7 @@ var standard_library = {
             ff: 0
         },
         "PWUS_01": {
-            tags: ['Wall'],
+            tags: ['Party_wall'],
             name: "225mm brick wall, plastered both sides. ",
             description: "",
             location: "",
@@ -916,7 +916,7 @@ var standard_library = {
             ff: 0
         },
         "PWUC_01": {
-            tags: ['Wall'],
+            tags: ['Party_wall'],
             name: "Cavity masonry wall, uncapped, unfilled. ",
             description: "",
             location: "",
