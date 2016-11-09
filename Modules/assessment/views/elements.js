@@ -270,6 +270,8 @@ function add_window(z)
 
 function elements_initUI()
 {
+    library_helper.type = 'elements';
+    
     if (data.fabric.measures == undefined) // Normally this is done in model-rX.js. The model is intended for calculations so i prefer to initialize data.fabric.measures here
         data.fabric.measures = {};
 

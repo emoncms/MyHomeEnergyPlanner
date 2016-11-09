@@ -346,12 +346,12 @@ global $reports;
         data = project[scenario];
 
         // Update the type of the libraries we are using
-        if (typeof library_helper != "undefined") {
+        /*if (typeof library_helper != "undefined") {
             if (page == "system")
                 library_helper.type = 'systems';
             else
                 library_helper.type = page;
-        }
+        }*/
 
         // Render page
         load_view("#content", page);
