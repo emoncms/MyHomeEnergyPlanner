@@ -347,11 +347,11 @@ global $reports;
 
         // Update the type of the libraries we are using
         /*if (typeof library_helper != "undefined") {
-            if (page == "system")
-                library_helper.type = 'systems';
-            else
-                library_helper.type = page;
-        }*/
+         if (page == "system")
+         library_helper.type = 'systems';
+         else
+         library_helper.type = page;
+         }*/
 
         // Render page
         load_view("#content", page);
@@ -438,18 +438,18 @@ global $reports;
 
     $("#openbem").on('click', ".scenario-block", function () {
         var s = $(this).attr('scenario');
-      //  if (s != scenario) {
-            window.location = '#' + s + '/' + page;
-            $(".menu-content").hide();
-            $(this).find(".menu-content").show();
-            /*
-             data = project[scenario];
-             load_view("#content", page);
-             InitUI();
-             UpdateUI(data);
-             draw_openbem_graphics();
-             */
-       // }
+        //  if (s != scenario) {
+        window.location = '#' + s + '/' + page;
+        $(".menu-content").hide();
+        $(this).find(".menu-content").show();
+        /*
+         data = project[scenario];
+         load_view("#content", page);
+         InitUI();
+         UpdateUI(data);
+         draw_openbem_graphics();
+         */
+        // }
     });
 
     $('#openbem').on('click', '.project-menu-item', function () {
@@ -494,6 +494,7 @@ global $reports;
 
         scenario = s;
         update();
+        $('div [scenario="' + s + '"]').click();
     });
 
     $("#openbem").on('click', ".delete-scenario-launch", function () {
