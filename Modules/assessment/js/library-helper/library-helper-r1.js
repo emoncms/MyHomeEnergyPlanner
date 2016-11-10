@@ -2382,8 +2382,6 @@ libraryHelper.prototype.populate_measure_new_item = function (type_of_library) {
     var library = this.get_library_by_id($('#replace-from-lib').val()).data;
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var new_item = library[item_index];
-    if (original_item.location != undefined)
-        new_item.location = original_item.location;
     $('#apply-measure-item-fields').html('');
     var function_name = type_of_library + "_item_to_html";
     var out = this[function_name](new_item, item_index);
