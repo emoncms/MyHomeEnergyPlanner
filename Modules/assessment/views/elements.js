@@ -242,11 +242,11 @@ function add_window(z)
 
     var name = data.fabric.elements[z].name;
     name = name.toLowerCase();
-    if (data.fabric.elements[z].type == 'Door' || name.indexOf("door") != -1) {
+    if (data.fabric.elements[z].type == 'Door') {
         $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', '#ffeeee');
     }
 
-    if (data.fabric.elements[z].type == 'Roof_light' || name.indexOf("roof") != -1) {
+    if (data.fabric.elements[z].type == 'Roof_light') {
         $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', '#eeffee');
     }
 
@@ -271,7 +271,7 @@ function add_window(z)
 function elements_initUI()
 {
     library_helper.type = 'elements';
-    
+
     if (data.fabric.measures == undefined) // Normally this is done in model-rX.js. The model is intended for calculations so i prefer to initialize data.fabric.measures here
         data.fabric.measures = {};
 
@@ -318,11 +318,11 @@ function elements_UpdateUI()
         var name = data.fabric.elements[z].name;
         name = name.toLowerCase();
 
-        if (data.fabric.elements[z].type == 'Door' || name.indexOf("door") != -1) {
+        if (data.fabric.elements[z].type == 'Door') {
             color = '#ffeeee';
         }
 
-        if (data.fabric.elements[z].type == 'Roof_light' || name.indexOf("roof") != -1) {
+        if (data.fabric.elements[z].type == 'Roof_light') {
             color = '#ddffdd';
         }
 
