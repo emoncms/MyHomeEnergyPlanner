@@ -936,8 +936,8 @@ function carboncoopreport_UpdateUI() {
     $(".js-thermostat-comparison").html(compare(21, parseFloat(data.household["3a_roomthermostat"])));
     $('#js-habitable-not-heated-rooms').html(project['master'].household["3a_habitable_rooms_not_heated"])
     $(".js-unheated-rooms-comparison").html(compare(0, project['master'].household["3a_habitable_rooms_not_heated"]));
-    $(".js-appliance-energy-use").html(Math.round(project.master.energy_requirements.appliances.quantity));
-    $(".js-appliance-energy-use-comparison").html(compare(3880, Math.round(project.master.energy_requirements.appliances.quantity)));
+    $(".js-appliance-energy-use").html(Math.round(project.master.energy_requirements.appliances != undefined ? project.master.energy_requirements.appliances.quantity : 0));
+    $(".js-appliance-energy-use-comparison").html(compare(3880, Math.round(project.master.energy_requirements.appliances != undefined ? project.master.energy_requirements.appliances.quantity : 0)));
     /* Figure 12: SAP chart
      //
      */
@@ -1379,7 +1379,7 @@ function carboncoopreport_UpdateUI() {
 function compareCarbonCoop(scenario, outputElement) {
 
     var out = "";
-    
+
     // Basic dwelling data
     var properties_to_check = [
         ["Region", 'region'],
@@ -1419,7 +1419,7 @@ function compareCarbonCoop(scenario, outputElement) {
     var SHW = compareSolarHotWater(scenario);
     if (SHW.changed === true)
         out += '<h3>Solar hot water</h3><table class="table table-striped">' + SHW.html + '</table></br>';
-    
+
     // Generation
     var GEN = compareGeneration(scenario);
     if (GEN.changed === true)
@@ -1941,22 +1941,22 @@ function compareGeneration(scenario) {
     var changed = false;
 
     var properties_to_check = [
-        ['Solar PV Annual Generation','generation.solar_annual_kwh'],
-        ['Solar PV Fraction used on-site','generation.solar_fraction_used_onsite'],
-        ['Solar PV Feed in tariff (£/kWh)','generation.solar_FIT'],
-        ['Wind Annual Generation','generation.wind_annual_kwh'],
-        ['Wind Fraction used on-site','generation.wind_fraction_used_onsite'],
-        ['Wind Feed in tariff (£/kWh)','generation.wind_FIT'],
-        ['Hydro Annual Generation','generation.hydro_annual_kwh'],
-        ['Hydro Fraction used on-site','generation.hydro_fraction_used_onsite'],
-        ['Hydro Feed in tariff (£/kWh)','generation.hydro_FIT'],
-        ['Array Installed Capacity kWp (PV calculator)','generation.solarpv_kwp_installed'],
-        ['Array Orientation (PV calculator)','generation.solarpv_orientation'],
-        ['Array Inclination (PV calculator)','generation.solarpv_inclination'],
-        ['Overshading factor (PV calculator)','generation.solarpv_overshading'],
-        ['Annual generation (PV calculator)','generation.solarpv_annual_kwh'],
-        ['Fraction used on-site (PV calculator)','generation.solarpv_fraction_used_onsite'],
-        ['Feed in tariff (£/kWh) (PV calculator)','generation.solarpv_FIT']
+        ['Solar PV Annual Generation', 'generation.solar_annual_kwh'],
+        ['Solar PV Fraction used on-site', 'generation.solar_fraction_used_onsite'],
+        ['Solar PV Feed in tariff (£/kWh)', 'generation.solar_FIT'],
+        ['Wind Annual Generation', 'generation.wind_annual_kwh'],
+        ['Wind Fraction used on-site', 'generation.wind_fraction_used_onsite'],
+        ['Wind Feed in tariff (£/kWh)', 'generation.wind_FIT'],
+        ['Hydro Annual Generation', 'generation.hydro_annual_kwh'],
+        ['Hydro Fraction used on-site', 'generation.hydro_fraction_used_onsite'],
+        ['Hydro Feed in tariff (£/kWh)', 'generation.hydro_FIT'],
+        ['Array Installed Capacity kWp (PV calculator)', 'generation.solarpv_kwp_installed'],
+        ['Array Orientation (PV calculator)', 'generation.solarpv_orientation'],
+        ['Array Inclination (PV calculator)', 'generation.solarpv_inclination'],
+        ['Overshading factor (PV calculator)', 'generation.solarpv_overshading'],
+        ['Annual generation (PV calculator)', 'generation.solarpv_annual_kwh'],
+        ['Fraction used on-site (PV calculator)', 'generation.solarpv_fraction_used_onsite'],
+        ['Feed in tariff (£/kWh) (PV calculator)', 'generation.solarpv_FIT']
     ];
 
     var DWU = comparePropertiesInArray(scenario, properties_to_check);
