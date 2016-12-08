@@ -36,7 +36,7 @@ function draw_openbem_graphics()
     $("#house-thermalbridgewk").html(Math.round(thermalbridgewk) + " W/K");
     $("#house-infiltrationwk").html(Math.round(infiltrationwk) + " W/K");
     $("#house-totalwk").html(Math.round(totalwk) + " W/K");
-    
+
     var targetbarwidth = $("#targetbars").width();
 
     $("#spaceheating").css("width", targetbarwidth);
@@ -53,10 +53,21 @@ function draw_openbem_graphics()
     $("#perperson").css("height", targetbarheight);
 
     // ---------------------------------------------------------------------------------
+    var value = '';
+    var units = '';
+    // ---------------------------------------------------------------------------------
+    if (isNaN(data.space_heating_demand_m2) == true) {
+        value = 'No data yet';
+        units = '';
+    }
+    else {
+        value = Math.round(data.space_heating_demand_m2);
+        units = "kWh/m2";
+    }
     var options = {
         name: "Space heating demand",
-        value: Math.round(data.space_heating_demand_m2),
-        units: "kWh/m2",
+        value: value,
+        units: units,
         targets: {
             //"Passivhaus": 15,
             "Passivhaus retrofit": 25,
@@ -65,10 +76,18 @@ function draw_openbem_graphics()
     };
     targetbar("spaceheating", options);
     // ---------------------------------------------------------------------------------
+    if (isNaN(data.primary_energy_use_m2) == true) {
+        value = 'No data yet';
+        units = '';
+    }
+    else {
+        value = Math.round(data.primary_energy_use_m2);
+        units = "kWh/m2";
+    }
     var options = {
         name: "Primary energy demand",
-        value: Math.round(data.primary_energy_use_m2),
-        units: "kWh/m2",
+        value: value,
+        units: units,
         targets: {
             "Passivhaus": 120,
             "UK Average": 350
@@ -76,10 +95,18 @@ function draw_openbem_graphics()
     };
     targetbar("primaryenergy", options);
     // ---------------------------------------------------------------------------------
+    if (isNaN(data.kgco2perm2) == true) {
+        value = 'No data yet';
+        units = '';
+    }
+    else {
+        value = Math.round(data.kgco2perm2);
+        units = "kWh/m2";
+    }
     var options = {
         name: "CO2 Emission rate",
-        value: Math.round(data.kgco2perm2),
-        units: "kgCO2/m2",
+        value: value,
+        units: units,
         targets: {
             "80% by 2050": 17,
             "UK Average": 85
@@ -87,10 +114,18 @@ function draw_openbem_graphics()
     };
     targetbar("co2", options);
     // ---------------------------------------------------------------------------------
+    if (isNaN(data.kwhdpp) == true) {
+        value = 'No data yet';
+        units = '';
+    }
+    else {
+        value = Math.round(data.kwhdpp.toFixed(1));
+        units = "kWh/m2";
+    }
     var options = {
         name: "Per person energy use",
-        value: data.kwhdpp.toFixed(1),
-        units: "kWh/day",
+        value: value,
+        units: units,
         targets: {
             "70% heating saving": 8.6,
             "UK Average": 19.6
