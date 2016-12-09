@@ -462,6 +462,10 @@ function ventilation_initUI()
         $('#CDF').append(out);
     }
 
+    // Darught proofing measure applied
+    if (data.measures.ventilation['draught_proofing_measures'] != undefined)
+        $('#draught-proofing_measure-applied').html('Measure applied: ' + data.measures.ventilation['draught_proofing_measures'].measure.name);
+
     show_hide_if_master();
 }
 
