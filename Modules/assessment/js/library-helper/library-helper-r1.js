@@ -1149,7 +1149,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     out += '<table class="table">';
     out += '<tr><td>Tag</td><td><input type="text" class="create-element-tag item-tag" value="' + item.tag + '" /></td></tr>';
     out += '<tr><td>Name</td><td><input type="text" class="create-element-name" value="' + item.name + '" /></td></tr>';
-    out += '<tr><td>Description</td><td><input type="text" class="create-element-description" value="' + item.description + '" /></td></tr>';
+    //out += '<tr><td>Description</td><td><input type="text" class="create-element-description" value="' + item.description + '" /></td></tr>';
     //out += '<tr><td>Location</td><td><input type="text" class="create-element-location" value="' + item.location + '" /></td></tr>';
     out += '<tr><td>Source</td><td><input type="text" class="create-element-source" value="' + item.source + '" /></td></tr>';
     out += '<tr><td>U-value</td><td><input type="text" class="create-element-uvalue editable-field" value="' + item.uvalue + '" /></td></tr>';
