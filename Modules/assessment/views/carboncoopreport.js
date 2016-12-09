@@ -677,16 +677,16 @@ function carboncoopreport_UpdateUI() {
                         primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['fans_and_pumps'] / data.TFA, label: 'Fans and Pumps'});
                     }
                     if (project[scenarios[i]].use_generation == 1) {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA, label: 'Offset'});
-                        primaryEnergyUseData[scenarios[i]][0].value += project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA; // We substract the offset (generation) from the first stack (water heating)
+                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA, label: 'Generation'});
+                        //primaryEnergyUseData[scenarios[i]][0].value += project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA; // We substract the offset (generation) from the first stack (water heating)
                     }
-                    else
-                        primaryEnergyUseData[scenarios[i]].push({value: 0, label: 'Offset'});
+                    //else
+                        primaryEnergyUseData[scenarios[i]].push({value: 0, label: 'Generation'});
                 }
             }
             if (typeof project[scenarios[i]] !== "undefined" && project[scenarios[i]].primary_energy_use_m2 > primaryEnergyUseData.max)
                 primaryEnergyUseData.max = project[scenarios[i]].primary_energy_use_m2;
-            if (typeof project[scenarios[i]] !== "undefined" && project[scenarios[i]].use_generation == 1 && project[scenarios[i]].fuel_totals['generation'].primaryenergy < primaryEnergyUseData.min)  // fuel_totals['generation'] is negative
+            if (typeof project[scenarios[i]] !== "undefined" && project[scenarios[i]].use_generation == 1 && project[scenarios[i]].fuel_totals['generation'].primaryenergy / project[scenarios[i]].TFA < primaryEnergyUseData.min)  // fuel_totals['generation'] is negative
                 primaryEnergyUseData.min = project[scenarios[i]].fuel_totals['generation'].primaryenergy / project[scenarios[i]].TFA;
         }
 
@@ -721,7 +721,8 @@ function carboncoopreport_UpdateUI() {
             'Appliances': 'rgb(240,212,156)',
             'Lighting': 'rgb(236,102,79)',
             'Fans and Pumps': 'rgb(246, 167, 7)',
-            'Non categorized': 'rgb(131, 51, 47)'
+            'Non categorized': 'rgb(131, 51, 47)',
+            'Generation': 'rgb(200,213,203)'
         },
         data: [
             {label: 'Your Home Now', value: primaryEnergyUseData.master},
