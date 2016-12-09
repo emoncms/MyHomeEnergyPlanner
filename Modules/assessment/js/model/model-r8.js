@@ -996,7 +996,7 @@ calc.fuel_requirements = function (data) {
             quantity: -data.generation.total_generation,
             annualco2: -data.generation.total_CO2,
             primaryenergy: -data.generation.total_primaryenergy,
-            annualcost: -data.generation.total_generation * data.fuels.generation.fuelcost
+            annualcost: -data.generation.total_used_onsite * data.fuels.generation.fuelcost / 100 
         };
         data.primary_energy_use += data.fuel_totals['generation'].primaryenergy;
         data.annualco2 += data.fuel_totals['generation'].annualco2;
