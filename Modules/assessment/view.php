@@ -454,6 +454,7 @@ global $reports;
 
     $('#openbem').on('click', '.project-menu-item', function () {
         $('.scenario-block[scenario=master]').click();
+        $('.menu-content').hide();
     });
 
     $("#openbem").on('click', "#create-new", function () {
@@ -536,6 +537,7 @@ global $reports;
     $("#modal-error-submitting-data-done").on('click', function () {
         location.reload();
     });
+
 
 
     //-------------------------------------------------------------------
