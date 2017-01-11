@@ -676,12 +676,20 @@ function carboncoopreport_UpdateUI() {
                     if (typeof project[scenarios[i]].primary_energy_use_by_requirement['fans_and_pumps'] !== "undefined") {
                         primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].primary_energy_use_by_requirement['fans_and_pumps'] / data.TFA, label: 'Fans and Pumps'});
                     }
-                    if (project[scenarios[i]].use_generation == 1) {
-                        primaryEnergyUseData[scenarios[i]].push({value: project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA, label: 'Generation'});
-                        //primaryEnergyUseData[scenarios[i]][0].value += project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA; // We substract the offset (generation) from the first stack (water heating)
+                    if (project[scenarios[i]].use_generation == 1 && project[scenarios[i]].fuel_totals['generation'].primaryenergy < 0) { // we offset the stack displacing it down for the amount of renewables
+                        var renewable_left = -project[scenarios[i]].fuel_totals['generation'].primaryenergy / data.TFA; // fuel_totals['generation'].primaryenergy is negative
+                        primaryEnergyUseData[scenarios[i]].forEach(function (use) {
+                            if (use.value <= renewable_left) {
+                                renewable_left -= use.value;
+                                use.value = -use.value;
+                            }
+                            if (use.value > renewable_left) {
+                                primaryEnergyUseData[scenarios[i]].push({value: use.value - renewable_left, label: use.label}); // we create another bar with the same color than current use with the amount that is still positive
+                                use.value = -renewable_left; // the amount offseted
+                                renewable_left = 0;
+                            }
+                        });
                     }
-                    //else
-                        primaryEnergyUseData[scenarios[i]].push({value: 0, label: 'Generation'});
                 }
             }
             if (typeof project[scenarios[i]] !== "undefined" && project[scenarios[i]].primary_energy_use_m2 > primaryEnergyUseData.max)
@@ -719,10 +727,9 @@ function carboncoopreport_UpdateUI() {
             'Space Heating': 'rgb(231,37,57)',
             'Cooking': 'rgb(24,86,62)',
             'Appliances': 'rgb(240,212,156)',
-            'Lighting': 'rgb(236,102,79)',
-            'Fans and Pumps': 'rgb(246, 167, 7)',
+            'Lighting': 'rgb(236,102,79)', 'Fans and Pumps': 'rgb(246, 167, 7)',
             'Non categorized': 'rgb(131, 51, 47)',
-            'Generation': 'rgb(200,213,203)'
+           // 'Generation': 'rgb(200,213,203)'
         },
         data: [
             {label: 'Your Home Now', value: primaryEnergyUseData.master},
@@ -746,6 +753,9 @@ function carboncoopreport_UpdateUI() {
     });
     $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
+
+
+
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
      */
@@ -774,13 +784,11 @@ function carboncoopreport_UpdateUI() {
         width: 1200,
         chartHeight: 600,
         barWidth: 110,
-        barGutter: 80,
-        defaultBarColor: 'rgb(157,213,203)',
+        barGutter: 80, defaultBarColor: 'rgb(157,213,203)',
         data: carbonDioxideEmissionsData,
         targets: [
             {
-                label: 'Carbon Coop Target',
-                target: 20,
+                label: 'Carbon Coop Target', target: 20,
                 color: 'rgb(231,37,57)'
             },
             {
@@ -814,8 +822,7 @@ function carboncoopreport_UpdateUI() {
     var CarbonDioxideEmissionsPerPerson = new BarChart({
         chartTitle: 'Carbon Dioxide Emissions Per Person',
         yAxisLabel: 'kgCO2/person/year',
-        fontSize: 22,
-        font: "Karla",
+        fontSize: 22, font: "Karla",
         division: 1000,
         width: 1200,
         chartHeight: 600,
@@ -866,19 +873,15 @@ function carboncoopreport_UpdateUI() {
         chartTitle: 'Estimate Energy Costs (Net) Comparison',
         yAxisLabel: '£/year',
         fontSize: 22,
-        font: "Karla",
-        division: 'auto',
+        font: "Karla", division: 'auto',
         chartHigh: max + 50,
         width: 1200,
         chartHeight: 600,
-        barGutter: 80,
-        defaultBarColor: 'rgb(157,213,203)',
+        barGutter: 80, defaultBarColor: 'rgb(157,213,203)',
         data: estimatedEnergyCostsData
     });
     $('#estimated-energy-cost-comparison').html('');
-    EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');
-    /* Figure 11: Your home compared with the average home.
-     // Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
+    EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');     /* Figure 11: Your home compared with the average home.      // Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
      // Would be useful to have total hours of heating (currently only given times heating is on - see question 3a)
      // Where is data for number of rooms not heated? Appliance Q?
      */
@@ -985,7 +988,6 @@ function carboncoopreport_UpdateUI() {
     } else {
         var sapScenario2 = false;
     }
-
     if (typeof project["scenario3"] != "undefined" && typeof project["scenario3"]["SAP"] !== "undefined") {
         var sap2050 = Math.round(project["scenario3"]["SAP"]["rating"]);
     } else {
@@ -1019,70 +1021,64 @@ function carboncoopreport_UpdateUI() {
             }
             $("#" + tableID + " .extreme-left").after($("<td class='comfort-table-td comfort-table-option " + i + "'  style='background:" + background + "'></td>"));
         }
-
     }
 
     var red = "rgb(228, 27, 58)";
     var green = "rgb(149, 211, 95)";
+    
     // Temperature in Winter
-    var options = [
-        {
+    var options = [{
             title: "Too cold",
             color: red,
         }, {
             title: "Just right",
             color: green,
-        }, {
-            title: "Too hot",
-            color: red
+        }, {title: "Too hot", color: red
         }
     ];
     createComforTable(options, "comfort-table-winter-temp", project.master.household["6a_temperature_winter"]);
+    
     // Air quality in winter
-
     var options = [
         {
-            title: "Too dry",
-            color: red,
+            title: "Too dry", color: red,
         }, {
             title: "Just right",
             color: green,
         }, {
             title: "Too stuffy",
             color: red
-        }
-    ];
+        }];
     createComforTable(options, "comfort-table-winter-air", project.master.household["6a_airquality_winter"]);
+    createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
+    
     // Temperature in Summer
-
     var options = [
         {
             title: "Too cold",
             color: red,
         }, {
-            title: "Just right",
-            color: green,
+            title: "Just right", color: green,
         }, {
             title: "Too hot",
             color: red
         }
     ];
-    createComforTable(options, "comfort-table-summer-temp", project.master.household["6a_temperature_summer"]);
+        createComforTable(options, "comfort-table-summer-temp", project.master.household["6a_temperature_summer"]);
+        
     // Air quality in Summer
-
     var options = [
         {
-            title: "Too dry",
-            color: red,
+            title: "Too dry", color: red,
         }, {
             title: "Just right",
             color: green,
         }, {
             title: "Too stuffy",
             color: red
-        }
-    ];
+        }];
     createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
+    
     var options = [
         {
             title: "Too little",
@@ -1096,6 +1092,7 @@ function carboncoopreport_UpdateUI() {
         }
     ];
     createComforTable(options, "comfort-table-daylight-amount", project.master.household["6b_daylightamount"]);
+    
     var options = [
         {
             title: "Too little",
@@ -1109,6 +1106,8 @@ function carboncoopreport_UpdateUI() {
         }
     ];
     createComforTable(options, "comfort-table-artificial-light-amount", project.master.household["6b_artificallightamount"]);
+    
+    
     /* Figure 14: Humidity Data
      // 
      */
@@ -1124,7 +1123,6 @@ function carboncoopreport_UpdateUI() {
     /* Figure 16: You also told us...
      // 
      */
-
     var laundryHabits = "";
     if (typeof data.household["4b_drying_outdoorline"] != "undefined" && data.household["4b_drying_outdoorline"]) {
         laundryHabits += "outdoor clothes line, ";
@@ -1151,8 +1149,7 @@ function carboncoopreport_UpdateUI() {
     var laundryHabits = laundryHabits.slice(0, -2);
     $(".js-laundry-habits").html(laundryHabits);
     /* Figure 17: Scenario 1 Measures
-     //
-     */
+     //      */
 
     var measuresTableColumns = [
         "name",
@@ -1233,12 +1230,12 @@ function carboncoopreport_UpdateUI() {
 
     function initialiseMeasuresTable(tableSelector) {
         var html = '<tr>\
-            <th class="tg-yw4l" rowspan="2">Measure</th>\
+        <th class="tg-yw4l" rowspan="2">Measure</th>\
             <th class="tg-yw4l" rowspan="2">Description</th>\
-            <th class="tg-yw4l" rowspan="2">Performance Target</th>\
-            <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
-            <th class="tg-yw4l" colspan="4">How Much?</th>\
-            <th class="tg-yw4l" rowspan="2">Who by?</th>\
+                <th class="tg-yw4l" rowspan="2">Performance Target</th>\
+    <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
+    <th class="tg-yw4l" colspan="4">How Much?</th>\
+        <th class="tg-yw4l" rowspan="2">Who by?</th>\
             <th class="tg-yw4l" rowspan="2">Key risks</th>\
             <th class="tg-yw4l" rowspan="2">Dirt and disruption?</th>\
             <th class="tg-yw4l" rowspan="2">Associated work?</th>\
@@ -1263,12 +1260,11 @@ function carboncoopreport_UpdateUI() {
     function initiliaseMeasuresSummaryTable(summaryTableSelector) {
         var html = "<thead>\
 				<tr>\
-					<th>Name</th>\
-            <th>Description</th>\
-            <th>Benefits (in order)</th>\
+        <th>Name</th>\             <th>Description</th>\
+        <th>Benefits (in order)</th>\
 					<th>Cost</th>\
 					<th>Completed By</th>\
-            <th>Disruption</th>\
+        <th>Disruption</th>\
 				</tr>\
 			</thead>\
 	 	<tbody>\
@@ -1400,18 +1396,17 @@ function compareCarbonCoop(scenario, outputElement) {
     var Inf = compareInfiltration(scenario);
     if (Inf.changed === true)
         out += '<h3>Infiltration</h3><table class="table table-striped">' + Inf.html + '</table></br>';
-    // Clothes drying facilities
+    // Clothes drying facilities     
     var CDF = compareClothesDryingFacilities(scenario);
     if (CDF.changed === true)
-        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>';
-    //Fabric
+        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>';     //Fabric
     var Fabric = compareFabric(scenario);
     if (Fabric.changed === true)
         out += '<h3>Fabric</h3><p>Changes to Floor\'s, Wall\'s, Windows and Roof elements</p>\n\
-            <table class="table table-striped"><tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>'
+        <table class="table table-striped"><tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>'
                 + Fabric.html + '</table></br>';
 
-    // Heating
+    // Heating    
     var Heating = compareHeating(scenario);
     if (Heating.changed === true)
         out += '<h3>Heating</h3><table class="table table-striped">' + Heating.html + '</table></br>';
@@ -1436,8 +1431,7 @@ function compareCarbonCoop(scenario, outputElement) {
     if (FR.changed === true)
         out += '<h3>Fuel requirements</h3><table class="table table-striped">' + FR.html + '</table></br>';
 
-    // Totals
-    out += '<h3>Totals</h3><table class="table table-striped"><tr><td></td><td>Before</td><td>After</td></tr>';
+    // Totals     out += '<h3>Totals</h3><table class="table table-striped"><tr><td></td><td>Before</td><td>After</td></tr>';
     out += '<tr><td>Annual cost</td><td><i>£' + project.master.total_cost.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_cost.toFixed(0) + '</i></td></tr>';
     out += '<tr><td>Total income</td><td><i>£' + project.master.total_income.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_income.toFixed(0) + '</i></td></tr>';
     out += '<tr><td>SAP rating</td><td><i>' + project.master.SAP.rating.toFixed(0) + '</i></td><td><i>' + project[scenario].SAP.rating.toFixed(0) + '</i></td></tr>';
@@ -1533,8 +1527,7 @@ function compareVentilation(scenario) {
         }
         else { // DEV, MV, MEV, MVHR
             properties_to_check = [
-                ['Air change rate', 'ventilation.system_air_change_rate'],
-                ['Specific Fan Power', 'ventilation.system_specific_fan_power'],
+                ['Air change rate', 'ventilation.system_air_change_rate'], ['Specific Fan Power', 'ventilation.system_specific_fan_power'],
                 ['Heat recovery efficiency', 'ventilation.balanced_heat_recovery_efficiency']
             ];
             var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
@@ -1566,8 +1559,7 @@ function compareInfiltration(scenario) {
     if (project.master.ventilation.air_permeability_test === false && project[scenario].ventilation.air_permeability_test === false) {
         var properties_to_check = [
             ['Number of sides sheltered', 'ventilation.number_of_sides_sheltered'],
-            ['Walls', 'ventilation.dwelling_construction'],
-            ['Floors', 'ventilation.suspended_wooden_floor'],
+            ['Walls', 'ventilation.dwelling_construction'], ['Floors', 'ventilation.suspended_wooden_floor'],
             ['Percentage of windows and doors draught proofed', 'ventilation.percentage_draught_proofed'],
             ['Draught Lobby', 'ventilation.draught_lobby']
         ];
@@ -1592,9 +1584,9 @@ function compareInfiltration(scenario) {
     else if (project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
         changed = true;
         out += '<tr><td>The original Infiltration due to dweling construction was calculated \n\
-                based on air tightness test with q50 = <i>' + project.master.ventilation.air_permeability_value
+        based on air tightness test with q50 = <i>' + project.master.ventilation.air_permeability_value
                 + ' cubic metres per hour per square metre of envelope area</i>. \n\
-                After applying <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.name
+        After applying <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.name
                 + '</i>,  q50 = <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.q50
                 + '</i></td></tr>';
         out += '<tr><td>The structural infiltration due to dwelling construction was <i>'
@@ -1662,7 +1654,6 @@ function compareClothesDryingFacilities(scenario) {
 
     return {html: out, changed: changed};
 }
-
 function compareFabric(scenario) {
     var out = "";
     var changed = false;
@@ -1708,8 +1699,7 @@ function compareHeating(scenario) {
     var changed = false;
 
     // Hot water demand
-    var properties_to_check = [
-        ["Designed water use is not more than 125 litres per person per day", 'water_heating.low_water_use_design'],
+    var properties_to_check = [["Designed water use is not more than 125 litres per person per day", 'water_heating.low_water_use_design'],
         ['Do you know how much energy you use for water heating?', 'water_heating.override_annual_energy_content'],
         ['Annual average hot water usage', 'water_heating.Vd_average'],
         ['Annual energy content', 'water_heating.annual_energy_content']
@@ -1803,9 +1793,7 @@ function compareHeating(scenario) {
     if (project[scenario].measures.water_heating != undefined
             && project[scenario].measures.water_heating.hot_water_control_type != undefined) {
         changed = true;
-        out += '<tr><td>The hot water storage control type has changed from <i>'
-                + project[scenario].measures.water_heating.hot_water_control_type.original
-                + '</i> to <i>' + project[scenario].measures.water_heating.hot_water_control_type.measure.control_type
+        out += '<tr><td>The hot water storage control type has changed from <i>' + project[scenario].measures.water_heating.hot_water_control_type.original + '</i> to <i>' + project[scenario].measures.water_heating.hot_water_control_type.measure.control_type
                 + '</i></td></tr>';
     }
 
@@ -1818,20 +1806,17 @@ function compareHeating(scenario) {
                 + '</i> to <i>' + project[scenario].measures.water_heating.pipework_insulation.measure.pipework_insulation
                 + '</i></td></tr>';
     }
-
     // Storage type
     if (project[scenario].measures.water_heating != undefined
             && project[scenario].measures.water_heating.storage_type_measures != undefined) {
         changed = true;
         out += '<tr><td>The type of storage has changed from <i>'
-                + project[scenario].measures.water_heating.storage_type_measures.original.name
-                + '</i> to <i>' + project[scenario].measures.water_heating.storage_type_measures.measure.name
+                + project[scenario].measures.water_heating.storage_type_measures.original.name + '</i> to <i>' + project[scenario].measures.water_heating.storage_type_measures.measure.name
                 + '</i></td></tr>';
     }
 
     return {html: out, changed: changed};
 }
-
 function compareEnergyRequirements(scenario) {
     var out = "";
     var changed = false;
@@ -1856,7 +1841,6 @@ function compareEnergyRequirements(scenario) {
 
     return {html: out, changed: changed};
 }
-
 function compareFuelRequirements(scenario) {
     var out = "";
     var changed = false;
@@ -1864,12 +1848,11 @@ function compareFuelRequirements(scenario) {
     for (var fuel in project.master.fuel_totals) {
         if (project[scenario].fuel_totals[fuel] == undefined) {
             changed = true;
-            out += '<tr><td style="padding-right:10px">' + fuel + '</td><td style="padding-right:10px"><i>Quantity: ' + project.master.fuel_totals[fuel].quantity.toFixed(2)
-                    + ' kWh, CO<sub>2</sub>: ' + project.master.fuel_totals[fuel].annualco2.toFixed(2)
+            out += '<tr><td style="padding-right:10px">' + fuel + '</td><td style="padding-right:10px"><i>Quantity: ' + project.master.fuel_totals[fuel].quantity.toFixed(2) + ' kWh, CO<sub>2</sub>: ' + project.master.fuel_totals[fuel].annualco2.toFixed(2)
                     + ' kg, Primary energy: ' + project.master.fuel_totals[fuel].primaryenergy.toFixed(2)
                     + ' kWh, Annual cost: £' + project.master.fuel_totals[fuel].annualcost.toFixed(2)
                     + '</i></td><td style="padding-right:10px" style="padding-right:10px"><i>Quantity: 0 kWh, CO<sub>2</sub>: 0 kg, Primary energy: 0 kWh, \n\
-                        Annual cost: £0</i></td><td style="padding-right:10px">100%</td><td>100%</td></tr>';
+                    Annual cost: £0</i></td><td style="padding-right:10px">100%</td><td>100%</td></tr>';
         }
         else if (project.master.fuel_totals[fuel].quantity != project[scenario].fuel_totals[fuel].quantity) {
             changed = true;
@@ -1882,17 +1865,15 @@ function compareFuelRequirements(scenario) {
                     + ' kg, Primary energy: ' + project[scenario].fuel_totals[fuel].primaryenergy.toFixed(2)
                     + ' kWh, Annual cost: £' + project[scenario].fuel_totals[fuel].annualcost.toFixed(2)
                     + '</i></td><td style="padding-right:10px">' + (100 * (project.master.fuel_totals[fuel].quantity - project[scenario].fuel_totals[fuel].quantity) / project.master.fuel_totals[fuel].quantity).toFixed(2)
-                    + '%</td><td>' + (100 * (project.master.fuel_totals[fuel].annualcost - project[scenario].fuel_totals[fuel].annualcost) / project.master.fuel_totals[fuel].annualcost).toFixed(2)
-                    + '%</td></tr>';
+                    + '%</td><td>' + (100 * (project.master.fuel_totals[fuel].annualcost - project[scenario].fuel_totals[fuel].annualcost) / project.master.fuel_totals[fuel].annualcost).toFixed(2) + '%</td></tr>';
         }
     }
     for (var fuel in project[scenario].fuel_totals) {
         if (project.master.fuel_totals[fuel] == undefined) {
             changed = true;
             out += '<tr><td style="padding-right:10px">' + fuel + '</td><td style="padding-right:10px"><i>Quantity: 0 kWh, \n\
-                    CO<sub>2</sub>: 0 kg, Primary energy: 0 kWh, Annual cost: £0</i></td><td style="padding-right:10px"><i>Quantity: '
-                    + project[scenario].fuel_totals[fuel].quantity.toFixed(2)
-                    + ' kWh, CO<sub>2</sub>: ' + project[scenario].fuel_totals[fuel].annualco2.toFixed(2)
+        CO<sub>2</sub>: 0 kg, Primary energy: 0 kWh, Annual cost: £0</i></td><td style="padding-right:10px"><i>Quantity: '
+                    + project[scenario].fuel_totals[fuel].quantity.toFixed(2) + ' kWh, CO<sub>2</sub>: ' + project[scenario].fuel_totals[fuel].annualco2.toFixed(2)
                     + ' kg, Primary energy: ' + project[scenario].fuel_totals[fuel].primaryenergy.toFixed(2)
                     + ' kWh, Annual cost: £' + project[scenario].fuel_totals[fuel].annualcost.toFixed(2)
                     + '</i></td><td style="padding-right:10px">0%</td><td>0%</td></tr>';
@@ -1915,8 +1896,7 @@ function compareSolarHotWater(scenario) {
         ['Aperture area of solar collector, m2', 'SHW.A'],
         ['Zero-loss collector efficiency, η0, from test certificate or Table H1', 'SHW.n0'],
         ['Collector linear heat loss coefficient, a1, from test certificate', 'SHW.a1'],
-        ['Collector 2nd order heat loss coefficient, a2, from test certificate', 'SHW.a2'],
-        ['Collector Orientation', 'SHW.orientation'],
+        ['Collector 2nd order heat loss coefficient, a2, from test certificate', 'SHW.a2'], ['Collector Orientation', 'SHW.orientation'],
         ['Collector Inclination', 'SHW.inclination'],
         ['Overshading factor', 'SHW.overshading'],
         ['Solar energy available', 'SHW.solar_energy_available'],
