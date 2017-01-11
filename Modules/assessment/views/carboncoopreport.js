@@ -93,7 +93,7 @@ function carboncoopreport_UpdateUI() {
         $("#bound").css("width", "1200px"); // set to width to optimum to avoid antialiasing
         $(".js-printer-friendly-link").css("display", "none");
     } else {
-        $(".js-printer-friendly-link").attr("href", "/assessment/print?id=" + projectid + "#master/carboncoopreport");
+        $(".js-printer-friendly-link").attr("href", path + "assessment/print?id=" + projectid + "#master/carboncoopreport");
     }
 
 // Report date
@@ -283,7 +283,6 @@ function carboncoopreport_UpdateUI() {
     $(".key-square--scenario2").css("background", colors[2]);
     $(".key-square--scenario3").css("background", colors[3]);
     /* Figure 3: How does my home lose heat?
-     // TODO: Show house graphic with heat loss for the four scenarios.
      */
 
     function heatlossData(scenario) {
@@ -729,7 +728,7 @@ function carboncoopreport_UpdateUI() {
             'Appliances': 'rgb(240,212,156)',
             'Lighting': 'rgb(236,102,79)', 'Fans and Pumps': 'rgb(246, 167, 7)',
             'Non categorized': 'rgb(131, 51, 47)',
-           // 'Generation': 'rgb(200,213,203)'
+            // 'Generation': 'rgb(200,213,203)'
         },
         data: [
             {label: 'Your Home Now', value: primaryEnergyUseData.master},
@@ -1007,6 +1006,7 @@ function carboncoopreport_UpdateUI() {
     $(".js-sap-rating-2050").html(calculateSapRatingFromScore(sap2050));
     $(".js-sap-score-average").html(sapAverage);
     $(".js-sap-rating-average").html(calculateSapRatingFromScore(sapAverage));
+
     /* Figure 13: Comfort Tables.
      //	
      */
@@ -1016,98 +1016,102 @@ function carboncoopreport_UpdateUI() {
 
             if (options[i].title == chosenValue) {
                 var background = options[i].color;
+                $("#" + tableID + " .extreme-left").after($("<td class='comfort-table-td comfort-table-option " + i + "'><img src='../Modules/assessment/img-assets/" + options[i].color + "_box.jpg' style='height:30px;width:30px;vertical-align:middle' /></td>"));
             } else {
                 var background = 'transparent';
+                $("#" + tableID + " .extreme-left").after($("<td class='comfort-table-td comfort-table-option " + i + "'></td>"));
             }
-            $("#" + tableID + " .extreme-left").after($("<td class='comfort-table-td comfort-table-option " + i + "'  style='background:" + background + "'></td>"));
+            //$("#" + tableID + " .extreme-left").after($("<td class='comfort-table-td comfort-table-option " + i + "'  style='background:" + background + "'></td>"));
         }
     }
 
-    var red = "rgb(228, 27, 58)";
-    var green = "rgb(149, 211, 95)";
-    
+    //var red = "rgb(228, 27, 58)";
+    //var green = "rgb(149, 211, 95)";
+
     // Temperature in Winter
     var options = [{
             title: "Too cold",
-            color: red,
+            color: 'red',
         }, {
             title: "Just right",
-            color: green,
-        }, {title: "Too hot", color: red
+            color: 'green',
+        }, {
+            title: "Too hot",
+            color: 'red'
         }
     ];
     createComforTable(options, "comfort-table-winter-temp", project.master.household["6a_temperature_winter"]);
-    
+
     // Air quality in winter
     var options = [
         {
-            title: "Too dry", color: red,
+            title: "Too dry", color: 'red',
         }, {
             title: "Just right",
-            color: green,
+            color: 'green',
         }, {
             title: "Too stuffy",
-            color: red
+            color: 'red'
         }];
     createComforTable(options, "comfort-table-winter-air", project.master.household["6a_airquality_winter"]);
     createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
-    
+
     // Temperature in Summer
     var options = [
         {
             title: "Too cold",
-            color: red,
+            color: 'red',
         }, {
-            title: "Just right", color: green,
+            title: "Just right", color: 'green',
         }, {
             title: "Too hot",
-            color: red
+            color: 'red'
         }
     ];
-        createComforTable(options, "comfort-table-summer-temp", project.master.household["6a_temperature_summer"]);
-        
+    createComforTable(options, "comfort-table-summer-temp", project.master.household["6a_temperature_summer"]);
+
     // Air quality in Summer
     var options = [
         {
-            title: "Too dry", color: red,
+            title: "Too dry", color: 'red',
         }, {
             title: "Just right",
-            color: green,
+            color: 'green',
         }, {
             title: "Too stuffy",
-            color: red
+            color: 'red'
         }];
     createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
-    
+
     var options = [
         {
             title: "Too little",
-            color: red,
+            color: 'red',
         }, {
             title: "Just right",
-            color: green,
+            color: 'green',
         }, {
             title: "Too much",
-            color: red
+            color: 'red'
         }
     ];
     createComforTable(options, "comfort-table-daylight-amount", project.master.household["6b_daylightamount"]);
-    
+
     var options = [
         {
             title: "Too little",
-            color: red,
+            color: 'red',
         }, {
             title: "Just right",
-            color: green,
+            color: 'green',
         }, {
             title: "Too much",
-            color: red
+            color: 'red'
         }
     ];
     createComforTable(options, "comfort-table-artificial-light-amount", project.master.household["6b_artificallightamount"]);
-    
-    
+
+
     /* Figure 14: Humidity Data
      // 
      */
