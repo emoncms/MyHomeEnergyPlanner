@@ -894,7 +894,7 @@ function carboncoopreport_UpdateUI() {
     for (var period in data.temperature.weekend)
         hours_off += data.temperature.weekend[period];
     var altDayHeatingHours = 24 - hours_off;
-    var totalHeatingHours = normalDayHeatingHours; // Right now we only take into account weekdays hours, there is an issue open about if we need to take into account weekends as well
+    var totalHeatingHours = normalDayHeatingHours; // We only take into account weekdays hours, discussion in issue 182
 
     function compare(num1, num2) {
         if (num1 > num2) {
