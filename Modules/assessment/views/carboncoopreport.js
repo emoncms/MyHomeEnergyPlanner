@@ -888,12 +888,12 @@ function carboncoopreport_UpdateUI() {
     //var normalDayHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on1"], data.household["3a_heatinghours_normal_off1"]);
     //var altDayHeatingHours = getTimeDifference(data.household["3a_heatinghours_normal_on2"], data.household["3a_heatinghours_normal_off2"]);
     var hours_off = 0;
-    for (var period in data.temperature.weekday)
-        hours_off += data.temperature.weekday[period];
+    for (var period in data.temperature.hours_off.weekday)
+        hours_off += data.temperature.hours_off.weekday[period];
     var normalDayHeatingHours = 24 - hours_off;
     hours_off = 0;
-    for (var period in data.temperature.weekend)
-        hours_off += data.temperature.weekend[period];
+    for (var period in data.temperature.hours_off.weekend)
+        hours_off += data.temperature.hours_off.weekend[period];
     var altDayHeatingHours = 24 - hours_off;
     var totalHeatingHours = normalDayHeatingHours; // We only take into account weekdays hours, discussion in issue 182
 
