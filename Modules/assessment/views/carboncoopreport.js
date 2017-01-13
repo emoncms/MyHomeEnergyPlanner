@@ -528,10 +528,12 @@ function carboncoopreport_UpdateUI() {
         // },
         targets: [
             {
+                label: 'Min. target',
                 target: 20,
                 color: 'rgb(231,37,57)'
             },
             {
+                label: 'Max. target',
                 target: 70,
                 color: 'rgb(231,37,57)'
             },
@@ -723,7 +725,7 @@ function carboncoopreport_UpdateUI() {
         defaultBarColor: 'rgb(157,213,203)',
         barColors: {
             'Water Heating': 'rgb(157,213,203)',
-            'Space Heating': 'rgb(231,37,57)',
+            'Space Heating': 'rgb(66, 134, 244)',
             'Cooking': 'rgb(24,86,62)',
             'Appliances': 'rgb(240,212,156)',
             'Lighting': 'rgb(236,102,79)', 'Fans and Pumps': 'rgb(246, 167, 7)',
@@ -752,9 +754,6 @@ function carboncoopreport_UpdateUI() {
     });
     $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
-
-
-
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
      */
@@ -880,7 +879,7 @@ function carboncoopreport_UpdateUI() {
         data: estimatedEnergyCostsData
     });
     $('#estimated-energy-cost-comparison').html('');
-    EstimatedEnergyCosts.draw('estimated-energy-cost-comparison');     /* Figure 11: Your home compared with the average home.      // Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
+    EstimatedEnergyCosts.draw('estimated-energy-cost-comparison'); /* Figure 11: Your home compared with the average home.      // Main SAP assumptions  vs actual condition comparison - table stating 'higher' or 'lower'.
      // Would be useful to have total hours of heating (currently only given times heating is on - see question 3a)
      // Where is data for number of rooms not heated? Appliance Q?
      */
@@ -1006,7 +1005,6 @@ function carboncoopreport_UpdateUI() {
     $(".js-sap-rating-2050").html(calculateSapRatingFromScore(sap2050));
     $(".js-sap-score-average").html(sapAverage);
     $(".js-sap-rating-average").html(calculateSapRatingFromScore(sapAverage));
-
     /* Figure 13: Comfort Tables.
      //	
      */
@@ -1041,7 +1039,6 @@ function carboncoopreport_UpdateUI() {
         }
     ];
     createComforTable(options, "comfort-table-winter-temp", project.master.household["6a_temperature_winter"]);
-
     // Air quality in winter
     var options = [
         {
@@ -1055,7 +1052,6 @@ function carboncoopreport_UpdateUI() {
         }];
     createComforTable(options, "comfort-table-winter-air", project.master.household["6a_airquality_winter"]);
     createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
-
     // Temperature in Summer
     var options = [
         {
@@ -1069,7 +1065,6 @@ function carboncoopreport_UpdateUI() {
         }
     ];
     createComforTable(options, "comfort-table-summer-temp", project.master.household["6a_temperature_summer"]);
-
     // Air quality in Summer
     var options = [
         {
@@ -1082,7 +1077,6 @@ function carboncoopreport_UpdateUI() {
             color: 'red'
         }];
     createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
-
     var options = [
         {
             title: "Too little",
@@ -1096,7 +1090,6 @@ function carboncoopreport_UpdateUI() {
         }
     ];
     createComforTable(options, "comfort-table-daylight-amount", project.master.household["6b_daylightamount"]);
-
     var options = [
         {
             title: "Too little",
@@ -1110,8 +1103,6 @@ function carboncoopreport_UpdateUI() {
         }
     ];
     createComforTable(options, "comfort-table-artificial-light-amount", project.master.household["6b_artificallightamount"]);
-
-
     /* Figure 14: Humidity Data
      // 
      */
@@ -1152,9 +1143,66 @@ function carboncoopreport_UpdateUI() {
 
     var laundryHabits = laundryHabits.slice(0, -2);
     $(".js-laundry-habits").html(laundryHabits);
-    /* Figure 17: Scenario 1 Measures
-     //      */
 
+    /* Figure 17: Scenario 1 Measures    */
+    // Total cost
+    for (scenario in project) {
+        if (scenario != 'master') {
+            var measures_total_cost = 0;
+            if (project[scenario].fabric.measures != undefined)
+                measures_total_cost += cost_of_measures_by_id(project[scenario].fabric.measures);
+            if (project[scenario].measures.ventilation != undefined) {
+                if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
+                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.extract_ventilation_points);
+                if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined)
+                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.intentional_vents_and_flues);
+                if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
+                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.intentional_vents_and_flues_measures);
+                if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
+                    measures_total_cost += project[scenario].measures.ventilation.draught_proofing_measures.measure.cost_total;
+                if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
+                    measures_total_cost += project[scenario].measures.ventilation.ventilation_systems_measures.measure.cost_total;
+                if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined)
+                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.clothes_drying_facilities);
+            }
+            if (project[scenario].measures.water_heating != undefined) {
+                if (project[scenario].measures.water_heating.water_usage != undefined)
+                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.water_heating.water_usage);
+                if (project[scenario].measures.water_heating.storage_type != undefined)
+                    measures_total_cost += project[scenario].measures.water_heating.storage_type.measure.cost_total;
+                if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+                    measures_total_cost += project[scenario].measures.water_heating.pipework_insulation.measure.cost_total;
+                if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+                    measures_total_cost += project[scenario].measures.water_heating.hot_water_control_type.measure.cost_total;
+            }
+            if (project[scenario].measures.space_heating_control_type != undefined)
+                measures_total_cost += cost_of_measures_by_id(project[scenario].measures.space_heating_control_type);
+            if (project[scenario].measures.heating_systems != undefined)
+                measures_total_cost += cost_of_measures_by_id(project[scenario].measures.heating_systems);
+            if (project[scenario].measures.space_heating != undefined) {
+                if (project[scenario].measures.space_heating.heating_control != undefined)
+                    measures_total_cost += project[scenario].measures.space_heating.heating_control.measure.cost_total;
+            }
+            $('#tota-cost-' + scenario).html('£' + measures_total_cost);
+        }
+    }
+
+    function cost_of_measures_by_id(list_of_measures_by_id) {
+        var cost = 0;
+        for (var id in list_of_measures_by_id) {
+            cost += list_of_measures_by_id[id].measure.cost_total;
+        }
+        return cost;
+    }
+    ;
+
+
+
+
+
+
+
+// Tables
     var measuresTableColumns = [
         "name",
         "description",
@@ -1203,7 +1251,6 @@ function carboncoopreport_UpdateUI() {
                 addListOfMeasuresByIdToSummaryTable(project[scenario].measures.space_heating_control_type, tableSelector, summaryTableSelector);
             if (project[scenario].measures.heating_systems != undefined)
                 addListOfMeasuresByIdToSummaryTable(project[scenario].measures.heating_systems, tableSelector, summaryTableSelector);
-            // Change this one project[scenario].measures.space_heating_control_type
             if (project[scenario].measures.space_heating != undefined) {
                 if (project[scenario].measures.space_heating.heating_control != undefined)
                     addMeasureToSummaryTable(project[scenario].measures.space_heating.heating_control, tableSelector, summaryTableSelector);
@@ -1228,7 +1275,7 @@ function carboncoopreport_UpdateUI() {
             row.append(cell);
         }
         $(tableSelector).append(row);
-        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description,
+        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description, measure.measure.performance,
                 measure.measure.benefits, measure.measure.cost_total, measure.measure.who_by, measure.measure.disruption);
     }
 
@@ -1247,7 +1294,7 @@ function carboncoopreport_UpdateUI() {
             <th class="tg-yw4l" rowspan="2">Special and other considerations</th>\
 						  </tr>\
 						  <tr>\
-						    <td class="th">Rate</td>\
+						    <td class="th">Rate (£)</td>\
 						    <td class="th">Unit</td>\
 						    <td class="th">Quantity</td>\
 						    <td class="th">Total</td>\
@@ -1264,7 +1311,7 @@ function carboncoopreport_UpdateUI() {
     function initiliaseMeasuresSummaryTable(summaryTableSelector) {
         var html = "<thead>\
 				<tr>\
-        <th>Name</th>\             <th>Description</th>\
+        <th>Name</th>\             <th>Description</th>\ <th>Performance target</th>\
         <th>Benefits (in order)</th>\
 					<th>Cost</th>\
 					<th>Completed By</th>\
@@ -1277,10 +1324,11 @@ function carboncoopreport_UpdateUI() {
     }
 
 
-    function addRowToSummaryTable(tableSelector, name, description, benefits, cost, who_by, disruption) {
+    function addRowToSummaryTable(tableSelector, name, description, performance, benefits, cost, who_by, disruption) {
         var html = '<tr><td class="highlighted-col">' + name + '</td>';
         html += '<td><div class="text-width-limiter">' + description + '</div>';
         html += '</td>';
+        html += '<td>' + performance + '</td>';
         html += '<td>' + benefits + '</td>';
         html += '<td class="cost">£' + cost + '</td>';
         html += '<td>' + who_by + '</td>';
@@ -1290,23 +1338,23 @@ function carboncoopreport_UpdateUI() {
     }
 
     if (typeof project["scenario1"] != "undefined") {
-        $("#output-scenario1-name").html(project["scenario1"]["scenario_name"]);
+        $(".output-scenario1-name").html(project["scenario1"]["scenario_name"]);
         createMeasuresTable("scenario1", "#scenario1-measures", ".js-measures1-summary");
     }
     else
-        $("#output-scenario1-name").html('This scenario has not been created');
+        $(".output-scenario1-name").html('This scenario has not been created');
     if (typeof project["scenario2"] != "undefined") {
-        $("#output-scenario2-name").html(project["scenario2"]["scenario_name"]);
+        $(".output-scenario2-name").html(project["scenario2"]["scenario_name"]);
         createMeasuresTable("scenario2", "#scenario2-measures", ".js-measures2-summary");
     }
     else
-        $("#output-scenario2-name").html('This scenario has not been created');
+        $(".output-scenario2-name").html('This scenario has not been created');
     if (typeof project["scenario3"] != "undefined") {
-        $("#output-scenario3-name").html(project["scenario3"]["scenario_name"]);
+        $(".output-scenario3-name").html(project["scenario3"]["scenario_name"]);
         createMeasuresTable("scenario3", "#scenario3-measures", ".js-measures3-summary");
     }
     else
-        $("#output-scenario3-name").html('This scenario has not been created');
+        $(".output-scenario3-name").html('This scenario has not been created');
     /* Figure 18: Scenario 2 Measures
      //
      */
@@ -1321,66 +1369,65 @@ function carboncoopreport_UpdateUI() {
      */
     $(".js-heating-hours-normal").html(normalDayHeatingHours);
     $(".js-heating-hours-alt").html(altDayHeatingHours);
-    // Scenario comparison
+// Scenario comparison
     if (typeof project["scenario1"] != "undefined")
         compareCarbonCoop("scenario1", "#js-scenario1-comparison");
     if (typeof project["scenario2"] != "undefined")
         compareCarbonCoop("scenario2", "#js-scenario2-comparison");
     if (typeof project["scenario3"] != "undefined")
-        compareCarbonCoop("scenario3", "#js-scenario2-comparison");
-    // Figure 5
-    // var options = {
-    //       name: "Space heating demand Master",
-    //       value: Math.round(project["master"].space_heating_demand_m2),
-    //       units: "kWh/m2",     //       targets: {
-    //           //"Passivhaus": 15,
-    //           "Passivhaus retrofit": 25,
-    //           "UK Average": 145
-    //       }
-    //   };
-    //   targetbarCarboncoop("space-heating-demand-1", options);
+        compareCarbonCoop("scenario3", "#js-scenario3-comparison");
+// Figure 5
+// var options = {
+//       name: "Space heating demand Master",
+//       value: Math.round(project["master"].space_heating_demand_m2),
+//       units: "kWh/m2",     //       targets: {
+//           //"Passivhaus": 15,
+//           "Passivhaus retrofit": 25,
+//           "UK Average": 145
+//       }
+//   };
+//   targetbarCarboncoop("space-heating-demand-1", options);
 
-    //   	 var options = {
-    //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario1"].space_heating_demand_m2),
-    //       units: "kWh/m2",
-    //       targets: {
-    //           //"Passivhaus": 15,
-    //           "Passivhaus retrofit": 25,
-    //           "UK Average": 145
-    //       }
-    //   };
-    //   targetbarCarboncoop("space-heating-demand-2", options);
+//   	 var options = {
+//       name: "Space heating demand Master",
+//       value: Math.round(project["scenario1"].space_heating_demand_m2),
+//       units: "kWh/m2",
+//       targets: {
+//           //"Passivhaus": 15,
+//           "Passivhaus retrofit": 25,
+//           "UK Average": 145
+//       }
+//   };
+//   targetbarCarboncoop("space-heating-demand-2", options);
 
-    //   	 var options = {
-    //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario2"].space_heating_demand_m2),
-    //       units: "kWh/m2",
-    //       targets: {
-    //           //"Passivhaus": 15,
-    //           "Passivhaus retrofit": 25,
-    //           "UK Average": 145
-    //       }
-    //   };
-    //   targetbarCarboncoop("space-heating-demand-3", options);
+//   	 var options = {
+//       name: "Space heating demand Master",
+//       value: Math.round(project["scenario2"].space_heating_demand_m2),
+//       units: "kWh/m2",
+//       targets: {
+//           //"Passivhaus": 15,
+//           "Passivhaus retrofit": 25,
+//           "UK Average": 145
+//       }
+//   };
+//   targetbarCarboncoop("space-heating-demand-3", options);
 
-    //   	 var options = {
-    //       name: "Space heating demand Master",
-    //       value: Math.round(project["scenario3"].space_heating_demand_m2),
-    //       units: "kWh/m2",
-    //       targets: {
-    //           //"Passivhaus": 15,
-    //           "Passivhaus retrofit": 25,
-    //           "UK Average": 145
-    //       }
-    //   };
-    //   targetbarCarboncoop("space-heating-demand-4", options);
+//   	 var options = {
+//       name: "Space heating demand Master",
+//       value: Math.round(project["scenario3"].space_heating_demand_m2),
+//       units: "kWh/m2",
+//       targets: {
+//           //"Passivhaus": 15,
+//           "Passivhaus retrofit": 25,
+//           "UK Average": 145
+//       }
+//   };
+//   targetbarCarboncoop("space-heating-demand-4", options);
 }
 
 function compareCarbonCoop(scenario, outputElement) {
 
     var out = "";
-
     // Basic dwelling data
     var properties_to_check = [
         ["Region", 'region'],
@@ -1403,44 +1450,39 @@ function compareCarbonCoop(scenario, outputElement) {
     // Clothes drying facilities     
     var CDF = compareClothesDryingFacilities(scenario);
     if (CDF.changed === true)
-        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>';     //Fabric
+        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>'; //Fabric
     var Fabric = compareFabric(scenario);
     if (Fabric.changed === true)
         out += '<h3>Fabric</h3><p>Changes to Floor\'s, Wall\'s, Windows and Roof elements</p>\n\
         <table class="table table-striped"><tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>'
                 + Fabric.html + '</table></br>';
-
     // Heating    
     var Heating = compareHeating(scenario);
     if (Heating.changed === true)
         out += '<h3>Heating</h3><table class="table table-striped">' + Heating.html + '</table></br>';
-
     // Solar hot water
-    var SHW = compareSolarHotWater(scenario);
-    if (SHW.changed === true)
-        out += '<h3>Solar hot water</h3><table class="table table-striped">' + SHW.html + '</table></br>';
-
+    if (project[scenario].use_SHW == true) {
+        var SHW = compareSolarHotWater(scenario);
+        if (SHW.changed === true)
+            out += '<h3>Solar hot water</h3><table class="table table-striped">' + SHW.html + '</table></br>';
+    }
     // Generation
     var GEN = compareGeneration(scenario);
     if (GEN.changed === true)
         out += '<h3>Generation</h3><table class="table table-striped">' + GEN.html + '</table></br>';
-
     // Energy requirements
     var ER = compareEnergyRequirements(scenario);
     if (ER.changed === true)
         out += '<h3>Energy requirements</h3><table class="table table-striped">' + ER.html + '</table></br>';
-
     // Fuel requirements
     var FR = compareFuelRequirements(scenario);
     if (FR.changed === true)
         out += '<h3>Fuel requirements</h3><table class="table table-striped">' + FR.html + '</table></br>';
-
     // Totals     out += '<h3>Totals</h3><table class="table table-striped"><tr><td></td><td>Before</td><td>After</td></tr>';
     out += '<tr><td>Annual cost</td><td><i>£' + project.master.total_cost.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_cost.toFixed(0) + '</i></td></tr>';
     out += '<tr><td>Total income</td><td><i>£' + project.master.total_income.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_income.toFixed(0) + '</i></td></tr>';
     out += '<tr><td>SAP rating</td><td><i>' + project.master.SAP.rating.toFixed(0) + '</i></td><td><i>' + project[scenario].SAP.rating.toFixed(0) + '</i></td></tr>';
     out += '</table></br>';
-
     $(outputElement).html(out);
 }
 
@@ -1465,7 +1507,7 @@ function comparePropertiesInArray(scenario, changes) {
         }
         var valA = subA;
         var valB = subB;
-        if (valA != valB && (isNaN(valA) == false || isNaN(valB) == false)) {
+        if (valA != valB) {
             if (typeof valA == 'number')
                 valA = valA.toFixed(2);
             if (typeof valB == 'number')
@@ -1541,16 +1583,6 @@ function compareVentilation(scenario) {
             }
         }
 
-        // Totals
-        properties_to_check = [
-            ['Ventilation looses (WK)', 'ventilation.average_WK']
-        ];
-        var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
-        if (possible_changes.changed === true) {
-            changed = true;
-            out += possible_changes.html;
-        }
-
         out += '</tbody>';
     }
 
@@ -1581,7 +1613,7 @@ function compareInfiltration(scenario) {
                 + ' cubic metres per hour per square metre of envelope</i> </td></tr>';
         out += '<tr><td>The structural infiltration due to dwelling construction was <i>'
                 + project[scenario].measures.ventilation.draught_proofing_measures.original_structural_infiltration
-                + ' ACH</i>, after applying the measures: <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.structural_infiltration
+                + ' ACH</i>, after applying the measures: <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.structural_infiltration.toFixed(2)
                 + ' ACH</i></td></tr>';
         +'</i></td></tr>';
     }
@@ -1628,6 +1660,16 @@ function compareInfiltration(scenario) {
         out += changes.html;
     }
 
+    // Totals
+    properties_to_check = [
+        ['Loses due to ventilation and infiltration (WK)', 'ventilation.average_WK']
+    ];
+    var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
+    if (possible_changes.changed === true) {
+        changed = true;
+        out += possible_changes.html;
+    }
+
     return {html: out, changed: changed};
 }
 
@@ -1665,7 +1707,6 @@ function compareFabric(scenario) {
         changed = true;
         for (z in project[scenario].fabric.measures) {
             var element = project[scenario].fabric.measures[z];
-
             out += "<tr><td>" + element.original_element.name + "<br><i>Area: " + element.original_element.area
                     + "m<sup>2</sup>, U-value " + element.original_element.uvalue + ":, k-value: "
                     + element.original_element.kvalue;
@@ -1674,7 +1715,6 @@ function compareFabric(scenario) {
                 out += 'g: ' + element.original_element.g + ', gL: ' + element.original_element.gL + ', ff:' + element.original_element.ff;
             out += '</i></td>';
             out += "<td style='padding-left:3px;padding-right:5px'>" + (element.original_element.uvalue * element.original_element.area).toFixed(2) + " W/K</td>";
-
             out += "<td>" + element.measure.name + "<br><i>Area: " + element.measure.area
                     + "m<sup>2</sup>, U-value " + element.measure.uvalue + ":, k-value: "
                     + element.measure.kvalue;
@@ -1683,7 +1723,6 @@ function compareFabric(scenario) {
                 out += 'g: ' + element.measure.g + ', gL: ' + element.measure.gL + ', ff:' + element.measure.ff;
             out += '</i></td>';
             out += "<td style='padding-left:3px;padding-right:5px'>" + (element.measure.uvalue * element.measure.area).toFixed(2) + " W/K</td>";
-
             var saving = (element.original_element.uvalue * element.original_element.area) - (element.measure.uvalue * element.measure.area);
             out += "<td>";
             if (saving > 0)
@@ -1701,7 +1740,6 @@ function compareFabric(scenario) {
 function compareHeating(scenario) {
     var out = "";
     var changed = false;
-
     // Hot water demand
     var properties_to_check = [["Designed water use is not more than 125 litres per person per day", 'water_heating.low_water_use_design'],
         ['Do you know how much energy you use for water heating?', 'water_heating.override_annual_energy_content'],
@@ -1726,7 +1764,6 @@ function compareHeating(scenario) {
             out += '<tr><td><i>' + wu_in_master.name + '</i> has been removed</td></tr>';
         }
     });
-
     // Check if any water usage has been added
     if (project[scenario].measures.water_heating != undefined
             && project[scenario].measures.water_heating.water_usage != undefined
@@ -1824,7 +1861,6 @@ function compareHeating(scenario) {
 function compareEnergyRequirements(scenario) {
     var out = "";
     var changed = false;
-
     var ER_list = ['appliances', 'cooking', 'fans_and_pumps', 'lighting', 'space_heating', 'waterheating'];
     var ER_names = ['appliances', 'cooking', 'fans and pumps', 'lighting', 'space heating', 'water heating'];
     ER_list.forEach(function (ER, index) {
@@ -1848,7 +1884,6 @@ function compareEnergyRequirements(scenario) {
 function compareFuelRequirements(scenario) {
     var out = "";
     var changed = false;
-
     for (var fuel in project.master.fuel_totals) {
         if (project[scenario].fuel_totals[fuel] == undefined) {
             changed = true;
@@ -1894,7 +1929,6 @@ function compareFuelRequirements(scenario) {
 function compareSolarHotWater(scenario) {
     var out = "";
     var changed = false;
-
     var properties_to_check = [
         ['Solar water heating pump', 'SHW.pump'],
         ['Aperture area of solar collector, m2', 'SHW.A'],
@@ -1911,7 +1945,6 @@ function compareSolarHotWater(scenario) {
         ['Solar storage volume factor', 'SHW.f2'],
         ['Annual solar input Qs (kWh)', 'SHW.Qs']
     ];
-
     var DWU = comparePropertiesInArray(scenario, properties_to_check);
     if (DWU.changed === true) {
         changed = true;
@@ -1924,7 +1957,6 @@ function compareSolarHotWater(scenario) {
 function compareGeneration(scenario) {
     var out = "";
     var changed = false;
-
     var properties_to_check = [
         ['Solar PV Annual Generation', 'generation.solar_annual_kwh'],
         ['Solar PV Fraction used on-site', 'generation.solar_fraction_used_onsite'],
@@ -1943,7 +1975,6 @@ function compareGeneration(scenario) {
         ['Fraction used on-site (PV calculator)', 'generation.solarpv_fraction_used_onsite'],
         ['Feed in tariff (£/kWh) (PV calculator)', 'generation.solarpv_FIT']
     ];
-
     var DWU = comparePropertiesInArray(scenario, properties_to_check);
     if (DWU.changed === true) {
         changed = true;

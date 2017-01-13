@@ -233,6 +233,10 @@ function add_quantity_and_cost_to_measure(measure) {
         measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
     else if (measure.cost_units == 'unit')
         measure.quantity = 1;
+    else {
+        measure.quantity = 1;
+        measure.cost_units = 'unit';
+    }
     measure.cost_total = measure.quantity * measure.cost;
 
 }

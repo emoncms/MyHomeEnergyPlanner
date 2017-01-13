@@ -259,13 +259,14 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             var item_id = get_HS_max_id() + 1;
             if (data.measures.heating_systems[item_id] == undefined) //if first time we apply a measure to this system
                 data.measures.heating_systems[item_id] = {original: 'empty', measure: {}};
-            var measure = library_helper.heating_systems_get_item_to_save();
+            var measure = library_helper.heating_systems_measures_get_item_to_save();
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
             measure[tag].id = item_id;
             if (measure[tag].category == 'Warm air systems')
                 measure[tag].fans_and_supply_pumps = 0.4 * measure[tag].sfp * data.volume;
+            add_quantity_and_cost_to_measure(measure[tag]);
             // Add extra properties to measure 
             measure[tag].id = get_HS_max_id() + 1;
             measure[tag].fuel = 'Standard Tariff';
@@ -422,7 +423,7 @@ function add_heating_systems() {
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.responsiveness" max = "1" step = "0.01" min = "0" /> </td>';
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.temperature_adjustment" max = "1" step = "0.01" min = "0" /> </td>';
         out += '<td class = "if-SH" style = "text-align:center" > <input class="controls-input" style = "width:40px" type = "number" key = "data.heating_systems.' + z + '.heating_controls" max = "3" step = "1" min = "1" /> \n\
-        <br /> <span class = "apply-water-heating-measure if-not-master" type = "space_heating_control_type" item - index = "' + z + '" style = "cursor:pointer" > <button class = "btn if-not-locked" > Apply measure </button></span > </td>';
+        <br /> <span class = "apply-water-heating-measure if-not-master" type = "space_heating_control_type" item-index = "' + z + '" style = "cursor:pointer" > <button class = "btn if-not-locked" > Apply measure </button></span > </td>';
         out += '<td class = "if-WH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.instantaneous_water_heating" /> </td></tr > ';
 
         $('#heating-systems').append(out);

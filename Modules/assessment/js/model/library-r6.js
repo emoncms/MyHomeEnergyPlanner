@@ -2355,7 +2355,7 @@ var standard_library = {
     },
     draught_proofing_measures: {
         "DP_01": {
-            name: "Basic Draughtproffing Measures",
+            name: "Basic Draught-proofing Measures",
             "q50": 12,
             description: "This may include DIY draught-proofing measures to doors and windows, skirting boards\/ junctions, ceilings and accessible service penetrations (e.g. soil pipes to WCs). Draught-proofing to letter boxes, loft hatches and cat flaps etc. Can be done simply with readily available sealants by an ethusiastic DIYer. Don't forget doors to cellars, garages and other unheated spaces. ",
             performance: 'Dependent on existing. 8-12 m3\/m2.hr@50pa',
