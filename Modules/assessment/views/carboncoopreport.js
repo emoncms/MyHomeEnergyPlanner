@@ -754,6 +754,8 @@ function carboncoopreport_UpdateUI() {
     });
     $('#primary-energy-use').html('');
     primaryEneryUse.draw('primary-energy-use');
+
+
     /* Figure 8: Carbon dioxide emissions in kgCO2/m2.a
      //
      */
@@ -773,6 +775,12 @@ function carboncoopreport_UpdateUI() {
         carbonDioxideEmissionsData.push({label: "Scenario 3", value: project["scenario3"].kgco2perm2});
     }
 
+    var max = 0;
+    carbonDioxideEmissionsData.forEach(function (scenario) {
+        if (scenario.value > max)
+            max = scenario.value;
+    });
+    console.log(max);
     var CarbonDioxideEmissions = new BarChart({
         chartTitle: 'Carbon Dioxide Emissions',
         yAxisLabel: 'kgCO2/m2.year',
@@ -781,8 +789,10 @@ function carboncoopreport_UpdateUI() {
         division: 'auto',
         width: 1200,
         chartHeight: 600,
+        chartHigh: max + 20,
         barWidth: 110,
-        barGutter: 80, defaultBarColor: 'rgb(157,213,203)',
+        barGutter: 80,
+        defaultBarColor: 'rgb(157,213,203)',
         data: carbonDioxideEmissionsData,
         targets: [
             {
