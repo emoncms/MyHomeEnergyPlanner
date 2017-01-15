@@ -1207,6 +1207,7 @@ function carboncoopreport_UpdateUI() {
 // Tables
     var measuresTableColumns = [
         "name",
+        "location",
         "description",
         "performance",
         "benefits",
@@ -1277,13 +1278,13 @@ function carboncoopreport_UpdateUI() {
             row.append(cell);
         }
         $(tableSelector).append(row);
-        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description, measure.measure.performance,
+        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.location, measure.measure.description, measure.measure.performance,
                 measure.measure.benefits, (1.0 * measure.measure.cost_total).toFixed(2), measure.measure.who_by, measure.measure.disruption);
     }
 
     function initialiseMeasuresTable(tableSelector) {
         var html = '<tr>\
-        <th class="tg-yw4l" rowspan="2">Measure</th>\
+        <th class="tg-yw4l" rowspan="2">Measure</th>\<th class="tg-yw4l" rowspan="2">Label/location</th>\
             <th class="tg-yw4l" rowspan="2">Description</th>\
                 <th class="tg-yw4l" rowspan="2">Performance Target</th>\
     <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
@@ -1313,7 +1314,7 @@ function carboncoopreport_UpdateUI() {
     function initiliaseMeasuresSummaryTable(summaryTableSelector) {
         var html = "<thead>\
 				<tr>\
-        <th>Name</th>\             <th>Description</th>\ <th>Performance target</th>\
+        <th>Name</th>\<th>Label/location</th>\   <th>Description</th>\ <th>Performance target</th>\
         <th>Benefits (in order)</th>\
 					<th>Cost</th>\
 					<th>Completed By</th>\
@@ -1326,8 +1327,9 @@ function carboncoopreport_UpdateUI() {
     }
 
 
-    function addRowToSummaryTable(tableSelector, name, description, performance, benefits, cost, who_by, disruption) {
+    function addRowToSummaryTable(tableSelector, name, location, description, performance, benefits, cost, who_by, disruption) {
         var html = '<tr><td class="highlighted-col">' + name + '</td>';
+        html += '<td><div class="text-width-limiter">' + location + '</div>';
         html += '<td><div class="text-width-limiter">' + description + '</div>';
         html += '</td>';
         html += '<td>' + performance + '</td>';
@@ -1723,7 +1725,7 @@ function compareFabric(scenario) {
 }
 
 function compareFabricElement(element, measure) {
-    var out = "<tr><td>" + element.name + "<br><i>Net area: " + element.netarea.toFixed(2)
+    var out = "<tr><td>" + element.location + ' - ' + element.name + "<br><i>Net area: " + element.netarea.toFixed(2)
             + "m<sup>2</sup>, U-value " + element.uvalue + ":, k-value: "
             + element.kvalue;
     if (element.type == "Window" || element.type == "window"
@@ -1731,7 +1733,7 @@ function compareFabricElement(element, measure) {
         out += ', g: ' + element.g + ', gL: ' + element.gL + ', ff:' + element.ff;
     out += '</i></td>';
     out += "<td style='padding-left:3px;padding-right:5px'>" + (element.uvalue * element.netarea).toFixed(2) + " W/K</td>";
-    out += "<td>" + measure.name + "<br><i>Net area: " + element.netarea.toFixed(2)
+    out += "<td>" + element.location + ' - ' + measure.name + "<br><i>Net area: " + element.netarea.toFixed(2)
             + "m<sup>2</sup>, U-value " + measure.uvalue + ":, k-value: "
             + measure.kvalue;
     if (measure.type == "Window" || measure.type == "window"

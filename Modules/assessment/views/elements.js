@@ -157,7 +157,7 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
         if (obj.checked == true) {
             var row = $(obj).attr('element-row');
             area += data.fabric.elements[row].netarea;
-            measure[lib].location += data.fabric.elements[row].location + '<br />';
+            measure[lib].location += data.fabric.elements[row].location + ',<br>';
             for (var attr in measure[lib]) {
                 var element_id = data.fabric.elements[row].id;
                 data.fabric.measures[measure[lib].id].original_elements[element_id] = JSON.parse(JSON.stringify(data.fabric.elements[row]));
