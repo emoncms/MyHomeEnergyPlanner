@@ -780,7 +780,6 @@ function carboncoopreport_UpdateUI() {
         if (scenario.value > max)
             max = scenario.value;
     });
-    console.log(max);
     var CarbonDioxideEmissions = new BarChart({
         chartTitle: 'Carbon Dioxide Emissions',
         yAxisLabel: 'kgCO2/m2.year',
@@ -1204,13 +1203,6 @@ function carboncoopreport_UpdateUI() {
         }
         return cost;
     }
-    ;
-
-
-
-
-
-
 
 // Tables
     var measuresTableColumns = [
@@ -1281,12 +1273,12 @@ function carboncoopreport_UpdateUI() {
         var row = $('<tr></tr>');
         for (var i = 0; i < measuresTableColumns.length; i++) {
             var cell = $('<td></td>');
-            cell.html(measure.measure[measuresTableColumns[i]]);
+            cell.html(isNaN(measure.measure[measuresTableColumns[i]]) ? measure.measure[measuresTableColumns[i]] : (1.0 * measure.measure[measuresTableColumns[i]]).toFixed(2));
             row.append(cell);
         }
         $(tableSelector).append(row);
         addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.description, measure.measure.performance,
-                measure.measure.benefits, measure.measure.cost_total, measure.measure.who_by, measure.measure.disruption);
+                measure.measure.benefits, (1.0 * measure.measure.cost_total).toFixed(2), measure.measure.who_by, measure.measure.disruption);
     }
 
     function initialiseMeasuresTable(tableSelector) {
@@ -1716,35 +1708,47 @@ function compareFabric(scenario) {
     if (project[scenario].fabric.measures != undefined && Object.keys(project[scenario].fabric.measures).length > 0) {
         changed = true;
         for (z in project[scenario].fabric.measures) {
-            var element = project[scenario].fabric.measures[z];
-            out += "<tr><td>" + element.original_element.name + "<br><i>Area: " + element.original_element.area
-                    + "m<sup>2</sup>, U-value " + element.original_element.uvalue + ":, k-value: "
-                    + element.original_element.kvalue;
-            if (element.original_element.type == "Window" || element.original_element.type == "window"
-                    || element.original_element.type == "Door" || element.original_element.type == "Roof_light")
-                out += 'g: ' + element.original_element.g + ', gL: ' + element.original_element.gL + ', ff:' + element.original_element.ff;
-            out += '</i></td>';
-            out += "<td style='padding-left:3px;padding-right:5px'>" + (element.original_element.uvalue * element.original_element.area).toFixed(2) + " W/K</td>";
-            out += "<td>" + element.measure.name + "<br><i>Area: " + element.measure.area
-                    + "m<sup>2</sup>, U-value " + element.measure.uvalue + ":, k-value: "
-                    + element.measure.kvalue;
-            if (element.measure.type == "Window" || element.measure.type == "window"
-                    || element.measure.type == "Door" || element.measure.type == "Roof_light")
-                out += 'g: ' + element.measure.g + ', gL: ' + element.measure.gL + ', ff:' + element.measure.ff;
-            out += '</i></td>';
-            out += "<td style='padding-left:3px;padding-right:5px'>" + (element.measure.uvalue * element.measure.area).toFixed(2) + " W/K</td>";
-            var saving = (element.original_element.uvalue * element.original_element.area) - (element.measure.uvalue * element.measure.area);
-            out += "<td>";
-            if (saving > 0)
-                out += "<span style='color:#00aa00'>-";
-            if (saving < 0)
-                out += "<span style='color:#aa0000'>+";
-            out += (saving).toFixed(2) + " W/K</span></td>";
-            out += "</tr>";
+            var measure = project[scenario].fabric.measures[z];
+            if (measure.original_element != undefined) // Measure applied to only one element
+                out += compareFabricElement(measure.original_element, measure.measure);
+            if (measure.original_elements != undefined) { // Bulk Measure 
+                for (var id in measure.original_elements)
+                    out += compareFabricElement(measure.original_elements[id], measure.measure);
+            }
+
         }
     }
 
     return {html: out, changed: changed};
+}
+
+function compareFabricElement(element, measure) {
+    var out = "<tr><td>" + element.name + "<br><i>Net area: " + element.netarea.toFixed(2)
+            + "m<sup>2</sup>, U-value " + element.uvalue + ":, k-value: "
+            + element.kvalue;
+    if (element.type == "Window" || element.type == "window"
+            || element.type == "Door" || element.type == "Roof_light")
+        out += ', g: ' + element.g + ', gL: ' + element.gL + ', ff:' + element.ff;
+    out += '</i></td>';
+    out += "<td style='padding-left:3px;padding-right:5px'>" + (element.uvalue * element.netarea).toFixed(2) + " W/K</td>";
+    out += "<td>" + measure.name + "<br><i>Net area: " + element.netarea.toFixed(2)
+            + "m<sup>2</sup>, U-value " + measure.uvalue + ":, k-value: "
+            + measure.kvalue;
+    if (measure.type == "Window" || measure.type == "window"
+            || measure.type == "Door" || measure.type == "Roof_light")
+        out += ', g: ' + measure.g + ', gL: ' + measure.gL + ', ff:' + measure.ff;
+    out += '</i></td>';
+    out += "<td style='padding-left:3px;padding-right:5px'>" + (measure.uvalue * element.netarea).toFixed(2) + " W/K</td>";
+    var saving = (element.uvalue * element.netarea) - (measure.uvalue * element.netarea);
+    out += "<td>";
+    if (saving > 0)
+        out += "<span style='color:#00aa00'>-";
+    if (saving < 0)
+        out += "<span style='color:#aa0000'>+";
+    out += (saving).toFixed(2) + " W/K</span></td>";
+    out += "</tr>";
+
+    return out;
 }
 
 function compareHeating(scenario) {
