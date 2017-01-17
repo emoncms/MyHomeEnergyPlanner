@@ -204,5 +204,16 @@ var datasets = {
         'electricimmersion': {name: "Electric immersion heater", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'},
         'electric-high': {name: "High rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-high'},
         'electric-low': {name: "Low rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-low'},
-    }
-}
+    },
+  target_values:{
+      space_heating_demand_lower: 20, // kWh/m2.a
+      space_heating_demand_upper: 70, // kWh/m2.a
+      primary_energy_demand:120, // kWh/m2.a
+      co2_emission_rate: 17, // kgCO2/m2.a
+  },
+  uk_average_values:{
+      space_heating_demand: 120, // kWh/m2.a
+      primary_energy_demand:360, // kWh/m2.a
+      co2_emission_rate: 50.3, // kgCO2/m2.a
+  }
+};

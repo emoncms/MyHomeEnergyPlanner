@@ -98,7 +98,9 @@ function carboncoopreport_UpdateUI() {
 
 // Report date
     var date = new Date();
-    $('#report_date').html(date.getDate() + ' - ' + date.getMonth() + ' - ' + date.getFullYear());
+    var months_numbers = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    $('#report_date').html(date.getDate() + '-' + months_numbers[date.getMonth()] + '-' + date.getFullYear());
+
     /* Figure 1: Retrofit Priorities
      //  Shows retrofit priorities - in order - identifying whether interested in retrofit for cost, comfort or carbon reasons etc.
      */
@@ -192,7 +194,7 @@ function carboncoopreport_UpdateUI() {
         "rgb(164, 211, 226)",
         "rgb(184, 237, 234)",
         "rgb(251, 212, 139)"
-    ]
+    ];
 
     var options = {
         name: "Space heating demand",
@@ -202,10 +204,11 @@ function carboncoopreport_UpdateUI() {
         values: values,
         units: "kWh/m2.a",
         targets: {
-            "Target Range (lower bound)": 20,
-            "Target Range (upper bound)": 70
+            "Min Target": datasets.target_values.space_heating_demand_lower,
+            "Max Target": datasets.target_values.space_heating_demand_upper,
+            "UK average": datasets.uk_average_values.space_heating_demand
         },
-        targetRange: [20, 70]
+        targetRange: [datasets.target_values.space_heating_demand_lower, datasets.target_values.space_heating_demand_upper]
     };
     targetbarCarboncoop("space-heating-demand", options);
     // ---------------------------------------------------------------------------------
@@ -226,8 +229,8 @@ function carboncoopreport_UpdateUI() {
         units: "kWh/m2.a",
         targets: {
             // "Passivhaus": 120,
-            "Carbon Coop 2050 target (inc. renewables)": 120,
-            "UK Average": 360
+            "Carbon Coop 2050 target (inc. renewables)": datasets.target_values.primary_energy_demand,
+            "UK Average": datasets.uk_average_values.primary_energy_demand
         }
     };
     targetbarCarboncoop("primary-energy", options);
@@ -243,14 +246,16 @@ function carboncoopreport_UpdateUI() {
     }
 
     var options = {
-        name: "CO2 Emission rate",
+        name: "CO2 Emission rate <i class='icon-question-sign' title='Carbon emissions and number of homes: DECC (2014) \"United Kindgdom Housing Energy Fact File: 2013\", 28 January 2014, accessed at http://www.gov.uk/government/statistics/united-kingdom-housing-energy-fact-file-2013\n\n"
+                + "Average Floor Area: National Statistics, (2016), \"English Housing Survey 2014 to 2015: Headline Report\", 18 Feb 2016, accessed at http://www.gov.uk/government/statistics/english-housing-survey-2014-to-2015-headline-report \n\n"
+                + "CO2 emissions factors are 15 year ones, based on figures published by BRE at http://www.bre.co.uk/filelibrary/SAP/2012/Emission-and-primary-factors-2013-2027.pdf' />",
         value: Math.round(data.kgco2perm2),
         colors: colors,
         values: values,
         units: "kgCO2/m2.a",
         targets: {
-            "Carbon Coop 2050 target": 20,
-            "UK Average": 100
+            "Carbon Coop 2050 target": datasets.target_values.co2_emission_rate,
+            "UK Average": datasets.uk_average_values.co2_emission_rate,
         }
     };
     targetbarCarboncoop("co2-emission-rate", options);
@@ -529,28 +534,28 @@ function carboncoopreport_UpdateUI() {
         targets: [
             {
                 label: 'Min. target',
-                target: 20,
+                target: datasets.target_values.space_heating_demand_lower,
                 color: 'rgb(231,37,57)'
             },
             {
                 label: 'Max. target',
-                target: 70,
+                target: datasets.target_values.space_heating_demand_upper,
                 color: 'rgb(231,37,57)'
             },
             {
-                label: 'UK Average 140 kWh/m2.a',
-                target: 140,
+                label: 'UK Average',
+                target: datasets.uk_average_values.space_heating_demand,
                 color: 'rgb(231,37,57)'
             },
         ],
         targetRange: [
             {
-                label: '20 kWh/m2.a',
+                label: '(kWh/m2.a)',
                 target: 20,
                 color: 'rgb(231,37,57)'
             },
             {
-                label: '70 kWh/m2.a',
+                label: '(kWh/m2.a)',
                 target: 70,
                 color: 'rgb(231,37,57)'
             },
@@ -795,12 +800,13 @@ function carboncoopreport_UpdateUI() {
         data: carbonDioxideEmissionsData,
         targets: [
             {
-                label: 'Carbon Coop Target', target: 20,
+                label: 'Carbon Coop Target',
+                target: datasets.target_values.co2_emission_rate,
                 color: 'rgb(231,37,57)'
             },
             {
                 label: 'UK Average',
-                target: 70,
+                target: datasets.uk_average_values.co2_emission_rate,
                 color: 'rgb(231,37,57)'
             },
         ],
@@ -1192,7 +1198,7 @@ function carboncoopreport_UpdateUI() {
                 if (project[scenario].measures.space_heating.heating_control != undefined)
                     measures_total_cost += project[scenario].measures.space_heating.heating_control.measure.cost_total;
             }
-            $('#tota-cost-' + scenario).html('£' + measures_total_cost);
+            $('#tota-cost-' + scenario).html('£' + measures_total_cost.toFixed(2));
         }
     }
 
@@ -1204,7 +1210,7 @@ function carboncoopreport_UpdateUI() {
         return cost;
     }
 
-// Tables
+// Tables - Figure 15
     var measuresTableColumns = [
         "name",
         "location",
@@ -1314,7 +1320,7 @@ function carboncoopreport_UpdateUI() {
     function initiliaseMeasuresSummaryTable(summaryTableSelector) {
         var html = "<thead>\
 				<tr>\
-        <th>Name</th>\<th>Label/location</th>\   <th>Description</th>\ <th>Performance target</th>\
+        <th>Name</th>\<th>Label/location</th>\ <th>Performance target</th>\
         <th>Benefits (in order)</th>\
 					<th>Cost</th>\
 					<th>Completed By</th>\
@@ -1330,7 +1336,6 @@ function carboncoopreport_UpdateUI() {
     function addRowToSummaryTable(tableSelector, name, location, description, performance, benefits, cost, who_by, disruption) {
         var html = '<tr><td class="highlighted-col">' + name + '</td>';
         html += '<td><div class="text-width-limiter">' + location + '</div>';
-        html += '<td><div class="text-width-limiter">' + description + '</div>';
         html += '</td>';
         html += '<td>' + performance + '</td>';
         html += '<td>' + benefits + '</td>';
@@ -1482,7 +1487,8 @@ function compareCarbonCoop(scenario, outputElement) {
     var FR = compareFuelRequirements(scenario);
     if (FR.changed === true)
         out += '<h3>Fuel requirements</h3><table class="table table-striped">' + FR.html + '</table></br>';
-    // Totals     out += '<h3>Totals</h3><table class="table table-striped"><tr><td></td><td>Before</td><td>After</td></tr>';
+    // Totals     
+    out += '<h3>Totals</h3><table class="table table-striped"><tr><td></td><td>Before</td><td>After</td></tr>';
     out += '<tr><td>Annual cost</td><td><i>£' + project.master.total_cost.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_cost.toFixed(0) + '</i></td></tr>';
     out += '<tr><td>Total income</td><td><i>£' + project.master.total_income.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_income.toFixed(0) + '</i></td></tr>';
     out += '<tr><td>SAP rating</td><td><i>' + project.master.SAP.rating.toFixed(0) + '</i></td><td><i>' + project[scenario].SAP.rating.toFixed(0) + '</i></td></tr>';

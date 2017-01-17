@@ -35,7 +35,7 @@ function targetbarCarboncoop(element, options)
             var y = 1 + subBarHeightFraction * barheight * i;
             ctx.fillRect(1, y, (options.values[i] * xscale) - 2, subBarHeightFraction * barheight);
             ctx.fillStyle = "rgba(99,86,71,1.0)";
-            ctx.fillText(options.values[i] + " " + options.units, (options.value * xscale) - 2, y + 16);
+            ctx.fillText(options.values[i] + " " + options.units, 4, y + 16);
         }
     } else {
         ctx.fillStyle = "rgb(217, 58, 71)";
@@ -45,7 +45,10 @@ function targetbarCarboncoop(element, options)
     ctx.setLineDash([4, 4]);
 
     var i = 60;
+    var index = 0;
     for (z in options.targets) {
+        if (index == 2)
+            i = 30;
         xpos = options.targets[z] * xscale;
 
         ctx.strokeStyle = "rgba(99,86,71,0.8)";
@@ -59,6 +62,7 @@ function targetbarCarboncoop(element, options)
         ctx.fillText(options.targets[z] + " " + options.units, xpos + 5, barheight - 18 - i);
         ctx.fillText(z, xpos + 5, barheight - 8 - i);
         i = i - 60;
+        index++;
     }
 
     // draw target range
