@@ -70,8 +70,8 @@ function draw_openbem_graphics()
         units: units,
         targets: {
             //"Passivhaus": 15,
-            "Passivhaus retrofit": 25,
-            "UK Average": 145
+            "Passivhaus retrofit": datasets.target_values.space_heating_demand_passive_house,
+            "UK Average": datasets.uk_average_values.space_heating_demand
         }
     };
     targetbar("spaceheating", options);
@@ -89,8 +89,8 @@ function draw_openbem_graphics()
         value: value,
         units: units,
         targets: {
-            "Passivhaus": 120,
-            "UK Average": 350
+            "Passivhaus": datasets.target_values.primary_energy_demand_passive_house,
+            "UK Average": datasets.uk_average_values.primary_energy_demand
         }
     };
     targetbar("primaryenergy", options);
@@ -109,7 +109,7 @@ function draw_openbem_graphics()
         units: units,
         targets: {
             "80% by 2050": 17,
-            "UK Average": 85
+            "UK Average": datasets.uk_average_values.co2_emission_rate
         }
     };
     targetbar("co2", options);
@@ -127,8 +127,8 @@ function draw_openbem_graphics()
         value: value,
         units: units,
         targets: {
-            "70% heating saving": 8.6,
-            "UK Average": 19.6
+            "70% heating saving": datasets.target_values.energy_use_per_person,
+            "UK Average": datasets.uk_average_values.energy_use_per_person
         }
     };
     targetbar("perperson", options);

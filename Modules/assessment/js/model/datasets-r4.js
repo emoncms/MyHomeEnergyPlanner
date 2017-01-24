@@ -212,12 +212,16 @@ var datasets = {
   target_values:{
       space_heating_demand_lower: 20, // kWh/m2.a
       space_heating_demand_upper: 70, // kWh/m2.a
+      space_heating_demand_passive_house: 25, // kWh/m2.a
       primary_energy_demand:120, // kWh/m2.a
+      primary_energy_demand_passive_house: 120, // kWh/m2.a
       co2_emission_rate: 17, // kgCO2/m2.a
+      energy_use_per_person: 8.6 // kgCO2/m2.a
   },
   uk_average_values:{
       space_heating_demand: 120, // kWh/m2.a
       primary_energy_demand:360, // kWh/m2.a
       co2_emission_rate: 50.3, // kgCO2/m2.a
+      energy_use_per_person: 19.6 // kgCO2/m2.a
   }
 };
