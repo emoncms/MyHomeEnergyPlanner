@@ -176,8 +176,8 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 data.ventilation.air_permeability_value -= measure[tag].q50;
             else
                 data.ventilation.air_permeability_value = measure[tag].q50;
-            update();
             data.measures.ventilation[library_helper.type].measure = measure[tag];
+            update();
             data.measures.ventilation[library_helper.type].measure.structural_infiltration = data.ventilation.structural_infiltration_from_test;
             break;
         case 'ventilation_systems_measures':
@@ -365,8 +365,7 @@ $('#openbem').on('click', '.edit-item-IVF', function () {
     library_helper.onEditItem($(this));
 });
 
-function ventilation_initUI()
-{
+function ventilation_initUI(){
     if (data.measures == undefined)
         data.measures = {};
     if (data.measures.ventilation == undefined)
