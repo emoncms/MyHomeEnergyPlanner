@@ -1592,7 +1592,7 @@ var standard_library = {
             gL: 0,
             ff: 0,
             description: "100-140mm thick vapour permeable external wall insulation (EWI) with render finish on filled cavity wall.To include insulation to all window and door reveals and thresholds, treatment of roof eaves and verges junctions, taking insulation to at least 300mm below the level of the internal floor (so thermal bridge is reduced). It will require adjustments of external drainage, and removal/refixing of sundry items (satellite dishes, telephone connections, alarm boxes, boiler flues, bird boxes, gates and fences etc). ",
-            performance: '0.15',
+            performance: '0.15 W/K.m2',
             EWI:true,
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
