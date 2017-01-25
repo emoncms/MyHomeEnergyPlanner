@@ -70,7 +70,8 @@ function draw_openbem_graphics()
         units: units,
         targets: {
             //"Passivhaus": 15,
-            "Passivhaus retrofit": datasets.target_values.space_heating_demand_passive_house,
+            "Min target": datasets.target_values.space_heating_demand_lower,
+            "Max target": datasets.target_values.space_heating_demand_upper,
             "UK Average": datasets.uk_average_values.space_heating_demand
         }
     };
@@ -89,7 +90,7 @@ function draw_openbem_graphics()
         value: value,
         units: units,
         targets: {
-            "Passivhaus": datasets.target_values.primary_energy_demand_passive_house,
+            "Target": datasets.target_values.primary_energy_demand_passive_house,
             "UK Average": datasets.uk_average_values.primary_energy_demand
         }
     };
