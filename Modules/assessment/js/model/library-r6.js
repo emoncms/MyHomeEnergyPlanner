@@ -2148,6 +2148,28 @@ var standard_library = {
             notes: "Ensure reveals and cill are insulated where fitted within external or internal wall insulation - and a good seal is made against any cavity wall insulation. If wall insulation might be fitted later, ensure the window frames are deep enough to allow for this easily. Check the light transmittance values the glazing used - this can make a big difference to the amount of light in your home. Think as well about the arrangement of openings in the window - as a general rule the simpler the framing, the better it will perform thermally, the more light it will provide, and the cheaper it will be. Ensure opening lights meet fire escape regulations. ",
             maintenance: "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
+         "WWPT_02": {
+            tags: ['Window'],
+            name: "Replacement Triple Glazed unit in existing window",
+            location: "",
+            source: "",
+            uvalue: 1.1,
+            kvalue: 0,
+            g: 0.58,
+            gL: 0.74,
+            ff: 0.7,
+            description: 'Replace existing double-glazed units within uPVC frames with new triple glazed units to improve their thermal performance. ',
+            performance: '1.1 W/K.m2',
+            benefits: "Comfort + Carbon Emissions + Fuel Bills",
+            cost_units: 'sqm',
+            cost: 300,
+            who_by: "Window Fitter",
+            disruption: "MEDIUM",
+            associated_work: "Ventilation, external wall insulation, internal wall insulation, draught-proofing.  ",
+            key_risks: "Poor state of existing windows, glazing unit failure",
+            notes: "You can improve the thermal performance of an existing double-glazed uPVC window by fitting a new triple-glazed unit within the existing frame. However, this needs some care. If the existing window is in a poor state of repair, it's probably better to simply replace the whole window. The perfromance is also limited by the depth of frame avaiable - you probably won't be able to fit the highest performing triple-glazed units in an existing double-glazed frame.You should take care to ensure that the new glazing unit is well sealed - both within itself and to the window frame. ",
+            maintenance: "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
+        },
         "WWTXX": {
             tags: ['Window'],
             name: "Night window vent - reduced overheating risk. ",
