@@ -1,0 +1,56 @@
+.house-heatloss-diagrams-wrapper{
+	position: relative;
+}
+
+.house-heatloss-diagrams-wrapper ul{
+	position: absolute;
+	top:0;
+	left:0;
+	padding:20px;
+}
+
+.house-heatloss-diagram-picker  li {
+	cursor: pointer;
+}
+
+.house-heatloss-diagram-picker li:hover{
+	color:$red;
+}
+
+.house-heatloss-diagram-picker .selected{
+	color:$red;
+	text-decoration:underline;
+}
+
+.carbon-report-wrapper .centered-house {
+	border-bottom: solid 2px $pink--light;
+}
+
+.carbon-report-wrapper .centered-house svg {
+	position: relative;
+	left: 10px;
+}
+
+#house-heatloss-diagram-master{
+	display:block;
+}
+
+#house-heatloss-diagram-scenario1,
+#house-heatloss-diagram-scenario2,
+#house-heatloss-diagram-scenario3,
+.house-heatloss-diagrams-wrapper p {
+	display:none;
+}
+
+@media print {
+	.house-heatloss-diagram-picker { 
+		display: none;
+	}
+
+	#house-heatloss-diagram-scenario1,
+	#house-heatloss-diagram-scenario2,
+	#house-heatloss-diagram-scenario3,
+	.house-heatloss-diagrams-wrapper p {
+		display:block!important;
+	}
+}

@@ -1,0 +1,42 @@
+.carbon-report-wrapper {
+	.highlight-box {
+		padding: 30px;
+		display: block;
+		margin-bottom: 1em;
+	}
+
+	.highlight-box :last-child {
+		margin-bottom: 0;
+	}
+
+	.highlight-box.pink-highlight {
+		background: $pink--light;
+	}
+
+	.highlight-box + .highlight-box {
+		margin-top: 3em;
+	}
+
+	.image-figure{
+		margin:20px auto;
+		display: block;
+	}
+
+	.comfort-tables{
+		overflow:hidden;
+	}
+
+	.comfort-table-wrapper{
+		margin-bottom:40px;
+		float:left;
+		width:50%;
+	}
+
+
+
+	@media screen and (max-width: 700px) {
+		.highlight-box {
+			padding: 15px;
+		}
+	}
+}

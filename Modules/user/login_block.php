@@ -179,13 +179,15 @@ $(document).ready(function() {
         var rememberme = 0; if ($("#rememberme").is(":checked")) rememberme = 1;
 
         var result = user.login(username,password,rememberme);
-
+        
         if (result.success)
         {
             window.location.href = path+"assessment/list";
         }
         else
         {
+            if(result.message == undefined)
+                result.message = 'No connection with server';
             $("#error").html(result.message).show();
         }
     }

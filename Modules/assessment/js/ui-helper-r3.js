@@ -186,3 +186,57 @@ function alertifnotlogged(data) {
         $('#modal-error-submitting-data').show();
     }
 }
+
+function get_fuels_for_select(category_to_show) {
+    // Group fuels by category
+    var fuels_by_category = {};
+    for (var fuel in data.fuels) {
+        var category = data.fuels[fuel].category;
+        if (fuels_by_category[category] == undefined)
+            fuels_by_category[category] = [];
+        fuels_by_category[category].push(fuel);
+    }
+
+    // Generate output string according to the category passed to the function, if the category exist we return optionns for that category, if it doesn't exist we return all the fuel sorted by category
+    var options = '';
+    if (fuels_by_category[category_to_show] != undefined) {
+        for (fuel in data.fuels) {
+            if (data.fuels[fuel].category == category_to_show)
+                options += '<option value="' + fuel + '">' + fuel + '</option>';
+        }
+    }
+    else {
+        for (category in fuels_by_category) {
+            if (category != 'generation') {
+                options += '<optgroup label="' + category + '">';
+                for (index in fuels_by_category[category])
+                    options += '<option value="' + fuels_by_category[category][index] + '">' + fuels_by_category[category][index] + '</option>';
+                options += '</optgroup>';
+            }
+        }
+    }
+    return options;
+}
+
+function get_a_fuel(type_of_fuel) { // Returns the first fuel for a specific type found in data.fuels for a specific type
+    for (var fuel in data.fuels) {
+        if (data.fuels[fuel].category == type_of_fuel)
+            return fuel;
+    }
+}
+
+function add_quantity_and_cost_to_measure(measure) {
+    // Add extra properties to measure 
+    if (measure.cost_units == 'sqm')
+        measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
+    else if (measure.cost_units == 'ln m')
+        measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
+    else if (measure.cost_units == 'unit')
+        measure.quantity = 1;
+    else {
+        measure.quantity = 1;
+        measure.cost_units = 'unit';
+    }
+    measure.cost_total = measure.quantity * measure.cost;
+
+}

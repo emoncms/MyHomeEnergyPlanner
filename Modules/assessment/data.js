@@ -337,14 +337,15 @@ var project = {
             "percentage_draught_proofed": 0,
             "number_of_sides_sheltered": 2,
             "ventilation_type": "d",
-            "system_air_change_rate": 0,
-            "balanced_heat_recovery_efficiency": 100
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": 65
         },
         "use_LAC": 1,
         "LAC": {
             "LLE": 0,
             "L": 12,
-            "reduced_internal_heat_gains": false
+            energy_efficient_appliances: false,
+            "energy_efficient_cooking": false
         },
         "use_generation": 0,
         "generation": {
@@ -822,7 +823,7 @@ var project = {
         "LAC": {
             "LLE": 12,
             "L": 12,
-            "reduced_internal_heat_gains": false
+            "energy_efficient_cooking": false
         },
         "use_generation": 0,
         "generation": {
