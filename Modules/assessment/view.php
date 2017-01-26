@@ -64,6 +64,7 @@ global $reports;
 
                 <div class="scenario-nav-heading">Project</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/carboncoopreport">Carbon Coop Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
@@ -92,8 +93,8 @@ global $reports;
                         <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
                         <div class="scenario-nav-heading">Other</a></div>
-                        <div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
-                        <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>
+                        <!--<div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
+                        <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>-->
                         <div class="scenario-nav"><a href="#template/worksheets">SAP worksheets</a></div>
                         <!--<div class="scenario-nav"><a href="#template/changelog">Session change log</a></div>-->
                         <br>
@@ -114,9 +115,9 @@ global $reports;
         <div class="side-block" style="background:none">
 
             <div class="scenario-nav-heading">Documentation</a></div>
-            <div class="scenario-nav"><a href="https://github.com/emoncms/openbem/blob/v3/docs/guide.md">User guide</a></div>
-            <div class="scenario-nav"><a href="https://github.com/emoncms/openbem/blob/v3/docs/ElementLibrary.md">Element Library</a></div>
-            <div class="scenario-nav"><a href="https://github.com/openenergymonitor/documentation/tree/master/BuildingBlocks/BuildingEnergyModelling">Building Energy Modelling</a></div>
+            <div class="scenario-nav"><a target='_blank' href="https://github.com/emoncms/openbem/blob/v3/docs/guide.md">User guide (out of date)</a></div>
+            <div class="scenario-nav"><a target='_blank' href="https://github.com/emoncms/openbem/blob/v3/docs/ElementLibrary.md">A Fabric elements Library</a></div>
+            <div class="scenario-nav"><a target='_blank' href="https://github.com/openenergymonitor/documentation/tree/master/BuildingBlocks/BuildingEnergyModelling">Building Energy Modelling</a></div>
         </div>
     </div>
 
