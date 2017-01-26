@@ -63,7 +63,6 @@ global $reports;
                 <br><br>
 
                 <div class="scenario-nav-heading">Project</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/carboncoopreport">Carbon Coop Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>

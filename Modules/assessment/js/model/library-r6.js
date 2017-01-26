@@ -2945,14 +2945,14 @@ var standard_library = {
         },
         "DRTDI01": {
             tags: ['Door'],
-            name: "Insulated Timber Door - double glazing",
+            name: "Insulated Timber Door - double glazing (assumes glazing 30-60%)",
             location: "",
             source: "--",
             uvalue: 1.4,
             kvalue: 0,
             g: 0.72,
             gL: 0.8,
-            ff: 0.7,
+            ff: 0.4,
             description: 'Replacement insulated doorset. Fitted to minimise thermal bridges and maintain air-tightness.',
             performance: '1.4 W/K.m2',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
@@ -2967,14 +2967,14 @@ var standard_library = {
         },
         "DRTTI01": {
             tags: ['Door'],
-            name: "Insulated Timber Door - triple glazing",
+            name: "Insulated Timber Door - triple glazing (assumes glazing 30-60%)",
             location: "",
             source: "--",
             uvalue: 1.1,
             kvalue: 0,
             g: 0.58,
             gL: 0.74,
-            ff: 0.7,
+            ff: 0.4,
             description: 'Replacement insulated doorset. Fitted to minimise thermal bridges and maintain air-tightness.',
             performance: '1.1 W/K.m2',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
@@ -2987,7 +2987,7 @@ var standard_library = {
             notes: "Ensure reveals and threshold (where possible) are insulated where fitted within external or internal wall insulation - and a good seal is made against any cavity wall insulation. If wall insulation might be fitted later, ensure the door frame is deep enough to allow for this easily. Check the light transmittance values the glazing used - this can make a big difference to the amount of light in your home. If the door is part of a fire escape, ensure it can be opened from inside without a key. You may also wish to specify enhanced security standards, such as multiple locking mechanisms. ",
             maintenance: "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
-        "DRTI01": {
+        "DRPI01": {
             tags: ['Door'],
             name: "Insulated uPVC Door - no glazing",
             location: "",
@@ -3009,16 +3009,16 @@ var standard_library = {
             notes: "Ensure reveals and threshold (where possible) are insulated where fitted within external or internal wall insulation - and a good seal is made against any cavity wall insulation. If wall insulation might be fitted later, ensure the door frame is deep enough to allow for this easily. Check the light transmittance values the glazing used - this can make a big difference to the amount of light in your home. If the door is part of a fire escape, ensure it can be opened from inside without a key. You may also wish to specify enhanced security standards, such as multiple locking mechanisms. ",
             maintenance: "Cleaning on a regular basis. Oiling hinges annually. Checking seals and replacing over time. "
         },
-        "DRTDI01": {
+        "DRPDI01": {
             tags: ['Door'],
-            name: "Insulated Timber Door - double glazing",
+            name: "Insulated uPVC Door - double glazing (assumes glazing 30-60%)",
             location: "",
             source: "--",
             uvalue: 1.4,
             kvalue: 0,
             g: 0.72,
             gL: 0.8,
-            ff: 0.7,
+            ff: 0.4,
             description: 'Replacement insulated doorset. Fitted to minimise thermal bridges and maintain air-tightness.',
             performance: '1.4 W/K.m2',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
@@ -3031,16 +3031,16 @@ var standard_library = {
             notes: "Ensure reveals and threshold (where possible) are insulated where fitted within external or internal wall insulation - and a good seal is made against any cavity wall insulation. If wall insulation might be fitted later, ensure the door frame is deep enough to allow for this easily. Check the light transmittance values the glazing used - this can make a big difference to the amount of light in your home. If the door is part of a fire escape, ensure it can be opened from inside without a key. You may also wish to specify enhanced security standards, such as multiple locking mechanisms. ",
             maintenance: "Cleaning on a regular basis. Oiling hinges annually. Checking seals and replacing over time. "
         },
-        "DRTTI01": {
+        "DRPTI01": {
             tags: ['Door'],
-            name: "Insulated Timber Door - triple glazing",
+            name: "Insulated uPVC Door - double glazing (assumes glazing 30-60%)",
             location: "",
             source: "--",
             uvalue: 1.1,
             kvalue: 0,
             g: 0.58,
             gL: 0.74,
-            ff: 0.7,
+            ff: 0.4,
             description: 'Replacement insulated doorset. Fitted to minimise thermal bridges and maintain air-tightness.',
             performance: '1.1 W/K.m2',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
