@@ -3,6 +3,7 @@ var datasets = {
     fuels: {
         // standing charge in £, unit cost in p/kWh
         // For electricity co2factor and primaryenergyfactor: http://www.bre.co.uk/filelibrary/SAP/2012/Emission-and-primary-factors-2013-2027.pdf
+        // For wood co2factor: http://www.volker-quaschning.de/datserv/CO2-spez/index_e.php, also insteresting discussion in https://github.com/emoncms/MyHomeEnergyPlanner/issues/226#issuecomment-276710998
         // For other fuel's  co2factor and primaryenergyfactor: https://www.bre.co.uk/filelibrary/SAP/2016/CONSP-07---CO2-and-PE-factors---V1_0.pdf
         // Cost: https://github.com/emoncms/MyHomeEnergyPlanner/files/706014/BRE.SAP-fuel-prices-July-2015-summary.xls.pdf
         'Mains Gas': {category: 'Gas', standingcharge: 101, fuelcost: 4.25, co2factor: 0.222, primaryenergyfactor: 1.28, SAP_code: 1},
@@ -12,10 +13,10 @@ var datasets = {
         'House Coal': {category: 'Solid fuel', standingcharge: 0, fuelcost: 4.01, co2factor: 0.416, primaryenergyfactor: 1.079, SAP_code: 11},
         'Anthracite': {category: 'Solid fuel', standingcharge: 0, fuelcost: 4.02, co2factor: 0.416, primaryenergyfactor: 1.079, SAP_code: 15},
         'Manufactured smokeless fuel': {category: 'Solid fuel', standingcharge: 0, fuelcost: 5.04, co2factor: 0.490, primaryenergyfactor: 1.265, SAP_code: 12},
-        'Wood Logs': {category: 'Solid fuel', standingcharge: 0, fuelcost: 4.65, co2factor: 0.026, primaryenergyfactor: 1.058, SAP_code: 20},
-        'Wood Pellets (secondary heating/ in bags)': {category: 'Solid fuel', standingcharge: 0, fuelcost: 6.3, co2factor: 0.045, primaryenergyfactor: 1.32, SAP_code: 22},
-        'Wood pellets (main heating/ bulk supply)': {category: 'Solid fuel', standingcharge: 0, fuelcost: 5.7, co2factor: 0.045, primaryenergyfactor: 1.32, SAP_code: 23},
-        'Wood chips': {category: 'Solid fuel', standingcharge: 0, fuelcost: 3.36, co2factor: 0.030, primaryenergyfactor: 1.174, SAP_code: 21},
+        'Wood Logs': {category: 'Solid fuel', standingcharge: 0, fuelcost: 4.65, co2factor: 0.390, primaryenergyfactor: 1.058, SAP_code: 20},
+        'Wood Pellets (secondary heating/ in bags)': {category: 'Solid fuel', standingcharge: 0, fuelcost: 6.3, co2factor: 0.390, primaryenergyfactor: 1.32, SAP_code: 22},
+        'Wood pellets (main heating/ bulk supply)': {category: 'Solid fuel', standingcharge: 0, fuelcost: 5.7, co2factor: 0.390, primaryenergyfactor: 1.32, SAP_code: 23},
+        'Wood chips': {category: 'Solid fuel', standingcharge: 0, fuelcost: 3.36, co2factor: 0.390, primaryenergyfactor: 1.174, SAP_code: 21},
         'Dual Fuel Appliance': {category: 'Solid fuel', standingcharge: 0, fuelcost: 4.36, co2factor: 0.108, primaryenergyfactor: 1.062, SAP_code: 10},
         'Standard Tariff': {category: 'Electricity', standingcharge: 66, fuelcost: 15.06, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 30},
         '7-Hour tariff - High Rate': {category: 'Electricity', standingcharge: 13, fuelcost: 17.81, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 32},
