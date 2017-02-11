@@ -1,6 +1,16 @@
 <h3>Solar Hot Water system</h3>
 
 <table class="table">
+    <tr>
+    <td>Solar water heating pump</td>
+    <td>
+      <select key="data.SHW.pump" style="width:80px">
+        <option value="PV">PV powered</option>
+        <option value="electric">Electrically powered</option>
+      </select>
+    </td>
+  </tr>
+  
   <tr><td>Aperture area of solar collector, m2</td><td><input key="data.SHW.A" type="text" style="width:50px"></td></tr>
   
   <tr><td>Zero-loss collector efficiency, η0, from test certificate or Table H1</td><td><input key="data.SHW.n0" type="text" style="width:50px"></td></tr>

@@ -1,0 +1,273 @@
+<div id="show-library-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="show-library-header"></h3>
+        <p>Select a library and choose an item:</p>
+    </div>
+    <div class="modal-body" style="height:500px">
+
+        <div class="input-prepend library-select-view">
+            <span class="add-on">Select library:</span>
+            <select id="library-select"></select>
+        </div>
+
+        <span class="if-write">Share library: 
+            <i id="open-share-library" class="icon-share"></i>
+        </span>
+
+        <div id="library_table" class="table">
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn if-write" id="create-in-library" library-id="">Create new item in this library</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+
+
+<div id="modal-share-library" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Share library: </h3>
+    </div>
+    <div class="modal-body">
+        <p>Enter user, or organisation name to share this library with: </p>
+        <input id="sharename" type="text" style="margin:10px;width:120px"/>
+        <input type="checkbox" id="write_permissions">  Grant write persmisions
+        <p id="return-message" style="margin-bottom:25px"></p>
+        <table class="table" id="shared-with-table">
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="share-library" class="btn btn-primary">Share / Update permissions</button>
+    </div>
+</div>
+
+<div id="new-library-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Create a new library - <span id="new-library-type"></span></h3>
+    </div>
+    <div class="modal-body">
+        <div class="input-append input-prepend">
+            <span class="add-on">Enter name for new library</span>
+            <input type="text" id="new-library-name" placeholder="Name"/>
+        </div>
+        <p>What do you want to do?</p>
+        <div style="margin-left:25px">
+            <p><input type="radio" id="create_empty_lib" name="empty_or_copy_library" value="empty" checked /> Create an empty library</p>
+            <p><input type="radio" name="empty_or_copy_library" value="copy" /> Copy from existing library</p>
+            <div id="library-to-copy" class="input-prepend" style="display: none;">
+                <span class="add-on">Select library:</span>
+                <select id="library-to-copy-select"></select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <p id="create-library-message"></p>
+        <button id="cancelnewlibrary" data-dismiss="modal" class="btn">Cancel</button>
+        <button id="newlibrary" class="btn">Create</button>
+        <button id="finishcreatelibrary" data-dismiss="modal" style="display:none" class="btn">Finish</button>
+    </div>
+</div>
+
+<div id="modal-create-in-library" style="position:absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel"> </h3>
+    </div>
+    <div class="modal-body">
+        <p>What do you want to do?</p>
+        <div style="margin-left:25px">
+            <p><input type="radio" id="create_empty_item" name="empty_or_copy_item" value="empty" checked /> Create an empty one</p>
+            <p><input type="radio" name="empty_or_copy_item" value="copy" /> Copy from existing library</p>
+            <div id="copy-item-from" style="margin-left:25px; display: none;">
+                <div id="origin-library" class="input-prepend">
+                    <span class="add-on">Select library:</span>
+                    <select id="origin-library-select"></select>
+                </div>
+                <div id="item-to-copy" class="input-prepend">
+                    <span class="add-on">Copy from:</span>
+                    <select id="item-to-copy-select"></select>
+                </div>
+            </div>
+        </div>
+        <p style='margin-top: 25px'>New item to create</p>
+        <div class="new-item-in-library"></div>
+    </div>
+    <div class="modal-footer">
+        <p id="create-in-library-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="create-in-library-ok" class="btn btn-primary">Create</button>
+        <button id="create-in-library-finish" class="btn btn-primary" style="display:none">Finish</button>
+    </div>
+</div>
+
+
+
+<div id="modal-edit-item" style="position:absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Edit item</h3>
+    </div>
+    <div class="modal-body">
+        <p>Library: <span id="library-to-edit-item"></span></p>
+        <table class="table edit-item-in-library" style='margin:15px 0 0 25px'></table>
+    </div>
+    <div class="modal-footer">
+        <p id="edit-item-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="edit-item-ok" class="btn btn-primary">Edit</button>
+        <button id="edit-item-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+    </div>
+</div>
+
+<div id="apply-measure-modal" style="position:absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Apply measure</h3>
+    </div>
+    <div class="modal-body">
+        <p>Choose a measure from library</p>
+        <!--<p style="margin-left:25px"><input type="radio" name="radio-type-of-measure" value="remove" /> Remove item</p>-->
+        <p style="margin-left:25px; display:none"><input type="radio" name="radio-type-of-measure" value="edit" /> Edit manually</p>
+        <p style="margin-left:25px; display:none"><input type="radio" name="radio-type-of-measure" value="replace" /> Replace with another one from library</p>
+        <p style="margin-left:25px; display:none" class="replace_from_measure_library"><input type="radio" name="radio-type-of-measure" value="replace_from_measure_library" /> From Measures library</p>
+        <div id="apply-measure-replace"  style="margin: 40px 0 0 25px;display:none">
+            <select id="replace-from-lib"></select>
+            <select id="replace-from-lib-items"></select>
+        </div>
+        <div id="apply-measure-item-fields" style="display:none;margin-left:25px"></div>
+    </div>
+    <div class="modal-footer">
+        <p id="apply-measure-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="apply-measure-ok" tag="" library="" row="" item_id="" class="btn btn-primary">Apply measure</button>
+        <button id="apply-measure-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+    </div>
+</div>
+
+
+<div id="edit-library-name-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Edit library name</h3>
+    </div>
+    <div class="modal-body">
+        <p>Enter new name</p><p><input id="new-library-name" type="text" placeholder="" /></p>
+    </div>
+    <div class="modal-footer">
+        <p id="message"></p>
+        <button class="btn" id="edit-library-name-ok" library-id="">OK</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+
+
+
+
+<div id="create-element-template" style="height:500px; display:none">
+    <p>Enter details of new element or measure to be created.</p>
+    <div class="input-prepend">
+        <span class="add-on">Type</span>
+        <select id="create-element-type">
+            <option value="Wall">Wall</option>
+            <option value="Floor">Floor</option>
+            <option value="Roof">Roof</option>
+            <option value="Loft">Loft</option>
+            <option value="Window">Window</option>
+            <option value="Party_wall">Party wall</option>
+        </select>
+    </div>
+
+    <table class="table">
+        <tr><td>Tag</td><td><input type="text" id="create-element-tag" class="item-tag" /></td></tr>
+        <tr><td>Name</td><td><input type="text" id="create-element-name" /></td></tr>
+        <tr><td>Source</td><td><input type="text" id="create-element-source" /></td></tr>
+        <tr><td>U-value</td><td><input type="text" id="create-element-uvalue" /></td></tr>
+        <tr><td>K-value</td><td><input type="text" id="create-element-kvalue" /></td></tr>
+        <tbody class="create-element-window-options" style="display:none">
+            <tr><td>g</td><td><input type="text" id="create-element-g" /></td></tr>
+            <tr><td>gL</td><td><input type="text" id="create-element-gL" /></td></tr>
+            <tr><td>Frame factor (ff)</td><td><input type="text" id="create-element-ff" /></td></tr>
+        </tbody>
+        <tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>
+        <!--<tr><td>Criteria to be measure (comma seperated element tags)</td><td><input type="text" id="create-element-criteria" /></td></tr>-->
+        <tr><td>Description</td><td><textarea rows="4" cols="50" id="create-element-description" /></td></tr>
+        <tr><td>Performance</td><td><input type="text" id="create-element-performance" /></td></tr>
+        <tr><td>Benefits</td><td><input type="text" id="create-element-benefits" /></td></tr>
+        <tr><td>Cost</td><td><input type="text" id="create-element-cost" /></td></tr>
+        <tr><td>Who by</td><td><input type="text" id="create-element-who_by" /></td></tr>
+        <tr><td>Disruption</td><td><input type="text" id="create-element-disruption" /></td></tr>
+        <tr><td>Associated work</td><td><input type="text" id="create-element-associated_work" /></td></tr>
+        <tr><td>Key risks</td><td><input type="text" id="create-element-key_risks" /></td></tr>
+        <tr><td>Notes</td><td><textarea rows="4" cols="50" id="create-element-notes" /></td></tr>
+        <tr><td>Maintenance</td><td><input type="text" id="create-element-maintenance" /></td></tr>
+    </table>
+</div>
+
+<div id="show-library-items-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="show-library-items-header"></h3>
+        <h4 id="show-library-items-library-name"></h4>
+    </div>
+    <div class="modal-body" style="height:500px">
+
+        <table id="show-library-items-table" class="table">
+        </table>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn if-write" id="create-in-library" library-id="">Create new item</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+
+<div id="confirm-delete-library-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="show-library-items-header">Are you sure you want to delete this library?</h3>
+    </div>
+    <div class="modal-body">
+        <p>Once a library is deleted it cannot be recovered</p>
+        <p class="message" style="font-weight: bold"></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" id="delete-library-ok" library-id="">Delete library</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+
+<div id="confirm-delete-library-item-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Are you sure you want to delete this library item?</h3>
+    </div>
+    <div class="modal-body">
+        <p>Once an item is deleted it cannot be recovered</p>
+        <p class="message" style="font-weight: bold"></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" id="delete-library-item-ok" library-id="" tag="">Delete item</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>
+
+
+<!--<div id="confirm-delete-library-item-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Are you sure you want to delete this library item?</h3>
+    </div>
+    <div class="modal-body">
+        <p>Once an item is deleted it cannot be recovered</p>
+        <p class="message" style="font-weight: bold"></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" id="delete-item-ok" library-id="">Delete item</button>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    </div>
+</div>-->

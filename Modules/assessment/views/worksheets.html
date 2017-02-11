@@ -1,0 +1,112 @@
+<div id="elements-container" class="page">
+
+
+    <h3>SAP 2012 Worksheets</h3>
+    <p>This section summarizes the results of MyHomeEnergyPlanner following SAP worksheets.</p>
+    <p>MHEP is a tool for helping to improve the performance of existing buildings. Despite it is based in SAP model, in some cases different assumptions are taken. Therefor the results shown here may differ from a SAP assesment.</p>
+    <hr>
+    <table class="table">
+        <tr><td colspan="2" style="padding-top:30px"><h4>1. Overall dwelling dimensions</h4></td></tr>
+        <tr><td style="width: 20%">(4) Total Floor Area (TFA)</td><td><span key="data.TFA" dp="2"></span></td></tr>
+        <tr><td>(5) Dwelling Volume</td><td><span key="data.volume" dp="2"></span></td></tr>
+        <tr><td colspan="2" style="padding-top:30px"><h4>2. Ventilation rate</h4></td></tr>
+        <tr><td>(8) Infiltration due to chimneys, flues and fans <i class="icon-question-sign" title="This may differ from SAP as we allow different values for the ventilationn rate of the elements"></i></td><td><span key="data.ventilation.infiltration_chimeneyes_fires_fans" dp="2"></span></td></tr>
+        <tr><td>(18) Infiltration rate </td><td><span key="data.ventilation.infiltration_rate" dp="2"></span></td></tr>
+        <tr><td>(21) Infiltration rate incorporating shelter factor </td><td><span key="data.ventilation.infiltration_rate_incorp_shelter_factor" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.ventilation.windfactor" title="(22am) Wind factor" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.ventilation.adjusted_infiltration" title="Adjusted infiltration rate (allowing for shelter and wind speed)" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.ventilation.effective_air_change_rate" title="(25) Effective air change rate" units="" dp=2></tbody>
+        <tr><td colspan="2" style="padding-top:30px"><h4>3. Heat losses and heat loss parameter</h4></td></tr>
+        <tr><td>(31) Total area of elements</td><td><span key="data.fabric.total_external_area" dp="2"></span></td></tr>
+        <tr><td>(32) Party wall </td><td><span key="data.fabric.total_party_wall_area" dp="2"></span></td></tr>
+        <tr><td>(33) Fabric Heat loss</td><td><span key="data.fabric.fabric_heat_loss_WK" dp="2"></span></td></tr>
+        <tr><td>(34) Heat Capacity</td><td><span key="data.fabric.total_thermal_capacity" dp="2"></span></td></tr>
+        <tr><td>(35) Thermal mass paremeter</td><td><span key="data.TMP" dp="2"></span></td></tr>
+        <tr><td>(36) Thermal Bridges</td><td><span key="data.fabric.thermal_bridging_heat_loss" dp="2"></span></td></tr>
+        <tr><td>(37) Total Fabric Heat loss</td><td><span key="data.fabric.total_heat_loss_WK" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.ventilation.SAP_ventilation_WK" title="(38) Ventilation heat loss calculated monthly (SAP ventilation is the addition of Ventilation and Infiltration in MHEP)" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.totalWK_monthly" title="(39) Heat transfer coefficient W/K monthly" units="" dp=2></tbody>
+        <tr><td>(39) Heat transfer coefficient</td><td><span key="data.totalWK" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.HLP" title="(40) Heat loss parameter (HLP), W/m<sup>2</sup>K" units="" dp=2></tbody>
+        <tr><td colspan="2" style="padding-top:30px"><h4>4. Water heating energy requirement</h4></td></tr>
+        <tr><td>(42) Assumed occupancy</td><td><span key="data.occupancy" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.water_heating.monthly_energy_content" title="(45m) Energy content of hot water calculated monthly" units="" dp=2></tbody>
+        <tr><td>(45) Energy content of hot water</td><td><span key="data.water_heating.annual_energy_content" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.water_heating.distribution_loss" title="(46m) Distribution loss" units="" dp=2></tbody>
+        <tr><td>(55) Energy lost from water storage, kWh/year</td><td><span key="data.water_heating.energy_lost_from_water_storage" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.water_heating.monthly_storage_loss" title="(57m) Water storage loss monthly" units="" dp=2></tbody>
+        <tr><td>(58) Water storage loss</td><td><span key="data.water_heating.energy_lost_from_water_storage" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.water_heating.primary_circuit_loss" title="(59) Primary circuit loss" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.water_heating.combi_loss" title="(61) Combi loss" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.water_heating.total_heat_required" title="(62) Total heat required for water heating" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.SHW.Qs_monthly" title="(63m) Solar DHW input" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.water_heating.hot_water_heater_output" title="(64m) Output from water heater" units="" dp=2></tbody>
+        <tr><td>(64) Output from water heater annual</td><td><span key="data.water_heating.annual_waterheating_demand" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.water_heating.heat_gains_from_water_heating" title="(65) Heat gains from water heater annual" units="" dp=2></tbody>
+        <tr><td colspan="2" style="padding-top:30px"><h4>5. Internal gains</h4></td></tr>
+        <tbody class="monthly" key="data.gains_W.metabolic" title="(66) Metabolic gains" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.gains_W.Lighting" title="(67) Lighting gains - May be different to SAP as other calculations are possible" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.gains_W.Appliances" title="(68) Appliances gains - May be different to SAP as other calculations are possible" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.gains_W.Cooking" title="(69) Cooking gains - May be different to SAP as other calculations are possible" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.gains_W.fans_and_pumps" title="(70) Pumps and funs gains" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.gains_W.losses" title="(71) Losses eg. evaporation (negative values)" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.gains_W.waterheating" title="(72) Water heating gains" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.total_internal_gains" title="(73) Total internal gains" units="" dp=2></tbody>
+        <tr><td colspan="2" style="padding-top:30px"><h4>6. Solar gains</h4></td></tr>
+        <tbody class="monthly" key="data.gains_W.solar" title="(83) Solar gains" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.total_internal_and_solar_gains" title="(84) Total gains - internal and solar" units="" dp=2></tbody>
+        <tr><td colspan="2" style="padding-top:30px"><h4>7. Mean internal temperature (in heating season)</h4></td></tr>
+        <tbody class="monthly" key="data.mean_internal_temperature.u_factor_living_area" title="(86) Utilisation factor for gains for living area" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.mean_internal_temperature.m_i_t_living_area" title="(87) Mean internal temperature living area" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.mean_internal_temperature.t_heating_periods_rest_of_dwelling" title="(88) Temperature during heating periods in rest of dwelling" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.mean_internal_temperature.u_factor_rest_of_dwelling" title="(89) Utilisation factor for gains rest of dwelling" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.mean_internal_temperature.m_i_t_rest_of_dwelling" title="(90) Mean internal temperature in the rest of dwelling" units="" dp=2></tbody>
+        <tr><td>(91) fLA</td><td><span key="data.mean_internal_temperature.fLA" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.mean_internal_temperature.m_i_t_whole_dwelling" title="(92) Mean internal temperature (for the whole dwelling)" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.mean_internal_temperature.m_i_t_whole_dwelling_adjusted" title="(93) Apply adjustment to the mean internal temperature" units="" dp=2></tbody>
+        <tr><td colspan="2" style="padding-top:30px"><h4>8. Space heating requirement</h4></td></tr>
+        <tbody class="monthly" key="data.space_heating.utilisation_factor" title="(94) Utilisation factor for gains" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.space_heating.useful_gains" title="(95) Useful gains" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.external_temperature" title="(96) Monthly average external temperature from table 8" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.space_heating.total_losses" title="(97) Heat loss rate for mean internal temperature" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.space_heating.heat_demand_kwh" title="(98m) Space heating requirement for each month, kWh/month" units="" dp=2></tbody>
+        <tr><td>(98) Total per year (kWh/year)</td><td><span key="data.space_heating.annual_heating_demand" dp="2"></span></td></tr>
+        <tr><td>(99) Space heating requirement in kWh/m<sup>2</sup>/year</td><td><span key="data.space_heating.annual_heating_demand_m2" dp="2"></span></td></tr>
+        <!--<tr><td>(109) Fabric efficiency</td><td><span key="data.space_heating_demand_m2" dp="2"></span></td></tr>-->
+        <tr><td colspan="2" style="padding-top:30px"><h4>9. Energy requirements</h4></td></tr>
+        <tbody class="monthly" key="data.energy_systems.space_heating.0.fuelinput_monthly" title="(211m) Space heating fuel (main heating system) - There is no logic here to make a difference between main systen, main system 2 and secondary system" units="" dp=2></tbody>
+        <tr><td>(211) Total (kWh/year)</td><td><span key="data.energy_systems.space_heating.0.fuelinput" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.energy_systems.space_heating.1.fuelinput_monthly" title="(213m) Space heating fuel (main heating system 2) - There is no logic here to make a difference between main systen, main system 2 and secondary system" units="" dp=2></tbody>
+        <tr><td>(213) Total (kWh/year)</td><td><span key="data.energy_systems.space_heating.1.fuelinput" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.energy_systems.space_heating.2.fuelinput_monthly" title="(215m) Space heating fuel (secondary system) - There is no logic here to make a difference between main systen, main system 2 and secondary system" units="" dp=2></tbody>
+        <tr><td>(215) Total (kWh/year)</td><td><span key="data.energy_systems.space_heating.2.fuelinput" dp="2"></span></td></tr>
+        <tr><td>(216) Efficiency of water heater</td><td><span key="data.energy_systems.waterheating.0.efficiency" dp="2"></span></td></tr>
+        <tbody class="monthly" key="data.energy_systems.waterheating.0.efficiency_monthly" title="(217) Efficiency of hot water monthly" units="" dp=2></tbody>
+        <tbody class="monthly" key="data.energy_systems.waterheating.0.fuelinput_monthly" title="(219m) Fuel for water heating kWh/month" units="" dp=2></tbody>
+        <tr><td>(219) Fuel for water heating kWh</td><td><span key="data.energy_systems.waterheating.0.fuelinput" dp="2"></span></td></tr>
+        <tr><td>(231) Total electricity for pumps, fans and keep hot facility</td><td><span key="data.energy_requirements.fans_and_pumps.quantity" dp="2"></span></td></tr>
+        <tr><td>(232) Electricity for lighting</td><td><span key="data.energy_requirements.lighting.quantity" dp="2"></span></td></tr>
+        <tr><td>(233a) Electricity generated by PVs</td><td><span key="data.generation.systems.solarpv.quantity" dp="2"></span></td></tr>
+        <tr><td>(233b) Electricity generated by PVs from calculator</td><td><span key="data.generation.systems.solarpv2.quantity" dp="2"></span></td></tr>
+        <tr><td>(234) Electricity generated by wind turbine</td><td><span key="data.generation.systems.wind.quantity" dp="2"></span></td></tr>
+        <tr><td colspan="2" style="padding-top:30px"><h4>10. Fuel costs</h4></td></tr>
+        <tr><td>(235a) Electricity generated by hydroelectric generator</td><td><span key="data.generation.systems.hydro.quantity" dp="2"></span></td></tr>
+        <tr><td>(255 MHEP) Total energy cost </td><td><span key="data.total_cost" dp="2"></span></td></tr>
+        <tr><td>(255 SAP) Total energy cost (following SAP calculations)</td><td><span key="data.SAP.total_costSAP" dp="2"></span></td></tr>
+        <tr><td colspan="2" style="padding-top:30px"><h4>11. SAP rating</h4></td></tr>
+        <tr><td>(257) Energy Cost Factor</td><td><span key="data.SAP.energy_cost_factor" dp="2"></span></td></tr>
+        <tr><td>(258) SAP rating</td><td><span key="data.SAP.rating" dp="2"></span></td></tr>
+        <tr><td colspan="2" style="padding-top:30px"><h4>12. CO<sub>2</sub> emissions</h4></td></tr>
+        <tr><td>(272 MHEP) Total CO<sub>2</sub> kg/year (Takes into account appliances and cooking)</td><td><span key="data.annualco2" dp="2"></span></td></tr>
+        <tr><td>(272 SAP) Total CO<sub>2</sub> kg/year</td><td><span key="data.SAP.annualco2SAP" dp="2"></span></td></tr>
+        <tr><td>(273 MHEP) CO<sub>2</sub> emission per m<sup>2</sup> (Takes into account appliances and cooking)</td><td><span key="data.kgco2perm2" dp="2"></span></td></tr>
+        <tr><td>(273 SAP) CO<sub>2</sub> emission per m<sup>2</sup></td><td><span key="data.SAP.kgco2perm2SAP" dp="2"></span></td></tr>
+        <tr><td>(274) EI rating</td><td><span key="data.SAP.EI_rating" dp="2"></span></td></tr>
+        <tr><td colspan="2" style="padding-top:30px"><h4>13. Primary energy</h4></td></tr>
+        <tr><td>(272 MHEP) Total primary energy (Takes into account appliances and cooking)</td><td><span key="data.primary_energy_use" dp="2"></span></td></tr>
+        <tr><td>(272 SAP) Total primary energy</td><td><span key="data.SAP.primary_energy_useSAP" dp="2"></span></td></tr>
+        <tr><td>(273 MHEP) Total primary energy kWh/m<sup>2</sup>/year (Takes into account appliances and cooking)</td><td><span key="data.primary_energy_use_m2" dp="2"></span></td></tr>
+        <tr><td>(273 SAP) Total primary energy kWh/m<sup>2</sup>/year </td><td><span key="data.SAP.primary_energy_use_m2SAP" dp="2"></span></td></tr>
+        
+    </table>
+</div>

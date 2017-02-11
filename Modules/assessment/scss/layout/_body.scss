@@ -1,0 +1,32 @@
+.carbon-report-wrapper { 
+	.page-wrapper {
+		max-width: 1100px;
+		margin: 0 auto;
+	}
+
+	.page-wrapper > section:last-of-type {
+		margin-bottom: 5em;
+	}
+
+	pre {
+		word-break: normal;
+		background:none;
+	    white-space: pre-wrap;       /* CSS 3 */
+	    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+	    white-space: -pre-wrap;      /* Opera 4-6 */
+	    white-space: -o-pre-wrap;    /* Opera 7 */
+	    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+	}
+
+	@media screen and (max-width: 1100px) {
+		section {
+			padding: 0 20px;
+		}
+	}
+
+	@media screen and (max-width: 700px) {
+		section {
+			padding: 15px;
+		}
+	}
+}

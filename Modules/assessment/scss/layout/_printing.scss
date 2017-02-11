@@ -1,0 +1,8 @@
+.page-wrapper > section {
+    page-break-after: always;
+    page-break-inside: avoid;
+}
+
+:root {
+  -webkit-print-color-adjust: exact;
+}

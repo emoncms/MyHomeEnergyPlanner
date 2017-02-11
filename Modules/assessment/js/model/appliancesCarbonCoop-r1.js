@@ -143,7 +143,9 @@ var appliancesCarbonCoop = {
             "Electric fraction": 1,
             "DHW fraction": 0,
             "GAS fraction": 0,
-        },
+        }
+    },
+    "Other kitchen / cleaning": {
         "electric kettle": {
             "Norm demand": 20,
             "Units": "kWh",
@@ -154,8 +156,6 @@ var appliancesCarbonCoop = {
             "DHW fraction": 0,
             "GAS fraction": 0
         },
-    },
-    "Other kitchen / cleaning": {
         "Dishwasher - hot feed": {
             "Norm demand": 1.5,
             "Units": "kWh per use",

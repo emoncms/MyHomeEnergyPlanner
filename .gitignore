@@ -6,7 +6,9 @@ Modules/dashboard
 Modules/vis
 Modules/assessment/views/ccreport.html
 Modules/assessment/views/ccreport.js
-Modules/assessment/views/householdquestionnaire.html
+Modules/assessment/.sass-cache
 background.jpg
+/nbproject
+.DS_Store
 nbproject/
 Modules/assessment/images

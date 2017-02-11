@@ -1,0 +1,40 @@
+.carbon-report-wrapper {
+	footer {
+		width: 100%;
+		background: $grey--x-light;
+		padding: 2em 20px 4em 20px;
+	}
+
+
+	.footer-sponsor {
+		width: 37.5%;
+		float: left;
+
+		img {
+			max-width: 82.5%;
+			max-height: 90px;
+		}
+
+	}
+
+	.sponsor-wrapper:after {
+		content: '';
+		display: block;
+		clear: both;
+	}
+
+	.carbon-coop-logo img {
+		margin-top: 3%;
+	}
+
+	@media screen and (max-width: 1000px) {
+		.footer-sponsor {
+			width: 100%;
+			margin-bottom: 1em;
+
+			img {
+				max-width: 40%;
+			}
+		}
+	}
+}

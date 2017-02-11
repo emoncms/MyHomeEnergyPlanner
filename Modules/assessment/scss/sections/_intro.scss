@@ -1,0 +1,45 @@
+.carbon-report-wrapper {
+	.home-image {
+		width: 100%;
+		display: block;
+	}
+
+	.client-info p {
+		margin-bottom: 0.8em;
+	}
+
+	.client-info span {
+		margin-bottom: 0;
+	}
+
+	.performance-summary-wrapper{
+		background:$white;
+		padding:40px;
+	}
+
+	.performace-summary-target-bar{
+		margin-bottom:40px;
+	}
+
+	#performace-summary-key {
+		margin-bottom:40px;
+		border-top: 1px dashed $red;
+		padding-top:5px;
+	}
+
+	#performace-summary-key li{
+		float:left;
+		width:25%;
+		padding:10px 0 20px;
+	}
+
+	.key-square{
+		display:inline-block;
+		width:20px;
+		height:20px;
+		margin-right:10px;
+		background:grey;
+		position: relative;
+		top: 3px;
+	}
+}
