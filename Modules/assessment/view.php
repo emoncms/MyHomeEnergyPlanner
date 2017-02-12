@@ -116,7 +116,7 @@ global $reports;
             <div class="scenario-nav-heading">Documentation</a></div>
             <div class="scenario-nav"><a target='_blank' href="https://github.com/emoncms/openbem/blob/v3/docs/guide.md">User guide (out of date)</a></div>
             <div class="scenario-nav"><a target='_blank' href="https://github.com/emoncms/openbem/blob/v3/docs/ElementLibrary.md">A Fabric elements Library</a></div>
-            <div class="scenario-nav"><a target='_blank' href="https://github.com/openenergymonitor/documentation/tree/master/BuildingBlocks/BuildingEnergyModelling">Building Energy Modelling</a></div>
+            <div class="scenario-nav"><a target='_blank' href="https://learn.openenergymonitor.org/sustainable-energy/building-energy-model/readme">Learn: Building Energy Modelling</a></div>
         </div>
     </div>
 
