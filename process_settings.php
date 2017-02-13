@@ -32,6 +32,7 @@ if(file_exists(dirname(__FILE__)."/settings.php"))
 
     if (!isset($redis_enabled)) $redis_enabled = true;
     if (!isset($allowuseredit)) $allowuseredit = true;
+    if (!isset($admin_enable_userlist)) $admin_enable_userlist = true;
     
     if ($error_out!="") {
       echo "<div style='width:600px; background-color:#eee; padding:20px; font-family:arial;'>";

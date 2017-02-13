@@ -14,7 +14,7 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 
 function admin_controller()
 {
-    global $mysqli,$session,$route,$updatelogin;
+    global $mysqli,$session,$route,$updatelogin,$admin_enable_userlist;
 
     // Allow for special admin session if updatelogin property is set to true in settings.php
     // Its important to use this with care and set updatelogin to false or remove from settings
@@ -45,23 +45,24 @@ function admin_controller()
             $result = view("Modules/admin/update_view.php", array('applychanges'=>$applychanges, 'updates'=>$updates));
         }
 
-        if ($route->action == 'users' && $session['write'] && $session['admin'])
-        {
-            $result = view("Modules/admin/userlist_view.php", array());
-        }
+        
+        if ($admin_enable_userlist) {
+        
+            if ($route->action == 'users' && $session['write'] && $session['admin']) {
+                $result = view("Modules/admin/userlist_view.php", array());
+            }
 
-        if ($route->action == 'userlist' && $session['write'] && $session['admin'])
-        {
-            $data = array();
-            $result = $mysqli->query("SELECT id,username,email FROM users");
-            while ($row = $result->fetch_object()) $data[] = $row;
-            $result = $data;
-        }
+            if ($route->action == 'userlist' && $session['write'] && $session['admin']) {
+                $data = array();
+                $result = $mysqli->query("SELECT id,username,email FROM users");
+                while ($row = $result->fetch_object()) $data[] = $row;
+                $result = $data;
+            }
 
-        if ($route->action == 'setuser' && $session['write'] && $session['admin'])
-        {
-            $_SESSION['userid'] = intval(get('id'));
-            header("Location: ../user/view");
+            if ($route->action == 'setuser' && $session['write'] && $session['admin']) {
+                $_SESSION['userid'] = intval(get('id'));
+                header("Location: ../user/view");
+            }
         }
     }
 

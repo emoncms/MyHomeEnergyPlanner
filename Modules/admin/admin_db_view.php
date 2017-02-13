@@ -1,3 +1,4 @@
+<?php defined('EMONCMS_EXEC') or die('Restricted access'); ?>
 <h2><?php echo _('Database setup, update and status check'); ?></h2>
 <p><?php echo _('This page displays the output of the database setup and update process which checks the database requirements of each module installed and enter any new table or fields if required.'); ?></p>
 <p><?php echo _('If all the item statuses below show ok that means your database is setup correctly.'); ?></p>

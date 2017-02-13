@@ -1,5 +1,6 @@
 <?php
-
+    defined('EMONCMS_EXEC') or die('Restricted access');
+    
     global $path;
 
     $out = "";
