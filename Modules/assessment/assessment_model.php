@@ -4,8 +4,6 @@
 defined('EMONCMS_EXEC') or die('Restricted access');
 
 // id, metadata, data
-
-
 class Assessment {
 
     private $mysqli;

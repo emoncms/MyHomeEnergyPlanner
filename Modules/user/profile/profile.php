@@ -13,7 +13,7 @@
 // no direct access
 defined('EMONCMS_EXEC') or die('Restricted access');
 
-    global $path;
+    global $path,$allowuseredit;
 
     $languages = get_available_languages();
 
@@ -37,7 +37,7 @@ function languagecodetotext()
         <div id="account">
             <div class="account-item">
                 <span class="muted"><?php echo _('Username'); ?></span>
-                <span id="username-view"><br><span class="username"></span> <a id="edit-username" style="float:right"><?php echo _('Edit'); ?></a></span>
+                <span id="username-view"><br><span class="username"></span> <a id="edit-username" style="float:right"><?php if ($allowuseredit) echo _('Edit'); ?></a></span>
                 <div id="edit-username-form" class="input-append" style="display:none">
                     <input class="span2" type="text" style="width:150px">
                     <button class="btn" type="button"><?php echo _('Save'); ?></button>
@@ -46,7 +46,7 @@ function languagecodetotext()
             </div>
             <div class="account-item">
                 <span class="muted"><?php echo _('Email'); ?></span>
-                <span id="email-view"><br><span class="email"></span> <a id="edit-email" style="float:right"><?php echo _('Edit'); ?></a></span>
+                <span id="email-view"><br><span class="email"></span> <a id="edit-email" style="float:right"><?php if ($allowuseredit) echo _('Edit'); ?></a></span>
                 <div id="edit-email-form" class="input-append" style="display:none">
                     <input class="span2" type="text" style="width:150px">
                     <button class="btn" type="button"><?php echo _('Save'); ?></button>
@@ -54,9 +54,11 @@ function languagecodetotext()
                 <div id="change-email-error" class="alert alert-error" style="display:none; width:170px"></div>
             </div>
 
+            <?php if ($allowuseredit) { ?>
             <div class="account-item">
                 <a id="changedetails"><?php echo _('Change Password'); ?></a>
             </div>  
+            <?php } ?>
 
         </div>
 
@@ -106,6 +108,7 @@ function languagecodetotext()
     
     var currentlanguage = list.data.language;
 
+    list.editable = <?php if ($allowuseredit) echo "true"; else echo "false"; ?>;
     list.fields = {
         'gravatar':{'title':"<?php echo _('Gravatar'); ?>", 'type':'gravatar'},
         'name':{'title':"<?php echo _('Name'); ?>", 'type':'text'},

@@ -13,6 +13,7 @@ var list = {
     'data':{},
     'fields':{},
     'element':"#table",
+    'editable':true,
 
     'init':function()
     {
@@ -22,7 +23,7 @@ var list = {
             tr = $("<tr />").attr("field", field);
             tr.append('  <td type="name" class="muted" style="width:150px;">'+list.fields[field].title+'</td>');
             tr.append('  <td type="value">'+(list.fieldtypes[list.fields[field].type].draw(list.data[field])||'N/A')+'</td>');
-            tr.append('  <td type="edit" action="edit"><i class="icon-pencil" style="display:none"></i></td>');
+            if (list.editable) tr.append('  <td type="edit" action="edit"><i class="icon-pencil" style="display:none"></i></td>');
             table.append(tr);
         }
         $(list.element).html(table);
