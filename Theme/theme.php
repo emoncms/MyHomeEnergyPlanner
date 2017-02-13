@@ -103,8 +103,7 @@
 
         <div id="footer">
             <?php echo _('Powered by '); ?>
-            <a href="http://openenergymonitor.org">openenergymonitor.org</a>
-            <span> | v<?php echo $emoncms_version; ?></span>
+            <a href="http://openenergymonitor.org">openenergymonitor.org</a> and <a href="http://carbon.coop/">carbon.coop</a>
         </div>
 
         <script src="<?php echo $path; ?>Lib/bootstrap/js/bootstrap.js"></script>
