@@ -192,12 +192,12 @@ class User
 
         // filter out all except for alphanumeric white space and dash
         //if (!ctype_alnum($username))
-        $username_out = preg_replace('/[^\w\s-]/','',$username);
+        $username_out = preg_replace('/[^\p{N}\p{L}_\s-]/u','',$username);
 
         if ($username_out!=$username) return array('success'=>false, 'message'=>_("Username must only contain a-z 0-9 dash and underscore, if you created an account before this rule was in place enter your username without the non a-z 0-9 dash underscore characters to login and feel free to change your username on the profile page."));
 
         $username = $this->mysqli->real_escape_string($username);
-        $password = $this->mysqli->real_escape_string($password);
+        //$password = $this->mysqli->real_escape_string($password);
 
         $result = $this->mysqli->query("SELECT id,password,admin,salt,language FROM users WHERE username = '$username'");
 
