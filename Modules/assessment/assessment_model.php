@@ -335,12 +335,14 @@ class Assessment {
         while ($row = $result->fetch_object()) {
             $id = $row->id;
             $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");
-            $librow = $libresult->fetch_object();
-            if (!in_array($id, $loadedlibs)) {
-                $librow->data = json_encode(json_decode($librow->data));
-                $libraries[] = $librow;
+            if ($libresult->num_rows > 0) {
+                $librow = $libresult->fetch_object();
+                if (!in_array($id, $loadedlibs)) {
+                    $librow->data = json_encode(json_decode($librow->data));
+                    $libraries[] = $librow;
+                }
+                $loadedlibs[] = $id;
             }
-            $loadedlibs[] = $id;
         }
 
         // Load organisation libraries
