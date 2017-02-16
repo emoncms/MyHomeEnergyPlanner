@@ -308,7 +308,7 @@
     .carbon-report-wrapper .table-sub-total {
       margin-top: 2em;
       float: left; }
-    .carbon-report-wrapper .five-col-table td:nth-of-type(1):before {
+    /*.carbon-report-wrapper .five-col-table td:nth-of-type(1):before {
       content: "Name"; }
     .carbon-report-wrapper .five-col-table td:nth-of-type(2):before {
       content: "Description"; }
@@ -327,7 +327,7 @@
       width: 100%;
       padding-top: 50px; }
     .carbon-report-wrapper .three-col-table td:before {
-      left: 0px; } }
+      left: 0px; }*/ }
   @media only screen and (max-width: 465px) {
     .carbon-report-wrapper .five-col-table td {
       padding-left: 0%;

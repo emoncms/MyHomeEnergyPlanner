@@ -108,6 +108,7 @@ function carboncoopreport_UpdateUI() {
     var scenarios = ["master", "scenario1", "scenario2", "scenario3"];
     // $(".home-image").attr("src", project[scenario].household.houseimage);
     if (data.featuredimage) {
+        $(".js-home-image-wrapper").html('');
         var img = $('<img class="home-image">').attr("src", path + "Modules/assessment/images/" + projectid + "/" + data.featuredimage)
         img.appendTo(".js-home-image-wrapper");
     }
@@ -1310,11 +1311,11 @@ function carboncoopreport_UpdateUI() {
         $(tableSelector).append(row);
 
         //Summary table
-        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.name, measure.measure.description, measure.measure.performance,
+        addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.location, measure.measure.description, measure.measure.performance,
                 measure.measure.benefits, (1.0 * measure.measure.cost_total).toFixed(2), measure.measure.who_by, measure.measure.disruption);
-
+   
         //List
-        html = "<table>";
+        html = "<table class='no-break'>";
         html += '<tr><td style="width:13%"><strong>Measure: </strong></td><td colspan=3>' + measure.measure.name + '</td></tr>';
         html += '<tr><td><strong>Label/location: </strong></td><td colspan=3>' + measure.measure.location + '</td></tr>';
         html += '<tr><td><strong>Description: </strong></td><td colspan=3>' + measure.measure.description + '</td></tr>';
@@ -1424,6 +1425,10 @@ function carboncoopreport_UpdateUI() {
     /* Figure 19: Scenario 3 Measures
      //
      */
+
+     // Commentary
+     var commentary = data.household.commentary.replace(/\n/gi, "<br />");
+     $('#commentary').html(commentary);
 
 
     /* Figure 23: Appendix B - data from household questionnaire
