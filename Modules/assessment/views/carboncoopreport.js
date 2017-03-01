@@ -1395,18 +1395,29 @@ function carboncoopreport_UpdateUI() {
 
     if (typeof project["scenario1"] != "undefined") {
         $(".output-scenario1-name").html(project["scenario1"]["scenario_name"]);
+        $('#scenario1-measures').html("");
+        $('.js-measures1-summary').html("");
+        $('#scenario1-measures-list').html("");
         createMeasuresTable("scenario1", "#scenario1-measures", ".js-measures1-summary", '#scenario1-measures-list');
     }
     else
         $(".output-scenario1-name").html('This scenario has not been created');
+    
     if (typeof project["scenario2"] != "undefined") {
         $(".output-scenario2-name").html(project["scenario2"]["scenario_name"]);
+        $('#scenario2-measures').html("");
+        $('.js-measures2-summary').html("");
+        $('#scenario2-measures-list').html("");
         createMeasuresTable("scenario2", "#scenario2-measures", ".js-measures2-summary", '#scenario2-measures-list');
     }
     else
         $(".output-scenario2-name").html('This scenario has not been created');
+    
     if (typeof project["scenario3"] != "undefined") {
         $(".output-scenario3-name").html(project["scenario3"]["scenario_name"]);
+        $('#scenario3-measures').html("");
+        $('.js-measures3-summary').html("");
+        $('#scenario3-measures-list').html("");
         createMeasuresTable("scenario3", "#scenario3-measures", ".js-measures3-summary", '#scenario3-measures-list');
     }
     else
