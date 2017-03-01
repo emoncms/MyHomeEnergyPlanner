@@ -1313,7 +1313,7 @@ function carboncoopreport_UpdateUI() {
         //Summary table
         addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.location, measure.measure.description, measure.measure.performance,
                 measure.measure.benefits, (1.0 * measure.measure.cost_total).toFixed(2), measure.measure.who_by, measure.measure.disruption);
-   
+
         //List
         html = "<table class='no-break'>";
         html += '<tr><td style="width:13%"><strong>Measure: </strong></td><td colspan=3>' + measure.measure.name + '</td></tr>';
@@ -1402,7 +1402,7 @@ function carboncoopreport_UpdateUI() {
     }
     else
         $(".output-scenario1-name").html('This scenario has not been created');
-    
+
     if (typeof project["scenario2"] != "undefined") {
         $(".output-scenario2-name").html(project["scenario2"]["scenario_name"]);
         $('#scenario2-measures').html("");
@@ -1412,7 +1412,7 @@ function carboncoopreport_UpdateUI() {
     }
     else
         $(".output-scenario2-name").html('This scenario has not been created');
-    
+
     if (typeof project["scenario3"] != "undefined") {
         $(".output-scenario3-name").html(project["scenario3"]["scenario_name"]);
         $('#scenario3-measures').html("");
@@ -1437,9 +1437,11 @@ function carboncoopreport_UpdateUI() {
      //
      */
 
-     // Commentary
-     var commentary = data.household.commentary.replace(/\n/gi, "<br />");
-     $('#commentary').html(commentary);
+    // Commentary
+    if (data.household.commentary != undefined) {
+        var commentary = data.household.commentary.replace(/\n/gi, "<br />");
+        $('#commentary').html(commentary);
+    }
 
 
     /* Figure 23: Appendix B - data from household questionnaire
