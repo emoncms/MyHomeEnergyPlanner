@@ -210,19 +210,67 @@ var datasets = {
         'electric-high': {name: "High rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-high'},
         'electric-low': {name: "Low rate electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric-low'},
     },
-  target_values:{
-      space_heating_demand_lower: 20, // kWh/m2.a
-      space_heating_demand_upper: 70, // kWh/m2.a
-      space_heating_demand_passive_house: 25, // kWh/m2.a
-      primary_energy_demand:120, // kWh/m2.a
-      primary_energy_demand_passive_house: 120, // kWh/m2.a
-      co2_emission_rate: 17, // kgCO2/m2.a
-      energy_use_per_person: 8.6 // kgCO2/m2.a
-  },
-  uk_average_values:{
-      space_heating_demand: 120, // kWh/m2.a
-      primary_energy_demand:360, // kWh/m2.a
-      co2_emission_rate: 50.3, // kgCO2/m2.a
-      energy_use_per_person: 19.6 // kgCO2/m2.a
-  }
+    target_values: {
+        space_heating_demand_lower: 20, // kWh/m2.a
+        space_heating_demand_upper: 70, // kWh/m2.a
+        space_heating_demand_passive_house: 25, // kWh/m2.a
+        primary_energy_demand: 120, // kWh/m2.a
+        primary_energy_demand_passive_house: 120, // kWh/m2.a
+        co2_emission_rate: 17, // kgCO2/m2.a
+        energy_use_per_person: 8.6 // kgCO2/m2.a
+    },
+    uk_average_values: {
+        space_heating_demand: 120, // kWh/m2.a
+        primary_energy_demand: 360, // kWh/m2.a
+        co2_emission_rate: 50.3, // kgCO2/m2.a
+        energy_use_per_person: 19.6 // kgCO2/m2.a
+    },
+    current_energy_defaults: {
+        'electric': {name: "Electricity", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-heating': {name: "Electricity for direct heating", note: "e.g: Storage Heaters", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-heatpump': {name: "Electricity for heatpump", note: "annual electricity input to the heatpump", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-waterheating': {name: "Electricity for water heating", note: "",
+            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-car': {name: "Electric car", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1319, standingcharge: 54, selected: 0, group: "Electric"},
+        'electric-e7-day': {name: "Electricity (Economy 7 day rate)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.1529, standingcharge: 24, selected: 0, group: "Economy 7"},
+        'electric-e7-night': {name: "Electricity (Economy 7 night rate)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 3.07, unitcost: 0.055, standingcharge: 24, selected: 0, group: "Economy 7"},
+        /*'electric-e7': {name: "Electricity (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+         'electric-heating-e7': {name: "Electricity for direct heating (Economy 7)", note: "e.g: Storage Heaters",
+         quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+         'electric-heatpump-e7': {name: "Electricity for heatpump (Economy 7)", note: "annual electricity input to the heatpump",
+         quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+         'electric-waterheating-e7': {name: "Electricity for water heating (Economy 7)", note: "",
+         quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+         'electric-car-e7': {name: "Electric car (Economy 7)", note: "", quantity: 0, units: "kWh", kwh: 1.0, co2: 0.519, primaryenergy: 2.4, unitcost: 0.1529, standingcharge: 78, selected: 0, group: "Economy 7"},
+         */
+        'gas': {name: "Mains gas", note: "", quantity: 0, units: "m3", kwh: 9.8, co2: 2.1168, primaryenergy: 1.22, unitcost: 0.34104, standingcharge: 120.00, selected: 0, group: "Heating (non-electric)"},
+        'gas-kwh': {name: "Mains gas in kWh", note: "",
+            quantity: 0, units: "kWh", kwh: 1.0, co2: 0.216, primaryenergy: 1.22, unitcost: 0.0348, standingcharge: 120, selected: 0, group: "Heating (non-electric)"},
+        'wood-logs': {name: "Wood Logs", note: "",
+            quantity: 0, units: "m3", kwh: 1380, co2: 26.22, primaryenergy: 1.04, unitcost: 58.374, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+        'wood-pellets': {name: "Wood Pellets", note: "In bags",
+            quantity: 0, units: "m3", kwh: 4800, co2: 187.2, primaryenergy: 1.26, unitcost: 278.88, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+        'oil': {name: "Oil", note: "",
+            quantity: 0, units: "L", kwh: 10.27, co2: 3.06, primaryenergy: 1.1, unitcost: 0.5587, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+        'lpg': {name: "LPG", note: "",
+            quantity: 0, units: "kWh", kwh: 11.0, co2: 2.651, primaryenergy: 1.09, unitcost: 0.836, standingcharge: 70.00, selected: 0, group: "Heating (non-electric)"},
+        'bottledgas': {name: "Bottled gas", note: "",
+            quantity: 0, units: "kg", kwh: 13.9, co2: 3.35, primaryenergy: 1.09, unitcost: 1.4317, standingcharge: 0.00, selected: 0, group: "Heating (non-electric)"},
+        //'electric-car-miles': { name: "Electric car (miles)", note: "miles not included in home electricty above, assuming 100% green electricity",
+        //    quantity:0, units: "miles", kwh: 0.25, co2: 0.02, primaryenergy: 2.4, unitcost:0.00, standingcharge:0.00},
+        'car1': {name: "Car 1", note: "",
+            quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
+        'car2': {name: "Car 2", note: "",
+            quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
+        'car3': {name: "Car 3", note: "", quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
+        'motorbike': {name: "Motorbike", note: "",
+            quantity: 0, units: "miles", mpg: 35.0, kwh: 9.7 * 4.5, co2: 2.31 * 4.5, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
+        'bus': {name: "Bus", note: "",
+            quantity: 0, units: "miles", kwh: 0.53, co2: 0.176, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"}, 'train': {name: "Train", note: "",
+            quantity: 0, units: "miles", kwh: 0.096, co2: 0.096, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
+        'boat': {name: "Boat", note: "",
+            quantity: 0, units: "miles", kwh: 1.0, co2: 0.192, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"},
+        'plane': {name: "Plane", note: "",
+            quantity: 0, units: "miles", kwh: 0.69, co2: 0.43, primaryenergy: 1.1, unitcost: 0.00, standingcharge: 0.00, selected: 0, group: "Transport"}
+    }
 };
