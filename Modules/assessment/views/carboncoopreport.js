@@ -1,22 +1,5 @@
 console.log('debug carboncoopreport.js');
 
-$('#openbem').on('click', '#export-to-pdf-link', function () {
-    /*var result_html = "";
-     $.ajax({
-     type: "POST",
-     url: path + "assessment/printcarboncoopreport",
-     data: "html=holaaaaaaaaaaaaaaaaaaaa",
-     dataType: 'text',
-     contentType: 'application/pdf',
-     success: function (result) {
-     console.log(result);
-     }
-     });*/
-    var report_html = $('div.carbon-report-wrapper').html();
-    console.log(report_html);
-    $('<form method="post" action="' + path + "assessment/printcarboncoopreport" + '"><input type="text" name="html" value="' + report_html + '" /></form>').appendTo('body').submit();
-});
-
 function carboncoopreport_initUI() {
 
     data = project['master'];
@@ -37,67 +20,7 @@ function carboncoopreport_initUI() {
         async: false
     });
     var scenarios = ["master", "scenario1", "scenario2", "scenario3"];
-    // add empty objects for missing data
-    // for (var i = 0 ; i < scenarios.length ; i++){
-    // 	var scenarioName = scenarios[i];
-    // 	var scenarioObject = project[scenarioName];
-    // 	if (typeof scenarioObject === "undefined"){
-    // 		project[scenarioName] = {};
-    // 	}
 
-    // 	if (typeof project[scenarioName].kwhdpp === "undefined"){
-    // 		project[scenarioName].kwhdpp = 0;
-    // 	}
-
-    // 	if (typeof project[scenarioName].ventilation === "undefined"){
-    // 		project[scenarioName].ventilation = {
-    // 			average_WK:0
-    // 		};
-    // 	}
-
-    // 	if (typeof project[scenarioName].space_heating_demand_m2 === "undefined"){
-    // 		project[scenarioName].space_heating_demand_m2 = 0;
-    // 	}
-
-    // 	if (typeof project[scenarioName].fabric === "undefined"){
-    // 		project[scenarioName].fabric = {
-    // 			total_floor_WK: 0,
-    // 			total_window_WK:0,
-    // 			total_wall_WK:0,
-    // 			total_roof_WK:0,
-    // 			thermal_bridging_heat_loss:0,
-    // 			totalwk:0
-    // 		};
-    // 	}
-
-    // 	if (typeof project[scenarioName].annual_useful_gains_kWh_m2 === "undefined"){
-    // 		project[scenarioName].annual_useful_gains_kWh_m2 = {
-    // 			"Internal":0,
-    // 			"Space heating":0,
-    // 			"Solar": 0
-    // 		}
-    // 	}
-
-    // 	if (typeof project[scenarioName].fuel_totals === "undefined"){
-    // 		project[scenarioName].fuel_totals = {
-    // 			"gas":{
-    // 				"quantity": 0,
-    // 			},
-    // 			"electric":{
-    // 				"quantity": 0,
-    // 			},
-    // 			"wood":{
-    // 				"quantity": 0,
-
-    // 			}
-    // 		}
-    // 	}
-    // }
-
-
-
-    // need to wait until page has loaded so we can use the webfont in our charts.
-    //$(window).load(function(){
     WebFontConfig.active = function () {
         carboncoopreport_UpdateUI();
     };
@@ -446,11 +369,11 @@ function carboncoopreport_UpdateUI() {
         dataFig4.push({
             label: 'Your Home Now',
             value: [
-                {value: project["master"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
-                {value: project["master"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
-                {value: project["master"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
-                {value: -project["master"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -(project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
+                {value: project["master"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal Gains'},
+                {value: project["master"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar Gains'},
+                {value: project["master"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space Heating Requirement'},
+                {value: -project["master"].annual_losses_kWh_m2["fabric"], label: 'Fabric Losses'},
+                {value: -(project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation and Infiltration Losses'},
             ]
         });
         if (max_value < (project["master"].annual_losses_kWh_m2["fabric"] + project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]))
@@ -461,11 +384,11 @@ function carboncoopreport_UpdateUI() {
         dataFig4.push({
             label: 'Scenario 1',
             value: [
-                {value: project["scenario1"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
-                {value: project["scenario1"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
-                {value: project["scenario1"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
-                {value: -project["scenario1"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -(project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
+                {value: project["scenario1"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal Gains'},
+                {value: project["scenario1"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar Gains'},
+                {value: project["scenario1"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space Heating Requirement'},
+                {value: -project["scenario1"].annual_losses_kWh_m2["fabric"], label: 'Fabric Losses'},
+                {value: -(project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation and Infiltration Losses'},
             ]
         });
         if (max_value < (project["scenario1"].annual_losses_kWh_m2["fabric"] + project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]))
@@ -476,11 +399,11 @@ function carboncoopreport_UpdateUI() {
         dataFig4.push({
             label: 'Scenario 2',
             value: [
-                {value: project["scenario2"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
-                {value: project["scenario2"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
-                {value: project["scenario2"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
-                {value: -project["scenario2"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -(project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
+                {value: project["scenario2"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal Gains'},
+                {value: project["scenario2"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar Gains'},
+                {value: project["scenario2"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space Heating Requirement'},
+                {value: -project["scenario2"].annual_losses_kWh_m2["fabric"], label: 'Fabric Losses'},
+                {value: -(project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation and Infiltration Losses'},
             ]
         });
         if (max_value < (project["scenario2"].annual_losses_kWh_m2["fabric"] + project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]))
@@ -491,11 +414,11 @@ function carboncoopreport_UpdateUI() {
         dataFig4.push({
             label: 'Scenario 3',
             value: [
-                {value: project["scenario3"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal'},
-                {value: project["scenario3"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar'},
-                {value: project["scenario3"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space heating'},
-                {value: -project["scenario3"].annual_losses_kWh_m2["fabric"], label: 'Fabric'},
-                {value: -(project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation & Infiltration'},
+                {value: project["scenario3"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal Gains'},
+                {value: project["scenario3"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar Gains'},
+                {value: project["scenario3"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space Heating Requirement'},
+                {value: -project["scenario3"].annual_losses_kWh_m2["fabric"], label: 'Fabric Losses'},
+                {value: -(project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation and Infiltration Losses'},
             ]
         });
         if (max_value < (project["scenario3"].annual_losses_kWh_m2["fabric"] + project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]))
@@ -504,23 +427,26 @@ function carboncoopreport_UpdateUI() {
 
     var EnergyDemand = new BarChart({
         chartTitle: 'Heat Balance',
+        chartTitleColor: 'rgb(87, 77, 86)',
+        yAxisLabelColor: 'rgb(87, 77, 86)',
+        barLabelsColor: 'rgb(87, 77, 86)',
         yAxisLabel: 'kWh/m2.year',
-        fontSize: 22,
+        fontSize: 33,
         width: 1200,
         chartHeight: 600,
-        division: 100,
+        division: 50,
         barWidth: 110,
         barGutter: 120,
-        chartHigh: max_value + 50,
-        chartLow: -max_value - 50,
+        chartHigh: 250,
+        chartLow: -250,
         font: "Karla",
         defaultBarColor: 'rgb(231,37,57)',
         barColors: {
-            'Internal': 'rgb(24,86,62)',
-            'Solar': 'rgb(240,212,156)',
-            'Space heating': 'rgb(236,102,79)',
-            'Fabric': 'rgb(246,167,7)',
-            'Ventilation & Infiltration': 'rgb(157, 213, 203)',
+            'Internal Gains': 'rgb(24,86,62)',
+            'Solar Gains': 'rgb(240,212,156)',
+            'Space Heating Requirement': 'rgb(236,102,79)',
+            'Fabric Losses': 'rgb(246,167,7)',
+            'Ventilation and Infiltration Losses': 'rgb(157, 213, 203)',
         },
         data: dataFig4,
     });
@@ -541,10 +467,14 @@ function carboncoopreport_UpdateUI() {
 
     var SpaceHeatingDemand = new BarChart({
         chartTitle: 'Space Heating Demand',
+        chartTitleColor: 'rgb(87, 77, 86)',
+        yAxisLabelColor: 'rgb(87, 77, 86)',
+        barLabelsColor: 'rgb(87, 77, 86)',
         yAxisLabel: 'kWh/m2.year',
-        fontSize: 22,
+        fontSize: 33,
         font: "Karla",
-        division: 'auto',
+        division: 25,
+        chartHigh: 200,
         width: 1200,
         chartHeight: 600,
         barWidth: 110,
@@ -647,12 +577,16 @@ function carboncoopreport_UpdateUI() {
     var energyDemandData = getEnergyDemandData();
     var EnergyDemand = new BarChart({
         chartTitle: 'Energy Demand',
+        chartTitleColor: 'rgb(87, 77, 86)',
+        yAxisLabelColor: 'rgb(87, 77, 86)',
+        barLabelsColor: 'rgb(87, 77, 86)',
         yAxisLabel: 'kWh/year',
-        fontSize: 22,
+        fontSize: 33,
         font: "Karla",
         width: 1200,
         chartHeight: 600,
-        division: 'auto',
+        division: 5000,
+        chartHigh: 35000,
         barWidth: 110,
         barGutter: 80,
         defaultBarColor: 'rgb(231,37,57)',
@@ -741,15 +675,18 @@ function carboncoopreport_UpdateUI() {
     var primaryEnergyUseData = getPrimaryEnergyUseData();
     var primaryEneryUse = new BarChart({
         chartTitle: 'Primary Energy Use',
+        chartTitleColor: 'rgb(87, 77, 86)',
+        yAxisLabelColor: 'rgb(87, 77, 86)',
+        barLabelsColor: 'rgb(87, 77, 86)',
         yAxisLabel: 'kWh/m2.year',
-        fontSize: 22,
+        fontSize: 33,
         font: "Karla",
         width: 1200,
         chartHeight: 600,
-        division: 'auto',
+        division: 50,
         barWidth: 110,
         barGutter: 80,
-        chartHigh: primaryEnergyUseData.max + 50,
+        chartHigh: 400,
         chartLow: primaryEnergyUseData.min - 50,
         defaultBarColor: 'rgb(157,213,203)',
         barColors: {
@@ -811,13 +748,16 @@ function carboncoopreport_UpdateUI() {
     });
     var CarbonDioxideEmissions = new BarChart({
         chartTitle: 'Carbon Dioxide Emissions',
+        chartTitleColor: 'rgb(87, 77, 86)',
+        yAxisLabelColor: 'rgb(87, 77, 86)',
+        barLabelsColor: 'rgb(87, 77, 86)',
         yAxisLabel: 'kgCO2/m2.year',
-        fontSize: 22,
+        fontSize: 33,
         font: "Karla",
-        division: 'auto',
+        division: 10,
         width: 1200,
         chartHeight: 600,
-        chartHigh: max + 20,
+        chartHigh: 80,
         barWidth: 110,
         barGutter: 80,
         defaultBarColor: 'rgb(157,213,203)',
@@ -858,13 +798,18 @@ function carboncoopreport_UpdateUI() {
 
     var CarbonDioxideEmissionsPerPerson = new BarChart({
         chartTitle: 'Carbon Dioxide Emissions Per Person',
+        chartTitleColor: 'rgb(87, 77, 86)',
+        yAxisLabelColor: 'rgb(87, 77, 86)',
+        barLabelsColor: 'rgb(87, 77, 86)',
         yAxisLabel: 'kgCO2/person/year',
-        fontSize: 22, font: "Karla",
+        fontSize: 33,
+        font: "Karla",
         division: 1000,
+        chartHigh: 8000,
         width: 1200,
         chartHeight: 600,
         barWidth: 110,
-        barGutter: 80,
+        barGutter: 70,
         defaultBarColor: 'rgb(157,213,203)',
         defaultVarianceColor: 'rgb(231,37,57)',
         // barColors: {
@@ -908,10 +853,14 @@ function carboncoopreport_UpdateUI() {
 
     var EstimatedEnergyCosts = new BarChart({
         chartTitle: 'Estimate Energy Costs (Net) Comparison',
+        chartTitleColor: 'rgb(87, 77, 86)',
+        yAxisLabelColor: 'rgb(87, 77, 86)',
+        barLabelsColor: 'rgb(87, 77, 86)',
         yAxisLabel: '£/year',
-        fontSize: 22,
-        font: "Karla", division: 'auto',
-        chartHigh: max + 50,
+        fontSize: 33,
+        font: "Karla",
+        division: 500,
+        chartHigh: 3100,
         width: 1200,
         chartHeight: 600,
         barGutter: 80, defaultBarColor: 'rgb(157,213,203)',
@@ -1066,97 +1015,133 @@ function carboncoopreport_UpdateUI() {
     //var green = "rgb(149, 211, 95)";
 
     // Temperature in Winter
-    var options = [{
-            title: "Too cold",
-            color: 'red',
-        }, {
-            title: "Just right",
-            color: 'green',
-        }, {
-            title: "Too hot",
-            color: 'red'
-        }
-    ];
-    createComforTable(options, "comfort-table-winter-temp", project.master.household["6a_temperature_winter"]);
-    // Air quality in winter
-    var options = [
-        {
-            title: "Too dry", color: 'red',
-        }, {
-            title: "Just right",
-            color: 'green',
-        }, {
-            title: "Too stuffy",
-            color: 'red'
-        }];
-    createComforTable(options, "comfort-table-winter-air", project.master.household["6a_airquality_winter"]);
-    createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
-    // Temperature in Summer
-    var options = [
-        {
-            title: "Too cold",
-            color: 'red',
-        }, {
-            title: "Just right", color: 'green',
-        }, {
-            title: "Too hot",
-            color: 'red'
-        }
-    ];
-    createComforTable(options, "comfort-table-summer-temp", project.master.household["6a_temperature_summer"]);
-    // Air quality in Summer
-    var options = [
-        {
-            title: "Too dry", color: 'red',
-        }, {
-            title: "Just right",
-            color: 'green',
-        }, {
-            title: "Too stuffy",
-            color: 'red'
-        }];
-    createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
-    var options = [
-        {
-            title: "Too little",
-            color: 'red',
-        }, {
-            title: "Just right",
-            color: 'green',
-        }, {
-            title: "Too much",
-            color: 'red'
-        }
-    ];
-    createComforTable(options, "comfort-table-daylight-amount", project.master.household["6b_daylightamount"]);
-    var options = [
-        {
-            title: "Too little",
-            color: 'red',
-        }, {
-            title: "Just right",
-            color: 'green',
-        }, {
-            title: "Too much",
-            color: 'red'
-        }
-    ];
-    createComforTable(options, "comfort-table-artificial-light-amount", project.master.household["6b_artificallightamount"]);
+    if (project.master.household["6a_temperature_winter"] == undefined
+            || project.master.household["6a_airquality_winter"] == undefined
+            || project.master.household["6a_airquality_summer"] == undefined
+            || project.master.household["6a_temperature_summer"] == undefined
+            || project.master.household["6b_daylightamount"] == undefined
+            || project.master.household["6b_artificallightamount"] == undefined) {
+        $('.comfort-tables').html('<p>There is not enough information, please check section 6 in Household Questionnaire. </p>')
+    }
+    else {
+        var options = [{
+                title: "Too cold",
+                color: 'red',
+            }, {
+                title: "Just right",
+                color: 'green',
+            }, {
+                title: "Too hot",
+                color: 'red'
+            }
+        ];
+        createComforTable(options, "comfort-table-winter-temp", project.master.household["6a_temperature_winter"]);
+        // Air quality
+        var options = [
+            {
+                title: "Too dry", color: 'red',
+            }, {
+                title: "Just right",
+                color: 'green',
+            }, {
+                title: "Too stuffy",
+                color: 'red'
+            }];
+        createComforTable(options, "comfort-table-winter-air", project.master.household["6a_airquality_winter"]);
+        createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
+        // Temperature in Summer
+        var options = [
+            {
+                title: "Too cold",
+                color: 'red',
+            }, {
+                title: "Just right", color: 'green',
+            }, {
+                title: "Too hot",
+                color: 'red'
+            }
+        ];
+        createComforTable(options, "comfort-table-summer-temp", project.master.household["6a_temperature_summer"]);
+        // Air quality in Summer
+        var options = [
+            {
+                title: "Too dry", color: 'red',
+            }, {
+                title: "Just right",
+                color: 'green',
+            }, {
+                title: "Too stuffy",
+                color: 'red'
+            }];
+        createComforTable(options, "comfort-table-summer-air", project.master.household["6a_airquality_summer"]);
+        var options = [
+            {
+                title: "Too little",
+                color: 'red',
+            }, {
+                title: "Just right",
+                color: 'green',
+            }, {
+                title: "Too much",
+                color: 'red'
+            }
+        ];
+        createComforTable(options, "comfort-table-daylight-amount", project.master.household["6b_daylightamount"]);
+        var options = [
+            {
+                title: "Too little",
+                color: 'red',
+            }, {
+                title: "Just right",
+                color: 'green',
+            }, {
+                title: "Too much",
+                color: 'red'
+            }
+        ];
+        createComforTable(options, "comfort-table-artificial-light-amount", project.master.household["6b_artificallightamount"]);
+    }
     /* Figure 14: Humidity Data
      // 
      */
+    if (data.household.reading_humidity1 == undefined && data.household.reading_humidity2 == undefined)
+        $(".js-average-humidity").html('There is not enough information, please check section 3 in Household Questionnaire.');
+    else if (data.household.reading_humidity1 != undefined && data.household.reading_humidity2 == undefined)
+        $(".js-average-humidity").html('When we visited, the relative humidity was ' + data.household.reading_humidity1 + ' %. (The ideal range is 40-60%).');
+    else if (data.household.reading_humidity1 == undefined && data.household.reading_humidity2 != undefined)
+        $(".js-average-humidity").html(' When we visited, the relative humidity was ' + data.household.reading_humidity2 + '%. (The ideal range is 40-60%).');
+    else {
+        var averageHumidity = 0.5 * (data.household.reading_humidity1 + data.household.reading_humidity2);
+        $(".js-average-humidity").html('When we visited, the relative humidity was ' + averageHumidity + '%. (The ideal range is 40-60%).');
+    }
 
-    var averageHumidity = 0.5 * (data.household.reading_humidity1 + data.household.reading_humidity2);
-    $(".js-average-humidity").html(averageHumidity);
     /* Figure 15: Temperature Data
      // 
      */
+    if (data.household.reading_temp1 == undefined && data.household.reading_temp2 == undefined)
+        $(".js-average-temp").html('There is not enough information, please check section 3 in Household Questionnaire.');
+    else if (data.household.reading_temp1 != undefined && data.household.reading_temp2 == undefined)
+        $(".js-average-temp").html('When we visited, the relative temperature was ' + data.household.reading_temp1 + ' °C.<br />(It is recommended that living spaces are at 16<sup>o</sup>C as a minium (World Health Organisation).');
+    else if (data.household.reading_temp1 == undefined && data.household.reading_temp2 != undefined)
+        $(".js-average-temp").html(' When we visited, the relative temperature was ' + data.household.reading_temp2 + '°C.<br />(It is recommended that living spaces are at 16<sup>o</sup>C as a minium (World Health Organisation).');
+    else {
+        var averageHumidity = 0.5 * (data.household.reading_temp1 + data.household.reading_temp2);
+        $(".js-average-temp").html('When we visited, the relative temperature was ' + averageHumidity + '°C.<br />(It is recommended that living spaces are at 16<sup>o</sup>C as a minium (World Health Organisation).');
+    }
 
-    var averageTemperature = 0.5 * (data.household.reading_temp1 + data.household.reading_temp2);
-    $(".js-average-temp").html(averageTemperature);
     /* Figure 16: You also told us...
      // 
      */
+    if (data.household['6b_problem_locations'] === '')
+        console.log('nothis')
+    else
+        cosole.log('todo')
+    data.household['6c_noise_comment'] == undefined ? $('.js-noise_comment').html('There is not enough information, please check section 6 in Household Questionnaire.') : $('.js-noise_comment').html(data.household['6c_noise_comment']);
+    data.household['6b_problem_locations'] == undefined || data.household['6b_problem_locations'] === '' ? $('.js-problem_locations_daylight').html('There is not enough information, please check section 6 in Household Questionnaire.') : $('.js-problem_locations_daylight').html(data.household['6b_problem_locations']);
+    data.household['6a_problem_locations'] == undefined || data.household['6a_problem_locations'] == '' ? $('.js-problem_locations').html('There is not enough information, please check section 6 in Household Questionnaire.') : $('.js-problem_locations').html(data.household['6a_problem_locations']);
+    data.household['6d_favourite_room'] == undefined || data.household['6d_favourite_room'] == '' ? $('.js-favourite_room').html('There is not enough information, please check section 6 in Household Questionnaire.') : $('.js-favourite_room').html(data.household['6d_favourite_room']);
+    data.household['6d_unloved_rooms'] == undefined || data.household['6d_unloved_rooms'] == '' ? $('.js-unloved_rooms').html('There is not enough information, please check section 6 in Household Questionnaire.') : $('.js-unloved_rooms').html(data.household['6d_unloved_rooms']);
+
     var laundryHabits = "";
     if (typeof data.household["4b_drying_outdoorline"] != "undefined" && data.household["4b_drying_outdoorline"]) {
         laundryHabits += "outdoor clothes line, ";
@@ -1180,7 +1165,10 @@ function carboncoopreport_UpdateUI() {
         laundryHabits += "electric maiden, ";
     }
 
-    var laundryHabits = laundryHabits.slice(0, -2);
+    if (laundryHabits.length === 0)
+        laundryHabits = 'There is not enough information, please check section 4 in Household Questionnaire.'
+    else
+        var laundryHabits = laundryHabits.slice(0, -2);
     $(".js-laundry-habits").html(laundryHabits);
 
     /* Figure 15 and Figure 16 and Figure 17: Scenarios Measures    */
@@ -1317,13 +1305,21 @@ function carboncoopreport_UpdateUI() {
         //List
         html = "<table class='no-break'>";
         html += '<tr><td style="width:13%"><strong>Measure: </strong></td><td colspan=3>' + measure.measure.name + '</td></tr>';
-        html += '<tr><td><strong>Label/location: </strong></td><td colspan=3>' + measure.measure.location + '</td></tr>';
+        if (typeof measure.measure.location != 'undefined') {
+            var location = measure.measure.location.replace(/,br/g, ', '); // for measures applied in bulk to fabric elements the location has the form of: W9,brW10,brW21,brD3,brW4,brW5,brW6a,brW16 , and we dont want that
+            if (location[location.length - 2] == ',' && location[location.length - 1] == ' ')
+                location = location.substring(0, location.length - 2);
+            html += '<tr><td><strong>Label/location: </strong></td><td colspan=3>' + location + '</td></tr>';
+        }
+        else
+            html += '<tr><td><strong>Label/location: </strong></td><td colspan=3> Whole house</td></tr>';
         html += '<tr><td><strong>Description: </strong></td><td colspan=3>' + measure.measure.description + '</td></tr>';
         html += '<tr><td><strong>Associated work: </strong></td><td colspan=3>' + measure.measure.associated_work + '</td></tr>';
-        html += '<tr><td><strong>Maintenance: </strong></td><td colspan=3>' + measure.measure.maintenance + '</td></tr>';
+        if (measure.measure.maintenance != 'undefined')
+            html += '<tr><td><strong>Maintenance: </strong></td><td colspan=3>' + measure.measure.maintenance + '</td></tr>';
+        else
+            html += '<tr><td><strong>Maintenance: </strong></td><td colspan=3> N/A</td></tr>';
         html += '<tr><td><strong>Special and other considerations: </strong></td><td colspan=3>' + measure.measure.notes + '</td></tr>';
-
-
         html += '<tr><td><strong>Who by: </strong></td><td style="width:35%">' + measure.measure.who_by + '</td>';
         html += '<td style="width:13%"><strong>Key risks: </strong></td><td>' + measure.measure.key_risks + '</td></tr>';
         html += '<tr><td><strong>Benefits: </strong></td><td>' + measure.measure.benefits + '</td>';
@@ -1382,7 +1378,16 @@ function carboncoopreport_UpdateUI() {
 
     function addRowToSummaryTable(tableSelector, name, location, description, performance, benefits, cost, who_by, disruption) {
         var html = '<tr><td class="highlighted-col">' + name + '</td>';
-        html += '<td><div class="text-width-limiter">' + location + '</div>';
+        if (typeof location != 'undefined') {
+            location = location.replace(/,br/g, ', '); // for measures applied in bulk to fabric elements the location has the form of: W9,brW10,brW21,brD3,brW4,brW5,brW6a,brW16 , and we dont want that
+            if (location[location.length - 2] == ',' && location[location.length - 1] == ' ')
+                location = location.substring(0, location.length - 2);
+            if (location.length > 50)
+                location = "Various";
+            html += '<td><div class="text-width-limiter">' + location + '</div>';
+        }
+        else
+            html += '<td><div class="text-width-limiter">Whole house</div>';
         html += '</td>';
         html += '<td>' + performance + '</td>';
         html += '<td>' + benefits + '</td>';
