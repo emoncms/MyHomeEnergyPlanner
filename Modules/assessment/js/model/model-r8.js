@@ -996,7 +996,7 @@ calc.fuel_requirements = function (data) {
             quantity: -data.generation.total_generation,
             annualco2: -data.generation.total_CO2,
             primaryenergy: -data.generation.total_primaryenergy,
-            annualcost: -data.generation.total_used_onsite * data.fuels.generation.fuelcost / 100 
+            annualcost: -data.generation.total_used_onsite * data.fuels.generation.fuelcost / 100
         };
         data.primary_energy_use += data.fuel_totals['generation'].primaryenergy;
         data.annualco2 += data.fuel_totals['generation'].annualco2;
@@ -1021,7 +1021,7 @@ calc.primary_energy_by_requirement = function (data) {
         for (z in data.fuel_requirements[req].list) {
             var fuel_input = data.fuel_requirements[req].list[z].fuel_input;
             var fuel = data.fuel_requirements[req].list[z].fuel;
-            
+
             data.primary_energy_use_by_requirement[req] += fuel_input * data.fuels[fuel].primaryenergyfactor;
         }
     }
@@ -1265,7 +1265,7 @@ calc.water_heating = function (data) {
     if (data.water_heating.hot_water_control_type == undefined)
         data.water_heating.hot_water_control_type = 'no_cylinder_thermostat';
     if (data.water_heating.pipework_insulation == undefined)
-        data.water_heating.pipework_insulation = 'Fully insulated primary pipework';    
+        data.water_heating.pipework_insulation = 'Fully insulated primary pipework';
     if (data.water_heating.Vc == undefined)
         data.water_heating.Vc = 0;
     if (data.water_heating.water_usage == undefined)
@@ -1777,8 +1777,10 @@ calc.currentenergy = function (data) {
         } else {
             energy[item].annual_co2 = (energy[item].quantity / energy[item].mpg) * energy[item].co2;
         }
-
-        energy[item].annual_cost = (energy[item].quantity * energy[item].unitcost) + energy[item].standingcharge;
+        if (energy[item].quantity > 0)
+            energy[item].annual_cost = (energy[item].quantity * energy[item].unitcost) + energy[item].standingcharge;
+        else
+            energy[item].annual_cost = 0;
     }
 
     var spaceheatingtags = ['electric-heating', 'electric-heatpump', /*'electric-heating-e7', 'electric-heatpump-e7',*/'electric-e7-day', 'electric-e7-night', 'wood-logs', 'wood-pellets', 'oil', 'gas', 'gas-kwh', 'lpg', 'bottledgas'];
