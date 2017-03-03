@@ -215,7 +215,6 @@ $d = $path . "Modules/assessment/";
                 for (library_index in user_libraries) {
                     var library_changed = false;
                     if (user_libraries[library_index].type == library_type && user_libraries[library_index].name == "StandardLibrary - " + myusername) {
-                        console.log(library_type);
                         var user_library = JSON.parse(user_libraries[library_index].data);
                         for (item in standard_library[library_type]) {
                             item = item.replace(/[^\w\s-+.",:{}\/'\[\]\\]/g, ''); // we apply the same validation than in the server
@@ -228,7 +227,6 @@ $d = $path . "Modules/assessment/";
                     if (library_changed === true) {
                         var library_string = JSON.stringify(user_library);
                         library_string = library_string.replace(/&/g, 'and');
-                        console.log(user_libraries[library_index])
                         $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + user_libraries[library_index].id + "&data=" + library_string, success: function (result) {
                                 console.log("Library: " + library_type + ' - ' + result);
                             }});
