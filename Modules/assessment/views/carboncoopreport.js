@@ -1144,7 +1144,7 @@ function carboncoopreport_UpdateUI() {
     /* Figure 15 and Figure 16 and Figure 17: Scenarios Measures    */
     // Calculate Total cost
     for (scenario in project) {
-        if (scenario != 'master') {
+        if (scenario == 'scenario1' || scenario == 'scenario3' || scenario == 'scenario2') {
             var measures_total_cost = 0;
             if (project[scenario].fabric.measures != undefined)
                 measures_total_cost += cost_of_measures_by_id(project[scenario].fabric.measures);
