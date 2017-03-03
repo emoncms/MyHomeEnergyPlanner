@@ -551,26 +551,29 @@ function carboncoopreport_UpdateUI() {
             }
         }
 
-        var energyitems = project['master'].currentenergy.energyitems;
+
         data.bills = [
             {
-                value: energyitems["gas-kwh"].annual_kwh + energyitems.bottledgas.annual_kwh
-                        + energyitems.gas.annual_kwh + energyitems.lpg.annual_kwh,
+                value: 0,
                 label: 'Gas',
             },
-            {
-                value: energyitems.electric.annual_kwh + energyitems['electric-heatpump'].annual_kwh +
-                        energyitems['electric-heatpump'].annual_kwh + energyitems['electric-waterheating'].annual_kwh
-                        + energyitems['electric-car'].annual_kwh + energyitems['electric-e7-day'].annual_kwh
-                        + energyitems['electric-e7-night'].annual_kwh,
+            {value: 0,
                 label: 'Electric',
             },
             {
-                value: energyitems['wood-logs'].annual_kwh + energyitems['wood-pellets'].annual_kwh
-                        + energyitems['oil'].annual_kwh,
+                value: 0,
                 label: "Other"
             }
         ];
+        for (var fuel in project['master'].currentenergy.use_by_fuel) {
+            var f_use = project['master'].currentenergy.use_by_fuel[fuel];
+            if (project['master'].fuels[fuel].category == 'Gas')
+                data.bills[0].value += f_use.annual_use;
+            else if (project['master'].fuels[fuel].category == 'Electricity')
+                data.bills[1].value += f_use.annual_use;
+            else
+                data.bills[2].value += f_use.annual_use;
+        }
         return data;
     }
 
@@ -578,8 +581,7 @@ function carboncoopreport_UpdateUI() {
     var EnergyDemand = new BarChart({
         chartTitle: 'Energy Demand',
         chartTitleColor: 'rgb(87, 77, 86)',
-        yAxisLabelColor: 'rgb(87, 77, 86)',
-        barLabelsColor: 'rgb(87, 77, 86)',
+        yAxisLabelColor: 'rgb(87, 77, 86)', barLabelsColor: 'rgb(87, 77, 86)',
         yAxisLabel: 'kWh/year',
         fontSize: 33,
         font: "Karla",
@@ -587,16 +589,13 @@ function carboncoopreport_UpdateUI() {
         chartHeight: 600,
         division: 5000,
         chartHigh: 35000,
-        barWidth: 110,
-        barGutter: 80,
-        defaultBarColor: 'rgb(231,37,57)',
-        defaultVarianceColor: 'rgb(2,37,57)',
+        barWidth: 110, barGutter: 80,
+        defaultBarColor: 'rgb(231,37,57)', defaultVarianceColor: 'rgb(2,37,57)',
         barColors: {
             'Gas': 'rgb(236,102,79)',
             'Electric': 'rgb(240,212,156)',
             'Other': 'rgb(24,86,62)',
-        },
-        data: [
+        }, data: [
             {label: 'Your Home Now', value: energyDemandData.master},
             {label: 'Bills data', value: energyDemandData.bills},
             {label: 'Scenario 1', value: energyDemandData.scenario1},
@@ -606,8 +605,7 @@ function carboncoopreport_UpdateUI() {
     });
     $('#energy-demand').html('');
     EnergyDemand.draw('energy-demand');
-    /* Figure 7:
-     //
+    /* Figure 7:      //
      */
     function getPrimaryEnergyUseData() {
         var primaryEnergyUseData = {};
@@ -665,8 +663,7 @@ function carboncoopreport_UpdateUI() {
         primaryEnergyUseData.bills = [
             {
                 value: data.currentenergy.primaryenergy_annual_kwhm2,
-                label: "Non categorized"
-            }
+                label: "Non categorized"}
         ]
 
         return primaryEnergyUseData;
@@ -694,14 +691,11 @@ function carboncoopreport_UpdateUI() {
             'Space Heating': 'rgb(66, 134, 244)',
             'Cooking': 'rgb(24,86,62)',
             'Appliances': 'rgb(240,212,156)',
-            'Lighting': 'rgb(236,102,79)', 'Fans and Pumps': 'rgb(246, 167, 7)',
-            'Non categorized': 'rgb(131, 51, 47)',
+            'Lighting': 'rgb(236,102,79)', 'Fans and Pumps': 'rgb(246, 167, 7)', 'Non categorized': 'rgb(131, 51, 47)',
             // 'Generation': 'rgb(200,213,203)'
         },
-        data: [
-            {label: 'Your Home Now', value: primaryEnergyUseData.master},
-            {label: 'Bills data', value: primaryEnergyUseData.bills},
-            {label: 'Scenario 1', value: primaryEnergyUseData.scenario1},
+        data: [{label: 'Your Home Now', value: primaryEnergyUseData.master},
+            {label: 'Bills data', value: primaryEnergyUseData.bills}, {label: 'Scenario 1', value: primaryEnergyUseData.scenario1},
             {label: 'Scenario 2', value: primaryEnergyUseData.scenario2},
             {label: 'Scenario 3', value: primaryEnergyUseData.scenario3}
         ],
@@ -710,8 +704,7 @@ function carboncoopreport_UpdateUI() {
                 label: 'UK Average 360 kWh/m2.a',
                 target: 360,
                 color: 'rgb(231,37,57)'
-            },
-            {
+            }, {
                 label: 'Carbon Coop Target 120 kWh/m2.a',
                 target: 120,
                 color: 'rgb(231,37,57)'
@@ -729,7 +722,6 @@ function carboncoopreport_UpdateUI() {
     if (typeof project["master"] !== "undefined" && typeof project["master"].kgco2perm2 !== "undefined") {
         carbonDioxideEmissionsData.push({label: "Your home now", value: project["master"].kgco2perm2});
     }
-
     carbonDioxideEmissionsData.push({label: "Bills data", value: project["master"].currentenergy.total_co2m2});
     if (typeof project["scenario1"] !== "undefined" && typeof project["scenario1"].kgco2perm2 !== "undefined") {
         carbonDioxideEmissionsData.push({label: "Scenario 1", value: project["scenario1"].kgco2perm2});
@@ -749,10 +741,8 @@ function carboncoopreport_UpdateUI() {
     var CarbonDioxideEmissions = new BarChart({
         chartTitle: 'Carbon Dioxide Emissions',
         chartTitleColor: 'rgb(87, 77, 86)',
-        yAxisLabelColor: 'rgb(87, 77, 86)',
-        barLabelsColor: 'rgb(87, 77, 86)',
-        yAxisLabel: 'kgCO2/m2.year',
-        fontSize: 33,
+        yAxisLabelColor: 'rgb(87, 77, 86)', barLabelsColor: 'rgb(87, 77, 86)',
+        yAxisLabel: 'kgCO2/m2.year', fontSize: 33,
         font: "Karla",
         division: 10,
         width: 1200,
@@ -764,8 +754,7 @@ function carboncoopreport_UpdateUI() {
         data: carbonDioxideEmissionsData,
         targets: [
             {
-                label: 'Carbon Coop Target',
-                target: datasets.target_values.co2_emission_rate,
+                label: 'Carbon Coop Target', target: datasets.target_values.co2_emission_rate,
                 color: 'rgb(231,37,57)'
             },
             {
@@ -773,12 +762,10 @@ function carboncoopreport_UpdateUI() {
                 target: datasets.uk_average_values.co2_emission_rate,
                 color: 'rgb(231,37,57)'
             },
-        ],
-    });
+        ], });
     $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
-    /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)
-     //
+    /* Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)      //
      */
     var carbonDioxideEmissionsPerPersonData = [];
     if (typeof project["master"] != "undefined" && typeof project["master"].annualco2 !== "undefined" && typeof project["master"].occupancy !== "undefined") {
@@ -810,19 +797,16 @@ function carboncoopreport_UpdateUI() {
         chartHeight: 600,
         barWidth: 110,
         barGutter: 70,
-        defaultBarColor: 'rgb(157,213,203)',
-        defaultVarianceColor: 'rgb(231,37,57)',
+        defaultBarColor: 'rgb(157,213,203)', defaultVarianceColor: 'rgb(231,37,57)',
         // barColors: {
         // 	'Space heating': 'rgb(157,213,203)',
         // 	'Pumps, fans, etc.': 'rgb(24,86,62)',
-        // 	'Cooking': 'rgb(40,153,139)',
-        // },
+        // 	'Cooking': 'rgb(40,153,139)',         // },
         data: carbonDioxideEmissionsPerPersonData
     });
     $('#carbon-dioxide-emissions-per-person').html('');
     CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
-    /* Figure 10: Estimated Energy cost comparison 
-     // Bar chart showing annual fuel cost. Waiting on Trystan for data
+    /* Figure 10: Estimated Energy cost comparison       // Bar chart showing annual fuel cost. Waiting on Trystan for data
      */
     var estimatedEnergyCostsData = [];
     var max = 0;
@@ -831,7 +815,6 @@ function carboncoopreport_UpdateUI() {
         if (max < project["master"].net_cost + 0.3 * project["master"].net_cost)
             max = project["master"].net_cost + 0.3 * project["master"].net_cost;
     }
-
     estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost, variance: 30});
     if (max < project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost)
         max = project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost;
@@ -859,8 +842,7 @@ function carboncoopreport_UpdateUI() {
         yAxisLabel: '£/year',
         fontSize: 33,
         font: "Karla",
-        division: 500,
-        chartHigh: 3100,
+        division: 500, chartHigh: 3100,
         width: 1200,
         chartHeight: 600,
         barGutter: 80, defaultBarColor: 'rgb(157,213,203)',
@@ -941,8 +923,7 @@ function carboncoopreport_UpdateUI() {
         var sapRatings = {
             "90": "A",
             "80": "B",
-            "70": "C",
-            "60": "D",
+            "70": "C", "60": "D",
             "50": "E",
             "40": "F",
             "30": "G",
@@ -952,7 +933,6 @@ function carboncoopreport_UpdateUI() {
         if (scoreFlooredToNearestTen < 30) {
             scoreFlooredToNearestTen = 30;
         }
-
         return sapRatings[scoreFlooredToNearestTen];
     }
 
@@ -1022,17 +1002,14 @@ function carboncoopreport_UpdateUI() {
             || project.master.household["6b_daylightamount"] == undefined
             || project.master.household["6b_artificallightamount"] == undefined) {
         $('.comfort-tables').html('<p>There is not enough information, please check section 6 in Household Questionnaire. </p>')
-    }
-    else {
+    } else {
         var options = [{
-                title: "Too cold",
-                color: 'red',
+                title: "Too cold", color: 'red',
             }, {
                 title: "Just right",
                 color: 'green',
             }, {
-                title: "Too hot",
-                color: 'red'
+                title: "Too hot", color: 'red'
             }
         ];
         createComforTable(options, "comfort-table-winter-temp", project.master.household["6a_temperature_winter"]);
@@ -1043,8 +1020,7 @@ function carboncoopreport_UpdateUI() {
             }, {
                 title: "Just right",
                 color: 'green',
-            }, {
-                title: "Too stuffy",
+            }, {title: "Too stuffy",
                 color: 'red'
             }];
         createComforTable(options, "comfort-table-winter-air", project.master.household["6a_airquality_winter"]);
@@ -1052,8 +1028,7 @@ function carboncoopreport_UpdateUI() {
         // Temperature in Summer
         var options = [
             {
-                title: "Too cold",
-                color: 'red',
+                title: "Too cold", color: 'red',
             }, {
                 title: "Just right", color: 'green',
             }, {
@@ -1078,8 +1053,7 @@ function carboncoopreport_UpdateUI() {
             {
                 title: "Too little",
                 color: 'red',
-            }, {
-                title: "Just right",
+            }, {title: "Just right",
                 color: 'green',
             }, {
                 title: "Too much",
@@ -1132,10 +1106,6 @@ function carboncoopreport_UpdateUI() {
     /* Figure 16: You also told us...
      // 
      */
-    if (data.household['6b_problem_locations'] === '')
-        console.log('nothis')
-    else
-        cosole.log('todo')
     data.household['6c_noise_comment'] == undefined ? $('.js-noise_comment').html('There is not enough information, please check section 6 in Household Questionnaire.') : $('.js-noise_comment').html(data.household['6c_noise_comment']);
     data.household['6b_problem_locations'] == undefined || data.household['6b_problem_locations'] === '' ? $('.js-problem_locations_daylight').html('There is not enough information, please check section 6 in Household Questionnaire.') : $('.js-problem_locations_daylight').html(data.household['6b_problem_locations']);
     data.household['6a_problem_locations'] == undefined || data.household['6a_problem_locations'] == '' ? $('.js-problem_locations').html('There is not enough information, please check section 6 in Household Questionnaire.') : $('.js-problem_locations').html(data.household['6a_problem_locations']);
@@ -1278,7 +1248,6 @@ function carboncoopreport_UpdateUI() {
             }
         }
     }
-
     function addListOfMeasuresByIdToSummaryTable(listOfMeasures, tableSelector, summaryTableSelector, listSelector) {
 
         for (var measureID in listOfMeasures) {
@@ -1286,7 +1255,6 @@ function carboncoopreport_UpdateUI() {
             addMeasureToSummaryTable(measure, tableSelector, summaryTableSelector, listSelector);
         }
     }
-
     function addMeasureToSummaryTable(measure, tableSelector, summaryTableSelector, listSelector) {
         // Complete table
         var html = "<tr>";
@@ -1334,26 +1302,24 @@ function carboncoopreport_UpdateUI() {
     function initialiseMeasuresTable(tableSelector) {
         var html = '<tr>\
         <th class="tg-yw4l" rowspan="2">Measure</th>\<th class="tg-yw4l" rowspan="2">Label/location</th>\
-            <th class="tg-yw4l" rowspan="2">Description</th>\
-                <th class="tg-yw4l" rowspan="2">Performance Target</th>\
-    <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
+        <th class="tg-yw4l" rowspan="2">Description</th>\
+    <th class="tg-yw4l" rowspan="2">Performance Target</th>\
+        <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
     <th class="tg-yw4l" colspan="4">How Much?</th>\
         <th class="tg-yw4l" rowspan="2">Who by?</th>\
             <th class="tg-yw4l" rowspan="2">Key risks</th>\
-            <th class="tg-yw4l" rowspan="2">Dirt and disruption?</th>\
-            <th class="tg-yw4l" rowspan="2">Associated work?</th>\
-            <th class="tg-yw4l" rowspan="2">Maintenace</th>\
-            <th class="tg-yw4l" rowspan="2">Special and other considerations</th>\
-						  </tr>\
-						  <tr>\
-						    <td class="th">Rate (£)</td>\
-						    <td class="th">Unit</td>\
-						    <td class="th">Quantity</td>\
-						    <td class="th">Total</td>\
+        <th class="tg-yw4l" rowspan="2">Dirt and disruption?</th>\
+    <th class="tg-yw4l" rowspan="2">Associated work?</th>\
+        <th class="tg-yw4l" rowspan="2">Maintenace</th>\
+        <th class="tg-yw4l" rowspan="2">Special and other considerations</th>\
+		 	 	  </tr>\
+				 	  <tr>\
+            <td class="th">Rate (£)</td>\ 						    <td class="th">Unit</td>\
+ 	 			    <td class="th">Quantity</td>\
+        <td class="th">Total</td>\
 						  </tr>';
         return $(tableSelector).html(html);
     }
-
     function createMeasuresTable(scenario, tableSelector, summaryTableSelector, listSelector) {
         initialiseMeasuresTable(tableSelector);
         initiliaseMeasuresSummaryTable(summaryTableSelector);
@@ -1362,19 +1328,17 @@ function carboncoopreport_UpdateUI() {
 
     function initiliaseMeasuresSummaryTable(summaryTableSelector) {
         var html = "<thead>\
-				<tr>\
+            <tr>\
         <th>Name</th>\<th>Label/location</th>\ <th>Performance target</th>\
         <th>Benefits (in order)</th>\
-					<th>Cost</th>\
-					<th>Completed By</th>\
+	 	 	<th>Cost</th>\
+        <th>Completed By</th>\
         <th>Disruption</th>\
-				</tr>\
-			</thead>\
+				</tr>\ 			</thead>\
 	 	<tbody>\
-			</tbody>";
+		 </tbody>";
         return $(summaryTableSelector).html(html);
     }
-
 
     function addRowToSummaryTable(tableSelector, name, location, description, performance, benefits, cost, who_by, disruption) {
         var html = '<tr><td class="highlighted-col">' + name + '</td>';
@@ -1471,42 +1435,41 @@ function carboncoopreport_UpdateUI() {
 // Figure 5
 // var options = {
 //       name: "Space heating demand Master",
-//       value: Math.round(project["master"].space_heating_demand_m2),
-//       units: "kWh/m2",     //       targets: {
-//           //"Passivhaus": 15,
-//           "Passivhaus retrofit": 25,
-//           "UK Average": 145
-//       }
+    //       value: Math.round(project["master"].space_heating_demand_m2),
+    //       units: "kWh/m2",     //       targets: {
+    //           //"Passivhaus": 15,
+    //           "Passivhaus retrofit": 25,
+    //           "UK Average": 145
+    //       }
 //   };
-//   targetbarCarboncoop("space-heating-demand-1", options);
+    //   targetbarCarboncoop("space-heating-demand-1", options);
 
 //   	 var options = {
 //       name: "Space heating demand Master",
-//       value: Math.round(project["scenario1"].space_heating_demand_m2),
+    //       value: Math.round(project["scenario1"].space_heating_demand_m2),
 //       units: "kWh/m2",
-//       targets: {
-//           //"Passivhaus": 15,
+    //       targets: {
+    //           //"Passivhaus": 15,
 //           "Passivhaus retrofit": 25,
-//           "UK Average": 145
+    //           "UK Average": 145
 //       }
 //   };
-//   targetbarCarboncoop("space-heating-demand-2", options);
+    //   targetbarCarboncoop("space-heating-demand-2", options);
 
 //   	 var options = {
-//       name: "Space heating demand Master",
-//       value: Math.round(project["scenario2"].space_heating_demand_m2),
-//       units: "kWh/m2",
+    //       name: "Space heating demand Master",
+    //       value: Math.round(project["scenario2"].space_heating_demand_m2),
+    //       units: "kWh/m2",
 //       targets: {
-//           //"Passivhaus": 15,
+    //           //"Passivhaus": 15,
 //           "Passivhaus retrofit": 25,
-//           "UK Average": 145
+    //           "UK Average": 145
 //       }
 //   };
-//   targetbarCarboncoop("space-heating-demand-3", options);
+    //   targetbarCarboncoop("space-heating-demand-3", options);
 
 //   	 var options = {
-//       name: "Space heating demand Master",
-//       value: Math.round(project["scenario3"].space_heating_demand_m2),
+//       name: "Space heating demand Master", //       value: Math.round(project["scenario3"].space_heating_demand_m2),
 //       units: "kWh/m2",
 //       targets: {
 //           //"Passivhaus": 15,

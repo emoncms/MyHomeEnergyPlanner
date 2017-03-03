@@ -161,8 +161,9 @@ var openbem = {
         inputdata.use_generation = data.use_generation;
         inputdata.generation = data.generation;
         inputdata.currentenergy = {
-            energyitems: data.currentenergy.energyitems,
-            greenenergy: data.currentenergy.greenenergy
+            //energyitems: data.currentenergy.energyitems,
+            greenenergy: data.currentenergy.greenenergy,
+            use_by_fuel:data.currentenergy.use_by_fuel
         };
         // Waterheating
         //inputdata.use_water_heating = data.use_water_heating;

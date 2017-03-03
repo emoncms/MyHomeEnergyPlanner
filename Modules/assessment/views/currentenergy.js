@@ -1,62 +1,31 @@
+console.log("Debug currentenergy.js");
+
+
 function currentenergy_initUI() {
     data = project['master'];
-    var E = data.currentenergy.energyitems;
-    console.log(E);
-    var out = "";
-    var lastgroup = "";
-    for (z in E)
-    {
-        if (E[z].selected == 0 && E[z].group != 'Transport') {
-            if (E[z].group != lastgroup)
-                out += "<optgroup label='" + E[z].group + "'>";
-            lastgroup = E[z].group;
-            out += "<option value='" + z + "'>" + E[z].name + "</option>";
-        }
-    }
-    $("#energyitem_select").html(out);
 
-    var out = "";
-    for (z in E)
-    {
-        if (E[z].selected == 1)
-        {
-            out += "<tr>";
-            out += "<td>" + E[z].name;
-            if (E[z].note != "")
-                out += "<br><i style='font-size:12px'>" + E[z].note + "</i>";
-            out += "</td>";
-            out += "<td><input type='text' style='width:60px' key='data.currentenergy.energyitems." + z + ".quantity' /> " + E[z].units + "</td>";
-            /*if (E[z].mpg != undefined) {
-                out += "<td><input type='text' style='width:60px' key='data.currentenergy.energyitems." + z + ".mpg' /> mpg</td>";
-            } else {
-                out += "<td></td>";
-            }*/
-            out += "<td><span type='text' key='data.currentenergy.energyitems." + z + ".kwhd' dp=1/> kWh/d</td>";
-            out += "<td><span type='text' key='data.currentenergy.energyitems." + z + ".annual_co2' dp=2/> kg</td>";
-            out += "<td><input type='text' style='width:50px' key='data.currentenergy.energyitems." + z + ".unitcost' dp=2 /> £/" + E[z].units + "</td>";
-            out += "<td><input type='text' style='width:50px' key='data.currentenergy.energyitems." + z + ".standingcharge' dp=2 /></td>";
-            out += "<td>£<span type='text' key='data.currentenergy.energyitems." + z + ".annual_cost' dp=2/></td>";
-            out += "<td><i class='currentenergy-deleteitem icon-trash' tag='" + z + "'></i></td></tr>";
-        }
+    $('#type_of_fuel_select').html(get_fuels_for_select());
+    $('#currentenergy_use_by_fuel').html('');
 
+    for (var fuel in data.currentenergy.use_by_fuel) {
+        var html = "<tr>";
+        html += "<td>" + fuel + "</td>";
+        html += "<td><input type='number' style='width:70px' key='data.currentenergy.use_by_fuel." + fuel + ".annual_use' dp=2 /></td>";
+        html += "<td>x <input type='number' style='width:70px' key='data.fuels." + fuel + ".co2factor' dp=2 /></td>";
+        html += "<td><span key='data.currentenergy.use_by_fuel." + fuel + ".annual_co2' dp=2 /></td>";
+        html += "<td>x <input type='number' style='width:70px' key='data.fuels." + fuel + ".primaryenergyfactor' dp=2 /></td>";
+        html += "<td><span key='data.currentenergy.use_by_fuel." + fuel + ".primaryenergy' dp=2 /></td>";
+        html += "<td><input type='number' style='width:70px' key='data.fuels." + fuel + ".fuelcost' dp=2 /></td>";
+        html += "<td><input type='number' style='width:70px' key='data.fuels." + fuel + ".standingcharge' dp=2 /></td>";
+        html += "<td>£<span key='data.currentenergy.use_by_fuel." + fuel + ".annualcost' dp=2 /></td>";
+        html += "<td><i class='currentenergy-delete-fuel icon-trash' style='cursor:pointer' fuel='" + fuel + "'></i></td>";
+        html += '</tr>';
+        $('#currentenergy_use_by_fuel').append(html);
     }
-    $("#currentenergy_energyitems").html(out);
 }
 
 function currentenergy_UpdateUI()
 {
-    // ---------------------------------------------------------------------------------
-    var options = {
-        name: "Space heating demand",
-        value: Math.round(data.currentenergy.spaceheating_annual_kwhm2),
-        units: "kWh/m2",
-        targets: {
-            //"Passivhaus": 15,
-            "Passivhaus retrofit": 25,
-            "UK Average": 145
-        }
-    };
-    targetbar("currentenergy-spaceheating", options);
     // ---------------------------------------------------------------------------------
     var options = {
         name: "Primary energy demand",
@@ -92,18 +61,17 @@ function currentenergy_UpdateUI()
     targetbar("currentenergy-perperson", options);
 }
 
-$("#add_energyitem").click(function () {
-    var tag = $("#energyitem_select").val();
-    console.log(tag);
-    data.currentenergy.energyitems[tag].selected = 1;
+
+$("#add_use_by_fuel").click(function () {
+    var fuel_type = $("#type_of_fuel_select").val();
+    data.currentenergy.use_by_fuel[fuel_type] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
     currentenergy_initUI();
     update();
 });
 
-$("#currentenergy_energyitems").on("click", ".currentenergy-deleteitem", function () {
-    var tag = $(this).attr("tag");
-    data.currentenergy.energyitems[tag].selected = 0;
-    data.currentenergy.energyitems[tag].quantity = 0;
+$('#openbem').on('click', '.currentenergy-delete-fuel', function () {
+    var fuel = $(this).attr(('fuel'));
+    delete data.currentenergy.use_by_fuel[fuel];
     currentenergy_initUI();
     update();
 });

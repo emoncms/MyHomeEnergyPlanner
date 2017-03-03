@@ -1721,93 +1721,39 @@ calc.generation = function (data) {
     data.generation.total_exported = data.generation.total_generation - data.generation.total_used_onsite;
     return data;
 };
+
 calc.currentenergy = function (data) {
     var defaults = datasets.current_energy_defaults;
     if (data.currentenergy == undefined)
         data.currentenergy = {};
-    if (data.currentenergy.energyitems == undefined) {
-        data.currentenergy.energyitems = defaults;
+    if (data.currentenergy.use_by_fuel == undefined) {
+        data.currentenergy.use_by_fuel = {};
     }
 
-    for (z in data.currentenergy.energyitems) {
-        if (data.currentenergy.energyitems[z].selected == undefined)
-            data.currentenergy.energyitems[z].selected = 0;
-        if (data.currentenergy.energyitems[z].group == undefined)
-            data.currentenergy.energyitems[z].group = defaults[z].group;
-    }
-
-    var tmp = JSON.parse(JSON.stringify(defaults));
-    for (z in tmp) {
-        if (data.currentenergy.energyitems[z] != undefined) {
-            tmp[z].selected = data.currentenergy.energyitems[z].selected;
-            if (data.currentenergy.energyitems[z].quantity > 0)
-                tmp[z].selected = 1;
-            tmp[z].quantity = data.currentenergy.energyitems[z].quantity;
-            tmp[z].unitcost = data.currentenergy.energyitems[z].unitcost;
-            tmp[z].standingcharge = data.currentenergy.energyitems[z].standingcharge;
-            if (tmp[z].mpg != undefined)
-                tmp[z].mpg = data.currentenergy.energyitems[z].mpg;
-        }
-    }
-
-    var energy = tmp;
-    var electrictags = ['electric', 'electric-heating', 'electric-heatpump', 'electric-waterheating', 'electric-car'];
-    for (z in electrictags) {
-        var tag = electrictags[z];
-        if (data.currentenergy.greenenergy) {
-            energy[tag].co2 = 0.02;
-            energy[tag].primaryenergy = 1.3;
-        } else {
-            energy[tag].co2 = 0.519;
-            energy[tag].primaryenergy = 3.07;
-        }
-    }
-
-
-    for (item in energy)
-    {
-        if (energy[item].mpg == undefined) {
-            energy[item].annual_kwh = energy[item].quantity * energy[item].kwh;
-        } else {
-            energy[item].annual_kwh = (energy[item].quantity / energy[item].mpg) * energy[item].kwh;
-        }
-        energy[item].kwhd = energy[item].annual_kwh / 365.0;
-        if (energy[item].mpg == undefined) {
-            energy[item].annual_co2 = energy[item].quantity * energy[item].co2;
-        } else {
-            energy[item].annual_co2 = (energy[item].quantity / energy[item].mpg) * energy[item].co2;
-        }
-        if (energy[item].quantity > 0)
-            energy[item].annual_cost = (energy[item].quantity * energy[item].unitcost) + energy[item].standingcharge;
-        else
-            energy[item].annual_cost = 0;
-    }
-
-    var spaceheatingtags = ['electric-heating', 'electric-heatpump', /*'electric-heating-e7', 'electric-heatpump-e7',*/'electric-e7-day', 'electric-e7-night', 'wood-logs', 'wood-pellets', 'oil', 'gas', 'gas-kwh', 'lpg', 'bottledgas'];
-    var spaceheating_annual_kwh = 0;
-    for (z in spaceheatingtags) {
-        spaceheating_annual_kwh += energy[spaceheatingtags[z]].annual_kwh
-    }
-
-    var primaryenergytags = ['electric', 'electric-heating', 'electric-waterheating', 'electric-heatpump', 'electric-e7-day', 'electric-e7-night', /*'electric-e7', 'electric-heating-e7', 'electric-waterheating-e7', 'electric-heatpump-e7',*/ 'wood-logs', 'wood-pellets', 'oil', 'gas', 'gas-kwh', 'lpg', 'bottledgas'];
     var total_co2 = 0;
     var total_cost = 0;
     var primaryenergy_annual_kwh = 0;
     var enduse_annual_kwh = 0;
-    for (z in primaryenergytags) {
-        var item = primaryenergytags[z];
-        primaryenergy_annual_kwh += energy[item].annual_kwh * energy[item].primaryenergy;
-        enduse_annual_kwh += energy[item].annual_kwh;
-        total_co2 += energy[item].annual_co2;
-        total_cost += energy[item].annual_cost;
+    for (var fuel in data.currentenergy.use_by_fuel) {
+        // Calculations for current fuel
+        var f_use = data.currentenergy.use_by_fuel[fuel];
+        f_use.annual_co2 = f_use.annual_use * data.fuels[fuel].co2factor;
+        f_use.primaryenergy = f_use.annual_use * data.fuels[fuel].primaryenergyfactor;
+        if (f_use.annual_use > 0)
+            f_use.annualcost = f_use.annual_use * data.fuels[fuel].fuelcost / 100 + data.fuels[fuel].standingcharge;
+        else
+            f_use.annualcost = 0;
+        
+        // Calculation of totals
+        total_co2 += f_use.annual_co2;
+        total_cost += f_use.annualcost;
+        primaryenergy_annual_kwh += f_use.primaryenergy;
+        enduse_annual_kwh += f_use.annual_use;
     }
-
-    data.currentenergy.energyitems = energy;
-    data.currentenergy.spaceheating_annual_kwh = spaceheating_annual_kwh;
+    
     data.currentenergy.primaryenergy_annual_kwh = primaryenergy_annual_kwh;
     data.currentenergy.total_co2 = total_co2;
     data.currentenergy.total_cost = total_cost;
-    data.currentenergy.spaceheating_annual_kwhm2 = spaceheating_annual_kwh / data.TFA;
     data.currentenergy.primaryenergy_annual_kwhm2 = primaryenergy_annual_kwh / data.TFA;
     data.currentenergy.total_co2m2 = total_co2 / data.TFA;
     data.currentenergy.total_costm2 = total_cost / data.TFA;

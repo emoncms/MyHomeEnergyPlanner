@@ -406,8 +406,73 @@ global $reports;
     }
 
     function run_backwards_compatibility() {
-        // NOthing to do tight now       
+        // March 2017 -Added with Issue 220: 'Current Energy' fuel energy cost and carbon discrepancies
+        var data = project['master'];
+        if (data.currentenergy.use_by_fuel == undefined)
+            data.currentenergy.use_by_fuel = {};
+        if (typeof data.currentenergy.energyitems != 'undefined') {
+            console.log('Running Current Energy backwards compatibility ');
+            for (energy_item in data.currentenergy.energyitems) {
+                var item = data.currentenergy.energyitems[energy_item];
+                if (item.selected === 1) {
+                    if (item.group == 'Electric') {
+                        if (data.currentenergy.use_by_fuel['Standard Tariff'] == undefined)
+                            data.currentenergy.use_by_fuel['Standard Tariff'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['Standard Tariff'].annual_use += item.quantity;
+                    }
+                    else if (item.name == 'Electricity (Economy 7 night rate)') {
+                        if (data.currentenergy.use_by_fuel['7 Hour tariff - Low Rate'] == undefined)
+                            data.currentenergy.use_by_fuel['7 Hour tariff - Low Rate'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['7 Hour tariff - Low Rate'].annual_use += item.quantity;
+                    }
+                    else if (item.name == 'Electricity (Economy 7 day rate)') {
+                        if (data.currentenergy.use_by_fuel['7-Hour tariff - High Rate'] == undefined)
+                            data.currentenergy.use_by_fuel['7-Hour tariff - High Rate'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['7-Hour tariff - High Rate'].annual_use += item.quantity;
+                    }
+                    else if (item.name == 'Mains gas in kWh') {
+                        if (data.currentenergy.use_by_fuel['Mains Gas'] == undefined)
+                            data.currentenergy.use_by_fuel['Mains Gas'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['Mains Gas'].annual_use += item.quantity;
+                    }
+                    else if (item.name == 'Mains gas') {
+                        if (data.currentenergy.use_by_fuel['Mains Gas'] == undefined)
+                            data.currentenergy.use_by_fuel['Mains Gas'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['Mains Gas'].annual_use += 9.8 * item.quantity;
+                    }
+                    else if (item.name == 'Wood Logs') {
+                        if (data.currentenergy.use_by_fuel['Wood Logs'] == undefined)
+                            data.currentenergy.use_by_fuel['Wood Logs'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['Wood Logs'].annual_use += 1380 * item.quantity;
+                    }
+                    else if (item.name == 'Wood Pellets') {
+                        if (data.currentenergy.use_by_fuel['Wood Pellets secondary heating/ in bags'] == undefined)
+                            data.currentenergy.use_by_fuel['Wood Pellets secondary heating/ in bags'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['Wood Pellets (secondary heating/ in bags)'].annual_use += 4800 * item.quantity;
+                    }
+                    else if (item.name == 'Oil') {
+                        if (data.currentenergy.use_by_fuel['Heating Oil'] == undefined)
+                            data.currentenergy.use_by_fuel['Heating Oil'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['Heating Oil'].annual_use += 10.27 * item.quantity;
+                    }
+                    else if (item.name == 'LPG') {
+                        if (data.currentenergy.use_by_fuel['Bulk LPG'] == undefined)
+                            data.currentenergy.use_by_fuel['Bulk LPG'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['Bulk LPG'].annual_use += item.quantity;
+                    }
+                    else if (item.name == 'Bottled gas') {
+                        if (data.currentenergy.use_by_fuel['Bottled LPG'] == undefined)
+                            data.currentenergy.use_by_fuel['Bottled LPG'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                        data.currentenergy.use_by_fuel['Bottled LPG'].annual_use += 13.9 * item.quantity;
+                    }
+
+                    delete data.currentenergy.energyitems;
+                    update();
+                }
+            }
+        }
     }
+
 
     $("#openbem").on("change", '[key]', function () {
         if (data.locked == true && page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy')
@@ -426,7 +491,6 @@ global $reports;
 
             if (key == 'data.use_SHW')
                 data.water_heating.solar_water_heating = !data.use_SHW; // I don't know why but only works properly coping the negative
-
             var lastval = varset(key, val);
 
             $("#openbem").trigger("onKeyChange", {key: key, value: val});
@@ -561,6 +625,7 @@ global $reports;
 
     $(window).resize(function () {
         draw_openbem_graphics();
-    });
+    }
+    );
 
 </script>

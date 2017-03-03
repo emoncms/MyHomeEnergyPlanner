@@ -306,7 +306,7 @@ function compareInfiltration(scenario) {
                 + ' ACH</i></td></tr>';
         +'</i></td></tr>';
     }
-    else if (project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
+    else if (project[scenario].measures.ventilation!=undefined && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
         changed = true;
         out += '<tr><td>The original Infiltration due to dweling construction was calculated \n\
         based on air tightness test with q50 = <i>' + project.master.ventilation.air_permeability_value
