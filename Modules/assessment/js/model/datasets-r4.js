@@ -21,7 +21,7 @@ var datasets = {
         'Standard Tariff': {category: 'Electricity', standingcharge: 66, fuelcost: 15.06, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 30},
         '7-Hour tariff - High Rate': {category: 'Electricity', standingcharge: 13, fuelcost: 17.81, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 32},
         '7 Hour tariff - Low Rate': {category: 'Electricity', standingcharge: 0, fuelcost: 6.67, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 31},
-        '10-hour tariff - High Rate': {category: 'Electricity', standingcharge: 12, fuelcost: 17.1, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 34},
+        '10-hour tariff - High Rate': {category: 'Electricity', standingcharge: 11, fuelcost: 17.1, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 34},
         '10-hour tariff - Low Rate': {category: 'Electricity', standingcharge: 0, fuelcost: 9.25, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 33},
         '24-hour heating tariff': {category: 'Electricity', standingcharge: 40, fuelcost: 7.75, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 35},
         'generation': {category: 'generation', standingcharge: 0, fuelcost: 15.06, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 0}
