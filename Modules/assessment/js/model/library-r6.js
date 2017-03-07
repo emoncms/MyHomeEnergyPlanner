@@ -995,6 +995,19 @@ var standard_library = {
             "gL": 0,
             "ff": 0,
             "description": "Cavity fill insulation injected through outer face of brickwork. This is used on its own or behind External Wall Insulation to prevent thermal bypass chimney effect within cavity. "},
+       
+        "CWF_05": {
+            "tags": ["Wall"],
+            "name": "Filled Cavity Masonry Wall - 100mm Cavity - against ground/ retaining wall",
+            "location": "",
+            "source": "URBED/ SAP table 1e, p.195",
+            "uvalue": 0.35,
+            "kvalue": 110,
+            "g": 0,
+            "gL": 0,
+            "ff": 0,
+            "description": "Assume no surface resistance on external face against ground"
+        },
         "PWF_01": {
             "tags": ["Wall"],
             "name": "Cavity masonry wall, filled. ",
@@ -1803,19 +1816,19 @@ var standard_library = {
             "name": "Timber Frame Wall with rendered or tiled finish and 50mm insulation",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.7,
-            "kvalue": 18,
+            "kvalue": 9,
             "tags": ["Wall"]},
         "TFWI_04": {
             "name": "Timber Frame Wall with rendered or tiled finish and 100mm insulation",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.4,
-            "kvalue": 18,
+            "kvalue": 9,
             "tags": ["Wall"]},
         "TFWI_05": {
             "name": "Timber Frame Wall with rendered or tiled finish and 200mm insulation",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.25,
-            "kvalue": 18,
+            "kvalue": 9,
             "tags": ["Wall"]
         },
         "SWIN_02": {
