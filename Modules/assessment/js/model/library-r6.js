@@ -3725,7 +3725,24 @@ var standard_library = {
             key_risks: "Indoor air quality",
             notes: "Ensure flue is no longer required before removing. Some flues contain asbestos, so be sure to carry out a proper inspection (or ask a specialist to) and remove carefully. ",
             maintenance: "--"
-        }
+        },
+        IV_12: {
+            name: 'Remove gas fire',
+            source: '--',
+            type: 'Measure',
+            ventilation_rate: 0,
+            description: "Gas fires are inefficient, cause draughts and carry risks of build up of carbon dioxide and carbon monoxide. They should be removed and avoided whererever possible. ",
+            performance: 'n\/a',
+            benefits: "Fuel bills, carbon, indoor air quality",
+            cost_units: 'unit',
+            cost: 50,
+            who_by: "Gas Safe Registered Engineer (where plumbed in).  ",
+            disruption: "MINIMAL",
+            associated_work: "Heating system upgrades. ",
+            key_risks: "Indoor air quality ",
+            notes: "Ensure fire is no longer required for heating. Removing gas fires should reduce heating costs whilst also improve indoor air quality, as they create a huge amount of water vapour when they burn which is not directly vented to outside. ",
+            maintenance: "--"
+        },
     },
     water_usage: {
         HW_01: {
