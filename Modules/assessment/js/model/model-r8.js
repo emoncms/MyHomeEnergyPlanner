@@ -969,7 +969,8 @@ calc.fuel_requirements = function (data) {
             var fuel = data.fuel_requirements[z].list[x].fuel;
             if (data.fuel_totals[fuel] == undefined)
                 data.fuel_totals[fuel] = {name: fuel, quantity: 0};
-            data.fuel_totals[fuel].quantity += data.fuel_requirements[z].list[x].fuel_input;
+            if (isNaN(data.fuel_requirements[z].list[x].fuel_input) != true)
+                data.fuel_totals[fuel].quantity += data.fuel_requirements[z].list[x].fuel_input;
         }
     }
 
@@ -1754,15 +1755,15 @@ calc.currentenergy = function (data) {
         primaryenergy_annual_kwh += f_use.primaryenergy;
         enduse_annual_kwh += f_use.annual_use;
     }
-    
-    if(data.currentenergy.onsite_generation === 1){
+
+    if (data.currentenergy.onsite_generation === 1) {
         data.currentenergy.generation.primaryenergy = data.fuels.generation.primaryenergyfactor * data.currentenergy.generation.annual_generation;
         data.currentenergy.generation.annual_CO2 = data.fuels.generation.co2factor * data.currentenergy.generation.annual_generation;
-        data.currentenergy.generation.annual_savings = data.fuels.generation.fuelcost/100 * data.currentenergy.generation.fraction_used_onsite * data.currentenergy.generation.annual_generation;
-        
-        
+        data.currentenergy.generation.annual_savings = data.fuels.generation.fuelcost / 100 * data.currentenergy.generation.fraction_used_onsite * data.currentenergy.generation.annual_generation;
+
+
     }
-        
+
 
     data.currentenergy.primaryenergy_annual_kwh = primaryenergy_annual_kwh;
     data.currentenergy.total_co2 = total_co2;
