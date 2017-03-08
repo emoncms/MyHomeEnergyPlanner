@@ -107,7 +107,7 @@ calc.start = function (data)
     data.totalWK = 0;
     if (data.fuels == undefined)
         data.fuels = [];
-    // data.fuels -> Copy dataset over to user data without overwritting user changed properties (useful when a new fuel is added to the dataset)
+    // data.fuels -> Copy dataset over to user data without overwritting standingcharge and fuelcost (as the user may have adjusted it to fit his/her price)
     var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
     for (fuel in tmpfuels) {
         for (prop in tmpfuels[fuel]) {
