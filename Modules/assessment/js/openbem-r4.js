@@ -146,8 +146,8 @@ var openbem = {
             percentage_draught_proofed: data.ventilation.percentage_draught_proofed,
             number_of_sides_sheltered: data.ventilation.number_of_sides_sheltered,
             ventilation_type: data.ventilation.ventilation_type,
-            ventilation_tag:data.ventilation.ventilation_tag,
-            ventilation_name:data.ventilation.ventilation_name,
+            ventilation_tag: data.ventilation.ventilation_tag,
+            ventilation_name: data.ventilation.ventilation_name,
             system_air_change_rate: data.ventilation.system_air_change_rate,
             balanced_heat_recovery_efficiency: data.ventilation.balanced_heat_recovery_efficiency,
             system_specific_fan_power: data.ventilation.system_specific_fan_power,
@@ -162,8 +162,10 @@ var openbem = {
         inputdata.generation = data.generation;
         inputdata.currentenergy = {
             //energyitems: data.currentenergy.energyitems,
-            greenenergy: data.currentenergy.greenenergy,
-            use_by_fuel:data.currentenergy.use_by_fuel
+            //greenenergy: data.currentenergy.greenenergy,
+            use_by_fuel: data.currentenergy.use_by_fuel,
+            onsite_generation: data.currentenergy.onsite_generation,
+            generation: data.currentenergy.generation
         };
         // Waterheating
         //inputdata.use_water_heating = data.use_water_heating;

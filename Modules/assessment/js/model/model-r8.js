@@ -1729,6 +1729,10 @@ calc.currentenergy = function (data) {
     if (data.currentenergy.use_by_fuel == undefined) {
         data.currentenergy.use_by_fuel = {};
     }
+    if (data.currentenergy.generation == undefined)
+        data.currentenergy.generation = {annual_generation: 0, annual_CO2: 0, primaryenergy: 0, annual_savings: 0, fraction_used_onsite: 0};
+
+
 
     var total_co2 = 0;
     var total_cost = 0;
@@ -1743,7 +1747,7 @@ calc.currentenergy = function (data) {
             f_use.annualcost = f_use.annual_use * data.fuels[fuel].fuelcost / 100 + data.fuels[fuel].standingcharge;
         else
             f_use.annualcost = 0;
-        
+
         // Calculation of totals
         total_co2 += f_use.annual_co2;
         total_cost += f_use.annualcost;
@@ -1751,6 +1755,15 @@ calc.currentenergy = function (data) {
         enduse_annual_kwh += f_use.annual_use;
     }
     
+    if(data.currentenergy.onsite_generation === 1){
+        data.currentenergy.generation.primaryenergy = data.fuels.generation.primaryenergyfactor * data.currentenergy.generation.annual_generation;
+        data.currentenergy.generation.annual_CO2 = data.fuels.generation.co2factor * data.currentenergy.generation.annual_generation;
+        data.currentenergy.generation.annual_savings = data.fuels.generation.fuelcost/100 * data.currentenergy.generation.fraction_used_onsite * data.currentenergy.generation.annual_generation;
+        
+        
+    }
+        
+
     data.currentenergy.primaryenergy_annual_kwh = primaryenergy_annual_kwh;
     data.currentenergy.total_co2 = total_co2;
     data.currentenergy.total_cost = total_cost;

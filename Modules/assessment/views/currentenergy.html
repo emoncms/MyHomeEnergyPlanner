@@ -31,11 +31,11 @@
     <tr>
         <th style="width:100px"></th>
         <th>Annual use<br />kWh <i class="icon-question-sign" title="Conversion factors:
-            - Wood Logs: 1m3 = 1380 kWh 
-            - Wood Pellets: 1m3 = 4800 kWh 
-            - Oil: 1L = 10.27 kWh
-            - Bottled gas: 1kg = 13.9 
-            - Mains gas: 1m3 = 9.8 kWh" ></i></th>
+                                   - Wood Logs: 1m3 = 1380 kWh 
+                                   - Wood Pellets: 1m3 = 4800 kWh 
+                                   - Oil: 1L = 10.27 kWh
+                                   - Bottled gas: 1kg = 13.9 <i
+                                   - Mains gas: 1m3 = 9.8 kWh" ></i></th>
         <th>CO<sub>2</sub> factor<br />kgCO<sub>2</sub>/kWh</th>
         <th>Annual kgCO<sub>2</sub></th>
         <th>Primary Energy Factor</th>
@@ -54,8 +54,34 @@
     <span class="add-on">Type of fuel</span>
     <select id="type_of_fuel_select"></select><button id="add_use_by_fuel" class="btn">Add</button>
 </div>
-<br><br>
 
+<br><br>
+<p>Is there any on-site generation? <input style="margin-left:15px" type="checkbox" key="data.currentenergy.onsite_generation" /></p>
+<table id="onsite-generation" class="table" style="background-color:#f0f0f0; display:none">
+    <tr>
+        <th>Annual generation<br />kWh </th>
+        <th>CO<sub>2</sub> factor<br />kgCO<sub>2</sub>/kWh</th>
+        <th>Annual kgCO<sub>2</sub> saved <i class="icon-question-sign" title="Due to total generation: includes energy used on-site and exported" ></i></th>
+        <th>Primary Energy Factor</th>
+        <th>Primary Energy saved <br />kWh <i class="icon-question-sign" title="Due to total generation: includes energy used on-site and exported" ></i></th>
+        <th>Unit cost<br /> p/kWh</th>
+        <th>Fraction used on-site</th>
+        <th>Annual savings <i class="icon-question-sign" title="Due to energy used on-site" ></i></th>
+
+    <tbody>
+        <tr>
+            <td><input style="width: 70px" type="number" key="data.currentenergy.generation.annual_generation" dp="2" /></td>
+            <td>x<span key="data.fuels.generation.co2factor" dp="2" /></td>
+            <td><span key="data.currentenergy.generation.annual_CO2" dp="2" /></td>
+            <td>x<span key="data.fuels.generation.primaryenergyfactor" dp="2" /></td>
+            <td><span key="data.currentenergy.generation.primaryenergy" dp="2" /></td>
+            <td><input style="width: 70px" type="number" key="data.fuels.generation.fuelcost" dp="2" /></td>
+            <td><input style="width: 70px" max="1" step="0.01" type="number" key="data.currentenergy.generation.fraction_used_onsite" dp="2" /></td>
+            <td>£<span key="data.currentenergy.generation.annual_savings" dp="2" /></td>
+        </tr>
+    </tbody>
+
+</table>
 <!--<p class="alert alert-success"><b>100% green electricity tariff?</b> <input type="checkbox" key="data.currentenergy.greenenergy" /><br>Ticking the green electricity tariff button here reduces electricity co2 emissions from <b>0.519kgCO2/kWh</b> to <b>0.02 kgCO2/kWh</b> and the primary energy factor is also reduced from <b>3.07</b> that relates to ~58% energy loss in coal and gas electricity generation to <b>1.3</b></p>-->
 
 

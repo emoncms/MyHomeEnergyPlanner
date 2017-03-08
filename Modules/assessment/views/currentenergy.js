@@ -6,7 +6,6 @@ function currentenergy_initUI() {
 
     $('#type_of_fuel_select').html(get_fuels_for_select());
     $('#currentenergy_use_by_fuel').html('');
-
     for (var fuel in data.currentenergy.use_by_fuel) {
         var html = "<tr>";
         html += "<td>" + fuel + "</td>";
@@ -22,6 +21,11 @@ function currentenergy_initUI() {
         html += '</tr>';
         $('#currentenergy_use_by_fuel').append(html);
     }
+
+    if (data.currentenergy.onsite_generation === 1)
+        $('#onsite-generation').show();
+    else
+        $('#onsite-generation').hide();
 }
 
 function currentenergy_UpdateUI()
@@ -74,4 +78,11 @@ $('#openbem').on('click', '.currentenergy-delete-fuel', function () {
     delete data.currentenergy.use_by_fuel[fuel];
     currentenergy_initUI();
     update();
+});
+
+$('#openbem').on('change', '[key="data.currentenergy.onsite_generation"]', function () {
+    if (data.currentenergy.onsite_generation === 1) // Yes I know it shoud be there other way around, but this is how it works
+        $('#onsite-generation').hide();
+    else
+        $('#onsite-generation').show();
 });
