@@ -224,7 +224,7 @@ global $reports;
     var path = "<?php echo $path; ?>";
     var jspath = path + "Modules/assessment/";
 
-    //var c=document.getElementById("rating");
+//var c=document.getElementById("rating");
     //var ctx=c.getContext("2d");
 
     load_view("#topgraphic", 'topgraphic');
@@ -239,6 +239,14 @@ global $reports;
     if (p.data == false || p.data == null)
         p.data = {'master': {}};
     var project = p.data;
+
+    var historical = []; // used for the undo functionality
+    var historical_index; // pointer for the historical array, pointing the current version of project
+    historical.unshift(JSON.stringify(project));
+    historical_index = 0;
+    $('ul.nav.pull-right').prepend('<li id="redo"><a><img src="' + path + 'Modules/assessment/img-assets/redo.gif" title="Redo" style="width:14px" /></a></li>');
+    $('ul.nav.pull-right').prepend('<li id="undo"><a><img src="' + path + 'Modules/assessment/img-assets/undo.gif" title="Undo" style="width:14px" / > </a></li > ');
+    refresh_undo_redo_buttons();
 
     // Side Menus
     var mastermenu = $("#scenario-menu-template").html();
@@ -302,7 +310,6 @@ global $reports;
     for (s in project) {
         if (project[s].locked == undefined)
             project[s].locked = false;
-
         if (project[s].locked == false)
             $(".scenario-block[scenario=" + s + "]").find(".lock").html('Lock');
         else
@@ -376,14 +383,19 @@ global $reports;
 
         // Disable measures if master
         show_hide_if_master();
-
     });
 
-    function update()
+    function update(undo_redo = false)
     {
         console.log("updating");
         project[scenario] = calc.run(project[scenario]);
         data = project[scenario];
+        if (undo_redo === false) {
+            historical.splice(0, historical_index); // reset the historical removing all the elements that were still there because of undoing
+            historical.unshift(JSON.stringify(project));
+            historical_index = 0;
+            refresh_undo_redo_buttons();
+        }
 
         UpdateUI(data);
         draw_openbem_graphics();
@@ -521,7 +533,6 @@ global $reports;
         $('.scenario-block[scenario=master]').click();
         $('.menu-content').hide();
     });
-
     $("#openbem").on('click', "#create-new", function () {
         // Reset select
         $('#select-scenario').html("");
@@ -603,8 +614,46 @@ global $reports;
         location.reload();
     });
 
+    $('ul.nav.pull-right').on('click', '#undo', function () {
+        if (historical_index < historical.length - 1) {
+            historical_index++;
+            project = JSON.parse(historical[historical_index]);
+            update(true);
+        }
 
+        refresh_undo_redo_buttons();
+    });
 
+    $('ul.nav.pull-right').on('click', '#redo', function () {
+        if (historical_index > 0) {
+            historical_index--;
+            project = JSON.parse(historical[historical_index]);
+            update(true);
+        }
+
+        refresh_undo_redo_buttons();
+    });
+
+    function refresh_undo_redo_buttons() {
+        if (historical_index == historical.length - 1) {
+            $('#undo').css('opacity', 0.1);
+            $('#undo').css('cursor', 'default');
+        }
+        else {
+            $('#undo').css('opacity', 1);
+            $('#undo').css('cursor', 'pointer');
+        }
+
+        if (historical_index > 0) {
+            $('#redo').css('opacity', 1);
+            $('#redo').css('cursor', 'pointer');
+        }
+        else {
+            $('#redo').css('opacity', 0.1);
+            $('#redo').css('cursor', 'default');
+        }
+    }
+    //-----
     //-------------------------------------------------------------------
 
     $(".house_graphic").click(function () {
