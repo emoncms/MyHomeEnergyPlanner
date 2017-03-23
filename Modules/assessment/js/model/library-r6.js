@@ -1727,7 +1727,7 @@ var standard_library = {
             "description": "",
             "location": "",
             "source": "assume 70 glazing",
-            "uvalue": 4.2,
+            "uvalue": 2.66,
             "kvalue": 0,
             "g": "0.72",
             "gL": "0.8",
