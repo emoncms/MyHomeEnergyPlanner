@@ -14,28 +14,11 @@ function assessment_controller() {
       //---------------------------------------------------------------------------- */
     if (!isset($_SESSION['backwards_comp'])) { // We only run when we start the session
         $_SESSION['backwards_comp'] = true;
-
-
-// Add 'location' to the elements in existing libraries
-        /*        $libresult = $mysqli->query("SELECT id,data FROM element_library WHERE `type` = 'elements'");
-          foreach ($libresult as $row) {
-          $update_needed = false;
-          $library = json_decode($row['data']);
-          foreach ($library as $item) {
-          if (!isset($item->location)) {
-          $update_needed = true;
-          $item->location = '';
-          }
-          }
-          if ($update_needed === true) {
-          $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
-          $library = json_encode($library);
-          $req->bind_param('si', $library, $row['id']);
-          $req->execute();
-          }
-          }
-         */
     }
+
+   // require "Modules/assessment/assessment_model.php";
+    //$assessment = new Assessment($mysqli);
+    //$assessment->edit_item_in_all_libraries('elements', 'DRD04', 'uvalue', 2.6);
 
     /* End backwards compatibility section */
 
@@ -68,10 +51,10 @@ function assessment_controller() {
 
     if ($route->format == 'json') {
 
-        require "Modules/assessment/assessment_model.php";
+        require_once "Modules/assessment/assessment_model.php";
         $assessment = new Assessment($mysqli);
 
-        require "Modules/assessment/organisation_model.php";
+        require_once "Modules/assessment/organisation_model.php";
         $organisation = new Organisation($mysqli);
 
 // -------------------------------------------------------------------------------------------------------------

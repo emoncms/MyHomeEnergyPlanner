@@ -686,6 +686,22 @@ class Assessment {
         return $item;
     }
 
+    public function edit_item_in_all_libraries($library_type, $tag, $field, $value) {
+        $libresult = $this->mysqli->query("SELECT id,data FROM element_library WHERE `type` = '" . $library_type . "'");
+        foreach ($libresult as $row) {
+            $library = json_decode($row['data']);
+            foreach ($library as $key => $item) {
+                if ($key == $tag) {
+                    $item->$field = $value;
+                }
+            }
+            $req = $this->mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+            $library = json_encode($library);
+            $req->bind_param('si', $library, $row['id']);
+            $req->execute();
+        }
+    }
+
 // ------------------------------------------------------------------------------------------------
 // IMAGE GALLERY
 // ------------------------------------------------------------------------------------------------
