@@ -309,10 +309,11 @@ calc.fabric = function (data, solar_acces_factor)
                 var summer = 0;
                 if (solar_acces_factor == 'summer' && month >= 5 && month <= 8) // solar gains for heating only use 'Winter access factor', while the summer one is used for the calculatin of "Solar gains for cooling and Summer temperatures", table 6d, p. 216 SAP2012
                     summer = 1;
-                if (data.fabric.elements[z].type == 'Roof_light')
-                    var access_factor = 1.0;
-                else
-                    var access_factor = table_6d[overshading][summer];
+                // According to SAP2012 (p,26 note2) a solar access factor of 1.0 [...] should be used for roof lights, but we think that is not right (see issue 237: https://github.com/emoncms/MyHomeEnergyPlanner/issues/237 
+                /*if (data.fabric.elements[z].type == 'Roof_light')
+                 var access_factor = 1.0;
+                 else*/
+                var access_factor = table_6d[overshading][summer];
                 // Map orientation code from window to solar rad orientation codes.
                 if (orientation == 5)
                     orientation = 3; // SE/SW
