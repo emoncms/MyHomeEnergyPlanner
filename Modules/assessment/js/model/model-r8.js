@@ -105,17 +105,7 @@ calc.start = function (data)
     data.space_heating_demand_m2 = 0;
     data.primary_energy_use_by_requirement = {};
     data.totalWK = 0;
-    if (data.fuels == undefined)
-        data.fuels = [];
-    // data.fuels -> Copy dataset over to user data without overwritting standingcharge and fuelcost (as the user may have adjusted it to fit his/her price)
-    var tmpfuels = JSON.parse(JSON.stringify(datasets.fuels));
-    for (fuel in tmpfuels) {
-        for (prop in tmpfuels[fuel]) {
-            if (data.fuels[fuel] != undefined && data.fuels[fuel][prop] != undefined)
-                tmpfuels[fuel][prop] = data.fuels[fuel][prop]
-        }
-    }
-    data.fuels = tmpfuels;
+
     return data;
 }
 
@@ -1732,7 +1722,7 @@ calc.currentenergy = function (data) {
         data.currentenergy.use_by_fuel = {};
     }
     if (data.currentenergy.generation == undefined)
-        data.currentenergy.generation = {annual_generation: 0, annual_CO2: 0, primaryenergy: 0, annual_savings: 0, fraction_used_onsite: 0};
+        data.currentenergy.generation = {annual_generation: 0, annual_CO2: 0, primaryenergy: 0, annual_savings: 0, fraction_used_onsite: 0.25};
 
 
 

@@ -574,6 +574,8 @@ function carboncoopreport_UpdateUI() {
             else
                 data.bills[2].value += f_use.annual_use;
         }
+        data.bills[1].value += project['master'].currentenergy.generation.fraction_used_onsite * project['master'].currentenergy.generation.annual_generation; // We added consumption coming from generation
+        
         return data;
     }
 
@@ -842,7 +844,7 @@ function carboncoopreport_UpdateUI() {
         yAxisLabel: '£/year',
         fontSize: 33,
         font: "Karla",
-        division: 500, 
+        division: 500,
         chartHigh: 3500,
         width: 1200,
         chartHeight: 600,

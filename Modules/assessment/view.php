@@ -70,6 +70,7 @@ global $reports;
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
+            <div class="scenario-nav"><a class="project-menu-item" href="#master/fuelsmanager">Fuels manager</a></div>
             </div>
         </div>
 
@@ -266,6 +267,12 @@ global $reports;
     var keys = {};
 
     run_backwards_compatibility();
+
+    // Ensure all the scenarios have the same fuels
+    if (project.master.fuels == undefined)
+        project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));;
+    for (scenario in project)
+        project[scenario].fuels = project.master.fuels;
 
     for (s in project) {
         // QUESTION: do you really want to do calc.run twice here?
