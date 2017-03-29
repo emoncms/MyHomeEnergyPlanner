@@ -225,6 +225,15 @@ function get_a_fuel(type_of_fuel) { // Returns the first fuel for a specific typ
     }
 }
 
+function get_fuel_categories() {
+    var categories = [];
+    for (var fuel in project.master.fuels) {
+        if (categories.indexOf(project.master.fuels[fuel].category) === -1)
+            categories.push(project.master.fuels[fuel].category);
+    }
+    return categories;
+}
+
 function add_quantity_and_cost_to_measure(measure) {
     // Add extra properties to measure 
     if (measure.cost_units == 'sqm')
