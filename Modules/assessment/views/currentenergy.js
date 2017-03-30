@@ -10,7 +10,7 @@ function currentenergy_initUI() {
         var html = "<tr>";
         html += "<td>" + fuel + "</td>";
         html += "<td><input type='number' style='width:80px' key='data.currentenergy.use_by_fuel." + fuel + ".annual_use' dp=2 /></td>";
-        html += "<td>x <span' key='data.fuels." + fuel + ".co2factor' dp=2 /></td>";
+        html += "<td>x <span key='data.fuels." + fuel + ".co2factor' dp=2 /></td>";
         html += "<td><span key='data.currentenergy.use_by_fuel." + fuel + ".annual_co2' dp=2 /></td>";
         html += "<td>x <span key='data.fuels." + fuel + ".primaryenergyfactor' dp=2 /></td>";
         html += "<td><span key='data.currentenergy.use_by_fuel." + fuel + ".primaryenergy' dp=2 /></td>";
