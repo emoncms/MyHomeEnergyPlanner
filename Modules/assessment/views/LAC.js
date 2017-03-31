@@ -53,6 +53,8 @@ function LAC_initUI() {
     show_LAC_divs(data.LAC_calculation_type)
 }
 function LAC_UpdateUI() {
+    LAC_initUI();
+    
     for (z in data.applianceCarbonCoop.list) {
         data.applianceCarbonCoop.list[z].energy_demand = 1.0 * data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
     }
