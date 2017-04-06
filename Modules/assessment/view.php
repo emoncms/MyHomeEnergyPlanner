@@ -249,9 +249,6 @@ global $reports;
     $('ul.nav.pull-right').prepend('<li id="undo"><a><img src="' + path + 'Modules/assessment/img-assets/undo.gif" title="Undo" style="width:14px" / > </a></li > ');
     refresh_undo_redo_buttons();
 
-    // Side Menus
-    add_scenarios_to_menu();
-
     $(".menu-content").hide();
     $(".scenario-block[scenario=master]").find(".delete-scenario-launch").hide();
     $(".scenario-block[scenario=master]").find(".menu-content").show();
@@ -272,6 +269,9 @@ global $reports;
         project[s] = calc.run(calc.run(project[s]));
         $("." + s + "_sap_rating").html(project[s].SAP.rating.toFixed(0));
     }
+
+    // Side Menus
+    add_scenarios_to_menu();
 
     var tmp = (window.location.hash).substring(1).split('/');
     var page = tmp[1];
@@ -498,7 +498,7 @@ global $reports;
             $("#scenario-list").append(tmp);
         }
         for (s in project) {
-            project[s] = calc.run(calc.run(project[s]));
+            //project[s] = calc.run(calc.run(project[s]));
             $("." + s + "_sap_rating").html(project[s].SAP.rating.toFixed(0));
         }
         $('div [scenario="' + scenario + '"]').click();
