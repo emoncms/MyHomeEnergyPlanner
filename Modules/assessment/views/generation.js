@@ -29,9 +29,16 @@ function generation_UpdateUI() {
 }
 
 $('#openbem').on('change', '[key="data.generation.use_PV_calculator"]', function () {
-    $('#PV_calculator').toggle(800);
-    $('input[key="data.generation.solar_annual_kwh"').toggle();
-    $('span#solar_annual_kwh').html(data.generation.solar_annual_kwh.toFixed(0)).toggle();
+    if (data.generation.use_PV_calculator == 1) {
+        $('#PV_calculator').show(800);
+        $('input[key="data.generation.solar_annual_kwh"').hide();
+        $('span#solar_annual_kwh').html(data.generation.solar_annual_kwh.toFixed(0)).show();
+    }
+    else{
+        $('#PV_calculator').hide(800);
+        $('input[key="data.generation.solar_annual_kwh"').show();
+        $('span#solar_annual_kwh').html(data.generation.solar_annual_kwh.toFixed(0)).hide();
+    }
 });
 
 
@@ -90,7 +97,7 @@ $('#openbem').on('click', '#apply-measure-generation-ok', function () {
     for (var t in measure)
         var tag = t;
     measure[tag].tag = tag;
-    data.measures.PV_generation.measure = measure[tag];    
+    data.measures.PV_generation.measure = measure[tag];
     data.measures.PV_generation.measure.quantity = measure[tag].kWp;
     data.measures.PV_generation.measure.cost_total = measure[tag].cost * measure[tag].kWp;
 
