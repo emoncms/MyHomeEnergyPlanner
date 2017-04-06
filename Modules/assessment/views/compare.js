@@ -19,7 +19,7 @@ function generateSummary(outputElement) {
         out += '<th>' + scenario + '<br />' + project[scenario].scenario_name + '</th>'
     out += '</tr>';
     var rows = [
-        ['<b>Totals</b>',],
+        ['<b>Totals</b>', ],
         ['Space heating demand (kWh/m<sup>2</sup>.a)', 'space_heating_demand_m2'],
         ['Primary energy demand (kWh/m<sup>2</sup>.a)', 'primary_energy_use_m2'],
         ['CO<sub>2</sub> emission rate (kgCO<sub>2</sub>/m<sup>2</sup>.a)', 'kwhdpp'],
@@ -306,7 +306,7 @@ function compareInfiltration(scenario) {
                 + ' ACH</i></td></tr>';
         +'</i></td></tr>';
     }
-    else if (project[scenario].measures.ventilation!=undefined && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
+    else if (project[scenario].measures.ventilation != undefined && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
         changed = true;
         out += '<tr><td>The original Infiltration due to dweling construction was calculated \n\
         based on air tightness test with q50 = <i>' + project.master.ventilation.air_permeability_value
@@ -564,12 +564,18 @@ function compareEnergyRequirements(scenario) {
     var ER_list = ['appliances', 'cooking', 'fans_and_pumps', 'lighting', 'space_heating', 'waterheating'];
     var ER_names = ['appliances', 'cooking', 'fans and pumps', 'lighting', 'space heating', 'water heating'];
     ER_list.forEach(function (ER, index) {
-        if (project.master.energy_requirements[ER] != undefined && project.master.energy_requirements[ER].quantity
-                != project[scenario].energy_requirements[ER].quantity) {
+        if (project.master.energy_requirements[ER] != undefined && project[scenario].energy_requirements[ER] != undefined
+                && project.master.energy_requirements[ER].quantity != project[scenario].energy_requirements[ER].quantity) {
             changed = true;
             out += '<tr><td>The demand for <i>' + ER_names[index] + '</i> has changed from <i>'
                     + project.master.energy_requirements[ER].quantity.toFixed(2) + '</i> kWh/year to <i>'
                     + project[scenario].energy_requirements[ER].quantity.toFixed(2) + '</i> kWh/year</td></tr>';
+        }
+        else if (project.master.energy_requirements[ER] != undefined && project[scenario].energy_requirements[ER] == undefined) // there is a specific case (CarbonCoop for appliances and cooking) when the energy requirements can be undefined
+        {
+            changed = true;
+            out += '<tr><td>The demand for <i>' + ER_names[index] + '</i> has changed from <i>'
+                    + project.master.energy_requirements[ER].quantity.toFixed(2) + '</i> kWh/year to <i>0</i> kWh/year</td></tr>';
         }
     });
     if (project.master.generation.total_generation != project[scenario].generation.total_generation) {
