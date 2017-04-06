@@ -70,7 +70,7 @@ global $reports;
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
-            <div class="scenario-nav"><a class="project-menu-item" href="#master/fuelsmanager">Fuels manager</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/fuelsmanager">Fuels manager</a></div>
             </div>
         </div>
 
@@ -250,16 +250,8 @@ global $reports;
     refresh_undo_redo_buttons();
 
     // Side Menus
-    var mastermenu = $("#scenario-menu-template").html();
-    for (s in project) {
-        var tmp = mastermenu.replace(/template/g, s);
-        tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
-        var name = "";
-        if (project[s].scenario_name != undefined)
-            name = project[s].scenario_name;
-        tmp = tmp.replace("scenarioname", " " + name.charAt(0).toUpperCase() + name.slice(1));
-        $("#scenario-list").append(tmp);
-    }
+    add_scenarios_to_menu();
+
     $(".menu-content").hide();
     $(".scenario-block[scenario=master]").find(".delete-scenario-launch").hide();
     $(".scenario-block[scenario=master]").find(".menu-content").show();
@@ -270,7 +262,8 @@ global $reports;
 
     // Ensure all the scenarios have the same fuels
     if (project.master.fuels == undefined)
-        project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));;
+        project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));
+    ;
     for (scenario in project)
         project[scenario].fuels = project.master.fuels;
 
@@ -492,6 +485,24 @@ global $reports;
         }
     }
 
+    function add_scenarios_to_menu() {
+        $("#scenario-list").html('');
+        var mastermenu = $("#scenario-menu-template").html();
+        for (s in project) {
+            var tmp = mastermenu.replace(/template/g, s);
+            tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
+            var name = "";
+            if (project[s].scenario_name != undefined)
+                name = project[s].scenario_name;
+            tmp = tmp.replace("scenarioname", " " + name.charAt(0).toUpperCase() + name.slice(1));
+            $("#scenario-list").append(tmp);
+        }
+        for (s in project) {
+            project[s] = calc.run(calc.run(project[s]));
+            $("." + s + "_sap_rating").html(project[s].SAP.rating.toFixed(0));
+        }
+        $('div [scenario="' + scenario + '"]').click();
+    }
 
     $("#openbem").on("change", '[key]', function () {
         if (data.locked == true && page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy')
@@ -553,11 +564,23 @@ global $reports;
 
     $("#modal-create-scenario").on('click', '#modal-create-scenario-done', function () {
         var n = 0;
-        for (z in project)
+        for (z in project) {
+            var scenario_number = z.slice(8);
+            if (z != 'master' && n != scenario_number) // if for a reason a scenario was deleted, when we create a new one it takes its position. Example: we have master, scenario1 and scenario2. We delete scenario1. We create a new one that becomes scenario1
+                break;
             n++;
+        }
         var s = "scenario" + n;
-
         project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
+
+        //sort project alphabetically
+        temp_project = {};
+        Object.keys(project)
+                .sort()
+                .forEach(function (v, i) {
+                    temp_project[v] = project[v];
+                });
+        project = JSON.parse(JSON.stringify(temp_project));
 
         // dont make a copy of the following properties
         project[s].household = {};
@@ -569,11 +592,12 @@ global $reports;
         // Ensure new scenario is unlocked
         project[s].locked = false;
 
-        var tmp = mastermenu.replace(/template/g, s);
-        tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
+        /*var mastermenu = $("#scenario-menu-template").html();
+         var tmp = mastermenu.replace(/template/g, s);
+         tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));*/
 
         $(".menu-content").hide();
-        $("#scenario-list").append(tmp);
+        add_scenarios_to_menu();
         $('#modal-create-scenario').modal('hide');
 
         scenario = s;
