@@ -1651,8 +1651,6 @@ calc.generation = function (data) {
             solarpv_kwp_installed: 0,
             solarpv_inclination: 35,
             solarpv_overshading: 1,
-            solarpv_fraction_used_onsite: 0.5,
-            solarpv_FIT: 0,
             total_generation: 0,
             total_used_onsite: 0,
             total_exported: 0,
@@ -1660,17 +1658,23 @@ calc.generation = function (data) {
         };
     if (data.generation.systems == undefined)
         data.generation.systems = {};
-    var kWp = data.generation.solarpv_kwp_installed;
-    // 0:North, 1:NE/NW, 2:East/West, 3:SE/SW, 4:South
-    var orient = data.generation.solarpv_orientation;
-    var p = data.generation.solarpv_inclination;
-    var overshading_factor = data.generation.solarpv_overshading;
-    // annual_solar_radiation
-    // U3.3 in Appendix U for the applicable climate and orientation and tilt of the PV
-    // Z PV is the overshading factor from Table H2.
-    // p: tilt
-    var annual_solar_radiation = annual_solar_rad(data.region, orient, p);
-    data.generation.solarpv_annual_kwh = 0.8 * kWp * annual_solar_radiation * overshading_factor;
+
+    if (data.generation.use_PV_calculator != false) {
+        var kWp = data.generation.solarpv_kwp_installed;
+        
+        // 0:North, 1:NE/NW, 2:East/West, 3:SE/SW, 4:South
+        var orient = data.generation.solarpv_orientation;
+        var p = data.generation.solarpv_inclination;
+        var overshading_factor = data.generation.solarpv_overshading;
+        
+        // annual_solar_radiation
+        // U3.3 in Appendix U for the applicable climate and orientation and tilt of the PV
+        // Z PV is the overshading factor from Table H2.
+        // p: tilt
+        var annual_solar_radiation = annual_solar_rad(data.region, orient, p);
+        
+        data.generation.solar_annual_kwh = 0.8 * kWp * annual_solar_radiation * overshading_factor;
+    }
     // ----------
 
     data.generation.total_energy_income = 0;
@@ -1691,12 +1695,6 @@ calc.generation = function (data) {
     {
         data.generation.systems.hydro = {name: "Hydro", quantity: data.generation.hydro_annual_kwh, fraction_used_onsite: data.generation.hydro_fraction_used_onsite, CO2: data.generation.hydro_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.hydro_annual_kwh * data.fuels['generation'].primaryenergyfactor};
         data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT;
-    }
-
-    if (data.generation.solarpv_annual_kwh > 0)
-    {
-        data.generation.systems.solarpv2 = {name: "Solar PV from calculator", quantity: data.generation.solarpv_annual_kwh, fraction_used_onsite: data.generation.solarpv_fraction_used_onsite, CO2: data.generation.solarpv_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.solarpv_annual_kwh * data.fuels['generation'].primaryenergyfactor};
-        data.total_income += data.generation.solarpv_annual_kwh * data.generation.solarpv_FIT;
     }
 
     data.generation.total_generation = 0;

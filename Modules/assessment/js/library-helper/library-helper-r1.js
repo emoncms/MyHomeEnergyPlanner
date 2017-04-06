@@ -46,7 +46,8 @@ libraryHelper.prototype.init = function () {
         'pipework_insulation': "Pipework insulation measures",
         'hot_water_control_type': "Storage control types",
         space_heating_control_type: 'Space heating control types',
-        'clothes_drying_facilities': "Clothes drying facilities"
+        'clothes_drying_facilities': "Clothes drying facilities",
+        'generation_measures': 'Generation measures'
     };
 };
 libraryHelper.prototype.add_events = function () {
@@ -1066,6 +1067,11 @@ libraryHelper.prototype.clothes_drying_facilities_library_to_html = function (or
     out = out.replace(/add-system/g, 'add-clothes-drying-facilities');
     return out;
 };
+libraryHelper.prototype.generation_measures_library_to_html = function (origin, library_id) {
+    var out = this.default_library_to_html(origin, library_id);
+    out = out.replace(/add-system/g, 'add-generation');
+    return out;
+};
 
 
 /**********************************************
@@ -1168,7 +1174,7 @@ libraryHelper.prototype.elements_item_to_html = function (item, tag) {
     return out;
 };
 libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
-        if (item == undefined)
+    if (item == undefined)
         item = {tag: '', name: 'New name', EWI: false, uvalue: 1.0, kvalue: 1.0, tags: ['Wall'], location: '',
             source: "", description: "", performance: "", benefits: "", cost: "",
             who_by: "", disruption: "", associated_work: "", key_risks: "", notes: "",
@@ -1186,7 +1192,7 @@ libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
         item.tags = ['Wall'];
         type = 'Wall';
     }
-    
+
     var out = this.elements_item_to_html(item, tag);
 
     out += '<table><tr><td colspan="2">Fields to be taken into account when using the element as a Measure</td></tr>';
@@ -1833,6 +1839,29 @@ libraryHelper.prototype.clothes_drying_facilities_item_to_html = function (item,
     out += '</tbody></table>';
     return out;
 };
+libraryHelper.prototype.generation_measures_item_to_html = function (item, tag) {
+    if (item == undefined)
+        item = {tag: '', name: "--", kWp: 0, source: '--', description: '--', performance: '--', benefits: '--', cost: 0, who_by: '--', disruption: '--', associated_work: '--', key_risks: '--', notes: '--', maintenance: '--'};
+    else if (tag != undefined)
+        item.tag = tag;
+    var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
+    out += '<tr><td>Tag</td><td><input type="text" class="item-tag" required value="' + item.tag + '"/></td></tr>';
+    out += '<tr><td>Name</td><td><input type="text" class="item-name" required value="' + item.name + '"/></td></tr>';
+    out += '<tr><td>Description</td><td><textarea rows="4" cols="50" class="item-description">' + item.description + '</textarea></td></tr>';
+    out += '<tr><td>kWp</td><td><input type="text" class="item-kWp" value="' + item.kWp + '" /></td></tr>';
+    out += '<tr><td>Performance</td><td><input type="text" class="item-performance" value="' + item.performance + '" /></td></tr>';
+    out += '<tr><td>Benefits</td><td><input type="text" class="item-benefits" value="' + item.benefits + '" /></td></tr>';
+    out += '<tr><td>Cost</td><td><input type="text" class="item-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
+    out += '<tr><td>Who by</td><td><input type="text" class="item-who_by" value="' + item.who_by + '" /></td></tr>';
+    out += '<tr><td>Disruption</td><td><input type="text" class="item-disruption" value="' + item.disruption + '" /></td></tr>';
+    out += '<tr><td>Associated work</td><td><input type="text" class="item-associated_work" value="' + item.associated_work + '" /></td></tr>';
+    out += '<tr><td>Key risks</td><td><input type="text" class="item-key_risks" value="' + item.key_risks + '" /></td></tr>';
+    out += '<tr><td>Notes</td><td><textarea rows="4" cols="50" class="item-notes">' + item.notes + '</textarea></td></tr>';
+    out += '<tr><td>Maintenance</td><td><input type="text" class="item-maintenance" value="' + item.maintenance + '" /></td></tr>';
+    out += '</tbody></table>';
+    return out;
+};
 
 /*****************************************************************
  * Get item to save in library (when editing or creating new item)
@@ -2321,6 +2350,26 @@ libraryHelper.prototype.clothes_drying_facilities_get_item_to_save = function ()
     };
     return item;
 };
+libraryHelper.prototype.generation_measures_get_item_to_save = function () {
+    var item = {};
+    var tag = $(".item-tag").val();
+    item[tag] = {
+        name: $(".item-name").val(),
+        description: $(".item-description").val(),
+        kWp: $(".item-kWp").val(),
+        performance: $(".item-performance").val(),
+        benefits: $(".item-benefits").val(),
+        cost: $(".item-cost").val(),
+        cost_units: $(".item-cost-units").val(),
+        who_by: $(".item-who_by").val(),
+        disruption: $(".item-disruption").val(),
+        associated_work: $(".item-associated_work").val(),
+        key_risks: $(".item-key_risks").val(),
+        notes: $(".item-notes").val(),
+        maintenance: $(".item-maintenance").val()
+    };
+    return item;
+};
 
 
 /***************************************************
@@ -2516,7 +2565,7 @@ libraryHelper.prototype.orderObjectsByKeys = function (obj, expected) {
 };
 
 libraryHelper.prototype.get_cost_units_select = function (item) {
-    var units = ['sqm', 'unit', 'ln m'];
+    var units = ['sqm', 'unit', 'ln m', 'kWp'];
     var out = '<select class="item-cost-units">';
 
     for (index in units) {
