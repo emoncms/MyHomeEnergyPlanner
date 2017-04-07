@@ -62,13 +62,14 @@ global $reports;
                 <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
                 <br><br>
 
-                <div class="scenario-nav-heading">Project</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/carboncoopreport">Carbon Coop Report</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
+                <div class="scenario-nav-heading">Project input</div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
+                <div class="scenario-nav-heading">Other</div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/carboncoopreport">Carbon Coop Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/fuelsmanager">Fuels manager</a></div>
             </div>
