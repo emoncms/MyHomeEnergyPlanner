@@ -488,5 +488,16 @@ $d = $path . "Modules/assessment/";
                 $("#myview").show();
             }});
     });
+    
+    
+// -------------------------------------------------------
+// Other
+// -------------------------------------------------------
+  $('#modal-assessment-create').on('keypress', function (e) {
+        console.log('aaaaaaaaaaaaa')
+        if (e.which == 13) {
+            $('#assessment-create').click();
+        }
+    });
 
 </script>
