@@ -495,7 +495,7 @@ global $reports;
             var name = "";
             if (project[s].scenario_name != undefined)
                 name = project[s].scenario_name;
-            tmp = tmp.replace("scenarioname", " " + name.charAt(0).toUpperCase() + name.slice(1));
+            tmp = tmp.replace("scenarioname", " " + String(name).charAt(0).toUpperCase() + String(name).slice(1));
             $("#scenario-list").append(tmp);
         }
         for (s in project) {
