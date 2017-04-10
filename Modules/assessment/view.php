@@ -583,13 +583,6 @@ global $reports;
                 });
         project = JSON.parse(JSON.stringify(temp_project));
 
-        // dont make a copy of the following properties
-        project[s].household = {};
-        project[s].imagegallery = [];
-        project[s].currentenergy = {};
-        project[s].fabric.measures = {};
-        project[s].measures = {};
-
         // Ensure new scenario is unlocked
         project[s].locked = false;
 
