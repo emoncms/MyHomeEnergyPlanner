@@ -1658,21 +1658,23 @@ calc.generation = function (data) {
         };
     if (data.generation.systems == undefined)
         data.generation.systems = {};
+    if (data.generation.use_PV_calculator == undefined)
+        data.generation.use_PV_calculator = false;
 
     if (data.generation.use_PV_calculator != false) {
         var kWp = data.generation.solarpv_kwp_installed;
-        
+
         // 0:North, 1:NE/NW, 2:East/West, 3:SE/SW, 4:South
         var orient = data.generation.solarpv_orientation;
         var p = data.generation.solarpv_inclination;
         var overshading_factor = data.generation.solarpv_overshading;
-        
+
         // annual_solar_radiation
         // U3.3 in Appendix U for the applicable climate and orientation and tilt of the PV
         // Z PV is the overshading factor from Table H2.
         // p: tilt
         var annual_solar_radiation = annual_solar_rad(data.region, orient, p);
-        
+
         data.generation.solar_annual_kwh = 0.8 * kWp * annual_solar_radiation * overshading_factor;
     }
     // ----------
