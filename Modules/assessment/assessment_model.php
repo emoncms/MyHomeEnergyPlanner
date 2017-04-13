@@ -759,15 +759,28 @@ class Assessment {
         return $result;
     }
 
-    public
-            function deleteimage($userid, $projectid, $filename) {
+    public function deleteimage($userid, $projectid, $filename) {
         // Check if user has access to this assesment      
         if (!$this->has_access($userid, $projectid))
             return "User has no access to the assesment";
-        $result = array();
+        $result = 0;
         error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
-        $message = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
-        $message = $message === true ? "Deleted" : "File couldn't be deleted";
+        if (!file_exists(__DIR__ . "/images/" . $projectid . "/" . $filename)) { // if for a reason the file doesn't exist in the server but it does in the data object we allow to delete it
+            $result = 1;
+        } else {
+            $result = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
+        }
+        switch ($result){
+            case 1:
+                $message= 'File could not be found in the server. Image gallery list updated';
+                break;
+            case false:
+                $message = "File couldn't be deleted";
+                break;
+            case true:
+                $message = "File deleted";
+                break;
+        }
         $to_return = array();
         $to_return[$filename] = $message;
         return $to_return;

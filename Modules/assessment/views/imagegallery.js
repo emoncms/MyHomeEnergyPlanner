@@ -1,3 +1,5 @@
+console.log('Debug imagegallery.js');
+
 function imagegallery_initUI() {
     if (data.imagegallery == undefined) // Normally this is done in model-rX.js. The model is intended for calculations so i prefer to initialize data.imagegallery here
         data.imagegallery = [];
@@ -104,7 +106,7 @@ $('#modal-delete-image').on('click', '#delete-file-confirm', function () {
 function delete_image_callback(result) {
     for (image_name in result) {
         $('#delete_result').append("<p>" + image_name + " - " + result[image_name] + "</p>"); // Display the result message of the deletion
-        if (result[image_name] === "Deleted") {
+        if (result[image_name] === "File deleted" || result[image_name] === "File could not be found in the server. Image gallery list updated") {
             // Find the image in the data object and remove it
             for (z in data.imagegallery) {
                 if (image_name === data.imagegallery[z]) {
