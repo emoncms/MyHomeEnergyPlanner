@@ -6131,3 +6131,22 @@ var standard_library = {
     }
 
 };
+//The items in the extendeed library are not added to the list in the library helper (and not displayed in the manager, etc)
+var extended_library = {
+    lighting_measures: {
+        L1: {
+            name: "Low energy bulbs",
+            description: "Coming soon",
+            performance: 'Coming soon',
+            benefits: "Coming soon",
+            cost_units: 'unit',
+            cost: 4,
+            who_by: "Coming soon",
+            disruption: "LOW",
+            associated_work: "Coming soon",
+            key_risks: "Coming soon",
+            notes: "Coming soon",
+            maintenance: "Coming soon"
+        }
+    }
+};

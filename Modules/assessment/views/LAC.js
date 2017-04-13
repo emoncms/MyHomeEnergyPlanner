@@ -54,7 +54,7 @@ function LAC_initUI() {
 }
 function LAC_UpdateUI() {
     LAC_initUI();
-    
+
     for (z in data.applianceCarbonCoop.list) {
         data.applianceCarbonCoop.list[z].energy_demand = 1.0 * data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
     }
@@ -115,6 +115,9 @@ $('#openbem').on('click', '.add_LAC_fuel', function () { // Fix index
     // Update
     LAC_initUI();
     update();
+});
+$('#openbem').on('click', '#apply-measure-lighting', function () {
+    apply_LAC_measure('lighting');
 });
 
 function show_LAC_divs(type_of_calc) {
@@ -183,4 +186,28 @@ function add_applianceCarbonCoop(z) {
     out += '<td><i index="' + z + '" class="delete-appliance icon-trash" style="cursor:pointer"></i></td>';
     out += '</tr>';
     $(table_selector).append(out);
+}
+function apply_LAC_measure(type) {
+    if (data.measures.LAC == undefined) {
+        data.measures.LAC = {};
+    }
+
+    switch (type) {
+        case 'lighting':
+            if (data.measures.LAC.lighting == undefined) {
+                data.measures.LAC.lighting = {original_LLE: data.LAC.LLE, measure: {}};
+            }
+
+            var n_bulbs_to_change = data.LAC.L - data.LAC.LLE;
+            data.measures.LAC.lighting.measure = extended_library.lighting_measures.L1;
+            data.measures.LAC.lighting.measure.tag = 'L1';
+            data.measures.LAC.lighting.measure.quantity = n_bulbs_to_change;
+            data.measures.LAC.lighting.measure.cost_total = n_bulbs_to_change * data.measures.LAC.lighting.measure.cost;
+
+            data.LAC.LLE = data.LAC.L;
+
+            break;
+    }
+
+    update();
 }

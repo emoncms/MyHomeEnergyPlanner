@@ -1186,6 +1186,10 @@ function carboncoopreport_UpdateUI() {
             if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
                 measures_total_cost += project[scenario].measures.PV_generation.measure.cost_total;
             }
+            if (project[scenario].measures.LAC != undefined) {
+                if (project[scenario].measures.LAC.lighting != undefined)
+                    measures_total_cost += project[scenario].measures.LAC.lighting.measure.cost_total;
+            }
             $('#tota-cost-' + scenario).html('£' + measures_total_cost.toFixed(2));
         }
     }
@@ -1253,7 +1257,11 @@ function carboncoopreport_UpdateUI() {
                     addMeasureToSummaryTable(project[scenario].measures.space_heating.heating_control, tableSelector, summaryTableSelector, listSelector);
             }
             if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
-                    addMeasureToSummaryTable(project[scenario].measures.PV_generation, tableSelector, summaryTableSelector, listSelector);
+                addMeasureToSummaryTable(project[scenario].measures.PV_generation, tableSelector, summaryTableSelector, listSelector);
+            }
+             if (project[scenario].measures.LAC != undefined) {
+                if (project[scenario].measures.LAC.lighting != undefined)
+                    addMeasureToSummaryTable(project[scenario].measures.LAC.lighting, tableSelector, summaryTableSelector, listSelector);
             }
         }
     }
