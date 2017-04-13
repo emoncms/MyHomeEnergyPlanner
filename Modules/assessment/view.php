@@ -54,7 +54,7 @@ global $reports;
 <div id="openbem">
     <div id="left-pane">
         <div class="side-block-2">
-            <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
+            <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;width"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
             <div style="padding:10px">
 
                 <p style="font-size:14px">Description: <span id="project-description"></span></p>
@@ -79,7 +79,7 @@ global $reports;
 
             <div class="side-block-2 scenario-block" scenario="template" style="cursor:pointer">
 
-                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>title<span style="float:right">scenarioname (<span class="template_sap_rating"></span>)</span></b></div>
+                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;height:40px"><b>title<span style="float:right">scenarioname<br /><span class="template_scenario_emissions"></span> kgCO<sub>2</sub>/m<sup>2</sup></span></b></div>
 
                 <div class="menu-content">
                     <div style="padding:10px">
@@ -268,7 +268,7 @@ global $reports;
     for (s in project) {
         // QUESTION: do you really want to do calc.run twice here?
         project[s] = calc.run(calc.run(project[s]));
-        $("." + s + "_sap_rating").html(project[s].SAP.rating.toFixed(0));
+        $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
     }
 
     // Side Menus
@@ -401,7 +401,7 @@ global $reports;
         UpdateUI(data);
         draw_openbem_graphics();
 
-        $("." + scenario + "_sap_rating").html(project[scenario].SAP.rating.toFixed(0));
+        $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
 
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
@@ -500,7 +500,7 @@ global $reports;
         }
         for (s in project) {
             //project[s] = calc.run(calc.run(project[s]));
-            $("." + s + "_sap_rating").html(project[s].SAP.rating.toFixed(0));
+            $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
         }
         $('div [scenario="' + scenario + '"]').click();
     }
