@@ -389,6 +389,7 @@ global $reports;
     function update(undo_redo = false)
     {
         console.log("updating");
+        project[scenario].household = project.master.household;
         project[scenario] = calc.run(project[scenario]);
         data = project[scenario];
         if (undo_redo === false) {
