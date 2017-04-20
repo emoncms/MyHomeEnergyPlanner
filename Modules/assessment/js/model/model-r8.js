@@ -576,8 +576,8 @@ calc.temperature = function (data)
 
     // Calculate hours of heating off from household questionnaire
     data.temperature.hours_off = {weekday: [], weekend: []};
-    data.temperature.hours_off.weekday = get_hours_off_weekday();
-    data.temperature.hours_off.weekend = get_hours_off_weekend();
+    data.temperature.hours_off.weekday = get_hours_off_weekday(data);
+    data.temperature.hours_off.weekend = get_hours_off_weekend(data);
 
     // Get Main heating systems
     var mainHSs = {}; // It will take the form of: mainHSs = {mainHS1: systemObject, mainHS2: systemObject}
@@ -2095,7 +2095,7 @@ function calc_MeanInternalTemperature(Th, hours_off, TMP, HLP, H, Te, G, R) {
     return Ti_area;
 }
 
-get_hours_off_weekday = function () {
+get_hours_off_weekday = function (data) {
     var hours_off = [];
     if (data.household['3a_heatinghours_weekday_off3_hours'] != undefined
             && data.household['3a_heatinghours_weekday_off3_mins'] != undefined
@@ -2159,7 +2159,7 @@ get_hours_off_weekday = function () {
         hours_off.push(0);
     return hours_off;
 };
-get_hours_off_weekend = function () {
+get_hours_off_weekend = function (data) {
     var hours_off = [];
     if (data.household['3a_heatinghours_weekend_off3_hours'] != undefined
             && data.household['3a_heatinghours_weekend_off3_mins'] != undefined
