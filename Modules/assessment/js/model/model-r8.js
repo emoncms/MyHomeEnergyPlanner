@@ -1732,7 +1732,7 @@ calc.currentenergy = function (data) {
         data.currentenergy.use_by_fuel = {};
     }
     if (data.currentenergy.generation == undefined)
-        data.currentenergy.generation = {annual_generation: 0, annual_CO2: 0, primaryenergy: 0, annual_savings: 0, fraction_used_onsite: 0.25};
+        data.currentenergy.generation = {annual_generation: 0, annual_CO2: 0, primaryenergy: 0, annual_savings: 0, fraction_used_onsite: 0.25, annual_FIT_income: 0};
 
 
 
@@ -1762,13 +1762,16 @@ calc.currentenergy = function (data) {
         data.currentenergy.generation.annual_CO2 = data.fuels.generation.co2factor * data.currentenergy.generation.annual_generation;
         data.currentenergy.generation.annual_savings = data.fuels.generation.fuelcost / 100 * data.currentenergy.generation.fraction_used_onsite * data.currentenergy.generation.annual_generation;
 
-
+        // total_co2 -= data.currentenergy.generation.annual_CO2; ---   Onsite generation not taken into account for household emissions as it is already accounted in CO2 fator for the grid
+        // primaryenergy_annual_kwh -= data.currentenergy.generation.primaryenergy; --- Same than total_co2
+        total_cost -= data.currentenergy.generation.annual_savings;
     }
 
 
     data.currentenergy.primaryenergy_annual_kwh = primaryenergy_annual_kwh;
     data.currentenergy.total_co2 = total_co2;
     data.currentenergy.total_cost = total_cost;
+    data.currentenergy.annual_net_cost = total_cost - data.currentenergy.generation.annual_FIT_income;
     data.currentenergy.primaryenergy_annual_kwhm2 = primaryenergy_annual_kwh / data.TFA;
     data.currentenergy.total_co2m2 = total_co2 / data.TFA;
     data.currentenergy.total_costm2 = total_cost / data.TFA;

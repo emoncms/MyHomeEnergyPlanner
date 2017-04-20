@@ -7,9 +7,11 @@
         <td>
             <p><b>Totals</b></p><br>
             <table class="table">
-                <tr><td>Total primary energy consumption:</td><td><span key="data.currentenergy.primaryenergy_annual_kwh" dp=0></span> kWh</td></tr>
-                <tr><td>Total CO<sub>2</sub> emissions:</td><td><span key="data.currentenergy.total_co2" dp=0></span> kg</td></tr>
-                <tr><td>Total energy cost:</td><td>£<span key="data.currentenergy.total_cost" dp=0></span></td></tr>
+                <tr><td>Total primary energy consumption <i class="icon-question-sign" title="Savings due to generation not taken into account as they are already accounted for in the CO2 factor for the grid">:</td><td><span key="data.currentenergy.primaryenergy_annual_kwh" dp=0></span> kWh</td></tr>
+                <tr><td>Total CO<sub>2</sub> emissions <i class="icon-question-sign" title="Savings due to generation not taken into account as they are already accounted for in the Primary Energy factor for the grid">:</td><td><span key="data.currentenergy.total_co2" dp=0></span> kg</td></tr>
+                <tr><td>Total energy cost <i class="icon-question-sign" title="Taking into account generation used on-site">:</td><td>£<span key="data.currentenergy.total_cost" dp=0></span></td></tr>
+                <tr><td>Net energy cost (includes FIT income):</td><td>£<span key="data.currentenergy.annual_net_cost" dp=0></span></td></tr>
+
 
                 <tr><td>Total primary energy consumption per m<sup>2</sup> floor area:</td><td><span key="data.currentenergy.primaryenergy_annual_kwhm2" dp=0></span> kWh/m<sup>2</sup></td></tr>
                 <tr><td>Total co2 emissions per m<sup>2</sup> floor area:</td><td><span key="data.currentenergy.total_co2m2" dp=0></span> kgCO2/m<sup>2</sup>/year</td></tr>
@@ -31,19 +33,19 @@
     <tr>
         <th style="width:100px"></th>
         <th>Annual use<br />kWh <i class="icon-question-sign" title="Conversion factors:
-        - Wood Logs*: 1m3 = 1380 kWh
-        - Wood Pellets: 1m3 = 4230 kWh 
-        - Mains gas**: 1m3 = 11.18 kWh
-        - Mains gas**: 1ft3 = 31.7 kWh
-        - Oil: 1L = 10.35 kWh
-        - Bottled gas (LPG): 1L = 7.11kWh
-        - Bottled gas (LPG): 1kg = 13.89kWh
-        - Coal: 1kg = 8.34kWh
-        - Smokeless fuel: 1kg = 8.9kWh
-        - Anthracite: 1kg = 9.66kWh
-                                   
-* Assumes stacked measure, with gaps
-** Note, calorific value of mains gas does vary over time and by region - you can check against current figures, or use this as an approximation" ></i></th>
+                                   - Wood Logs*: 1m3 = 1380 kWh
+                                   - Wood Pellets: 1m3 = 4230 kWh 
+                                   - Mains gas**: 1m3 = 11.18 kWh
+                                   - Mains gas**: 1ft3 = 31.7 kWh
+                                   - Oil: 1L = 10.35 kWh
+                                   - Bottled gas (LPG): 1L = 7.11kWh
+                                   - Bottled gas (LPG): 1kg = 13.89kWh
+                                   - Coal: 1kg = 8.34kWh
+                                   - Smokeless fuel: 1kg = 8.9kWh
+                                   - Anthracite: 1kg = 9.66kWh
+
+                                   * Assumes stacked measure, with gaps
+                                   ** Note, calorific value of mains gas does vary over time and by region - you can check against current figures, or use this as an approximation" ></i></th>
         <th>CO<sub>2</sub> factor<br />kgCO<sub>2</sub>/kWh</th>
         <th>Annual kgCO<sub>2</sub></th>
         <th>Primary Energy Factor</th>
@@ -75,6 +77,7 @@
         <th>Unit cost<br /> p/kWh</th>
         <th>Fraction used on-site</th>
         <th>Annual savings <i class="icon-question-sign" title="Due to energy used on-site" ></i></th>
+        <th>FIT annual income</th>
 
     <tbody>
         <tr>
@@ -86,6 +89,7 @@
             <td><span key="data.fuels.generation.fuelcost" dp="2" /></td>
             <td><input style="width: 70px" max="1" step="0.01" type="number" key="data.currentenergy.generation.fraction_used_onsite" dp="2" value="0.25" /></td>
             <td>£<span key="data.currentenergy.generation.annual_savings" dp="2" /></td>
+            <td>£ <input type="number" step="1" min="0" key="data.currentenergy.generation.annual_FIT_income" style="width: 70px"></input></td>
         </tr>
     </tbody>
 
