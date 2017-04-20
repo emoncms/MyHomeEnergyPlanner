@@ -1642,11 +1642,14 @@ calc.generation = function (data) {
             solar_annual_kwh: 0,
             solar_fraction_used_onsite: 0.5,
             solar_FIT: 0,
+            solar_export_FIT: 0,
             wind_annual_kwh: 0,
             wind_fraction_used_onsite: 0.5,
             wind_FIT: 0,
+            wind_export_FIT: 0,
             hydro_annual_kwh: 0, hydro_fraction_used_onsite: 0.5,
             hydro_FIT: 0,
+            hydro_export_FIT: 0,
             solarpv_orientation: 4,
             solarpv_kwp_installed: 0,
             solarpv_inclination: 35,
@@ -1684,19 +1687,26 @@ calc.generation = function (data) {
     if (data.generation.solar_annual_kwh > 0)
     {
         data.generation.systems.solarpv = {name: "Solar PV", quantity: data.generation.solar_annual_kwh, fraction_used_onsite: data.generation.solar_fraction_used_onsite, CO2: data.generation.solar_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.solar_annual_kwh * data.fuels['generation'].primaryenergyfactor};
-        data.total_income += data.generation.solar_annual_kwh * data.generation.solar_FIT;
+        data.total_income += data.generation.solar_annual_kwh * data.generation.solar_FIT; //income due to generation
+        if (data.generation.solar_export_FIT != undefined)
+            data.total_income += 0.5 * data.generation.solar_annual_kwh * data.generation.solar_export_FIT; //income due to generation
+
     }
 
     if (data.generation.wind_annual_kwh > 0)
     {
         data.generation.systems.wind = {name: "Wind", quantity: data.generation.wind_annual_kwh, fraction_used_onsite: data.generation.wind_fraction_used_onsite, CO2: data.generation.wind_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.wind_annual_kwh * data.fuels['generation'].primaryenergyfactor};
-        data.total_income += data.generation.wind_annual_kwh * data.generation.wind_FIT;
+        data.total_income += data.generation.wind_annual_kwh * data.generation.wind_FIT; //income due to generation
+        if (data.generation.wind_export_FIT != undefined)
+            data.total_income += 0.5 * data.generation.wind_annual_kwh * data.generation.wind_export_FIT; //income due to generation
     }
 
     if (data.generation.hydro_annual_kwh > 0)
     {
         data.generation.systems.hydro = {name: "Hydro", quantity: data.generation.hydro_annual_kwh, fraction_used_onsite: data.generation.hydro_fraction_used_onsite, CO2: data.generation.hydro_annual_kwh * data.fuels['generation'].co2factor, primaryenergy: data.generation.hydro_annual_kwh * data.fuels['generation'].primaryenergyfactor};
-        data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT;
+        data.total_income += data.generation.hydro_annual_kwh * data.generation.hydro_FIT; //income due to generation
+        if (data.generation.hydro_export_FIT != undefined)
+            data.total_income += 0.5 * data.generation.hydro_annual_kwh * data.generation.hydro_export_FIT; //income due to generation
     }
 
     data.generation.total_generation = 0;

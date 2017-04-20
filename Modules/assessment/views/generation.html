@@ -13,18 +13,20 @@
         <th style="width: 135px">Annual Generation</th>
         <th style="width: 115px"></th>
         <th style="width: 155px">Fraction used on-site</th>
-        <th style="width: 155px">Feed in tariff (£/kWh)</th>
+        <th style="width: 155px">Feed in tariff<br />Generation (£/kWh)</th>
+        <th style="width: 155px">Feed in tariff<br />Export (£/kWh)</th>
         <th></th>
     </tr>
     <tr>
         <td style="text-align:left">Solar PV</td>
         <td>
             <input type="number" step="1" min="0" key="data.generation.solar_annual_kwh" dp="0" style="width:60px" />
-           <span id="solar_annual_kwh" style="display:none" />
+            <span id="solar_annual_kwh" style="display:none" />
         </td>
         <td style="text-align:left;width:85px"><input type="checkbox" key="data.generation.use_PV_calculator" /> Use PV calculator</td>
         <td><input type="number" min="0" max="1" step="0.01" dp="2"" value="0" key="data.generation.solar_fraction_used_onsite" style="width:60px" /></td>
         <td><input type="number" min="0" value="0" key="data.generation.solar_FIT" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.solar_export_FIT" style="width:60px" /></td>
         <td><button class="if-not-master apply-generation-measure-from-lib" style="max-width:109px">Apply measure</button></td>
     </tr>
     <tr>
@@ -33,6 +35,7 @@
         <td></td>
         <td><input type="number" min="0" max="1" step="0.01" dp="2" value="0" key="data.generation.wind_fraction_used_onsite" style="width:60px" /></td>
         <td><input type="number" min="0" value="0" key="data.generation.wind_FIT" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.wind_export_FIT" style="width:60px" /></td>
         <td></td>
     </tr>
     <tr>
@@ -41,6 +44,7 @@
         <td></td>
         <td><input type="number" min="0" max="1" step="0.01" dp="2" value="0" key="data.generation.hydro_fraction_used_onsite" style="width:60px" /></td>
         <td><input type="number" min="0" value="0" key="data.generation.hydro_FIT" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.hydro_export_FIT" style="width:60px" /></td>
         <td></td>
     </tr>
 </table>
@@ -86,27 +90,27 @@
             </td>
         </tr>
     </table>
-        
+
 </div>
 
-  <div id="apply-measure-generation-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Apply measure</h3>
-            <p id="myModalIntroText">Choose below</p>
-        </div>
-        <div style="padding: 15px" id='apply-measure-generation-library-item-selects'>
-            <select id="apply-measure-generation-library-select"></select>
-            <select id="apply-measure-generation-items-select"></select>            
-        </div>
-        <div class="modal-body">
-        </div>
-        <div class="modal-footer">
-            <p id="apply-measure-generation-message" style="font-weight: bold"></p>
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-            <button id="apply-measure-generation-ok" class="btn btn-primary">Apply measure</button>
-            <button id="apply-measure-generation-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
-        </div>
+<div id="apply-measure-generation-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Apply measure</h3>
+        <p id="myModalIntroText">Choose below</p>
     </div>
+    <div style="padding: 15px" id='apply-measure-generation-library-item-selects'>
+        <select id="apply-measure-generation-library-select"></select>
+        <select id="apply-measure-generation-items-select"></select>            
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+        <p id="apply-measure-generation-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="apply-measure-generation-ok" class="btn btn-primary">Apply measure</button>
+        <button id="apply-measure-generation-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+    </div>
+</div>
 
 
