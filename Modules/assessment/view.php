@@ -574,7 +574,9 @@ global $reports;
         }
         var s = "scenario" + n;
         project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
-
+        project[s].measures = {};
+        project[s].fabric.measures = {};
+       
         //sort project alphabetically
         temp_project = {};
         Object.keys(project)
