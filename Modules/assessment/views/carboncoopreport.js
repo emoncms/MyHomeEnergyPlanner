@@ -1482,7 +1482,20 @@ function carboncoopreport_UpdateUI() {
     if (org_report === 'CAfS') {
         $('h1.doc-title-org').html('Cumbria Action for Sustainability')
         $('.org-name').html('CAfS');
-
+        
+        // CSS
+        $('#print-css').append("@media print{\n\
+                .carbon-report-wrapper .doc-title-wrapper{border-color: #00ffff}\n\
+                .carbon-report-wrapper .top-border-title{border-color: #00ffff}\n\
+                .carbon-report-wrapper .section-title{border-color: #00ffff}\n\
+                .carbon-report-wrapper #performace-summary-key{border-color: #00ffff}\n\
+                .carbon-report-wrapper .sap-table{border-color: #00ffff}\n\
+                .carbon-report-wrapper .right-align-item-list li{border-color: #00ffff}\n\
+                .carbon-report-wrapper th{border-color: #00ffff}\n\
+                .carbon-report-wrapper td{border-color: #00ffff}\n\
+                .carbon-report-wrapper .measures-list>table{border-color: #00ffff}\n\
+            }");
+        
         // Logos in cover page
         $('#extra_logo').attr("src", path + "Modules/assessment/img-assets/CAfS_Logo_CMYK.jpg").attr('alt', 'Cumbria Action for Sustainability logo').css('width', '150px');
         $('#cover').append('<img id="bgltr_logo" class="printable-inline" style="margin-left: 150px; width: 100px;" src="' + path + 'Modules/assessment/img-assets/hi_big_e_min_blue.jpg" />')
