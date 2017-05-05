@@ -1,10 +1,30 @@
 <style>
+    #logo-in-report{
+        display:none;
+        width: 300px;
+        margin-top:200px;
+    }
+    #extra_logo{
+        display:none;
+    }
+    .carbon-report-wrapper .performance-summary-wrapper, .carbon-report-wrapper  #bar-chart-container, .carbon-report-wrapper  .bar-chart-container, .carbon-report-wrapper #heat-balance{
+        padding:10px 0 !important;
+    }
+    .doc-title-org{
+        color:rgb(228, 27, 58);
+    }
+    .printable, .printable-inline{
+        display:none;
+    }
+</style>
+
+<style id="print-css">
     @media print{
         #left-pane, #footer,#topgraphic,div.navbar{
             display:none
         }
         @page{
-            margin:1.5cm
+            margin: 1.5cm
         }
         h1,h2,h3{
             margin-top:0.5cm;
@@ -58,7 +78,24 @@
         thead {
             display: table-row-group;
         }
+        #logo-in-report, #extra_logo{
+            display:inline-block;
+        }
+        .carbon-report-wrapper .section-title{
+            margin-top: 1.25em;
+            margin-bottom: 1em;
+        }
+        .carbon-report-wrapper .performace-summary-target-bar{
+            margin-bottom:10px;
+        }
+        .printable-inline{
+            display:inline-block;
+        }
+        .printable{
+            display:block;
+        }
     }
+
     @media print and (color){
         * {
             -webkit-print-color-adjust: exact;
@@ -68,10 +105,11 @@
 </style>
 <div class="carbon-report-wrapper">
     <div class="page-wrapper">
-        <section>
-            <div class="doc-title-wrapper">
-                <h1 class="doc-title">Carbon Co-op</h1>
-                <span class="doc-sub-title">My Home Energy Planner</span>
+        <section id="cover">
+            <div class="doc-title-wrapper doc-title">                
+                <img id="extra_logo" style="float:right;" src="">
+                <h1 class="doc-title-org">Carbon Co-op</h1>
+                <span class="doc-sub-title MHEP">My Home Energy Planner</span>
                 <!--<p>
                        <a href="" class='js-printer-friendly-link'>View printer friendly version</a>
                </p>-->
@@ -100,9 +138,9 @@
                     <div class="js-home-image-wrapper">
 
                     </div>
-                </div>
+                </div>                
             </div>
-
+            <img id="logo-in-report" src="" alt="" />
 
         </section>
 
@@ -121,34 +159,36 @@
                 <h2>Welcome to My Home Energy Assessment</h2>
             </div>
             <div class="two-col-text">
-                <p>This report is unique to your home. It is based on what you told us, and the survey we carried out, fed through My Home Energy Planner (http://myhome.carbon.coop). This is an online tool where the data about your home is stored and processed. You can speak to Carbon Co-op about accessing this tool and it may be useful for you to log and track improvements you make over time or to test out alternatives.</p>
-                <p>We show the current performance of your home and what may be possible to improve its energy performance, comfort and carbon emissions. We show you where most energy is being lost, which improvements would have the biggest effect, and highlight what to do first. </p>
-                <p>Our advice is specific and relevant to your home. We have taken your household, lifestyle and priorities into consideration. </p>
-                <p>You told us that the following things are most important to you in considering energy efficiency retrofit options for your home: </p>
+                <p>This report is unique is based on what you told us, and the survey we carried out of your home, fed through My Home Energy Planner by one of our assessors (http://myhome.carbon.coop). </p>
+                <p>Our advice is specific to your home. We have taken your household, lifestyle and priorities into consideration. We create a detailed model of energy use in your home, based on an adapted version of the full Standard Assessment Procedure. This considers all energy uses in your home, including heating, hot water, lighting, cooking and appliances like washing machines and televisions.</p>
+                <p>We consider various attributes of your home as it stands now including: areas of greatest heat loss and heat gain; space heating demand; total energy demand and the fuels used; primary energy use; carbon dioxide emissions; approximate energy costs; comfort and health. </p>
+                <p>We then use the energy model to develop three scenarios for making improvements to your home, based on its physical attributes and what you told us about your plans and priorities. We take a whole house approach, considering how improvements work together or don't, and which measures need to be done together. For example, we always consider the need for proper planned ventilation alongside insulation and air-tightness works.</p>
+                <p>We test how these scenarios affect the attributes described above, and set out a pathway to significant energy and carbon emissions reductions. </p>
+                <p>The impact of each of the scenarios suggested is set out in Section 1.0 of this report - and compared with your home as it stands now as well as with UK averages and Carbon Co-op targets. The work required to achieve them is set out in Section 2.0, and described in further detail in Appendix A. </p>
+                <p>Many measures suggested will require further detailed design work or specialist advice before being carried out. The intention of this report is to provide you with an overview of what might be involved, which measures it might be sensible to do together, and their relative likely impact. It is the first step on your retrofit journey. </p>
+                <p>You told us that the following things are most important to you in considering energy efficiency retrofit options for your home, and we have considered these in developing the scenarios set out in this report: </p>
             </div>
+
             <div class="highlight-box pink-highlight">
                 <h4 class="top-border-title">Figure 1: Retrofit Priorities</h4>
-                <ul id='retrofit-priorities' style="margin-left:50px">
+                <ul id='retrofit-priorities' style="margin-left:50px"></ul>
+            </div>
 
-                </ul>
-            </div>
-            <p>Your report is made up of four sections: </p>
-            <h3 class="top-border-title title-margin-top title-margin-bottom">Summary of Section 1.0: How does your home perform?</h3>
-            <div class="two-col-text">
-                <p>In this section we measure the current performance of your home and model this against the UK average. </p>
-                <p>We have taken a rigorous approach in preparing this report, using a detailed model of energy use, the full Standard Assessment Procedure (SAP) rather than the reduced data version (rdSAP) that is used for Energy Performance Certificates (EPCs). </p>
-                <p>We consider all the energy uses in your home, including heating, lighting, hot water, cooking and using appliances. </p>
-                <p>We employ various measures comprising: heat loss and heat gain; space heating demand; energy demand; primary energy use; carbon dioxide emissions; energy costs; SAP rating; comfort and health.</p>
-                <p>We also show how your home could perform if you adopt the proposed measures for retrofit that we explore further in Section 2.0. </p>
-                <p>Your headline results are: </p>
-            </div>
+            <p class="break-before">Your report is made up of three sections. </p>
+            <p>In <b>Section</b> 1.0 we measure the current performance of your home and model this against the UK average, the potential impact of the scenarios suggested in this report and Carbon Co-op's targets for energy and carbon emissions reductions. </p>
+            <p>The scenarios we developed in this report are:</p>
+            <ul class="right-align-item-list">
+                <li style="margin-top:0"><p style="margin:6px">Scenario 1: <span class='output-scenario1-name'></span></p></li>
+                <li style="margin-top:0"><p style="margin:6px">Scenario 2: <span class='output-scenario2-name'></span></p></li>
+                <li style="margin-top:0"><p style="margin:6px">Scenario 3: <span class='output-scenario3-name'></span></p></li>
+            </ul>
+            <p>Your headline results are: </p>
             <div class="highlight-box pink-highlight">
                 <h4 class="top-border-title">Figure 2. Performance Summary</h4>
                 <div class="performance-summary-wrapper">
                     <div class='performace-summary-target-bar' id="space-heating-demand" width='1000px' height='100px'></div>
                     <div class='performace-summary-target-bar' id="primary-energy" width='1000px' height='100px'></div>
                     <div class='performace-summary-target-bar' id="co2-emission-rate" width='1000px' height='100px'></div>
-                    <!-- <div class='performace-summary-target-bar' id="energy-use-per-person" width='1000px' height='100px'></div> -->
                     <div id="performace-summary-key">
                         Key
                         <ul>
@@ -161,36 +201,31 @@
                 </div>
             </div>
 
-            <h3 class="top-border-title title-margin-top title-margin-bottom">Summary of Section 2.0: How could your home perform better?</h3>
-            <div class="two-col-text">
-                <p>In this section we give recommendations for planning retrofit works in your home. We show you a full range of possibilities for your home, from simple DIY measures through to Your 2050 Home – an exemplar model of significant energy saving and carbon reduction. </p>
-                <p>We show three scenarios including descriptions of proposed measures, approximate quantities and budget costs.</p>
-                <p>We also give a detailed commentary that provides more specific guidance, and considers factors other than energy use and finances that may be important to you, such as comfort and other planned home improvements. We focus first on quick wins and the things you told us are most important to you. We take a whole house approach, rather than considering single measures in isolation. </p>
-                <p>In suggesting measures we consider things that may affect your health and the condition of your property, like comfort, ventilation and indoor air quality. We also consider the level of disruption involved in carrying out various building works in accordance with what you told us would be acceptable. </p>
+            <div>
+                <p>In <b>Section 2.0</b> we set out how the retrofit scenarios shown in section 1.0 could be achieved, with further details on each of the measures contained in  Appendix A. We show you a full range of possibilities for your home, from simple DIY measures through to Your 2050 Home – an exemplar model of significant energy saving and carbon reduction. </p>
+                <p>In suggesting measures we consider comfort, ventilation and indoor air quality alongside energy use. We also consider the level of disruption involved in carrying out various building works in accordance with what you told us would be acceptable. </p>
                 <p>These recommendations show a pathway for you to achieve a 2050 emissions reduction and energy use target by using technologies and techniques that are currently available. </p>
             </div>
 
-            <h3 class="top-border-title title-margin-top title-margin-bottom">Summary of Section 3.0 How can Carbon Co-op help?</h3>
-            <p>However you decide to tackle things, there are a number of ways you can access information and advice from Carbon Co-op. This section gives you more details on how we can help.</p>
-            <p>We've also included six appendices:</p>
-            <ul style="margin-left:32px;margin-bottom:16px">
-                <li><strong>Appendix A: Scenario Measures Complete Table</strong></li>
-                <li></li>
-                <li><strong>Appendix B: Scenario comparison</strong> - Based on the survey we completed of your home, and results generated using My Home Energy Planner, we provide comparisons across fabric condition; heating and hot water systems; ventilation; lighting; appliances and cooking; and renewables. </li>
-                <li><strong>Appendix C: About us</strong> - A bit more information about Carbon Co-op and URBED.</li> 
-                <li><strong>Appendix D: Glossary</strong> - There may be words and phrases in this report that you are unfamiliar with. This short glossary provides definitions and explanations. </li>
-                <li><strong>Appendix E: About our methodology</strong> - A bit more information about the model we used to produce this report.</li>
-                <li><strong>Appendix F: Figures</strong> - List of Figures in the report</li>
+            <p>In <b>Section 3.0</b> of the report we provide details of how <span class="org-name">Carbon Co-op</span> might be able to help you take the next steps in your retrofit journey. </p>
+            <p>We also included five appendices:</p>
+            <ul style="margin-left:32px;margin-bottom:16px;font-size:16px">
+                <li style="margin-bottom:8px"><strong>Appendix A: Scenario Measures Complete Table</strong> - Further details on each of the retrofit measures suggested for each scenario. </li>
+                <li style="margin-bottom:8px"><strong>Appendix B: Scenario comparison</strong> - Based on the survey we completed of your home, and results generated using My Home Energy Planner, we provide comparisons across fabric condition; heating and hot water systems; ventilation; lighting; appliances and cooking; and renewables. </li>
+                <li style="margin-bottom:8px"><strong>Appendix C: About us</strong> - A bit more information about Carbon Co-op and URBED.</li> 
+                <li style="margin-bottom:8px"><strong>Appendix D: Glossary</strong> - There may be words and phrases in this report that you are unfamiliar with. This short glossary provides definitions and explanations. </li>
+                <li style="margin-bottom:8px"><strong>Appendix E: About our methodology</strong> - A bit more information about the model we used to produce this report.</li>
             </ul>
             <p>This report was prepared by one of our experienced and expert assessors.</p>
             <p>Your assessor is: <span key='data.household.assessors_name'></span> </p>
             <p><span key='data.household.assessors_biography'></span></p>
 
-            <p>If you’ve got any questions about this report, please contact: info@carbon.coop or 0161 448 6492</p>
+            <p>If you’ve got any questions about this report, please contact: <span id="contact-for-questions">info@carbon.coop or 0161 448 6492</span></p>
 
         </section>
 
         <!-- Section 1.0 -->
+
         <section>
             <div class="section-title title-margin-top">
                 <h2>How does your home perform?</h2>
@@ -200,15 +235,13 @@
             <p>The charts in this section are designed to help you understand how your home’s current energy use compares with UK averages and targets. We also show the extent to which your home could be improved to meet the UK's 2050 80% carbon reduction target, reduce your fuel bills and improve comfort. </p>
             <p>We’ve modelled your home as it is now in SAP (Standard Assessment Procedure). We’ve modelled it again to show the effect of the measures proposed in Section 2.0 of this report.</p>
             <p>Where provided, we’ve also compared this with information from your utility bills. The SAP model makes a set of assumptions, based on averages, about climate, heating patterns, hot water and appliance use. If your energy bill data is from a particularly mild or cold year, of if your household habits are very different from the UK average, the model may produce a predicted energy use that is different from your actual energy use. </p>
-            <p>Through the way you live in your home, or changes you’ve already made, you may already be some way towards the 2050 target. For example, you may use your space heating a lot less than is assumed in the model, or have your thermostat at the lowest setting. </p>
-            <p>However, if you are significantly under-heating your home, you may have noticed other problems such as excessive condensation or poor indoor air quality. This may affect your comfort and health - and is something you might want to tackle through energy efficiency retrofit work. </p>
-            <p>Alternatively, you may find that you are using far more energy than predicted in the SAP model, and that a few simple steps could help reduce this significantly. Likewise, if you continue to use a lot of electricity – with lots of high demand electrical appliances such as tumble driers or plasma TVs – then you are likely to still use more energy after retrofit than suggested by the SAP model.</p>
+            <p>Through the way you live in your home, or changes you’ve already made, you may already be some way towards the 2050 target. However, if you are significantly under-heating your home, you may have noticed other problems such as excessive condensation or poor indoor air quality. This may affect your comfort and health - and is something you might want to tackle through energy efficiency retrofit work, though it may mean you don't make big savings in energy use with more 'light touch' measures, it should mean you are warmer. Alternatively, you may find that you are using far more energy than predicted in the SAP model, and that a few simple steps could help reduce this significantly.</p>
 
             <section>
                 <h3 class="top-border-title title-margin-top title-margin-bottom">1.1 Heat losses and gains</h3>
-                <p>In the UK, most homes use the majority of energy to keep warm during the cooler months of winter, spring and autumn. When it is colder outside, your home continuously loses heat from the warmer inside through its building fabric. The building fabric is made up of walls, floor, roof and windows. The better insulated your home the slower this heat loss happens. </p>
-                <p>Your home also loses heat through draughts and ventilation losses. This is when warm air leaves your home unintentionally through gaps in the building fabric – or intentionally through windows or fans. This rate of heat loss depends on how draughty your home is and the ways you choose to ventilate your home. </p>
-                <p>Figure 3 shows how your home loses heat, modelled against the various scenarios given in this report.</p>
+                <p>In the UK, most homes use the majority of energy to keep warm during the cooler months of winter, spring and autumn. When it is colder outside, your home continuously loses heat from the warmer inside through the building fabric. The building fabric is made up of walls, floor, roof and windows. The better insulated your home the slower this heat loss happens, so the less energy is needed to keep your home warm.  </p>
+                <p>Your home also loses heat through draughts and ventilation. Warm leaves your home through gaps in the building fabric – or intentionally through windows or fans. This rate of heat loss depends on how draughty your home is and the ways you choose to ventilate your home. </p>
+                <p>Figure 3 shows how your home loses heat, modelled against the various scenarios created in this report.</p>
 
                 <div class="highlight-box pink-highlight">
                     <h4 class="top-border-title title-margin-bottom ">Figure 3. Performance Summary</h4>
@@ -246,7 +279,7 @@
                     </div>
                 </div>
 
-                <p>It’s not all bad news though. These heat losses are balanced by the heat generated by you and activities in your home, such as cooking (these are shown as 'internal' gains on the graph below). Heat is also provided by sunlight entering your home – this is known as passive solar gain  (this is shown as 'solar' on the graph below). The absolute contribution that both solar and internal gains make to heating your home might go down as you make improvements - more efficient appliances will reduce the amount of heat they provide, and better glazing in windows reduces the amount of solar gain. However, as you improve the rest of the fabric, the proportion both of these contribute to your heating needs will go up, and your need for heat from your homes heating system will reduce. </p>
+                <p>It’s not all bad news though. These heat losses are balanced by the heat generated by you and activities in your home, such as cooking (these are shown as 'internal' gains on the graph below). Heat is also provided by sunlight entering your home – this is known as passive solar gain  (this is shown as 'solar' on the graph below). The absolute contribution that both solar and internal gains make to heating your home might go down as you make improvements - as more efficient appliances, lighting and hot water systems  will reduce the amount of heat they create, and better glazing in windows reduces the amount of solar gain. However, as you improve the rest of the fabric, the proportion both of these contribute to your space heating needs will go up, reducing the energy used by your home's heating system. </p>
                 <p>Figure 4 shows this balance for your home in each of the scenarios mapped out in this report. </p>
                 <div class="highlight-box pink-highlight">
                     <h4 class="top-border-title title-margin-bottom ">Figure 4. Your home’s heat balance </h4>
@@ -254,17 +287,12 @@
                 </div>
             </section>
 
-            <section>
+            <section class="break-before">
                 <h3 class="top-border-title title-margin-top title-margin-bottom">1.2 Space heating demand</h3>
                 <p>To keep your home warm, the gap between heat losses and heat gains in your home needs to be topped up by your heating system. The amount of energy needed to do this is known as space heating demand. </p>
                 <p>Space heating demand is measured in kilowatt-hours per square metre per year, so that different sizes of building can be compared directly. Space heating demand takes into account all the heat loss and heat gain factors described in 1.1 above. </p>
                 <p>Space heating demand does not cover any other energy uses, such as lighting, hot water or electricity use for fans, pumps and appliances. It does take into account the type of controls used by your heating system, and how advanced they are. It is a good way of understanding the performance of the fabric of your home, and how energy efficient it is. It is also affected by the shape and volume of your home - the more complex the shape of your home, and the greater the proportion of exposed surface area to floor area, the higher your Space Heating Demand is likely to be. So a complicated detached house will usually have a higher space heating demand than an apartment with only one or two external walls, even if their fabric is similar. If your home is uncomfortably cold or you have problems with condensation and damp, the most important thing you can do is improve the efficiency of its fabric, so that it stays warmer for longer. This will also improve the comfort and health of your home. The lower the number given for 'Space Heating Demand', the more efficient your home is, and the easier it will be to keep it warm, making you more comfortable and reducing the risk of condensation and damp.   </p>
-                <p>Figure 5 shows the space heating demand for your home. The graph shows several different comparisons including: </p>
-                <ul class="right-align-item-list">
-                    <li><p>Your home now compared to the current UK average; </p></li>
-                    <li><p>Your home now compared to the target range for significantly improved comfort and meeting carbon reduction standards; </p></li>
-                    <li><p>Scenarios related to the Proposed Measures given in Section 2.0 of this report including Your 2050 home – an exemplar model of how your home could perform if all the improvements recommended in this report are carried out. </p></li>
-                </ul>
+                <p>Figure 5 shows the space heating demand for your home. The graph shows each of the scenarios against the current UK average and the Carbon Co-op suggested  target range for space heating demand.  </p>
 
                 <div class="highlight-box pink-highlight">
                     <h4 class="top-border-title title-margin-bottom ">Figure 5.  Space heating demand – how your home compares</h4>
@@ -280,7 +308,7 @@
                     <div class="bar-chart-container" id="energy-demand"></div>
                 </div>
 
-                <p>Figure 6 shows the total amount of energy used in your home, in kilowatt-hours per year and by fuel type. This is a total figure specific to your home, and is not benchmarked against any other buildings or targets. It is intended to help you understand how much energy you use in total and how much this could be reduced if you carry out retrofit works.</p> 
+                <p style="margin-top: 15px">Figure 6 shows the total amount of energy used in your home, in kilowatt-hours per year and by fuel type. This is a total figure specific to your home, and is not benchmarked against any other buildings or targets. It is intended to help you understand how much energy you use in total and how much this could be reduced if you carry out retrofit works.</p> 
                 <p>Your actual energy use is affected by factors such as the external climate and the way you use energy in your home – so it will change over time. Please remember that this graph is based on a model - so is more useful for making comparisons between different scenarios than making absolute predictions. </p>
             </section>
 
@@ -290,7 +318,7 @@
                 <p>The level of insulation in your home, the efficiency of services such as heating and lighting, and the type of fuel used all affect your primary energy use.</p> 
                 <p>The same task, such as boiling a kettle, will take different amounts of primary energy depending on the fuel used. This is because of efficiency differences in the way various fuels are generated and distributed. Primary energy includes an allowance for the efficiency of the national electricity grid and fuel transport.</p>
                 <p>Figure 7 shows the primary energy use for your home now, both as modelled in SAP and using any utility bill data you gave us. It also shows Your 2050 Home as modelled in SAP and against the Carbon Co-op target of 120kWh/m2.year (which it may not be feasible for all homes to meet), and the different scenarios modelled to reach the 2050 target.</p>  
-                <p>Where possible this is also broken down by use. Where renewable technologies have been proposed, the stack has been shifted down the negative axis, so the graph shows your net total primary energy, once the contribution of renewable energy generated on site has been accounted for, against the Carbon Coop target. .</p>
+                <p>Where possible this is also broken down by use. Where renewable technologies have been proposed, the stack has been shifted down the negative axis, so the graph shows your net total primary energy, once the contribution of renewable energy generated on site has been accounted for, against the Carbon Co-op target.</p>
 
                 <div class="highlight-box pink-highlight">
                     <h4 class="top-border-title title-margin-bottom ">Figure 7: Primary energy use in kilowatt-hours per square metre per year</h4>
@@ -319,7 +347,7 @@
             <section>
                 <h3 class="top-border-title title-margin-top title-margin-bottom">1.6 Energy costs</h3>
                 <p>Figure 10 shows the estimated annual cost of fuel for your home now and your retrofitted home modelled in SAP. For comparison, Figure 10 also shows your current annual energy use from bill data, if you provided this. </p>
-                <p>The fuel costs for your home will be affected by the level of insulation, the efficiency of services and lighting, the type of fuel used and the fuel tariff you have with your supplier. If you were not able to provide us with your actual costs, Figure 10 uses the standard fuel costs from SAP which may differ from your actual costs, depending on what rate your energy providers charge. .</p> 
+                <p>The fuel costs for your home will be affected by the level of insulation, the efficiency of services and lighting, the type of fuel used and the fuel tariff you have with your supplier. If you were not able to provide us with your actual costs, Figure 10 uses the standard fuel costs from SAP which may differ from your actual costs, depending on what rate your energy providers charge.</p> 
                 <p>In most retrofits, it is possible to significantly reduce the cost of heating, hot water, lighting and ventilation through improvements in building fabric and services – or at least to improve comfort, whilst not increasing costs.</p> 
                 <p>However, the costs of unregulated energy uses such as cooking and using appliances, are much more dependent on individual behaviour. So, alongside physical retrofit measures, you can maximise savings by being more aware of how you use energy in your home.</p> 
                 <p>Figure 10 includes error bars with a 30% positive and negative range. These error bars are included because the model is only ever an approximation of reality. Your actual energy costs may vary, depending on the different factors described above.</p> 
@@ -327,7 +355,7 @@
                 <p>We have not included any payments you might receive such as Feed-in-Tariffs for renewable electricity generation from things like solar panels, or payments from schemes like the renewable heat incentive. This is because these payments and the rules around them are currently changing on a regular basis, so what you may be entitled to will vary significantly over time. However, we have shown the benefits of the estimated amount of energy you may generate may be used directly in your home - so for example the energy used to run appliances whilst solar photo-voltaic panels are generating. It should be noted that this is an estimate, and will depend on how you live in your home and whether you are able to make use of this energy.  </p>
 
                 <div class="highlight-box pink-highlight">
-                    <h4 class="top-border-title title-margin-bottom ">Figure 10: Estimated energy cost comparison</h4>
+                    <h4 class="top-border-title title-margin-bottom ">Figure 10: Estimated energy costs net comparison</h4>
                     <div class="bar-chart-container" id="estimated-energy-cost-comparison"></div>
                 </div>
 
@@ -349,18 +377,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th class="half-width">Number of Occupants</th>
-                                <td>2.9 people</td>
-                                <td><span key='data.occupancy' dp="1"></span> people</td>
-                                <td><span class='js-occupancy-comparison'></span></td>
-                            </tr>
-                            <tr>
-                                <th class="half-width">Average hours of heating (weekday/normal day)</th>
-                                <td>9 hours</td>
-                                <td><span class='js-average-heating-hours'></span> hours</td>
-                                <td><span class='js-average-heating-hours-comparison'></span></td>
-                            </tr>
                             <tr>
                                 <th class="half-width">Living room thermostat temperature</th>
                                 <td>21°C</td>
@@ -397,7 +413,6 @@
 
                     <div class="table-wrapper">
                         <h4 class="top-border-title title-margin-bottom ">Figure 12: SAP results table</h4>
-                        <!-- <img src="../Modules/assessment/img-assets/images/sap-test.jpg" alt=""> -->
                         <table class="sap-table">
                             <thead>
                                 <tr>
@@ -438,7 +453,7 @@
 
                 </div>
 
-                <p><em><strong>Please note:</strong> though based on the same calculations, this is not an accredited SAP assessment. If you need an official SAP rating for funding purposes, you will need to commission this separately.</em></p>
+                <p style="margin-top: 25px"><em><strong>Please note:</strong> though based on the same calculations, this is not an accredited SAP assessment. If you need an official SAP rating for funding purposes, you will need to commission this separately.</em></p>
                 <p><em>For existing buildings, the calculation tool used to generate Energy Performance Certificates (EPCs) is based on a reduced data entry version of SAP (rdSAP), which makes a greater number of assumptions. This means it may differ widely from the rating given above – especially if your home has had significant energy efficiency improvements.</em></p>
             </section>
 
@@ -449,7 +464,7 @@
                 <p>This is why we collect information about you as householders. Understanding your perceptions of comfort, as well as how you use the spaces within your home, allows us to tailor the recommendations with your comfort and health in mind.</p>
 
                 <div class="highlight-box pink-highlight" style="margin:0px;padding:10px 30px">
-                    <h4 class="top-border-title">Figure 13: Comfort tables based on what you told us</h4>
+                    <h4 class="top-border-title">Figure 13: Comfort tables</h4>
                     <div class="comfort-tables">
                         <div class="comfort-table-wrapper">
                             <p>Temperature in winter:</p>
@@ -457,15 +472,6 @@
                                 <tr>
                                     <td class='extreme-left'>Too cold</td>
                                     <td class='extreme-right'>Too hot</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="comfort-table-wrapper">
-                            <p>Air in winter:</p>
-                            <table id="comfort-table-winter-air">
-                                <tr>
-                                    <td class='extreme-left'>Too dry</td>
-                                    <td class='extreme-right'>Too stuffy</td>
                                 </tr>
                             </table>
                         </div>
@@ -482,6 +488,16 @@
                         </div>
 
                         <div class="comfort-table-wrapper">
+                            <p>Air in winter:</p>
+                            <table id="comfort-table-winter-air">
+                                <tr>
+                                    <td class='extreme-left'>Too dry</td>
+                                    <td class='extreme-right'>Too stuffy</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="comfort-table-wrapper">
                             <p>Air in summer:</p>
 
                             <table id="comfort-table-summer-air">
@@ -491,10 +507,6 @@
                                 </tr>
                             </table>
                         </div>
-
-                        <!-- 					<p>
-                                                                        Draughts: <span key='data.household.6a_draughts_comment'></span>
-                                                                </p> -->
 
                         <div class="comfort-table-wrapper">
                             <p>Amount of daylight:</p>
@@ -514,6 +526,24 @@
                                 </tr>
                             </table>
                         </div>
+                        <div class="comfort-table-wrapper">
+                            <p>Draughts in winter:</p>
+                            <table id="comfort-table-draughts-winter">
+                                <tr>
+                                    <td class='extreme-left'>Too Draughty</td>
+                                    <td class='extreme-right'>Too Still</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="comfort-table-wrapper">
+                            <p>Draughts in summer:</p>
+                            <table id="comfort-table-draughts-summer">
+                                <tr>
+                                    <td class='extreme-left'>Too Draughty</td>
+                                    <td class='extreme-right'>Too Still</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
 
                 </div>
@@ -522,17 +552,17 @@
                     <h4 class="top-border-title">Figure 14: Health</h4>
                     <h5>RH data</h5>
                     <p class='js-average-humidity'>
-                       
+
                     </p>
                     <h5>Temperature data</h5>
                     <p class='js-average-temp'></p>
                     <h5>You also told us</h5>
-                    <p style="margin-left:25px">Do you have any problems with noise from neighbours, between rooms, or from outside? <br /><em><span class ='js-noise_comment'></span></em></p>
-                    <p style="margin-left:25px">Any problem locations for lighting?  <br /><em><span class='js-problem_locations_daylight'></span></em></p>
-                    <p style="margin-left:25px">Are there any particular problem locations for thermal comfort? <br /><em><span class="js-problem_locations"></span></em></p>
-                    <p style="margin-left:25px">Your favourite room?<br /><em> <span class='js-favourite_room'></span></em></br></p>
-                    <p style="margin-left:25px">Any rooms in your home you don't love?<br /><em> <span class='js-unloved_rooms'></span></em></p>                    </p>
-                    <p style="margin-left:25px">How do you dry your laundry? <br /><em>  <span class='js-laundry-habits'></span></em></p>
+                    <p style="margin-left:25px">Do you have any problems with noise from neighbours, between rooms, or from outside? <br /><span style="font-style: italic" class ='js-noise_comment'></span></p>
+                    <p style="margin-left:25px">Any problem locations for lighting?  <br /><em><span style="font-style: italic" class='js-problem_locations_daylight'></span></em></p>
+                    <p style="margin-left:25px">Are there any particular problem locations for thermal comfort? <br /><em><span style="font-style: italic" class="js-problem_locations"></span></em></p>
+                    <p style="margin-left:25px">Your favourite room?<br /><em> <span style="font-style: italic" class='js-favourite_room'></span></em></br></p>
+                    <p style="margin-left:25px">Any rooms in your home you don't love?<br /><em> <span style="font-style: italic" class='js-unloved_rooms'></span></em></p>          
+                    <p style="margin-left:25px">How do you dry your laundry? <br /><em>  <span style="font-style: italic" class='js-laundry-habits'></span></em></p>
 
                 </div>
             </section>
@@ -608,14 +638,14 @@
             </div>
 
 
-            <h3 class="top-border-title title-margin-bottom ">Figure 16 Scenario 2: <span class='output-scenario2-name'></span></h3>
+            <h3 class="top-border-title title-margin-bottom break-before">Figure 16 Scenario 2: <span class='output-scenario2-name'></span></h3>
             <p>Total cost of the scenario <span id="tota-cost-scenario2"></span></p> 
             <div class="five-col-table-wrapper">
                 <table class="five-col-table js-measures2-summary" >
                 </table>
             </div>
 
-            <h3 class="top-border-title title-margin-bottom ">Figure 17 Scenario 3: <span class='output-scenario3-name'></span></h3>
+            <h3 class="top-border-title title-margin-bottom break-before">Figure 17 Scenario 3: <span class='output-scenario3-name'></span></h3>
             <p>Total cost of the scenario <span id="tota-cost-scenario3"></span></p> 
             <div class="five-col-table-wrapper">
                 <table class="five-col-table js-measures3-summary">
@@ -634,22 +664,24 @@
 
         <section>
             <div class="section-title title-margin-top">
-                <h2>How can Carbon Co-op help?</h2>
+                <h2 id="section-3-title">How can Carbon Co-op help?</h2>
                 <h3 class="section-sub-title">Section 3.0</h3>
             </div>		
-
-            <p>Carbon Co-op is a community benefit society made up of like-minded members, individuals taking practical action to reduce their use of home energy. We can assist you by providing information or by facilitating the sharing of knowledge and expertise between householders. Some services are accessible to all; others are exclusive to members – as described below.</p>
-            <p>In taking things forward it is important to realise there are no one-size-fits-all solutions. Some people employ professionals to oversee their improvements; others carry out the work on a DIY basis. Some achieve everything at once in a 'big bang’; others work in stages, incrementally over years.</p>
-            <p>However you decide to tackle things, there are a number of ways you can access information and advice from Carbon Co-op. </p>
-
+            <div id="section-3-how-can-we-help">
+                <p>Carbon Co-op is a community benefit society made up of like-minded members, individuals taking practical action to reduce their use of home energy. We can assist you by providing information or by facilitating the sharing of knowledge and expertise between householders. Some services are accessible to all; others are exclusive to members – as described below.</p>
+                <p>In taking things forward it is important to realise there are no one-size-fits-all solutions. Some people employ professionals to oversee their improvements; others carry out the work on a DIY basis. Some achieve everything at once in a 'big bang’; others work in stages, incrementally over years.</p>
+                <p>However you decide to tackle things, there are a number of ways you can access information and advice from Carbon Co-op. </p>
+            </div>
             <section>
-                <h3 class="top-border-title title-margin-top title-margin-bottom">3.1 Available to all</h3>
+                <h3 id="section-3-available-to-title" class="top-border-title title-margin-top title-margin-bottom">3.1 Available to all</h3>
+                <div id="section-3-available-to">
                 <p><strong>Seminars:</strong> We host retrofit seminars and events, ranging from introductory sessions to more advanced workshops. Led by industry professionals, our seminars provide specialist information and enable householders to access trusted, independent expertise.</p> 
                 <p><strong>Green Open Homes weekends:</strong> Householders who have carried out improvements regularly open their homes to the general public over a weekend – and we co-ordinate visits and bus tours. Open homes are a great way to understand just what is involved in a whole house retrofit, exchange contacts and to become aware of some of the common pitfalls to avoid.</p> 
                 <p>Keep an eye on the Carbon Co-op website for details of upcoming events.</p> 
+                </div>
             </section>
 
-            <section>
+            <section id="carbon-coop-services">
                 <h3 class="top-border-title title-margin-top title-margin-bottom">3.2 Carbon Co-op member services</h3>
                 <p>Membership of Carbon Co-op is open to anyone for an annual subscription. As a member you become a co-owner of the organisation, you can attend general meetings and stand for the governing committee. Members also get access to a range of exclusive services including:</p> 
 
@@ -664,7 +696,7 @@
                 <p><strong>Bulk discount offers:</strong> Our members benefit from collective purchasing power. Where a common need can be identified, Carbon Co-op can negotiate a bulk discount scheme with suppliers or installers. Past deals include energy monitors, triple glazed windows, car share schemes and LED lightbulbs.</p>
             </section>
 
-            <section>
+            <section id="section-3-3">
                 <h3 class="top-border-title title-margin-top title-margin-bottom">3.3 Recommendations?</h3>
                 <p>We are often asked to recommend specific, trusted contractors that householders can use to carry out retrofit works. At present, for a number of reasons, we do not make recommendations.</p> 
                 <p>Firstly, the retrofit sector is new and developing – there isn’t currently a large range of experienced contractors available to carry out works and very few have a track record.</p> 
@@ -672,14 +704,15 @@
                 <p>Instead of recommendations, we offer training and advice to householders, providing them with the tools to procure high quality, appropriate contractors, installers and consultants. Through events, socials and our forum we also offer a platform for householders to exchange contacts and provide feedback on their experiences.</p>
             </section>
 
-            <section>
+            <section id="section-3-4">
                 <h3 class="top-border-title title-margin-top title-margin-bottom">3.4 Keep in touch</h3>
                 <p>In addition to these specific services we're always happy to answer questions and signpost help where we can. Drop us a line at info@carbon.coop or give us a call on 0161 448 6492.</p>
             </section>
 
         </section>
 
-        <!-- Section 5.0 (Appendices) -->
+        <!-- (Appendices) -->
+
         <style>
 
             .measures-list > table{
@@ -696,7 +729,7 @@
             <div class="section-title title-margin-top">
                 <h2>Appendices</h2>
             </div>
-            <h3>Appendix A: Scenario Measures Complete Table</h3>
+            <h3 class="top-border-title title-margin-top title-margin-bottom">Appendix A: Scenario Measures Complete Table</h3>
 
             <h4 class="top-border-title title-margin-top" style="padding-top: 15px">Figure 18: Scenario 1 Measures Complete Table</h4>
 
@@ -707,7 +740,7 @@
             <div class="measures-list" id="scenario1-measures-list"></div>
 
 
-            <h4 class="top-border-title title-margin-top" style="padding-top: 15px">Figure 19: Scenario 2 Measures Complete Table</h4>
+            <h4 class="top-border-title title-margin-top break-before" style="padding-top: 15px">Figure 19: Scenario 2 Measures Complete Table</h4>
 
             <div class="five-col-table-wrapper">
                 <table class="data-table" id='scenario2-measures'>					 
@@ -716,7 +749,7 @@
             <div class="measures-list" id="scenario2-measures-list"></div>
 
 
-            <h4 class="top-border-title title-margin-top" style="padding-top: 15px">Figure 20: Scenario 3 Measures Complete Table</h4>
+            <h4 class="top-border-title title-margin-top break-before" style="padding-top: 15px">Figure 20: Scenario 3 Measures Complete Table</h4>
 
             <div class="five-col-table-wrapper">
                 <table class="data-table" id='scenario3-measures'>					 
@@ -779,7 +812,11 @@
                         </li>
                         <li>
                             <h4 class="top-border-title title-margin-top">Air tightness:</h4> 
-                            <p>A draughty house allows heat to be lost around the insulation you have installed. Air tightness is usually measured as the volume of air that moves through a square metre of outside surface in an hour at a given difference in pressure between inside and outside – metres3/hour/metre2 at 50 Pascals, shorthand – q50.</p> 
+                            <p>A draughty house allows heat to be lost around the insulation you have installed. Air tightness is usually measured as the volume of air that moves through a square metre of outside surface in an hour at a given difference in pressure between inside and outside – metres<sup>3</sup>/hour/metre<sup>2</sup> at 50 Pascals, shorthand – q50.</p> 
+                        </li>
+                        <li>
+                            <h4 class="top-border-title title-margin-top">Breathable (Vapour Permeable/ Vapour Open):</h4> 
+                            <p>This can be confusing - if a material is described as 'breathable' it actually refers to the behaviour of materials in relation to water vapour and moisture rather than air - i.e. its level of vapour permeability. So it's not about draughts or air being able to move through a wall, but about whether water vapour can move through a wall or other construction. It is an important consideration in retrofit, because older building materials are generally more 'breathable' than modern materials, and this needs to be considered when suggesting changes to older buildings. The existing way in which the construction handles moisture needs to be understood, so that this isn't altered in a damaging way, and the risks of damp, mould and condensation associated with getting it wrong are mitigated. This is also talked about in terms of a material's 'hygroscopic' qualities.</p> 
                         </li>
                         <li>
                             <h4 class="top-border-title title-margin-top">Kilowatt-hour (kWh):</h4> 
@@ -794,7 +831,7 @@
                             <p>New houses can be built to a very high level of energy efficiency. Older houses, built when our expectations of comfort were much lower and when energy was cheaper, tend to perform very poorly in terms of energy efficiency, carbon emissions and comfort. These homes therefore need to be augmented with energy saving measures – both in fabric and services - or renewable energy generating measures, to bring them up to a more acceptable standard. This process is known as retrofit, i.e. ‘retrospectively fitting’ measures to an existing property.</p>   
                         </li>
                         <li>
-                            <h4 class="top-border-title title-margin-top">SAP:</h4> 
+                            <h4 class="top-border-title title-margin-top break-before">SAP:</h4> 
                             <p>SAP is the Standard Assessment Procedure used to assess energy use in UK homes. The UK government devised SAP as a way to compare homes and test them against Building Regulations. SAP forms the basis of the energy model used in this report.</p> 
                             <p>SAP makes assumptions about the number of people living in a home and how it is heated and used, based on averages for the UK. You may not be ‘average’ and may use your home in different ways. So, SAP is not an exact predictive tool.</p> 
                         </li>
@@ -813,7 +850,7 @@
                         </li>
                         <li>
                             <h4 class="top-border-title title-margin-top">U-value:</h4> 
-                            <p>This is a measure of the thermal performance of a building element. U-value is measured in watts per square metre per degree of temperature difference (measured in Kelvin). So, if a wall has a U-value of 1 W/m2. K, it loses 1 watt per square metre of wall area per degree of difference between inside and outside. So, if it is 0oC outside and 20 oC inside and the wall is 10 square metres, it would lose 200 watts of heat – equivalent to the power used by a set of hair-straighteners.</p> 
+                            <p>This is a measure of the thermal performance of a building element. U-value is measured in watts per square metre per degree of temperature difference (measured in Kelvin). So, if a wall has a U-value of 1 W/m<sup>2</sup>. K, it loses 1 watt per square metre of wall area per degree of difference between inside and outside. So, if it is 0oC outside and 20 <sup>o</sup>C inside and the wall is 10 square metres, it would lose 200 watts of heat – equivalent to the power used by a set of hair-straighteners.</p> 
                         </li>
                         <li>
                             <h4 class="top-border-title title-margin-top">Watt:</h4>
@@ -826,64 +863,19 @@
             <section>
                 <h3 class="top-border-title title-margin-bottom break-before">Appendix E. About our methodology</h3>
                 <p>This report is based on a survey of the condition of your home at a fixed point in time (or as noted otherwise if you have planned works). </p>
-                <p>The information we gathered from this survey was entered into an energy model based on the UK’s National Calculation Methodology – SAP version 9.92.</p> 
-                <p>However, this model is only a representation that allows different approaches to be compared – it does not produce guaranteed absolute predictions. Whilst changing the physical properties of your home as suggested in this report should make a positive contribution towards energy saving, the actual amount of energy saved depends on how you use and interact with your home.</p> 
-                <p>We have evidence from previous retrofits that these measures work – but they will produce different outcomes for different households. Different types of construction will also not always perform in accordance with the models (for example solid walls may actually perform better than predicted in standard heat loss calculations - though one of the adjustments made by Carbon Coop is to improve their performance in accordance with the available evidence and out own calculations, so that our model more closely reflects reality).</p> 
+                <p>The information we gathered from this survey was entered into an energy model based an adapted version of on the UK’s National Calculation Methodology – SAP version 9.92.</p> 
+                <p>However, this model is only a representation that allows different approaches to be compared – it does not produce guaranteed absolute predictions. Whilst changing the physical properties of your home as suggested in this report should make a positive contribution towards energy saving, the actual amount of energy saved depends on how you use and interact with your home and the order in which the works are done.</p> 
+                <p>Carbon Co-op has evidence from completed and monitored retrofits that these measures work – but they will produce different outcomes for different households. Different types of construction will also not always perform in accordance with the models. For example solid walls may actually perform better than predicted in standard heat loss calculations - though one of the adjustments made by Carbon Co-op is to improve their performance in accordance with the available evidence and our own calculations, so that our model more closely reflects reality.</p> 
                 <p>We are confident that the levels of insulation we propose will have a significant impact on energy use and comfort. However, services measures are more difficult to predict, and the use of electrical appliances, hot water and cooking varies significantly between households. In addition, the savings available from renewable technologies will depend greatly on whether your household is able to maximise the amount of energy generated by them that is used directly in your home, and also the quality of their installation and maintenance. </p> 
-                <p>Before making a final decision about retrofit works, you should carefully consider what your aims are, how they can best be achieved, and how you compare to the modelled average. Carbon Co-op can also help with advice on simple changes to how you use your home to save energy without altering the fabric.</p> 
+                <p>Before making a final decision about retrofit works, you should carefully consider what your aims are and how they can best be achieved. Carbon Co-op can also help with advice on simple changes to how you use your home to save energy without altering the fabric.</p> 
 
                 <p><strong>Disclaimer:</strong></p> 
-                <p>We take reasonable care to ensure that the information contained within this report is of a level of accuracy and completeness sufficient for the purposes of an outline energy model of your home, and suggesting potential improvements. However, the measurements and information taken during our short survey are not suitable for use as construction information, and should be verified by others on site before carrying out any detailed design and construction work.</p> 
+                <p>We take reasonable care to ensure that the information contained within this report is of a level of accuracy and completeness sufficient for the purposes of an outline energy model of your home, and suggesting potential improvements. However, <b>the measurements and information taken during our short survey are not suitable for use as construction information, and should be verified by others on site before carrying out any detailed design and construction work</b>.</p> 
                 <p>It should also be noted that we do not carry out invasive surveys as part of this report, and we will not access areas where to do so would cause undue risk to the assessor. We will therefore have made a number of assumptions about the construction of your home that may need to be verified by further investigation and detailed condition surveys of your home before detailed design and construction work is undertaken.</p> 
-                <p>Whilst we will notify you if we see something in your home that concerns us as to its safety or condition, this is not a full building inspection and condition survey, and should not be used as such. We strongly recommend that before undertaking any major works – particularly where the structural condition of your home may be affected – you seek advice from surveyor or structural engineer to carry out a full structural and condition survey..</p> 
+                <p>Whilst we will notify you if we see something in your home that concerns us as to its safety or condition, this is not a full building inspection and condition survey, and should not be used as such. We strongly recommend that before undertaking any major works – particularly where the structural condition of your home may be affected – you seek advice from surveyor or structural engineer to carry out a full structural and condition survey.</p> 
 
                 <p><strong>Thank you for using My Home Energy Assessment.</strong></p>
-            </section>
-
-            <section>
-                <h3 class="top-border-title title-margin-bottom break-before">Appendix F. Figures</h3>
-                <ol class="indented-list">
-                    <li>
-                        <p><strong class="top-border-title bolded">Welcome to My Home Energy Assessment</strong><p>
-                        <p>Figure 1: Retrofit Priorities<p>
-                        <p>Figure 2. Performance Summary<p>
-                    </li>
-                    <li>
-                        <p><strong class="top-border-title bolded">Section 1.0 How does your home perform?</strong></p>
-                        <p>Figure 3: How does my home lose heat?</p>
-                        <p>Figure 4: Your home’s heat balance</p>
-                        <p>Figure 5 Space heating demand – how your home compares</p>
-                        <p>Figure 6: Total amount of energy used in your home in kilowatt-hours per year and by fuel type</p>
-                        <p>Figure 7: Primary energy use in kilowatt-hours per square metre per year</p>
-                        <p>Figure 8: Carbon dioxide emissions in kilograms per square metres per year)</p>
-                        <p>Figure 9: Carbon dioxide emissions in kilograms per person per year (your personal carbon footprint)</p>
-                        <p>Figure 10: Estimated energy cost comparison</p>
-                        <p>Figure 11: Your home compared with the assumed average home</p>
-                        <p>Figure 12: SAP results table</p>
-                        <p>Figure 13: Comfort tables based on what you told us (too hot/cold/ stuffy etc. based on Householder Questionnaire).</p>
-                        <p>Figure 14: Health data (where available)</p>
-                    </li>
-                    <li>
-                        <p><strong class="top-border-title bolded">Section 2.0 How could your home perform better?</strong></p>
-                        <p>Figure 15 Summary Scenario 1: DIY and Simple Measures</p>
-                        <p>Figure 16 Summary Scenario 2: More Advanced Measures</p>
-                        <p>Figure 17 Summary Scenario 3: Further Measures – Your 2050 Home</p>
-                    </li>
-                    <li>
-                        <p><strong class="top-border-title bolded">Section 3.0 How can Carbon Co-op help?</strong></p>
-                    </li>
-                    <li>
-                        <p><strong class="top-border-title bolded">Appendices</strong></p>
-                        <p>Figure 18 Scenario 1 Measures Table (Full)</p>
-                        <p>Figure 19 Scenario 2 Measures Table (Full)</p>
-                        <p>Figure 20 Scenario 3 Measures Table (Full)</p>
-                        <p>Figure 21a Master/Scenario 1 Comparison Table</p>
-                        <p>Figure 21b Master/Scenario 2 Comparison Table</p>
-                        <p>Figure 21c Master/Scenario 3 Comparison Table</p>
-                    </li>
-                </ol>
-            </section>
-
+            </section>          
 
         </section>
 

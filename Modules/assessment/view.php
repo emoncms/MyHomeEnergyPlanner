@@ -67,7 +67,8 @@ global $reports;
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
                 <div class="scenario-nav-heading">Other</div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/carboncoopreport">Carbon Coop Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CarbonCoop">Carbon Coop Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CAfS">CAfS Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
@@ -220,6 +221,7 @@ global $reports;
     var selected_library = -1;
     var selected_library_tag = "Wall";
     var printmode = false;
+    //var org_report = ''; //
 
     $("#openbem").css("background-color", "#eee");
 
@@ -533,6 +535,7 @@ global $reports;
         update();
     });
 
+    // Scenarios menu interactions
     $("#openbem").on('click', ".scenario-block", function () {
         var s = $(this).attr('scenario');
         //  if (s != scenario) {
@@ -548,11 +551,12 @@ global $reports;
          */
         // }
     });
-
     $('#openbem').on('click', '.project-menu-item', function () {
         $('.scenario-block[scenario=master]').click();
         $('.menu-content').hide();
     });
+
+    // Scenarios management
     $("#openbem").on('click', "#create-new", function () {
         // Reset select
         $('#select-scenario').html("");
@@ -563,7 +567,6 @@ global $reports;
 
         $('#modal-create-scenario').modal('show');
     });
-
     $("#modal-create-scenario").on('click', '#modal-create-scenario-done', function () {
         var n = 0;
         for (z in project) {
@@ -576,7 +579,7 @@ global $reports;
         project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
         project[s].measures = {};
         project[s].fabric.measures = {};
-       
+
         //sort project alphabetically
         temp_project = {};
         Object.keys(project)
@@ -601,7 +604,6 @@ global $reports;
         update();
         $('div [scenario="' + s + '"]').click();
     });
-
     $("#openbem").on('click', ".delete-scenario-launch", function () {
         var s = $(this).parent().parent().parent().attr('scenario');
         if (s != "master") {
@@ -609,7 +611,6 @@ global $reports;
             $("#modal-delete-scenario").attr("scenario", s);
         }
     });
-
     $("#delete-scenario-confirm").click(function () {
         var s = $("#modal-delete-scenario").attr('scenario');
 
@@ -624,7 +625,7 @@ global $reports;
         $("#modal-delete-scenario").modal("hide");
     });
 
-
+    // Project's name and description management
     $("#edit-project-name-and-description").on('click', function () {
         $("#project-name-input").val(p.name);
         $("#project-description-input").val(p.description);
@@ -638,10 +639,12 @@ global $reports;
         $("#modal-edit-project-name-and-description").modal("hide");
         openbem.set_name_and_description(projectid, p.name, p.description);
     });
+
     $("#modal-error-submitting-data-done").on('click', function () {
         location.reload();
     });
 
+    // Do/undo
     $('ul.nav.pull-right').on('click', '#undo', function () {
         if (historical_index < historical.length - 1) {
             historical_index++;
@@ -651,7 +654,6 @@ global $reports;
 
         refresh_undo_redo_buttons();
     });
-
     $('ul.nav.pull-right').on('click', '#redo', function () {
         if (historical_index > 0) {
             historical_index--;
@@ -661,7 +663,6 @@ global $reports;
 
         refresh_undo_redo_buttons();
     });
-
     function refresh_undo_redo_buttons() {
         if (historical_index == historical.length - 1) {
             $('#undo').css('opacity', 0.1);
@@ -681,6 +682,8 @@ global $reports;
             $('#redo').css('cursor', 'default');
         }
     }
+
+
     //-----
     //-------------------------------------------------------------------
 

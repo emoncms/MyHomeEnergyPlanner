@@ -34,7 +34,7 @@ function targetbarCarboncoop(element, options)
             ctx.fillStyle = colors[i];
             var y = 1 + subBarHeightFraction * barheight * i;
             ctx.fillRect(1, y, (options.values[i] * xscale) - 2, subBarHeightFraction * barheight);
-            ctx.font = "12px Karla";
+            ctx.font = "13px Arial";
             ctx.fillStyle = "rgba(99,86,71,1.0)";
             ctx.fillText(options.values[i] + " " + options.units, 4, y + 16);
         }
@@ -42,13 +42,13 @@ function targetbarCarboncoop(element, options)
         ctx.fillStyle = "rgb(217, 58, 71)";
         ctx.fillRect(1, 1, (options.value * xscale) - 2, barheight - 2);
     }
-    ctx.font = "14px Karla";
+    ctx.font = "14px Arial";
     ctx.setLineDash([4, 4]);
 
     var i = 60;
     var index = 0;
     for (z in options.targets) {
-      //  if (index == 2)
+        //  if (index == 2)
         //    i = 30;
         xpos = options.targets[z] * xscale;
 
@@ -60,8 +60,8 @@ function targetbarCarboncoop(element, options)
 
         ctx.textAlign = "left";
         ctx.fillStyle = "rgba(99,86,71,1.0)";
-        ctx.fillText(z + ':', xpos + 5, barheight -70);
-        ctx.fillText(options.targets[z] + " " + options.units, xpos + 15, barheight - 54 );
+        ctx.fillText(z + ':', xpos + 5, barheight - 70);
+        ctx.fillText(options.targets[z] + " " + options.units, xpos + 15, barheight - 54);
         i = i - 60;
         index++;
     }
