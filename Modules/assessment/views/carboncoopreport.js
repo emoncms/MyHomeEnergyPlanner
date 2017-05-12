@@ -1482,7 +1482,7 @@ function carboncoopreport_UpdateUI() {
     if (org_report === 'CAfS') {
         $('h1.doc-title-org').html('Cumbria Action for Sustainability')
         $('.org-name').html('CAfS');
-        
+
         // CSS
         $('#print-css').append("@media print{\n\
                 .carbon-report-wrapper .doc-title-wrapper{border-color: #00ffff}\n\
@@ -1494,15 +1494,22 @@ function carboncoopreport_UpdateUI() {
                 .carbon-report-wrapper th{border-color: #00ffff}\n\
                 .carbon-report-wrapper td{border-color: #00ffff}\n\
                 .carbon-report-wrapper .measures-list>table{border-color: #00ffff}\n\
+                .carbon-report-wrapper .three-col-table thead th:after,\n\
+                .carbon-report-wrapper .three-col-table thead th:before\n\
+                    {background:#00ffff}\n\
+                .carbon-report-wrapper .js-measures1-summary th, .carbon-report-wrapper .js-measures1-summary td,\n\
+                .carbon-report-wrapper .js-measures2-summary th, .carbon-report-wrapper .js-measures2-summary td,\n\
+                .carbon-report-wrapper .js-measures3-summary th, .carbon-report-wrapper .js-measures3-summary td\n\
+                    {border-color: #00ffff;}\n\
             }");
-        
+
         // Logos in cover page
         $('#extra_logo').attr("src", path + "Modules/assessment/img-assets/CAfS_Logo_CMYK.jpg").attr('alt', 'Cumbria Action for Sustainability logo').css('width', '150px');
         $('#cover').append('<img id="bgltr_logo" class="printable-inline" style="margin-left: 150px; width: 100px;" src="' + path + 'Modules/assessment/img-assets/hi_big_e_min_blue.jpg" />')
 
         // Extra info in cover page
-        var to_append = '<p class="printable" style="font-size:14px;margin-top:50px">Your report is provided by Cumbria Action for Sustainability (CAfS) with funding from The Big Lottery. It is produced in partnership with Carbon Coop, who provides the accredited audit framework along with targets included in the report. </p>';
-        to_append += "<p class='printable' style='font-size:12px'>Cumbria Action for Sustainability<br />Eden Rural Foyer, Old London Road, Penrith, CA11 8ET<br />01768 210 276<br />www.cafs.org.uk<br />Registered Charity Number: 1123155</p>";
+        var to_append = '<p class="printable" style="font-size:14px;margin-top:50px">Your report is provided by Cumbria Action for Sustainability (CAfS) with funding from The Big Lottery. It is produced in partnership with Carbon Coop, who provide the accredited audit framework along with targets included in the report. </p>';
+        to_append += "<p class='printable' style='font-size:12px; text-align:center'>Cumbria Action for Sustainability - Eden Rural Foyer, Old London Road, Penrith, CA11 8ET - 01768 210 276 - www.cafs.org.uk <br />Registered Charity Number: 1123155</p>";
         $('#cover').append(to_append)
 
         // Adjust size of title in first page to fit the logo

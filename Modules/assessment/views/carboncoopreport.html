@@ -16,6 +16,7 @@
     .printable, .printable-inline{
         display:none;
     }
+    
 </style>
 
 <style id="print-css">
@@ -159,7 +160,7 @@
                 <h2>Welcome to My Home Energy Assessment</h2>
             </div>
             <div class="two-col-text">
-                <p>This report is unique is based on what you told us, and the survey we carried out of your home, fed through My Home Energy Planner by one of our assessors (http://myhome.carbon.coop). </p>
+                <p>This report is based on what you told us, and the survey we carried out of your home, fed through My Home Energy Planner by one of our assessors. </p>
                 <p>Our advice is specific to your home. We have taken your household, lifestyle and priorities into consideration. We create a detailed model of energy use in your home, based on an adapted version of the full Standard Assessment Procedure. This considers all energy uses in your home, including heating, hot water, lighting, cooking and appliances like washing machines and televisions.</p>
                 <p>We consider various attributes of your home as it stands now including: areas of greatest heat loss and heat gain; space heating demand; total energy demand and the fuels used; primary energy use; carbon dioxide emissions; approximate energy costs; comfort and health. </p>
                 <p>We then use the energy model to develop three scenarios for making improvements to your home, based on its physical attributes and what you told us about your plans and priorities. We take a whole house approach, considering how improvements work together or don't, and which measures need to be done together. For example, we always consider the need for proper planned ventilation alongside insulation and air-tightness works.</p>
@@ -212,9 +213,8 @@
             <ul style="margin-left:32px;margin-bottom:16px;font-size:16px">
                 <li style="margin-bottom:8px"><strong>Appendix A: Scenario Measures Complete Table</strong> - Further details on each of the retrofit measures suggested for each scenario. </li>
                 <li style="margin-bottom:8px"><strong>Appendix B: Scenario comparison</strong> - Based on the survey we completed of your home, and results generated using My Home Energy Planner, we provide comparisons across fabric condition; heating and hot water systems; ventilation; lighting; appliances and cooking; and renewables. </li>
-                <li style="margin-bottom:8px"><strong>Appendix C: About us</strong> - A bit more information about Carbon Co-op and URBED.</li> 
-                <li style="margin-bottom:8px"><strong>Appendix D: Glossary</strong> - There may be words and phrases in this report that you are unfamiliar with. This short glossary provides definitions and explanations. </li>
-                <li style="margin-bottom:8px"><strong>Appendix E: About our methodology</strong> - A bit more information about the model we used to produce this report.</li>
+                <li style="margin-bottom:8px"><strong>Appendix C: Glossary</strong> - There may be words and phrases in this report that you are unfamiliar with. This short glossary provides definitions and explanations. </li>
+                <li style="margin-bottom:8px"><strong>Appendix D: About our methodology</strong> - A bit more information about the model we used to produce this report.</li>
             </ul>
             <p>This report was prepared by one of our experienced and expert assessors.</p>
             <p>Your assessor is: <span key='data.household.assessors_name'></span> </p>
@@ -317,7 +317,7 @@
                 <p>Primary energy is the total amount of energy used by your home, from the power station to your lightbulb. Primary energy is measured in kilowatt-hours per square metre per year.</p> 
                 <p>The level of insulation in your home, the efficiency of services such as heating and lighting, and the type of fuel used all affect your primary energy use.</p> 
                 <p>The same task, such as boiling a kettle, will take different amounts of primary energy depending on the fuel used. This is because of efficiency differences in the way various fuels are generated and distributed. Primary energy includes an allowance for the efficiency of the national electricity grid and fuel transport.</p>
-                <p>Figure 7 shows the primary energy use for your home now, both as modelled in SAP and using any utility bill data you gave us. It also shows Your 2050 Home as modelled in SAP and against the Carbon Co-op target of 120kWh/m2.year (which it may not be feasible for all homes to meet), and the different scenarios modelled to reach the 2050 target.</p>  
+                <p>Figure 7 shows the primary energy use for your home now, both as modelled in SAP and using any utility bill data you gave us. It also shows Your 2050 Home as modelled in SAP and against the Carbon Co-op target of 120kWh/m<sup>2</sup>.year (which it may not be feasible for all homes to meet), and the different scenarios modelled to reach the 2050 target.</p>  
                 <p>Where possible this is also broken down by use. Where renewable technologies have been proposed, the stack has been shifted down the negative axis, so the graph shows your net total primary energy, once the contribution of renewable energy generated on site has been accounted for, against the Carbon Co-op target.</p>
 
                 <div class="highlight-box pink-highlight">
@@ -367,7 +367,7 @@
 
                 <div class="highlight-box pink-highlight">
                     <h4 class="top-border-title title-margin-bottom ">Figure 11: Your home compared with the assumed average home</h4>
-                    <table class="three-col-table">
+                    <table class="three-col-table" id="comparison-with-average">
                         <thead>
                             <tr>
                                 <th class="half-width"></th>
@@ -675,9 +675,9 @@
             <section>
                 <h3 id="section-3-available-to-title" class="top-border-title title-margin-top title-margin-bottom">3.1 Available to all</h3>
                 <div id="section-3-available-to">
-                <p><strong>Seminars:</strong> We host retrofit seminars and events, ranging from introductory sessions to more advanced workshops. Led by industry professionals, our seminars provide specialist information and enable householders to access trusted, independent expertise.</p> 
-                <p><strong>Green Open Homes weekends:</strong> Householders who have carried out improvements regularly open their homes to the general public over a weekend – and we co-ordinate visits and bus tours. Open homes are a great way to understand just what is involved in a whole house retrofit, exchange contacts and to become aware of some of the common pitfalls to avoid.</p> 
-                <p>Keep an eye on the Carbon Co-op website for details of upcoming events.</p> 
+                    <p><strong>Seminars:</strong> We host retrofit seminars and events, ranging from introductory sessions to more advanced workshops. Led by industry professionals, our seminars provide specialist information and enable householders to access trusted, independent expertise.</p> 
+                    <p><strong>Green Open Homes weekends:</strong> Householders who have carried out improvements regularly open their homes to the general public over a weekend – and we co-ordinate visits and bus tours. Open homes are a great way to understand just what is involved in a whole house retrofit, exchange contacts and to become aware of some of the common pitfalls to avoid.</p> 
+                    <p>Keep an eye on the Carbon Co-op website for details of upcoming events.</p> 
                 </div>
             </section>
 
@@ -776,33 +776,8 @@
 
             </section>
 
-            <section class="break-before">
-                <h3 class="top-border-title title-margin-bottom ">Appendix C: About us</h4>
-                    <p>My Home Energy Planner and My Home Energy Assessment are delivered by URBED (Urbanism Environment and Design Ltd) on behalf of Carbon Co-op.</p>
-
-                    <p><strong>About Carbon Co-op:</strong></p>
-                    <p>Established in 2011, Carbon Co-op is a Community Benefit Society, a membership organisation for householders to take practical and significant action on climate change and reclaim control of their energy, homes, warmth and power.</p>
-                    <p>Based in Greater Manchester, the co-operative was established to help people transform their draughty old properties into smart, efficient, low-carbon homes of the future. Owned by our members, we work together to pool expertise, reduce costs and access cheaper finance.</p>
-                    <p>Using cutting edge research and technologies, we collaborate with architects, suppliers and professionals to implement innovative energy efficiency and carbon reduction solutions. We offer a variety of products and services and regularly pilot new, innovative low carbon projects, disseminating the learning to members and the wider Community Energy sector.</p>
-                    <p>A co-operative is a democratically controlled means for people to work together for mutual benefit. To become involved and access more of our services visit: www.carbon.coop</p> 
-
-                    <p><strong>About URBED:</strong></p>
-                    <p>URBED (Urbanism, Environment and Design) Ltd does what our name suggests. We specialise in urban design and sustainability in an urban context. We work across the UK from our base in Manchester for public and private sector clients.</p> 
-                    <p>Our team includes architects with specialisms in low energy design, planners, urban designers, economists and sustainability specialists. Our work is united by our core values of urbanism, community, environmental sustainability and good design.</p> 
-                    <p>We have a developed specialism in domestic retrofit, an area that covers some of our key concerns around both environmental sustainability and the involvement of building users in design. We’ve developed this expertise through a number of hands on and policy-led projects including:</p> 
-
-                    <ul class="right-align-item-list">
-                        <li><p>A low-cost TSB (now Innovate UK) Retrofit for the Future pilot covering 10 properties that were some of the best performing in the programme; </p></li>
-                        <li><p>Devising retrofit standards for the Sustainable Housing Action Partnership (SHAP) in the West Midlands; </p></li>
-                        <li><p>Drafting the Greater Manchester Domestic Retrofit Strategy; </p></li>
-                        <li><p>Working as designers on the Carbon Co-op Community Green Deal pilot.</p></li>
-                    </ul>
-                    <p>We continue to work closely with Carbon Co-op as technical advisers on their dissemination and education programmes around retrofit, and worked with them to develop the My Home Energy Planner tool and My Home Energy Assessment service.</p> 
-                    <p>URBED (Urbanism, Environment and Design) Ltd is an employee-owned co-operative. You can find out more about us on our website: <a href="http://www.urbed.coop" target="_blank">www.urbed.coop</a></p>
-            </section>
-
             <section>
-                <h3 class="top-border-title title-margin-bottom break-before">Appendix D: Glossary</h4>
+                <h3 class="top-border-title title-margin-bottom break-before">Appendix C: Glossary</h4>
                     <p>Retrofit and building efficiency have a language all of their own. In this report there may be words and concepts that are unfamiliar to you. If there is anything you don’t understand, please ask us – either in person, through one of the regular Carbon Co-op webinars, or on the member forum.</p> 
                     <p>We believe in using the correct terminology wherever possible, so that when you speak to professionals and tradespeople involved in retrofit you are familiar with the terms. To help your understanding we have provided this short glossary of common words and phrases:</p> 
                     <ol class="indented-list">
@@ -831,7 +806,7 @@
                             <p>New houses can be built to a very high level of energy efficiency. Older houses, built when our expectations of comfort were much lower and when energy was cheaper, tend to perform very poorly in terms of energy efficiency, carbon emissions and comfort. These homes therefore need to be augmented with energy saving measures – both in fabric and services - or renewable energy generating measures, to bring them up to a more acceptable standard. This process is known as retrofit, i.e. ‘retrospectively fitting’ measures to an existing property.</p>   
                         </li>
                         <li>
-                            <h4 class="top-border-title title-margin-top break-before">SAP:</h4> 
+                            <h4 class="top-border-title title-margin-top">SAP:</h4> 
                             <p>SAP is the Standard Assessment Procedure used to assess energy use in UK homes. The UK government devised SAP as a way to compare homes and test them against Building Regulations. SAP forms the basis of the energy model used in this report.</p> 
                             <p>SAP makes assumptions about the number of people living in a home and how it is heated and used, based on averages for the UK. You may not be ‘average’ and may use your home in different ways. So, SAP is not an exact predictive tool.</p> 
                         </li>
@@ -861,7 +836,7 @@
             </section>
 
             <section>
-                <h3 class="top-border-title title-margin-bottom break-before">Appendix E. About our methodology</h3>
+                <h3 class="top-border-title title-margin-bottom break-before">Appendix D. About our methodology</h3>
                 <p>This report is based on a survey of the condition of your home at a fixed point in time (or as noted otherwise if you have planned works). </p>
                 <p>The information we gathered from this survey was entered into an energy model based an adapted version of on the UK’s National Calculation Methodology – SAP version 9.92.</p> 
                 <p>However, this model is only a representation that allows different approaches to be compared – it does not produce guaranteed absolute predictions. Whilst changing the physical properties of your home as suggested in this report should make a positive contribution towards energy saving, the actual amount of energy saved depends on how you use and interact with your home and the order in which the works are done.</p> 
