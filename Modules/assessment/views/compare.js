@@ -126,7 +126,7 @@ function compareCarbonCoop(scenario, outputElement) {
     ];
     var BDD = comparePropertiesInArray(scenario, properties_to_check);
     if (BDD.changed === true)
-        out += '<h3>Basic dwelling data</h3><table class="table table-striped">' + BDD.html + '</table></br>';
+        out += '<h3>Basic dwelling data</h3><table class="table table-striped">' + BDD.html + '</table><br />';
     // Ventilation
     var Vent = compareVentilation(scenario);
     if (Vent.changed === true)
@@ -294,7 +294,10 @@ function compareInfiltration(scenario) {
             out += changes.html;
         }
     }
-    else if (project.master.ventilation.air_permeability_test === false && project[scenario].ventilation.air_permeability_test === true) {
+    else if (project.master.ventilation.air_permeability_test === false
+            && project[scenario].ventilation.air_permeability_test === true
+            && project[scenario].measures.ventilation != undefined
+            && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
         changed = true;
         out += '<tr><td>The structural infiltration due to dwelling construction was changed applying <i>'
                 + project[scenario].measures.ventilation.draught_proofing_measures.measure.name
@@ -306,7 +309,8 @@ function compareInfiltration(scenario) {
                 + ' ACH</i></td></tr>';
         +'</i></td></tr>';
     }
-    else if (project[scenario].measures.ventilation != undefined && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
+    else if (project[scenario].measures.ventilation != undefined
+            && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
         changed = true;
         out += '<tr><td>The original Infiltration due to dweling construction was calculated \n\
         based on air tightness test with q50 = <i>' + project.master.ventilation.air_permeability_value
@@ -389,6 +393,7 @@ function compareClothesDryingFacilities(scenario) {
 
     return {html: out, changed: changed};
 }
+
 function compareFabric(scenario) {
     var out = "";
     var changed = false;
@@ -558,6 +563,7 @@ function compareHeating(scenario) {
 
     return {html: out, changed: changed};
 }
+
 function compareEnergyRequirements(scenario) {
     var out = "";
     var changed = false;
@@ -587,6 +593,7 @@ function compareEnergyRequirements(scenario) {
 
     return {html: out, changed: changed};
 }
+
 function compareFuelRequirements(scenario) {
     var out = "";
     var changed = false;
