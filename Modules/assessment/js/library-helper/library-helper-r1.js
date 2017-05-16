@@ -904,8 +904,8 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
              */
             out += "</td>";
             out += "<td style='font-size:13px'>";
-            out += "<b>U-value:</b> " + element_library[z].uvalue + " W/K.m2";
-            out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/K.m2";
+            out += "<b>U-value:</b> " + element_library[z].uvalue + " W/m<sup>2</sup>.K";
+            out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/m<sup>2</sup>.K";
             if (element_library[z].tags[0] == "Window" || element_library[z].tags[0] == "Door" || element_library[z].tags[0] == "Roof_light") {
                 out += "<br><b>g:</b> " + element_library[z].g + ", ";
                 out += "<b>gL:</b> " + element_library[z].gL + ", ";
