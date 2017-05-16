@@ -235,7 +235,8 @@ var openbem = {
             responsiveness: data.temperature.responsiveness,
             target: data.temperature.target,
             living_area: data.temperature.living_area,
-            temperature_adjustment: data.temperature.temperature_adjustment
+            temperature_adjustment: data.temperature.temperature_adjustment,
+            hours_off: data.temperature.hours_off
         };
         // Space heating
         inputdata.space_heating = {

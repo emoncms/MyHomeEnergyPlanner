@@ -1,4 +1,4 @@
-//console.log('debug householdquestionnaire.js')
+console.log('debug householdquestionnaire.js')
 
 $('#add-shower').on('click', function () {
     if (data.household['3b_extra_showers'] == undefined)
@@ -23,6 +23,19 @@ $('#add-shower').on('click', function () {
             '<input type="number" value="" key="data.household.3b_extra_showers.' + extra_shower_index + '.bath_frequency" /></td></tr>'
             );
 });
+
+$('#openbem').on('change','.hours-off', function () {
+    var weekday = get_hours_off_weekday(data);
+    var weekend = get_hours_off_weekend(data);
+    console.log(weekday);
+    console.log(weekend);
+    for (var scenario in project) {
+        project[scenario].temperature.hours_off.weekday = weekday;
+        project[scenario].temperature.hours_off.weekend = weekend;
+    }
+    update();
+});
+
 function householdquestionnaire_UpdateUI() {
     if (data.household['3b_extra_showers'] != undefined) {
         $('#more-showers').html('');

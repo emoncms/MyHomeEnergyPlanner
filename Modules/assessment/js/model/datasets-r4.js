@@ -196,6 +196,9 @@ var datasets = {
         {start: 21, end: 38, letter: 'F', color: "#fd8130"},
         {start: 1, end: 20, letter: 'G', color: "#fd001a"}
     ],
+    // Access factor table: first dimention is shading factor, 2nd in winter, summer.
+    table_6d_solar_access_factor: [[0.3, 0.5], [0.54, 0.7], [0.77, 0.9], [1.0, 1.0]],
+    table_6d_light_access_factor: [0.5, 0.67, 0.83, 1.0],
     energysystems: {
         'electric': {name: "Standard Electric", efficiency: 1.0, winter: 1.0, summer: 1.0, fuel: 'electric'},
         'gasboiler': {name: "Standard Gas boiler", efficiency: 0.90, winter: 0.90, summer: 0.80, fuel: 'gas'},

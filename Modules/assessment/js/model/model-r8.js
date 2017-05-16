@@ -28,9 +28,11 @@
  
  - calc functions should be divided by task.
  
- 
+ - Version of the model is noted as major.minor -> changes of the major value are due to 
+ a change of inputs to the model. Changes of the minor values are due to changes only in the code.
  */
 
+var version = 9.0;
 
 var calc = {data: {}};
 calc.run = function (datain)
@@ -56,7 +58,7 @@ calc.run = function (datain)
     calc.fuel_requirements(calc.data);
     calc.primary_energy_by_requirement(calc.data);
     calc.SAP(calc.data);
-    calc.data.totalWK = calc.data.fabric.total_heat_loss_WK + calc.data.ventilation.average_WK;
+    calc.data.totalWK = calc.data.fabric_total_heat_loss_WK + calc.data.ventilation.average_WK;
     calc.data.primary_energy_use_m2 = calc.data.primary_energy_use / calc.data.TFA;
     calc.data.kgco2perm2 = calc.data.annualco2 / calc.data.TFA;
     calc.data.kwhdpp = (calc.data.energy_use / 365.0) / calc.data.occupancy;
@@ -111,8 +113,14 @@ calc.start = function (data)
 
 //---------------------------------------------------------------------------------------------
 // FLOORS
-// Module Inputs:  data.floors
-// Global Outputs: data.TFA, data.volume, data.num_of_floors
+// 
+// Module Inputs:  
+//      - data.floors
+//      
+// Global Outputs: 
+//      - data.TFA
+//      - data.volume
+//      - data.num_of_floors
 //---------------------------------------------------------------------------------------------
 
 calc.floors = function (data)
@@ -132,9 +140,16 @@ calc.floors = function (data)
 
 //---------------------------------------------------------------------------------------------
 // OCCUPANCY
+// 
 // SAP calculation of occupancy based on total floor area
-// Global inputs:  data.TFA
-// Global outputs: data.occupancy
+// 
+// Global inputs:  
+//      - data.use_custom_occupancy
+//      - data.custom_occupancy
+//      - data.TFA
+//      
+// Global outputs: 
+//  - data.occupancy
 //---------------------------------------------------------------------------------------------
 
 calc.occupancy = function (data)
@@ -159,11 +174,58 @@ calc.occupancy = function (data)
 
 //---------------------------------------------------------------------------------------------
 // BUILDING FABRIC
-// Calculates total monthly fabric heat loss and monthly solar gains from building elements list
-// Module Inputs:  data.fabric.elements
-// Global Inputs:  data.TFA
-// Global Outputs: data.TMP, data.losses_WK.fabric, data.gains_W.solar
-// Uses external function: calc_solar_gains_from_windows
+// 
+// Calculates:
+//      - total monthly fabric heat loss
+//      - monthly solar gains from building elements list
+//      
+// Module Inputs:  
+//      - data.fabric.elements, 
+//      - data.fabric.thermal_bridging_yvalue, 
+//      - data.fabric.global_TMP // global thermal mass parameter: true or false
+//      - data.fabric.global_TMP_value
+//      
+// Global Inputs:  
+//      - data.TFA
+//      
+// Global Outputs: 
+//      - data.TMP, 
+//      - data.losses_WK.fabric, 
+//      - data.gains_W.solar, 
+//      - data.GL
+//      - data.fabric_total_heat_loss_WK
+//      
+// Module Variables: 
+//      - data.fabric.TMP
+//      - data.fabric.elements[z].netarea
+//      - data.fabric.elements[z].windowarea
+//      - data.fabric.elements[z].wk
+//      - data.fabric.elements[z].gain
+//      - data.fabric.total_external_area
+//      - data.fabric.total_floor_WK
+//      - data.fabric.total_floor_area
+//      - data.fabric.total_wall_WK
+//      - data.fabric.total_wall_area
+//      - data.fabric.total_roof_WK
+//      - data.fabric.total_roof_area
+//      - data.fabric.total_window_WK
+//      - data.fabric.total_window_area
+//      - data.fabric.total_party_wall_WK
+//      - data.fabric.total_party_wall_area
+//      - data.fabric.total_thermal_capacity
+//      - data.fabric.thermal_bridging_heat_loss
+//      - data.fabric.fabric_heat_loss_WK
+//      - data.fabric.total_heat_loss_WK
+//      - data.fabric.annual_solar_gain
+//      - data.fabric.annual_solar_gain_kwh
+//      
+// Uses external function: 
+//      - calc_solar_gains_from_windows
+// 
+// Datasets:
+//      - table_6d_solar_access_factor
+//      - table_6d_light_access_factor
+// 
 //---------------------------------------------------------------------------------------------
 
 calc.fabric = function (data, solar_acces_factor)
@@ -178,6 +240,7 @@ calc.fabric = function (data, solar_acces_factor)
         data.fabric.global_TMP = false;
     if (solar_acces_factor == undefined)
         solar_acces_factor = 'winter'; // solar gains for heating only use 'Winter access factor', while the summer one is used for the calculatin of "Solar gains for cooling and Summer temperatures", table 6d, p. 216 SAP2012
+    data.fabric_total_heat_loss_WK = 0;
     data.fabric.total_heat_loss_WK = 0;
     data.fabric.total_thermal_capacity = 0;
     data.fabric.total_floor_WK = 0;
@@ -292,8 +355,6 @@ calc.fabric = function (data, solar_acces_factor)
             // the result of which needs to be put in a bin for totals for jan, feb etc..
             for (var month = 0; month < 12; month++)
             {
-// Access factor table: first dimention is shading factor, 2nd in winter, summer.
-                var table_6d = [[0.3, 0.5], [0.54, 0.7], [0.77, 0.9], [1.0, 1.0]];
                 // access factor is time of year dependent
                 // Summer months: 5:June, 6:July, 7:August and 8:September (where jan = month 0)
                 var summer = 0;
@@ -303,7 +364,7 @@ calc.fabric = function (data, solar_acces_factor)
                 /*if (data.fabric.elements[z].type == 'Roof_light')
                  var access_factor = 1.0;
                  else*/
-                var access_factor = table_6d[overshading][summer];
+                var access_factor = datasets.table_6d_solar_access_factor[overshading][summer];
                 // Map orientation code from window to solar rad orientation codes.
                 if (orientation == 5)
                     orientation = 3; // SE/SW
@@ -317,11 +378,11 @@ calc.fabric = function (data, solar_acces_factor)
                 gain += gain_month;
             }
 
-            var accessfactor = [0.5, 0.67, 0.83, 1.0];
-            if (data.fabric.elements[z].type == 'Roof_light')
-                sum += 0.9 * area * gL * ff * 1.0; // Ligthing gains
-            else
-                sum += 0.9 * area * gL * ff * accessfactor[overshading]; // Ligthing gains
+            // According to SAP2012 (p,26 note2) a solar access factor of 1.0 [...] should be used for roof lights, but we think that is not right (see issue 237: https://github.com/emoncms/MyHomeEnergyPlanner/issues/237 
+            /*if (data.fabric.elements[z].type == 'Roof_light')
+             sum += 0.9 * area * gL * ff * 1.0; // Ligthing gains
+             else*/
+            sum += 0.9 * area * gL * ff * datasets.table_6d_light_access_factor[overshading]; // Ligthing gains
             data.fabric.elements[z].gain = gain / 12.0;
             data.fabric.annual_solar_gain += data.fabric.elements[z].gain;
         }
@@ -338,17 +399,60 @@ calc.fabric = function (data, solar_acces_factor)
     var monthly_fabric_heat_loss = [];
     for (var m = 0; m < 12; m++)
         monthly_fabric_heat_loss[m] = data.fabric.total_heat_loss_WK;
+    data.fabric_total_heat_loss_WK = data.fabric.total_heat_loss_WK;
     data.losses_WK["fabric"] = monthly_fabric_heat_loss;
     data.gains_W["solar"] = gains;
     data.GL = sum / data.TFA;
     return data;
 };
+
 //---------------------------------------------------------------------------------------------
 // VENTILATION
-// Module Inputs: data.ventilation object
-// Global Inputs: data.volume, data.num_of_floors, data.region
-// Global Outputs: data.losses_WK.ventilation
-// Datasets: datasets.table_u2
+// Module Inputs: 
+//      - data.ventilation.ventilation_type
+//      - data.ventilation.IVF
+//      - data.ventilation.EVP
+//      - data.ventilation.dwelling_construction
+//      - data.ventilation.suspended_wooden_floor
+//      - data.ventilation.suspended_wooden_floor
+//      - data.ventilation.draught_lobby
+//      - data.ventilation.percentage_draught_proofed
+//      - data.ventilation.air_permeability_test
+//      - data.ventilation.air_permeability_value
+//      - data.ventilation.number_of_sides_sheltered
+//      - data.ventilation.system_air_change_rate
+//      - data.ventilation.balanced_heat_recovery_efficiency
+//      
+// Global Inputs: 
+//      - data.volume
+//      - data.num_of_floors
+//      - data.region
+//      
+// Global Outputs: 
+//      - data.losses_WK.ventilation
+// 
+// Module variables:
+//      - data.ventilation.infiltration_chimeneyes_fires_fans
+//      - data.ventilation.infiltration_rate // includes chimneys and fans
+//      - data.ventilation.EVP_air_changes
+//      - data.ventilation.infiltration_rate_incorp_shelter_factor
+//      - data.ventilation.windfactor // monthly
+//      - data.ventilation.adjusted_infiltration // monthly
+//      - data.ventilation.adjusted_EVP_air_changes // monthly
+//      - data.ventilation.average_WK 
+//      - data.ventilation.average_infiltration_WK
+//      - data.ventilation.average_ventilation_WK
+//      - data.ventilation.effective_air_change_rate 
+//      - data.ventilation.infiltration_WK 
+//      - data.ventilation.ventilation_WK 
+//      - data.losses_WK.ventilation 
+//      - data.losses_WK.infiltration
+//      - data.ventilation.SAP_ventilation_WK // includes loses due to the ventilation system and infiltration
+//      - data.totalWK_monthly 
+// 
+// Datasets: 
+//      - datasets.table_u2
+//      
 //---------------------------------------------------------------------------------------------
 
 calc.ventilation = function (data)
@@ -457,7 +561,7 @@ calc.ventilation = function (data)
         case 'NV':
         case 'IE':
         case 'PS':
-            ventilation_type = 'd'; // Natural ventilation or whole house positive input ventilation from loft'
+            ventilation_type = 'd'; // Natural ventilation or whole house positive input ventilation from loft
             break;
         case 'DEV':
         case'MEV':
@@ -538,7 +642,7 @@ calc.ventilation = function (data)
         sum_infiltration += infiltration_WK[m];
         sum_ventilation += ventilation_WK[m];
         SAP_ventilation_WK[m] = infiltration_WK[m] + ventilation_WK[m];
-        HTC[m] = data.fabric.total_heat_loss_WK + SAP_ventilation_WK[m];
+        HTC[m] = data.fabric_total_heat_loss_WK + SAP_ventilation_WK[m];
     }
 
     data.ventilation.average_WK = (sum_infiltration + sum_ventilation) / 12.0;
@@ -552,15 +656,50 @@ calc.ventilation = function (data)
     data.ventilation.SAP_ventilation_WK = SAP_ventilation_WK;
     data.totalWK_monthly = HTC;
     return data;
-}
+};
 
 //---------------------------------------------------------------------------------------------
 // TEMPERATURE
-// Module Inputs: data.temperature.responsiveness, data.temperature.target, data.temperature.living_area
-// Global Inputs: data.TFA, data.TMP, data.losses_WK, data.gains_W, data.altitude, data.region
-// Global Outputs: data.internal_temperature, data.external_temperature
-// Datasets: datasets.table_u1
-// Uses external function: calc_utilisation_factor
+// 
+// Module Inputs: 
+//      - data.temperature.target
+//      - data.temperature.living_area
+//      
+// Global Inputs: 
+//      - data.TFA
+//      - data.TMP
+//      - data.losses_WK    
+//      - data.gains_W
+//      - data.altitude
+//      - data.region
+//	- data.heating_systems
+//      
+// Global Outputs: 
+//      - data.internal_temperature
+//      - data.external_temperature
+//      - data.HLP
+//	- data.mean_internal_temperature.u_factor_living_area
+//      - data.mean_internal_temperature.m_i_t_living_area
+//      - data.mean_internal_temperature.t_heating_periods_rest_of_dwelling
+//      - data.mean_internal_temperature.u_factor_rest_of_dwelling
+//      - data.mean_internal_temperature.m_i_t_rest_of_dwelling
+//      - data.mean_internal_temperature.fLA
+//      - data.mean_internal_temperature.m_i_t_whole_dwelling
+//      - data.temperature.temperature_adjustment
+//	- data.mean_internal_temperature.m_i_t_whole_dwelling_adjusted
+//
+//
+// Module Variables:
+//	- data.temperature.responsiveness
+//
+// Datasets: 
+//      - datasets.table_u1
+// 
+// Uses external function: 
+//      - calc_utilisation_factor
+//	- calc_MeanInternalTemperature
+//	- calc_Th2
+//
 //---------------------------------------------------------------------------------------------
 calc.temperature = function (data)
 {
@@ -572,12 +711,8 @@ calc.temperature = function (data)
         data.temperature.target = 21;
     if (data.temperature.temperature_adjustment == undefined)
         data.temperature.temperature_adjustment = 0;
-
-
-    // Calculate hours of heating off from household questionnaire
-    data.temperature.hours_off = {weekday: [], weekend: []};
-    data.temperature.hours_off.weekday = get_hours_off_weekday(data);
-    data.temperature.hours_off.weekend = get_hours_off_weekend(data);
+    if (data.temperature.hours_off == undefined)
+        data.temperature.hours_off = {weekday: [7, 8], weekend: [8]};
 
     // Get Main heating systems
     var mainHSs = {}; // It will take the form of: mainHSs = {mainHS1: systemObject, mainHS2: systemObject}
@@ -1997,14 +2132,12 @@ function calc_solar_gains_from_windows(windows, region)
         // The gains for a given window are calculated for each month         // the result of which needs to be put in a bin for totals for jan, feb etc..
         for (var month = 0; month < 12; month++)
         {
-            // Access factor table: first dimention is shading factor, 2nd in winter, summer.
-            var table_6d = [[0.3, 0.5], [0.54, 0.7], [0.77, 0.9], [1.0, 1.0]];
             // access factor is time of year dependent
             // Summer months: 5:June, 6:July, 7:August and 8:September (where jan = month 0)
             var summer = 0;
             if (month >= 5 && month <= 8)
                 summer = 1;
-            var access_factor = table_6d[overshading][summer];
+            var access_factor = datasets.table_6d_solar_access_factor[overshading][summer];
             // Map orientation code from window to solar rad orientation codes.
             if (orientation == 5)
                 orientation = 3; // SE/SW
@@ -2108,134 +2241,6 @@ function calc_MeanInternalTemperature(Th, hours_off, TMP, HLP, H, Te, G, R) {
     return Ti_area;
 }
 
-get_hours_off_weekday = function (data) {
-    var hours_off = [];
-    if (data.household['3a_heatinghours_weekday_off3_hours'] != undefined
-            && data.household['3a_heatinghours_weekday_off3_mins'] != undefined
-            && (data.household['3a_heatinghours_weekday_on3_hours'] != data.household['3a_heatinghours_weekday_off3_hours']
-                    || data.household['3a_heatinghours_weekday_on3_mins'] != data.household['3a_heatinghours_weekday_off3_mins'])) {
-        var date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_off3_hours'], data.household['3a_heatinghours_weekday_off3_mins'], 0, 0);
-        var date2 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_on1_hours'], data.household['3a_heatinghours_weekday_on1_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-
-        date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_off2_hours'], data.household['3a_heatinghours_weekday_off2_mins'], 0, 0);
-        date2 = new Date(2000, 1, 2, data.household['3a_heatinghours_weekday_on3_hours'], data.household['3a_heatinghours_weekday_on3_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-
-        date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_off1_hours'], data.household['3a_heatinghours_weekday_off1_mins'], 0, 0);
-        date2 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_on2_hours'], data.household['3a_heatinghours_weekday_on2_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-    }
-    else if (data.household['3a_heatinghours_weekday_off2_hours'] != undefined
-            && data.household['3a_heatinghours_weekday_off2_mins'] != undefined
-            && (data.household['3a_heatinghours_weekday_on2_hours'] != data.household['3a_heatinghours_weekday_off2_hours']
-                    || data.household['3a_heatinghours_weekday_on2_mins'] != data.household['3a_heatinghours_weekday_off2_mins'])) {
-        var date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_off2_hours'], data.household['3a_heatinghours_weekday_off2_mins'], 0, 0);
-        var date2 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_on1_hours'], data.household['3a_heatinghours_weekday_on1_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-
-        date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_off1_hours'], data.household['3a_heatinghours_weekday_off1_mins'], 0, 0);
-        date2 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_on2_hours'], data.household['3a_heatinghours_weekday_on2_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-    }
-    else if (data.household['3a_heatinghours_weekday_off1_hours'] != data.household['3a_heatinghours_weekday_on1_hours'] || data.household['3a_heatinghours_weekday_off1_mins'] != data.household['3a_heatinghours_weekday_on1_mins']) {
-        var date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekday_off1_hours'], data.household['3a_heatinghours_weekday_off1_mins'], 0, 0);
-        var date2 = new Date(2000, 1, 2, data.household['3a_heatinghours_weekday_on1_hours'], data.household['3a_heatinghours_weekday_on1_mins'], 0, 0);
-        hours_off.push(Math.abs(date2 - date1) / 36e5);
-    }
-    else
-        hours_off.push(0);
-    return hours_off;
-};
-get_hours_off_weekend = function (data) {
-    var hours_off = [];
-    if (data.household['3a_heatinghours_weekend_off3_hours'] != undefined
-            && data.household['3a_heatinghours_weekend_off3_mins'] != undefined
-            && (data.household['3a_heatinghours_weekend_on3_hours'] != data.household['3a_heatinghours_weekend_off3_hours']
-                    || data.household['3a_heatinghours_weekend_on3_mins'] != data.household['3a_heatinghours_weekend_off3_mins'])) {
-        var date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_off3_hours'], data.household['3a_heatinghours_weekend_off3_mins'], 0, 0);
-        var date2 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_on1_hours'], data.household['3a_heatinghours_weekend_on1_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-
-        date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_off2_hours'], data.household['3a_heatinghours_weekend_off2_mins'], 0, 0);
-        date2 = new Date(2000, 1, 2, data.household['3a_heatinghours_weekend_on3_hours'], data.household['3a_heatinghours_weekend_on3_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-
-        date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_off1_hours'], data.household['3a_heatinghours_weekend_off1_mins'], 0, 0);
-        date2 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_on2_hours'], data.household['3a_heatinghours_weekend_on2_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-    }
-    else if (data.household['3a_heatinghours_weekend_off2_hours'] != undefined
-            && data.household['3a_heatinghours_weekend_off2_mins'] != undefined
-            && (data.household['3a_heatinghours_weekend_on2_hours'] != data.household['3a_heatinghours_weekend_off2_hours']
-                    || data.household['3a_heatinghours_weekend_on2_mins'] != data.household['3a_heatinghours_weekend_off2_mins'])) {
-        var date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_off2_hours'], data.household['3a_heatinghours_weekend_off2_mins'], 0, 0);
-        var date2 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_on1_hours'], data.household['3a_heatinghours_weekend_on1_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-
-        date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_off1_hours'], data.household['3a_heatinghours_weekend_off1_mins'], 0, 0);
-        date2 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_on2_hours'], data.household['3a_heatinghours_weekend_on2_mins'], 0, 0);
-        if (date2 > date1)
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        else {
-            date2.setDate(date2.getDate() + 1);
-            hours_off.push(Math.abs(date2 - date1) / 36e5);
-        }
-    }
-    else if (data.household['3a_heatinghours_weekend_off1_hours'] != data.household['3a_heatinghours_weekend_on1_hours'] || data.household['3a_heatinghours_weekend_off1_mins'] != data.household['3a_heatinghours_weekend_on1_mins']) {
-        var date1 = new Date(2000, 1, 1, data.household['3a_heatinghours_weekend_off1_hours'], data.household['3a_heatinghours_weekend_off1_mins'], 0, 0);
-        var date2 = new Date(2000, 1, 2, data.household['3a_heatinghours_weekend_on1_hours'], data.household['3a_heatinghours_weekend_on1_mins'], 0, 0);
-        hours_off.push(Math.abs(date2 - date1) / 36e5);
-    }
-    else
-        hours_off.push(0);
-    return hours_off;
-};
 function calc_Th2(control_type, Th, HLP) {
     var temp = [];
     for (var m = 0; m < 12; m++) {
