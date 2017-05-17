@@ -62,7 +62,7 @@ function draw_openbem_graphics()
     }
     else {
         value = Math.round(data.space_heating_demand_m2);
-        units = "kWh/m2";
+        units = "kWh/m" + String.fromCharCode(178);
     }
     var options = {
         name: "Space heating demand",
@@ -83,7 +83,7 @@ function draw_openbem_graphics()
     }
     else {
         value = Math.round(data.primary_energy_use_m2);
-        units = "kWh/m2";
+        units = "kWh/m" + String.fromCharCode(178);
     }
     var options = {
         name: "Primary energy demand",
@@ -102,7 +102,7 @@ function draw_openbem_graphics()
     }
     else {
         value = Math.round(data.kgco2perm2);
-        units = "kgCO2/m2";
+        units = "kgCO" + String.fromCharCode(8322) + "/m" + String.fromCharCode(178);
     }
     var options = {
         name: "CO2 Emission rate",
@@ -121,7 +121,7 @@ function draw_openbem_graphics()
     }
     else {
         value = Math.round(data.kwhdpp.toFixed(1));
-        units = "kWh/m2";
+        units = "kWh/day";
     }
     var options = {
         name: "Per person energy use",

@@ -34,7 +34,7 @@ function currentenergy_UpdateUI()
     var options = {
         name: "Primary energy demand",
         value: Math.round(data.currentenergy.primaryenergy_annual_kwhm2),
-        units: "kWh/m2",
+        units: "kWh/m" + String.fromCharCode(178),
         targets: {
             "Passivhaus": 120,
             "UK Average": 350
@@ -45,7 +45,7 @@ function currentenergy_UpdateUI()
     var options = {
         name: "CO2 Emission rate",
         value: Math.round(data.currentenergy.total_co2m2),
-        units: "kgCO2/m2",
+        units: "kgCO" + String.fromCharCode(8322) + "/m" + String.fromCharCode(178),
         targets: {
             "80% by 2050": 17,
             "UK Average": 85
