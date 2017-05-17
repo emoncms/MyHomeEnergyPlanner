@@ -246,7 +246,7 @@ var appliancesCarbonCoop = {
             "Norm demand": 0.080,
             "Units": "kW",
             "Utilisation factor": 1,
-            "Frequency": 0.55,
+            "Frequency": 550,
             "Reference quantity": 3,
             "Electric fraction": 1,
             "DHW fraction": 0,

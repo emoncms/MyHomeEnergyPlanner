@@ -4778,7 +4778,7 @@ var standard_library = {
             "norm_demand": 0.080,
             "units": "kW",
             "utilisation_factor": 1,
-            "frequency": 0.55,
+            "frequency": 550,
             "reference_quantity": 3,
             "type_of_fuel": "Electricity",
             "efficiency": 1
