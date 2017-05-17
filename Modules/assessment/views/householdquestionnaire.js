@@ -24,18 +24,6 @@ $('#add-shower').on('click', function () {
             );
 });
 
-$('#openbem').on('change','.hours-off', function () {
-    var weekday = get_hours_off_weekday(data);
-    var weekend = get_hours_off_weekend(data);
-    console.log(weekday);
-    console.log(weekend);
-    for (var scenario in project) {
-        project[scenario].temperature.hours_off.weekday = weekday;
-        project[scenario].temperature.hours_off.weekend = weekend;
-    }
-    update();
-});
-
 function householdquestionnaire_UpdateUI() {
     if (data.household['3b_extra_showers'] != undefined) {
         $('#more-showers').html('');
@@ -65,6 +53,23 @@ function householdquestionnaire_UpdateUI() {
             update();
         })
 
+    }
+    
+    if (data.temperature.hours_off.weekday.length > 0) {
+        $('#periods_heating_off_weekday').html('Periods heating off week day:').show();
+        for (var period in data.temperature.hours_off.weekday) {
+            if (period != 0)
+                $('#periods_heating_off_weekday').append(',')
+            $('#periods_heating_off_weekday').append(' ' + data.temperature.hours_off.weekday[period].toFixed(1) + 'h');
+        }
+    }
+     if (data.temperature.hours_off.weekend.length > 0) {
+        $('#periods_heating_off_weekend').html('Periods heating off weekend:').show();
+        for (var period in data.temperature.hours_off.weekend) {
+            if (period != 0)
+                $('#periods_heating_off_weekend').append(',')
+            $('#periods_heating_off_weekend').append(' ' + data.temperature.hours_off.weekend[period].toFixed(1) + 'h');
+        }
     }
 }
 ;
