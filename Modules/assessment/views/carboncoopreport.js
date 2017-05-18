@@ -1484,24 +1484,60 @@ function carboncoopreport_UpdateUI() {
         $('.org-name').html('CAfS');
 
         // CSS
-        $('#print-css').append("@media print{\n\
-                .carbon-report-wrapper .doc-title-wrapper{border-color: #00ffff}\n\
-                .carbon-report-wrapper .top-border-title{border-color: #00ffff}\n\
-                .carbon-report-wrapper .section-title{border-color: #00ffff}\n\
-                .carbon-report-wrapper #performace-summary-key{border-color: #00ffff}\n\
-                .carbon-report-wrapper .sap-table{border-color: #00ffff}\n\
-                .carbon-report-wrapper .right-align-item-list li{border-color: #00ffff}\n\
-                .carbon-report-wrapper th{border-color: #00ffff}\n\
-                .carbon-report-wrapper td{border-color: #00ffff}\n\
-                .carbon-report-wrapper .measures-list>table{border-color: #00ffff}\n\
+        /*$('#print-css').append("@media print{\n\
+                .carbon-report-wrapper .doc-title-wrapper{border-color: rgb(87,139,63)}\n\
+                .carbon-report-wrapper .top-border-title{border-color: rgb(87,139,63)}\n\
+                .carbon-report-wrapper .section-title{border-color: rgb(87,139,63)}\n\
+                .carbon-report-wrapper #performace-summary-key{border-color: rgb(87,139,63)}\n\
+                .carbon-report-wrapper .sap-table{border-color: rgb(87,139,63)}\n\
+                .carbon-report-wrapper .right-align-item-list li{border-color: rgb(87,139,63)}\n\
+                .carbon-report-wrapper th{border-color: rgb(87,139,63)}\n\
+                .carbon-report-wrapper td{border-color: rgb(87,139,63)}\n\
+                .carbon-report-wrapper .measures-list>table{border-color: rgb(87,139,63)}\n\
                 .carbon-report-wrapper .three-col-table thead th:after,\n\
                 .carbon-report-wrapper .three-col-table thead th:before\n\
-                    {background:#00ffff}\n\
+                    {background:rgb(87,139,63)}\n\
                 .carbon-report-wrapper .js-measures1-summary th, .carbon-report-wrapper .js-measures1-summary td,\n\
                 .carbon-report-wrapper .js-measures2-summary th, .carbon-report-wrapper .js-measures2-summary td,\n\
                 .carbon-report-wrapper .js-measures3-summary th, .carbon-report-wrapper .js-measures3-summary td\n\
-                    {border-color: #00ffff;}\n\
+                    {border-color: rgb(87,139,63);}\n\
+            }");*/
+        $('#print-css').append("@media print{\n\
+                .carbon-report-wrapper .doc-title-wrapper{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper .top-border-title{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper .section-title{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper #performace-summary-key{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper .sap-table{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper .right-align-item-list li{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper th{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper td{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper .measures-list>table{border-color: rgb(161,205,68)}\n\
+                .carbon-report-wrapper .three-col-table thead th:after,\n\
+                .carbon-report-wrapper .three-col-table thead th:before\n\
+                    {background:rgb(161,205,68)}\n\
+                .carbon-report-wrapper .js-measures1-summary th, .carbon-report-wrapper .js-measures1-summary td,\n\
+                .carbon-report-wrapper .js-measures2-summary th, .carbon-report-wrapper .js-measures2-summary td,\n\
+                .carbon-report-wrapper .js-measures3-summary th, .carbon-report-wrapper .js-measures3-summary td\n\
+                    {border-color: rgb(161,205,68);}\n\
             }");
+        /*$('#print-css').append("@media print{\n\
+                .carbon-report-wrapper .doc-title-wrapper{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper .top-border-title{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper .section-title{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper #performace-summary-key{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper .sap-table{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper .right-align-item-list li{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper th{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper td{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper .measures-list>table{border-color: rgb(39,84,43)}\n\
+                .carbon-report-wrapper .three-col-table thead th:after,\n\
+                .carbon-report-wrapper .three-col-table thead th:before\n\
+                    {background:rgb(39,84,43)}\n\
+                .carbon-report-wrapper .js-measures1-summary th, .carbon-report-wrapper .js-measures1-summary td,\n\
+                .carbon-report-wrapper .js-measures2-summary th, .carbon-report-wrapper .js-measures2-summary td,\n\
+                .carbon-report-wrapper .js-measures3-summary th, .carbon-report-wrapper .js-measures3-summary td\n\
+                    {border-color: rgb(39,84,43);}\n\
+            }");*/
 
         // Logos in cover page
         $('#extra_logo').attr("src", path + "Modules/assessment/img-assets/CAfS_Logo_CMYK.jpg").attr('alt', 'Cumbria Action for Sustainability logo').css('width', '150px');
