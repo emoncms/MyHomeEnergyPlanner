@@ -878,14 +878,51 @@ calc.temperature = function (data)
     data.mean_internal_temperature.m_i_t_whole_dwelling_adjusted = data.internal_temperature;
     return data;
 };
+
 //---------------------------------------------------------------------------------------------
 // SPACE HEATING AND COOLING
 // Calculates space heating and cooling demand.
-// Module Inputs: data.space_heating.use_utilfactor_forgains
-// Global Inputs: data.TFA, data.internal_temperature, data.external_temperature, data.losses_WK, data.gains_W
-// Global Outputs: data.energy_requirements.space_heating, data.energy_requirements.space_cooling, data.annual_useful_gains_kWh_m2, data.annual_losses_kWh_m2
-// Uses external function: calc_utilisation_factor
-// Datasets: datasets.table_1a
+// 
+// Module Inputs: 
+//      - data.space_heating.use_utilfactor_forgains
+//	- data.space_heating.heating_off_summer
+//      
+// Global Inputs: 
+//      - data.internal_temperature
+//	- data.external_temperature
+//	- data.losses_WK
+//	- data.gains_W
+//	- data.TFA
+//	- data.TMP
+//      
+// Global Outputs: 
+//	- data.annual_useful_gains_kWh_m2
+//	- data.annual_losses_kWh_m2 
+//	- data.space_heating_demand_m2
+//	- data.energy_requirements.space_heating
+//	- data.energy_requirements.space_cooling
+//
+// Module Variables:
+//	- data.space_heating.delta_T
+//	- data.space_heating.total_losses
+//	- data.space_heating.total_gains
+//	- data.space_heating.utilisation_factor
+//	- data.space_heating.useful_gains
+//	- data.space_heating.heat_demand
+//	- data.space_heating.cooling_demand
+//	- data.space_heating.heat_demand_kwh
+//	- data.space_heating.cooling_demand_kwh
+//	- data.space_heating.annual_heating_demand
+//	- data.space_heating.annual_cooling_demand
+//	- data.space_heating.annual_heating_demand_m2
+//	- data.space_heating.annual_cooling_demand_m2
+//
+// Datasets: 
+//      - datasets.table_1a
+// 
+// Uses external function: 
+//      - calc_utilisation_factor
+//      
 //---------------------------------------------------------------------------------------------
 
 calc.space_heating = function (data)
@@ -1005,10 +1042,25 @@ calc.space_heating = function (data)
     return data;
 };
 
-/*****************************************************/
-/*  Calculates fuel requirements for water heating   */
-/*  and space heating                                */
-/*  **************************************************/
+//---------------------------------------------------------------------------------------------
+// HEATING SYSTEMS
+//  
+// Calculates fuel requirements for water heating   */
+//  and space heating                                */
+//
+// Module Inputs: 
+//      - data.heating_systems
+//      
+// Global Inputs: 
+//      - data.energy_requirements.waterheating
+//	-  data.energy_requirements.space_heating
+//      
+// Global Outputs: 
+//	- data.fuel_requirements.waterheating
+//	- data.fuel_requirements.space_heating
+//
+//---------------------------------------------------------------------------------------------
+
 calc.heating_systems = function (data) {
     if (data.heating_systems == undefined)
         data.heating_systems = [];
@@ -1077,10 +1129,24 @@ calc.heating_systems = function (data) {
 
 //---------------------------------------------------------------------------------------------
 // FUEL REQUIREMENTS
+//
 // Module Inputs: 
+//      -  data.use_generation
+//      
 // Global Inputs: 
+//      - data.fuel_requirements
+//	- data.fuels
+//	- data.generation
+//      
 // Global Outputs: 
-// Datasets: 
+//	- data.fuel_totals
+//	- data.energy_use
+//	- data.annualco2
+//	- data.energy_delivered
+//	- data.total_cost
+//	- data.primary_energy_use
+//	- data.net_cost
+//
 //---------------------------------------------------------------------------------------------
 calc.fuel_requirements = function (data) {
 
@@ -2083,6 +2149,7 @@ calc.gains = function (data) {
         }
     }
 };
+
 //---------------------------------------------------------------------------------------------
 // SEPERATED MODEL FUNCTIONS
 //---------------------------------------------------------------------------------------------
