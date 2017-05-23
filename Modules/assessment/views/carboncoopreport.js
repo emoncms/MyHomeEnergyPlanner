@@ -1398,7 +1398,7 @@ function carboncoopreport_UpdateUI() {
         else
             html += '<td><div class="text-width-limiter">Whole house</div>';
         html += '</td>';
-        html += '<td>' + performance.replace('WK.m2', 'W/m<sup>2</sup>.k').replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa').replace('na', 'n/a'), +'</td>';
+        html += '<td>' + performance.replace('WK.m2', 'W/m<sup>2</sup>.K').replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa').replace('na', 'n/a'), +'</td>';
         html += '<td>' + benefits + '</td>';
         html += '<td class="cost">£' + Number(cost).toFixed(0) + '</td>';
         html += '<td>' + who_by + '</td>';
