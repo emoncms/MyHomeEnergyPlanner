@@ -1340,7 +1340,8 @@ function carboncoopreport_UpdateUI() {
         html += '<td style="width:13%"><strong>Key risks: </strong></td><td>' + measure.measure.key_risks + '</td></tr>';
         html += '<tr><td><strong>Benefits: </strong></td><td>' + measure.measure.benefits + '</td>';
         html += '<td><strong>Dirt and disruption: </strong></td><td>' + measure.measure.disruption.replace('MEDIUMHIGH', 'MEDIUM / HIGH') + '</td></tr>';
-        html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + measure.measure.performance.replace('W/K.m2', 'W/m<sup>2</sup>.K').replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa').replace('na', 'n/a') + '</td>';
+        var perf = measure.measure.performance.replace("K.m2", "m<sup>2</sup>.K").replace('m3/m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa').replace('na', 'n/a'); // We have realized that some units were inputted wrong in the library
+        html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + perf + '</td>';
         html += '<td colspan=2><table  style="width:100%"><tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.measure.cost_units + '</td></tr>';
         html += '<tr><td><strong>Quantity (units): </strong></td><td>' + measure.measure.quantity + '</td><td><strong>Total cost (£): </strong></td><td>' + measure.measure.cost_total + '</td></tr></table></td></tr>';
         html += "</table>";
@@ -1398,7 +1399,8 @@ function carboncoopreport_UpdateUI() {
         else
             html += '<td><div class="text-width-limiter">Whole house</div>';
         html += '</td>';
-        html += '<td>' + performance.replace('WK.m2', 'W/m<sup>2</sup>.K').replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa').replace('na', 'n/a'), +'</td>';
+        var perf = performance.replace("K.m2", "m<sup>2</sup>.K").replace('m3/m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa').replace('na', 'n/a'); // We have realized that some units were inputted wrong in the library
+        html += '<td>' + perf + '</td>';
         html += '<td>' + benefits + '</td>';
         html += '<td class="cost">£' + Number(cost).toFixed(0) + '</td>';
         html += '<td>' + who_by + '</td>';
@@ -1485,23 +1487,23 @@ function carboncoopreport_UpdateUI() {
 
         // CSS
         /*$('#print-css').append("@media print{\n\
-                .carbon-report-wrapper .doc-title-wrapper{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper .top-border-title{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper .section-title{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper #performace-summary-key{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper .sap-table{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper .right-align-item-list li{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper th{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper td{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper .measures-list>table{border-color: rgb(87,139,63)}\n\
-                .carbon-report-wrapper .three-col-table thead th:after,\n\
-                .carbon-report-wrapper .three-col-table thead th:before\n\
-                    {background:rgb(87,139,63)}\n\
-                .carbon-report-wrapper .js-measures1-summary th, .carbon-report-wrapper .js-measures1-summary td,\n\
-                .carbon-report-wrapper .js-measures2-summary th, .carbon-report-wrapper .js-measures2-summary td,\n\
-                .carbon-report-wrapper .js-measures3-summary th, .carbon-report-wrapper .js-measures3-summary td\n\
-                    {border-color: rgb(87,139,63);}\n\
-            }");*/
+         .carbon-report-wrapper .doc-title-wrapper{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper .top-border-title{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper .section-title{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper #performace-summary-key{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper .sap-table{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper .right-align-item-list li{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper th{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper td{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper .measures-list>table{border-color: rgb(87,139,63)}\n\
+         .carbon-report-wrapper .three-col-table thead th:after,\n\
+         .carbon-report-wrapper .three-col-table thead th:before\n\
+         {background:rgb(87,139,63)}\n\
+         .carbon-report-wrapper .js-measures1-summary th, .carbon-report-wrapper .js-measures1-summary td,\n\
+         .carbon-report-wrapper .js-measures2-summary th, .carbon-report-wrapper .js-measures2-summary td,\n\
+         .carbon-report-wrapper .js-measures3-summary th, .carbon-report-wrapper .js-measures3-summary td\n\
+         {border-color: rgb(87,139,63);}\n\
+         }");*/
         $('#print-css').append("@media print{\n\
                 .carbon-report-wrapper .doc-title-wrapper{border-color: rgb(161,205,68)}\n\
                 .carbon-report-wrapper .top-border-title{border-color: rgb(161,205,68)}\n\
@@ -1521,23 +1523,23 @@ function carboncoopreport_UpdateUI() {
                     {border-color: rgb(161,205,68);}\n\
             }");
         /*$('#print-css').append("@media print{\n\
-                .carbon-report-wrapper .doc-title-wrapper{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper .top-border-title{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper .section-title{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper #performace-summary-key{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper .sap-table{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper .right-align-item-list li{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper th{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper td{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper .measures-list>table{border-color: rgb(39,84,43)}\n\
-                .carbon-report-wrapper .three-col-table thead th:after,\n\
-                .carbon-report-wrapper .three-col-table thead th:before\n\
-                    {background:rgb(39,84,43)}\n\
-                .carbon-report-wrapper .js-measures1-summary th, .carbon-report-wrapper .js-measures1-summary td,\n\
-                .carbon-report-wrapper .js-measures2-summary th, .carbon-report-wrapper .js-measures2-summary td,\n\
-                .carbon-report-wrapper .js-measures3-summary th, .carbon-report-wrapper .js-measures3-summary td\n\
-                    {border-color: rgb(39,84,43);}\n\
-            }");*/
+         .carbon-report-wrapper .doc-title-wrapper{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper .top-border-title{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper .section-title{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper #performace-summary-key{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper .sap-table{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper .right-align-item-list li{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper th{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper td{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper .measures-list>table{border-color: rgb(39,84,43)}\n\
+         .carbon-report-wrapper .three-col-table thead th:after,\n\
+         .carbon-report-wrapper .three-col-table thead th:before\n\
+         {background:rgb(39,84,43)}\n\
+         .carbon-report-wrapper .js-measures1-summary th, .carbon-report-wrapper .js-measures1-summary td,\n\
+         .carbon-report-wrapper .js-measures2-summary th, .carbon-report-wrapper .js-measures2-summary td,\n\
+         .carbon-report-wrapper .js-measures3-summary th, .carbon-report-wrapper .js-measures3-summary td\n\
+         {border-color: rgb(39,84,43);}\n\
+         }");*/
 
         // Logos in cover page
         $('#extra_logo').attr("src", path + "Modules/assessment/img-assets/CAfS_Logo_CMYK.jpg").attr('alt', 'Cumbria Action for Sustainability logo').css('width', '150px');
