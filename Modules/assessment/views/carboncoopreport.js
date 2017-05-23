@@ -1340,7 +1340,7 @@ function carboncoopreport_UpdateUI() {
         html += '<td style="width:13%"><strong>Key risks: </strong></td><td>' + measure.measure.key_risks + '</td></tr>';
         html += '<tr><td><strong>Benefits: </strong></td><td>' + measure.measure.benefits + '</td>';
         html += '<td><strong>Dirt and disruption: </strong></td><td>' + measure.measure.disruption.replace('MEDIUMHIGH', 'MEDIUM / HIGH') + '</td></tr>';
-        html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + measure.measure.performance.replace('WK.m2', 'W/m<sup>2</sup>.K').replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa').replace('na', 'n/a') + '</td>';
+        html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + measure.measure.performance.replace('W/K.m2', 'W/m<sup>2</sup>.K').replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa').replace('na', 'n/a') + '</td>';
         html += '<td colspan=2><table  style="width:100%"><tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.measure.cost_units + '</td></tr>';
         html += '<tr><td><strong>Quantity (units): </strong></td><td>' + measure.measure.quantity + '</td><td><strong>Total cost (£): </strong></td><td>' + measure.measure.cost_total + '</td></tr></table></td></tr>';
         html += "</table>";
