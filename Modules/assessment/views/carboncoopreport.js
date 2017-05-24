@@ -381,7 +381,7 @@ function carboncoopreport_UpdateUI() {
             value: [
                 {value: project["master"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal Gains'},
                 {value: project["master"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar Gains'},
-                {value: project["master"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space Heating Requirement'},
+                {value: project["master"].space_heating.annual_heating_demand_m2, label: 'Space Heating Requirement'},
                 {value: -project["master"].annual_losses_kWh_m2["fabric"], label: 'Fabric Losses'},
                 {value: -(project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation and Infiltration Losses'},
             ]
@@ -396,7 +396,7 @@ function carboncoopreport_UpdateUI() {
             value: [
                 {value: project["scenario1"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal Gains'},
                 {value: project["scenario1"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar Gains'},
-                {value: project["scenario1"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space Heating Requirement'},
+                {value: project["scenario1"].space_heating.annual_heating_demand_m2, label: 'Space Heating Requirement'},
                 {value: -project["scenario1"].annual_losses_kWh_m2["fabric"], label: 'Fabric Losses'},
                 {value: -(project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation and Infiltration Losses'},
             ]
@@ -411,7 +411,7 @@ function carboncoopreport_UpdateUI() {
             value: [
                 {value: project["scenario2"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal Gains'},
                 {value: project["scenario2"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar Gains'},
-                {value: project["scenario2"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space Heating Requirement'},
+                {value: project["scenario2"].space_heating.annual_heating_demand_m2, label: 'Space Heating Requirement'},
                 {value: -project["scenario2"].annual_losses_kWh_m2["fabric"], label: 'Fabric Losses'},
                 {value: -(project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation and Infiltration Losses'},
             ]
@@ -426,7 +426,7 @@ function carboncoopreport_UpdateUI() {
             value: [
                 {value: project["scenario3"].annual_useful_gains_kWh_m2["Internal"], label: 'Internal Gains'},
                 {value: project["scenario3"].annual_useful_gains_kWh_m2["Solar"], label: 'Solar Gains'},
-                {value: project["scenario3"].annual_useful_gains_kWh_m2["Space heating"], label: 'Space Heating Requirement'},
+                {value: project["scenario3"].space_heating.annual_heating_demand_m2, label: 'Space Heating Requirement'},
                 {value: -project["scenario3"].annual_losses_kWh_m2["fabric"], label: 'Fabric Losses'},
                 {value: -(project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]), label: 'Ventilation and Infiltration Losses'},
             ]
