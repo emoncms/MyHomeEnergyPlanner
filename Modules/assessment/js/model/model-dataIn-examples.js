@@ -34,6 +34,7 @@ var dataIn_model_r9 = {
         air_permeability_value: 15, // q50, cubic meters per hour per square meter of envelope area
         number_of_sides_sheltered: 1,
         system_air_change_rate: 0.5,
+        system_specific_fan_power:3, // for MVHR
         balanced_heat_recovery_efficiency: 50, // for MVHR
         IVF: [//Intentional vents and flues (IVF: Chimneys, open flues and flueless gas fires)
             {
@@ -132,7 +133,7 @@ var dataIn_model_r9 = {
     water_heating: {
         override_annual_energy_content: false, // true || false
         annual_energy_content: 0, // input to the module when override_annual_energy_content is set to true
-        hot_water_control_type: no_cylinder_thermostat, // no_cylinder_thermostat || Cylinder thermostat, water heating not separately timed || Cylinder thermostat, water heating separately timed
+        hot_water_control_type: 'no_cylinder_thermostat', // no_cylinder_thermostat || Cylinder thermostat, water heating not separately timed || Cylinder thermostat, water heating separately timed
         pipework_insulation: 'Uninsulated primary pipework', // Uninsulated primary pipework || First 1m from cylinder insulated || All accesible piperwok insulated || Fully insulated primary pipework
         contains_dedicated_solar_storage_or_WWHRS: 0, // Volume in litres
         solar_water_heating: false, // true || false
@@ -196,7 +197,7 @@ var dataIn_model_r9 = {
 // If you use the example dataIn object above you will still get an error as data.TFA will be missing, therefore you would have to add it yourself
 // As a general rule for running the whole model ensure that everything in the dataIn example object is defined, but if you are only running a specific function then you need to check the which are the globla and module inputs and ensure they are in the data object passed to the function as an argument
 
-data.TFA
+/*data.TFA
 data.volume
 data.num_of_floors
 data.occupancy
@@ -207,7 +208,7 @@ data.TMP,
 data.fabric_total_heat_loss_WK
 data.losses_WK.ventilation
 data.totalWK_monthly
-
+*/
 
 
 // Differences with SAP2012
