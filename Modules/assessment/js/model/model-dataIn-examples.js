@@ -55,13 +55,13 @@ var dataIn_model_r9 = {
     heating_systems: [// the lines with "//" are the ones that I haven't found as inputs yet so they may not be needed as inputs
         {
             "category": "Warm air systems", //
-            "winter_efficiency": 90, 
-            "summer_efficiency": 80, 
+            "winter_efficiency": 90,
+            "summer_efficiency": 80,
             "central_heating_pump": 120, //
             "fans_and_supply_pumps": null, //
-            "responsiveness": 1, //Refer to Table 4d, p.209 SAP 9.92
-            "combi_loss": "Instantaneous, without keep hot-facility", //
-            "primary_circuit_loss": "No", //
+            "responsiveness": 1, // Refer to Table 4d, p.209 SAP 9.92
+            "combi_loss": "Instantaneous, without keep hot-facility", // Instantaneous, without keep hot-facility || Instantaneous, with keep-hot facility controlled by time clock || Instantaneous, with keep-hot facility not controlled by time clock || Storage combi boiler >= 55 litres || Storage combi boiler < 55 litres
+            "primary_circuit_loss": "No", // yes || No
             "id": 1, //
             "fuel": "Mains Gas", //
             "fraction_space": 1,
@@ -71,15 +71,118 @@ var dataIn_model_r9 = {
             "provides": "heating_and_water", // heating || water || heating_and_water
             "instantaneous_water_heating": false, //
             "heating_controls": 1, // 1|| 2 || 3  -  Refer to Table 4e, p.210 SAP 9.92
-            "efficiency": 0.8573275245289163//
+            "efficiency": 0.85 //
         }
     ],
-    space_heating: { // to be  checked
+    space_heating: {// to be  checked
         "use_utilfactor_forgains": true,
         "heating_off_summer": true
+    },
+    use_generation: true,
+    LAC_calculation_type: 'SAP', // SAP || carboncoop_SAPlighting || detailedlist
+    LAC: {
+        L: 10, // The total number of fixed lighting outlets
+        LLE: 8, // The number of fixed low energy lighting outlets
+        reduced_heat_gains_lighting: true,
+        energy_efficient_appliances: true,
+        energy_efficient_cooking: true
+    },
+    applianceCarbonCoop: {
+        list: [// The annual demand of an item is: "frequency x norm_demand x frequency x utilisation_factor x  reference_quantity"
+            {
+                a_plus_rated: false,
+                category: "appliances", // appliances || cooking
+                efficiency: "1",
+                frequency: "555",
+                fuel: "Standard Tariff",
+                name: "Small Consumer Electronics",
+                norm_demand: "0.8",
+                number_used: 1,
+                reference_quantity: "3",
+                type_of_fuel: "Electricity",
+                units: "kW",
+                utilisation_factor: "1"
+            }
+        ]
+    },
+    appliancelist: {
+        list: [
+            {
+                name: "LED Light",
+                power: 6,
+                hours: 12,
+                category: 'lighting',
+                fuel: 'Standard Tariff',
+                efficiency: 1
+            }
+        ]
+    },
+    use_SHW: false, // if set to true Solar Hot Water is included in the calculations
+    SHW: {
+        a1: 3.7, // Collector linear heat loss coefficient, a1, from test certificate
+        a2: 0.01, // Collector 2nd order heat loss coefficient, a2, from test certificate
+        n0: 0.78, // Zero-loss collector efficiency, η0, from test certificate or Table H1
+        orientation: 0, // 0 (N) || 1 (NE/NW)  || 2 (E/W)  || 3 (SE/SW)  ||4 (S) 
+        inclination: 45,
+        A: 8, // Aperture area of solar collector, m2
+        combined_cylinder_volume: 0, // In litres
+        Vs: 300, //Dedicated solar storage volume, Vs, (litres)
+        volume_ratio: 0.5	// Volume ratio Veff/Vd,avera
+    },
+    water_heating: {
+        override_annual_energy_content: false, // true || false
+        annual_energy_content: 0, // input to the module when override_annual_energy_content is set to true
+        hot_water_control_type: no_cylinder_thermostat, // no_cylinder_thermostat || Cylinder thermostat, water heating not separately timed || Cylinder thermostat, water heating separately timed
+        pipework_insulation: 'Uninsulated primary pipework', // Uninsulated primary pipework || First 1m from cylinder insulated || All accesible piperwok insulated || Fully insulated primary pipework
+        contains_dedicated_solar_storage_or_WWHRS: 0, // Volume in litres
+        solar_water_heating: false, // true || false
+        hot_water_store_in_dwelling: true, // 	true || false
+        community_heating: false, //	true || false
+        storage_type: {// if undefined, it means there is no storage
+            name: "Cylinder with electric immersion, up to 130 litres, 80mm loose fit jacket (DIY)",
+            category: 'Cylinders with inmersion',
+            manufacturer_loss_factor: 0,
+            temperature_factor_a: 0,
+            storage_volume: 110,
+            loss_factor_b: 0.024,
+            volume_factor_b: 1.063,
+            temperature_factor_b: 0.6,
+            declared_loss_factor_known: false,
+        }
+    },
+    generation: {
+        use_PV_calculator: true, // when set to true, solar_annual_kwh is calculated Using the PV calculator
+        solar_annual_kwh: 0,
+        solar_fraction_used_onsite: 0,
+        solar_FIT: 0,
+        solar_export_FIT: 0,
+        wind_annual_kwh: 0,
+        wind_fraction_used_onsite: 0,
+        wind_FIT: 0,
+        wind_export_FIT: 0,
+        hydro_annual_kwh: 0,
+        hydro_fraction_used_onsite: 0,
+        hydro_FIT: 0,
+        hydro_export_FIT: 0,
+        solarpv_orientation: 4, // PV calculator: 0 (N) || 1 (NE/NW) || 2 (E/W) || 3 (SE/SW) || 4 (S)
+        solarpv_kwp_installed: 3, // PV calculator
+        solarpv_inclination: 35, // PV calculator, degrees
+        solarpv_overshading: 1 // PV calculator: 0.5 (heavy > 80%) || 0.65 (Significant 60% - 80%) || 0.8 (Modest 20% - 60%) || 1 (None or very little, less than 20%)
+    },
+    currentenergy: {
+        use_by_fuel: {
+            'Mains Gas': {// needs to be in data.fuels
+                annual_use: 18000
+            }
+        },
+        onsite_generation: true, // true || false
+        generation: {
+            annual_generation: 1500,
+            fraction_used_onsite: 0.25,
+            annual_FIT_income: 0
+        }
+
     }
-
-
 }
 
 
@@ -128,9 +231,11 @@ data.totalWK_monthly
  - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
  - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)
  - calc.temperature: SAP assumes specific periods with heating off in week or weekend days (table 9). OpenBEM allows the user to define the number and length of the periods
- 
+ - data.total_cost, data.primary_energy_use and data.annualco2: SAP doesn't take into account the energy used for appliances and cooking for the calculations of total cost, primary energy and co2 emissions. OpenBEM does
+ - When using SAP calculation for LAC: 
+ - the energy requirements for cooking are calculated from the CO2 emssions applying a emission factor of 0.519 (assuming cooking is done with electricity. 
+ - OpenBEM has energy_efficient_appliances as input. When set to true: reduced internal heat gains are asssumed (as per SAP) and also a coefficient of 0.9 is applied in the calculation of the annual energy used for appliances
+ - OpenBem allows to calculate energy requirements, gains and CO2 for LAC inputing a detailed list of items with info about the power they use, efficiency and time of use. This method can be more accurate than SAP
+ - OpenBem allows to calculate energy requirements, gains and CO2 for Appliances and Cooking using items from a Carbon Co-op library. This method can be more accurate than SAP
+ - OpenBEM allows to override the SAP calculation for annual energy content of hot water
  */
-
-
-data.temperature.hours_off.weekday = get_hours_off_weekday(data);
-data.temperature.hours_off.weekend = get_hours_off_weekend(data);
