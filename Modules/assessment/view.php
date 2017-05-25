@@ -393,10 +393,12 @@ global $reports;
         console.log(scenario)
 
         // We need to calculate the periods of heating off here because if we try to do it in household.js it happens after the update
-         for (var s in project){ // we ensure all the scenarios have the same household data and heating off periods
-            project[s].household = project.master.household;
-            project[s].temperature.hours_off.weekday = get_hours_off_weekday(project[s]); 
-            project[s].temperature.hours_off.weekend = get_hours_off_weekend(project[s]);
+        if (project.master.household != undefined) {
+            for (var s in project) { // we ensure all the scenarios have the same household data and heating off periods
+                project[s].household = project.master.household;
+                project[s].temperature.hours_off.weekday = get_hours_off_weekday(project[s]);
+                project[s].temperature.hours_off.weekend = get_hours_off_weekend(project[s]);
+            }
         }
 
         project[scenario] = calc.run(project[scenario]);
