@@ -420,8 +420,8 @@ function elements_UpdateUI()
 {
     for (z in data.fabric.elements) {
         var color = "#fff";
-        var name = data.fabric.elements[z].name;
-        name = name.toLowerCase();
+        /*var name = data.fabric.elements[z].name;
+        name = name.toLowerCase();*/
         if (data.fabric.elements[z].type == 'Door') {
             color = '#ffeeee';
         }
