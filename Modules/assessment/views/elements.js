@@ -345,6 +345,8 @@ function add_window(z)
     $("#windows [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
     $("#windows [tag='template']").attr('tag', data.fabric.elements[z].lib);
     $('#windows .window_fields_template').removeClass('window_fields_template');
+    console.log(data.fabric.elements[z])
+    data.fabric.elements[z].name = String(data.fabric.elements[z].name);
     var name = data.fabric.elements[z].name;
     name = name.toLowerCase();
     if (data.fabric.elements[z].type == 'Door') {
