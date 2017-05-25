@@ -12,7 +12,7 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r5.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r9.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
