@@ -676,6 +676,7 @@ calc.ventilation = function (data)
 //      - data.altitude
 //      - data.region
 //	- data.heating_systems
+//	- data.temperature.hours_off
 //      
 // Global Outputs: 
 //      - data.internal_temperature

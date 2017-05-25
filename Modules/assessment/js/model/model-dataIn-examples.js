@@ -1,4 +1,6 @@
 var dataIn_model_r9 = {
+    altituda: 10,
+    region: 7,
     floors: [
         {height: 1, area: 1}
     ],
@@ -34,7 +36,7 @@ var dataIn_model_r9 = {
         air_permeability_value: 15, // q50, cubic meters per hour per square meter of envelope area
         number_of_sides_sheltered: 1,
         system_air_change_rate: 0.5,
-        system_specific_fan_power:3, // for MVHR
+        system_specific_fan_power: 3, // for MVHR
         balanced_heat_recovery_efficiency: 50, // for MVHR
         IVF: [//Intentional vents and flues (IVF: Chimneys, open flues and flueless gas fires)
             {
@@ -51,7 +53,8 @@ var dataIn_model_r9 = {
     },
     temperature: {
         target: 21,
-        living_area: 20
+        living_area: 20,
+        hours_off:{weekday: [7, 8], weekend: [8]}
     },
     heating_systems: [// the lines with "//" are the ones that I haven't found as inputs yet so they may not be needed as inputs
         {
@@ -63,7 +66,6 @@ var dataIn_model_r9 = {
             "responsiveness": 1, // Refer to Table 4d, p.209 SAP 9.92
             "combi_loss": "Instantaneous, without keep hot-facility", // Instantaneous, without keep hot-facility || Instantaneous, with keep-hot facility controlled by time clock || Instantaneous, with keep-hot facility not controlled by time clock || Storage combi boiler >= 55 litres || Storage combi boiler < 55 litres
             "primary_circuit_loss": "No", // yes || No
-            "id": 1, //
             "fuel": "Mains Gas", //
             "fraction_space": 1,
             "fraction_water_heating": 1,
@@ -75,11 +77,30 @@ var dataIn_model_r9 = {
             "efficiency": 0.85 //
         }
     ],
-    space_heating: {// to be  checked
+    space_heating: {
         "use_utilfactor_forgains": true,
         "heating_off_summer": true
     },
     use_generation: true,
+    generation: {
+        use_PV_calculator: true, // when set to true, solar_annual_kwh is calculated Using the PV calculator
+        solar_annual_kwh: 0,
+        solar_fraction_used_onsite: 0,
+        solar_FIT: 0,
+        solar_export_FIT: 0,
+        wind_annual_kwh: 0,
+        wind_fraction_used_onsite: 0,
+        wind_FIT: 0,
+        wind_export_FIT: 0,
+        hydro_annual_kwh: 0,
+        hydro_fraction_used_onsite: 0,
+        hydro_FIT: 0,
+        hydro_export_FIT: 0,
+        solarpv_orientation: 4, // PV calculator: 0 (N) || 1 (NE/NW) || 2 (E/W) || 3 (SE/SW) || 4 (S)
+        solarpv_kwp_installed: 3, // PV calculator
+        solarpv_inclination: 35, // PV calculator, degrees
+        solarpv_overshading: 1 // PV calculator: 0.5 (heavy > 80%) || 0.65 (Significant 60% - 80%) || 0.8 (Modest 20% - 60%) || 1 (None or very little, less than 20%)
+    },
     LAC_calculation_type: 'SAP', // SAP || carboncoop_SAPlighting || detailedlist
     LAC: {
         L: 10, // The total number of fixed lighting outlets
@@ -131,6 +152,7 @@ var dataIn_model_r9 = {
         volume_ratio: 0.5	// Volume ratio Veff/Vd,avera
     },
     water_heating: {
+        low_water_use_design: false,    //
         override_annual_energy_content: false, // true || false
         annual_energy_content: 0, // input to the module when override_annual_energy_content is set to true
         hot_water_control_type: 'no_cylinder_thermostat', // no_cylinder_thermostat || Cylinder thermostat, water heating not separately timed || Cylinder thermostat, water heating separately timed
@@ -151,25 +173,6 @@ var dataIn_model_r9 = {
             declared_loss_factor_known: false,
         }
     },
-    generation: {
-        use_PV_calculator: true, // when set to true, solar_annual_kwh is calculated Using the PV calculator
-        solar_annual_kwh: 0,
-        solar_fraction_used_onsite: 0,
-        solar_FIT: 0,
-        solar_export_FIT: 0,
-        wind_annual_kwh: 0,
-        wind_fraction_used_onsite: 0,
-        wind_FIT: 0,
-        wind_export_FIT: 0,
-        hydro_annual_kwh: 0,
-        hydro_fraction_used_onsite: 0,
-        hydro_FIT: 0,
-        hydro_export_FIT: 0,
-        solarpv_orientation: 4, // PV calculator: 0 (N) || 1 (NE/NW) || 2 (E/W) || 3 (SE/SW) || 4 (S)
-        solarpv_kwp_installed: 3, // PV calculator
-        solarpv_inclination: 35, // PV calculator, degrees
-        solarpv_overshading: 1 // PV calculator: 0.5 (heavy > 80%) || 0.65 (Significant 60% - 80%) || 0.8 (Modest 20% - 60%) || 1 (None or very little, less than 20%)
-    },
     currentenergy: {
         use_by_fuel: {
             'Mains Gas': {// needs to be in data.fuels
@@ -182,7 +185,6 @@ var dataIn_model_r9 = {
             fraction_used_onsite: 0.25,
             annual_FIT_income: 0
         }
-
     }
 }
 
@@ -198,17 +200,17 @@ var dataIn_model_r9 = {
 // As a general rule for running the whole model ensure that everything in the dataIn example object is defined, but if you are only running a specific function then you need to check the which are the globla and module inputs and ensure they are in the data object passed to the function as an argument
 
 /*data.TFA
-data.volume
-data.num_of_floors
-data.occupancy
-data.TMP,
-        data.losses_WK.fabric,
-        data.gains_W.solar,
-        data.GL
-data.fabric_total_heat_loss_WK
-data.losses_WK.ventilation
-data.totalWK_monthly
-*/
+ data.volume
+ data.num_of_floors
+ data.occupancy
+ data.TMP,
+ data.losses_WK.fabric,
+ data.gains_W.solar,
+ data.GL
+ data.fabric_total_heat_loss_WK
+ data.losses_WK.ventilation
+ data.totalWK_monthly
+ */
 
 
 // Differences with SAP2012
@@ -218,6 +220,7 @@ data.totalWK_monthly
  - calc.ventilation: ventilation loses in SAP is calculated from the loses due to infiltration and ventilation system (see calculation of 25m in worksheets). OpenBEM keeps those loses separated and calls them: ventilation loses (due to ventilation system) and infiltratioon loses 
  - calc.ventilation: despite SAP doesn't make a difference between ventilation and infiltration loses, the loses due to Extract Ventilation Points (intermittent fans and passive vents) is in the part of the formula that corresponds with "infiltration". OpenBEM considers them to be loses due to the ventilation system. GIT issue 177: https://github.com/emoncms/MyHomeEnergyPlanner/issues/177)
  - calc.ventilation: SAP does has a magnificient mistake when calculating the Infiltration Rate if a pressurisation test has been carried out. Formula 18 in worksheet adds q50 (cubic meters per hour per square meter of envelope area) with ACH (air changes per hour). In the case of using q50 we first convert it from cubic meter per... to ACH and then calculate the infiltration rate (ACH)
+ 
  - calc.ventilation: SAP only considers 4 type of ventilation systems:
  - a: Balanced mechanical ventilation with heat recovery (MVHR)
  - b: Balanced mechanical ventilation without heat recovery (MV)
@@ -231,6 +234,8 @@ data.totalWK_monthly
  - MEV: Mechanical Continuous Extract Ventilation (type 'c' in SAP)
  - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
  - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)
+ 
+ - TSAP defines vaues for ventilation rates of Extract Ventilation Points, these can be changed in OpenBEM to their actual specification
  - calc.temperature: SAP assumes specific periods with heating off in week or weekend days (table 9). OpenBEM allows the user to define the number and length of the periods
  - data.total_cost, data.primary_energy_use and data.annualco2: SAP doesn't take into account the energy used for appliances and cooking for the calculations of total cost, primary energy and co2 emissions. OpenBEM does
  - When using SAP calculation for LAC: 
