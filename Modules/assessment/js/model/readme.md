@@ -6,11 +6,11 @@ An Open source Building Energy Model based on SAP.
 
 - Coder: Carlos Alonso-Gabizon from [Carbon Co-op](http://carbon.coop/)
 - Consultant: Marinanne Heaslip from [Urbed](http://urbed.coop/)
+- Jonathan Atkinson from [Carbon Co-op](http://carbon.coop/), project manager 
 
 ## Big thanks to:
 
 - Trystan Lea from [OpenEnergyMonitor](https://openenergymonitor.org/), original developer 
-- Jonathan Atkinson from [Carbon Co-op](http://carbon.coop/), project manager 
 - Helen Grimshaw from [Urbed](http://urbed.coop/), consultant 
 - Gervase Mangwana [Waxwing Energy](https://uk.linkedin.com/in/gervasecooke), asessor
 
