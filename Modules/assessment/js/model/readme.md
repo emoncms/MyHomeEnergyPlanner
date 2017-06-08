@@ -1,42 +1,42 @@
-#OpenBEM
+# OpenBEM
 
 An Open source Building Energy Model based on SAP.
 
-##Current development by 
+## Current development by 
 
 - Coder: Carlos Alonso-Gabizon from [Carbon Co-op](http://carbon.coop/)
 - Consultant: Marinanne Heaslip from [Urbed](http://urbed.coop/)
 
-##Big thanks to:
+## Big thanks to:
 
 - Trystan Lea from [OpenEnergyMonitor](https://openenergymonitor.org/), original developer 
 - Jonathan Atkinson from [Carbon Co-op](http://carbon.coop/), project manager 
 - Helen Grimshaw from [Urbed](http://urbed.coop/), consultant 
 - Gervase Mangwana [Waxwing Energy](https://uk.linkedin.com/in/gervasecooke), asessor
 
-##What is OpenBEM
+## What is OpenBEM
 
 As stated above OpenBEM is an Open source Building Energy Model. The calculations follow the SAP2012 worksheets workflow. SAP is known because its inconsistencies and misleading assumptions. Because of them, OpenBEM implementation differs from SAP in all those situations where we thought it could be improved. A list of differences can be found below.
 
 OpenBEM has been developed as part of a bigger project to help households design the retrofit works for their houses: [MyHomeEnergyPlanner](https://github.com/emoncms/MyHomeEnergyPlanner/). But OpenBem itself is a stand alone tool that can easily be used in other projects. As an example [Carbon Co-op](http://carbon.coop/) and [Urbed](http://urbed.coop/) have developed another tool based on OpenBEM to quickly and easily assess the energy performance and emissions of houses in Saldford area: [MyHomeEnergySaldford](http://myhomeenergysalford.carbon.coop/). An extremely simple Javascript use of the model is shown in the [index.html](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/index.html) file included in the model directory.
 
-##Who is it for
+## Who is it for
 
 OpenBEM is aimed for everybody with interest in the effect that buildings have on the environment. From students to modellers and software developers OpenBEM is free to use, share and modificate. 
 
-##License
+## License
 
 OpenBEM is released under a GPL license, this means that any modifications you do and that you put in the public domain need to remain under the same GPL license. You can still use OpenBEM for your own profit [as we, the developers, do](http://carbon.coop/content/household-energy-assessment)  . 
 
 If you use OpenBEM, we would appreciate you letting us know. No matter if it is for profit or not. If you use it, you are part of our commmunity and your experiences will help making OpenBEM better and making our, your and every user's work better. This is the power of Open Source.
 
-##Bussiness Models based on Open Source
+## Bussiness Models based on Open Source
 
 We are very interested in Business Models and how open source can be used for making money at the same time that being a contribution for a better and fairer society. We encourage people to think on ways to make money with OpenBEM or any other opensource product. Let us learn from you and share you experience with us. 
 
 OpenBEM and [MyHomeEnergyPlanner](https://github.com/emoncms/MyHomeEnergyPlanner/) are "our" open source codes and our Business Model based on Open Source is a social franchise to deliver home energy assessment, more about this to come soon.
 
-##Differences with SAP2012
+## Differences with SAP2012
 
 Here we show a list of differences between OpenBEM and SAP2012. Being humble, there must be more. SAP is a monster difficult to implement (even more when you are an assessor following the worksheets). We say this because we have probably missed the awkward footnote that tells the assessor to reduce the g-value for a window due to dirt (joke).
 
@@ -70,7 +70,7 @@ Here we show a list of differences between OpenBEM and SAP2012. Being humble, th
 
 
 
-##How to use OpenBEM
+## How to use OpenBEM
 
 The approach when developing OpenBEM was to split SAP worksheets into different modules, each of them implementing a specific calculation of the building model. OpenBEM can be run as a whole or each module can be run on its own. For example, a researcher wanting to understand the effect on solar gains of different type of glasses may want to only run the [*fabric*](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/model-r9.js#L234) module with just windows as inputs and forget about the rest of the house.
 
