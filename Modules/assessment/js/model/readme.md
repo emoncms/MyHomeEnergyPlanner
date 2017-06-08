@@ -18,7 +18,7 @@ An Open source Building Energy Model based on SAP.
 
 As stated above OpenBEM is an Open source Building Energy Model. The calculations follow the SAP2012 worksheets workflow. SAP is known because its inconsistencies and misleading assumptions. Because of them, OpenBEM implementation differs from SAP in all those situations where we thought it could be improved. A list of differences can be found below.
 
-OpenBEM has been developed as part of a bigger project to help households design the retrofit works for their houses: [MyHomeEnergyPlanner](https://github.com/emoncms/MyHomeEnergyPlanner/). But OpenBem itself is a stand alone tool that can easily be used in other projects. As an example [Carbon Co-op](http://carbon.coop/) and [Urbed](http://urbed.coop/) have developed another tool based on OpenBEM to quickly and easily assess the energy performance and emissions of houses in Saldford area: [MyHomeEnergySaldford](http://myhomeenergysalford.carbon.coop/). An extremely simple Javascript use of the model is shown in the [index.html](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/index.html) file included in the model directory.
+OpenBEM has been developed as part of a bigger project to help households design the retrofit works for their houses: [MyHomeEnergyPlanner](https://github.com/emoncms/MyHomeEnergyPlanner/). But OpenBEM itself is a stand alone tool that can easily be used in other projects. As an example [Carbon Co-op](http://carbon.coop/) and [Urbed](http://urbed.coop/) have developed another tool based on OpenBEM to quickly and easily assess the energy performance and emissions of houses in Saldford area: [MyHomeEnergySaldford](http://myhomeenergysalford.carbon.coop/). An extremely simple Javascript use of the model is shown in the [index.html](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/index.html) file included in the model directory.
 
 ## Who is it for
 
@@ -32,7 +32,7 @@ If you use OpenBEM, we would appreciate you letting us know. No matter if it is 
 
 ## Bussiness Models based on Open Source
 
-We are very interested in Business Models and how open source can be used for making money at the same time that being a contribution for a better and fairer society. We encourage people to think on ways to make money with OpenBEM or any other opensource product. Let us learn from you and share you experience with us. 
+We are very interested in Business Models and how open source can be used for making money at the same time that being a contribution for a better and fairer society. We encourage people to think on ways to make a living with OpenBEM or any other opensource product. Let us learn from you and share you experience with us. 
 
 OpenBEM and [MyHomeEnergyPlanner](https://github.com/emoncms/MyHomeEnergyPlanner/) are "our" open source codes and our Business Model based on Open Source is a social franchise to deliver home energy assessment, more about this to come soon.
 
