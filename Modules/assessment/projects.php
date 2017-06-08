@@ -22,7 +22,7 @@ $d = $path . "Modules/assessment/";
 </style>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
 
 <div id="left-pane">
 
