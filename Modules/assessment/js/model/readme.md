@@ -5,7 +5,7 @@ An Open source Building Energy Model based on SAP.
 ## Current development by 
 
 - Coder: Carlos Alonso-Gabizon from [Carbon Co-op](http://carbon.coop/)
-- Consultant: Marinanne Heaslip from [Urbed](http://urbed.coop/)
+- Consultant: Marianne Heaslip from [Urbed](http://urbed.coop/)
 - Jonathan Atkinson from [Carbon Co-op](http://carbon.coop/), project manager 
 
 ## Big thanks to:
