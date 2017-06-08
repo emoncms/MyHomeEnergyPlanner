@@ -35,6 +35,14 @@
 var version = 9.0;
 
 var calc = {data: {}};
+
+
+/******************************************************************
+ * RUN
+ * 
+ * Run all the modules in the right order 
+ * 
+ ******************************************************************/
 calc.run = function (datain)
 {
     calc.data = calc.start(datain);
@@ -67,6 +75,12 @@ calc.run = function (datain)
     return calc.data;
 }
 
+/******************************************************************
+ * START
+ * 
+ * Inits the data input object 
+ * 
+ ******************************************************************/
 calc.start = function (data)
 {
     data = data || {};
@@ -75,8 +89,6 @@ calc.start = function (data)
         data.region = 0;
     if (data.altitude == undefined)
         data.altitude = 0;
-    if (data.household == undefined)
-        data.household = {};
     if (data.LAC_calculation_type == undefined)
         data.LAC_calculation_type = 'SAP';
     if (data.fuels == undefined)
@@ -114,17 +126,17 @@ calc.start = function (data)
     return data;
 }
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // FLOORS
 // 
-// Module Inputs:  
+// Inputs from user:  
 //      - data.floors
 //      
 // Global Outputs: 
 //      - data.TFA
 //      - data.volume
 //      - data.num_of_floors
-//---------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------*/
 
 calc.floors = function (data)
 {
@@ -141,7 +153,7 @@ calc.floors = function (data)
     return data;
 }
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // OCCUPANCY
 // 
 // SAP calculation of occupancy based on total floor area
@@ -153,7 +165,7 @@ calc.floors = function (data)
 //      
 // Global outputs: 
 //  - data.occupancy
-//---------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------*/
 
 calc.occupancy = function (data)
 {
@@ -175,20 +187,20 @@ calc.occupancy = function (data)
     return data;
 }
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // BUILDING FABRIC
 // 
 // Calculates:
 //      - total monthly fabric heat loss
 //      - monthly solar gains from building elements list
 //      
-// Module Inputs:  
+// Inputs from user:  
 //      - data.fabric.elements, 
 //      - data.fabric.thermal_bridging_yvalue, 
 //      - data.fabric.global_TMP // global thermal mass parameter: true or false
 //      - data.fabric.global_TMP_value
 //      
-// Global Inputs:  
+// Inputs from other modules:  
 //      - data.TFA
 //      
 // Global Outputs: 
@@ -229,7 +241,7 @@ calc.occupancy = function (data)
 //      - table_6d_solar_access_factor
 //      - table_6d_light_access_factor
 // 
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 
 calc.fabric = function (data, solar_acces_factor)
 {
@@ -409,9 +421,9 @@ calc.fabric = function (data, solar_acces_factor)
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // VENTILATION
-// Module Inputs: 
+// Inputs from user: 
 //      - data.ventilation.ventilation_type
 //      - data.ventilation.IVF
 //      - data.ventilation.EVP
@@ -426,7 +438,7 @@ calc.fabric = function (data, solar_acces_factor)
 //      - data.ventilation.system_air_change_rate
 //      - data.ventilation.balanced_heat_recovery_efficiency
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //      - data.volume
 //      - data.num_of_floors
 //      - data.region
@@ -456,7 +468,7 @@ calc.fabric = function (data, solar_acces_factor)
 // Datasets: 
 //      - datasets.table_u2
 //      
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 
 calc.ventilation = function (data)
 {
@@ -661,14 +673,14 @@ calc.ventilation = function (data)
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // TEMPERATURE
 // 
-// Module Inputs: 
+// Inputs from user: 
 //      - data.temperature.target
 //      - data.temperature.living_area
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //      - data.TFA
 //      - data.TMP
 //      - data.losses_WK    
@@ -704,7 +716,7 @@ calc.ventilation = function (data)
 //	- calc_MeanInternalTemperature
 //	- calc_Th2
 //
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 calc.temperature = function (data)
 {
     if (data.temperature == undefined)
@@ -883,15 +895,15 @@ calc.temperature = function (data)
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // SPACE HEATING AND COOLING
 // Calculates space heating and cooling demand.
 // 
-// Module Inputs: 
+// Inputs from user: 
 //      - data.space_heating.use_utilfactor_forgains
 //	- data.space_heating.heating_off_summer
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //      - data.internal_temperature
 //	- data.external_temperature
 //	- data.losses_WK
@@ -927,7 +939,7 @@ calc.temperature = function (data)
 // Uses external function: 
 //      - calc_utilisation_factor
 //      
-//---------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------*/
 
 calc.space_heating = function (data)
 {
@@ -1045,16 +1057,16 @@ calc.space_heating = function (data)
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // HEATING SYSTEMS
 //  
 // Calculates fuel requirements for water heating   */
 //  and space heating                                */
 //
-// Module Inputs: 
+// Inputs from user: 
 //      - data.heating_systems
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //      - data.energy_requirements.waterheating
 //	- data.energy_requirements.space_heating
 //      
@@ -1062,7 +1074,7 @@ calc.space_heating = function (data)
 //	- data.fuel_requirements.waterheating
 //	- data.fuel_requirements.space_heating
 //
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 
 calc.heating_systems = function (data) {
     if (data.heating_systems == undefined)
@@ -1130,15 +1142,15 @@ calc.heating_systems = function (data) {
 
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // FUEL REQUIREMENTS
 // Calculates the totals for each type of fuel (Mains Gas, Standard Tariff, etc) from 
 // the fuel requirements (appliances, cooking, space_heating, etc)
 //
-// Module Inputs: 
+// Inputs from user: 
 //      -  data.use_generation
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //      - data.fuel_requirements
 //	- data.fuels
 //	- data.generation
@@ -1152,7 +1164,7 @@ calc.heating_systems = function (data) {
 //	- data.primary_energy_use
 //	- data.net_cost
 //
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 calc.fuel_requirements = function (data) {
 
     // Fuel totals
@@ -1206,16 +1218,16 @@ calc.fuel_requirements = function (data) {
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // PRIMARY ENERGY USE BY REQUIREMENT
 // 
-// Global Inputs: 
+// Inputs from other modules: 
 //      - data.fuel_requirements
 //      
 // Global Outputs: 
 //	- data.primary_energy_use_by_requirement
 //	
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 calc.primary_energy_by_requirement = function (data) {
     for (var req in data.fuel_requirements) {
         data.primary_energy_use_by_requirement[req] = 0;
@@ -1229,13 +1241,13 @@ calc.primary_energy_by_requirement = function (data) {
 };
 
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // SAP
 // Calculates SAP (energy cost) and EI (environmental impact) ratings. 
 // Beware SAP doesn't take into account the energy for appliances 
 // and cooking for the calculation of total cost and primary energy use. 
 // 
-// Global Inputs: 
+// Inputs from other modules: 
 //      - data
 //      
 // Global Outputs: 
@@ -1252,7 +1264,7 @@ calc.primary_energy_by_requirement = function (data) {
 //	- data.SAP.rating
 //	- data.SAP.EI_rating
 //	
-//---------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------*/
 
 calc.SAP = function (data)
 {
@@ -1285,7 +1297,7 @@ calc.SAP = function (data)
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // LAC_SAP
 // Calculates heat gains, energy requirements, CO2 emissions and fuel requirements due to lighting, 
 // appliances and cooking following SAP worksheets
@@ -1294,14 +1306,14 @@ calc.SAP = function (data)
 //  - Cooking: Anex L3 for heat gains and CO2. SAP2012 doesn't calculate energy requirements for cooking
 //      while OenBEM does it from the CO2 emssions applying a emissioon factor of 0.519 (assuming cooking is done with electricity.
 //
-// Module Inputs: 
+// Inputs from user: 
 //      - data.LAC.L // The total number of fixed lighting outlets
 //	- data.LAC.LLE // The number of fixed low energy lighting outlets
 //	- data.LAC.reduced_heat_gains_lighting
 //	- data.LAC.energy_efficient_appliances
 //	- data.LAC.energy_efficient_cooking
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //	- data.LAC_calculation_type // SAP || carboncoop_SAPlighting || detailedlist
 //      - data.GL
 //	- data.occupancy
@@ -1333,7 +1345,7 @@ calc.SAP = function (data)
 // Datasets: 
 //      - datasets.table_1a
 //      	
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 calc.LAC_SAP = function (data) {
     if (data.LAC == undefined)
         data.LAC = {};
@@ -1474,11 +1486,11 @@ calc.LAC_SAP = function (data) {
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // SHW  -   Solar Hot Water
 // Calculates annual solar input Q (kWh) from a specific SHW system
 //
-// Module Inputs: 
+// Inputs from user: 
 //      - data.SHW.a1	// Collector linear heat loss coefficient, a1, from test certificate
 //	- data.SHW.a2	// Collector 2nd order heat loss coefficient, a2, from test certificate
 //	- data.SHW.n0	// Zero-loss collector efficiency, η0, from test certificate or Table H1
@@ -1489,7 +1501,7 @@ calc.LAC_SAP = function (data) {
 //	- data.SHW.Vs	//Dedicated solar storage volume, Vs, (litres)
 //	- data.SHW.volume_ratio	// Volume ratio Veff/Vd,average
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //	- data.region
 //	- data.water_heating.annual_energy_content
 //	- data.water_heating.Vd_average
@@ -1516,7 +1528,7 @@ calc.LAC_SAP = function (data) {
 //      - annual_solar_rad
 //	- solar_rad
 //      	
-//---------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------*/
 calc.SHW = function (data) {
     if (data.SHW == undefined)
         data.SHW = {};
@@ -1573,13 +1585,13 @@ calc.SHW = function (data) {
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // water_heating
 // Calculates:
 //   - Gains from: primary circuit loses, storage loses, combi loses and distribution loses
 //   - Energy requirements
 //
-// Module Inputs: 
+// Inputs from user: 
 //      - data.water_heating.override_annual_energy_content
 //	- data.water_heating.annual_energy_content
 //	- data.water_heating.low_water_use_design
@@ -1591,7 +1603,7 @@ calc.SHW = function (data) {
 //	- data.water_heating.hot_water_store_in_dwelling 
 //	- data.water_heating.community_heating
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //	- data.heating_systems 
 //	- data.SHW.Qs_monthly
 //      
@@ -1618,7 +1630,7 @@ calc.SHW = function (data) {
 //      - datasets.table_1c
 //	- datasets.table_1a
 //      	
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 calc.water_heating = function (data) {
     if (data.water_heating == undefined)
         data.water_heating = {};
@@ -1830,14 +1842,14 @@ calc.water_heating = function (data) {
 };
 
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // applianceCarbonCoop 
 // Alternative method to calculate heat gains, energy requirements, CO2 emissions and fuel requirements for appliances
 // 
-// Module Inputs: 
+// Inputs from user: 
 //      - data.applianceCarbonCoop.list
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //	- data.LAC_calculation_type
 //      
 // Global Outputs: 
@@ -1855,7 +1867,7 @@ calc.water_heating = function (data) {
 //	- data.applianceCarbonCoop.fuel_input_total
 //	- data.applianceCarbonCoop.list 	// items updated with the energy demand and fuel input values 
 //
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 
 
 calc.applianceCarbonCoop = function (data) {
@@ -1961,11 +1973,11 @@ calc.applianceCarbonCoop = function (data) {
 };
 
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // appliancelist  -   
 // Alternative method to calculate heat gains, energy requirements, CO2 emissions and fuel requirements for LAC
 //
-// Module Inputs: 
+// Inputs from user: 
 //      - data.appliancelist.list: [{name: "LED Light", power: 6, hours: 12, category: 'lighting', fuel: 'Standard Tariff', efficiency: 1}]
 //      
 // Global Outputs: 
@@ -1993,7 +2005,7 @@ calc.applianceCarbonCoop = function (data) {
 // Datasets:
 //      - datasets.table_1a
 //	
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 
 calc.appliancelist = function (data) {
     //data.appliancelist={};
@@ -2072,11 +2084,11 @@ calc.appliancelist = function (data) {
     return data;
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // generation
 // Calculates total generation, CO2, primary energy and income from renewables
 //	
-//	// Module Inputs: 
+//	// Inputs from user: 
 //	- data.generation.use_PV_calculator
 //      - data.generation.solar_annual_kwh
 //      - data.generation.solar_fraction_used_onsite
@@ -2094,7 +2106,7 @@ calc.appliancelist = function (data) {
 //      - data.generation.solarpv_inclination // PV calculator, degrees
 //      - data.generation.solarpv_overshading // PV calculator: 0.5 (heavy > 80%) || 0.65 (Significant 60% - 80%) || 0.8 (Modest 20% - 60%) || 1 (None or very little, less than 20%)
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //	- data.fuels['generation']
 //      
 // Global Outputs: 
@@ -2111,7 +2123,7 @@ calc.appliancelist = function (data) {
 //
 // External functions:
 //	- annual_solar_rad
-//---------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------*/
 
 calc.generation = function (data) {
 
@@ -2203,16 +2215,16 @@ calc.generation = function (data) {
 };
 
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // currentenergy
 // Calculates totals from data from bills
 //	
-// Module Inputs: 
+// Inputs from user: 
 //	- data.currentenergy.use_by_fuel
 //	- data.currentenergy.onsite_generation
 //	- data.currentenergy.generation
 //      
-// Global Inputs: 
+// Inputs from other modules: 
 //	- data.fuels
 //      
 // Global Outputs: 
@@ -2229,7 +2241,7 @@ calc.generation = function (data) {
 //      - data.currentenergy.total_costm2
 //      - data.currentenergy.energyuseperperson
 //      	
-//--------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------*/
 
 calc.currentenergy = function (data) {
     var defaults = datasets.current_energy_defaults;
@@ -2287,11 +2299,11 @@ calc.currentenergy = function (data) {
 };
 
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // fans_and_pumps_and_combi_keep_hot 
 // Calculates Annual energy requirements for pumps, fans and electric keep-hot
 // 
-// Global Inputs:  
+// Inputs from other modules:  
 //      - data.heating_systems
 //	- data.ventilation.ventilation_type
 //	- data.ventilation.EVP
@@ -2303,7 +2315,7 @@ calc.currentenergy = function (data) {
 //      - data.energy_requirements.fans_and_pumps
 //	- data.fuel_requirements.fans_and_pumps
 //      
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 
 calc.fans_and_pumps_and_combi_keep_hot = function (data) {
 
@@ -2398,11 +2410,11 @@ calc.fans_and_pumps_and_combi_keep_hot = function (data) {
 };
 
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // gains
 // Calculates gains for "metabolic", "losses", "fans and pumps"
 //
-// Global Inputs:  
+// Inputs from other modules:  
 //      - data.space_heating.use_utilfactor_forgains
 //	- data.occupancy
 //	- data.ventilation.ventilation_type
@@ -2414,7 +2426,7 @@ calc.fans_and_pumps_and_combi_keep_hot = function (data) {
 //	- data.gains_W['metabolic']
 //	- data.gains_W['losses']
 //	  
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 
 calc.metabolic_losses_fans_and_pumps_gains = function (data) {
 
@@ -2481,7 +2493,7 @@ calc.metabolic_losses_fans_and_pumps_gains = function (data) {
 
 };
 
-//---------------------------------------------------------------------------------------------
+/*---------------------------------------------------------------------------------------------
 // gains_summary
 // Calculates total solar gains, total internal gains and both together
 //      - Solar gains are calculated in calc.fabric
@@ -2491,7 +2503,7 @@ calc.metabolic_losses_fans_and_pumps_gains = function (data) {
 //      - Useful gains (after applying utilisation factor) are calculated in calc.space_heating()
 //      
 //
-// Global Inputs:  
+// Inputs from other modules:  
 //      - data.gains_W
 //      
 // Global Outputs:
@@ -2499,7 +2511,7 @@ calc.metabolic_losses_fans_and_pumps_gains = function (data) {
 //	- data.total_solar_gains
 //	- data.total_internal_and_solar_gains
 //	  
-//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------*/
 
 calc.gains_summary = function (data) {
     data.total_internal_gains = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -2517,6 +2529,7 @@ calc.gains_summary = function (data) {
 
     return data;
 }
+
 //---------------------------------------------------------------------------------------------
 // SEPERATED MODEL FUNCTIONS
 //---------------------------------------------------------------------------------------------
