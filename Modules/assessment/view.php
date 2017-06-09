@@ -496,6 +496,21 @@ global $reports;
                 delete data_rb.currentenergy.energyitems;
             }
         }
+        // 9 June 2017 fix problems in Dom's assessment (very very old)
+        for (scenario in project) {
+            for (e in project[scenario].fabric.elements) {
+                if (project[scenario].fabric.elements[e].type == 'window')
+                    project[scenario].fabric.elements[e].type = 'Window';
+                if (project[scenario].fabric.elements[e].type == 'door')
+                    project[scenario].fabric.elements[e].type = 'Door';
+                if (project[scenario].fabric.elements[e].type == 'wall')
+                    project[scenario].fabric.elements[e].type = 'Wall';
+                if (project[scenario].fabric.elements[e].type == 'roof')
+                    project[scenario].fabric.elements[e].type = 'Roof';
+                if (project[scenario].fabric.elements[e].type == 'floor')
+                    project[scenario].fabric.elements[e].type = 'Floor';
+            }
+        }
     }
 
     function add_scenarios_to_menu() {
