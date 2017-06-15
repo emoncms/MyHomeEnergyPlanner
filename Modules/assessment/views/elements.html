@@ -14,7 +14,7 @@
     .apply-measure td{
         max-width: 200px;
     }
-    
+
     #modal-bulk-measure-body table td, #modal-bulk-measure-body table th{
         padding:4px 10px;
         vertical-align: top;
@@ -60,9 +60,9 @@
             <th>Net<br>Area<br>(m<sup>2</sup>)</th>
             <th>W/K</th>
             <th class="only-for-walls">EWI<i class="icon-question-sign" title="When EWI has been applied the original area of the wall has been increased by 1.15"></i></th>
-            <th><button class=" if-not-master apply-bulk-measure" tags="Wall" style="max-width:109px"
-                        item='{"type":"Wall","name":"--","lib":"--","l":0,"h":0,"area":0,"uvalue":0,"id":0,"location":"","description":"","kvalue":"","orientation":0,"overshading":0,"g":"0","gL":"0","ff":"0","performance":"","benefits":"","cost":"","who_by":"","disruption":"","associated_work":"","notes":"","maintenance":"","netarea":0,"wk":0,"gain":0}'
-                        tag="--" item_id="0" row="13">Apply bulk measure
+            <th style="text-align: center"><button class=" if-not-master apply-bulk-measure" tags="Wall" style="max-width:109px"
+                                                   item='{"type":"Wall","name":"--","lib":"--","l":0,"h":0,"area":0,"uvalue":0,"id":0,"location":"","description":"","kvalue":"","orientation":0,"overshading":0,"g":"0","gL":"0","ff":"0","performance":"","benefits":"","cost":"","who_by":"","disruption":"","associated_work":"","notes":"","maintenance":"","netarea":0,"wk":0,"gain":0}'
+                                                   tag="--" item_id="0" row="13">Apply bulk measure
                 </button>
             </th>
 
@@ -79,7 +79,10 @@
                 <td><span key="data.fabric.elements.template.netarea" dp=2>0.0</span>m<sup>2</sup></td>
                 <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>                
                 <td class="only-for-walls"><span key="data.fabric.elements.template.EWI">0</span> </td>
-                <td><button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button></td>
+                <td style="text-align:center">
+                    <button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button>
+                    <br /><p style="margin-top:5px; display:none; cursor: pointer" class="revert-to-master if-not-master" item_id="template"><img src="" class="revert-to-master-icon" title="Revert to master" style="width:14px" /> Revert to master</p>
+                </td>
                 <td><span class="edit-item if-master" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tag="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
                 <td><span class="delete-element if-master" row="template" style="cursor:pointer" item_id="template"  title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span></td>
             </tr>
@@ -179,7 +182,10 @@
                 <td><input type="text" value="0" key="data.fabric.elements.template.perimeter" style="width:40px"/></td>
                 <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
                 <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>   
-                <td><button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button></td>
+                <td>
+                    <button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button>
+                    <br /><p style="margin-top:5px; display:none; cursor: pointer" class="revert-to-master if-not-master" item_id="template"><img src="" class="revert-to-master-icon" title="Revert to master" style="width:14px" /> Revert to master</p>
+                </td>
                 <td><span class="edit-item if-master" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tag="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
                 <td><span class="delete-element if-master" row="template" style="cursor:pointer" item_id="template"  title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span></td>
             </tr>
@@ -232,9 +238,9 @@
             <th>Over<br>shading <i class="icon-question-sign" title="MHEP applies same solar access factor to roof lights than any other windows. This is a deviation from SAP2012 (p.26 note 2) where solar factors for roof lights are always 1 independent of the overshading"></i></th>
             <th>Gain</th>
             <th>W/K</th>
-            <th><button class=" if-not-master apply-bulk-measure" tags="Window" 
-                        item='{"type":"Window","name":"--","lib":"--","l":0,"h":0,"area":0,"uvalue":0,"id":0,"location":"","description":"","kvalue":"","orientation":0,"overshading":0,"g":"0","gL":"0","ff":"0","performance":"","benefits":"","cost":"","who_by":"","disruption":"","associated_work":"","notes":"","maintenance":"","netarea":0,"wk":0,"gain":0}'
-                        tag="--" item_id="0" row="13">Apply bulk measure
+            <th style="text-align: center"><button class=" if-not-master apply-bulk-measure" tags="Window" 
+                                                   item='{"type":"Window","name":"--","lib":"--","l":0,"h":0,"area":0,"uvalue":0,"id":0,"location":"","description":"","kvalue":"","orientation":0,"overshading":0,"g":"0","gL":"0","ff":"0","performance":"","benefits":"","cost":"","who_by":"","disruption":"","associated_work":"","notes":"","maintenance":"","netarea":0,"wk":0,"gain":0}'
+                                                   tag="--" item_id="0" row="13">Apply bulk measure
                 </button>
             </th>
         </tr>
@@ -288,7 +294,10 @@
 
                 <td><span key="data.fabric.elements.template.gain" dp=2>0</span>W</td>
                 <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>
-                <td><button class="apply-measure if-not-master" row="template" item="template" tag="template" item_id="template">Apply Measure</button></td>
+                <td>
+                    <button class="apply-measure if-not-master" row="template" item="template" tag="template" item_id="template">Apply Measure</button>
+                    <br /><p style="margin-top:5px; display:none; cursor: pointer" class="revert-to-master if-not-master" item_id="template"><img src="" class="revert-to-master-icon" title="Revert to master" style="width:14px" /> Revert to master</p>
+                </td>
                 <td><span class="edit-item if-master" row="template" style="cursor:pointer" item="template" tag="template" item_id="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
                 <td><span class="delete-element if-master" row="template" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" item_id="template"><i class="icon-trash"></i></span></td>
 

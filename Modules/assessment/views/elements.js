@@ -192,72 +192,27 @@ $("#openbem").on("change", '#bulk-measure-check-all', function () {
      $('.bulk-element').attr('checked', false);
      */
 });
+$("#openbem").on("click", '.revert-to-master', function () {
+    var element_id = $(this).attr('item_id');
+    if (element_exists_in_master(element_id) == true) {
+        // copy the original element from master
+        for (var e in project.master.fabric.elements) {
+            if (project.master.fabric.elements[e].id == element_id) {
+                data.fabric.elements[get_element_index_by_id(element_id)] = JSON.parse(JSON.stringify(project.master.fabric.elements[e]));
+                break;
+            }
+        }
+        // delete measure
+        var applied_in_bulk = measure_applied_in_bulk(element_id);
+        if (applied_in_bulk == false) 
+            delete(data.fabric.measures[element_id]);
+        else
+            delete(data.fabric.measures[applied_in_bulk].original_elements[element_id]);
+    }
+    elements_initUI();
+    update();
+});
 
-/*$("#create-element").click(function () {
- // Empty "tag" so that it has nothing, we leave the other inputs as it can be handy for the user
- $('#create-element-tag').val("");
- $("#myModalcreateelement").modal('show');
- $('#myModal').modal('hide');
- });
- /*$("#create-element-type").change(function () {
- var type = $(this).val();
- if (type == "Window") {
- $(".create-element-window-options").show('fast');
- } else {
- $(".create-element-window-options").hide('fast');
- }
- });
- */
-/*$("#create-element-save").click(function () {
- 
- var type = $("#create-element-type").val();
- var tag = $("#create-element-tag").val();
- //if (element_library[tag]==undefined) {
- element_library[tag] = {};
- element_library[tag].name = $("#create-element-name").val();
- element_library[tag].source = $("#create-element-source").val();
- element_library[tag].uvalue = $("#create-element-uvalue").val();
- element_library[tag].kvalue = $("#create-element-kvalue").val();
- if (type == "Window")
- element_library[tag].g = $("#create-element-g").val();
- if (type == "Window")
- element_library[tag].gL = $("#create-element-gL").val();
- if (type == "Window")
- element_library[tag].ff = $("#create-element-ff").val();
- element_library[tag].tags = [type];
- //element_library[tag].criteria = $("#create-element-criteria").val().split(",");
- 
- // Measures
- if ($('#create-element-name').val() !== "")
- element_library[tag].name = $("#create-element-name").val();
- if ($('#create-element-description').val() !== "")
- element_library[tag].description = $("#create-element-description").val();
- if ($('#create-element-performance').val() !== "")
- element_library[tag].performance = $("#create-element-performance").val();
- if ($('#create-element-benefits').val() !== "")
- element_library[tag].benefits = $("#create-element-benefits").val();
- if ($('#create-element-cost').val() !== "")
- element_library[tag].cost = $("#create-element-cost").val();
- if ($('#create-element-who_by').val() !== "")
- element_library[tag]["who_by"] = $("#create-element-who_by").val();
- if ($('#create-element-disruption').val() !== "")
- element_library[tag].disruption = $("#create-element-disruption").val();
- if ($('#create-element-associated_work').val() !== "")
- element_library[tag]["associated_work"] = $("#create-element-associated_work").val();
- if ($('#create-element-key_risks').val() !== "")
- element_library[tag]["key_risks"] = $("#create-element-key_risks").val();
- if ($('#create-element-notes').val() !== "")
- element_library[tag].notes = $("#create-element-notes").val();
- if ($('#create-element-maintenance').val() !== "")
- element_library[tag].maintenance = $("#create-element-maintenance").val();
- $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library + "&data=" + JSON.stringify(element_library), success: function (result) {
- console.log("save library result: " + result);
- }});
- $("#myModalcreateelement").modal('hide');
- //} else {
- //    alert("Element or measure already exists");
- //}
- });*/
 
 $("[key='data.fabric.global_TMP']").change(function () {
     value = $("[key='data.fabric.global_TMP']").is(":checked");
@@ -288,6 +243,16 @@ function add_element(id, z)
     $(id + " [item_id='template']").attr('item_id', data.fabric.elements[z].id);
     $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
+
+    // Revert to master
+    if (measure_applied_to_element(data.fabric.elements[z].id) != false) {
+        $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').show();
+        if (element_exists_in_master(data.fabric.elements[z].id) == false)
+            $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-master').css('cursor', 'default').html('Original element in master doesn\'t<br />exist, cannot revert');
+    }
+    else {
+        $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').hide();
+    }
 }
 
 function add_floor(z)
@@ -312,6 +277,16 @@ function add_floor(z)
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
     if (data.fabric.elements[z].uvalue == 0)
         $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color', 'red');
+    
+    // Revert to master
+    if (measure_applied_to_element(data.fabric.elements[z].id) == true) {
+        $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').show();
+        if (element_exists_in_master(data.fabric.elements[z].id) == false)
+            $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-master').css('cursor', 'default').html('Original element in master doesn\'t<br />exist, cannot revert');
+    }
+    else {
+        $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').hide();
+    }
 }
 
 function add_window(z)
@@ -345,7 +320,6 @@ function add_window(z)
     $("#windows [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
     $("#windows [tag='template']").attr('tag', data.fabric.elements[z].lib);
     $('#windows .window_fields_template').removeClass('window_fields_template');
-    console.log(data.fabric.elements[z])
     data.fabric.elements[z].name = String(data.fabric.elements[z].name);
     var name = data.fabric.elements[z].name;
     name = name.toLowerCase();
@@ -372,6 +346,16 @@ function add_window(z)
         //subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
     }
     $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").html(subtractfromhtml);
+    
+  // Revert to master
+    if (measure_applied_to_element(data.fabric.elements[z].id) == true) {
+        $('#windows  .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').show();
+        if (element_exists_in_master(data.fabric.elements[z].id) == false)
+            $('#windows  .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-master').css('cursor', 'default').html('Original element in master doesn\'t<br />exist, cannot revert');
+    }
+    else {
+        $('#windows .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').hide();
+    }
 }
 
 function elements_initUI()
@@ -421,7 +405,7 @@ function elements_UpdateUI()
     for (z in data.fabric.elements) {
         var color = "#fff";
         /*var name = data.fabric.elements[z].name;
-        name = name.toLowerCase();*/
+         name = name.toLowerCase();*/
         if (data.fabric.elements[z].type == 'Door') {
             color = '#ffeeee';
         }
@@ -457,6 +441,8 @@ function elements_UpdateUI()
         if (data.fabric.elements[z].type != "Window" && data.fabric.elements[z].type != "Door" && data.fabric.elements[z].type != "Roof_light" && data.fabric.elements[z].type != "Hatch" && data.fabric.elements[z].type != "Floor")
             options += "<option value='" + data.fabric.elements[z].id + "'>" + data.fabric.elements[z].location + "</option>";
     }
+
+    $('.revert-to-master-icon').attr('src', path + "Modules/assessment/img-assets/undo.gif");
 
     // Fill up the substractfrom selects
     $('.subtractfrom').each(function (i, obj) {
@@ -582,6 +568,44 @@ function get_element_by_id(id) {
         if (data.fabric.elements[index].id == id)
             return data.fabric.elements[index];
     }
+}
+
+function get_element_index_by_id(id) {
+    for (var index in data.fabric.elements) {
+        if (data.fabric.elements[index].id == id)
+            return index;
+    }
+}
+
+function measure_applied_to_element(element_id) {
+    for (var measure_id in data.fabric.measures) {
+        if (measure_id == element_id)
+            return true;
+        else if (measure_applied_in_bulk(element_id) != false) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function element_exists_in_master(element_id) {
+    for (e in project.master.fabric.elements) {
+        if (project.master.fabric.elements[e].id == element_id)
+            return true;
+    }
+    return false;
+}
+
+function measure_applied_in_bulk(element_id) { // returns false if measure is not in a bulf measure, returns the measure id if it is
+    for (var measure_id in data.fabric.measures) {
+        if (data.fabric.measures[measure_id].original_elements != undefined) { // bulk measure
+            for (var m in data.fabric.measures[measure_id].original_elements) {
+                if (m == element_id)
+                    return measure_id;
+            }
+        }
+    }
+    return false;
 }
 //
 //-----------------------------------------------------------------------------------------------
