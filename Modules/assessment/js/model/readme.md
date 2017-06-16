@@ -18,11 +18,11 @@ An Open source Building Energy Model based on SAP.
 
 As stated above OpenBEM is an Open source Building Energy Model. The calculations follow the SAP2012 worksheets workflow. SAP is known because its inconsistencies and misleading assumptions. Because of them, OpenBEM implementation differs from SAP in all those situations where we thought it could be improved. A list of differences can be found below.
 
-OpenBEM has been developed as part of a bigger project to help households design the retrofit works for their houses: [MyHomeEnergyPlanner](https://github.com/emoncms/MyHomeEnergyPlanner/). But OpenBEM itself is a stand alone tool that can easily be used in other projects. As an example [Carbon Co-op](http://carbon.coop/) and [Urbed](http://urbed.coop/) have developed another tool based on OpenBEM to quickly and easily assess the energy performance and emissions of houses in Saldford area: [MyHomeEnergySaldford](http://myhomeenergysalford.carbon.coop/). An extremely simple Javascript use of the model is shown in the [index.html](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/index.html) file included in the model directory.
+OpenBEM has been developed as part of a bigger project to help households design the retrofit works for their houses: [MyHomeEnergyPlanner](https://github.com/emoncms/MyHomeEnergyPlanner/). But OpenBEM itself is a stand alone tool that can easily be used in other projects. As an example [Carbon Co-op](http://carbon.coop/) and [Urbed](http://urbed.coop/) have developed another tool based on OpenBEM to quickly and easily assess the energy performance and emissions of houses in Salford area: [MyHomeEnergySaldford](http://myhomeenergysalford.carbon.coop/). An extremely simple Javascript use of the model is shown in the [index.html](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/index.html) file included in the model directory.
 
 ## Who is it for
 
-OpenBEM is aimed for everybody with interest in the effect that buildings have on the environment. From students to modellers and software developers OpenBEM is free to use, share and modificate. 
+OpenBEM is aimed for everybody with interest in the effect that buildings have on the environment. From students to modellers and software developers OpenBEM is free to use, share and modify. 
 
 ## License
 
@@ -32,7 +32,7 @@ If you use OpenBEM, we would appreciate you letting us know. No matter if it is 
 
 ## Bussiness Models based on Open Source
 
-We are very interested in Business Models and how open source can be used for making money at the same time that being a contribution for a better and fairer society. We encourage people to think on ways to make a living with OpenBEM or any other opensource product. Let us learn from you and share you experience with us. 
+We are very interested in Business Models and how open source can be used for making money at the same time as being a contribution for a better and fairer society. We encourage people to think of ways to make a living with OpenBEM or any other opensource product. Let us learn from you and share you experience with us. 
 
 OpenBEM and [MyHomeEnergyPlanner](https://github.com/emoncms/MyHomeEnergyPlanner/) are "our" open source codes and our Business Model based on Open Source is a social franchise to deliver home energy assessment, more about this to come soon.
 
@@ -55,7 +55,7 @@ Here we show a list of differences between OpenBEM and SAP2012. Being humble, th
   - IE: Intermittent Extract Ventilations (type 'd' in SAP)
   - PS: Passive Stack (type 'd' in SAP)
   - DEV: Decentralised continous mechanical extract ventilation (type 'c' in SAP)
-  - MEV: Mechanical Continuous Extract Ventilation (type 'c' in SAP)
+  - MEV: Centralised Mechanical Continuous Extract Ventilation (type 'c' in SAP)
   - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
   - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)
  - SAP defines fixed values for ventilation rates of Extract Ventilation Points, these can be changed in OpenBEM to their actual specification
@@ -72,7 +72,7 @@ Here we show a list of differences between OpenBEM and SAP2012. Being humble, th
 
 ## How to use OpenBEM
 
-The approach when developing OpenBEM was to split SAP worksheets into different modules, each of them implementing a specific calculation of the building model. OpenBEM can be run as a whole or each module can be run on its own. For example, a researcher wanting to understand the effect on solar gains of different type of glasses may want to only run the [*fabric*](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/model-r9.js#L234) module with just windows as inputs and forget about the rest of the house.
+The approach when developing OpenBEM was to split SAP worksheets into different modules, each of them implementing a specific calculation for the building model. OpenBEM can be run as a whole or each module can be run on its own. For example, a researcher wanting to understand the effect on solar gains of different type of glazing may want to only run the [*fabric*](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/model-r9.js#L234) module with just windows as inputs and forget about the rest of the house.
 
 OpenBEM is a Javascript Object and each module is a function. A data object is passed to the model (or module). The inputs are properties of that data object. The model (or module) will return the same data object with new extra properties (the outputs). To understand it see the very simple example _index.html_ 
 
