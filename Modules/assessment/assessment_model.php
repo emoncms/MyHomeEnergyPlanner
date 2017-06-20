@@ -161,7 +161,7 @@ class Assessment {
         if (!$this->has_access($userid, $id))
             return false;
 
-        $data = preg_replace('/[^\w\s-.\/",:{}\'\[\]\\\]/', '', $data);
+        $data = preg_replace('/[^\w\s-%.\/",:{}\'\[\]\\\]/', '', $data);
         $data = json_decode($data);
 
         $mdate = time();
@@ -681,7 +681,7 @@ class Assessment {
     }
 
     public function escape_item($item) {
-        $item = preg_replace('/[^\w\s-+.",:{}\/\'\[\]\\\]/', '', $item);
+        $item = preg_replace('/[^\w\s-+."%,:{}\/\'\[\]\\\]/', '', $item);
         //$item = str_replace("'", "\\'", $item);
         return $item;
     }
