@@ -2244,7 +2244,6 @@ calc.generation = function (data) {
 //--------------------------------------------------------------------------------------------*/
 
 calc.currentenergy = function (data) {
-    var defaults = datasets.current_energy_defaults;
     if (data.currentenergy == undefined)
         data.currentenergy = {};
     if (data.currentenergy.use_by_fuel == undefined) {
