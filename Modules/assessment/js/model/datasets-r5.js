@@ -270,9 +270,10 @@ var datasets = {
         
         /************************************************
          * table_1c
-         * Monthly factors for hot water use
+         * Monthly factors for hot water use, the coefficients in this table are used to calculate 
+         * the energy used to heat hot water in a specific month when  you know how much you have 
+         * used in the whole year
          * 
-         *  - Units: days
          *  - Index: month
          *  - Source: SAP2012, table 1c, p. 194 
          *  
