@@ -14,25 +14,42 @@ function assessment_controller() {
       //---------------------------------------------------------------------------- */
     if (!isset($_SESSION['backwards_comp'])) { // We only run when we start the session
         $_SESSION['backwards_comp'] = true;
+        
+        /*$libresult = $mysqli->query("SELECT `id`, `data`, `type` FROM `element_library`");
+        foreach ($libresult as $row) {
+            echo $row['type'];
+            if ($row['type'] == "heating_systems_measures") {
+                $data = json_decode($row['data']);
+                foreach ($data as $element) {
+                    $element->performance = $element->performance . '%';
+                }
+                $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+                $data = json_encode($data);
+                $req->bind_param('si', $data, $row['id']);
+                $req->execute();
+            }
+        }*/
     }
 
     //require "Modules/assessment/assessment_model.php";
     //$assessment = new Assessment($mysqli);
     //$assessment->edit_item_in_all_libraries('elements', 'DRD04', 'uvalue', 2.6);
-   
-    /*$libresult = $mysqli->query("SELECT id,data FROM assessment");
-    $i = 0;
-    foreach ($libresult as $row) {
-        $data = json_decode($row['data']);
-        $fuel = "7-Hour tariff - High Rate";
-        $data->master->fuels->$fuel->standingcharge = 79;
-        $fuel = "10-hour tariff - High Rate";
-        $data->master->fuels->$fuel->standingcharge = 77;
-        $req = $mysqli->prepare("UPDATE `assessment` SET `data`=? WHERE `id`=?");
-        $data = json_encode($data);
-        $req->bind_param('si', $data, $row['id']);
-        $req->execute();
-    }*/
+
+
+    /* $libresult = $mysqli->query("SELECT id,data FROM assessment");
+      $i = 0;
+      foreach ($libresult as $row) {
+      $data = json_decode($row['data']);
+      $fuel = "7-Hour tariff - High Rate";
+      $data->master->fuels->$fuel->standingcharge = 79;
+      $fuel = "10-hour tariff - High Rate";
+      $data->master->fuels->$fuel->standingcharge = 77;
+      $req = $mysqli->prepare("UPDATE `assessment` SET `data`=? WHERE `id`=?");
+      $data = json_encode($data);
+      $req->bind_param('si', $data, $row['id']);
+      $req->execute();
+      } */
+
     /* End backwards compatibility section */
 
 
