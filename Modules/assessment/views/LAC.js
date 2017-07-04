@@ -13,21 +13,21 @@ function LAC_initUI() {
     $('#LAC-lighting-fuels').html('');
     for (index in data.LAC.fuels_lighting) {
         if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
-            var out = '<tr><td></td><td><select key="data.LAC.fuels_lighting.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_lighting.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_lighting.' + index + '.fuel_input" /></td></tr>'
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_lighting.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" min="0" max="1" key="data.LAC.fuels_lighting.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_lighting.' + index + '.fuel_input" /></td><td><i style="cursor:pointer" class="icon-trash delete-LAC-fuel" type="fuels_lighting" index="' + index + '"></i></td></tr>'
             $('#LAC-lighting-fuels').append(out);
         }
     }
     $('#LAC-appliances-fuels').html('');
     for (index in data.LAC.fuels_appliances) {
         if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
-            var out = '<tr><td></td><td><select key="data.LAC.fuels_appliances.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_appliances.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_appliances.' + index + '.fuel_input" /></td></tr>'
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_appliances.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" min="0" max="1" key="data.LAC.fuels_appliances.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_appliances.' + index + '.fuel_input" /></td><td><i style="cursor:pointer" class="icon-trash delete-LAC-fuel" type="fuels_appliances" index="' + index + '"></i></td></tr>'
             $('#LAC-appliances-fuels').append(out);
         }
     }
     $('#LAC-cooking-fuels').html('');
     for (index in data.LAC.fuels_cooking) {
         if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
-            var out = '<tr><td></td><td><select key="data.LAC.fuels_cooking.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_cooking.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_cooking.' + index + '.fuel_input" /></td></tr>'
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_cooking.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" min="0" max="1" key="data.LAC.fuels_cooking.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_cooking.' + index + '.fuel_input" /></td><td><i style="cursor:pointer" class="icon-trash delete-LAC-fuel" type="fuels_cooking" index="' + index + '"></i></td>/tr>'
             $('#LAC-cooking-fuels').append(out);
         }
     }
@@ -109,9 +109,17 @@ $('#openbem').on('click', '.add_LAC_fuel', function () { // Fix index
     var array_name = 'fuels_' + type;
     data.LAC[array_name].push({fuel: 'Standard Tariff', fraction: 0, fuel_input: 0});
     var index = data.LAC[array_name].length - 1;
-    var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0"></td><td><span key="data.LAC.fuels_' + type + '.' + index + 'fuel_input"/>    </td></tr>'
+    var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0"></td><td><span key="data.LAC.fuels_' + type + '.' + index + 'fuel_input"/>    </td><td><i class="icon-trash delete-LAC-fuel" type="fuels_' + type + '" index="' + index + '"></i></td></tr>'
     $('#LAC-' + type + '-fuels').append(out);
 
+    // Update
+    LAC_initUI();
+    update();
+});
+$('#openbem').on('click', '.delete-LAC-fuel', function () { // Fix index
+    var array_name = $(this).attr('type');
+    var index = $(this).attr('index');
+    data.LAC[array_name].splice(index,1);
     // Update
     LAC_initUI();
     update();
