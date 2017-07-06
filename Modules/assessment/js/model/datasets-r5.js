@@ -66,6 +66,26 @@ var datasets = {
                 "Orkney",
                 "Shetland",
                 "Northern Ireland"
+        //      "IECC Region 1A" Hot-Humid (Miami, FL)
+        //      "IECC Region 2A" Hot-Humid (Houston, TX)
+        //      "IECC Region 3A" Hot/Mixed-Humid (Atlanta, GA)
+        //      "IECC Region 4A" Mixed-Humid (Baltimore, MD)
+        //      "IECC Region 5A" Cold (Chicago, IL)
+        //      "IECC Region 6A" Cold (Minneapolis, MN)
+        //      "IECC Region 2B" (Phoenix, AZ)
+        //      "IECC Region 3B-CA" Hot-Dry (Los Angeles, CA)
+        //      "IECC Region 3B-Other" Hot-Dry (Las Vegas,NV
+        //      "IECC Region 4B" Mixed-Dry (Albuquerque, NM)
+        //      "IECC Region 5B" Cold (Boulder, CO)
+        //      "IECC Region 6B" Cold (Helena, MT)
+        //      "IECC Region 3C" Mixed-Marine (San Francisco, CA)    
+        //      "IECC Region 4C" Marine (Seattle, WA)
+        //      "IECC Region 7" Very Cold (Duluth, MN)  
+        //      "IECC Region 8" Arctic (Fairbanks, AK)
+        // References: 
+        // a) https://www1.eere.energy.gov/buildings/publications/pdfs/building_america/4_3a_ba_innov_buildingscienceclimatemaps_011713.pdf 
+        // b) https://energy.gov/sites/prod/files/2015/10/f27/ba_climate_region_guide_7.3.pdf
+        // c) http://en.openei.org/wiki/Commercial_Reference_Buildings
         ],
         
         
@@ -102,6 +122,24 @@ var datasets = {
                 [4.4, 4.2, 5.0, 7.0, 8.9, 11.2, 13.1, 13.2, 11.7, 9.1, 6.6, 4.3],
                 [4.6, 4.1, 4.7, 6.5, 8.3, 10.5, 12.4, 12.8, 11.4, 8.8, 6.5, 4.6],
                 [4.8, 5.2, 6.4, 8.4, 10.9, 13.5, 15.0, 14.9, 13.1, 10.0, 7.2, 4.7]
+        //      [20.3, 21.1, 22.5, 24.2, 26.6, 28.0, 28.8, 28.9, 28.3, 26.5, 23.8, 21.3] 
+        //      [11.9, 13.8, 16.9, 20.7, 24.9, 27.7, 28.9, 28.9, 26.3, 21.6, 16.5, 12.3] 
+        //      [6.9, 8.7, 12.7, 16.9, 21.4, 25.1, 26.8, 26.4, 23.2, 17.3, 12.3, 7.6]
+        //      [1.5, 2.4, 7.0, 12.5, 17.7, 22.9, 25.4, 24.4, 20.3, 13.7, 8.4, 3.0]
+        //      [-3.9, -2.1, 3.5, 9.6, 15.2, 20.7, 23.4, 22.5, 18.3, 11.5, 4.8, -1.9]
+        //      [-8.6, -6.2, 0.6, 8.7, 15.2, 20.7, 23.1, 21.7, 16.9, 9.5, 1.2, -6.1]
+        //      "IECC Region 2B" (Phoenix, AZ)
+        //      "IECC Region 3B-CA" Hot-Dry (Los Angeles, CA)
+        //      "IECC Region 3B-Other" Hot-Dry (Las Vegas,NV
+        //      "IECC Region 4B" Mixed-Dry (Albuquerque, NM)
+        //      "IECC Region 5B" Cold (Boulder, CO)
+        //      "IECC Region 6B" Cold (Helena, MT)
+        //      "IECC Region 3C" Mixed-Marine (San Francisco, CA)    
+        //      "IECC Region 4C" Marine (Seattle, WA)
+        //      "IECC Region 7" Very Cold (Duluth, MN)  
+        //      "IECC Region 8" Arctic (Fairbanks, AK)
+        // References: 
+        // a) http://ashrae-meteo.info/  1986-2010
         ],
         
         
@@ -138,6 +176,22 @@ var datasets = {
                 [7.9, 8.3, 7.9, 7.1, 6.2, 6.1, 5.5, 5.6, 6.4, 7.3, 7.8, 7.3],
                 [9.5, 9.4, 8.7, 7.5, 6.6, 6.4, 5.7, 6.0, 7.2, 8.5, 8.9, 8.5],
                 [5.4, 5.3, 5.0, 4.7, 4.5, 4.1, 3.9, 3.7, 4.2, 4.6, 5.0, 5.0]
+        //      [TBD] 
+        //      [TBD] 
+        //      [TBD]
+        //      [TBD]
+        //      [TBD]
+        //      [TBD]
+        //      "IECC Region 2B" (Phoenix, AZ)
+        //      "IECC Region 3B-CA" Hot-Dry (Los Angeles, CA)
+        //      "IECC Region 3B-Other" Hot-Dry (Las Vegas,NV
+        //      "IECC Region 4B" Mixed-Dry (Albuquerque, NM)
+        //      "IECC Region 5B" Cold (Boulder, CO)
+        //      "IECC Region 6B" Cold (Helena, MT)
+        //      "IECC Region 3C" Mixed-Marine (San Francisco, CA)    
+        //      "IECC Region 4C" Marine (Seattle, WA)
+        //      "IECC Region 7" Very Cold (Duluth, MN)  
+        //      "IECC Region 8" Arctic (Fairbanks, AK)
         ],
         
         
