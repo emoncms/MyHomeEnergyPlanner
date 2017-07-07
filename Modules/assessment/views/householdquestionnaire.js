@@ -24,6 +24,14 @@ $('#add-shower').on('click', function () {
             );
 });
 
+var textAreaLength = 0;
+$("#openbem").on("textInput", '[key="data.household.commentary"]', function () { // I have added this event because the Commentary box in Household questionnaire was not getting saved when the assessor refreshed the page or moved to another one before losing the focus of the input (which is what triggers the onChange event)
+    if ($(this)[0].value.length - textAreaLength > 15) {
+        textAreaLength = $(this)[0].value.length;
+        $(this).trigger("change");
+    }
+});
+
 function householdquestionnaire_UpdateUI() {
     if (data.household['3b_extra_showers'] != undefined) {
         $('#more-showers').html('');
@@ -54,7 +62,7 @@ function householdquestionnaire_UpdateUI() {
         })
 
     }
-    
+
     if (data.temperature.hours_off.weekday.length > 0) {
         $('#periods_heating_off_weekday').html('Periods heating off week day:').show();
         for (var period in data.temperature.hours_off.weekday) {
@@ -63,7 +71,7 @@ function householdquestionnaire_UpdateUI() {
             $('#periods_heating_off_weekday').append(' ' + data.temperature.hours_off.weekday[period].toFixed(1) + 'h');
         }
     }
-     if (data.temperature.hours_off.weekend.length > 0) {
+    if (data.temperature.hours_off.weekend.length > 0) {
         $('#periods_heating_off_weekend').html('Periods heating off weekend:').show();
         for (var period in data.temperature.hours_off.weekend) {
             if (period != 0)
