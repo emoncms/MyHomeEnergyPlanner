@@ -138,12 +138,17 @@ function compareCarbonCoop(scenario, outputElement) {
     // Clothes drying facilities     
     var CDF = compareClothesDryingFacilities(scenario);
     if (CDF.changed === true)
-        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>'; //Fabric
+        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>';
+    //Fabric
     var Fabric = compareFabric(scenario);
     if (Fabric.changed === true)
         out += '<h3>Fabric</h3><p>Changes to Floor\'s, Wall\'s, Windows and Roof elements</p>\n\
         <table class="table table-striped"><tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>'
                 + Fabric.html + '</table></br>';
+    // Lighting - SAP
+    var Lighting = compareLighting(scenario);
+    if (Lighting.changed === true)
+        out += '<h3>Lighting</h3><p>Changes to number of fixed low energy lighting outlets (LLE)</p><table class="table table-striped">' + Lighting.html + '</table></br>';
     // Heating    
     var Heating = compareHeating(scenario);
     if (Heating.changed === true)
@@ -700,6 +705,19 @@ function compareGeneration(scenario) {
     return {html: out, changed: changed};
 }
 
+function compareLighting(scenario) {
+    var out = "";
+    var changed = false;
+    var properties_to_check = [
+        ['Number of fixed LLE', 'LAC.LLE']
+    ];
+    var LLE = comparePropertiesInArray(scenario, properties_to_check);
+    if (LLE.changed === true) {
+        changed = true;
+        out += LLE.html;
+    }
+    return {html: out, changed: changed};
+}
 
 function getHeatingSystemById(id, scenario) {
     for (var index in project[scenario].heating_systems) {

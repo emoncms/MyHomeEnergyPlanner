@@ -207,8 +207,8 @@ function apply_LAC_measure(type) {
             }
 
             var n_bulbs_to_change = data.LAC.L - data.LAC.LLE;
-            data.measures.LAC.lighting.measure = extended_library.lighting_measures.L1;
-            data.measures.LAC.lighting.measure.tag = 'L1';
+            data.measures.LAC.lighting.measure = extended_library.lighting_measures['L01'];
+            data.measures.LAC.lighting.measure.tag = 'L01';
             data.measures.LAC.lighting.measure.quantity = n_bulbs_to_change;
             data.measures.LAC.lighting.measure.cost_total = n_bulbs_to_change * data.measures.LAC.lighting.measure.cost;
 
