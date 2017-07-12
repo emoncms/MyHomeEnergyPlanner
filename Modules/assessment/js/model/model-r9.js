@@ -1392,7 +1392,6 @@ calc.LAC_SAP = function (data) {
 
         if (EL_sum > 0 && (data.LAC_calculation_type == 'SAP' || data.LAC_calculation_type == 'carboncoop_SAPlighting')) {
             data.gains_W["Lighting"] = GL_monthly;
-            data.gains_W["Lighting"] = [97.18, 86.32, 70.2, 53.14, 39.73, 33.54, 36.24, 47.11, 63.22, 80.28, 93.7, 99.08];
             data.energy_requirements.lighting = {name: "Lighting", quantity: EL_sum, monthly: EL_monthly};
             var total_fuel_input = 0;
             data.LAC.fuels_lighting.forEach(function (fuel_item) {
