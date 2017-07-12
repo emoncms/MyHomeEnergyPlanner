@@ -83,7 +83,7 @@ function householdquestionnaire_UpdateUI() {
 ;
 function householdquestionnaire_initUI() {
     data = project['master'];
-    if (Object.keys(data.household).length === 0)
+    if (data.household == undefined || Object.keys(data.household).length === 0)
         data.household = {
             "3a_heatinghours_weekday_on1_hours": 7,
             "3a_heatinghours_weekday_on1_mins": 0,
