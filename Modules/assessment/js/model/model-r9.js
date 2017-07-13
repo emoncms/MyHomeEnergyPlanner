@@ -972,14 +972,14 @@ calc.space_heating = function (data)
         for (z in data.losses_WK)
             H += data.losses_WK[z][m];
         total_losses[m] = H * delta_T[m];
-        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
+        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 8) // SAP2012, p.220
             total_losses[m] = 0;
         // Monthly heat gains total
         var G = 0;
         for (z in data.gains_W)
             G += data.gains_W[z][m];
         total_gains[m] = G;
-        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
+        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 8) // SAP2012, p.220
             total_gains[m] = 0;
         // Calculate overall utilisation factor for gains
         var HLP = H / data.TFA;
@@ -1001,7 +1001,7 @@ calc.space_heating = function (data)
             heat_demand[m] = 0;
         }
 
-        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 9) // SAP2012, p.220
+        if (data.space_heating.heating_off_summer == 1 && m >= 5 && m <= 8) // SAP2012, p.220
             heat_demand[m] = 0;
         heat_demand_kwh[m] = 0.024 * heat_demand[m] * datasets.table_1a[m];
         cooling_demand_kwh[m] = 0.024 * cooling_demand[m] * datasets.table_1a[m];
@@ -1011,7 +1011,7 @@ calc.space_heating = function (data)
         ///////////////////////////////////////////////////////
         //Annual useful gains and losses. Units: kwh/m2/year //
         ///////////////////////////////////////////////////////
-        if (data.space_heating.heating_off_summer == 0 || (m < 5 || m > 9)) {
+        if (data.space_heating.heating_off_summer == 0 || (m < 5 || m > 8)) {
             var gains_source = "";
             for (z in data.gains_W) {
                 if (z === "Appliances" || z === "Lighting" || z === "Cooking" || z === "waterheating" || z === 'fans_and_pumps' || z === 'metabolic' || z === 'losses')
