@@ -1461,6 +1461,14 @@ function carboncoopreport_UpdateUI() {
     //
     //
 
+    // Figures  15, 16, 17, 18, 19, 20 - Display message when scenario is created from another scenario
+    if (project['scenario1'] != undefined && project['scenario1'].created_from != undefined && project['scenario1'].created_from != 'master')
+        $('.scenario1-inheritance').html('This scenario assumes the measures in ' + project['scenario1'].created_from + ' have already been carried out and adds to them').show();
+    if (project['scenario2'] != undefined && project['scenario2'].created_from != undefined && project['scenario2'].created_from != 'master')
+        $('.scenario1-inheritance').html('This scenario assumes the measures in ' + project['scenario2'].created_from + ' have already been carried out and adds to them').show();
+    if (project['scenario3'] != undefined && project['scenario3'].created_from != undefined && project['scenario3'].created_from != 'master')
+        $('.scenario1-inheritance').html('This scenario assumes the measures in Scenario ' + project['scenario3'].created_from.split('scenario')[1] + ' have already been carried out and adds to them').show();
+
     // Commentary
     if (data.household.commentary != undefined) {
         var commentary = data.household.commentary.replace(/\n/gi, "<br />");

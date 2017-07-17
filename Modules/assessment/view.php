@@ -605,6 +605,7 @@ global $reports;
         project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
         project[s].measures = {};
         project[s].fabric.measures = {};
+        project[s].created_from = $('#select-scenario').val();
 
         //sort project alphabetically
         temp_project = {};
