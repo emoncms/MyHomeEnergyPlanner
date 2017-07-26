@@ -1347,7 +1347,7 @@ function carboncoopreport_UpdateUI() {
                 .replace('na', 'n/a'); // We have realized that some units were inputted wrong in the library
         html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + perf + '</td>';
         html += '<td colspan=2><table  style="width:100%"><tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.measure.cost_units + '</td></tr>';
-        html += '<tr><td><strong>Quantity (units): </strong></td><td>' + measure.measure.quantity + '</td><td><strong>Total cost (£): </strong></td><td>' + measure.measure.cost_total + '</td></tr></table></td></tr>';
+        html += '<tr><td><strong>Quantity (units): </strong></td><td>' + (1.0 * measure.measure.quantity).toFixed(2) + '</td><td><strong>Total cost (£): </strong></td><td>' + (1.0 * measure.measure.cost_total).toFixed(2) + '</td></tr></table></td></tr>';
         html += "</table>";
         $(listSelector).append(html);
     }

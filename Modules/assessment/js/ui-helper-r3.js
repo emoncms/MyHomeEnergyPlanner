@@ -234,10 +234,13 @@ function get_fuel_categories() {
     return categories;
 }
 
-function add_quantity_and_cost_to_measure(measure) {
-    // Add extra properties to measure 
-    if (measure.cost_units == 'sqm')
-        measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
+function add_quantity_and_cost_to_measure(measure) { // Add extra properties to measure 
+    if (measure.cost_units == 'sqm') {
+        if (measure.EWI != undefined && measure.EWI == true) // are of EWI is bigger than the actual area of the wall
+            measure.area != undefined ? measure.quantity = 1.15 * measure.area : measure.quantity = 0;
+        else
+            measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
+    }
     else if (measure.cost_units == 'ln m')
         measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
     else if (measure.cost_units == 'unit')

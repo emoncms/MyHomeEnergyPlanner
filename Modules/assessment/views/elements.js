@@ -204,7 +204,7 @@ $("#openbem").on("click", '.revert-to-master', function () {
         }
         // delete measure
         var applied_in_bulk = measure_applied_in_bulk(element_id);
-        if (applied_in_bulk == false) 
+        if (applied_in_bulk == false)
             delete(data.fabric.measures[element_id]);
         else
             delete(data.fabric.measures[applied_in_bulk].original_elements[element_id]);
@@ -277,7 +277,7 @@ function add_floor(z)
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
     if (data.fabric.elements[z].uvalue == 0)
         $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color', 'red');
-    
+
     // Revert to master
     if (measure_applied_to_element(data.fabric.elements[z].id) == true) {
         $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').show();
@@ -346,8 +346,8 @@ function add_window(z)
         //subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
     }
     $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").html(subtractfromhtml);
-    
-  // Revert to master
+
+    // Revert to master
     if (measure_applied_to_element(data.fabric.elements[z].id) == true) {
         $('#windows  .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').show();
         if (element_exists_in_master(data.fabric.elements[z].id) == false)
@@ -483,13 +483,6 @@ function apply_measure(measure) {
             data.fabric.measures[measure.item_id].measure = "Element deleted";
             break;
         case  'replace_from_measure_library': // watch out no 'break' at the end of this case
-            if (measure.item[lib].EWI != undefined && measure.item[lib].EWI == true) {
-                data.fabric.elements[measure.row].l = 0;
-                data.fabric.elements[measure.row].h = 0;
-                data.fabric.elements[measure.row].area = 1.15 * data.fabric.elements[measure.row].area;
-            }
-
-            console.log(measure);
         case 'replace':
         case 'edit':
             measure.item[lib].lib = lib;
