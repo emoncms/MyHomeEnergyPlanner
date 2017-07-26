@@ -673,6 +673,9 @@ function carboncoopreport_UpdateUI() {
         primaryEnergyUseData.bills = [
             {
                 value: data.currentenergy.primaryenergy_annual_kwhm2,
+                label: "Non categorized"},
+            {
+                value: -data.currentenergy.generation.primaryenergy / data.TFA,
                 label: "Non categorized"}
         ]
 
@@ -817,28 +820,28 @@ function carboncoopreport_UpdateUI() {
     //
     var estimatedEnergyCostsData = [];
     var max = 0;
-    if (typeof project["master"] != "undefined" && typeof project["master"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].net_cost});
-        if (max < project["master"].net_cost + 0.3 * project["master"].net_cost)
-            max = project["master"].net_cost + 0.3 * project["master"].net_cost;
+    if (typeof project["master"] != "undefined" && typeof project["master"].total_cost !== "undefined") {
+        estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].total_cost});
+        if (max < project["master"].total_cost + 0.3 * project["master"].total_cost)
+            max = project["master"].total_cost + 0.3 * project["master"].total_cost;
     }
     estimatedEnergyCostsData.push({label: "Bills data", value: project["master"].currentenergy.total_cost});
     if (max < project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost)
         max = project["master"].currentenergy.total_cost + 0.3 * project["master"].currentenergy.total_cost;
-    if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].net_cost});
-        if (max < project["scenario1"].net_cost + 0.3 * project["scenario1"].net_cost)
-            max = project["scenario1"].net_cost + 0.3 * project["scenario1"].net_cost;
+    if (typeof project["scenario1"] != "undefined" && typeof project["scenario1"].total_cost !== "undefined") {
+        estimatedEnergyCostsData.push({label: "Scenario 1", value: project["scenario1"].total_cost});
+        if (max < project["scenario1"].total_cost + 0.3 * project["scenario1"].total_cost)
+            max = project["scenario1"].total_cost + 0.3 * project["scenario1"].total_cost;
     }
-    if (typeof project["scenario2"] != "undefined" && typeof project["scenario2"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Scenario 2", value: project["scenario2"].net_cost});
-        if (max < project["scenario2"].net_cost + 0.3 * project["scenario2"].net_cost)
-            max = project["scenario2"].net_cost + 0.3 * project["scenario2"].net_cost;
+    if (typeof project["scenario2"] != "undefined" && typeof project["scenario2"].total_cost !== "undefined") {
+        estimatedEnergyCostsData.push({label: "Scenario 2", value: project["scenario2"].total_cost});
+        if (max < project["scenario2"].total_cost + 0.3 * project["scenario2"].total_cost)
+            max = project["scenario2"].total_cost + 0.3 * project["scenario2"].total_cost;
     }
-    if (typeof project["scenario3"] != "undefined" && typeof project["scenario3"].net_cost !== "undefined") {
-        estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].net_cost});
-        if (max < project["scenario3"].net_cost + 0.3 * project["scenario3"].net_cost)
-            max = project["scenario3"].net_cost + 0.3 * project["scenario3"].net_cost;
+    if (typeof project["scenario3"] != "undefined" && typeof project["scenario3"].total_cost !== "undefined") {
+        estimatedEnergyCostsData.push({label: "Scenario 3", value: project["scenario3"].total_cost});
+        if (max < project["scenario3"].total_cost + 0.3 * project["scenario3"].total_cost)
+            max = project["scenario3"].total_cost + 0.3 * project["scenario3"].total_cost;
     }
 
     var EstimatedEnergyCosts = new BarChart({

@@ -32,7 +32,7 @@
  a change of inputs to the model. Changes of the minor values are due to changes only in the code.
  */
 
-var version = 9.0;
+var version = 9.2;
 
 var calc = {data: {}};
 
@@ -2279,14 +2279,21 @@ calc.currentenergy = function (data) {
         enduse_annual_kwh += f_use.annual_use;
     }
 
-    if (data.currentenergy.onsite_generation === 1) {
+    if (data.currentenergy.onsite_generation === 1) { // See issue 304
+        // Add to the totals the amount of energy generated that was used onsite
+        enduse_annual_kwh += data.currentenergy.generation.fraction_used_onsite * data.currentenergy.generation.annual_generation;
+        primaryenergy_annual_kwh += data.fuels.generation.primaryenergyfactor * data.currentenergy.generation.fraction_used_onsite * data.currentenergy.generation.annual_generation;
+        total_co2 += data.fuels.generation.co2factor * data.currentenergy.generation.fraction_used_onsite * data.currentenergy.generation.annual_generation;
+
+        // Calculate generation totals (savings due to generation)
         data.currentenergy.generation.primaryenergy = data.fuels.generation.primaryenergyfactor * data.currentenergy.generation.annual_generation;
         data.currentenergy.generation.annual_CO2 = data.fuels.generation.co2factor * data.currentenergy.generation.annual_generation;
         data.currentenergy.generation.annual_savings = data.fuels.generation.fuelcost / 100 * data.currentenergy.generation.fraction_used_onsite * data.currentenergy.generation.annual_generation;
 
-        // total_co2 -= data.currentenergy.generation.annual_CO2; ---   Onsite generation not taken into account for household emissions as it is already accounted in CO2 fator for the grid
-        // primaryenergy_annual_kwh -= data.currentenergy.generation.primaryenergy; --- Same than total_co2
-        total_cost -= data.currentenergy.generation.annual_savings;
+        // Calculate totals taking into account generation
+        total_co2 -= data.currentenergy.generation.annual_CO2;
+        primaryenergy_annual_kwh -= data.currentenergy.generation.primaryenergy;
+        // total_cost -= data.currentenergy.generation.annual_savings; -- Annual savings are not added: this is moeny that the user would pay on top of what they already pay if they didn't have generation
     }
 
 

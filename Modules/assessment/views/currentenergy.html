@@ -7,10 +7,10 @@
         <td>
             <p><b>Totals</b></p><br>
             <table class="table">
-                <tr><td>Total primary energy consumption <i class="icon-question-sign" title="Savings due to generation not taken into account as they are already accounted for in the CO2 factor for the grid">:</td><td><span key="data.currentenergy.primaryenergy_annual_kwh" dp=0></span> kWh</td></tr>
-                <tr><td>Total CO<sub>2</sub> emissions <i class="icon-question-sign" title="Savings due to generation not taken into account as they are already accounted for in the Primary Energy factor for the grid">:</td><td><span key="data.currentenergy.total_co2" dp=0></span> kg</td></tr>
-                <tr><td>Total energy cost <i class="icon-question-sign" title="Taking into account generation used on-site">:</td><td>£<span key="data.currentenergy.total_cost" dp=0></span></td></tr>
-                <tr><td>Net energy cost (includes FIT income):</td><td>£<span key="data.currentenergy.annual_net_cost" dp=0></span></td></tr>
+                <tr><td>Total primary energy consumption <i class="icon-question-sign" title="Takes into account energy from all the different sources (gas, electricity grid, etc. including the fraction used onsite from renewable generation) minus the total savings due to generation">:</td><td><span key="data.currentenergy.primaryenergy_annual_kwh" dp=0></span> kWh</td></tr>
+                <tr><td>Total CO<sub>2</sub> emissions <i class="icon-question-sign" title="Takes into account CO2 from all the different sources (gas, electricity grid, etc. including the fraction used onsite from renewable generation minus) the total savings due to generation">:</td><td><span key="data.currentenergy.total_co2" dp=0></span> kg</td></tr>
+                <tr><td>Total energy cost <i class="icon-question-sign" title='Exclusively from your bills'>:</td><td>£<span key="data.currentenergy.total_cost" dp=0></span></td></tr>
+                <tr><td>Net energy cost <i class="icon-question-sign" title="Includes FIT income">:</td><td>£<span key="data.currentenergy.annual_net_cost" dp=0></span></td></tr>
 
 
                 <tr><td>Total primary energy consumption per m<sup>2</sup> floor area:</td><td><span key="data.currentenergy.primaryenergy_annual_kwhm2" dp=0></span> kWh/m<sup>2</sup></td></tr>
@@ -76,7 +76,7 @@
         <th>Primary Energy saved <br />kWh <i class="icon-question-sign" title="Due to total generation: includes energy used on-site and exported" ></i></th>
         <th>Unit cost<br /> p/kWh</th>
         <th>Fraction used on-site</th>
-        <th>Annual savings <i class="icon-question-sign" title="Due to energy used on-site" ></i></th>
+        <th>Annual savings <i class="icon-question-sign" title="Due to energy used on-site. This amount would be part of your bills if you did not have generation." ></i></th>
         <th>FIT annual income</th>
 
     <tbody>
