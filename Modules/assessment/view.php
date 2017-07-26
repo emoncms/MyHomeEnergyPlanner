@@ -79,7 +79,7 @@ global $reports;
 
             <div class="side-block-2 scenario-block" scenario="template" style="cursor:pointer">
 
-                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;height:40px"><b>title<span style="float:right">scenarioname<br /><span class="template_scenario_emissions"></span> kgCO<sub>2</sub>/m<sup>2</sup></span></b></div>
+                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;height:40px"><b>title<span style="float:right">scenarioname<br /><span class="template_scenario_emissions"></span> kgCO<sub>2</sub>/m<sup>2</sup></span><br /><span class="template_scenario_created_from" style='float:left'></span></b></div>
 
                 <div class="menu-content">
                     <div style="padding:10px">
@@ -525,11 +525,14 @@ global $reports;
             if (project[s].scenario_name != undefined)
                 name = project[s].scenario_name;
             tmp = tmp.replace("scenarioname", " " + String(name).charAt(0).toUpperCase() + String(name).slice(1));
+            console.log(tmp);
             $("#scenario-list").append(tmp);
         }
         for (s in project) {
             //project[s] = calc.run(calc.run(project[s]));
             $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
+            if (s != 'master' && project[s].created_from != undefined)
+                $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + ')');
         }
         $('div [scenario="' + scenario + '"]').click();
     }
