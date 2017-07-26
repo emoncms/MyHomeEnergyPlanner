@@ -310,7 +310,7 @@ function compareInfiltration(scenario) {
                 + ' cubic metres per hour per square metre of envelope</i> </td></tr>';
         out += '<tr><td>The structural infiltration due to dwelling construction was <i>'
                 + project[scenario].measures.ventilation.draught_proofing_measures.original_structural_infiltration
-                + ' ACH</i>, after applying the measures: <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.structural_infiltration.toFixed(2)
+                + ' ACH</i>, after applying the measures: <i>' + project[scenario].ventilation.structural_infiltration.toFixed(2)
                 + ' ACH</i></td></tr>';
         +'</i></td></tr>';
     }
