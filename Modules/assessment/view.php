@@ -525,7 +525,6 @@ global $reports;
             if (project[s].scenario_name != undefined)
                 name = project[s].scenario_name;
             tmp = tmp.replace("scenarioname", " " + String(name).charAt(0).toUpperCase() + String(name).slice(1));
-            console.log(tmp);
             $("#scenario-list").append(tmp);
         }
         for (s in project) {

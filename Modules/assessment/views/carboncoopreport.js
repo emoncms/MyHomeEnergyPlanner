@@ -588,8 +588,8 @@ function carboncoopreport_UpdateUI() {
                 data.bills[2].value += f_use.annual_use;
         }
         data.bills[1].value += project['master'].currentenergy.generation.fraction_used_onsite * project['master'].currentenergy.generation.annual_generation; // We added consumption coming from generation
-        if (max_value < (data.bills[0].value + data.bills[1].value + data.bills[2].value))
-            max_value = data.bills[0].value + data.bills[1].value + data.bills[2].value + 5000;
+        if (max_value < (data.bills[0].value + data.bills[1].value + 1.0 * data.bills[2].value))
+            max_value = data.bills[0].value + data.bills[1].value + 1.0 * data.bills[2].value + 5000;
         return data;
     }
 
@@ -1001,6 +1001,7 @@ function carboncoopreport_UpdateUI() {
     $(".js-sap-rating-2050").html(calculateSapRatingFromScore(sap2050));
     $(".js-sap-score-average").html(sapAverage);
     $(".js-sap-rating-average").html(calculateSapRatingFromScore(sapAverage));
+
     // Figure 13: Comfort Tables.
     //	
     //
