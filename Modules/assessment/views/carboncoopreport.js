@@ -374,7 +374,7 @@ function carboncoopreport_UpdateUI() {
     }
 
     var dataFig4 = [];
-    var max_value = 0; // used to set the height of the chart
+    var max_value = 250; // used to set the height of the chart
     if (typeof project['master'] != "undefined" && typeof project["master"].annual_useful_gains_kWh_m2 != "undefined") {
         dataFig4.push({
             label: 'Your Home Now',
@@ -387,7 +387,7 @@ function carboncoopreport_UpdateUI() {
             ]
         });
         if (max_value < (project["master"].annual_losses_kWh_m2["fabric"] + project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"]))
-            max_value = project["master"].annual_losses_kWh_m2["fabric"] + project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"];
+            max_value = 50 + project["master"].annual_losses_kWh_m2["fabric"] + project["master"].annual_losses_kWh_m2["ventilation"] + project["master"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario1'] != "undefined" && typeof project["scenario1"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -402,7 +402,7 @@ function carboncoopreport_UpdateUI() {
             ]
         });
         if (max_value < (project["scenario1"].annual_losses_kWh_m2["fabric"] + project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"]))
-            max_value = project["scenario1"].annual_losses_kWh_m2["fabric"] + project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"];
+            max_value = 50 + project["scenario1"].annual_losses_kWh_m2["fabric"] + project["scenario1"].annual_losses_kWh_m2["ventilation"] + project["scenario1"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario2'] != "undefined" && typeof project["scenario2"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -417,7 +417,7 @@ function carboncoopreport_UpdateUI() {
             ]
         });
         if (max_value < (project["scenario2"].annual_losses_kWh_m2["fabric"] + project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"]))
-            max_value = project["scenario2"].annual_losses_kWh_m2["fabric"] + project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"];
+            max_value = 50 + project["scenario2"].annual_losses_kWh_m2["fabric"] + project["scenario2"].annual_losses_kWh_m2["ventilation"] + project["scenario2"].annual_losses_kWh_m2["infiltration"];
     }
 
     if (typeof project['scenario3'] != "undefined" && typeof project["scenario3"].annual_useful_gains_kWh_m2 != "undefined") {
@@ -432,7 +432,7 @@ function carboncoopreport_UpdateUI() {
             ]
         });
         if (max_value < (project["scenario3"].annual_losses_kWh_m2["fabric"] + project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"]))
-            max_value = project["scenario3"].annual_losses_kWh_m2["fabric"] + project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"];
+            max_value = 50 + project["scenario3"].annual_losses_kWh_m2["fabric"] + project["scenario3"].annual_losses_kWh_m2["ventilation"] + project["scenario3"].annual_losses_kWh_m2["infiltration"];
     }
 
     var EnergyDemand = new BarChart({
@@ -447,8 +447,8 @@ function carboncoopreport_UpdateUI() {
         division: 50,
         barWidth: 110,
         barGutter: 120,
-        chartHigh: 250,
-        chartLow: -250,
+        chartHigh: max_value,
+        chartLow: -max_value,
         font: "Karla",
         defaultBarColor: 'rgb(231,37,57)',
         barColors: {
@@ -462,14 +462,16 @@ function carboncoopreport_UpdateUI() {
     });
     $('#heat-balance').html('');
     EnergyDemand.draw('heat-balance');
-    // Figure 5: Space Heating Demand
-    // 
-    //
 
+
+    // Figure 5: Space Heating Demand
     var values = [];
+    var max_value = 250; // used to set the height of the chart
     for (var i = 0; i < scenarios.length; i++) {
         if (typeof project[scenarios[i]] != "undefined" && project[scenarios[i]].space_heating_demand_m2 != "undefined") {
             values[i] = Math.round(project[scenarios[i]].space_heating_demand_m2);
+            if (max_value < values[i])
+                max_value = values[i] + 50;
         } else {
             values[i] = 0;
         }
@@ -483,7 +485,7 @@ function carboncoopreport_UpdateUI() {
         fontSize: 33,
         font: "Karla",
         division: 50,
-        chartHigh: 250,
+        chartHigh: max_value,
         width: 1200,
         chartHeight: 600,
         barWidth: 110,
@@ -532,10 +534,10 @@ function carboncoopreport_UpdateUI() {
     });
     $('#fig-5-space-heating-demand').html('');
     SpaceHeatingDemand.draw('fig-5-space-heating-demand');
-    // Figure 6: Energy Demand
-    //
-    //
 
+
+    // Figure 6: Energy Demand
+    var max_value = 40000;
     function getEnergyDemandData() {
         var data = {};
         for (var i = 0; i < scenarios.length; i++) {
@@ -558,6 +560,8 @@ function carboncoopreport_UpdateUI() {
                     data[scenarios[i]].push({value: other, label: 'Other', variance: other * 0.3});
                 }
             }
+            if (max_value < (gas + electric + other))
+                max_value = gas + electric + other + 5000;
         }
 
 
@@ -584,7 +588,8 @@ function carboncoopreport_UpdateUI() {
                 data.bills[2].value += f_use.annual_use;
         }
         data.bills[1].value += project['master'].currentenergy.generation.fraction_used_onsite * project['master'].currentenergy.generation.annual_generation; // We added consumption coming from generation
-
+        if (max_value < (data.bills[0].value + data.bills[1].value + data.bills[2].value))
+            max_value = data.bills[0].value + data.bills[1].value + data.bills[2].value + 5000;
         return data;
     }
 
@@ -598,7 +603,7 @@ function carboncoopreport_UpdateUI() {
         width: 1200,
         chartHeight: 600,
         division: 5000,
-        chartHigh: 40000,
+        chartHigh: max_value,
         barWidth: 110, barGutter: 80,
         defaultBarColor: 'rgb(231,37,57)', defaultVarianceColor: 'rgb(2,37,57)',
         barColors: {
@@ -615,11 +620,12 @@ function carboncoopreport_UpdateUI() {
     });
     $('#energy-demand').html('');
     EnergyDemand.draw('energy-demand');
-    // Figure 7:      //
 
+
+    // Figure 7:    
     function getPrimaryEnergyUseData() {
         var primaryEnergyUseData = {};
-        primaryEnergyUseData.max = 0;
+        primaryEnergyUseData.max = 500;
         primaryEnergyUseData.min = 0;
         for (var i = 0; i < scenarios.length; i++) {
             primaryEnergyUseData[scenarios[i]] = [];
@@ -695,7 +701,7 @@ function carboncoopreport_UpdateUI() {
         division: 50,
         barWidth: 110,
         barGutter: 80,
-        chartHigh: 500,
+        chartHigh: primaryEnergyUseData.max,
         chartLow: primaryEnergyUseData.min - 50,
         defaultBarColor: 'rgb(157,213,203)',
         barColors: {
@@ -731,6 +737,7 @@ function carboncoopreport_UpdateUI() {
     //
     //
     var carbonDioxideEmissionsData = [];
+    var max = 100;
     if (typeof project["master"] !== "undefined" && typeof project["master"].kgco2perm2 !== "undefined") {
         carbonDioxideEmissionsData.push({label: "Your home now", value: project["master"].kgco2perm2});
     }
@@ -745,10 +752,9 @@ function carboncoopreport_UpdateUI() {
         carbonDioxideEmissionsData.push({label: "Scenario 3", value: project["scenario3"].kgco2perm2});
     }
 
-    var max = 0;
     carbonDioxideEmissionsData.forEach(function (scenario) {
         if (scenario.value > max)
-            max = scenario.value;
+            max = scenario.value + 10;
     });
     var CarbonDioxideEmissions = new BarChart({
         chartTitleColor: 'rgb(87, 77, 86)',
@@ -758,7 +764,7 @@ function carboncoopreport_UpdateUI() {
         division: 10,
         width: 1200,
         chartHeight: 600,
-        chartHigh: 100,
+        chartHigh: max,
         barWidth: 110,
         barGutter: 80,
         defaultBarColor: 'rgb(157,213,203)',
@@ -776,6 +782,8 @@ function carboncoopreport_UpdateUI() {
         ], });
     $('#carbon-dioxide-emissions').html('');
     CarbonDioxideEmissions.draw('carbon-dioxide-emissions');
+
+
     // Figure 9: Bar chart showing carbon dioxide emissions rate (kgCO2/person.a)      //
     //
     var carbonDioxideEmissionsPerPersonData = [];
@@ -794,6 +802,12 @@ function carboncoopreport_UpdateUI() {
         carbonDioxideEmissionsPerPersonData.push({label: "Scenario 3", value: project["scenario3"].annualco2 / project["scenario3"].occupancy});
     }
 
+    var max = 8000;
+    carbonDioxideEmissionsPerPersonData.forEach(function (scenario) {
+        if (scenario.value > max)
+            max = scenario.value + 1000;
+    });
+
     var CarbonDioxideEmissionsPerPerson = new BarChart({
         chartTitleColor: 'rgb(87, 77, 86)',
         yAxisLabelColor: 'rgb(87, 77, 86)',
@@ -801,8 +815,8 @@ function carboncoopreport_UpdateUI() {
         yAxisLabel: 'kgCO' + String.fromCharCode(8322) + '/person/year',
         fontSize: 33,
         font: "Karla",
-        division: 1000,
-        chartHigh: 8000,
+        division: max < 28000 ? 1000 : 2000,
+        chartHigh: max,
         width: 1200,
         chartHeight: 600,
         barWidth: 110,
@@ -816,10 +830,12 @@ function carboncoopreport_UpdateUI() {
     });
     $('#carbon-dioxide-emissions-per-person').html('');
     CarbonDioxideEmissionsPerPerson.draw('carbon-dioxide-emissions-per-person');
+
+
     // Figure 10: Estimated Energy cost comparison       // Bar chart showing annual fuel cost. Waiting on Trystan for data
     //
     var estimatedEnergyCostsData = [];
-    var max = 0;
+    var max = 3500;
     if (typeof project["master"] != "undefined" && typeof project["master"].total_cost !== "undefined") {
         estimatedEnergyCostsData.push({label: "Your home now", value: project["master"].total_cost});
         if (max < project["master"].total_cost + 0.3 * project["master"].total_cost)
@@ -852,7 +868,7 @@ function carboncoopreport_UpdateUI() {
         fontSize: 33,
         font: "Karla",
         division: 500,
-        chartHigh: 3500,
+        chartHigh: max,
         width: 1200,
         chartHeight: 600,
         barGutter: 80, defaultBarColor: 'rgb(157,213,203)',
