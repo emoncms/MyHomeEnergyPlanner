@@ -32,7 +32,7 @@
  a change of inputs to the model. Changes of the minor values are due to changes only in the code.
  */
 
-var version = 9.2;
+var version = 9.21;
 
 var calc = {data: {}};
 
@@ -253,6 +253,8 @@ calc.fabric = function (data, solar_acces_factor)
         data.fabric.thermal_bridging_yvalue = 0.15;
     if (data.fabric.global_TMP == undefined)
         data.fabric.global_TMP = false;
+    if (data.fabric.global_TMP_value == undefined)
+        data.fabric.global_TMP_value = 250; // medium
     if (solar_acces_factor == undefined)
         solar_acces_factor = 'winter'; // solar gains for heating only use 'Winter access factor', while the summer one is used for the calculatin of "Solar gains for cooling and Summer temperatures", table 6d, p. 216 SAP2012
     data.fabric_total_heat_loss_WK = 0;
