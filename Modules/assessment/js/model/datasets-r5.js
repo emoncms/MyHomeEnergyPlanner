@@ -139,7 +139,7 @@ var datasets = {
         //      [-11.5, -9.4, -3.1, 4.3, 10.8, 15.8, 18.7, 18.0, 13.3, 6.2, -1.6, -8.9]  
         //      [-2.1, -22.5, -17.8, -11.6, 1.0, 10.0, 16.1, 17.2, 13.8, 7.5, -4.0, -16.2, -20.1]
         // References: 
-        // a) http://ashrae-meteo.info/  1986-2010
+        // a) http://ashrae-meteo.info/  1986-2010 for monthly temperature average temp (C) 
         ],
         
         
@@ -176,12 +176,12 @@ var datasets = {
                 [7.9, 8.3, 7.9, 7.1, 6.2, 6.1, 5.5, 5.6, 6.4, 7.3, 7.8, 7.3],
                 [9.5, 9.4, 8.7, 7.5, 6.6, 6.4, 5.7, 6.0, 7.2, 8.5, 8.9, 8.5],
                 [5.4, 5.3, 5.0, 4.7, 4.5, 4.1, 3.9, 3.7, 4.2, 4.6, 5.0, 5.0]
-        //      [TBD] 
-        //      [TBD] 
-        //      [TBD]
-        //      [TBD]
-        //      [TBD]
-        //      [TBD]
+        //      "IECC Region 1A" Hot-Humid (Miami, FL)
+        //      "IECC Region 2A" Hot-Humid (Houston, TX)
+        //      "IECC Region 3A" Hot/Mixed-Humid (Atlanta, GA)
+        //      "IECC Region 4A" Mixed-Humid (Baltimore, MD)
+        //      "IECC Region 5A" Cold (Chicago, IL)
+        //      "IECC Region 6A" Cold (Minneapolis, MN)
         //      "IECC Region 2B" (Phoenix, AZ)
         //      "IECC Region 3B-CA" Hot-Dry (Los Angeles, CA)
         //      "IECC Region 3B-Other" Hot-Dry (Las Vegas,NV
