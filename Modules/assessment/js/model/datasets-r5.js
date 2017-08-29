@@ -66,21 +66,21 @@ var datasets = {
                 "Orkney",
                 "Shetland",
                 "Northern Ireland"
-                "Hot-Humid (Miami, FL)"     //"IECC Region 1A"
-                "Hot-Humid (Houston, TX)"      //"IECC Region 2A"
-                "Hot/Mixed-Humid (Atlanta, GA)"  //"IECC Region 3A"
-                "Mixed-Humid (Baltimore, MD)"   //"IECC Region 4A"
-                "Cold (Chicago, IL)"    //"IECC Region 5A"
-                "Cold (Minneapolis, MN)"    //"IECC Region 6A"
-                "Hot-Dry (Phoenix, AZ)" //"IECC Region 2B"
-                "Hot-Dry (CA) (Los Angeles, CA)" //"IECC Region 3B-CA"
-                "Hot-Dry (Las Vegas, NV)"    //"IECC Region 3B-Other"
-                "Mixed-Dry (Albuquerque, NM)"   //"IECC Region 4B"
-                "Cold (Boulder, CO)"    //"IECC Region 5B"
-                "Cold (Helena, MT)" //"IECC Region 6B"
-                "Mixed-Marine (San Francisco, CA)"  //"IECC Region 3C"
-                "Marine (Seattle, WA)"  //"IECC Region 4C"
-                "Very Cold (Duluth, MN)"    //"IECC Region 7"  
+                "Hot-Humid (Miami, FL)"     //"IECC Region 1A",
+                "Hot-Humid (Houston, TX)"      //"IECC Region 2A",
+                "Hot/Mixed-Humid (Atlanta, GA)"  //"IECC Region 3A",
+                "Mixed-Humid (Baltimore, MD)"   //"IECC Region 4A",
+                "Cold (Chicago, IL)"    //"IECC Region 5A",
+                "Cold (Minneapolis, MN)"    //"IECC Region 6A",
+                "Hot-Dry (Phoenix, AZ)" //"IECC Region 2B",
+                "Hot-Dry (CA) (Los Angeles, CA)" //"IECC Region 3B-CA",
+                "Hot-Dry (Las Vegas, NV)"    //"IECC Region 3B-Other",
+                "Mixed-Dry (Albuquerque, NM)"   //"IECC Region 4B",
+                "Cold (Boulder, CO)"    //"IECC Region 5B",
+                "Cold (Helena, MT)" //"IECC Region 6B",
+                "Mixed-Marine (San Francisco, CA)"  //"IECC Region 3C",
+                "Marine (Seattle, WA)"  //"IECC Region 4C",
+                "Very Cold (Duluth, MN)"    //"IECC Region 7",  
                 "Arctic (Fairbanks, AK)"    //"IECC Region 8"
         // References: 
         // a) https://www1.eere.energy.gov/buildings/publications/pdfs/building_america/4_3a_ba_innov_buildingscienceclimatemaps_011713.pdf 
