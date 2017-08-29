@@ -142,7 +142,22 @@ $("#openbem").on("click", '#bulk-measure-next', function () {
     $('#apply-measure-modal .modal-footer').append('<button id="bulk-measure-finish" class="btn btn-primary">Finish</button>');
 });
 $("#openbem").on("click", '#bulk-measure-finish', function () {
-    // Save measure
+    // Check that there is no previous measure applied to each element and if there is then delete it
+    $('.bulk-element').each(function (i, obj) { // For each window checked
+        if (obj.checked == true) {
+            var row = $(obj).attr('element-row');
+            var element_id = data.fabric.elements[row].id
+            // applied as single measure
+            if (data.fabric.measures[element_id] != undefined)
+                delete(data.fabric.measures[element_id]);
+            // applied as part of a bulk measure
+            var applied_in_bulk = measure_applied_in_bulk(element_id);
+            if (applied_in_bulk != false)
+                delete(data.fabric.measures[applied_in_bulk].original_elements[element_id]);
+        }
+    });
+
+    // Create measure
     var measure = library_helper.elements_measures_get_item_to_save();
     for (var lib in measure) {
         measure[lib].lib = lib;
@@ -151,6 +166,7 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
     measure[lib].location = '';
     var area = 0;
 
+    // Save original elements and calculate totals of bulk measure
     data.fabric.measures[measure[lib].id] = {};
     data.fabric.measures[measure[lib].id].original_elements = {};
     $('.bulk-element').each(function (i, obj) { // For each window checked
@@ -179,6 +195,8 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
             measure[lib].type = data.fabric.elements[row].type; // I know this shouldn't be here, but it is the only place where I can get the type of the element to add it to the measure
         }
     });
+
+    elements_initUI();
     update();
 
     // Tidy up the apply-measure modal
@@ -192,13 +210,13 @@ $("#openbem").on("change", '#bulk-measure-check-all', function () {
      $('.bulk-element').attr('checked', false);
      */
 });
-$("#openbem").on("click", '.revert-to-master', function () {
+$("#openbem").on("click", '.revert-to-original', function () {
     var element_id = $(this).attr('item_id');
-    if (element_exists_in_master(element_id) == true) {
-        // copy the original element from master
-        for (var e in project.master.fabric.elements) {
-            if (project.master.fabric.elements[e].id == element_id) {
-                data.fabric.elements[get_element_index_by_id(element_id)] = JSON.parse(JSON.stringify(project.master.fabric.elements[e]));
+    if (element_exists_in_original(data.created_from, element_id) == true) {
+        // copy the original element 
+        for (var e in project[data.created_from].fabric.elements) {
+            if (project[data.created_from].fabric.elements[e].id == element_id) {
+                data.fabric.elements[get_element_index_by_id(element_id)] = JSON.parse(JSON.stringify(project[data.created_from].fabric.elements[e]));
                 break;
             }
         }
@@ -244,15 +262,9 @@ function add_element(id, z)
     $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
 
-    // Revert to master
-    if (measure_applied_to_element(data.fabric.elements[z].id) != false) {
-        $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').show();
-        if (element_exists_in_master(data.fabric.elements[z].id) == false)
-            $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-master').css('cursor', 'default').html('Original element in master doesn\'t<br />exist, cannot revert');
-    }
-    else {
-        $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').hide();
-    }
+    // Revert to original
+    init_revert_to_original(id, z);
+
 }
 
 function add_floor(z)
@@ -278,15 +290,8 @@ function add_floor(z)
     if (data.fabric.elements[z].uvalue == 0)
         $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color', 'red');
 
-    // Revert to master
-    if (measure_applied_to_element(data.fabric.elements[z].id) == true) {
-        $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').show();
-        if (element_exists_in_master(data.fabric.elements[z].id) == false)
-            $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-master').css('cursor', 'default').html('Original element in master doesn\'t<br />exist, cannot revert');
-    }
-    else {
-        $(id + ' .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').hide();
-    }
+    // Revert to original 
+    init_revert_to_original(id, z);
 }
 
 function add_window(z)
@@ -347,15 +352,8 @@ function add_window(z)
     }
     $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").html(subtractfromhtml);
 
-    // Revert to master
-    if (measure_applied_to_element(data.fabric.elements[z].id) == true) {
-        $('#windows  .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').show();
-        if (element_exists_in_master(data.fabric.elements[z].id) == false)
-            $('#windows  .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-master').css('cursor', 'default').html('Original element in master doesn\'t<br />exist, cannot revert');
-    }
-    else {
-        $('#windows .revert-to-master[item_id="' + data.fabric.elements[z].id + '"]').hide();
-    }
+    // Revert to original
+    init_revert_to_original('#windows', z);
 }
 
 function elements_initUI()
@@ -442,7 +440,7 @@ function elements_UpdateUI()
             options += "<option value='" + data.fabric.elements[z].id + "'>" + data.fabric.elements[z].location + "</option>";
     }
 
-    $('.revert-to-master-icon').attr('src', path + "Modules/assessment/img-assets/undo.gif");
+    $('.revert-to-original-icon').attr('src', path + "Modules/assessment/img-assets/undo.gif");
 
     // Fill up the substractfrom selects
     $('.subtractfrom').each(function (i, obj) {
@@ -467,6 +465,11 @@ function get_elements_max_id() {
 
 
 function apply_measure(measure) {
+    // Check is a measure has previously been applied as part of a bulk measure, if so then we delete it
+    var applied_in_bulk = measure_applied_in_bulk(measure.item_id);
+    if (applied_in_bulk != false)
+        delete(data.fabric.measures[applied_in_bulk].original_elements[measure.item_id]);
+
     // The first time we apply a measure to an element we record its original stage
     if (data.fabric.measures[measure.item_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
         data.fabric.measures[measure.item_id] = {};
@@ -581,9 +584,9 @@ function measure_applied_to_element(element_id) {
     return false;
 }
 
-function element_exists_in_master(element_id) {
-    for (e in project.master.fabric.elements) {
-        if (project.master.fabric.elements[e].id == element_id)
+function element_exists_in_original(original_scenario, element_id) {
+    for (e in project[original_scenario].fabric.elements) {
+        if (project[original_scenario].fabric.elements[e].id == element_id)
             return true;
     }
     return false;
@@ -600,6 +603,23 @@ function measure_applied_in_bulk(element_id) { // returns false if measure is no
     }
     return false;
 }
+
+function init_revert_to_original(id, z) {
+    if (measure_applied_to_element(data.fabric.elements[z].id) != false) {
+        if (data.created_from != 'master') {
+            var inner_html = $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').html();
+            inner_html = inner_html.replace(/Revert to master/g, 'Revert to Scenario ' + data.created_from.split('scenario')[1]);
+            $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').html(inner_html);
+        }
+        $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').show();
+        if (element_exists_in_original(data.created_from, data.fabric.elements[z].id) == false)
+            $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-original').css('cursor', 'default').html('Original element doesn\'t<br />exist, cannot revert');
+    }
+    else {
+        $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').hide();
+    }
+}
+
 //
 //-----------------------------------------------------------------------------------------------
 // Element library
