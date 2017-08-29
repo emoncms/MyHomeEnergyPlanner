@@ -66,22 +66,22 @@ var datasets = {
                 "Orkney",
                 "Shetland",
                 "Northern Ireland"
-        //      "IECC Region 1A" Hot-Humid (Miami, FL)
-        //      "IECC Region 2A" Hot-Humid (Houston, TX)
-        //      "IECC Region 3A" Hot/Mixed-Humid (Atlanta, GA)
-        //      "IECC Region 4A" Mixed-Humid (Baltimore, MD)
-        //      "IECC Region 5A" Cold (Chicago, IL)
-        //      "IECC Region 6A" Cold (Minneapolis, MN)
-        //      "IECC Region 2B" (Phoenix, AZ)
-        //      "IECC Region 3B-CA" Hot-Dry (Los Angeles, CA)
-        //      "IECC Region 3B-Other" Hot-Dry (Las Vegas,NV
-        //      "IECC Region 4B" Mixed-Dry (Albuquerque, NM)
-        //      "IECC Region 5B" Cold (Boulder, CO)
-        //      "IECC Region 6B" Cold (Helena, MT)
-        //      "IECC Region 3C" Mixed-Marine (San Francisco, CA)    
-        //      "IECC Region 4C" Marine (Seattle, WA)
-        //      "IECC Region 7" Very Cold (Duluth, MN)  
-        //      "IECC Region 8" Arctic (Fairbanks, AK)
+                "Hot-Humid (Miami, FL)"     //"IECC Region 1A"
+                "Hot-Humid (Houston, TX)"      //"IECC Region 2A"
+                "Hot/Mixed-Humid (Atlanta, GA)"  //"IECC Region 3A"
+                "Mixed-Humid (Baltimore, MD)"   //"IECC Region 4A"
+                "Cold (Chicago, IL)"    //"IECC Region 5A"
+                "Cold (Minneapolis, MN)"    //"IECC Region 6A"
+                "Hot-Dry (Phoenix, AZ)" //"IECC Region 2B"
+                "Hot-Dry (CA) (Los Angeles, CA)" //"IECC Region 3B-CA"
+                "Hot-Dry (Las Vegas, NV)"    //"IECC Region 3B-Other"
+                "Mixed-Dry (Albuquerque, NM)"   //"IECC Region 4B"
+                "Cold (Boulder, CO)"    //"IECC Region 5B"
+                "Cold (Helena, MT)" //"IECC Region 6B"
+                "Mixed-Marine (San Francisco, CA)"  //"IECC Region 3C"
+                "Marine (Seattle, WA)"  //"IECC Region 4C"
+                "Very Cold (Duluth, MN)"    //"IECC Region 7"  
+                "Arctic (Fairbanks, AK)"    //"IECC Region 8"
         // References: 
         // a) https://www1.eere.energy.gov/buildings/publications/pdfs/building_america/4_3a_ba_innov_buildingscienceclimatemaps_011713.pdf 
         // b) https://energy.gov/sites/prod/files/2015/10/f27/ba_climate_region_guide_7.3.pdf
@@ -121,23 +121,23 @@ var datasets = {
                 [5.2, 5.0, 5.8, 7.6, 9.7, 11.8, 13.4, 13.6, 12.1, 9.6, 7.3, 5.2],
                 [4.4, 4.2, 5.0, 7.0, 8.9, 11.2, 13.1, 13.2, 11.7, 9.1, 6.6, 4.3],
                 [4.6, 4.1, 4.7, 6.5, 8.3, 10.5, 12.4, 12.8, 11.4, 8.8, 6.5, 4.6],
-                [4.8, 5.2, 6.4, 8.4, 10.9, 13.5, 15.0, 14.9, 13.1, 10.0, 7.2, 4.7]
-        //      [20.3, 21.1, 22.5, 24.2, 26.6, 28.0, 28.8, 28.9, 28.3, 26.5, 23.8, 21.3] 
-        //      [11.9, 13.8, 16.9, 20.7, 24.9, 27.7, 28.9, 28.9, 26.3, 21.6, 16.5, 12.3] 
-        //      [6.9, 8.7, 12.7, 16.9, 21.4, 25.1, 26.8, 26.4, 23.2, 17.3, 12.3, 7.6]
-        //      [1.5, 2.4, 7.0, 12.5, 17.7, 22.9, 25.4, 24.4, 20.3, 13.7, 8.4, 3.0]
-        //      [-3.9, -2.1, 3.5, 9.6, 15.2, 20.7, 23.4, 22.5, 18.3, 11.5, 4.8, -1.9]
-        //      [-8.6, -6.2, 0.6, 8.7, 15.2, 20.7, 23.1, 21.7, 16.9, 9.5, 1.2, -6.1]
-        //      [13.6, 15.4, 18.6, 22.6, 27.7, 32.7, 34.9, 34.1, 31.4, 25.0, 18.0, 13.0]
-        //      [14.6, 14.6, 16.0, 16.8, 19.0, 20.7, 22.9, 23.1, 22.4, 19.8, 17.0, 14.2]
-        //      [9.2, 11.0, 15.4, 18.8, 25.3, 30.0, 33.9, 32.0, 28.0, 20.5, 13.8, 8.5]
-        //      [3.1, 5.8, 9.4, 13.8, 19.1, 24.1, 25.8, 24.6, 20.9, 14.7, 7.6, 2.7]
-        //      [0.2, 1.3, 5.7, 10.0, 15.1, 20.7, 22.8, 21.9, 17.4, 10.9, 3.8, -0.9]
-        //      [-5.1, -2.7, 2.2, 7.1, 12.1, 16.6, 20.9, 19.9, 14.6, 7.7, 0.6, -5.1]
-        //      [10.9, 12.7, 14.2, 15.6, 16.1, 17.4, 18.1, 18.5, 18.4, 17.8, 14.5, 10.9]
-        //      [5.9, 6.8, 8.7, 11.0, 14.3, 16.8, 19.6, 19.7, 17.1, 12.3, 8.2, 5.3]
-        //      [-11.5, -9.4, -3.1, 4.3, 10.8, 15.8, 18.7, 18.0, 13.3, 6.2, -1.6, -8.9]  
-        //      [-2.1, -22.5, -17.8, -11.6, 1.0, 10.0, 16.1, 17.2, 13.8, 7.5, -4.0, -16.2, -20.1]
+                [4.8, 5.2, 6.4, 8.4, 10.9, 13.5, 15.0, 14.9, 13.1, 10.0, 7.2, 4.7],
+                [20.3, 21.1, 22.5, 24.2, 26.6, 28.0, 28.8, 28.9, 28.3, 26.5, 23.8, 21.3], 
+                [11.9, 13.8, 16.9, 20.7, 24.9, 27.7, 28.9, 28.9, 26.3, 21.6, 16.5, 12.3], 
+                [6.9, 8.7, 12.7, 16.9, 21.4, 25.1, 26.8, 26.4, 23.2, 17.3, 12.3, 7.6],
+                [1.5, 2.4, 7.0, 12.5, 17.7, 22.9, 25.4, 24.4, 20.3, 13.7, 8.4, 3.0],
+                [-3.9, -2.1, 3.5, 9.6, 15.2, 20.7, 23.4, 22.5, 18.3, 11.5, 4.8, -1.9],
+                [-8.6, -6.2, 0.6, 8.7, 15.2, 20.7, 23.1, 21.7, 16.9, 9.5, 1.2, -6.1],
+                [13.6, 15.4, 18.6, 22.6, 27.7, 32.7, 34.9, 34.1, 31.4, 25.0, 18.0, 13.0],
+                [14.6, 14.6, 16.0, 16.8, 19.0, 20.7, 22.9, 23.1, 22.4, 19.8, 17.0, 14.2],
+                [9.2, 11.0, 15.4, 18.8, 25.3, 30.0, 33.9, 32.0, 28.0, 20.5, 13.8, 8.5],
+                [3.1, 5.8, 9.4, 13.8, 19.1, 24.1, 25.8, 24.6, 20.9, 14.7, 7.6, 2.7],
+                [0.2, 1.3, 5.7, 10.0, 15.1, 20.7, 22.8, 21.9, 17.4, 10.9, 3.8, -0.9],
+                [-5.1, -2.7, 2.2, 7.1, 12.1, 16.6, 20.9, 19.9, 14.6, 7.7, 0.6, -5.1],
+                [10.9, 12.7, 14.2, 15.6, 16.1, 17.4, 18.1, 18.5, 18.4, 17.8, 14.5, 10.9],
+                [5.9, 6.8, 8.7, 11.0, 14.3, 16.8, 19.6, 19.7, 17.1, 12.3, 8.2, 5.3],
+                [-11.5, -9.4, -3.1, 4.3, 10.8, 15.8, 18.7, 18.0, 13.3, 6.2, -1.6, -8.9],  
+                [-2.1, -22.5, -17.8, -11.6, 1.0, 10.0, 16.1, 17.2, 13.8, 7.5, -4.0, -16.2, -20.1]
         // References: 
         // a) http://ashrae-meteo.info/  1986-2010 for monthly temperature average temp (C) 
         ],
@@ -175,26 +175,28 @@ var datasets = {
                 [8.3, 8.4, 7.9, 6.6, 6.1, 6.1, 5.6, 5.6, 6.3, 7.3, 7.7, 7.5],
                 [7.9, 8.3, 7.9, 7.1, 6.2, 6.1, 5.5, 5.6, 6.4, 7.3, 7.8, 7.3],
                 [9.5, 9.4, 8.7, 7.5, 6.6, 6.4, 5.7, 6.0, 7.2, 8.5, 8.9, 8.5],
-                [5.4, 5.3, 5.0, 4.7, 4.5, 4.1, 3.9, 3.7, 4.2, 4.6, 5.0, 5.0]
-        //      "IECC Region 1A" Hot-Humid (Miami, FL)
-        //      "IECC Region 2A" Hot-Humid (Houston, TX)
-        //      "IECC Region 3A" Hot/Mixed-Humid (Atlanta, GA)
-        //      "IECC Region 4A" Mixed-Humid (Baltimore, MD)
-        //      "IECC Region 5A" Cold (Chicago, IL)
-        //      "IECC Region 6A" Cold (Minneapolis, MN)
-        //      "IECC Region 2B" (Phoenix, AZ)
-        //      "IECC Region 3B-CA" Hot-Dry (Los Angeles, CA)
-        //      "IECC Region 3B-Other" Hot-Dry (Las Vegas,NV
-        //      "IECC Region 4B" Mixed-Dry (Albuquerque, NM)
-        //      "IECC Region 5B" Cold (Boulder, CO)
-        //      "IECC Region 6B" Cold (Helena, MT)
-        //      "IECC Region 3C" Mixed-Marine (San Francisco, CA)    
-        //      "IECC Region 4C" Marine (Seattle, WA)
-        //      "IECC Region 7" Very Cold (Duluth, MN)  
-        //      "IECC Region 8" Arctic (Fairbanks, AK)
+                [5.4, 5.3, 5.0, 4.7, 4.5, 4.1, 3.9, 3.7, 4.2, 4.6, 5.0, 5.0],
+                [4.2, 4.5, 4.6, 4.7, 4.2, 3.7, 3.5, 3.5, 3.6, 4.1, 4.3, 4.1],
+                [3.6, 4.0, 4.0, 4.0, 3.6, 3.6, 3.1, 2.7, 3.1, 3.1, 3.6, 3.6],
+                [4.6, 4.7, 4.9, 4.5, 3.9, 3.6, 3.4, 3.3, 3.6, 3.8, 4.1, 4.4],
+                [4.5, 4.5, 4.9, 4.9, 4.0, 3.6, 3.6, 3.6, 3.6, 4.0, 4.0, 4.0],
+                [5.4, 5.4, 5.4, 5.4, 4.9, 4.0, 4.0, 3.6, 4.0, 4.5, 4.9, 4.9],
+                [4.9, 4.5, 4.9, 5.4, 4.9, 4.9, 4.5, 4.0, 4.5, 4.9, 4.9, 4.5],
+                [2.2, 2.7, 3.1, 3.1, 3.1, 3.1, 3.1, 3.1, 2.7, 2.7, 2.2, 2.2],
+                [3.1, 3.1, 3.6, 4.0, 3.6, 3.6, 3.6, 3.6, 3.1, 3.1, 3.1, 3.1],
+                [3.1, 4.0, 4.9, 4.9, 5.4, 4.9, 4.9, 4.5, 4.0, 3.6, 3.6, 3.1],
+                [3.6, 4.0, 4.5, 4.9, 4.5, 4.5, 4.0, 3.6, 3.6, 3.6, 3.6, 3.6],
+                [4.5, 4.5, 4.5, 4.9, 4.5, 4.5, 4.0, 4.0, 4.0, 4.5, 4.0, 4.5],
+                [3.1, 3.1, 3.6, 4.0, 4.0, 4.0, 3.6, 3.1, 3.1, 3.1, 3.1, 3.1],
+                [3.6, 4.0, 4.9, 5.8, 6.3, 6.3, 6.3, 5.8, 5.4, 4.5, 3.6, 3.6],
+                [4.5, 4.5, 4.5, 4.5, 4.0, 4.0, 3.6, 3.6, 3.6, 4.0, 4.0, 4.5],
+                [5.4, 5.4, 5.4, 5.8, 5.4, 4.9, 4.5, 4.5, 4.9, 5.4, 5.4, 5.4],
+                [1.3, 1.8, 2.2, 2.7, 3.6, 3.1, 3.1, 2.7, 2.7, 2.2, 1.8, 1.3] 
         ],
         
-        
+        //      https://www.sercc.com/climateinfo/historical/avgwind.html (miami/atlanta)
+        //      https://www.ncdc.noaa.gov/sites/default/files/attachments/wind1996.pdf (all others)
+    
         /************************************************
          * table_u3
          * Mean global solar irradiance (W/m2) on a horizontal plane
