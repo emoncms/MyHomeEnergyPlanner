@@ -390,7 +390,6 @@ global $reports;
     function update(undo_redo = false)
     {
         console.log("updating");
-        console.log(scenario)
 
         // We need to calculate the periods of heating off here because if we try to do it in household.js it happens after the update
         if (project.master.household != undefined) {
@@ -414,6 +413,8 @@ global $reports;
         draw_openbem_graphics();
 
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
+        
+        add_scenarios_to_menu();
 
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
@@ -530,8 +531,19 @@ global $reports;
         for (s in project) {
             //project[s] = calc.run(calc.run(project[s]));
             $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
-            if (s != 'master' && project[s].created_from != undefined)
+            if (s != 'master' && project[s].created_from != undefined) {
                 $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + ')');
+                // Check if the original scenario has changed since the the creation of the current one
+                if (project[s].creation_hash != undefined) {
+                    var original_scenario = JSON.parse(JSON.stringify(project[project[s].created_from]));
+                    original_scenario.locked = false;
+                    hash_original = generate_hash(JSON.stringify(original_scenario));
+                    if (project[s].creation_hash != generate_hash(JSON.stringify(original_scenario))){
+                        $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + '*)');
+                    $("." + s + "_scenario_created_from").attr('title', 'The original scenario has changed since the creation of Scenario ' + s.split('scenario')[1]);
+                    }
+                }
+            }
         }
         $('div [scenario="' + scenario + '"]').click();
     }
@@ -605,6 +617,8 @@ global $reports;
         }
         var s = "scenario" + n;
         project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
+        project[s].locked = false;
+        project[s].creation_hash = generate_hash(JSON.stringify(project[s]));
         project[s].measures = {};
         project[s].fabric.measures = {};
         project[s].created_from = $('#select-scenario').val();
@@ -618,8 +632,7 @@ global $reports;
                 });
         project = JSON.parse(JSON.stringify(temp_project));
 
-        // Ensure new scenario is unlocked
-        project[s].locked = false;
+
 
         /*var mastermenu = $("#scenario-menu-template").html();
          var tmp = mastermenu.replace(/template/g, s);
@@ -711,6 +724,19 @@ global $reports;
             $('#redo').css('cursor', 'default');
         }
     }
+
+    function generate_hash(string) {
+        var hash = 0, i, chr;
+        if (string.length === 0)
+            return hash;
+        for (i = 0; i < string.length; i++) {
+            chr = string.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0; // Convert to 32bit integer
+        }
+        return hash;
+    }
+    ;
 
 
     //-----
