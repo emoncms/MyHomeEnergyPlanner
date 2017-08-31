@@ -606,13 +606,13 @@ function measure_applied_in_bulk(element_id) { // returns false if measure is no
 
 function init_revert_to_original(id, z) {
     if (measure_applied_to_element(data.fabric.elements[z].id) != false) {
-        if (data.created_from != 'master') {
+        if (data.created_from != undefined && data.created_from != 'master') {
             var inner_html = $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').html();
             inner_html = inner_html.replace(/Revert to master/g, 'Revert to Scenario ' + data.created_from.split('scenario')[1]);
             $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').html(inner_html);
         }
         $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').show();
-        if (element_exists_in_original(data.created_from, data.fabric.elements[z].id) == false)
+        if (data.created_from != undefined && element_exists_in_original(data.created_from, data.fabric.elements[z].id) == false)
             $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-original').css('cursor', 'default').html('Original element doesn\'t<br />exist, cannot revert');
     }
     else {
