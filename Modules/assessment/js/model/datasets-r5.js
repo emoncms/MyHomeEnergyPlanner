@@ -1,4 +1,3 @@
-
 var datasets = {
     /**********************************
      *  fuels
@@ -14,6 +13,10 @@ var datasets = {
      *      - This list of fuels has been created as they are the ones that best suit our needs at the time of development, there might be many missing so feel free to add new ones
      *      - The only fuels required by the model are: 'generation' and 'Standard Tariff', if you choose to delete any fuel ensure these two ones are kept
      */
+    
+    /***************************************************************************************************
+    *   USA data by  michaelsuhl11 - https://community.openenergymonitor.org/u/michaelsuhl11/summary
+    *****************************************************************************************************/
     fuels: {
         'Mains Gas': {category: 'Gas', standingcharge: 101, fuelcost: 4.25, co2factor: 0.222, primaryenergyfactor: 1.28, SAP_code: 1},
         'Bulk LPG': {category: 'Gas', standingcharge: 70, fuelcost: 8.46, co2factor: 0.242, primaryenergyfactor: 1.166, SAP_code: 2},
@@ -44,6 +47,7 @@ var datasets = {
          * Lits of regions, this dataset is important as its index corresponds with many other datasets that have regions as a first dimension
          */
         regions: [
+                // UK regions
                 "UK average",
                 "Thames",
                 "South East England",
@@ -65,23 +69,24 @@ var datasets = {
                 "Western Isles",
                 "Orkney",
                 "Shetland",
-                "Northern Ireland"
-                "Hot-Humid (Miami, FL)"     //"IECC Region 1A",
-                "Hot-Humid (Houston, TX)"      //"IECC Region 2A",
-                "Hot/Mixed-Humid (Atlanta, GA)"  //"IECC Region 3A",
-                "Mixed-Humid (Baltimore, MD)"   //"IECC Region 4A",
-                "Cold (Chicago, IL)"    //"IECC Region 5A",
-                "Cold (Minneapolis, MN)"    //"IECC Region 6A",
-                "Hot-Dry (Phoenix, AZ)" //"IECC Region 2B",
-                "Hot-Dry (CA) (Los Angeles, CA)" //"IECC Region 3B-CA",
-                "Hot-Dry (Las Vegas, NV)"    //"IECC Region 3B-Other",
-                "Mixed-Dry (Albuquerque, NM)"   //"IECC Region 4B",
-                "Cold (Boulder, CO)"    //"IECC Region 5B",
-                "Cold (Helena, MT)" //"IECC Region 6B",
+                "Northern Ireland",
+                // USA regions
+                /*"Hot-Humid (Miami, FL)",     //"IECC Region 1A",
+                "Hot-Humid (Houston, TX)" ,     //"IECC Region 2A",
+                "Hot/Mixed-Humid (Atlanta, GA)",  //"IECC Region 3A",
+                "Mixed-Humid (Baltimore, MD)",   //"IECC Region 4A",
+                "Cold (Chicago, IL)" ,   //"IECC Region 5A",
+                "Cold (Minneapolis, MN)",    //"IECC Region 6A",
+                "Hot-Dry (Phoenix, AZ)", //"IECC Region 2B",
+                "Hot-Dry (CA) (Los Angeles, CA)", //"IECC Region 3B-CA",
+                "Hot-Dry (Las Vegas, NV)",    //"IECC Region 3B-Other",
+                "Mixed-Dry (Albuquerque, NM)",   //"IECC Region 4B",
+                "Cold (Boulder, CO)",    //"IECC Region 5B",
+                "Cold (Helena, MT)", //"IECC Region 6B",
                 "Mixed-Marine (San Francisco, CA)"  //"IECC Region 3C",
-                "Marine (Seattle, WA)"  //"IECC Region 4C",
-                "Very Cold (Duluth, MN)"    //"IECC Region 7",  
-                "Arctic (Fairbanks, AK)"    //"IECC Region 8"
+                "Marine (Seattle, WA)",  //"IECC Region 4C",
+                "Very Cold (Duluth, MN)",    //"IECC Region 7",  
+                "Arctic (Fairbanks, AK)"    //"IECC Region 8"*/
         // References: 
         // a) https://www1.eere.energy.gov/buildings/publications/pdfs/building_america/4_3a_ba_innov_buildingscienceclimatemaps_011713.pdf 
         // b) https://energy.gov/sites/prod/files/2015/10/f27/ba_climate_region_guide_7.3.pdf
@@ -100,6 +105,7 @@ var datasets = {
          * 
          */
         table_u1: [
+                // UK regions
                 [4.3, 4.9, 6.5, 8.9, 11.7, 14.6, 16.6, 16.4, 14.1, 10.6, 7.1, 4.2],
                 [5.1, 5.6, 7.4, 9.9, 13.0, 16.0, 17.9, 17.8, 15.2, 11.6, 8.0, 5.1],
                 [5.0, 5.4, 7.1, 9.5, 12.6, 15.4, 17.4, 17.5, 15.0, 11.7, 8.1, 5.2],
@@ -122,7 +128,8 @@ var datasets = {
                 [4.4, 4.2, 5.0, 7.0, 8.9, 11.2, 13.1, 13.2, 11.7, 9.1, 6.6, 4.3],
                 [4.6, 4.1, 4.7, 6.5, 8.3, 10.5, 12.4, 12.8, 11.4, 8.8, 6.5, 4.6],
                 [4.8, 5.2, 6.4, 8.4, 10.9, 13.5, 15.0, 14.9, 13.1, 10.0, 7.2, 4.7],
-                [20.3, 21.1, 22.5, 24.2, 26.6, 28.0, 28.8, 28.9, 28.3, 26.5, 23.8, 21.3], 
+                // USA regions
+                /*[20.3, 21.1, 22.5, 24.2, 26.6, 28.0, 28.8, 28.9, 28.3, 26.5, 23.8, 21.3], 
                 [11.9, 13.8, 16.9, 20.7, 24.9, 27.7, 28.9, 28.9, 26.3, 21.6, 16.5, 12.3], 
                 [6.9, 8.7, 12.7, 16.9, 21.4, 25.1, 26.8, 26.4, 23.2, 17.3, 12.3, 7.6],
                 [1.5, 2.4, 7.0, 12.5, 17.7, 22.9, 25.4, 24.4, 20.3, 13.7, 8.4, 3.0],
@@ -137,7 +144,7 @@ var datasets = {
                 [10.9, 12.7, 14.2, 15.6, 16.1, 17.4, 18.1, 18.5, 18.4, 17.8, 14.5, 10.9],
                 [5.9, 6.8, 8.7, 11.0, 14.3, 16.8, 19.6, 19.7, 17.1, 12.3, 8.2, 5.3],
                 [-11.5, -9.4, -3.1, 4.3, 10.8, 15.8, 18.7, 18.0, 13.3, 6.2, -1.6, -8.9],  
-                [-2.1, -22.5, -17.8, -11.6, 1.0, 10.0, 16.1, 17.2, 13.8, 7.5, -4.0, -16.2, -20.1]
+                [-2.1, -22.5, -17.8, -11.6, 1.0, 10.0, 16.1, 17.2, 13.8, 7.5, -4.0, -16.2, -20.1]*/
         // References: 
         // a) http://ashrae-meteo.info/  1986-2010 for monthly temperature average temp (C) 
         ],
@@ -154,6 +161,7 @@ var datasets = {
          * 
          */
         table_u2: [
+                // Uk regions
                 [5.1, 5.0, 4.9, 4.4, 4.3, 3.8, 3.8, 3.7, 4.0, 4.3, 4.5, 4.7],
                 [4.2, 4.0, 4.0, 3.7, 3.7, 3.3, 3.4, 3.2, 3.3, 3.5, 3.5, 3.8],
                 [4.8, 4.5, 4.4, 3.9, 3.9, 3.6, 3.7, 3.5, 3.7, 4.0, 4.1, 4.4],
@@ -176,7 +184,8 @@ var datasets = {
                 [7.9, 8.3, 7.9, 7.1, 6.2, 6.1, 5.5, 5.6, 6.4, 7.3, 7.8, 7.3],
                 [9.5, 9.4, 8.7, 7.5, 6.6, 6.4, 5.7, 6.0, 7.2, 8.5, 8.9, 8.5],
                 [5.4, 5.3, 5.0, 4.7, 4.5, 4.1, 3.9, 3.7, 4.2, 4.6, 5.0, 5.0],
-                [4.2, 4.5, 4.6, 4.7, 4.2, 3.7, 3.5, 3.5, 3.6, 4.1, 4.3, 4.1],
+                // USA regions
+                /*[4.2, 4.5, 4.6, 4.7, 4.2, 3.7, 3.5, 3.5, 3.6, 4.1, 4.3, 4.1],
                 [3.6, 4.0, 4.0, 4.0, 3.6, 3.6, 3.1, 2.7, 3.1, 3.1, 3.6, 3.6],
                 [4.6, 4.7, 4.9, 4.5, 3.9, 3.6, 3.4, 3.3, 3.6, 3.8, 4.1, 4.4],
                 [4.5, 4.5, 4.9, 4.9, 4.0, 3.6, 3.6, 3.6, 3.6, 4.0, 4.0, 4.0],
@@ -191,7 +200,7 @@ var datasets = {
                 [3.6, 4.0, 4.9, 5.8, 6.3, 6.3, 6.3, 5.8, 5.4, 4.5, 3.6, 3.6],
                 [4.5, 4.5, 4.5, 4.5, 4.0, 4.0, 3.6, 3.6, 3.6, 4.0, 4.0, 4.5],
                 [5.4, 5.4, 5.4, 5.8, 5.4, 4.9, 4.5, 4.5, 4.9, 5.4, 5.4, 5.4],
-                [1.3, 1.8, 2.2, 2.7, 3.6, 3.1, 3.1, 2.7, 2.7, 2.2, 1.8, 1.3] 
+                [1.3, 1.8, 2.2, 2.7, 3.6, 3.1, 3.1, 2.7, 2.7, 2.2, 1.8, 1.3] */
         ],
         
         //      https://www.sercc.com/climateinfo/historical/avgwind.html (miami/atlanta)
@@ -208,6 +217,7 @@ var datasets = {
          *  
          */
         table_u3: [
+                // Uk regions
                 [26, 54, 96, 150, 192, 200, 189, 157, 115, 66, 33, 21],
                 [30, 56, 98, 157, 195, 217, 203, 173, 127, 73, 39, 24],
                 [32, 59, 104, 170, 208, 231, 216, 182, 133, 77, 41, 25],
@@ -230,7 +240,8 @@ var datasets = {
                 [14, 39, 84, 143, 205, 201, 178, 145, 100, 50, 19, 9],
                 [12, 34, 79, 135, 196, 190, 168, 144, 90, 46, 16, 7],
                 [24, 52, 96, 155, 201, 198, 183, 150, 107, 61, 30, 18]
-                [148, 184, 220, 244, 248, 228, 224, 206, 186, 180, 160, 140], 
+                // USA regions
+                /* [148, 184, 220, 244, 248, 228, 224, 206, 186, 180, 160, 140], 
                 [142, 170, 216, 250, 260, 254, 266, 240, 208, 186, 148, 130],
                 [124, 164, 214, 254, 264, 244, 228, 222, 214, 182, 144, 118], 
                 [92, 130, 182, 230, 260, 278, 268, 246, 202, 156, 108, 82], 
@@ -245,7 +256,7 @@ var datasets = {
                 [92, 126, 188, 240, 282, 320, 316, 288, 234, 170, 114, 88], 
                 [34, 72, 130, 186, 236, 258, 266, 236, 166, 96, 48, 34], 
                 [56, 96, 156, 210, 240, 252, 250, 230, 168, 108, 68, 50], 
-                [0, 22, 78, 146, 220, 204, 170, 136, 86, 34, 14, 0]
+                [0, 22, 78, 146, 220, 204, 170, 136, 86, 34, 14, 0]*/
         // http://www.soda-pro.com/web-services/meteo-data/monthly-means-solar-irradiance-temperature-relative-humidity
         ],
                 
