@@ -67,14 +67,15 @@ function householdquestionnaire_UpdateUI() {
         $('#periods_heating_off_weekday').html('Periods heating off week day:').show();
         for (var period in data.temperature.hours_off.weekday) {
             if (period != 0)
-                $('#periods_heating_off_weekday').append(',')
+                $('#periods_heating_off_weekday').append(',');
+            if (data.temperature.hours_off.weekday[period] == null)
+                data.temperature.hours_off.weekday[period] = 0;
             $('#periods_heating_off_weekday').append(' ' + data.temperature.hours_off.weekday[period].toFixed(1) + 'h');
         }
     }
     if (data.temperature.hours_off.weekend.length > 0) {
         $('#periods_heating_off_weekend').html('Periods heating off weekend:').show();
         for (var period in data.temperature.hours_off.weekend) {
-            console.log(data.temperature.hours_off)
             if (period != 0)
                 $('#periods_heating_off_weekend').append(',')
             if (data.temperature.hours_off.weekend[period] == null)
