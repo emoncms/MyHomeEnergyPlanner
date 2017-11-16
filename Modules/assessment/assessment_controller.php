@@ -4,7 +4,7 @@
 defined('EMONCMS_EXEC') or die('Restricted access');
 
 function assessment_controller() {
-    global $session, $route, $mysqli;
+    global $session, $route, $mysqli, $allow_image_upload;
 
     /* --------------------------------------------------------------------------
       // Backwards compatibility:
@@ -237,10 +237,10 @@ function assessment_controller() {
 // -------------------------------------------------------------------------------------------------------------
 // Image gallery
 // -------------------------------------------------------------------------------------------------------------
-        if ($route->action == 'uploadimages' && $session['write'])
+        if ($route->action == 'uploadimages' && $session['write'] && $allow_image_upload)
             $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
 
-        if ($route->action == 'deleteimage' && $session['write'])
+        if ($route->action == 'deleteimage' && $session['write'] && $allow_image_upload)
             $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
 
 

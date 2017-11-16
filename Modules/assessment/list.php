@@ -1,6 +1,6 @@
-<?php
-global $path;
-$d = $path . "Modules/assessment/";
+<?php 
+global $path; 
+$d = $path."Modules/assessment/";
 ?>
 
 <div id="openbem">

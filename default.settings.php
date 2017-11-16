@@ -14,32 +14,12 @@
 
     */
 
-    $username = "user";
-    $password = "pass";
+    $username = "username";
+    $password = "password";
     $server   = "localhost";
-    $database = "db";
+    $database = "database";
 
     $redis_enabled = true;
-    
-    $feed_settings = array(
-        'phpfiwa'=>array(
-            'datadir'=>'/var/lib/phpfiwa/'
-        ),
-        'phpfina'=>array(
-            'datadir'=>'/var/lib/phpfina/'
-        ),
-        'phptimeseries'=>array(
-            'datadir'=>'/var/lib/phptimeseries/'
-        )
-    );
-
-    // (OPTIONAL) Used by password reset feature
-    $smtp_email_settings = array(
-      'host'=>"",
-      'username'=>"",
-      'password'=>"",
-      'from'=>array('' => '')
-    );
 
     // To enable / disable password reset set to either true / false
     // default value of " _ENABLE_PASSWORD_RESET_ " required for .deb only
@@ -63,9 +43,9 @@
     $default_action_auth = "list";
     
     // Public profile functionality
-    $public_profile_enabled = TRUE;
-    $public_profile_controller = "dashboard";
-    $public_profile_action = "view";
+    // $public_profile_enabled = TRUE;
+    // $public_profile_controller = "dashboard";
+    // $public_profile_action = "view";
     
     /*
 
@@ -77,30 +57,23 @@
     $theme = "basic";
 
     // Error processing
-    $display_errors = TRUE;
+    $display_errors = true;
 
     // Allow user register in emoncms
-    $allowusersregister = FALSE;
+    $allowusersregister = false;
 
+    // Bolt down MyHomeEnergyPlanner install if used in conjunction with seperate emoncms installation    
+    $allowuseredit = false;
+    $admin_enable_userlist = false;
+    
     // Enable remember me feature - needs more testing
-    $enable_rememberme = TRUE;
+    $enable_rememberme = true;
 
     // Skip database setup test - set to false once database has been setup.
-    $dbtest = TRUE;
+    $dbtest = false;
 
     // Log4PHP configuration
     $log4php_configPath = 'logconfig.xml';
-
-    // CSV export options for the number of decimal_places, decimal_place_separator and field_separator
-    // The thousands separator is not used (specified as "nothing")
-    // NOTE: don't make $csv_decimal_place_separator == $csv_field_separator
-    // Adjust as appropriate for your location
-
-    // number of decimal places
-    $csv_decimal_places = 2;
-
-    // decimal place separator
-    $csv_decimal_place_separator = ".";
-
-    // field separator
-    $csv_field_separator = ",";
+    
+    // MyHomeEnergyPlanner
+    $allow_image_upload = false;

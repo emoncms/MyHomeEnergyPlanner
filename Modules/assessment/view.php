@@ -1,5 +1,5 @@
 <?php
-global $path;
+global $path, $allow_image_upload;
 $d = $path . "Modules/assessment/";
 
 $projectid = (int) $_GET['id'];
@@ -216,6 +216,7 @@ global $reports;
 
 <script>
 
+    var allow_image_upload = <?php if ($allow_image_upload) echo "true"; else echo "false"; ?>;
     var changelog = "";
     var selected_library = -1;
     var selected_library_tag = "Wall";

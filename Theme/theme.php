@@ -29,7 +29,6 @@
         <link rel="apple-touch-icon" href="<?php echo $path; ?>Theme/logo_normal.png">
         <link href="<?php echo $path; ?>Lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="<?php echo $path; ?>Lib/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-        <link href="<?php echo $path; ?>Lib/bootstrap-datetimepicker-0.0.11/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
         <link href="<?php echo $path; ?>Theme/style.css" rel="stylesheet">
         <script type="text/javascript" src="<?php echo $path; ?>Lib/jquery-1.9.0.min.js"></script>
 
@@ -104,8 +103,7 @@
 
         <div id="footer">
             <?php echo _('Powered by '); ?>
-            <a href="http://openenergymonitor.org">openenergymonitor.org</a>
-            <span> | v<?php echo $emoncms_version; ?></span>
+            <a href="http://openenergymonitor.org">openenergymonitor.org</a> and <a href="http://carbon.coop/">carbon.coop</a>
         </div>
 
         <script src="<?php echo $path; ?>Lib/bootstrap/js/bootstrap.js"></script>

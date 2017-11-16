@@ -31,6 +31,9 @@ if(file_exists(dirname(__FILE__)."/settings.php"))
     if (!isset($assessment_admin_users)) $assessment_admin_users = array(1);    
 
     if (!isset($redis_enabled)) $redis_enabled = true;
+    if (!isset($allowuseredit)) $allowuseredit = true;
+    if (!isset($admin_enable_userlist)) $admin_enable_userlist = true;
+    if (!isset($allow_image_upload)) $allow_image_upload = true;
     
     if ($error_out!="") {
       echo "<div style='width:600px; background-color:#eee; padding:20px; font-family:arial;'>";
@@ -40,8 +43,7 @@ if(file_exists(dirname(__FILE__)."/settings.php"))
       echo "</div>";
       die;
     }
-        
-
+    
     // Set display errors
     if (isset($display_errors) && ($display_errors)) {
         error_reporting(E_ALL);

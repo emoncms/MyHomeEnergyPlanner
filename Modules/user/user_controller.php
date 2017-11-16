@@ -16,7 +16,7 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 
 function user_controller()
 {
-    global $user, $path, $session, $route ,$allowusersregister;
+    global $user, $path, $session, $route;
 
     $result = false;
 
@@ -33,29 +33,10 @@ function user_controller()
     {
         // Core session
         if ($route->action == 'login' && !$session['read']) $result = $user->login(post('username'),post('password'),post('rememberme'));
-        if ($route->action == 'register' && $allowusersregister) $result = $user->register(post('username'),post('password'),post('email'));
         if ($route->action == 'logout' && $session['read']) $user->logout();
-
-        if ($route->action == 'changeusername' && $session['write']) $result = $user->change_username($session['userid'],get('username'));
-        if ($route->action == 'changeemail' && $session['write']) $result = $user->change_email($session['userid'],get('email'));
-        if ($route->action == 'changepassword' && $session['write']) $result = $user->change_password($session['userid'],get('old'),get('new'));
         
-        if ($route->action == 'passwordreset') $result = $user->passwordreset(get('username'),get('email'));
-        // Apikey
-        if ($route->action == 'newapikeyread' && $session['write']) $result = $user->new_apikey_read($session['userid']);
-        if ($route->action == 'newapikeywrite' && $session['write']) $result = $user->new_apikey_write($session['userid']);
-
-        if ($route->action == 'auth' && !$session['read']) $result = $user->get_apikeys_from_login(post('username'),post('password'));
-
         // Get and set - user by profile client
         if ($route->action == 'get' && $session['write']) $result = $user->get($session['userid']);
-
-        if ($route->action == 'set' && $session['write']) $result = $user->set($session['userid'],json_decode(get('data')));
-
-        if ($route->action == 'getconvert' && $session['write']) $result = $user->get_convert_status($session['userid']);
-        if ($route->action == 'setconvert' && $session['write']) $result = $user->set_convert_status($session['userid']);
-
-
         if ($route->action == 'timezone' && $session['read']) $result = $user->get_timezone($session['userid']);
     }
 

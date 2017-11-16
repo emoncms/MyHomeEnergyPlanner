@@ -108,6 +108,8 @@
     // If no controller of this name - then try username
     // need to actually test if there isnt a controller rather than if no content
     // is returned from the controller.
+    
+    /*
     if (!$output['content'] && $public_profile_enabled && $route->controller!='admin')
     {
         $userid = $user->get_id($route->controller);
@@ -120,13 +122,13 @@
             $route->action = $public_profile_action;
             $output = controller($public_profile_controller);
         }
-    }
+    }*/
     
     $theme = "assessment";
-    if ($route->controller=="input") $theme = "monitor";
-    if ($route->controller=="feed") $theme = "monitor";
-    if ($route->controller=="vis") $theme = "monitor";
-    if ($route->controller=="dashboard") $theme = "monitor";
+    //if ($route->controller=="input") $theme = "monitor";
+    //if ($route->controller=="feed") $theme = "monitor";
+    //if ($route->controller=="vis") $theme = "monitor";
+    //if ($route->controller=="dashboard") $theme = "monitor";
     
     // 7) Output
     if ($route->format == 'json')
@@ -149,5 +151,4 @@
      
         $output['mainmenu'] = view("Theme/menu_view.php", array());
         if ($embed == 0) print view("Theme/theme.php", $output);
-        if ($embed == 1) print view("Theme/embed.php", $output);
     }

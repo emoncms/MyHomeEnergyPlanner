@@ -20,6 +20,13 @@ function imagegallery_initUI() {
     for (z in data.imagegallery) {
         add_image(z);
     }
+    
+    if (!allow_image_upload) {
+        $("#image_upload_view").hide();
+    } else {
+        $("#image_upload_view").show();
+    }
+    
 }
 
 function imagegallery_updateUI() {
