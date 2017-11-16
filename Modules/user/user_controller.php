@@ -33,13 +33,13 @@ function user_controller()
     {
         // Core session
         if ($route->action == 'login' && !$session['read']) $result = $user->login(post('username'),post('password'),post('rememberme'));
-        if ($route->action == 'register' && $allowusersregister) $result = $user->register(post('username'),post('password'),post('email'));
+        // if ($route->action == 'register' && $allowusersregister) $result = $user->register(post('username'),post('password'),post('email'));
         if ($route->action == 'logout' && $session['read']) $user->logout();
         
         // Get and set - user by profile client
         if ($route->action == 'get' && $session['write']) $result = $user->get($session['userid']);
         if ($route->action == 'timezone' && $session['read']) $result = $user->get_timezone($session['userid']);
-        
+        /*
         if ($allowuseredit) {
             if ($route->action == 'changeusername' && $session['write']) $result = $user->change_username($session['userid'],get('username'));
             if ($route->action == 'changeemail' && $session['write']) $result = $user->change_email($session['userid'],get('email'));
@@ -49,7 +49,7 @@ function user_controller()
             if ($route->action == 'newapikeywrite' && $session['write']) $result = $user->new_apikey_write($session['userid']);
             if ($route->action == 'auth' && !$session['read']) $result = $user->get_apikeys_from_login(post('username'),post('password'));
             if ($route->action == 'set' && $session['write']) $result = $user->set($session['userid'],json_decode(get('data')));
-        }
+        }*/
     }
 
     return array('content'=>$result, 'fullwidth'=>true);
