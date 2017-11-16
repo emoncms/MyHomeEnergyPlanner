@@ -1,0 +1,61 @@
+
+<div class="page">
+
+    <hr>
+    <h3>Fuels manager</h3>
+    <hr>
+    <br>
+
+    <p style="text-align: right"><button id="add-fuel" class="btn"><i class="icon-plus"></i>Add fuel</button></p>
+
+    <table class="table" id="fuelsmanager-table">
+        <tr id="fuelsmanager-table-header-template" style="display:none">
+            <th style="width:200px;padding:20px"></th>
+            <th>CO<sub>2</sub> factor<br />kgCO<sub>2</sub>/kWh</th>
+            <th>Primary Energy Factor</th>
+            <th>Unit cost<br />p/kWh</th>
+            <th>Annual Standing charge<br />£/year</th>
+            <th></th>
+        </tr>
+    </table>
+
+    <div id="delete_fuel-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Delete fuel</h3>
+        </div>
+
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button id="delete-fuel-cancel" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button id="delete-fuel-ok" class="btn btn-primary">OK</button>
+        </div>
+    </div>
+
+    <div id="add_fuel-modal" style="position: absolute; width:450px" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Add fuel</h3>
+        </div>
+
+        <div class="modal-body">
+            <div class="input-prepend">
+                <span class="add-on">Category</span>
+                <select style="width: 100px" id="new-fuel-category" />
+            </div>
+            <table class="table">
+                <tr><td><b>Name</b></td><td style="text-align:right; width:100px"><input type="text" id="new-fuelname" placeholder="New fuel" /></td></tr>
+                <tr><td><b>CO2 factor</b> - kgCO<sub>2</sub>/kWh</td><td style="text-align:right"><input style="width: 85px" type="number" min="0" step="0.001" id="new-fuel-co2factor" dp="3" /></td></tr>
+                <tr><td><b>Primary Energy Factor</b></td><td style="text-align:right"><input style="width: 85px" type="number" min="0"step="0.001" dp="3" id="new-fuel-primmaryenergyfactor" /></td></tr>
+                <tr><td><b>Unit cost</b> -</td><td style="text-align:right"><input style="width: 85px" type="number" min="0" step=0.01" dp="2" id="new-fuel-unitcost" value="0"/></td></tr>
+                <tr><td><b>Annual Standing charge</b> - £/year</td><td style="text-align:right"><input style="width: 85px" type="number" min="0" step="1" dp="0" id="new-fuel-annualstandingcharge" value="0" /></td></tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button id="add_fuel-cancel" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button id="add_fuel-ok" class="btn btn-primary">OK</button>
+        </div>
+    </div>
+
+</div>

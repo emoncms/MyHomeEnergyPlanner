@@ -19,7 +19,7 @@ function generateSummary(outputElement) {
         out += '<th>' + scenario + '<br />' + project[scenario].scenario_name + '</th>'
     out += '</tr>';
     var rows = [
-        ['<b>Totals</b>',],
+        ['<b>Totals</b>', ],
         ['Space heating demand (kWh/m<sup>2</sup>.a)', 'space_heating_demand_m2'],
         ['Primary energy demand (kWh/m<sup>2</sup>.a)', 'primary_energy_use_m2'],
         ['CO<sub>2</sub> emission rate (kgCO<sub>2</sub>/m<sup>2</sup>.a)', 'kwhdpp'],
@@ -126,7 +126,7 @@ function compareCarbonCoop(scenario, outputElement) {
     ];
     var BDD = comparePropertiesInArray(scenario, properties_to_check);
     if (BDD.changed === true)
-        out += '<h3>Basic dwelling data</h3><table class="table table-striped">' + BDD.html + '</table></br>';
+        out += '<h3>Basic dwelling data</h3><table class="table table-striped">' + BDD.html + '</table><br />';
     // Ventilation
     var Vent = compareVentilation(scenario);
     if (Vent.changed === true)
@@ -138,12 +138,17 @@ function compareCarbonCoop(scenario, outputElement) {
     // Clothes drying facilities     
     var CDF = compareClothesDryingFacilities(scenario);
     if (CDF.changed === true)
-        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>'; //Fabric
+        out += '<h3>Clothes drying facilities</h3><table class="table table-striped">' + CDF.html + '</table></br>';
+    //Fabric
     var Fabric = compareFabric(scenario);
     if (Fabric.changed === true)
         out += '<h3>Fabric</h3><p>Changes to Floor\'s, Wall\'s, Windows and Roof elements</p>\n\
         <table class="table table-striped"><tr><th>Before</th><th>W/K</th><th>After</th><th>W/K</th><th>Change</th></tr>'
                 + Fabric.html + '</table></br>';
+    // Lighting - SAP
+    var Lighting = compareLighting(scenario);
+    if (Lighting.changed === true)
+        out += '<h3>Lighting</h3><p>Changes to number of fixed low energy lighting outlets (LLE)</p><table class="table table-striped">' + Lighting.html + '</table></br>';
     // Heating    
     var Heating = compareHeating(scenario);
     if (Heating.changed === true)
@@ -294,7 +299,10 @@ function compareInfiltration(scenario) {
             out += changes.html;
         }
     }
-    else if (project.master.ventilation.air_permeability_test === false && project[scenario].ventilation.air_permeability_test === true) {
+    else if (project.master.ventilation.air_permeability_test === false
+            && project[scenario].ventilation.air_permeability_test === true
+            && project[scenario].measures.ventilation != undefined
+            && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
         changed = true;
         out += '<tr><td>The structural infiltration due to dwelling construction was changed applying <i>'
                 + project[scenario].measures.ventilation.draught_proofing_measures.measure.name
@@ -302,11 +310,12 @@ function compareInfiltration(scenario) {
                 + ' cubic metres per hour per square metre of envelope</i> </td></tr>';
         out += '<tr><td>The structural infiltration due to dwelling construction was <i>'
                 + project[scenario].measures.ventilation.draught_proofing_measures.original_structural_infiltration
-                + ' ACH</i>, after applying the measures: <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.structural_infiltration.toFixed(2)
+                + ' ACH</i>, after applying the measures: <i>' + project[scenario].ventilation.structural_infiltration.toFixed(2)
                 + ' ACH</i></td></tr>';
         +'</i></td></tr>';
     }
-    else if (project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
+    else if (project[scenario].measures.ventilation != undefined
+            && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
         changed = true;
         out += '<tr><td>The original Infiltration due to dweling construction was calculated \n\
         based on air tightness test with q50 = <i>' + project.master.ventilation.air_permeability_value
@@ -389,6 +398,7 @@ function compareClothesDryingFacilities(scenario) {
 
     return {html: out, changed: changed};
 }
+
 function compareFabric(scenario) {
     var out = "";
     var changed = false;
@@ -558,18 +568,25 @@ function compareHeating(scenario) {
 
     return {html: out, changed: changed};
 }
+
 function compareEnergyRequirements(scenario) {
     var out = "";
     var changed = false;
     var ER_list = ['appliances', 'cooking', 'fans_and_pumps', 'lighting', 'space_heating', 'waterheating'];
     var ER_names = ['appliances', 'cooking', 'fans and pumps', 'lighting', 'space heating', 'water heating'];
     ER_list.forEach(function (ER, index) {
-        if (project.master.energy_requirements[ER] != undefined && project.master.energy_requirements[ER].quantity
-                != project[scenario].energy_requirements[ER].quantity) {
+        if (project.master.energy_requirements[ER] != undefined && project[scenario].energy_requirements[ER] != undefined
+                && project.master.energy_requirements[ER].quantity != project[scenario].energy_requirements[ER].quantity) {
             changed = true;
             out += '<tr><td>The demand for <i>' + ER_names[index] + '</i> has changed from <i>'
                     + project.master.energy_requirements[ER].quantity.toFixed(2) + '</i> kWh/year to <i>'
                     + project[scenario].energy_requirements[ER].quantity.toFixed(2) + '</i> kWh/year</td></tr>';
+        }
+        else if (project.master.energy_requirements[ER] != undefined && project[scenario].energy_requirements[ER] == undefined) // there is a specific case (CarbonCoop for appliances and cooking) when the energy requirements can be undefined
+        {
+            changed = true;
+            out += '<tr><td>The demand for <i>' + ER_names[index] + '</i> has changed from <i>'
+                    + project.master.energy_requirements[ER].quantity.toFixed(2) + '</i> kWh/year to <i>0</i> kWh/year</td></tr>';
         }
     });
     if (project.master.generation.total_generation != project[scenario].generation.total_generation) {
@@ -581,6 +598,7 @@ function compareEnergyRequirements(scenario) {
 
     return {html: out, changed: changed};
 }
+
 function compareFuelRequirements(scenario) {
     var out = "";
     var changed = false;
@@ -602,9 +620,12 @@ function compareFuelRequirements(scenario) {
                     + '</i></td><td style="padding-right:10px"><i>Quantity: ' + project[scenario].fuel_totals[fuel].quantity.toFixed(2)
                     + ' kWh, CO<sub>2</sub>: ' + project[scenario].fuel_totals[fuel].annualco2.toFixed(2)
                     + ' kg, Primary energy: ' + project[scenario].fuel_totals[fuel].primaryenergy.toFixed(2)
-                    + ' kWh, Annual cost: £' + project[scenario].fuel_totals[fuel].annualcost.toFixed(2)
-                    + '</i></td><td style="padding-right:10px">' + (100 * (project.master.fuel_totals[fuel].quantity - project[scenario].fuel_totals[fuel].quantity) / project.master.fuel_totals[fuel].quantity).toFixed(2)
-                    + '%</td><td>' + (100 * (project.master.fuel_totals[fuel].annualcost - project[scenario].fuel_totals[fuel].annualcost) / project.master.fuel_totals[fuel].annualcost).toFixed(2) + '%</td></tr>';
+                    + ' kWh, Annual cost: £' + project[scenario].fuel_totals[fuel].annualcost.toFixed(2);
+            if (project.master.fuel_totals[fuel].quantity != 0)
+                out += '</i></td><td style="padding-right:10px">' + (100 * (project.master.fuel_totals[fuel].quantity - project[scenario].fuel_totals[fuel].quantity) / project.master.fuel_totals[fuel].quantity).toFixed(2)
+                        + '%</td><td>' + (100 * (project.master.fuel_totals[fuel].annualcost - project[scenario].fuel_totals[fuel].annualcost) / project.master.fuel_totals[fuel].annualcost).toFixed(2) + '%</td></tr>';
+            else
+                out += '</i></td><td style="padding-right:10px">N/A</td><td>N/A</td></tr>';
         }
     }
     for (var fuel in project[scenario].fuel_totals) {
@@ -684,6 +705,19 @@ function compareGeneration(scenario) {
     return {html: out, changed: changed};
 }
 
+function compareLighting(scenario) {
+    var out = "";
+    var changed = false;
+    var properties_to_check = [
+        ['Number of fixed LLE', 'LAC.LLE']
+    ];
+    var LLE = comparePropertiesInArray(scenario, properties_to_check);
+    if (LLE.changed === true) {
+        changed = true;
+        out += LLE.html;
+    }
+    return {html: out, changed: changed};
+}
 
 function getHeatingSystemById(id, scenario) {
     for (var index in project[scenario].heating_systems) {

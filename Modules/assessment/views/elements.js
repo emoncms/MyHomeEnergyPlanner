@@ -142,7 +142,22 @@ $("#openbem").on("click", '#bulk-measure-next', function () {
     $('#apply-measure-modal .modal-footer').append('<button id="bulk-measure-finish" class="btn btn-primary">Finish</button>');
 });
 $("#openbem").on("click", '#bulk-measure-finish', function () {
-    // Save measure
+    // Check that there is no previous measure applied to each element and if there is then delete it
+    $('.bulk-element').each(function (i, obj) { // For each window checked
+        if (obj.checked == true) {
+            var row = $(obj).attr('element-row');
+            var element_id = data.fabric.elements[row].id
+            // applied as single measure
+            if (data.fabric.measures[element_id] != undefined)
+                delete(data.fabric.measures[element_id]);
+            // applied as part of a bulk measure
+            var applied_in_bulk = measure_applied_in_bulk(element_id);
+            if (applied_in_bulk != false)
+                delete(data.fabric.measures[applied_in_bulk].original_elements[element_id]);
+        }
+    });
+
+    // Create measure
     var measure = library_helper.elements_measures_get_item_to_save();
     for (var lib in measure) {
         measure[lib].lib = lib;
@@ -151,6 +166,7 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
     measure[lib].location = '';
     var area = 0;
 
+    // Save original elements and calculate totals of bulk measure
     data.fabric.measures[measure[lib].id] = {};
     data.fabric.measures[measure[lib].id].original_elements = {};
     $('.bulk-element').each(function (i, obj) { // For each window checked
@@ -179,6 +195,8 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
             measure[lib].type = data.fabric.elements[row].type; // I know this shouldn't be here, but it is the only place where I can get the type of the element to add it to the measure
         }
     });
+
+    elements_initUI();
     update();
 
     // Tidy up the apply-measure modal
@@ -192,72 +210,27 @@ $("#openbem").on("change", '#bulk-measure-check-all', function () {
      $('.bulk-element').attr('checked', false);
      */
 });
+$("#openbem").on("click", '.revert-to-original', function () {
+    var element_id = $(this).attr('item_id');
+    if (element_exists_in_original(data.created_from, element_id) == true) {
+        // copy the original element 
+        for (var e in project[data.created_from].fabric.elements) {
+            if (project[data.created_from].fabric.elements[e].id == element_id) {
+                data.fabric.elements[get_element_index_by_id(element_id)] = JSON.parse(JSON.stringify(project[data.created_from].fabric.elements[e]));
+                break;
+            }
+        }
+        // delete measure
+        var applied_in_bulk = measure_applied_in_bulk(element_id);
+        if (applied_in_bulk == false)
+            delete(data.fabric.measures[element_id]);
+        else
+            delete(data.fabric.measures[applied_in_bulk].original_elements[element_id]);
+    }
+    elements_initUI();
+    update();
+});
 
-/*$("#create-element").click(function () {
- // Empty "tag" so that it has nothing, we leave the other inputs as it can be handy for the user
- $('#create-element-tag').val("");
- $("#myModalcreateelement").modal('show');
- $('#myModal').modal('hide');
- });
- /*$("#create-element-type").change(function () {
- var type = $(this).val();
- if (type == "Window") {
- $(".create-element-window-options").show('fast');
- } else {
- $(".create-element-window-options").hide('fast');
- }
- });
- */
-/*$("#create-element-save").click(function () {
- 
- var type = $("#create-element-type").val();
- var tag = $("#create-element-tag").val();
- //if (element_library[tag]==undefined) {
- element_library[tag] = {};
- element_library[tag].name = $("#create-element-name").val();
- element_library[tag].source = $("#create-element-source").val();
- element_library[tag].uvalue = $("#create-element-uvalue").val();
- element_library[tag].kvalue = $("#create-element-kvalue").val();
- if (type == "Window")
- element_library[tag].g = $("#create-element-g").val();
- if (type == "Window")
- element_library[tag].gL = $("#create-element-gL").val();
- if (type == "Window")
- element_library[tag].ff = $("#create-element-ff").val();
- element_library[tag].tags = [type];
- //element_library[tag].criteria = $("#create-element-criteria").val().split(",");
- 
- // Measures
- if ($('#create-element-name').val() !== "")
- element_library[tag].name = $("#create-element-name").val();
- if ($('#create-element-description').val() !== "")
- element_library[tag].description = $("#create-element-description").val();
- if ($('#create-element-performance').val() !== "")
- element_library[tag].performance = $("#create-element-performance").val();
- if ($('#create-element-benefits').val() !== "")
- element_library[tag].benefits = $("#create-element-benefits").val();
- if ($('#create-element-cost').val() !== "")
- element_library[tag].cost = $("#create-element-cost").val();
- if ($('#create-element-who_by').val() !== "")
- element_library[tag]["who_by"] = $("#create-element-who_by").val();
- if ($('#create-element-disruption').val() !== "")
- element_library[tag].disruption = $("#create-element-disruption").val();
- if ($('#create-element-associated_work').val() !== "")
- element_library[tag]["associated_work"] = $("#create-element-associated_work").val();
- if ($('#create-element-key_risks').val() !== "")
- element_library[tag]["key_risks"] = $("#create-element-key_risks").val();
- if ($('#create-element-notes').val() !== "")
- element_library[tag].notes = $("#create-element-notes").val();
- if ($('#create-element-maintenance').val() !== "")
- element_library[tag].maintenance = $("#create-element-maintenance").val();
- $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library + "&data=" + JSON.stringify(element_library), success: function (result) {
- console.log("save library result: " + result);
- }});
- $("#myModalcreateelement").modal('hide');
- //} else {
- //    alert("Element or measure already exists");
- //}
- });*/
 
 $("[key='data.fabric.global_TMP']").change(function () {
     value = $("[key='data.fabric.global_TMP']").is(":checked");
@@ -288,6 +261,10 @@ function add_element(id, z)
     $(id + " [item_id='template']").attr('item_id', data.fabric.elements[z].id);
     $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
+
+    // Revert to original
+    init_revert_to_original(id, z);
+
 }
 
 function add_floor(z)
@@ -312,6 +289,9 @@ function add_floor(z)
     $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
     if (data.fabric.elements[z].uvalue == 0)
         $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color', 'red');
+
+    // Revert to original 
+    init_revert_to_original(id, z);
 }
 
 function add_window(z)
@@ -345,6 +325,7 @@ function add_window(z)
     $("#windows [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
     $("#windows [tag='template']").attr('tag', data.fabric.elements[z].lib);
     $('#windows .window_fields_template').removeClass('window_fields_template');
+    data.fabric.elements[z].name = String(data.fabric.elements[z].name);
     var name = data.fabric.elements[z].name;
     name = name.toLowerCase();
     if (data.fabric.elements[z].type == 'Door') {
@@ -370,6 +351,9 @@ function add_window(z)
         //subtractfromhtml += "<option value='" + i + "'>" + data.fabric.elements[i].name + "</option>";
     }
     $("#windows [key='data.fabric.elements." + z + ".subtractfrom']").html(subtractfromhtml);
+
+    // Revert to original
+    init_revert_to_original('#windows', z);
 }
 
 function elements_initUI()
@@ -418,8 +402,8 @@ function elements_UpdateUI()
 {
     for (z in data.fabric.elements) {
         var color = "#fff";
-        var name = data.fabric.elements[z].name;
-        name = name.toLowerCase();
+        /*var name = data.fabric.elements[z].name;
+         name = name.toLowerCase();*/
         if (data.fabric.elements[z].type == 'Door') {
             color = '#ffeeee';
         }
@@ -452,9 +436,11 @@ function elements_UpdateUI()
     // Get all the locations (walls, party walls, roofs and lofts
     var options = '';
     for (z in data.fabric.elements) {
-        if (data.fabric.elements[z].type != "Window" && data.fabric.elements[z].type != "Door" && data.fabric.elements[z].type != "Roof_light" && data.fabric.elements[z].type != "Hatch")
+        if (data.fabric.elements[z].type != "Window" && data.fabric.elements[z].type != "Door" && data.fabric.elements[z].type != "Roof_light" && data.fabric.elements[z].type != "Hatch" && data.fabric.elements[z].type != "Floor")
             options += "<option value='" + data.fabric.elements[z].id + "'>" + data.fabric.elements[z].location + "</option>";
     }
+
+    $('.revert-to-original-icon').attr('src', path + "Modules/assessment/img-assets/undo.gif");
 
     // Fill up the substractfrom selects
     $('.subtractfrom').each(function (i, obj) {
@@ -479,6 +465,11 @@ function get_elements_max_id() {
 
 
 function apply_measure(measure) {
+    // Check is a measure has previously been applied as part of a bulk measure, if so then we delete it
+    var applied_in_bulk = measure_applied_in_bulk(measure.item_id);
+    if (applied_in_bulk != false)
+        delete(data.fabric.measures[applied_in_bulk].original_elements[measure.item_id]);
+
     // The first time we apply a measure to an element we record its original stage
     if (data.fabric.measures[measure.item_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
         data.fabric.measures[measure.item_id] = {};
@@ -495,13 +486,6 @@ function apply_measure(measure) {
             data.fabric.measures[measure.item_id].measure = "Element deleted";
             break;
         case  'replace_from_measure_library': // watch out no 'break' at the end of this case
-            if (measure.item[lib].EWI != undefined && measure.item[lib].EWI == true) {
-                data.fabric.elements[measure.row].l = 0;
-                data.fabric.elements[measure.row].h = 0;
-                data.fabric.elements[measure.row].area = 1.15 * data.fabric.elements[measure.row].area;
-            }
-
-            console.log(measure);
         case 'replace':
         case 'edit':
             measure.item[lib].lib = lib;
@@ -581,6 +565,61 @@ function get_element_by_id(id) {
             return data.fabric.elements[index];
     }
 }
+
+function get_element_index_by_id(id) {
+    for (var index in data.fabric.elements) {
+        if (data.fabric.elements[index].id == id)
+            return index;
+    }
+}
+
+function measure_applied_to_element(element_id) {
+    for (var measure_id in data.fabric.measures) {
+        if (measure_id == element_id)
+            return true;
+        else if (measure_applied_in_bulk(element_id) != false) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function element_exists_in_original(original_scenario, element_id) {
+    for (e in project[original_scenario].fabric.elements) {
+        if (project[original_scenario].fabric.elements[e].id == element_id)
+            return true;
+    }
+    return false;
+}
+
+function measure_applied_in_bulk(element_id) { // returns false if measure is not in a bulf measure, returns the measure id if it is
+    for (var measure_id in data.fabric.measures) {
+        if (data.fabric.measures[measure_id].original_elements != undefined) { // bulk measure
+            for (var m in data.fabric.measures[measure_id].original_elements) {
+                if (m == element_id)
+                    return measure_id;
+            }
+        }
+    }
+    return false;
+}
+
+function init_revert_to_original(id, z) {
+    if (measure_applied_to_element(data.fabric.elements[z].id) != false) {
+        if (data.created_from != undefined && data.created_from != 'master') {
+            var inner_html = $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').html();
+            inner_html = inner_html.replace(/Revert to master/g, 'Revert to Scenario ' + data.created_from.split('scenario')[1]);
+            $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').html(inner_html);
+        }
+        $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').show();
+        if (data.created_from != undefined && element_exists_in_original(data.created_from, data.fabric.elements[z].id) == false)
+            $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').removeClass('revert-to-original').css('cursor', 'default').html('Original element doesn\'t<br />exist, cannot revert');
+    }
+    else {
+        $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').hide();
+    }
+}
+
 //
 //-----------------------------------------------------------------------------------------------
 // Element library

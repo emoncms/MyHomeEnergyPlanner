@@ -13,21 +13,21 @@ function LAC_initUI() {
     $('#LAC-lighting-fuels').html('');
     for (index in data.LAC.fuels_lighting) {
         if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
-            var out = '<tr><td></td><td><select key="data.LAC.fuels_lighting.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_lighting.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_lighting.' + index + '.fuel_input" /></td></tr>'
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_lighting.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" min="0" max="1" key="data.LAC.fuels_lighting.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_lighting.' + index + '.fuel_input" /></td><td><i style="cursor:pointer" class="icon-trash delete-LAC-fuel" type="fuels_lighting" index="' + index + '"></i></td></tr>'
             $('#LAC-lighting-fuels').append(out);
         }
     }
     $('#LAC-appliances-fuels').html('');
     for (index in data.LAC.fuels_appliances) {
         if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
-            var out = '<tr><td></td><td><select key="data.LAC.fuels_appliances.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_appliances.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_appliances.' + index + '.fuel_input" /></td></tr>'
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_appliances.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" min="0" max="1" key="data.LAC.fuels_appliances.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_appliances.' + index + '.fuel_input" /></td><td><i style="cursor:pointer" class="icon-trash delete-LAC-fuel" type="fuels_appliances" index="' + index + '"></i></td></tr>'
             $('#LAC-appliances-fuels').append(out);
         }
     }
     $('#LAC-cooking-fuels').html('');
     for (index in data.LAC.fuels_cooking) {
         if (index != 0) { // First fuel in array is added on LAC.html so no need to add it here
-            var out = '<tr><td></td><td><select key="data.LAC.fuels_cooking.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_cooking.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_cooking.' + index + '.fuel_input" /></td></tr>'
+            var out = '<tr><td></td><td><select key="data.LAC.fuels_cooking.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" min="0" max="1" key="data.LAC.fuels_cooking.' + index + '.fraction" default="0"></td><td><span dp="2" key="data.LAC.fuels_cooking.' + index + '.fuel_input" /></td><td><i style="cursor:pointer" class="icon-trash delete-LAC-fuel" type="fuels_cooking" index="' + index + '"></i></td>/tr>'
             $('#LAC-cooking-fuels').append(out);
         }
     }
@@ -53,6 +53,8 @@ function LAC_initUI() {
     show_LAC_divs(data.LAC_calculation_type)
 }
 function LAC_UpdateUI() {
+    LAC_initUI();
+
     for (z in data.applianceCarbonCoop.list) {
         data.applianceCarbonCoop.list[z].energy_demand = 1.0 * data.applianceCarbonCoop.list[z].energy_demand.toFixed(2);
     }
@@ -107,12 +109,23 @@ $('#openbem').on('click', '.add_LAC_fuel', function () { // Fix index
     var array_name = 'fuels_' + type;
     data.LAC[array_name].push({fuel: 'Standard Tariff', fraction: 0, fuel_input: 0});
     var index = data.LAC[array_name].length - 1;
-    var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0"></td><td><span key="data.LAC.fuels_' + type + '.' + index + 'fuel_input"/>    </td></tr>'
+    var out = '<tr><td></td><td><select key="data.LAC.fuels_' + type + '.' + index + '.fuel" class="fuels" category="Electricity"></select></td><td><input type="number" style="width:55px" step="0.01" max="1" key="data.LAC.fuels_' + type + '.' + index + '.fraction" default="0"></td><td><span key="data.LAC.fuels_' + type + '.' + index + 'fuel_input"/>    </td><td><i class="icon-trash delete-LAC-fuel" type="fuels_' + type + '" index="' + index + '"></i></td></tr>'
     $('#LAC-' + type + '-fuels').append(out);
 
     // Update
     LAC_initUI();
     update();
+});
+$('#openbem').on('click', '.delete-LAC-fuel', function () { // Fix index
+    var array_name = $(this).attr('type');
+    var index = $(this).attr('index');
+    data.LAC[array_name].splice(index,1);
+    // Update
+    LAC_initUI();
+    update();
+});
+$('#openbem').on('click', '#apply-measure-lighting', function () {
+    apply_LAC_measure('lighting');
 });
 
 function show_LAC_divs(type_of_calc) {
@@ -181,4 +194,28 @@ function add_applianceCarbonCoop(z) {
     out += '<td><i index="' + z + '" class="delete-appliance icon-trash" style="cursor:pointer"></i></td>';
     out += '</tr>';
     $(table_selector).append(out);
+}
+function apply_LAC_measure(type) {
+    if (data.measures.LAC == undefined) {
+        data.measures.LAC = {};
+    }
+
+    switch (type) {
+        case 'lighting':
+            if (data.measures.LAC.lighting == undefined) {
+                data.measures.LAC.lighting = {original_LLE: data.LAC.LLE, measure: {}};
+            }
+
+            var n_bulbs_to_change = data.LAC.L - data.LAC.LLE;
+            data.measures.LAC.lighting.measure = extended_library.lighting_measures['L01'];
+            data.measures.LAC.lighting.measure.tag = 'L01';
+            data.measures.LAC.lighting.measure.quantity = n_bulbs_to_change;
+            data.measures.LAC.lighting.measure.cost_total = n_bulbs_to_change * data.measures.LAC.lighting.measure.cost;
+
+            data.LAC.LLE = data.LAC.L;
+
+            break;
+    }
+
+    update();
 }
