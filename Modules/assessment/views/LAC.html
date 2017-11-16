@@ -16,12 +16,20 @@
     <div id="lighting-SAP" class="to-be-hidden" style="display:none;margin-bottom:35px">
         <h3>Lighting - SAP calculation</h3>
         <table class="table">
-            <tr><td>Reduced internal heat gains for lighting: </td><td colspan="4"><input key="data.LAC.reduced_heat_gains_lighting" type="checkbox" /></td></tr>
-            <tr><td>The number of fixed low energy lighting outlets (LLE)</td><td colspan="4"><input key="data.LAC.LLE" type="text" style="width:80px" /></td></tr>
-            <tr><td>The total number of fixed lighting outlets (L)</td><td colspan="4"><input key="data.LAC.L" type="text" style="width:80px" /></td></tr>
+            <tr>
+                <td>Reduced internal heat gains for lighting: </td>
+                <td colspan="4"><input key="data.LAC.reduced_heat_gains_lighting" type="checkbox" /></td>
+            </tr>
+            <tr><td>The number of fixed low energy lighting outlets (LLE)</td>
+                <td colspan="4"><input class="disabled-if-not-master" key="data.LAC.LLE" type="text" style="width:80px" />
+                    <button class="btn if-not-master" id="apply-measure-lighting" style="margin-left:25px">Apply measure<br />Replace all with LLE</button></td></tr>
+            <tr>
+                <td>The total number of fixed lighting outlets (L)</td>
+                <td colspan="4"><input key="data.LAC.L" class="disabled-if-not-master" type="text" style="width:80px" /></td>
+            </tr>
             <tr><td>The initial value of the annual energy used for lighting:</td><td><span key="data.LAC.EL" dp=2></span> kWh/year</td><td>Annual energy use:</td><td><span dp="2" key="data.energy_requirements.lighting.quantity" /> kWh/year</td></tr>
             <tr><td></td><th>Fuel</th><th>Fraction</th><th>Fuel input <i class="icon-question-sign" title="Assuming system efficiency to be 1"></i></th><td></td></tr>
-            <tr><td></td><td><select key="data.LAC.fuels_lighting.0.fuel" style="margin-right:20px" class="fuels" category="Electricity"></select><td><input type='number' style="width:55px;" step='0.01' max='1' key='data.LAC.fuels_lighting.0.fraction' default='1'></td><td><span style="margin:0 5px" dp="2" key='data.LAC.fuels_lighting.0.fuel_input' /></td><td> <button style="margin-left:15px" class='add_LAC_fuel' type='lighting'>Add fuel</button></td></tr>
+            <tr><td></td><td><select key="data.LAC.fuels_lighting.0.fuel" style="margin-right:20px" class="fuels" category="Electricity"></select><td><input type='number' style="width:55px;" step='0.01' max='1' key='data.LAC.fuels_lighting.0.fraction' default='1'></td><td><span style="margin:0 5px" dp="2" key='data.LAC.fuels_lighting.0.fuel_input' /></td><td> <button class="add_LAC_fuel btn" style="margin-left:15px" type='lighting'>Add fuel</button></td></tr>
             <tbody id="LAC-lighting-fuels"></tbody>
         </table>
     </div>
@@ -130,7 +138,7 @@
                 <th></th>
             </tr>
 
-            
+
             <tbody id="applianceCarbonCoop-Computing" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Computing</b></td></tr></tbody>
             <tbody id="applianceCarbonCoop-Cooking" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Cooking</b></td></tr></tbody>
             <tbody id="applianceCarbonCoop-Food-storage" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Food storage</b></td></tr></tbody>

@@ -44,17 +44,15 @@ function fuel_requirements_UpdateUI()
         $("#fuel_totals [key='data.fuel_totals.z.quantity']").attr('key', 'data.fuel_totals.' + z + '.quantity');
         $("#fuel_totals [key='data.fuel_totals.z.primaryenergy']").attr('key', 'data.fuel_totals.' + z + '.primaryenergy');
         $("#fuel_totals [key='data.fuel_totals.z.annualco2']").attr('key', 'data.fuel_totals.' + z + '.annualco2');
-
-
         $("#fuel_totals [key='data.fuel_totals.z.annualcost']").attr('key', 'data.fuel_totals.' + z + '.annualcost');
-        if (z == 'generation')
-        $("#fuel_totals [key='data.fuel_totals." + z + ".annualcost']").parent().append(' <i class="icon-question-sign" title="Savings due to generation take into account the fraction used onsite"></i>');
-
         $("#fuel_totals [key='data.fuels.f.standingcharge']").attr('key', 'data.fuels.' + z + '.standingcharge');
-
         $("#fuel_totals [key='data.fuels.f.fuelcost']").attr('key', 'data.fuels.' + z + '.fuelcost');
         $("#fuel_totals [key='data.fuels.f.primaryenergyfactor']").attr('key', 'data.fuels.' + z + '.primaryenergyfactor');
         $("#fuel_totals [key='data.fuels.f.co2factor']").attr('key', 'data.fuels.' + z + '.co2factor');
+
+        if (z == 'generation')
+            $("#fuel_totals [key='data.fuel_totals." + z + ".annualcost']").parent().append(' <i class="icon-question-sign" title="Savings due to generation take into account the fraction used onsite"></i>');
+    
     }
 }
 

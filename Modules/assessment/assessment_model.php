@@ -161,7 +161,7 @@ class Assessment {
         if (!$this->has_access($userid, $id))
             return false;
 
-        $data = preg_replace('/[^\w\s-.",:{}\'\[\]\\\]/', '', $data);
+        $data = preg_replace('/[^\w\s-%.\/",:{}\'\[\]\\\]/', '', $data);
         $data = json_decode($data);
 
         $mdate = time();
@@ -335,12 +335,14 @@ class Assessment {
         while ($row = $result->fetch_object()) {
             $id = $row->id;
             $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");
-            $librow = $libresult->fetch_object();
-            if (!in_array($id, $loadedlibs)) {
-                $librow->data = json_encode(json_decode($librow->data));
-                $libraries[] = $librow;
+            if ($libresult->num_rows > 0) {
+                $librow = $libresult->fetch_object();
+                if (!in_array($id, $loadedlibs)) {
+                    $librow->data = json_encode(json_decode($librow->data));
+                    $libraries[] = $librow;
+                }
+                $loadedlibs[] = $id;
             }
-            $loadedlibs[] = $id;
         }
 
         // Load organisation libraries
@@ -679,9 +681,25 @@ class Assessment {
     }
 
     public function escape_item($item) {
-        $item = preg_replace('/[^\w\s-+.",:{}\/\'\[\]\\\]/', '', $item);
+        $item = preg_replace('/[^\w\s-+."%,:{}\/\'\[\]\\\]/', '', $item);
         //$item = str_replace("'", "\\'", $item);
         return $item;
+    }
+
+    public function edit_item_in_all_libraries($library_type, $tag, $field, $value) {
+        $libresult = $this->mysqli->query("SELECT id,data FROM element_library WHERE `type` = '" . $library_type . "'");
+        foreach ($libresult as $row) {
+            $library = json_decode($row['data']);
+            foreach ($library as $key => $item) {
+                if ($key == $tag) {
+                    $item->$field = $value;
+                }
+            }
+            $req = $this->mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+            $library = json_encode($library);
+            $req->bind_param('si', $library, $row['id']);
+            $req->execute();
+        }
     }
 
 // ------------------------------------------------------------------------------------------------
@@ -741,15 +759,28 @@ class Assessment {
         return $result;
     }
 
-    public
-            function deleteimage($userid, $projectid, $filename) {
+    public function deleteimage($userid, $projectid, $filename) {
         // Check if user has access to this assesment      
         if (!$this->has_access($userid, $projectid))
             return "User has no access to the assesment";
-        $result = array();
+        $result = 0;
         error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
-        $message = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
-        $message = $message === true ? "Deleted" : "File couldn't be deleted";
+        if (!file_exists(__DIR__ . "/images/" . $projectid . "/" . $filename)) { // if for a reason the file doesn't exist in the server but it does in the data object we allow to delete it
+            $result = 1;
+        } else {
+            $result = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
+        }
+        switch ($result){
+            case 1:
+                $message= 'File could not be found in the server. Image gallery list updated';
+                break;
+            case false:
+                $message = "File couldn't be deleted";
+                break;
+            case true:
+                $message = "File deleted";
+                break;
+        }
         $to_return = array();
         $to_return[$filename] = $message;
         return $to_return;

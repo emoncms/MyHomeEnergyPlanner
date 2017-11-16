@@ -11,10 +11,9 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r8.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/appliancesCarbonCoop-r1.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r5.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r9.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>
@@ -54,7 +53,7 @@ global $reports;
 <div id="openbem">
     <div id="left-pane">
         <div class="side-block-2">
-            <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
+            <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;width"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
             <div style="padding:10px">
 
                 <p style="font-size:14px">Description: <span id="project-description"></span></p>
@@ -62,13 +61,17 @@ global $reports;
                 <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
                 <br><br>
 
-                <div class="scenario-nav-heading">Project</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
+                <div class="scenario-nav-heading">Project input</div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
+                <div class="scenario-nav-heading">Other</div>
+                <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CarbonCoop">Carbon Coop Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CAfS">CAfS Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/fuelsmanager">Fuels manager</a></div>
             </div>
         </div>
 
@@ -76,7 +79,7 @@ global $reports;
 
             <div class="side-block-2 scenario-block" scenario="template" style="cursor:pointer">
 
-                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>title<span style="float:right">scenarioname (<span class="template_sap_rating"></span>)</span></b></div>
+                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;height:40px"><b>title<span style="float:right">scenarioname<br /><span class="template_scenario_emissions"></span> kgCO<sub>2</sub>/m<sup>2</sup></span><br /><span class="template_scenario_created_from" style='float:left'></span></b></div>
 
                 <div class="menu-content">
                     <div style="padding:10px">
@@ -217,13 +220,14 @@ global $reports;
     var selected_library = -1;
     var selected_library_tag = "Wall";
     var printmode = false;
+    //var org_report = ''; //
 
     $("#openbem").css("background-color", "#eee");
 
     var path = "<?php echo $path; ?>";
     var jspath = path + "Modules/assessment/";
 
-    //var c=document.getElementById("rating");
+//var c=document.getElementById("rating");
     //var ctx=c.getContext("2d");
 
     load_view("#topgraphic", 'topgraphic');
@@ -239,17 +243,14 @@ global $reports;
         p.data = {'master': {}};
     var project = p.data;
 
-    // Side Menus
-    var mastermenu = $("#scenario-menu-template").html();
-    for (s in project) {
-        var tmp = mastermenu.replace(/template/g, s);
-        tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
-        var name = "";
-        if (project[s].scenario_name != undefined)
-            name = project[s].scenario_name;
-        tmp = tmp.replace("scenarioname", " " + name.charAt(0).toUpperCase() + name.slice(1));
-        $("#scenario-list").append(tmp);
-    }
+    var historical = []; // used for the undo functionality
+    var historical_index; // pointer for the historical array, pointing the current version of project
+    historical.unshift(JSON.stringify(project));
+    historical_index = 0;
+    $('ul.nav.pull-right').prepend('<li id="redo"><a><img src="' + path + 'Modules/assessment/img-assets/redo.gif" title="Redo" style="width:14px" /></a></li>');
+    $('ul.nav.pull-right').prepend('<li id="undo"><a><img src="' + path + 'Modules/assessment/img-assets/undo.gif" title="Undo" style="width:14px" / > </a></li > ');
+    refresh_undo_redo_buttons();
+
     $(".menu-content").hide();
     $(".scenario-block[scenario=master]").find(".delete-scenario-launch").hide();
     $(".scenario-block[scenario=master]").find(".menu-content").show();
@@ -258,11 +259,21 @@ global $reports;
 
     run_backwards_compatibility();
 
+    // Ensure all the scenarios have the same fuels
+    if (project.master.fuels == undefined)
+        project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));
+    ;
+    for (scenario in project)
+        project[scenario].fuels = project.master.fuels;
+
     for (s in project) {
         // QUESTION: do you really want to do calc.run twice here?
         project[s] = calc.run(calc.run(project[s]));
-        $("." + s + "_sap_rating").html(project[s].SAP.rating.toFixed(0));
+        $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
     }
+
+    // Side Menus
+    add_scenarios_to_menu();
 
     var tmp = (window.location.hash).substring(1).split('/');
     var page = tmp[1];
@@ -301,7 +312,6 @@ global $reports;
     for (s in project) {
         if (project[s].locked == undefined)
             project[s].locked = false;
-
         if (project[s].locked == false)
             $(".scenario-block[scenario=" + s + "]").find(".lock").html('Lock');
         else
@@ -375,19 +385,36 @@ global $reports;
 
         // Disable measures if master
         show_hide_if_master();
-
     });
 
-    function update()
+    function update(undo_redo = false)
     {
         console.log("updating");
+
+        // We need to calculate the periods of heating off here because if we try to do it in household.js it happens after the update
+        if (project.master.household != undefined) {
+            for (var s in project) { // we ensure all the scenarios have the same household data and heating off periods
+                project[s].household = project.master.household;
+                project[s].temperature.hours_off.weekday = get_hours_off_weekday(project[s]);
+                project[s].temperature.hours_off.weekend = get_hours_off_weekend(project[s]);
+            }
+        }
+
         project[scenario] = calc.run(project[scenario]);
         data = project[scenario];
+        if (undo_redo === false) {
+            historical.splice(0, historical_index); // reset the historical removing all the elements that were still there because of undoing
+            historical.unshift(JSON.stringify(project));
+            historical_index = 0;
+            refresh_undo_redo_buttons();
+        }
 
         UpdateUI(data);
         draw_openbem_graphics();
 
-        $("." + scenario + "_sap_rating").html(project[scenario].SAP.rating.toFixed(0));
+        $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
+        
+        add_scenarios_to_menu();
 
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
@@ -405,7 +432,120 @@ global $reports;
     }
 
     function run_backwards_compatibility() {
-        // NOthing to do tight now       
+        // March 2017 -Added with Issue 220: 'Current Energy' fuel energy cost and carbon discrepancies
+        if (project['master'] != undefined && project['master'].currentenergy != undefined) {
+            var data_rb = project['master'];
+            if (data_rb.currentenergy.use_by_fuel == undefined)
+                data_rb.currentenergy.use_by_fuel = {};
+            if (typeof data_rb.currentenergy.energyitems != 'undefined') {
+                console.log('Running Current Energy backwards compatibility ');
+                for (var energy_item in data_rb.currentenergy.energyitems) {
+                    var item = data_rb.currentenergy.energyitems[energy_item];
+                    if (item.selected === 1) {
+                        if (item.group == 'Electric') {
+                            if (data_rb.currentenergy.use_by_fuel['Standard Tariff'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['Standard Tariff'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['Standard Tariff'].annual_use += item.quantity;
+                        }
+                        else if (item.name == 'Electricity (Economy 7 night rate)') {
+                            if (data_rb.currentenergy.use_by_fuel['7 Hour tariff - Low Rate'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['7 Hour tariff - Low Rate'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['7 Hour tariff - Low Rate'].annual_use += item.quantity;
+                        }
+                        else if (item.name == 'Electricity (Economy 7 day rate)') {
+                            if (data_rb.currentenergy.use_by_fuel['7-Hour tariff - High Rate'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['7-Hour tariff - High Rate'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['7-Hour tariff - High Rate'].annual_use += item.quantity;
+                        }
+                        else if (item.name == 'Mains gas in kWh') {
+                            if (data_rb.currentenergy.use_by_fuel['Mains Gas'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['Mains Gas'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['Mains Gas'].annual_use += item.quantity;
+                        }
+                        else if (item.name == 'Mains gas') {
+                            if (data_rb.currentenergy.use_by_fuel['Mains Gas'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['Mains Gas'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['Mains Gas'].annual_use += 9.8 * item.quantity;
+                        }
+                        else if (item.name == 'Wood Logs') {
+                            if (data_rb.currentenergy.use_by_fuel['Wood Logs'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['Wood Logs'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['Wood Logs'].annual_use += 1380 * item.quantity;
+                        }
+                        else if (item.name == 'Wood Pellets') {
+                            if (data_rb.currentenergy.use_by_fuel['Wood Pellets secondary heating/ in bags'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['Wood Pellets secondary heating/ in bags'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['Wood Pellets (secondary heating/ in bags)'].annual_use += 4800 * item.quantity;
+                        }
+                        else if (item.name == 'Oil') {
+                            if (data_rb.currentenergy.use_by_fuel['Heating Oil'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['Heating Oil'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['Heating Oil'].annual_use += 10.27 * item.quantity;
+                        }
+                        else if (item.name == 'LPG') {
+                            if (data_rb.currentenergy.use_by_fuel['Bulk LPG'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['Bulk LPG'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['Bulk LPG'].annual_use += item.quantity;
+                        }
+                        else if (item.name == 'Bottled gas') {
+                            if (data_rb.currentenergy.use_by_fuel['Bottled LPG'] == undefined)
+                                data_rb.currentenergy.use_by_fuel['Bottled LPG'] = {annual_use: 0, annual_co2: 0, primaryenergy: 0, annualcost: 0};
+                            data_rb.currentenergy.use_by_fuel['Bottled LPG'].annual_use += 13.9 * item.quantity;
+                        }
+                    }
+                }
+                delete data_rb.currentenergy.energyitems;
+            }
+        }
+        // 9 June 2017 fix problems in Dom's assessment (very very old)
+        for (scenario in project) {
+            if (project[scenario].fabric != undefined) {
+                for (e in project[scenario].fabric.elements) {
+                    if (project[scenario].fabric.elements[e].type == 'window')
+                        project[scenario].fabric.elements[e].type = 'Window';
+                    if (project[scenario].fabric.elements[e].type == 'door')
+                        project[scenario].fabric.elements[e].type = 'Door';
+                    if (project[scenario].fabric.elements[e].type == 'wall')
+                        project[scenario].fabric.elements[e].type = 'Wall';
+                    if (project[scenario].fabric.elements[e].type == 'roof')
+                        project[scenario].fabric.elements[e].type = 'Roof';
+                    if (project[scenario].fabric.elements[e].type == 'floor')
+                        project[scenario].fabric.elements[e].type = 'Floor';
+                }
+            }
+        }
+    }
+
+    function add_scenarios_to_menu() {
+        $("#scenario-list").html('');
+        var mastermenu = $("#scenario-menu-template").html();
+        for (s in project) {
+            var tmp = mastermenu.replace(/template/g, s);
+            tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
+            var name = "";
+            if (project[s].scenario_name != undefined)
+                name = project[s].scenario_name;
+            tmp = tmp.replace("scenarioname", " " + String(name).charAt(0).toUpperCase() + String(name).slice(1));
+            $("#scenario-list").append(tmp);
+        }
+        for (s in project) {
+            //project[s] = calc.run(calc.run(project[s]));
+            $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
+            if (s != 'master' && project[s].created_from != undefined) {
+                $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + ')');
+                // Check if the original scenario has changed since the the creation of the current one
+                if (project[s].creation_hash != undefined) {
+                    var original_scenario = JSON.parse(JSON.stringify(project[project[s].created_from]));
+                    original_scenario.locked = false;
+                    hash_original = generate_hash(JSON.stringify(original_scenario));
+                    if (project[s].creation_hash != generate_hash(JSON.stringify(original_scenario))){
+                        $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + '*)');
+                    $("." + s + "_scenario_created_from").attr('title', 'The original scenario has changed since the creation of Scenario ' + s.split('scenario')[1]);
+                    }
+                }
+            }
+        }
+        $('div [scenario="' + scenario + '"]').click();
     }
 
     $("#openbem").on("change", '[key]', function () {
@@ -425,7 +565,6 @@ global $reports;
 
             if (key == 'data.use_SHW')
                 data.water_heating.solar_water_heating = !data.use_SHW; // I don't know why but only works properly coping the negative
-
             var lastval = varset(key, val);
 
             $("#openbem").trigger("onKeyChange", {key: key, value: val});
@@ -436,6 +575,7 @@ global $reports;
         update();
     });
 
+    // Scenarios menu interactions
     $("#openbem").on('click', ".scenario-block", function () {
         var s = $(this).attr('scenario');
         //  if (s != scenario) {
@@ -451,12 +591,12 @@ global $reports;
          */
         // }
     });
-
     $('#openbem').on('click', '.project-menu-item', function () {
         $('.scenario-block[scenario=master]').click();
         $('.menu-content').hide();
     });
 
+    // Scenarios management
     $("#openbem").on('click', "#create-new", function () {
         // Reset select
         $('#select-scenario').html("");
@@ -467,37 +607,45 @@ global $reports;
 
         $('#modal-create-scenario').modal('show');
     });
-
     $("#modal-create-scenario").on('click', '#modal-create-scenario-done', function () {
         var n = 0;
-        for (z in project)
+        for (z in project) {
+            var scenario_number = z.slice(8);
+            if (z != 'master' && n != scenario_number) // if for a reason a scenario was deleted, when we create a new one it takes its position. Example: we have master, scenario1 and scenario2. We delete scenario1. We create a new one that becomes scenario1
+                break;
             n++;
+        }
         var s = "scenario" + n;
-
         project[s] = JSON.parse(JSON.stringify(project[$('#select-scenario').val()]));
-
-        // dont make a copy of the following properties
-        project[s].household = {};
-        project[s].imagegallery = [];
-        project[s].currentenergy = {};
-        project[s].fabric.measures = {};
-        project[s].measures = {};
-
-        // Ensure new scenario is unlocked
         project[s].locked = false;
+        project[s].creation_hash = generate_hash(JSON.stringify(project[s]));
+        project[s].measures = {};
+        project[s].fabric.measures = {};
+        project[s].created_from = $('#select-scenario').val();
 
-        var tmp = mastermenu.replace(/template/g, s);
-        tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
+        //sort project alphabetically
+        temp_project = {};
+        Object.keys(project)
+                .sort()
+                .forEach(function (v, i) {
+                    temp_project[v] = project[v];
+                });
+        project = JSON.parse(JSON.stringify(temp_project));
+
+
+
+        /*var mastermenu = $("#scenario-menu-template").html();
+         var tmp = mastermenu.replace(/template/g, s);
+         tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));*/
 
         $(".menu-content").hide();
-        $("#scenario-list").append(tmp);
+        add_scenarios_to_menu();
         $('#modal-create-scenario').modal('hide');
 
         scenario = s;
         update();
         $('div [scenario="' + s + '"]').click();
     });
-
     $("#openbem").on('click', ".delete-scenario-launch", function () {
         var s = $(this).parent().parent().parent().attr('scenario');
         if (s != "master") {
@@ -505,7 +653,6 @@ global $reports;
             $("#modal-delete-scenario").attr("scenario", s);
         }
     });
-
     $("#delete-scenario-confirm").click(function () {
         var s = $("#modal-delete-scenario").attr('scenario');
 
@@ -520,7 +667,7 @@ global $reports;
         $("#modal-delete-scenario").modal("hide");
     });
 
-
+    // Project's name and description management
     $("#edit-project-name-and-description").on('click', function () {
         $("#project-name-input").val(p.name);
         $("#project-description-input").val(p.description);
@@ -534,12 +681,65 @@ global $reports;
         $("#modal-edit-project-name-and-description").modal("hide");
         openbem.set_name_and_description(projectid, p.name, p.description);
     });
+
     $("#modal-error-submitting-data-done").on('click', function () {
         location.reload();
     });
 
+    // Do/undo
+    $('ul.nav.pull-right').on('click', '#undo', function () {
+        if (historical_index < historical.length - 1) {
+            historical_index++;
+            project = JSON.parse(historical[historical_index]);
+            update(true);
+        }
+
+        refresh_undo_redo_buttons();
+    });
+    $('ul.nav.pull-right').on('click', '#redo', function () {
+        if (historical_index > 0) {
+            historical_index--;
+            project = JSON.parse(historical[historical_index]);
+            update(true);
+        }
+
+        refresh_undo_redo_buttons();
+    });
+    function refresh_undo_redo_buttons() {
+        if (historical_index == historical.length - 1) {
+            $('#undo').css('opacity', 0.1);
+            $('#undo').css('cursor', 'default');
+        }
+        else {
+            $('#undo').css('opacity', 1);
+            $('#undo').css('cursor', 'pointer');
+        }
+
+        if (historical_index > 0) {
+            $('#redo').css('opacity', 1);
+            $('#redo').css('cursor', 'pointer');
+        }
+        else {
+            $('#redo').css('opacity', 0.1);
+            $('#redo').css('cursor', 'default');
+        }
+    }
+
+    function generate_hash(string) {
+        var hash = 0, i, chr;
+        if (string.length === 0)
+            return hash;
+        for (i = 0; i < string.length; i++) {
+            chr = string.charCodeAt(i);
+            hash = ((hash << 5) - hash) + chr;
+            hash |= 0; // Convert to 32bit integer
+        }
+        return hash;
+    }
+    ;
 
 
+    //-----
     //-------------------------------------------------------------------
 
     $(".house_graphic").click(function () {
@@ -560,6 +760,7 @@ global $reports;
 
     $(window).resize(function () {
         draw_openbem_graphics();
-    });
+    }
+    );
 
 </script>

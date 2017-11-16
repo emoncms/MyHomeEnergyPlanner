@@ -1,10 +1,31 @@
-<h3>Import/Export</h3>
+<h3>Import</h3>
+<p>Import a project by pasting the data in the text area below or uploading a file.</p>
+<p>Note: image galleries are not imported</p>
 
+<table>
+    <tr>
+        <td style="width:620px; vertical-align: top">
+            <h4>From text box</h4>
+            <textarea id="import" style="width:85%;"></textarea>
+            <button class="btn" id="import-data">Import from text box</button>
+        </td>
+        <td style="vertical-align: top">
+            <h4>Upload project</h4>
+            <form style="margin-bottom:5px" action="#" id="upload_project" method="post" enctype="multipart/form-data" >
+                <input type="file" id="file_to_upload">
+                <p>Max. size: 1MB</p>
+                <input class="btn" type="submit" value="Import file" />
+            </form>
+
+            
+            <p id="upload-result"></p>
+        </td>
+    </tr>
+</table>
+
+<h3 style="margin-top:35px">Export</h3>
 <p>
-<button id="input-data">Input Data</button>
-<button id="all-data">All Data</button>
+    <button id="show-project-data" class="btn">Show project Data</button>
+    <a id="download-project-data"><button class="btn">Download project Data</button></a>
 </p>
-
-<textarea id="import-export" style="width:100%;"></textarea>
-
-<button class="btn" id="import-data">Import & Save</button>
+<textarea id="export" style="width:44%;"></textarea>

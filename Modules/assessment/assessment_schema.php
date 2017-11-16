@@ -33,7 +33,7 @@ $schema['element_library'] = array(
     'userid' => array('type' => 'int(11)'),
     'name' => array('type' => 'text'),
     'type' => array('type' => 'text'),
-    'data' => array('type' => 'text')
+    'data' => array('type' => 'MEDIUMTEXT')
 );
 
 $schema['element_library_access'] = array(

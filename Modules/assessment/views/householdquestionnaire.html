@@ -5,7 +5,7 @@
 <p>Commentary to be included on report:</p>
 <textarea key="data.household.commentary" style="width:98%; height:500px"></textarea>
 <br><br>
-<p>Assessment date (dd-mm-yy):<br>
+<p>Assessment date (dd-mm-yyyy):<br>
     <input type="text" value="" key="data.household.assessment_date" style="width:300px" /></p>
 <p>Assessor's name:<br>
     <input type="text" value="" key="data.household.assessors_name" style="width:300px" /></p>
@@ -72,8 +72,8 @@
 <p>Number of bedrooms<br>
     <input type="text" value="" key="data.household.1b_bedrooms" style="width:150px" /></p>
 
-<p>Number of storeys<br>
-    <input type="text" value="" key="data.household.1b_bedrooms" style="width:150px" /></p>
+<!--<p>Number of storeys<br>
+    <input type="text" value="" key="data.household.1b_bedrooms" style="width:150px" /></p>-->
 
 <p>Age:<br>
     <select key="data.household.1b_agesap" style="width:180px">
@@ -143,6 +143,13 @@
 <br>
 <p><b>3a Heating</b></p>
 
+<p>Do you completely switch off your space heating over summer? 
+    <select key="data.household.3a_heatingoffsummer" style="margin-left:20px;width:75px">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+</p>
+
 <table class="table">
     <tr><td>
             <p>Room thermostat temperature setting<br>
@@ -205,39 +212,41 @@
 <table class="table">
     <tr>
         <td width="500px">Period 1</td>
-        <td width="250px">On at <input key="data.household.3a_heatinghours_weekday_on1_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_on1_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
-        <td>Off at <input key="data.household.3a_heatinghours_weekday_off1_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_off1_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
+        <td width="250px">On at <input class="hours-off" key="data.household.3a_heatinghours_weekday_on1_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_on1_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
+        <td>Off at <input class="hours-off" key="data.household.3a_heatinghours_weekday_off1_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_off1_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
     </tr>
     <tr>
         <td>Period 2</td>
-        <td>On at <input key="data.household.3a_heatinghours_weekday_on2_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_on2_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
-        <td>Off at <input key="data.household.3a_heatinghours_weekday_off2_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_off2_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
+        <td>On at <input class="hours-off" key="data.household.3a_heatinghours_weekday_on2_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_on2_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
+        <td>Off at <input class="hours-off" key="data.household.3a_heatinghours_weekday_off2_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_off2_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
     </tr>
     <tr>
         <td>Period 3</td>
-        <td>On at <input key="data.household.3a_heatinghours_weekday_on3_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_on3_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
-        <td>Off at <input key="data.household.3a_heatinghours_weekday_off3_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_off3_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
+        <td>On at <input class="hours-off" key="data.household.3a_heatinghours_weekday_on3_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_on3_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
+        <td>Off at <input class="hours-off" key="data.household.3a_heatinghours_weekday_off3_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekday_off3_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
     </tr>
 </table>
+<p id="periods_heating_off_weekday" style="display:none; margin-bottom:25px;margin-left:8px"></p>
 
 <p>Heating hours: weekend day</p>
 <table class="table">
     <tr>
         <td width="500px">Period 1</td>
-        <td width="250px">On at <input key="data.household.3a_heatinghours_weekend_on1_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_on1_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
-        <td>Off at <input key="data.household.3a_heatinghours_weekend_off1_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_off1_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
+        <td width="250px">On at <input class="hours-off" key="data.household.3a_heatinghours_weekend_on1_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_on1_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
+        <td>Off at <input class="hours-off" key="data.household.3a_heatinghours_weekend_off1_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_off1_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
     </tr>
     <tr>
         <td>Period 2</td>
-        <td>On at <input key="data.household.3a_heatinghours_weekend_on2_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_on2_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
-        <td>Off at <input key="data.household.3a_heatinghours_weekend_off2_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_off2_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
+        <td>On at <input class="hours-off" key="data.household.3a_heatinghours_weekend_on2_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_on2_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
+        <td>Off at <input class="hours-off" key="data.household.3a_heatinghours_weekend_off2_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_off2_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
     </tr>
     <tr>
         <td>Period 3</td>
-        <td>On at <input key="data.household.3a_heatinghours_weekend_on3_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_on3_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
-        <td>Off at <input key="data.household.3a_heatinghours_weekend_off3_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_off3_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
+        <td>On at <input class="hours-off" key="data.household.3a_heatinghours_weekend_on3_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_on3_mins" type="number" min="0" max="59" style="width:45px"/> min </td>
+        <td>Off at <input class="hours-off" key="data.household.3a_heatinghours_weekend_off3_hours" type="number" min="0" max="23" style="width:45px"/> h <input key="data.household.3a_heatinghours_weekend_off3_mins" type="number" min="0" max="59" style="width:45px"/> min</td>
     </tr>
 </table>
+<p id="periods_heating_off_weekend" style="display:none; margin-bottom:25px;margin-left:8px"></p>
 
 <p>Rooms</p>
 <table class="table">
@@ -255,26 +264,26 @@
 
 <table class="table">
     <tr><td>Shower type:</td><td>
-    <select key="data.household.3b_showertype">
-        <option value="Unknown">Unknown</option>
-        <option value="Mixer direct">Mixer (direct)</option>
-        <option value="Electric">Electric</option>
-        <option value="Pumpedpower direct">Pumped/power (direct)</option>
-        <option value="Pumpedpower electric">Pumped/power (electric)</option>
-    </select></td></tr>
+            <select key="data.household.3b_showertype">
+                <option value="Unknown">Unknown</option>
+                <option value="Mixer direct">Mixer (direct)</option>
+                <option value="Electric">Electric</option>
+                <option value="Pumpedpower direct">Pumped/power (direct)</option>
+                <option value="Pumpedpower electric">Pumped/power (electric)</option>
+            </select></td></tr>
 
-<tr><td>If electric, shower rating (kW):</td><td>
-    <input type="number" value="" key="data.household.3b_showerrating"  /></td></tr>
+    <tr><td>If electric, shower rating (kW):</td><td>
+            <input type="number" value="" key="data.household.3b_showerrating"  /></td></tr>
 
-<tr><td>Frequency of use:</td><td>
-    <input type="number" value="" key="data.household.3b_shower_frequency"  /></td></tr>
+    <tr><td>Frequency of use per day:</td><td>
+            <input type="number" value="" key="data.household.3b_shower_frequency"  /></td></tr>
 
-<tr><td>Flow rate if known (litres/min):</td><td>
-    <input type="number" value="" key="data.household.3b_shower_flowrate"  /></td></tr>
+    <tr><td>Flow rate if known (litres/min):</td><td>
+            <input type="number" value="" key="data.household.3b_shower_flowrate"  /></td></tr>
 
 
-<tr><td>Bath, frequency of use (per day):</td><td>
-    <input type="number" value="" key="data.household.3b_bath_frequency"  /></td></tr>
+    <tr><td>Bath, frequency of use (per day):</td><td>
+            <input type="number" value="" key="data.household.3b_bath_frequency"  /></td></tr>
 </table>
 
 <div id='more-showers'><p><b>Extra showers</b></p></div>
@@ -534,34 +543,34 @@
         <td><input type="text" key="data.household.4b_drying_electricmaiden" style="width:100px" /></td>
         <td></td>
     </tr>
-<!--
-    <tr><th>TV</th><td></td><td></td></tr>
-    <tr>
-        <td>LED / LCD</td>
-        <td><input type="text" key="data.household.4b_tvledlcd_num" style="width:100px" /></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>CRT</td>
-        <td><input type="text" key="data.household.4b_crt_num" style="width:100px" /></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Plasma</td>
-        <td><input type="text" key="data.household.4b_plasma_num" style="width:100px" /></td>
-        <td></td>
-    </tr>
-    <tr><th>Computers</th><td></td><td></td></tr>
-    <tr>
-        <td>Desktop</td>
-        <td><input type="text" key="data.household.4b_desktops_num" style="width:100px" /></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Laptop</td>
-        <td><input type="text" key="data.household.4b_laptops_num" style="width:100px" /></td>
-        <td></td>
-    </tr>-->
+    <!--
+        <tr><th>TV</th><td></td><td></td></tr>
+        <tr>
+            <td>LED / LCD</td>
+            <td><input type="text" key="data.household.4b_tvledlcd_num" style="width:100px" /></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>CRT</td>
+            <td><input type="text" key="data.household.4b_crt_num" style="width:100px" /></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Plasma</td>
+            <td><input type="text" key="data.household.4b_plasma_num" style="width:100px" /></td>
+            <td></td>
+        </tr>
+        <tr><th>Computers</th><td></td><td></td></tr>
+        <tr>
+            <td>Desktop</td>
+            <td><input type="text" key="data.household.4b_desktops_num" style="width:100px" /></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Laptop</td>
+            <td><input type="text" key="data.household.4b_laptops_num" style="width:100px" /></td>
+            <td></td>
+        </tr>-->
 </table>
 
 <!--
@@ -687,10 +696,12 @@
         <td><select key="data.household.6a_draughts_winter">
                 <option>Too draughty</option>
                 <option>Just right</option>
+                <option>Too still</option>
             </select></td>
         <td><select key="data.household.6a_draughts_summer">
                 <option>Too draughty</option>
                 <option>Just right</option>
+                <option>Too still</option>
             </select></td>
     </tr>
 
@@ -743,7 +754,7 @@
 <br>
 <p><b>7a Future plans</b></p>
 
-<p>How long do you see yourself living here?<br><select key="data.household.7a_occupancylength"><option>Short term (move out within the next 5 years)</option><option>Long term (10 years+)</option></select>
+<p>How long do you see yourself living here?<br><select key="data.household.7a_occupancylength"><option>Short term, move out within the next 5 years</option><option>Long term, more than 10 years</option></select>
     <input type="text" value="" key="data.household.7a_occupancylength_comment" style="width:400px" /></p>
 
 <p>Do you envisage any changes in your lifestyle/household? (e.g. working from home, children/other family members)<br><input type="text" value="" key="data.household.7a_lifestylechange_comment" style="width:400px" /></p>

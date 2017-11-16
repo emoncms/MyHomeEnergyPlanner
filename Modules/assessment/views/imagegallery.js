@@ -1,3 +1,5 @@
+console.log('Debug imagegallery.js');
+
 function imagegallery_initUI() {
     if (data.imagegallery == undefined) // Normally this is done in model-rX.js. The model is intended for calculations so i prefer to initialize data.imagegallery here
         data.imagegallery = [];
@@ -6,7 +8,7 @@ function imagegallery_initUI() {
         data.featuredimage = '';
 
     data = project['master'];
-    
+
     $(document).ready(function () {
         $('#gallery').magnificPopup({
             delegate: 'a', // child items selector, by clicking on it popup will open
@@ -27,25 +29,28 @@ function imagegallery_updateUI() {
 }
 
 
-$('#upload_form').submit(function (e) {
+$('#openbem #upload_form').submit(function (e) {
     e.preventDefault();
+
+    $('#upload_result').html("Loading...");
+    $('#delete_result').html("");
 
     var form_data = new FormData();
     for (file_index in $('#files_to_upload')[0].files) {
         form_data.append($('#files_to_upload')[0].files[file_index].name, $('#files_to_upload')[0].files[file_index]);
     }
 
-    $('#upload_result').html("");
-    $('#delete_result').html("");
     openbem.upload_images(projectid, form_data, upload_images_callback);
+
 
 });
 
 function upload_images_callback(result) {
     // Result can be a string with an error message or an object with a message for each file to upload
     if (typeof result === 'string')
-        $('#upload_result').append("<p>" + result + "</p>");
+        $('#upload_result').html("<p>" + result + "</p>");
     else {
+        $('#upload_result').html('');
         for (image in result) {
             $('#upload_result').append("<p>" + image + " - " + result[image] + "</p>"); // Display the result message of the upload
             console.log(result[image]);
@@ -61,21 +66,21 @@ function upload_images_callback(result) {
 
 function add_image(z) {
     var url = path + "Modules/assessment/images/" + projectid + "/" + data.imagegallery[z];
-    var html = "<a class='image-in-gallery' key='data.imagegallery.";
+    var html = "<div style='display:inline-block; padding:15px'><a class='image-in-gallery' key='data.imagegallery.";
     html += z;
     html += "' href='";
     html += url;
     html += "'><img src='";
     html += url;
-    html += "' width='200' /></a><i class='icon-trash' index='";
+    html += "' width='200' /></a><i style='cursor:pointer' class='icon-trash' index='";
     html += z;
-    html += "'></i><i class='icon-star";
+    html += "'></i><i style='cursor:pointer' class='icon-star";
     if (data.imagegallery[z] != data.featuredimage) {
         html += "-empty";
     }
     html += "' index='"
     html += z;
-    html += "' title='Feature this image'></i>";
+    html += "' title='Feature this image'></i> </div>";
     $('#gallery').append(html);
     //$('#gallery').append("<img class='image-in-gallery' key='data.imagegallery." + z + "' src='" + url + "' width='200' />");
 }
@@ -104,7 +109,7 @@ $('#modal-delete-image').on('click', '#delete-file-confirm', function () {
 function delete_image_callback(result) {
     for (image_name in result) {
         $('#delete_result').append("<p>" + image_name + " - " + result[image_name] + "</p>"); // Display the result message of the deletion
-        if (result[image_name] === "Deleted") {
+        if (result[image_name] === "File deleted" || result[image_name] === "File could not be found in the server. Image gallery list updated") {
             // Find the image in the data object and remove it
             for (z in data.imagegallery) {
                 if (image_name === data.imagegallery[z]) {

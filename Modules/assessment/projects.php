@@ -22,7 +22,7 @@ $d = $path . "Modules/assessment/";
 </style>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/library-r6.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
 
 <div id="left-pane">
 
@@ -169,15 +169,11 @@ $d = $path . "Modules/assessment/";
 
     var viewmode = "personal";
     var orgid = 0;
-
     var myusername = "<?php echo $session['username']; ?>";
     $(".username").html(myusername);
-
     var path = "<?php echo $path; ?>";
     var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
     var now = (new Date()).getTime() * 0.001;
-
 // -----------------------------------------------------------------------------------
 // 1) Load project lists
 // -----------------------------------------------------------------------------------
@@ -188,12 +184,13 @@ $d = $path . "Modules/assessment/";
             draw_projects("#projects", projects);
             $("#assessments-title").html("My Assessments");
         }});
-
 // -----------------------------------------------------------------------------------
-// Check that the user has all the standard libraries and create them if not
+// Check that the user at least one library of each type and if not create it from the default one
+// Check that all the elements in the default library are in the user's Standard library, copy over the ones that are not (kind of getting in sync)
 // -----------------------------------------------------------------------------------
     var libraries = {};
     $.ajax({url: path + "assessment/loaduserlibraries.json", async: true, datatype: "json", success: function (user_libraries) {
+            // Check that the user at least one library of each type and if not create it from the default one
             var user_has_the_library = false;
             for (library_type in standard_library) {
                 user_has_the_library = false;
@@ -206,16 +203,38 @@ $d = $path . "Modules/assessment/";
                     $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + library_type, datatype: "json", async: false, success: function (result) {
                             var library_id = result;
                             var library_string = JSON.stringify(standard_library[library_type]);
-                            library_string = library_string.replace(/&/g,'and');
+                            library_string = library_string.replace(/&/g, 'and');
                             $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + library_string, success: function (result) {
                                     console.log("Library: " + library_type + ' - ' + result);
                                 }});
                         }});
                 }
             }
-        }});
-
-
+            // Check that all the elements in the default library are in the user's Standard library, copy over the ones that are not (kind of getting in sync)
+            for (library_type in standard_library) {
+                for (library_index in user_libraries) {
+                    var library_changed = false;
+                    if (user_libraries[library_index].type == library_type && user_libraries[library_index].name == "StandardLibrary - " + myusername) {
+                        var user_library = JSON.parse(user_libraries[library_index].data);
+                        for (item in standard_library[library_type]) {
+                            item = item.replace(/[^\w\s-+.",:{}\/'\[\]\\]/g, ''); // we apply the same validation than in the server
+                            if (user_library[item] == undefined) {
+                                user_library[item] = standard_library[library_type][item];
+                                library_changed = true;
+                            }
+                        }
+                    }
+                    if (library_changed === true) {
+                        var library_string = JSON.stringify(user_library);
+                        library_string = library_string.replace(/&/g, 'and');
+                        $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + user_libraries[library_index].id + "&data=" + library_string, success: function (result) {
+                                console.log("Library: " + library_type + ' - ' + result);
+                            }});
+                    }
+                }
+            }
+        }
+    });
 // -----------------------------------------------------------------------------------
 // Create new assessment
 // -----------------------------------------------------------------------------------
@@ -223,12 +242,10 @@ $d = $path . "Modules/assessment/";
     $("#new-assessment").click(function () {
         $("#modal-assessment-create").modal("show");
     });
-
     $("#assessment-create").click(function () {
 
         var name = $("#project-name-input").val();
         var description = $("#project-description-input").val();
-
         if (name == "") {
             alert("Please enter a project name");
         } else {
@@ -249,7 +266,6 @@ $d = $path . "Modules/assessment/";
             $("#modal-assessment-create").modal("hide");
         }
     });
-
 // -----------------------------------------------------------------------------------
 // Delete assessment
 // -----------------------------------------------------------------------------------
@@ -257,16 +273,13 @@ $d = $path . "Modules/assessment/";
     $(".assessments").on('click', '.delete-project', function () {
         var projectid = $(this).attr('projectid');
         var z = $(this).attr('z');
-
         $('#myModal').modal('show');
         $('#myModal').attr('the_id', projectid);
         $('#myModal').attr('the_row', z);
     });
-
     $("#confirmdelete").click(function () {
         var projectid = $('#myModal').attr('the_id');
         var z = $('#myModal').attr('the_row');
-
         if (openbem.delete(projectid)) {
             projects.splice(z, 1);
             draw_projects("#projects", projects);
@@ -274,7 +287,6 @@ $d = $path . "Modules/assessment/";
 
         $('#myModal').modal('hide');
     });
-
 // -----------------------------------------------------------------------------------
 // Share assessment
 // -----------------------------------------------------------------------------------
@@ -282,7 +294,6 @@ $d = $path . "Modules/assessment/";
     $(".assessments").on('click', '.share-project-openmodal', function () {
         var projectid = $(this).attr('projectid');
         var z = $(this).attr('z');
-
         $.ajax({url: path + "assessment/getshared.json", data: "id=" + projectid, success: function (shared) {
                 var out = "";
                 for (var i in shared) {
@@ -293,19 +304,16 @@ $d = $path . "Modules/assessment/";
                     out = "<tr><td>This assessment is currently private</td></tr>";
                 $("#shared-with-table").html(out);
             }});
-
         $('#modal-share-project').modal('show');
         $('#modal-share-project').attr('the_id', projectid);
         $('#modal-share-project').attr('the_row', z);
         console.log("Share project " + projectid);
     });
-
     $("#share-project").click(function () {
         var username = $("#sharename").val();
         var projectid = $('#modal-share-project').attr('the_id');
         $.ajax({url: path + "assessment/share.json", data: "id=" + projectid + "&username=" + username, success: function (data) {
                 console.log(data);
-
                 $.ajax({url: path + "assessment/getshared.json", data: "id=" + projectid, success: function (shared) {
                         var out = "";
                         for (var i in shared) {
@@ -318,7 +326,6 @@ $d = $path . "Modules/assessment/";
                     }});
             }});
     });
-
 // -----------------------------------------------------------------------------------
 // Change assessment status
 // -----------------------------------------------------------------------------------
@@ -331,8 +338,6 @@ $d = $path . "Modules/assessment/";
         projects[z].status = status;
         draw_projects("#projects", projects);
     });
-
-
 // -----------------------------------------------------------------------------------
 // Draw assessment list
 // -----------------------------------------------------------------------------------
@@ -340,7 +345,6 @@ $d = $path . "Modules/assessment/";
     function draw_projects(element, projects)
     {
         var status_options = ["Complete", "In progress", "Test"];
-
         var out = "";
         for (s in status_options) {
             // out += "<tr><th>"+status_options[s]+"</th><th></th><th></th><th></th><th></th><th></th><th></th></tr>";
@@ -351,7 +355,6 @@ $d = $path . "Modules/assessment/";
                     out += "<td>" + projects[z].name + "</td>";
                     out += "<td style='font-style:italic; color:#888'>" + projects[z].description + "</td>";
                     out += "<td>" + projects[z].author + "</td>";
-
                     var color = "";
                     if (projects[z].status == "Complete")
                         color = " alert-success";
@@ -359,7 +362,6 @@ $d = $path . "Modules/assessment/";
                         color = " alert-info";
                     if (projects[z].status == "Test")
                         color = " alert-error";
-
                     out += "<td><select class='project-status" + color + "' z=" + z + " projectid=" + projects[z].id + ">";
                     for (o in status_options) {
                         var selected = "";
@@ -368,10 +370,8 @@ $d = $path . "Modules/assessment/";
                         out += "<option " + selected + ">" + status_options[o] + "</option>";
                     }
                     out += "</select></td>";
-
                     var t = new Date();
                     var d = new Date(projects[z].mdate * 1000);
-
                     if (t.getYear() == d.getYear()) {
                         var mins = d.getMinutes();
                         if (mins < 10)
@@ -405,11 +405,9 @@ $d = $path . "Modules/assessment/";
     var myorganisations = {};
     $.ajax({url: path + "assessment/getorganisations.json", success: function (result) {
             myorganisations = result;
-
             draw_organisation_list();
             //draw_organisation(8);
         }});
-
 // -----------------------------------------------------------------------------------
 // Create organisation
 // -----------------------------------------------------------------------------------
@@ -429,7 +427,6 @@ $d = $path . "Modules/assessment/";
                 }});
         }
     });
-
     $("#organisation-add-member").click(function () {
         var membername = $("#organisation-add-member-name").val();
         if (membername == "") {
@@ -445,14 +442,11 @@ $d = $path . "Modules/assessment/";
                 }});
         }
     });
-
     $("body").on("click", ".org-item", function () {
         orgid = $(this).attr("orgid");
-
         draw_organisation(orgid);
         $("#organisation").show();
         viewmode = "organisation";
-
         $.ajax({url: path + "assessment/list.json", data: "orgid=" + orgid, success: function (result) {
                 projects = result;
                 draw_projects("#projects", projects);
@@ -460,7 +454,6 @@ $d = $path . "Modules/assessment/";
                 $("#myview").hide();
             }});
     });
-
     function draw_organisation_list() {
         var out = "";
         for (var z in myorganisations) {
@@ -474,9 +467,7 @@ $d = $path . "Modules/assessment/";
     function draw_organisation(orgid) {
         var out = "";
         $("#organisation-name").html(myorganisations[orgid].name);
-
         var members = myorganisations[orgid].members;
-
         for (var z in members) {
             out += "<div class='recent-activity-item' style='height:40px'>";
             out += "<img src='<?php echo $path; ?>Modules/assessment/defaultuser.png' style='height:40px; float:left; padding-right:5px'/ >";
@@ -490,14 +481,23 @@ $d = $path . "Modules/assessment/";
         var viewmode = "personal";
         var orgid = 0;
         $("#organisation").hide();
-
         $.ajax({url: path + "assessment/list.json", success: function (result) {
                 projects = result;
                 draw_projects("#projects", projects);
                 $("#assessments-title").html("My Assessments");
                 $("#myview").show();
             }});
-
+    });
+    
+    
+// -------------------------------------------------------
+// Other
+// -------------------------------------------------------
+  $('#modal-assessment-create').on('keypress', function (e) {
+        console.log('aaaaaaaaaaaaa')
+        if (e.which == 13) {
+            $('#assessment-create').click();
+        }
     });
 
 </script>

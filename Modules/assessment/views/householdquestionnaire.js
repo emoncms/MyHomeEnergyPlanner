@@ -1,4 +1,4 @@
-//console.log('debug householdquestionnaire.js')
+console.log('debug householdquestionnaire.js')
 
 $('#add-shower').on('click', function () {
     if (data.household['3b_extra_showers'] == undefined)
@@ -23,6 +23,15 @@ $('#add-shower').on('click', function () {
             '<input type="number" value="" key="data.household.3b_extra_showers.' + extra_shower_index + '.bath_frequency" /></td></tr>'
             );
 });
+
+var textAreaLength = 0;
+$("#openbem").on("textInput", '[key="data.household.commentary"]', function () { // I have added this event because the Commentary box in Household questionnaire was not getting saved when the assessor refreshed the page or moved to another one before losing the focus of the input (which is what triggers the onChange event)
+    if ($(this)[0].value.length - textAreaLength > 15) {
+        textAreaLength = $(this)[0].value.length;
+        $(this).trigger("change");
+    }
+});
+
 function householdquestionnaire_UpdateUI() {
     if (data.household['3b_extra_showers'] != undefined) {
         $('#more-showers').html('');
@@ -53,11 +62,32 @@ function householdquestionnaire_UpdateUI() {
         })
 
     }
+
+    if (data.temperature.hours_off.weekday.length > 0) {
+        $('#periods_heating_off_weekday').html('Periods heating off week day:').show();
+        for (var period in data.temperature.hours_off.weekday) {
+            if (period != 0)
+                $('#periods_heating_off_weekday').append(',');
+            if (data.temperature.hours_off.weekday[period] == null)
+                data.temperature.hours_off.weekday[period] = 0;
+            $('#periods_heating_off_weekday').append(' ' + data.temperature.hours_off.weekday[period].toFixed(1) + 'h');
+        }
+    }
+    if (data.temperature.hours_off.weekend.length > 0) {
+        $('#periods_heating_off_weekend').html('Periods heating off weekend:').show();
+        for (var period in data.temperature.hours_off.weekend) {
+            if (period != 0)
+                $('#periods_heating_off_weekend').append(',')
+            if (data.temperature.hours_off.weekend[period] == null)
+                data.temperature.hours_off.weekend[period] = 0;
+            $('#periods_heating_off_weekend').append(' ' + data.temperature.hours_off.weekend[period].toFixed(1) + 'h');
+        }
+    }
 }
 ;
 function householdquestionnaire_initUI() {
     data = project['master'];
-    if (Object.keys(data.household).length === 0)
+    if (data.household == undefined || Object.keys(data.household).length === 0)
         data.household = {
             "3a_heatinghours_weekday_on1_hours": 7,
             "3a_heatinghours_weekday_on1_mins": 0,
