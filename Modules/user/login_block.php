@@ -37,6 +37,7 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
         
         <h2>Login</h2>
         <p><b>My Home Energy Planner</b></p>
+        <p>Login with your emoncms.org account</p>
         
             <p>
                 <label><?php echo _('Username:'); ?>
@@ -66,7 +67,12 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
 
             <p class="login-item">
                 <?php if ($enable_rememberme) { ?><label class="checkbox"><input type="checkbox" tabindex="5" id="rememberme" value="1" name="rememberme"><?php echo '&nbsp;'._('Remember me'); ?></label><br /><?php } ?>
+                
+                <!--<p style="color:#333; font-size:13px; float:right"><b>To Register:</b> Create an<br>account on <a href="https://emoncms.org">emoncms.org</a></p>-->
                 <button id="login" class="btn btn-primary" tabindex="6" type="button"><?php echo _('Login'); ?></button>
+                
+                
+                
                 <?php if ($allowusersregister) { echo '&nbsp;'._('or').'&nbsp;' ?><a id="register-link"  href="#"><?php echo _('register'); ?></a><?php } ?>
             </p>
 
@@ -99,6 +105,8 @@ global $path, $allowusersregister, $enable_rememberme, $enable_password_reset;
                 </div>
 
             </div>
+            
+            
         </div>
 
     </div>
