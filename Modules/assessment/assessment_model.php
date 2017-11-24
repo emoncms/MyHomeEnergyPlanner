@@ -621,8 +621,14 @@ class Assessment {
         if (!$this->has_write_access_library($userid, $library_id))
             return "You haven't got enough permissions";
         else {
-            $result = $this->mysqli->query("UPDATE `element_library` SET `name`='$new_library_name' WHERE `id` = '$library_id'");
-            return $result;
+            $stmt = $this->mysqli->prepare("UPDATE element_library SET name=? WHERE id=?");
+            $stmt->bind_param("si", $new_library_name, $library_id);
+            $stmt->execute();
+            $affected_rows = $stmt->affected_rows;
+            $stmt->close();
+            if ($affected_rows == 1) return true;
+            
+            return false;
         }
     }
 
