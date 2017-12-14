@@ -347,4 +347,58 @@ function get_hours_three_periods(time_on_1, time_off_1, time_on_2, time_off_2, t
     hours_off.push(get_hours_off_one_period(time_on_1, time_off_3));
     return hours_off;
 }
- 
+
+function measures_costs(scenario) {
+    var measures_total_cost = 0;
+    if (project[scenario].fabric.measures != undefined)
+        measures_total_cost += cost_of_measures_by_id(project[scenario].fabric.measures);
+    if (project[scenario].measures.ventilation != undefined) {
+        if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.extract_ventilation_points);
+        if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.intentional_vents_and_flues);
+        if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.intentional_vents_and_flues_measures);
+        if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
+            measures_total_cost += project[scenario].measures.ventilation.draught_proofing_measures.measure.cost_total;
+        if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
+            measures_total_cost += project[scenario].measures.ventilation.ventilation_systems_measures.measure.cost_total;
+        if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.clothes_drying_facilities);
+    }
+    if (project[scenario].measures.water_heating != undefined) {
+        if (project[scenario].measures.water_heating.water_usage != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.water_heating.water_usage);
+        if (project[scenario].measures.water_heating.storage_type != undefined)
+            measures_total_cost += project[scenario].measures.water_heating.storage_type.measure.cost_total;
+        if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+            measures_total_cost += project[scenario].measures.water_heating.pipework_insulation.measure.cost_total;
+        if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+            measures_total_cost += project[scenario].measures.water_heating.hot_water_control_type.measure.cost_total;
+    }
+    if (project[scenario].measures.space_heating_control_type != undefined)
+        measures_total_cost += cost_of_measures_by_id(project[scenario].measures.space_heating_control_type);
+    if (project[scenario].measures.heating_systems != undefined)
+        measures_total_cost += cost_of_measures_by_id(project[scenario].measures.heating_systems);
+    if (project[scenario].measures.space_heating != undefined) {
+        if (project[scenario].measures.space_heating.heating_control != undefined)
+            measures_total_cost += project[scenario].measures.space_heating.heating_control.measure.cost_total;
+    }
+    if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
+        measures_total_cost += project[scenario].measures.PV_generation.measure.cost_total;
+    }
+    if (project[scenario].measures.LAC != undefined) {
+        if (project[scenario].measures.LAC.lighting != undefined)
+            measures_total_cost += project[scenario].measures.LAC.lighting.measure.cost_total;
+    }
+    return measures_total_cost;
+}
+
+
+function cost_of_measures_by_id(list_of_measures_by_id) {
+    var cost = 0;
+    for (var id in list_of_measures_by_id) {
+        cost += list_of_measures_by_id[id].measure.cost_total;
+    }
+    return cost;
+}

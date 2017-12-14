@@ -133,6 +133,13 @@ function draw_openbem_graphics()
         }
     };
     targetbar("perperson", options);
+    // ---------------------------------------------------------------------------------
+    if(scenario != undefined){
+        if(scenario != 'master')
+            $('#measures-costs').html('Measures cost: £' + measures_costs(scenario));
+        else
+            $('#measures-costs').html('');
+    }
 }
 
 function draw_rating(ctx)
