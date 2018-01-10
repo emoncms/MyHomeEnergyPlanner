@@ -14,23 +14,26 @@ function assessment_controller() {
       //---------------------------------------------------------------------------- */
     if (!isset($_SESSION['backwards_comp'])) { // We only run when we start the session
         $_SESSION['backwards_comp'] = true;
-        
-        /*$libresult = $mysqli->query("SELECT `id`, `data`, `type` FROM `element_library`");
+
+    /*    $libresult = $mysqli->query("SELECT `id`, `data`, `type` FROM `element_library`");
         foreach ($libresult as $row) {
-            echo $row['type'];
-            if ($row['type'] == "heating_systems_measures") {
-                $data = json_decode($row['data']);
-                foreach ($data as $element) {
-                    $element->performance = $element->performance . '%';
-                }
-                $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
-                $data = json_encode($data);
-                $req->bind_param('si', $data, $row['id']);
-                $req->execute();
-            }
+            //$data = json_decode($row['data']);
+            /* foreach ($data as $element) {
+              foreach ($element as $field) {
+              if (gettype($field) == 'string') {
+              str_replace("'", '\"', $field);
+              }
+              }
+              } */
+            /*$data = $row['data'];
+            $data = str_replace("'", '', $data);
+            $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+            //$data = json_encode($data);
+            $req->bind_param('si', $data, $row['id']);
+            $req->execute();
+            
         }*/
     }
-
     //require "Modules/assessment/assessment_model.php";
     //$assessment = new Assessment($mysqli);
     //$assessment->edit_item_in_all_libraries('elements', 'DRD04', 'uvalue', 2.6);
@@ -106,7 +109,8 @@ function assessment_controller() {
             if (isset($_GET['orgid'])) {
                 $orgid = $_GET['orgid'];
                 $result = $assessment->get_org_list($orgid);
-            } else {
+            }
+            else {
                 $result = $assessment->get_list($session['userid']);
             }
         }
@@ -162,7 +166,8 @@ function assessment_controller() {
             $orgid = $organisation->create($orgname, $session['userid']);
             if ($orgid) {
                 $result = array("success" => true, "myorganisations" => $organisation->get_organisations($session['userid']));
-            } else {
+            }
+            else {
                 $result = array("success" => false, "message" => 'Organisation "' . $orgname . '" already exists!');
             }
         }
@@ -178,10 +183,12 @@ function assessment_controller() {
             if ($userid = $user->get_id($username)) {
                 if ($organisation->add_member($orgid, $userid)) {
                     $result = array("success" => true, 'userid' => $userid, 'name' => $username, 'lastactive' => "?");
-                } else {
+                }
+                else {
                     $result = array("success" => false, "message" => 'Sorry, user "' . $username . '" is already a member');
                 }
-            } else {
+            }
+            else {
                 $result = array("success" => false, "message" => 'Sorry, user "' . $username . '" does not exist!?');
             }
         }

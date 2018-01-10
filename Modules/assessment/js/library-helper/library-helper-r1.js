@@ -172,6 +172,7 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '.delete-library-item', function () {
         $('#delete-library-item-ok').attr('library-id', $(this).attr('library'));
         $('#delete-library-item-ok').attr('tag', $(this).attr('tag'));
+        $('#confirm-delete-library-item-modal .message').html("");
         $('.modal').modal('hide');
         $('#confirm-delete-library-item-modal').modal('show');
     });

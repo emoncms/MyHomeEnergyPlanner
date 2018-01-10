@@ -149,7 +149,7 @@ var standard_library = {
             "g": 0,
             "gL": 0,
             "ff": 0,
-            "description": "Cavity fill insulation injected through outer face of brickwork behind External Wall Insulation to prevent thermal bypass chimney effect within cavity. On its own this would be a 'hard to treat' cavity, which would not normally be cavity filled due to risks of bridging in the cavity and marginal gains."},
+            "description": "Cavity fill insulation injected through outer face of brickwork behind External Wall Insulation to prevent thermal bypass chimney effect within cavity. On its own this would be a hard to treat cavity, which would not normally be cavity filled due to risks of bridging in the cavity and marginal gains."},
         "CWF_02": {
             "tags": ["Wall"],
             "name": "Filled Cavity Masonry Wall - 50mm Cavity",
@@ -205,7 +205,7 @@ var standard_library = {
             "g": 0,
             "gL": 0,
             "ff": 0,
-            "description": "Cavity fill insulation injected into party wall to reduce 'chimney effect' of thermal bypass in unfilled cavity. This assumes that it is not possible to effectively seal the edges and especially the top of the cavity. If this is possible - for example when re-roofing - the performance my be further improved. "},
+            "description": "Cavity fill insulation injected into party wall to reduce chimney effect of thermal bypass in unfilled cavity. This assumes that it is not possible to effectively seal the edges and especially the top of the cavity. If this is possible - for example when re-roofing - the performance my be further improved. "},
         "PWUS_01": {
             "tags": ["Party_wall"],
             "name": "225mm brick wall, plastered both sides. ",
@@ -1283,7 +1283,7 @@ var standard_library = {
             disruption: "HIGH",
             associated_work: "Windows and doors, roofline works and drainage etc and loft/roof insulation, floor perimeter insulation. ",
             key_risks: "Water ingress, cold briding, thermal bypass. ",
-            notes: "It is VERY important to pay attention to all junctions in External Wall Insulation - so that water cannot get behind the insulation, causing damage and reducing its effectiveness, and so that thermal bridges in the wall are minimised. Junctions with the roof, windows and doors and the floor need careful attention. Gaps in the insulation reduce its effectiveness and create risks to the building structure. You should consider carrying out works to these areas at the same time, for example by re-roofing (ideally extending the roof over the insulation), or replacing windows and doors so they can be moved into the insulation layer. There will be a requirement for scaffolding, which may need permission from neighbours. The current condition of the wall may affect the specification, and repairs may be required before external wall insualtion can be applied. Alternative finishes - tile hanging, timber cladding, rainscreen etc - may be possible, but will probably increase costs. The cavity within the wall should be filled (if not already) and quality of this should be checked to avoid risk of thermal bypass - where cavity acts as 'chimney', increasing heatloss through convection. ",
+            notes: "It is VERY important to pay attention to all junctions in External Wall Insulation - so that water cannot get behind the insulation, causing damage and reducing its effectiveness, and so that thermal bridges in the wall are minimised. Junctions with the roof, windows and doors and the floor need careful attention. Gaps in the insulation reduce its effectiveness and create risks to the building structure. You should consider carrying out works to these areas at the same time, for example by re-roofing (ideally extending the roof over the insulation), or replacing windows and doors so they can be moved into the insulation layer. There will be a requirement for scaffolding, which may need permission from neighbours. The current condition of the wall may affect the specification, and repairs may be required before external wall insualtion can be applied. Alternative finishes - tile hanging, timber cladding, rainscreen etc - may be possible, but will probably increase costs. The cavity within the wall should be filled (if not already) and quality of this should be checked to avoid risk of thermal bypass - where cavity acts as chimney, increasing heatloss through convection. ",
             maintenance: "MEDIUM: Render may need painting and repair after 10-30 years. All sealed junctions may need to be renewed periodically to prevent water ingress. "
         },
         "SWIN_01": {
@@ -1362,7 +1362,7 @@ var standard_library = {
             g: 0,
             gL: 0,
             ff: 0,
-            description: "Cavity fill insulation injected through outer face of brickwork behind External Wall Insulation to prevent thermal bypass (chimney effect) within cavity. On its own this would be a 'hard to treat' cavity, which would not normally be cavity filled due to risks of bridging in the cavity and marginal gains.",
+            description: "Cavity fill insulation injected through outer face of brickwork behind External Wall Insulation to prevent thermal bypass (chimney effect) within cavity. On its own this would be a hard to treat cavity, which would not normally be cavity filled due to risks of bridging in the cavity and marginal gains.",
             performance: '0.6 W/m<sup>2</sup>.K',
             benefits: "Fuel Bills + Carbon Emissions + Comfort",
             cost_units: 'sqm',
@@ -1494,7 +1494,7 @@ var standard_library = {
             g: 0,
             gL: 0,
             ff: 0,
-            description: "Cavity fill insulation injected into party wall to reduce 'chimney effect' of thermal bypass in unfilled cavity. This assumes that it is not possible to effectively seal the edges and especially the top of the cavity. If this is possible - for example when re-roofing - the performance my be further improved. ",
+            description: "Cavity fill insulation injected into party wall to reduce chimney effect of thermal bypass in unfilled cavity. This assumes that it is not possible to effectively seal the edges and especially the top of the cavity. If this is possible - for example when re-roofing - the performance my be further improved. ",
             performance: '0.2 W/m<sup>2</sup>.K',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
@@ -1604,7 +1604,7 @@ var standard_library = {
             g: 0,
             gL: 0,
             ff: 0,
-            description: "New replacement solid concrete floor slab or new cement floor screed with insulation below. Perimeter of new slab/screed also insulated with high-performance insulation strip to reduce cold bridge. Alternatively, a 'limecrete' floor may be created where there are concerns in older floors about moisture movement. In all cases, risk of rising damp should be carefully considered. ",
+            description: "New replacement solid concrete floor slab or new cement floor screed with insulation below. Perimeter of new slab/screed also insulated with high-performance insulation strip to reduce cold bridge. Alternatively, a limecrete floor may be created where there are concerns in older floors about moisture movement. In all cases, risk of rising damp should be carefully considered. ",
             performance: '0.15 W/m<sup>2</sup>.K',
             benefits: "Comfort + Carbon Emissions + Fuel Bills",
             cost_units: 'sqm',
@@ -1921,7 +1921,7 @@ var standard_library = {
             disruption: "MINIMAL",
             associated_work: "Loft Insulation, Loft Storage",
             key_risks: "Condensation in loft space.",
-            notes: "Can be difficult to get a good seal here if existing loft hatch in poor condition. If the hatch is small, new deeper insulation may make access to the loft more difficult. Boxing out around the hatch should help this. An additional timber or plywood 'lid' on top of the boxing out should further increase insulation and air-tightness. ",
+            notes: "Can be difficult to get a good seal here if existing loft hatch in poor condition. If the hatch is small, new deeper insulation may make access to the loft more difficult. Boxing out around the hatch should help this. An additional timber or plywood lid on top of the boxing out should further increase insulation and air-tightness. ",
             maintenance: "MINIMAL - ensure any ladders are properly maintained for safety. Air-tight seals may need to be replaced over time. "
         },
         "LRA_03": {
@@ -2400,7 +2400,7 @@ var standard_library = {
             disruption: "MINIMAL",
             associated_work: "Ventilation Works",
             key_risks: "Indoor Air Quality, Condensation, Mould. ",
-            notes: "This takes some attention to detail, but can be carried out on a DIY basis with readily available sealants. Walking round your home on a windy day, with a smoke pencil or similar if required, should enable you to find the biggest draughts and seal them. As you are making your home more air-tight, it's important to also ensure there is adequate ventilation so indoor air quality doesn't suffer. Make sure as a minimum you have extract ventilation from kitchens and bathrooms. Follow the rule 'seal tight, ventilate right'",
+            notes: "This takes some attention to detail, but can be carried out on a DIY basis with readily available sealants. Walking round your home on a windy day, with a smoke pencil or similar if required, should enable you to find the biggest draughts and seal them. As you are making your home more air-tight, it's important to also ensure there is adequate ventilation so indoor air quality doesn't suffer. Make sure as a minimum you have extract ventilation from kitchens and bathrooms. Follow the rule seal tight, ventilate right",
             maintenance: "Minimal. Ensure any draught-proofing strips are replaced as they wear out over time. "
         },
         "DP_02": {
@@ -2415,7 +2415,7 @@ var standard_library = {
             disruption: "MEDIUM",
             associated_work: "Ventilation works and insulation, including internal and external wall insulation. ",
             key_risks: "Indoor Air Quality, Condensation, Mould. ",
-            notes: "This takes a good deal of attention to detail, and may require some specialist air-tightness products and materials. Walking round your home on a windy day, with a smoke pencil or similar if required, should enable you to find the biggest draughts and seal them. As you are making your home more air-tight, it's important to also ensure there is adequate ventilation so indoor air quality doesn't suffer. Make sure as a minimum you have extract ventilation from kitchens and bathrooms. Follow the rule 'seal tight, ventilate right'. ",
+            notes: "This takes a good deal of attention to detail, and may require some specialist air-tightness products and materials. Walking round your home on a windy day, with a smoke pencil or similar if required, should enable you to find the biggest draughts and seal them. As you are making your home more air-tight, it's important to also ensure there is adequate ventilation so indoor air quality doesn't suffer. Make sure as a minimum you have extract ventilation from kitchens and bathrooms. Follow the rule seal tight, ventilate right. ",
             maintenance: "Minimal. Ensure any draught-proofing strips are replaced as they wear out over time. "
         },
         "DP_03": {
@@ -2430,7 +2430,7 @@ var standard_library = {
             disruption: "HIGH",
             associated_work: "Ventilation works, new windows and doors and insulation, including internal and external wall insulation. ",
             key_risks: "Indoor Air Quality, Condensation, Mould. ",
-            notes: "This takes a good deal of attention to detail, and may require some specialist air-tightness products and materials. Walking round your home on a windy day, with a smoke pencil or similar if required, should enable you to find the biggest draughts and seal them. As you are making your home more air-tight, it's important to also ensure there is adequate ventilation so indoor air quality doesn't suffer. Make sure as a minimum you have extract ventilation from kitchens and bathrooms. Follow the rule 'seal tight, vemtilate right'. ",
+            notes: "This takes a good deal of attention to detail, and may require some specialist air-tightness products and materials. Walking round your home on a windy day, with a smoke pencil or similar if required, should enable you to find the biggest draughts and seal them. As you are making your home more air-tight, it's important to also ensure there is adequate ventilation so indoor air quality doesn't suffer. Make sure as a minimum you have extract ventilation from kitchens and bathrooms. Follow the rule seal tight, ventilate right. ",
             maintenance: "Minimal. Ensure any draught-proofing strips are replaced as they wear out over time. "
         },
         "DP_04": {
@@ -4617,7 +4617,7 @@ var standard_library = {
             disruption: "MEDIUM",
             associated_work: "Advanced heating controls, hot water/thermal store",
             key_risks: "Carbon monoxide poisoning, poor controls installation and set-up. ",
-            notes: "Whilst often cited as 'green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings highly debatable. A dedicated (room-sealed) air-supply will be required in most cases to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. You may wish to consider whether you want to manually load the boiler, or whether some form of automated loading would be preferable. ",
+            notes: "Whilst often cited as green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings highly debatable. A dedicated (room-sealed) air-supply will be required in most cases to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. You may wish to consider whether you want to manually load the boiler, or whether some form of automated loading would be preferable. ",
             maintenance: "Regular cleaning of boiler and flue. Ensure air-supply maintained and expansion tanks and other systems to undergo regular safety checks. . "
         },
         "STMB13": {
@@ -4640,7 +4640,7 @@ var standard_library = {
             disruption: "MEDIUM",
             associated_work: "Advanced heating controls, hot water/thermal store",
             key_risks: "Carbon monoxide poisoning, poor controls installation and set-up. ",
-            notes: "Whilst often cited as 'green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings are highly debatable. They should probably be avoided in urban areas, especially if you can't find a local and sustainable source of wood. Room woodburners can come into conflict with better air-tightness, and may need a dedicated (room-sealed) air-supply to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. They do provide radiant heat to the room, and so provide some comfort benefits, as well as being aesthetically pleasing. However in a very well insulated home, where not much heat is required, only a very small heater is generally needed in a living room (<2kW), which can be hard to find on the UK market.Make sure that you use the stove in a way that means it can burn efficiently. ",
+            notes: "Whilst often cited as green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings are highly debatable. They should probably be avoided in urban areas, especially if you can't find a local and sustainable source of wood. Room woodburners can come into conflict with better air-tightness, and may need a dedicated (room-sealed) air-supply to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. They do provide radiant heat to the room, and so provide some comfort benefits, as well as being aesthetically pleasing. However in a very well insulated home, where not much heat is required, only a very small heater is generally needed in a living room (<2kW), which can be hard to find on the UK market.Make sure that you use the stove in a way that means it can burn efficiently. ",
             maintenance: "Regular cleaning of boiler and flue. Ensure air-supply maintained and expansion tanks and other systems to undergo regular safety checks. . "
         },
         "HPMP1": {
@@ -4709,7 +4709,7 @@ var standard_library = {
             disruption: "MEDIUM",
             associated_work: "advanced controls, insulation and draughtproofing works ",
             key_risks: "cheaper over-night tariffs phased out",
-            notes: "Storage heaters should be chosen which have a high degree of insulation and controls. This will allow you to make the best use of heat stored from cheaper electricity overnight when you need it. There is a risk that in coming years 'baseload' electricity is phosed out, so tariffs that provide cheaper electricty overnight are also phased out.",
+            notes: "Storage heaters should be chosen which have a high degree of insulation and controls. This will allow you to make the best use of heat stored from cheaper electricity overnight when you need it. There is a risk that in coming years baseload electricity is phosed out, so tariffs that provide cheaper electricty overnight are also phased out.",
             maintenance: "MINIMAL"
         },
         "ROMHT4": {
@@ -4754,7 +4754,7 @@ var standard_library = {
             disruption: "MEDIUM. ",
             associated_work: "Works to chimneys, air-tightness and ventilation, insulation. ",
             key_risks: "Carbon Monoxide poisoning, overheating. ",
-            notes: "Whilst often cited as 'green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings are highly debatable. They should probably be avoided in urban areas, especially if you can't find a local and sustainable source of wood. Room woodburners can come into conflict with better air-tightness, and may need a dedicated (room-sealed) air-supply to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. They do provide radiant heat to the room, and so provide some comfort benefits, as well as being aesthetically pleasing. However in a very well insulated home, where not much heat is required, only a very small heater is generally needed in a living room (<2kW), which can be hard to find on the UK market. Make sure that you use the stove in a way that means it can burn efficiently. ",
+            notes: "Whilst often cited as green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings are highly debatable. They should probably be avoided in urban areas, especially if you can't find a local and sustainable source of wood. Room woodburners can come into conflict with better air-tightness, and may need a dedicated (room-sealed) air-supply to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. They do provide radiant heat to the room, and so provide some comfort benefits, as well as being aesthetically pleasing. However in a very well insulated home, where not much heat is required, only a very small heater is generally needed in a living room (<2kW), which can be hard to find on the UK market. Make sure that you use the stove in a way that means it can burn efficiently. ",
             maintenance: "Regular cleaning of stove and flue. Ensure air-supply maintained. "
         },
         "HOTWT5": {
@@ -4895,7 +4895,7 @@ var standard_library = {
             disruption: "MEDIUM",
             associated_work: "Advanced heating controls, hot water/thermal store",
             key_risks: "Carbon monoxide poisoning, poor controls installation and set-up. ",
-            notes: "Whilst often cited as 'green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings highly debatable. A dedicated (room-sealed) air-supply will be required in most cases to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. You may wish to consider whether you want to manually load the boiler, or whether some form of automated loading would be preferable. ",
+            notes: "Whilst often cited as green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings highly debatable. A dedicated (room-sealed) air-supply will be required in most cases to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. You may wish to consider whether you want to manually load the boiler, or whether some form of automated loading would be preferable. ",
             maintenance: "Regular cleaning of boiler and flue. Ensure air-supply maintained and expansion tanks and other systems to undergo regular safety checks. . "
         },
         "STMB13": {
@@ -4918,7 +4918,7 @@ var standard_library = {
             disruption: "MEDIUM",
             associated_work: "Advanced heating controls, hot water/thermal store",
             key_risks: "Carbon monoxide poisoning, poor controls installation and set-up. ",
-            notes: "Whilst often cited as 'green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings are highly debatable. They should probably be avoided in urban areas, especially if you can't find a local and sustainable source of wood. Room woodburners can come into conflict with better air-tightness, and may need a dedicated (room-sealed) air-supply to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. They do provide radiant heat to the room, and so provide some comfort benefits, as well as being aesthetically pleasing. However in a very well insulated home, where not much heat is required, only a very small heater is generally needed in a living room (<2kW), which can be hard to find on the UK market.Make sure that you use the stove in a way that means it can burn efficiently. ",
+            notes: "Whilst often cited as green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings are highly debatable. They should probably be avoided in urban areas, especially if you can't find a local and sustainable source of wood. Room woodburners can come into conflict with better air-tightness, and may need a dedicated (room-sealed) air-supply to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. They do provide radiant heat to the room, and so provide some comfort benefits, as well as being aesthetically pleasing. However in a very well insulated home, where not much heat is required, only a very small heater is generally needed in a living room (<2kW), which can be hard to find on the UK market.Make sure that you use the stove in a way that means it can burn efficiently. ",
             maintenance: "Regular cleaning of boiler and flue. Ensure air-supply maintained and expansion tanks and other systems to undergo regular safety checks. . "
         },
         "HPMP1": {
@@ -4987,7 +4987,7 @@ var standard_library = {
             disruption: "MEDIUM",
             associated_work: "advanced controls, insulation and draughtproofing works ",
             key_risks: "cheaper over-night tariffs phased out",
-            notes: "Storage heaters should be chosen which have a high degree of insulation and controls. This will allow you to make the best use of heat stored from cheaper electricity overnight when you need it. There is a risk that in coming years 'baseload' electricity is phosed out, so tariffs that provide cheaper electricty overnight are also phased out.",
+            notes: "Storage heaters should be chosen which have a high degree of insulation and controls. This will allow you to make the best use of heat stored from cheaper electricity overnight when you need it. There is a risk that in coming years baseload electricity is phosed out, so tariffs that provide cheaper electricty overnight are also phased out.",
             maintenance: "MINIMAL"
         },
         "ROMHT4": {
@@ -5032,7 +5032,7 @@ var standard_library = {
             disruption: "MEDIUM. ",
             associated_work: "Works to chimneys, air-tightness and ventilation, insulation. ",
             key_risks: "Carbon Monoxide poisoning, overheating. ",
-            notes: "Whilst often cited as 'green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings are highly debatable. They should probably be avoided in urban areas, especially if you can't find a local and sustainable source of wood. Room woodburners can come into conflict with better air-tightness, and may need a dedicated (room-sealed) air-supply to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. They do provide radiant heat to the room, and so provide some comfort benefits, as well as being aesthetically pleasing. However in a very well insulated home, where not much heat is required, only a very small heater is generally needed in a living room (<2kW), which can be hard to find on the UK market. Make sure that you use the stove in a way that means it can burn efficiently. ",
+            notes: "Whilst often cited as green, there are some concerns about air quality and sustainability of fuel supply for wood buring stoves and boilers, and the actual carbon dioxide savings are highly debatable. They should probably be avoided in urban areas, especially if you can't find a local and sustainable source of wood. Room woodburners can come into conflict with better air-tightness, and may need a dedicated (room-sealed) air-supply to protect you from the risks of carbon monoxide whilst not compromising draught-proofing works. The condition of the flue is critical, and work may be required to make it safe. They do provide radiant heat to the room, and so provide some comfort benefits, as well as being aesthetically pleasing. However in a very well insulated home, where not much heat is required, only a very small heater is generally needed in a living room (<2kW), which can be hard to find on the UK market. Make sure that you use the stove in a way that means it can burn efficiently. ",
             maintenance: "Regular cleaning of stove and flue. Ensure air-supply maintained. "
         },
         "HOTWT5": {
