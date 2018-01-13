@@ -23,7 +23,9 @@ global $reports;
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/canvas-barchart/barchart.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-carboncoop.js"></script>
 <link rel="stylesheet" href="<?php echo $d; ?>js/magnific-popup/magnific-popup.css">
-<script src="<?php echo $d; ?>js/magnific-popup/jquery.magnific-popup.min.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-carboncoop.js"></script>
+<link rel="stylesheet" href="<?php echo $d; ?>js/jquery-ui-1.12.1/jquery-ui.min.css">
+<script src="<?php echo $d; ?>js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 
 <style>
     .modal-backdrop

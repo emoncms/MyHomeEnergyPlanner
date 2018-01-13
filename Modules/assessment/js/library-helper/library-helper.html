@@ -1,3 +1,37 @@
+<style>
+    .w50{width:50px}
+    .w100{width:100px}
+    .w150{width:150px}
+    .w200{width:200px}
+    .w300{width:300px}
+    .w350{width:350px}
+
+    td[index="EWI"] input{width:50px}
+    td[index="manufacturer_loss_factor"] input{width:150px}
+    .modal{
+        position: fixed;
+    }
+    #show-library-modal-edit-mode select.item-cost-units{
+        width:75px
+    }
+
+    #show-library-modal-edit-mode #message{
+        margin:10px;
+        text-align:right;
+    }
+
+
+    #show-library-modal-edit-mode #actions{
+        margin:30px 0 0;
+    }
+
+
+    #show-library-modal-edit-mode .modal-body{
+        height:500px;
+    }
+</style>
+
+
 <div id="show-library-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -25,6 +59,29 @@
     </div>
 </div>
 
+<div id="show-library-modal-edit-mode" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <!--<div class="modal hide" id="show-library-modal-edit-mode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <div id='actions' style='float:right'>
+                    <button class="btn if-write" id="create-in-library" library-id="">Create new item in this library</button>
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                    <button class="btn" id='save' aria-hidden="true">Save</button>
+                    <p id="message" />
+                </div>
+                <h3 id="show-library-header"></h3>        
+                <h4 id="show-library-name"></h4>
+                <p>Edit library</p>
+            </div>
+            <div class="modal-body">
+                <div id="library_table" class="table">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="modal-share-library" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
