@@ -234,25 +234,10 @@ function get_fuel_categories() {
     return categories;
 }
 
-function add_quantity_and_cost_to_measure(measure) { // Add extra properties to measure 
-    if (measure.cost_units == 'sqm') {
-        if (measure.EWI != undefined && measure.EWI == true) // are of EWI is bigger than the actual area of the wall
-            measure.area != undefined ? measure.quantity = 1.15 * measure.area : measure.quantity = 0;
-        else
-            measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
-    }
-    else if (measure.cost_units == 'ln m')
-        measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
-    else if (measure.cost_units == 'unit')
-        measure.quantity = 1;
-    else {
-        measure.quantity = 1;
-        measure.cost_units = 'unit';
-    }
-    measure.cost_total = measure.quantity * measure.cost;
 
-}
-
+/************************
+ **  Hours off
+ ************************/
 function get_hours_off_weekday(data) {
     var hours_off = [];
     if (project.master.household['3a_heatinghours_weekday_off3_hours'] != undefined
@@ -287,8 +272,6 @@ function get_hours_off_weekday(data) {
         hours_off.push(0);
     return hours_off;
 }
-
-
 function get_hours_off_weekend(data) {
     var hours_off = [];
     if (project.master.household['3a_heatinghours_weekend_off3_hours'] != undefined
@@ -323,7 +306,6 @@ function get_hours_off_weekend(data) {
         hours_off.push(0);
     return hours_off;
 }
-
 function get_hours_off_one_period(time_on, time_off) {
     if (time_on > time_off)  // heating is on before midnight and off after midnight
         return(Math.abs(time_off - time_on) / 36e5);
@@ -332,14 +314,12 @@ function get_hours_off_one_period(time_on, time_off) {
         return(Math.abs(time_on - time_off) / 36e5);
     }
 }
-
 function get_hours_two_periods(time_on_1, time_off_1, time_on_2, time_off_2) {
     var hours_off = [];
     hours_off.push((time_on_2 - time_off_1) / 36e5);
     hours_off.push(get_hours_off_one_period(time_on_1, time_off_2));
     return hours_off;
 }
-
 function get_hours_three_periods(time_on_1, time_off_1, time_on_2, time_off_2, time_on_3, time_off_3) {
     var hours_off = [];
     hours_off.push((time_on_2 - time_off_1) / 36e5);
@@ -348,6 +328,10 @@ function get_hours_three_periods(time_on_1, time_off_1, time_on_2, time_off_2, t
     return hours_off;
 }
 
+
+/************************
+ **  Cost of measures
+ ************************/
 function measures_costs(scenario) {
     var measures_total_cost = 0;
     if (project[scenario].fabric.measures != undefined)
@@ -393,14 +377,33 @@ function measures_costs(scenario) {
     }
     return measures_total_cost;
 }
-
-
 function cost_of_measures_by_id(list_of_measures_by_id) {
     var cost = 0;
     for (var id in list_of_measures_by_id) {
         cost += list_of_measures_by_id[id].measure.cost_total;
     }
     return cost;
+}
+function add_quantity_and_cost_to_measure(measure) { // Add extra properties to measure 
+    if (measure.cost_units == 'sqm') {
+        if (measure.EWI != undefined && measure.EWI == true) // are of EWI is bigger than the actual area of the wall
+            measure.area != undefined ? measure.quantity = 1.15 * measure.area : measure.quantity = 0;
+        else
+            measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
+    }
+    else if (measure.cost_units == 'ln m')
+        measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
+    else if (measure.cost_units == 'unit')
+        measure.quantity = 1;
+    else {
+        measure.quantity = 1;
+        measure.cost_units = 'unit';
+    }
+    if (measure.min_cost != undefined)
+        measure.cost_total = 1.0 * measure.min_cost + measure.quantity * measure.cost;
+    else
+        measure.cost_total = measure.quantity * measure.cost;
+
 }
 
 
@@ -496,7 +499,7 @@ function revert_to_original(item_id, type_of_item) {
         // copy the original element 
         for (var e in original_items_array) {
             if (original_items_array[e].id == item_id) {
-                current_items_array[get_item_index_by_id(item_id,current_items_array)] = JSON.parse(JSON.stringify(original_items_array[e]));
+                current_items_array[get_item_index_by_id(item_id, current_items_array)] = JSON.parse(JSON.stringify(original_items_array[e]));
                 break;
             }
         }

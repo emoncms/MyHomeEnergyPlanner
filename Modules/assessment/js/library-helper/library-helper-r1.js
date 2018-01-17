@@ -1295,7 +1295,7 @@ libraryHelper.prototype.elements_measures_library_to_html_edit_mode = function (
                 out += '<th>g</th><th>gL</th><th>ff</th>';
             if (tag == 'Wall')
                 out += '<th>EWI<i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" /></th>';
-            out += '<th>Description</th>';
+            out += '<th>Minimum cost <icon class="icon-question-sign" title="Total cost of measure = minimum cost + (area x unit cost)" /></th><th>Description</th>';
             out += '<th>Performance</th><th>Benefits</th><th>Cost</th><th>Cost units</th><th>Who by</th><th>Disruption</th><th>Associated work</th><th>Key risks</th><th>Notes</th><th>Maintenance</th>';
             out += '<th></th></tr>';
             for (z in element_library) {
@@ -1313,6 +1313,7 @@ libraryHelper.prototype.elements_measures_library_to_html_edit_mode = function (
                     }
                     if (tag == 'Wall')
                         out += '<td index="EWI"><input type="checkbox"' + (item.EWI === true ? 'checked' : '') + ' /></td>';
+                    out += '<td index="min_cost"><input class="w100" type="number" min="0" step="1" value="' + item.min_cost + '" /></td>';
                     out += myself.measure_fields_for_library_to_html_edit_mode(item);
                     out += '<td><i class="icon-trash if-write delete-library-item" tag="' + z + '" library="' + library_id + '" style="cursor:pointer;margin-left:10px;margin-right:20px"></i></td>';
                     out += '</tr>';
@@ -2026,7 +2027,8 @@ libraryHelper.prototype.elements_measures_item_to_html = function (item, tag) {
     }
     out += '<tr><td>Performance</td><td><input type="text" class="create-element-performance" value="' + item.performance + '" /></td></tr>';
     out += '<tr><td>Benefits</td><td><input type="text" class="create-element-benefits" value="' + item.benefits + '" /></td></tr>';
-    out += '<tr><td>Cost</td><td><input type="text" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
+    out += '<tr><td>Minimum cost  <icon class="icon-question-sign" title="Total cost of measure = minimum cost + (area x unit cost)" /></td><td><input type="number" min="0" step="1" class="create-element-min_cost" value="' + item.min_cost + '" /></td></tr>';
+    out += '<tr><td>Cost per unit</td><td><input type="numer" min="0" step="1" class="create-element-cost" value="' + item.cost + '" /></td></tr>';
     out += '<tr><td>Cost units</td><td>' + this.get_cost_units_select(item) + '</td></tr>';
     out += '<tr><td>Who by</td><td><input type="text" class="create-element-who_by" value="' + item.who_by + '" /></td></tr>';
     out += '<tr><td>Disruption</td><td><input type="text" class="create-element-disruption" value="' + item.disruption + '" /></td></tr>';
@@ -2779,6 +2781,8 @@ libraryHelper.prototype.elements_measures_get_item_to_save = function () {
         item[tag].name = $(".create-element-name").val();
     if ($('.create-element-description').val() !== "")
         item[tag].description = $(".create-element-description").val();
+    if ($('.create-element-min_cost').val() !== "")
+        item[tag].min_cost = $(".create-element-min_cost").val();
     if ($('.create-element-performance').val() !== "")
         item[tag].performance = $(".create-element-performance").val();
     if ($('.create-element-benefits').val() !== "")

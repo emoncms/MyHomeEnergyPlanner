@@ -1200,7 +1200,7 @@ function carboncoopreport_UpdateUI() {
     // Calculate Total cost
 
     for (scenario in project) {
-        if (scenario == 'scenario1' || scenario == 'scenario3' || scenario == 'scenario2') {            
+        if (scenario == 'scenario1' || scenario == 'scenario3' || scenario == 'scenario2') {
             $('#tota-cost-' + scenario).html('£' + Math.round(measures_costs(scenario) / 10) * 10);
         }
     }
@@ -1316,7 +1316,9 @@ function carboncoopreport_UpdateUI() {
                 .replace('m3/m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
                 .replace('na', 'n/a'); // We have realized that some units were inputted wrong in the library
         html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + perf + '</td>';
-        html += '<td colspan=2><table  style="width:100%"><tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.measure.cost_units + '</td></tr>';
+        html += '<td colspan=2><table  style="width:100%">';
+        html += measure.measure.min_cost == undefined ? '' : '<tr><td><strong>Minimum cost</strong></td><td colspan=3>' + measure.measure.min_cost + '</td></tr>';
+        html += '<tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.measure.cost_units + '</td></tr>';
         html += '<tr><td><strong>Quantity (units): </strong></td><td>' + (1.0 * measure.measure.quantity).toFixed(2) + '</td><td><strong>Total cost (£): </strong></td><td>' + (1.0 * measure.measure.cost_total).toFixed(2) + '</td></tr></table></td></tr>';
         html += "</table>";
         $(listSelector).append(html);

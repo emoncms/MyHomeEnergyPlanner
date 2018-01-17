@@ -12,28 +12,22 @@ function assessment_controller() {
       // make what is implemented compatible with the previous version. This section
       // is here fot his pourpose and will be deleted when the final realease is made
       //---------------------------------------------------------------------------- */
-    if (!isset($_SESSION['backwards_comp'])) { // We only run when we start the session
-        $_SESSION['backwards_comp'] = true;
+    /* if (!isset($_SESSION['backwards_comp'])) { // We only run when we start the session
+      $_SESSION['backwards_comp'] = true;
+      }
+     */
 
-    /*    $libresult = $mysqli->query("SELECT `id`, `data`, `type` FROM `element_library`");
-        foreach ($libresult as $row) {
-            //$data = json_decode($row['data']);
-            /* foreach ($data as $element) {
-              foreach ($element as $field) {
-              if (gettype($field) == 'string') {
-              str_replace("'", '\"', $field);
-              }
-              }
-              } */
-            /*$data = $row['data'];
-            $data = str_replace("'", '', $data);
-            $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
-            //$data = json_encode($data);
-            $req->bind_param('si', $data, $row['id']);
-            $req->execute();
-            
-        }*/
-    }
+    /*$libresult = $mysqli->query("SELECT `id`, `data` FROM `element_library` WHERE `type`='elements_measures'");
+    foreach ($libresult as $row) {
+        $data = json_decode($row['data']);
+        foreach ($data as $element) {
+            $element->min_cost = 100;
+        }
+        $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+        $data = json_encode($data);
+        $req->bind_param('si', $data, $row['id']);
+        $req->execute();
+    }*/
     //require "Modules/assessment/assessment_model.php";
     //$assessment = new Assessment($mysqli);
     //$assessment->edit_item_in_all_libraries('elements', 'DRD04', 'uvalue', 2.6);
