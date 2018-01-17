@@ -402,3 +402,119 @@ function cost_of_measures_by_id(list_of_measures_by_id) {
     }
     return cost;
 }
+
+
+/************************
+ **  Revert to original
+ ************************/
+function init_revert_to_original_by_id(selector, item_id, type_of_item) {
+    selector = selector + ' .revert-to-original[item-id="' + item_id + '"]';
+    if (scenario != 'master') {
+        if (measure_applied_to_item_by_id(type_of_item, item_id) != false || data.created_from == undefined) {
+            if (data.created_from == 'master')
+                $(selector + ' .text').html('Revert to master');
+            else {
+                var html = 'Revert to Scenario ' + data.created_from.split('scenario')[1];
+                $(selector + ' .text').html(html);
+            }
+            $(selector).show();
+            // Check original element still exists, it may have been deleted
+            if (item_exists_in_original(data.created_from, item_id, type_of_item) == false) {
+                $(selector).removeClass('revert-to-original').css('cursor', 'default').html('Original element doesn\'t<br />exist, cannot revert');
+                return;
+            }
+            $('#openbem').on('click', selector, function () {
+                revert_to_original(item_id, type_of_item)
+            });
+        }
+        else {
+            $(selector).hide();
+        }
+    }
+    else {
+        $(selector).hide();
+    }
+}
+function measure_applied_to_item_by_id(type_of_item, item_id) {
+    var measures_by_id = {};
+    switch (type_of_item) {
+        case'fabric-elements':
+            measures_by_id = data.fabric.measures;
+            break;
+        case'ventilation-EVP':
+            measures_by_id = data.measures.ventilation.extract_ventilation_points;
+            break;
+        default:
+            console.error('Type of item not valid');
+    }
+    for (var measure_id in measures_by_id) {
+        if (measure_id == item_id)
+            return true;
+        /*else if (measure_applied_in_bulk(element_id) != false) {
+         return true;
+         }*/
+    }
+    return false;
+}
+function item_exists_in_original(original_scenario, item_id, type_of_item) {
+    var items_array = [];
+    switch (type_of_item) {
+        case'fabric-elements':
+            items_array = project[original_scenario].fabric.elements;
+            break;
+        case'ventilation-EVP':
+            items_array = project[original_scenario].ventilation.EVP
+            break;
+        default:
+            console.error('Type of item not valid');
+    }
+    for (var e in items_array) {
+        if (items_array[e].id == item_id)
+            return true;
+    }
+    return false;
+}
+function revert_to_original(item_id, type_of_item) {
+    if (item_exists_in_original(data.created_from, item_id, type_of_item) == true) {
+        var original_items_array = [];
+        var current_items_array = [];
+        var measures_by_id = {};
+        switch (type_of_item) {
+            case'fabric-elements':
+                original_items_array = project[data.created_from].fabric.elements;
+                current_items_array = data.fabric.elements;
+                measures_by_id = data.fabric.measures;
+                break;
+            case'ventilation-EVP':
+                original_items_array = project[data.created_from].ventilation.EVP;
+                current_items_array = data.ventilation.EVP;
+                measures_by_id = data.measures.ventilation.extract_ventilation_points;
+                break;
+            default:
+                console.error('Type of item not valid');
+        }
+        // copy the original element 
+        for (var e in original_items_array) {
+            if (original_items_array[e].id == item_id) {
+                current_items_array[get_item_index_by_id(item_id,current_items_array)] = JSON.parse(JSON.stringify(original_items_array[e]));
+                break;
+            }
+        }
+        // delete measure
+        delete(measures_by_id[item_id]);
+        /*var applied_in_bulk = measure_applied_in_bulk(item_id);
+         if (applied_in_bulk == false)
+         delete(measures_by_id[item_id]);
+         else
+         delete(measures_by_id[applied_in_bulk].original_elements[item_id]);*/
+
+    }
+    /*elements_initUI();*/
+    update();
+}
+function get_item_index_by_id(id, array) {
+    for (var index in array) {
+        if (array[index].id == id)
+            return index;
+    }
+}
