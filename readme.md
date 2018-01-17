@@ -14,7 +14,7 @@ If we look at how energy is used in the UK we find: Space heating (in all buildi
 
 Low energy building technology: highly insulated, air-tight buildings can deliver space heating energy savings of up to 50-90% while simultaneously increasing our comfort.
 
-[OpenEnergyMonitor: Sustainable Energy page](http://openenergymonitor.org/emon/sustainable-energy)
+[OpenEnergyMonitor: Sustainable Energy](https://learn.openenergymonitor.org/sustainable-energy/energy/introduction)
 
     
 My Home Energy Planner is an open source energy assessment tool to help you explore how you can achieve this level of performance improvement in your own home.

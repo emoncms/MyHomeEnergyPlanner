@@ -434,10 +434,18 @@ class Assessment {
 
         $data = $this->escape_item($data);
         $data = json_decode($data);
+        if ($data==null) return false;
+        
         $data = json_encode($data);
-        $data = $this->mysqli->real_escape_string($data);
-        $result = $this->mysqli->query("UPDATE element_library SET `data`='$data' WHERE `userid` = '$userid' AND `id` = '$id'");
-        return $result;
+        
+        $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE userid=? AND id=?");
+        $stmt->bind_param("sii", $data, $userid, $id);
+        $stmt->execute();
+        $affected_rows = $stmt->affected_rows;
+        $stmt->close();
+        if ($affected_rows == 1) return true;
+        
+        return false;
     }
 
     public function has_access_library($userid, $id) {
@@ -667,11 +675,19 @@ class Assessment {
             $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id` = '$library_id'");
             $row = $result->fetch_object();
             $library = json_decode($row->data, true);
-            $library[$tag] = $item;
-            $library = json_encode($library);
-            $library = $this->mysqli->real_escape_string($library);
-            $result = $this->mysqli->query("UPDATE element_library SET `data`='$library' WHERE `id` = '$library_id'");
-            return $result;
+
+            $library[$tag] = $item;                     // add item to library object
+            $library = json_encode($library);           // covert to json string
+            
+            // Save with prepared statement
+            $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE id=?");
+            $stmt->bind_param("si", $library, $library_id);
+            $stmt->execute();
+            $affected_rows = $stmt->affected_rows;
+            $stmt->close();
+            if ($affected_rows == 1) return true;
+            
+            return false;
         }
     }
 
