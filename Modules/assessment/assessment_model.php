@@ -621,8 +621,14 @@ class Assessment {
         if (!$this->has_write_access_library($userid, $library_id))
             return "You haven't got enough permissions";
         else {
-            $result = $this->mysqli->query("UPDATE `element_library` SET `name`='$new_library_name' WHERE `id` = '$library_id'");
-            return $result;
+            $stmt = $this->mysqli->prepare("UPDATE element_library SET name=? WHERE id=?");
+            $stmt->bind_param("si", $new_library_name, $library_id);
+            $stmt->execute();
+            $affected_rows = $stmt->affected_rows;
+            $stmt->close();
+            if ($affected_rows == 1) return true;
+            
+            return false;
         }
     }
 
@@ -656,8 +662,16 @@ class Assessment {
                 return "Tag could not be found in the library - tag: $tag";
             unset($library[$tag]);
             $library = json_encode($library);
-            $result = $this->mysqli->query("UPDATE element_library SET `data`='$library' WHERE `id` = '$library_id'");
-            return $result;
+            
+            // Save with prepared statement
+            $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE id=?");
+            $stmt->bind_param("si", $library, $library_id);
+            $stmt->execute();
+            $affected_rows = $stmt->affected_rows;
+            $stmt->close();
+            if ($affected_rows == 1) return true;
+            
+            return false;
         }
     }
 
@@ -703,6 +717,9 @@ class Assessment {
     }
 
     public function edit_item_in_all_libraries($library_type, $tag, $field, $value) {
+    
+        $library_type = preg_replace('/[^\w\s-]/', '', $library_type); // Not stricly needed as only used internally
+    
         $libresult = $this->mysqli->query("SELECT id,data FROM element_library WHERE `type` = '" . $library_type . "'");
         foreach ($libresult as $row) {
             $library = json_decode($row['data']);

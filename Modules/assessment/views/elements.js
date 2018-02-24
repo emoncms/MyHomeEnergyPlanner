@@ -543,6 +543,7 @@ function check_and_add_measure_fields(element) {
 }
 
 function edit_item(element, row) {
+
     for (z in element) {
         var lib = z;
         element[z].lib = z;

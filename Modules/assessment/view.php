@@ -297,8 +297,8 @@ global $reports;
 
     load_view("#content", page);
     InitUI();
-    UpdateUI(data);
-    draw_openbem_graphics();
+    UpdateUI(data);           // js/ui-helper-rx.js
+    draw_openbem_graphics();  // js/ui-openbem-rx.js
 
     // Lock/unlock
     if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
@@ -368,8 +368,8 @@ global $reports;
         // Render page
         load_view("#content", page);
         InitUI();
-        UpdateUI(data);
-        draw_openbem_graphics();
+        UpdateUI(data);           // js/ui-helper-rx.js
+        draw_openbem_graphics();  // js/ui-openbem-rx.js
 
         // Add lock functionality to buttons and icons
         if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
@@ -411,8 +411,8 @@ global $reports;
             refresh_undo_redo_buttons();
         }
 
-        UpdateUI(data);
-        draw_openbem_graphics();
+        UpdateUI(data);           // js/ui-helper-rx.js
+        draw_openbem_graphics();  // js/ui-openbem-rx.js
 
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
         
@@ -588,8 +588,8 @@ global $reports;
          data = project[scenario];
          load_view("#content", page);
          InitUI();
-         UpdateUI(data);
-         draw_openbem_graphics();
+         UpdateUI(data);            // js/ui-helper-rx.js
+         draw_openbem_graphics();   
          */
         // }
     });
