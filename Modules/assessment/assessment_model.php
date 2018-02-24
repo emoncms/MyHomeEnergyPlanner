@@ -711,7 +711,7 @@ class Assessment {
     }
 
     public function escape_item($item) {
-        $item = preg_replace('/[^\w\s-+."%,:{}\/\'\[\]\\\]/', '', $item);
+        $item = preg_replace('/[^\w\s-+."%,:{}\/\[\]\\\]/', '', $item);
         //$item = str_replace("'", "\\'", $item);
         return $item;
     }

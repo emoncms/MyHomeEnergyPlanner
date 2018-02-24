@@ -1201,58 +1201,8 @@ function carboncoopreport_UpdateUI() {
 
     for (scenario in project) {
         if (scenario == 'scenario1' || scenario == 'scenario3' || scenario == 'scenario2') {
-            var measures_total_cost = 0;
-            if (project[scenario].fabric.measures != undefined)
-                measures_total_cost += cost_of_measures_by_id(project[scenario].fabric.measures);
-            if (project[scenario].measures.ventilation != undefined) {
-                if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
-                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.extract_ventilation_points);
-                if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined)
-                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.intentional_vents_and_flues);
-                if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
-                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.intentional_vents_and_flues_measures);
-                if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
-                    measures_total_cost += project[scenario].measures.ventilation.draught_proofing_measures.measure.cost_total;
-                if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
-                    measures_total_cost += project[scenario].measures.ventilation.ventilation_systems_measures.measure.cost_total;
-                if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined)
-                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.clothes_drying_facilities);
-            }
-            if (project[scenario].measures.water_heating != undefined) {
-                if (project[scenario].measures.water_heating.water_usage != undefined)
-                    measures_total_cost += cost_of_measures_by_id(project[scenario].measures.water_heating.water_usage);
-                if (project[scenario].measures.water_heating.storage_type != undefined)
-                    measures_total_cost += project[scenario].measures.water_heating.storage_type.measure.cost_total;
-                if (project[scenario].measures.water_heating.pipework_insulation != undefined)
-                    measures_total_cost += project[scenario].measures.water_heating.pipework_insulation.measure.cost_total;
-                if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
-                    measures_total_cost += project[scenario].measures.water_heating.hot_water_control_type.measure.cost_total;
-            }
-            if (project[scenario].measures.space_heating_control_type != undefined)
-                measures_total_cost += cost_of_measures_by_id(project[scenario].measures.space_heating_control_type);
-            if (project[scenario].measures.heating_systems != undefined)
-                measures_total_cost += cost_of_measures_by_id(project[scenario].measures.heating_systems);
-            if (project[scenario].measures.space_heating != undefined) {
-                if (project[scenario].measures.space_heating.heating_control != undefined)
-                    measures_total_cost += project[scenario].measures.space_heating.heating_control.measure.cost_total;
-            }
-            if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
-                measures_total_cost += project[scenario].measures.PV_generation.measure.cost_total;
-            }
-            if (project[scenario].measures.LAC != undefined) {
-                if (project[scenario].measures.LAC.lighting != undefined)
-                    measures_total_cost += project[scenario].measures.LAC.lighting.measure.cost_total;
-            }
-            $('#tota-cost-' + scenario).html('£' + Math.round(measures_total_cost / 10) * 10);
+            $('#tota-cost-' + scenario).html('£' + Math.round(measures_costs(scenario) / 10) * 10);
         }
-    }
-
-    function cost_of_measures_by_id(list_of_measures_by_id) {
-        var cost = 0;
-        for (var id in list_of_measures_by_id) {
-            cost += list_of_measures_by_id[id].measure.cost_total;
-        }
-        return cost;
     }
 
     // Tables - Figure 18
@@ -1366,7 +1316,9 @@ function carboncoopreport_UpdateUI() {
                 .replace('m3/m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
                 .replace('na', 'n/a'); // We have realized that some units were inputted wrong in the library
         html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + perf + '</td>';
-        html += '<td colspan=2><table  style="width:100%"><tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.measure.cost_units + '</td></tr>';
+        html += '<td colspan=2><table  style="width:100%">';
+        html += measure.measure.min_cost == undefined ? '' : '<tr><td><strong>Minimum cost</strong></td><td colspan=3>' + measure.measure.min_cost + '</td></tr>';
+        html += '<tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.measure.cost_units + '</td></tr>';
         html += '<tr><td><strong>Quantity (units): </strong></td><td>' + (1.0 * measure.measure.quantity).toFixed(2) + '</td><td><strong>Total cost (£): </strong></td><td>' + (1.0 * measure.measure.cost_total).toFixed(2) + '</td></tr></table></td></tr>';
         html += "</table>";
         $(listSelector).append(html);

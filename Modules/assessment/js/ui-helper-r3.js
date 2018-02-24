@@ -267,25 +267,10 @@ function get_fuel_categories() {
     return categories;
 }
 
-function add_quantity_and_cost_to_measure(measure) { // Add extra properties to measure 
-    if (measure.cost_units == 'sqm') {
-        if (measure.EWI != undefined && measure.EWI == true) // are of EWI is bigger than the actual area of the wall
-            measure.area != undefined ? measure.quantity = 1.15 * measure.area : measure.quantity = 0;
-        else
-            measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
-    }
-    else if (measure.cost_units == 'ln m')
-        measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
-    else if (measure.cost_units == 'unit')
-        measure.quantity = 1;
-    else {
-        measure.quantity = 1;
-        measure.cost_units = 'unit';
-    }
-    measure.cost_total = measure.quantity * measure.cost;
 
-}
-
+/************************
+ **  Hours off
+ ************************/
 function get_hours_off_weekday(data) {
     var hours_off = [];
     if (project.master.household['3a_heatinghours_weekday_off3_hours'] != undefined
@@ -320,8 +305,6 @@ function get_hours_off_weekday(data) {
         hours_off.push(0);
     return hours_off;
 }
-
-
 function get_hours_off_weekend(data) {
     var hours_off = [];
     if (project.master.household['3a_heatinghours_weekend_off3_hours'] != undefined
@@ -356,7 +339,6 @@ function get_hours_off_weekend(data) {
         hours_off.push(0);
     return hours_off;
 }
-
 function get_hours_off_one_period(time_on, time_off) {
     if (time_on > time_off)  // heating is on before midnight and off after midnight
         return(Math.abs(time_off - time_on) / 36e5);
@@ -365,14 +347,12 @@ function get_hours_off_one_period(time_on, time_off) {
         return(Math.abs(time_on - time_off) / 36e5);
     }
 }
-
 function get_hours_two_periods(time_on_1, time_off_1, time_on_2, time_off_2) {
     var hours_off = [];
     hours_off.push((time_on_2 - time_off_1) / 36e5);
     hours_off.push(get_hours_off_one_period(time_on_1, time_off_2));
     return hours_off;
 }
-
 function get_hours_three_periods(time_on_1, time_off_1, time_on_2, time_off_2, time_on_3, time_off_3) {
     var hours_off = [];
     hours_off.push((time_on_2 - time_off_1) / 36e5);
@@ -380,4 +360,196 @@ function get_hours_three_periods(time_on_1, time_off_1, time_on_2, time_off_2, t
     hours_off.push(get_hours_off_one_period(time_on_1, time_off_3));
     return hours_off;
 }
- 
+
+/************************
+ **  Cost of measures
+ ************************/
+function measures_costs(scenario) {
+    var measures_total_cost = 0;
+    if (project[scenario].fabric.measures != undefined)
+        measures_total_cost += cost_of_measures_by_id(project[scenario].fabric.measures);
+    if (project[scenario].measures.ventilation != undefined) {
+        if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.extract_ventilation_points);
+        if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.intentional_vents_and_flues);
+        if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.intentional_vents_and_flues_measures);
+        if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
+            measures_total_cost += project[scenario].measures.ventilation.draught_proofing_measures.measure.cost_total;
+        if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
+            measures_total_cost += project[scenario].measures.ventilation.ventilation_systems_measures.measure.cost_total;
+        if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.ventilation.clothes_drying_facilities);
+    }
+    if (project[scenario].measures.water_heating != undefined) {
+        if (project[scenario].measures.water_heating.water_usage != undefined)
+            measures_total_cost += cost_of_measures_by_id(project[scenario].measures.water_heating.water_usage);
+        if (project[scenario].measures.water_heating.storage_type != undefined)
+            measures_total_cost += project[scenario].measures.water_heating.storage_type.measure.cost_total;
+        if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+            measures_total_cost += project[scenario].measures.water_heating.pipework_insulation.measure.cost_total;
+        if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+            measures_total_cost += project[scenario].measures.water_heating.hot_water_control_type.measure.cost_total;
+    }
+    if (project[scenario].measures.space_heating_control_type != undefined)
+        measures_total_cost += cost_of_measures_by_id(project[scenario].measures.space_heating_control_type);
+    if (project[scenario].measures.heating_systems != undefined)
+        measures_total_cost += cost_of_measures_by_id(project[scenario].measures.heating_systems);
+    if (project[scenario].measures.space_heating != undefined) {
+        if (project[scenario].measures.space_heating.heating_control != undefined)
+            measures_total_cost += project[scenario].measures.space_heating.heating_control.measure.cost_total;
+    }
+    if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
+        measures_total_cost += project[scenario].measures.PV_generation.measure.cost_total;
+    }
+    if (project[scenario].measures.LAC != undefined) {
+        if (project[scenario].measures.LAC.lighting != undefined)
+            measures_total_cost += project[scenario].measures.LAC.lighting.measure.cost_total;
+    }
+    return measures_total_cost;
+}
+function cost_of_measures_by_id(list_of_measures_by_id) {
+    var cost = 0;
+    for (var id in list_of_measures_by_id) {
+        cost += list_of_measures_by_id[id].measure.cost_total;
+    }
+    return cost;
+}
+function add_quantity_and_cost_to_measure(measure) { // Add extra properties to measure 
+    if (measure.cost_units == 'sqm') {
+        if (measure.EWI != undefined && measure.EWI == true) // are of EWI is bigger than the actual area of the wall
+            measure.area != undefined ? measure.quantity = 1.15 * measure.area : measure.quantity = 0;
+        else
+            measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
+    }
+    else if (measure.cost_units == 'ln m')
+        measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
+    else if (measure.cost_units == 'unit')
+        measure.quantity = 1;
+    else {
+        measure.quantity = 1;
+        measure.cost_units = 'unit';
+    }
+    if (measure.min_cost != undefined)
+        measure.cost_total = 1.0 * measure.min_cost + measure.quantity * measure.cost;
+    else
+        measure.cost_total = measure.quantity * measure.cost;
+
+}
+
+
+/************************
+ **  Revert to original
+ ************************/
+function init_revert_to_original_by_id(selector, item_id, type_of_item) {
+    selector = selector + ' .revert-to-original[item-id="' + item_id + '"]';
+    if (scenario != 'master') {
+        if (measure_applied_to_item_by_id(type_of_item, item_id) != false || data.created_from == undefined) {
+            if (data.created_from == 'master')
+                $(selector + ' .text').html('Revert to master');
+            else {
+                var html = 'Revert to Scenario ' + data.created_from.split('scenario')[1];
+                $(selector + ' .text').html(html);
+            }
+            $(selector).show();
+            // Check original element still exists, it may have been deleted
+            if (item_exists_in_original(data.created_from, item_id, type_of_item) == false) {
+                $(selector).removeClass('revert-to-original').css('cursor', 'default').html('Original element doesn\'t<br />exist, cannot revert');
+                return;
+            }
+            $('#openbem').on('click', selector, function () {
+                revert_to_original(item_id, type_of_item)
+            });
+        }
+        else {
+            $(selector).hide();
+        }
+    }
+    else {
+        $(selector).hide();
+    }
+}
+function measure_applied_to_item_by_id(type_of_item, item_id) {
+    var measures_by_id = {};
+    switch (type_of_item) {
+        case'fabric-elements':
+            measures_by_id = data.fabric.measures;
+            break;
+        case'ventilation-EVP':
+            measures_by_id = data.measures.ventilation.extract_ventilation_points;
+            break;
+        default:
+            console.error('Type of item not valid');
+    }
+    for (var measure_id in measures_by_id) {
+        if (measure_id == item_id)
+            return true;
+        /*else if (measure_applied_in_bulk(element_id) != false) {
+         return true;
+         }*/
+    }
+    return false;
+}
+function item_exists_in_original(original_scenario, item_id, type_of_item) {
+    var items_array = [];
+    switch (type_of_item) {
+        case'fabric-elements':
+            items_array = project[original_scenario].fabric.elements;
+            break;
+        case'ventilation-EVP':
+            items_array = project[original_scenario].ventilation.EVP
+            break;
+        default:
+            console.error('Type of item not valid');
+    }
+    for (var e in items_array) {
+        if (items_array[e].id == item_id)
+            return true;
+    }
+    return false;
+}
+function revert_to_original(item_id, type_of_item) {
+    if (item_exists_in_original(data.created_from, item_id, type_of_item) == true) {
+        var original_items_array = [];
+        var current_items_array = [];
+        var measures_by_id = {};
+        switch (type_of_item) {
+            case'fabric-elements':
+                original_items_array = project[data.created_from].fabric.elements;
+                current_items_array = data.fabric.elements;
+                measures_by_id = data.fabric.measures;
+                break;
+            case'ventilation-EVP':
+                original_items_array = project[data.created_from].ventilation.EVP;
+                current_items_array = data.ventilation.EVP;
+                measures_by_id = data.measures.ventilation.extract_ventilation_points;
+                break;
+            default:
+                console.error('Type of item not valid');
+        }
+        // copy the original element 
+        for (var e in original_items_array) {
+            if (original_items_array[e].id == item_id) {
+                current_items_array[get_item_index_by_id(item_id, current_items_array)] = JSON.parse(JSON.stringify(original_items_array[e]));
+                break;
+            }
+        }
+        // delete measure
+        delete(measures_by_id[item_id]);
+        /*var applied_in_bulk = measure_applied_in_bulk(item_id);
+         if (applied_in_bulk == false)
+         delete(measures_by_id[item_id]);
+         else
+         delete(measures_by_id[applied_in_bulk].original_elements[item_id]);*/
+
+    }
+    /*elements_initUI();*/
+    update();
+}
+function get_item_index_by_id(id, array) {
+    for (var index in array) {
+        if (array[index].id == id)
+            return index;
+    }
+}

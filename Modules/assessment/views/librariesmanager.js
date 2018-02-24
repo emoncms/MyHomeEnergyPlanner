@@ -26,7 +26,6 @@ function librariesmanager_UpdateUI()
         
         //Add libraries
         array_libraries_of_same_type.forEach(function (library) {
-            console.log(library);
             var access = '';
             $('#libraries-table').append($('#library-template').html());
             $('#libraries-table td[library-name="template"]').html(library.name);

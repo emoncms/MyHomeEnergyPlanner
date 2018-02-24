@@ -206,3 +206,9 @@ body .modal {
         padding-top: 0px;
     }
 }
+
+ #topgraphic #measures-costs{
+        text-align:right;
+        margin-top:-60px
+    }
+

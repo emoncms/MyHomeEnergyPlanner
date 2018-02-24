@@ -365,7 +365,7 @@ $('#openbem').on('click', '.edit-item-IVF', function () {
     library_helper.onEditItem($(this));
 });
 
-function ventilation_initUI(){
+function ventilation_initUI() {
     if (data.measures == undefined)
         data.measures = {};
     if (data.measures.ventilation == undefined)
@@ -437,8 +437,11 @@ function ventilation_initUI(){
         var out = '<tr><td>' + item.tag + ': ' + item.name + '</td><td><input type="text" style="width: 190px" key="data.ventilation.EVP.' + z + '.location"></td><td>' + item.type + '</td><td style="padding-left:100px">' + item.ventilation_rate + '</td>';
         out += '<td> <button class="apply-ventilation-measure-from-lib if-not-master" type="extract_ventilation_points" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
         out += '<span class="edit-item-EVP" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing a system this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
-        out += '<span class = "delete-EVP" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
+        out += '<span class = "delete-EVP" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
+        out += '<span class="revert-to-original" item-id="' + item.id + '" item-type="ventilation-EVP" style="margin-left:15px; display:inline-block;cursor: pointer"><img src="' + path + 'Modules/assessment/img-assets/undo.gif" style="width:14px" /><span class="text" /></span>';
+        out += '</td></tr> ';
         $('#EVP').append(out);
+        init_revert_to_original_by_id('#fans_and_vents_div #EVP', item.id, 'ventilation-EVP');
     }
 
     // Intentional vents, flues and extraction points (IVF)
