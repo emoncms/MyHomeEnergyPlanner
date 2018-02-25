@@ -54,16 +54,21 @@ a:hover {
   max-width:1150px;
 }
 
-.side-block {
-    background-color:#fff;
-    padding:20px;
-    margin:10px;
-    
+.block-header {
+    background-color:#dbd6ce;
+    color:#897A67; 
+    padding:10px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.side-block-2 {
-    background-color:#fff;
+.block-header:hover {
+    background-color:#e2ded7;
+}
 
+.side-block {
+    background-color:#f7f6f5;
+    border-bottom: 1px solid #edeae6;
 }
 
 .main-block {
@@ -73,16 +78,6 @@ a:hover {
     background-color:#fff;
     
     margin-top:10px;
-}
-
-
-#create-new {
-    background-color:rgb(230,230,230);
-    padding:10px;
-    padding-left:20px;
-    margin:10px;
-    color:rgb(100,100,100);
-    font-size: 14px;
 }
 
 .scenario-nav {

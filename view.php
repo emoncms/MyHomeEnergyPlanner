@@ -59,13 +59,6 @@ global $reports;
         margin-left: -280px;
     }
 
-    #create-new {
-        cursor:pointer;
-    }
-
-    #create-new:hover {
-        background-color:rgb(220,220,220);
-    }
 </style>
 
 <link rel="stylesheet" href="<?php echo $d; ?>carbon.css">
@@ -73,14 +66,12 @@ global $reports;
 
 <div id="openbem">
     <div id="sidebar">
-        <div class="side-block-2">
-            <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;width"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
+        <div class="side-block">
+            <div class="block-header">Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></div>
             <div style="padding:10px">
 
                 <p style="font-size:14px">Description: <span id="project-description"></span></p>
                 <p style="font-size:14px">Author: <span id="project-author"></span></p>
-                <a class="house_graphic" style="margin-right:10px">Show house graphic</a>
-                <br><br>
 
                 <div class="scenario-nav-heading">Project input</div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
@@ -98,9 +89,9 @@ global $reports;
 
         <div id="scenario-menu-template" style="display:none">
 
-            <div class="side-block-2 scenario-block" scenario="template" style="cursor:pointer">
+            <div class="side-block scenario-block" scenario="template" style="cursor:pointer">
 
-                <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;height:40px"><b>title<span style="float:right">scenarioname<br /><span class="template_scenario_emissions"></span> kgCO<sub>2</sub>/m<sup>2</sup></span><br /><span class="template_scenario_created_from" style='float:left'></span></b></div>
+                <div class="block-header" style="height:40px">title<span style="float:right">scenarioname<br>(<span class="template_scenario_emissions"></span> <span style="font-size:12px">kgCO<sub>2</sub>/m<sup>2</sup></span>)</span><br /><span class="template_scenario_created_from" style='float:left'></span></div>
 
                 <div class="menu-content">
                     <div style="padding:10px">
@@ -131,11 +122,13 @@ global $reports;
 
         <div id="scenario-list"></div>
 
-        <div id="create-new">
+        <div class="side-block">
+        <div id="create-new" class="block-header">
             Create new scenario
         </div>
+        </div>
 
-        <div class="side-block" style="background:none">
+        <div style="background:none; padding:20px">
 
             <div class="scenario-nav-heading">Documentation</a></div>
             <div class="scenario-nav"><a target='_blank' href="https://learn.openenergymonitor.org/sustainable-energy/building-energy-model/MyHomeEnergyPlanner">User guide</a></div>
@@ -145,12 +138,8 @@ global $reports;
     </div>
 
     <div id="wrapper">
-
-
-
+        <div style="height:10px"></div>
         <div id="topgraphic"></div>
-
-
         <div id="bound">
             <div id="content"></div>
         </div>
