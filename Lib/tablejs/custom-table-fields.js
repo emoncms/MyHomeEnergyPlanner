@@ -1,222 +1,244 @@
 /*
-
   table.js is released under the GNU Affero General Public License.
   See COPYRIGHT.txt and LICENSE.txt.
 
-  Part of the OpenEnergyMonitor project:
-  http://openenergymonitor.org
- 
+  Part of the OpenEnergyMonitor project: http://openenergymonitor.org
+  2016-12-20 - Expanded tables by : Nuno Chaveiro  nchaveiro(a)gmail.com  
 */
 
 var customtablefields = {
-
-    'icon':
-    {
-        'draw': function(row,field)
-        {
-            if (table.data[row][field] == true) return "<i class='"+table.fields[field].trueicon+"' type='input' ></i>";
-            if (table.data[row][field] == false) return "<i class='"+table.fields[field].falseicon+"' type='input' ></i>";
-        },
-
-        'event': function()
-        {
-            // Event code for clickable switch state icon's
-            $(table.element).on('click', 'i[type=input]', function() {
-                var row = $(this).parent().attr('row');
-                var field = $(this).parent().attr('field');
-                table.data[row][field] = !table.data[row][field];
-
-                var fields = {};
-                fields[field] = table.data[row][field];
-
-                $(table.element).trigger("onSave",[table.data[row]['id'],fields]);
-
-                if (table.data[row][field]) $(this).attr('class', table.fields[field].trueicon); else $(this).attr('class', table.fields[field].falseicon);
-            });
-        }
+  'icon': {
+    'draw': function(t,row,child_row,field) {
+      if (t.data[row][field] == true) return "<i class='"+t.fields[field].trueicon+"' type='input' style='cursor:pointer'></i>";
+      if (t.data[row][field] == false) return "<i class='"+t.fields[field].falseicon+"' type='input' style='cursor:pointer'></i>";
     },
 
-    'updated':
-    {
-        'draw': function (row,field) { return list_format_updated(table.data[row][field]) }
-    },
-
-    'value':
-    {
-        'draw': function (row,field) { return list_format_value(table.data[row][field]) }
-    },
-
-    'processlist':
-    {
-        'draw': function (row,field) { 
-
-          var processlist = table.data[row][field];
-          if (!processlist) return "";
-          
-          var processPairs = processlist.split(",");
-
-          var out = "";
-
-          for (z in processPairs)
-          {
-            var keyvalue = processPairs[z].split(":");
-
-            var key = parseInt(keyvalue[0]);
-            var type = "";
-            var color = "";
-
-            switch(key)
-            {
-              case 1:
-                key = 'log'; type = 2; break;
-              case 2:  
-                key = 'x'; type = 0; break;
-              case 3:  
-                key = '+'; type = 0; break;
-              case 4:    
-                key = 'kwh'; type = 2; break;
-              case 5:  
-                key = 'kwhd'; type = 2; break;
-              case 6:
-                key = 'x inp'; type = 1; break;
-              case 7:
-                key = 'ontime'; type = 2; break;
-              case 8:
-                key = 'kwhinckwhd'; type = 2; break;
-              case 9:
-                key = 'kwhkwhd'; type = 2; break;
-              case 10:  
-                key = 'update'; type = 2; break;
-              case 11: 
-                key = '+ inp'; type = 1; break;
-              case 12:
-                key = '/ inp'; type = 1; break;
-              case 13:
-                key = 'phaseshift'; type =2; break;
-              case 14:
-                key = 'accumulate'; type = 2; break;
-              case 15:
-                key = 'rate'; type = 2; break;
-              case 16:
-                key = 'hist'; type = 2; break;
-              case 17:  
-                key = 'average'; type = 2; break;
-              case 18:
-                key = 'flux'; type = 2; break;
-              case 19:
-                key = 'pwrgain'; type = 2; break;
-              case 20:
-                key = 'pulsdiff'; type = 2; break;
-              case 21:
-                key = 'kwhpwr'; type = 2; break;
-              case 22:
-                key = '- inp'; type = 1; break;
-              case 23:
-                key = 'kwhkwhd'; type = 2; break;
-              case 24:
-                key = '> 0'; type = 3; break;
-              case 25:
-                key = '< 0'; type = 3; break;
-              case 26:
-                key = 'unsign'; type = 3; break;
-              case 27:
-                key = 'max'; type = 2; break;
-              case 28:
-                key = 'min'; type = 2; break;
-              case 29:
-                key = '+ feed'; type = 4; break;
-              case 30:
-                key = '- feed'; type = 4; break;
-              case 31:
-                key = 'x feed'; type = 4; break;
-              case 32:
-                key = '/ feed'; type = 4; break;
-              case 33:
-                key = '= 0'; type = 3; break;
-            }  
-
-            value = keyvalue[1];
-            
-            switch(type)
-            {
-              case 0:
-                type = 'value: '; color = 'important';
-                break;
-              case 1:
-                type = 'input: '; color = 'warning';
-                break;
-              case 2:
-                type = 'feed: '; color = 'info';
-                break;
-              case 3:
-                type = ''; color = 'important';
-                value = ''; // Argument type is NONE, we don't mind the value
-                break;
-              case 4:
-                type = 'feed: '; color = 'warning';
-                break;
-            }
-
-            if (type == 'feed: ') { 
-              out += "<a href='"+path+"vis/auto?feedid="+value+"'<span class='label label-"+color+"' title='"+type+value+"' style='cursor:pointer'>"+key+"</span></a> "; 
+    'event': function() {
+      // Event code for clickable switch state icon's
+      $(table.element).on('click', 'i[type=input]', function() {
+        var row = $(this).parent().attr('row');
+        var field = $(this).parent().attr('field');
+        var t = table;
+        if (!t.data[row]['#READ_ONLY#']) {
+          var val = t.data[row][field];
+          if (typeof val === "boolean") {
+            t.data[row][field] = !val;
+          } else {
+            //boolean conversion and negate
+            var boolVal;
+            if(typeof val === "number"){
+                boolVal = val === 0 ? false : true;
+            } else if (typeof val === "string") {
+                boolVal = (val == "0" || val == "false") ? false : true;
             } else {
-              out += "<span class='label label-"+color+"' title='"+type+value+"' style='cursor:default'>"+key+"</span> ";
+                //neither bool nor number nor string
+                //"strange" value
+                boolVal = false;
             }
+            t.data[row][field] = !boolVal;  
           }
-          
-          return out;
-        }
-    },
 
-    'iconlink':
-    {
-        'draw': function (row,field) { 
-          var icon = 'icon-eye-open'; if (table.fields[field].icon) icon = table.fields[field].icon;
-          return "<a href='"+table.fields[field].link+table.data[row]['id']+"' ><i class='"+icon+"' ></i></a>" 
-        }
-    },
+          var fields = {};
+          fields[field] = t.data[row][field];
 
-    'iconbasic':
+          $(table.element).trigger("onSave",[t.data[row]['id'],fields]);
+          if (t.data[row][field]) $(this).attr('class', t.fields[field].trueicon); else $(this).attr('class', t.fields[field].falseicon);
+          t.draw();
+        }
+      });
+    }
+  },
+
+  'updated': {
+    'draw': function (t,row,child_row,field) { return list_format_updated(t.data[row][field]) }
+  },
+
+  'value': {
+    'draw': function (t,row,child_row,field) { return list_format_value(t.data[row][field]) }
+  },
+
+  'processlist': {
+    'draw': function (t,row,child_row,field) {
+      var processlist = t.data[row][field];
+      if (processlist_ui != undefined) return processlist_ui.drawpreview(processlist);
+      else return "";
+    }
+  },
+
+  'iconlink': {
+    'draw': function (t,row,child_row,field) {
+      var icon = 'icon-eye-open'; if (t.fields[field].icon) icon = t.fields[field].icon;
+      return "<a href='"+t.fields[field].link+t.data[row]['id']+"' ><i class='"+icon+"' ></i></a>" 
+    }
+  },
+
+  'iconbasic': {
+    'draw': function(t,row,child_row,field) {
+      return "<i class='"+t.fields[field].icon+"' type='icon' row='"+row+"' child_row='"+child_row+"' style='cursor:pointer'></i>";
+    }
+  },
+
+  'hinteditable': {
+    'draw': function (t,row,child_row,field) { return "…";},
+    'edit': function (t,row,child_row,field) { return "<input type='text' value='"+t.data[row][field]+"' / >" },
+    'save': function (t,row,child_row,field) { return $("[row='"+row+"'][child_row='"+child_row+"'][field='"+field+"'] input").val() }
+  },
+
+  'iconconfig': {
+    'draw': function(t,row,child_row,field) {
+      return t.data[row]['#NO_CONFIG#'] ? "" : "<i class='"+t.fields[field].icon+"' type='icon' row='"+row+"' child_row='"+child_row+"' style='cursor:pointer'></i>";
+    }
+  },
+
+  'size': {
+    'draw': function (t,row,child_row,field) { return list_format_size(t.data[row][field]); }
+  },
+
+  'group-iconbasic': {
+    'draw': function(t,group,rows,field)
     {
-        'draw': function(row,field)
-        {
-            return "<i class='"+table.fields[field].icon+"' type='icon' row='"+row+"' style='cursor:pointer'></i>";
+      return "<i class='"+t.groupfields[field].icon+"' type='icon' group='"+group+"' rows='"+rows+"' style='cursor:pointer'></i>";
+    }
+  },
+
+  'group-size': {
+    'draw': function(t,group,rows,field) {
+      var sum = 0;
+      for (i in rows) {
+        var row=rows[i];
+        if ($.isNumeric(t.data[row][field])) {
+          sum = sum + (1*t.data[row][field]); 
+        }
+      }
+      return list_format_size(sum);
+    }
+  },
+
+  'group-updated': {
+    'draw': function(t,group,rows,field) {
+      var lastupdate = 0;
+      for (i in rows) {
+        var row=rows[i];
+        if ($.isNumeric(t.data[row][field])) {
+          var update = (1*t.data[row][field]);
+          if (update > lastupdate) lastupdate = update;
+        }
+      }
+      return list_format_updated(lastupdate);
+    }
+  },
+
+  'group-processlist': {
+    'draw': function(t,group,rows,field) {
+      var out = "";
+      for (i in rows) {
+        var row=rows[i];
+        var processlist = t.data[row][field];
+        if (processlist_ui != undefined) out+= processlist_ui.group_drawerror(processlist);
+        if (out != "") return out;
+      }
+      return out;
+    }
+  },
+  
+    'date': {
+        'draw': function (t,row,child_row,field) {
+            var date = new Date();
+            date.setTime(1000 * t.data[row][field]); //from seconds to miliseconds
+            return (date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes());
+        },
+        'edit':function (t,row,child_row,field) {
+            var date= new Date();
+            date.setTime(1000 * t.data[row][field]); //from seconds to miliseconds
+            var day = date.getDate();
+            var month = date.getMonth() +1; // getMonth() returns 0-11
+            var year = date.getFullYear();
+            var hours= date.getHours();
+            var minutes = date.getMinutes();
+            return '<div class="input-append date" id="'+field +'-'+row+'-'+t.data[row][field]+'" data-format="dd/MM/yyyy hh:mm" data-date="'+day+'/'+month+'/'+year+' '+hours+':'+minutes+'"><input data-format="dd/MM/yyyy hh:mm" value="'+day+'/'+month+'/'+year+' '+hours+':'+minutes+'" type="text" /><span class="add-on"> <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span></div>';
+        },
+        'save': function (t,row,child_row,field) { 
+            return parse_timepicker_time($("[row='"+row+"'][child_row='"+child_row+"'][field='"+field+"'] input").val());
+        }    
+    },
+  
+    'fixeddate': {
+        'draw': function (t,row,child_row,field) {
+            var date = new Date();
+            date.setTime(1000 * t.data[row][field]); //from seconds to miliseconds
+            return (date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes());
         }
     }
 }
 
 
 // Calculate and color updated time
-function list_format_updated(time)
-{
+function list_format_updated(time) {
   time = time * 1000;
-  var now = (new Date()).getTime();
+  var servertime = (new Date()).getTime() - table.timeServerLocalOffset;
   var update = (new Date(time)).getTime();
-  var lastupdate = (now-update)/1000;
 
-  var secs = (now-update)/1000;
+  var secs = (servertime-update)/1000;
   var mins = secs/60;
-  var hour = secs/3600
+  var hour = secs/3600;
+  var day = hour/24;
 
-  var updated = secs.toFixed(0)+"s ago";
-  if (secs>180) updated = mins.toFixed(0)+" mins ago";
-  if (secs>(3600*2)) updated = hour.toFixed(0)+" hours ago";
-  if (hour>24) updated = "inactive";
+  var updated = secs.toFixed(0) + "s";
+  if ((update == 0) || (!$.isNumeric(secs))) updated = "n/a";
+  else if (secs< 0) updated = secs.toFixed(0) + "s"; // update time ahead of server date is signal of slow network
+  else if (secs.toFixed(0) == 0) updated = "now";
+  else if (day>7) updated = "inactive";
+  else if (day>2) updated = day.toFixed(1)+" days";
+  else if (hour>2) updated = hour.toFixed(0)+" hrs";
+  else if (secs>180) updated = mins.toFixed(0)+" mins";
 
-  var color = "rgb(255,125,20)";
+  secs = Math.abs(secs);
+  var color = "rgb(255,0,0)";
   if (secs<25) color = "rgb(50,200,50)"
   else if (secs<60) color = "rgb(240,180,20)"; 
+  else if (secs<(3600*2)) color = "rgb(255,125,20)"
 
   return "<span style='color:"+color+";'>"+updated+"</span>";
 }
 
 // Format value dynamically 
-function list_format_value(value)
-{
-  if (value>=10) value = (1*value).toFixed(1);
-  if (value>=100) value = (1*value).toFixed(0);
-  if (value<10) value = (1*value).toFixed(2);
-  if (value<=-10) value = (1*value).toFixed(1);
-  if (value<=-100) value = (1*value).toFixed(0);
+function list_format_value(value) {
+  if (value == null) return 'NULL';
+  value = parseFloat(value);
+  if (value>=1000) value = parseFloat((value).toFixed(0));
+  else if (value>=100) value = parseFloat((value).toFixed(1));
+  else if (value>=10) value = parseFloat((value).toFixed(2));
+  else if (value<=-1000) value = parseFloat((value).toFixed(0));
+  else if (value<=-100) value = parseFloat((value).toFixed(1));
+  else if (value<10) value = parseFloat((value).toFixed(2));
   return value;
 }
+
+function list_format_size(bytes) {
+  if (!$.isNumeric(bytes)) {
+    return "n/a";
+  } else if (bytes<1024) {
+    return bytes+"B";
+  } else if (bytes<1024*100) {
+    return (bytes/1024).toFixed(1)+"KB";
+  } else if (bytes<1024*1024) {
+    return Math.round(bytes/1024)+"KB";
+  } else if (bytes<=1024*1024*1024) {
+    return Math.round(bytes/(1024*1024))+"MB";
+  } else {
+    return (bytes/(1024*1024*1024)).toFixed(1)+"GB";
+  }
+}
+
+  function parse_timepicker_time(timestr){
+    var tmp = timestr.split(" ");
+    if (tmp.length!=2) return false;
+
+    var date = tmp[0].split("/");
+    if (date.length!=3) return false;
+
+    var time = tmp[1].split(":");
+    if (time.length!=2) return false;
+
+    return new Date(date[2],date[1]-1,date[0],time[0],time[1],0).getTime() / 1000;
+  }

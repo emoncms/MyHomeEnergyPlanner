@@ -16,22 +16,39 @@ defined('EMONCMS_EXEC') or die('Restricted access');
     global $path;
 
     $languages = get_available_languages();
+    $languages_name = languagecode_to_name($languages);
+    //languages order by language name
+    $languages_new = array();
+    foreach ($languages_name as $key=>$lang){
+       $languages_new[$key]=$languages[$key];
+    }
+    $languages= array_values($languages_new);
+    $languages_name= array_values($languages_name);
 
-function languagecodetotext()
-{
-    _('es_ES');
-    _('fr_FR');
+
+function languagecode_to_name($langs) {
+    static $lang_names = null;
+    if ($lang_names === null) {
+        $json_data = file_get_contents(__DIR__.'/language_country.json');
+        $lang_names = json_decode($json_data, true);
+    }
+    foreach ($langs as $key=>$val){
+      $lang[$key]=$lang_names[$val];
+    }
+   asort($lang);
+   return $lang;
 }
 
 ?>
 
 <script type="text/javascript" src="<?php echo $path; ?>Modules/user/profile/md5.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Lib/misc/qrcode.js"></script>
+<script type="text/javascript" src="<?php echo $path; ?>Lib/misc/clipboard.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Modules/user/user.js"></script>
 <script type="text/javascript" src="<?php echo $path; ?>Lib/listjs/list.js"></script>
 
-<div id="left-pane">
-
-    <div class="side-block">
+<div class="row-fluid">
+    <div class="span4">
         <h3><?php echo _('My account'); ?></h3>
 
         <div id="account">
@@ -56,7 +73,7 @@ function languagecodetotext()
 
             <div class="account-item">
                 <a id="changedetails"><?php echo _('Change Password'); ?></a>
-            </div>  
+            </div>
 
         </div>
 
@@ -77,43 +94,94 @@ function languagecodetotext()
             <input id="change-password-submit" type="submit" class="btn btn-primary" value="<?php echo _('Save'); ?>" />
             <input id="change-password-cancel" type="submit" class="btn" value="<?php echo _('Cancel'); ?>" />
         </div>
-        
-        
-    </div>
-</div>
 
-<div id="right-pane">
-    <div id="bound">
+        <br>
+        <div id="account">
+          <div class="account-item">
+              <span class="muted"><?php echo _('Write API Key'); ?></span> <button style="float:right" class="btn btn-small" id="copyapiwritebtn"><?php echo _('Copy'); ?></button>
+              <span class="writeapikey" id="copyapiwrite"></span>
+          </div>
+          <div class="account-item">
+              <span class="muted"><?php echo _('Read API Key'); ?></span> <button style="float:right" class="btn btn-small" id="copyapireadbtn"><?php echo _('Copy'); ?></button>
+              <span class="readapikey" id="copyapiread"></span>
+              <span id="msg"></span>
+          </div>
+        </div>
+    </div>
+    <div class="span8">
         <h3><?php echo _('My Profile'); ?></h3>
         <div id="table"></div>
+        
+        <h3><?php echo _('Mobile app'); ?></h3>
+        <div class="account-item">
+            <table>
+            <tr>
+              <td style="width:192px">
+                <p><?php echo _('Scan QR code from the iOS or Android app to connect:');?></p>
+                <div id="qr_apikey"></div>
+                <p style="padding-top:10px"><?php echo _('Or using a barcode scanner scan to view MyElectric graph');?></p>
+              </td>
+              <td style="padding-left:20px">
+                <div><a href="https://itunes.apple.com/us/app/emoncms/id1169483587?ls=1&mt=8"><img alt="Download on the App Store" src="<?php echo $path; ?>Modules/user/images/appstore.png" /></a></div>
+                <br/>
+	              <div><a href="https://play.google.com/store/apps/details?id=org.emoncms.myapps"><img alt="Get it on Google Play" src="<?php echo $path; ?>Modules/user/images/en-play-badge.png" /></a></div>
+	            </td>
+	          </tr>
+	          </table>
+        </div>    
+         
     </div>
 </div>
-
 
 <script>
 
     var path = "<?php echo $path; ?>";
     var lang = <?php echo json_encode($languages); ?>;
+    var lang_name = <?php echo json_encode($languages_name); ?>;
 
     list.data = user.get();
 
     $(".writeapikey").html(list.data.apikey_write);
     $(".readapikey").html(list.data.apikey_read);
-    
+
+    //QR COde Generation
+    var urlCleaned = window.location.href.replace("user/view" ,"");
+    var qrcode = new QRCode(document.getElementById("qr_apikey"), {
+        text: urlCleaned + "app?readkey=" + list.data.apikey_read  + "#myelectric",
+        width: 192,
+        height: 192,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    }); //Re-designed on-board QR generation using javascript
+
     // Need to add an are you sure modal before enabling this.
     // $("#newapikeyread").click(function(){user.newapikeyread()});
     // $("#newapikeywrite").click(function(){user.newapikeywrite()});
-    
+
+    // Clipboard code
+    document.getElementById("copyapiwritebtn").addEventListener("click", function() {
+      copyToClipboardMsg(document.getElementById("copyapiwrite"), "msg");
+    });
+    document.getElementById("copyapireadbtn").addEventListener("click", function() {
+      copyToClipboardMsg(document.getElementById("copyapiread"), "msg");
+    });
+
     var currentlanguage = list.data.language;
 
     list.fields = {
         'gravatar':{'title':"<?php echo _('Gravatar'); ?>", 'type':'gravatar'},
         'name':{'title':"<?php echo _('Name'); ?>", 'type':'text'},
         'location':{'title':"<?php echo _('Location'); ?>", 'type':'text'},
+        'bio':{'title':"<?php echo _('Bio'); ?>", 'type':'text'},
         'timezone':{'title':"<?php echo _('Timezone'); ?>", 'type':'timezone'},
-        'language':{'title':"<?php echo _('Language'); ?>", 'type':'select', 'options':lang},
-        'bio':{'title':"<?php echo _('Bio'); ?>", 'type':'text'}
+        'language':{'title':"<?php echo _('Language'); ?>", 'type':'language', 'options':lang, 'label':lang_name},
+        'startingpage':{'title':"<?php echo _('Starting page'); ?>", 'type':'text'}
     }
+
+    $.ajax({ url: path+"user/gettimezones.json", dataType: 'json', async: true, success: function(result) {
+        list.timezones = result;
+    }});
 
     list.init();
 
@@ -191,7 +259,7 @@ function languagecodetotext()
         {
             $.ajax({
                 url: path+"user/changeemail.json",
-                data: "&email="+email,
+                data: "&email="+encodeURIComponent(email),
                 dataType: 'json',
                 success: function(result)
                 {

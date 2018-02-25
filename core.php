@@ -46,7 +46,7 @@ function db_check($mysqli,$database)
 
 function controller($controller_name)
 {
-    $output = array('content'=>'');
+    $output = array('content'=>"#UNDEFINED#");
 
     if ($controller_name)
     {
@@ -58,11 +58,9 @@ function controller($controller_name)
             $domain = "messages";
             bindtextdomain($domain, "Modules/".$controller_name."/locale");
             bind_textdomain_codeset($domain, 'UTF-8');
-
-
             textdomain($domain);
 
-            require $controllerScript;
+            require_once $controllerScript;
             $output = $controller();
         }
     }
@@ -120,7 +118,7 @@ function load_db_schema()
     $dir = scandir("Modules");
     for ($i=2; $i<count($dir); $i++)
     {
-        if (filetype("Modules/".$dir[$i])=='dir')
+        if (filetype("Modules/".$dir[$i])=='dir' || filetype("Modules/".$dir[$i])=='link')
         {
             if (is_file("Modules/".$dir[$i]."/".$dir[$i]."_schema.php"))
             {
@@ -133,14 +131,16 @@ function load_db_schema()
 
 function load_menu()
 {
-    $menu_left = array();
-    $menu_right = array();
-    $menu_dropdown = array();
+    $menu_dashboard = array(); // Published Dashboards
+    $menu_left = array();  // Left
+    $menu_dropdown = array(); // Extra
+    $menu_dropdown_config = array(); //Setup
+    $menu_right = array(); // Right
 
     $dir = scandir("Modules");
     for ($i=2; $i<count($dir); $i++)
     {
-        if (filetype("Modules/".$dir[$i])=='dir')
+        if (filetype("Modules/".$dir[$i])=='dir' || filetype("Modules/".$dir[$i])=='link')
         {
             if (is_file("Modules/".$dir[$i]."/".$dir[$i]."_menu.php"))
             {
@@ -149,11 +149,6 @@ function load_menu()
         }
     }
 
-    usort($menu_left, "menu_sort");
-    return array('left'=>$menu_left, 'right'=>$menu_right, 'dropdown'=>$menu_dropdown);
+    return array('dashboard'=>$menu_dashboard, 'left'=>$menu_left, 'dropdown'=>$menu_dropdown, 'dropdownconfig'=>$menu_dropdown_config, 'right'=>$menu_right);
 }
 
-// Menu sort by order
-function menu_sort($a,$b) {
-    return $a['order']>$b['order'];
-}

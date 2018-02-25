@@ -1,6 +1,6 @@
 /* Pretty handling of time axes.
 
-Copyright (c) 2007-2013 IOLA and Ole Laursen.
+Copyright (c) 2007-2014 IOLA and Ole Laursen.
 Licensed under the MIT license.
 
 Set axis.mode to "time" to enable. See the section "Time series data" in
@@ -204,7 +204,7 @@ API.txt for details.
 					axis.tickGenerator = function(axis) {
 
 						var ticks = [];
-						var d = dateGenerator(axis.min, opts);
+						var d = makeUtcWrapper(new Date(axis.min));
 						var minSize = 0;
 
 						// make quarter use a possibility if quarters are
@@ -427,5 +427,6 @@ API.txt for details.
 	// on the function, so we need to re-expose it here.
 
 	$.plot.formatDate = formatDate;
+	$.plot.dateGenerator = dateGenerator;
 
 })(jQuery);

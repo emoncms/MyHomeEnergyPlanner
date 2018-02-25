@@ -13,6 +13,7 @@ var list = {
     'data':{},
     'fields':{},
     'element':"#table",
+    'timezones':{},
 
     'init':function()
     {
@@ -82,31 +83,50 @@ var list = {
           'save':function(field) { return $(list.element+' tr[field='+field+'] td[type=value] select').val();}
         },
 
+        'language':
+        {
+          'draw':function(value) { 
+            for (i in list.fields['language'].options)
+            {
+              if (list.fields['language'].options[i] == value) return list.fields['language'].label[i];
+            } 
+          },
+          'edit':function(field,value) 
+          {
+            var options = '';
+            for (i in list.fields[field].options)
+            {
+              var selected = ""; if (list.fields[field].options[i] == value) selected = 'selected';
+              options += "<option value="+list.fields[field].options[i]+" "+selected+">"+list.fields[field].label[i]+"</option>";
+            }
+            return "<select>"+options+"</select>";
+          },
+          'save':function(field) { return $(list.element+' tr[field='+field+'] td[type=value] select').val();}
+        },
+
         'timezone':
         {
           'draw':function(value) 
           { 
-            var sign = value >= 0 ? '+' : ''; 
-            return "UTC "+sign+(value||0)+":00"; 
+            return value;
           },
           'edit':function(field,value) 
           {
             var select = $('<select />'),
-                selectedIndex = null,
-                sign;
+                selectedIndex = null;
                 
-            for (var i=-12; i<=14; i++) { 
+            for (i in list.timezones) {
+              var tz = list.timezones[i];
               var selected = ""; 
-              if (value == i) {
+              if (value == tz.id) {
                 selected = 'selected';
-                selectedIndex = i;
+                selectedIndex = tz.id;
               }
-              sign = i >= 0 ? '+' : '';
-              select.append("<option value="+i+" "+selected+">UTC "+sign+i+":00</option>");
+              select.append("<option value="+tz.id+" "+selected+">"+tz.id+" ("+tz.gmt_offset_text+")</option>");
             }
-            //If no selected index were set, then default to 0
+            //If no selected index were set, then default to UTC
             if ( selectedIndex === null ) {
-                select.find("option[value='0']").attr('selected', 'selected');
+                select.find("option[value='UTC']").attr('selected', 'selected');
             }
             return select.wrap('<p>').parent().html();  //return HTML-string
           },
@@ -115,7 +135,7 @@ var list = {
  
         'gravatar':
         {
-          'draw':function(value) { return "<img style='border: 1px solid #ccc; padding:2px;' src='http://www.gravatar.com/avatar/"+CryptoJS.MD5(value)+"'/ >" },
+          'draw':function(value) { return "<img style='border: 1px solid #ccc; padding:2px;' src='//www.gravatar.com/avatar/"+CryptoJS.MD5(value)+"'/ >" },
           'edit':function(field,value) { return "<input type='text' value='"+value+"' / >" },
           'save':function(field) { return $(list.element+' tr[field='+field+'] td[type=value] input').val();}
         }
