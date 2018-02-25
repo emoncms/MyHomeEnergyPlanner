@@ -1,5 +1,5 @@
 <?php
-global $path;
+global $path,$app_color,$app_title,$app_description;
 $d = $path . "Modules/assessment/";
 
 $projectid = (int) $_GET['id'];
@@ -7,6 +7,7 @@ $projectid = (int) $_GET['id'];
 global $reports;
 ?>        
 
+<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="<?php echo $d; ?>style.css">
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
@@ -28,6 +29,22 @@ global $reports;
 <script src="<?php echo $d; ?>js/magnific-popup/jquery.magnific-popup.min.js"></script>
 
 <style>
+    :root {
+        --app-color: <?php echo $app_color;?>;
+    }
+    
+    .cc {
+        color: var(--app-color);
+        font-weight: bold;
+        padding-right:20px;
+        
+    }
+
+    .title {
+        padding: 10px 30px;
+        color:#888;
+        float:left;
+    }
     .modal-backdrop
     {
         opacity:0.3 !important;

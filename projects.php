@@ -1,9 +1,29 @@
 <?php
-global $path, $session;
+global $path, $session, $app_color,$app_title,$app_description;
 $d = $path . "Modules/assessment/";
 ?>
 
+<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="<?php echo $d; ?>style.css">
+
 <style>
+    :root {
+        --app-color: <?php echo $app_color;?>;
+    }
+    
+    .cc {
+        color: var(--app-color);
+        font-weight: bold;
+        padding-right:20px;
+        
+    }
+
+    .title {
+        padding: 10px 30px;
+        color:#888;
+        float:left;
+    }
+    
     .recent-activity-item {
         padding:5px;
         border-bottom: 1px solid #ccc;
@@ -20,8 +40,6 @@ $d = $path . "Modules/assessment/";
         margin-left: -280px;
     }
 </style>
-
-<link rel="stylesheet" href="<?php echo $d; ?>style.css">
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
