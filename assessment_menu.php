@@ -4,7 +4,7 @@
 
     $menu_left[] = array(
         'id'=>"assessment_menu",
-        'name'=>"Assessment", 
+        'name'=>"MyHomeEnergyPlanner", 
         'path'=>"assessment/list" , 
         'session'=>"write", 
         'order' => 0,

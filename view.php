@@ -71,9 +71,8 @@ global $reports;
 <link rel="stylesheet" href="<?php echo $d; ?>carbon.css">
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
-
 <div id="openbem">
-    <div id="left-pane">
+    <div id="sidebar">
         <div class="side-block-2">
             <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;width"><b>Project: <span id="project-title"></span> <a id="edit-project-name-and-description" href="#"><i class="icon-edit"></i></a></b></div>
             <div style="padding:10px">
@@ -145,7 +144,7 @@ global $reports;
         </div>
     </div>
 
-    <div id="right-pane">
+    <div id="wrapper">
 
 
 
@@ -243,8 +242,6 @@ global $reports;
     var selected_library_tag = "Wall";
     var printmode = false;
     //var org_report = ''; //
-
-    $("#openbem").css("background-color", "#eee");
 
     var path = "<?php echo $path; ?>";
     var jspath = path + "Modules/assessment/";
@@ -780,9 +777,61 @@ global $reports;
     $("#rating").hide();
     $(".house_graphic").html("Hide house graphic");
 
-    $(window).resize(function () {
-        draw_openbem_graphics();
+
+var max_wrapper_width = 1150;
+var sidebar_enabled = true;
+var sidebar_visible = true;
+
+$("#assessment_menu").parent().attr("href","#");
+$("#assessment_menu").find("i").removeClass("icon-home");
+$("#assessment_menu").find("i").addClass("icon-list");
+
+sidebar_resize();
+
+function sidebar_resize() {
+    var width = $(window).width();
+    var height = $(window).height();
+    var nav = $(".navbar").height();
+    $("#sidebar").height(height-nav);
+    
+    if (width<max_wrapper_width) {
+        hide_sidebar()
+    } else {
+        if (sidebar_enabled) show_sidebar()
     }
-    );
+}
+
+$(window).resize(function(){
+    draw_openbem_graphics();
+    sidebar_resize();
+});
+
+$("#assessment_menu").parent().click(function(){
+    if (sidebar_visible) {
+        sidebar_enabled = false;
+        hide_sidebar();
+    } else {
+        sidebar_enabled = true;
+        show_sidebar();
+    }
+});
+
+function show_sidebar() {
+    var width = $(window).width();
+    sidebar_visible = true;
+    $("#sidebar").css("left","340px");
+    //if (width>=max_wrapper_width) $("#wrapper").css("padding-left","250px");
+    //$("#wrapper").css("margin","0");
+    $("#sidenav-open").hide();
+    $("#sidenav-close").hide();
+}
+
+function hide_sidebar() {
+    sidebar_visible = false;
+    $("#sidebar").css("left","0");
+    $("#wrapper").css("padding-left","0");
+    $("#wrapper").css("margin","0 auto");
+    $("#sidenav-open").show();
+}
 
 </script>
