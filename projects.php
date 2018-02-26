@@ -1,4 +1,5 @@
 <?php
+defined('EMONCMS_EXEC') or die('Restricted access');
 global $path, $session, $app_color,$app_title,$app_description;
 $d = $path . "Modules/assessment/";
 ?>

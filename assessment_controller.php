@@ -239,11 +239,11 @@ function assessment_controller() {
 // -------------------------------------------------------------------------------------------------------------
 // Image gallery
 // -------------------------------------------------------------------------------------------------------------
-        if ($route->action == 'uploadimages' && $session['write'])
-            $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
+        // if ($route->action == 'uploadimages' && $session['write'])
+        // $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
 
-        if ($route->action == 'deleteimage' && $session['write'])
-            $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
+        // if ($route->action == 'deleteimage' && $session['write'])
+        // $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
 
 
 // Upgrade (temporary)    

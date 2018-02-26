@@ -40,6 +40,7 @@ class Organisation
     public function create($orgname,$userid)
     {
         $userid = (int) $userid;
+        $orgname = preg_replace('/[^\w\s]/', '', $orgname);
 
         $result = $this->mysqli->query("SELECT * FROM organisations WHERE `name`='$orgname'");
         if ($result->num_rows==1) return false;   // entry already exists

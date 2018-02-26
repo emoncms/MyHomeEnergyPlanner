@@ -7,7 +7,7 @@ $projectid = (int) $_GET['id'];
 global $reports;
 ?>        
 
-<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
+<!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>-->
 <link rel="stylesheet" href="<?php echo $d; ?>style.css">
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
@@ -76,7 +76,7 @@ global $reports;
                 <div class="scenario-nav-heading">Project input</div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
+                <!--<div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>-->
                 <div class="scenario-nav-heading">Other</div>
                 <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CarbonCoop">Carbon Coop Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CAfS">CAfS Report</a></div>
