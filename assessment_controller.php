@@ -4,7 +4,8 @@
 defined('EMONCMS_EXEC') or die('Restricted access');
 
 function assessment_controller() {
-    global $session, $route, $mysqli;
+    global $session, $route, $mysqli, $fullwidth;
+    $fullwidth = true;
 
     /* --------------------------------------------------------------------------
       // Backwards compatibility:
