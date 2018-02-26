@@ -809,8 +809,8 @@ function show_sidebar() {
     var width = $(window).width();
     sidebar_visible = true;
     $("#sidebar").css("left","340px");
-    //if (width>=max_wrapper_width) $("#wrapper").css("padding-left","250px");
-    //$("#wrapper").css("margin","0");
+    if (width>=max_wrapper_width) $("#wrapper").css("padding-left","330px");
+    $("#wrapper").css("margin","0");
     $("#sidenav-open").hide();
     $("#sidenav-close").hide();
 }
