@@ -62,6 +62,36 @@ function varset(key, value)
     return lastval;
 }
 
+function varget(key)
+{
+    var p = key.split('.');
+    var val = false;
+
+    switch (p.length) {
+        case 0:
+            break;
+        case 1:
+            try { val = window[p[0]]; } catch(err) { }
+            break;
+        case 2:
+            try { val = window[p[0]][p[1]]; } catch(err) { }
+            break;
+        case 3:
+            try { val = window[p[0]][p[1]][p[2]]; } catch(err) { }
+            break;
+        case 4:
+            try { val = window[p[0]][p[1]][p[2]][p[3]]; } catch(err) { }
+            break;
+        case 5:
+            try { val = window[p[0]][p[1]][p[2]][p[3]][p[4]]; } catch(err) { }
+            break;
+        case 6:
+            try { val = window[p[0]][p[1]][p[2]][p[3]][p[4]][p[5]]; } catch(err) { }
+            break;
+    }
+    return val;
+}
+
 function InitUI()
 {
     // Call page specific updateui function
@@ -76,13 +106,16 @@ function InitUI()
         var title = $(this).attr('title');
         var units = $(this).attr('units');
 
-        var out = "<td>" + title + "</td>";
+        var out = "";
+        var sum = 0;
         for (var m = 0; m < 12; m++)
         {
             out += "<td key='" + name + "." + m + "' dp=" + dp + " units='" + units + "'></td>";
+            sum += varget(name+"."+m);
         }
-
-        $(this).html("<tr>" + out + "</tr>");
+        var mean = sum / 12.0;
+        
+        $(this).html("<tr><td>" + title + "</td><td>sum:"+sum.toFixed(dp)+"<br>mean:"+mean.toFixed(dp)+"</td>" + out + "</tr>");
     });
 }
 

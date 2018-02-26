@@ -557,16 +557,18 @@ libraryHelper.prototype.onEditLibraryItemOk = function (library_id) {
             }});
     }
 };
+
+// called from elements.js edit-item on fabric element
 libraryHelper.prototype.onEditItem = function (origin) {
     var item = JSON.parse(origin.attr('item'));
     var tag = origin.attr('tag');
     // Call to specific function for the type
     var function_name = this.type + '_item_to_html';
-    var out = this[function_name](item, tag);
+    var out = this[function_name](item, tag); // e.g: function_name: elements_item_to_html
     $('.edit-item-in-library').html(out);
     $('#library-to-edit-item').parent().hide('fast');
-    $('.item-tag').attr('disabled', 'true');
-    $('.editable-field').attr('disabled', 'true');
+    $('.item-tag').attr('disabled', 'true'); // comment to enable change of tag
+    $('.editable-field').attr('disabled', 'true'); // comment to enable change of tag
     $('#edit-item-ok').attr('class', "btn edit-item-ok");
     $("#edit-item-message").html('');
     $('#edit-item-ok').attr('row', origin.attr('row'));
