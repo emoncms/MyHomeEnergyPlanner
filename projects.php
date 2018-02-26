@@ -44,16 +44,9 @@ $d = $path . "Modules/assessment/";
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
 
-<div id="left-pane">
+<div id="wrapper">
 
-    <div id="myview" class="side-block-2">
-        <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>My Home Energy Planner</b></div>
-        <div style="padding:10px">
-            Welcome <span class="username"></span>!
-        </div>
-    </div>
-
-    <div id="organisation" class="side-block-2" style="display:none">
+    <div id="organisation" class="main-block" style="display:none">
         <button id="back-myview" style="float:right; margin-top:5px; margin-right:5px" class="btn">Home</button>
         <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;">
 
@@ -72,7 +65,7 @@ $d = $path . "Modules/assessment/";
         </div>
     </div>
 
-    <div class="side-block-2">
+    <div class="main-block">
         <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>My Organisations</b></div>
         <div style="padding:10px">
             <div id="myorganisations"></div>
@@ -83,24 +76,9 @@ $d = $path . "Modules/assessment/";
             </div>
         </div>
     </div>
-    <!--
-    <div class="side-block-2">
-        <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>Recent activity</b></div>
-        <div style="padding:10px">
-        <div class="recent-activity-item">
-        Trystan created new assessment: Ogoronwy<br>
-        <i>5 hours 44 min ago</i>
-        </div>
-        <div class="recent-activity-item">
-        Marianne made 32 changes to: 27 rockdale av<br>
-        <i>8 hours 23 min ago</i>
-        </div>
-        </div>
-    </div>
-    -->
 </div>
 
-<div id="right-pane" class="assessments">
+<div id="wrapper" class="assessments">
     <div style="padding-right:10px">
         <div class="main-block">
             <button id="new-assessment" style="float:right; margin-top:5px; margin-right:5px" class="btn">New</button>

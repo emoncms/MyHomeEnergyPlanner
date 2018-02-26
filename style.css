@@ -36,28 +36,39 @@ a:hover {
     color: var(--app-color);
 }
 
-#left-pane {
-    width:340px;
-    float:left;
+#sidebar {
+  margin-top:0px;
+  margin-left: -340px;
+  left: 340px;
+  width: 340px;
+  background: #d6d4ce;
+  position: fixed;
+  overflow-y: auto;
+  z-index: 1000; 
 }
 
-#right-pane {
-    width: auto;
-    min-width:720px;
-    max-width:1280px;
-    overflow: hidden;
+#wrapper {
+  padding:0px;
+  margin:0 auto;
+  padding-left: 0px;
+  max-width:1150px;
+}
+
+.block-header {
+    background-color:#dbd6ce;
+    color:#897A67; 
+    padding:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.block-header:hover {
+    background-color:#e2ded7;
 }
 
 .side-block {
-    background-color:#fff;
-    padding:20px;
-    margin:10px;
-    
-}
-
-.side-block-2 {
-    background-color:#fff;
-    margin:10px;
+    background-color:#f7f6f5;
+    border-bottom: 1px solid #edeae6;
 }
 
 .main-block {
@@ -67,16 +78,6 @@ a:hover {
     background-color:#fff;
     
     margin-top:10px;
-}
-
-
-#create-new {
-    background-color:rgb(230,230,230);
-    padding:10px;
-    padding-left:20px;
-    margin:10px;
-    color:rgb(100,100,100);
-    font-size: 14px;
 }
 
 .scenario-nav {
@@ -104,7 +105,7 @@ input[type="checkbox"] {
   background-color:#fff;
   
   padding:30px;
-  margin-top:10px;
+  
 }
 
 
@@ -133,5 +134,21 @@ body .modal {
 .modal-body {
   max-height: 800px;
 }
+
+@media (max-width: 767px) {
+  body {padding:0};
+}
+
+@media (max-width: 450px) {
+  .row { padding:10px; }
+  .col2 { width:100%; }  
+  .col1-inner { padding:5px; }
+  .col2-inner { padding:5px; }
+}
+    
+@media (min-width: 450px) and (max-width: 960px) { 
+  .col2 { width:100%; } 
+}
+@media (min-width: 960px) { }
 
 
