@@ -584,14 +584,15 @@ global $reports;
     });
 
     // Scenarios menu interactions
-    $("#openbem").on('click', ".scenario-block", function () {
-        var s = $(this).attr('scenario');
+    $("#openbem").on('click', ".block-header", function () {
+        var s = $(this).parent().attr('scenario');
         //  if (s != scenario) {
         window.location = '#' + s + '/' + page;
         
-        var visible = $(this).find(".menu-content").is(":visible");
+        var menu_content = $(this).parent().find(".menu-content");
+        var visible = menu_content.is(":visible");
         $(".menu-content").hide();
-        if (!visible) $(this).find(".menu-content").show();
+        if (!visible) menu_content.show();
         /*
          data = project[scenario];
          load_view("#content", page);
