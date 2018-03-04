@@ -344,7 +344,7 @@ global $reports;
         // Disable measures if master
         show_hide_if_master();
 
-        update();
+        update(false,false);
     });
 
 
@@ -395,7 +395,7 @@ global $reports;
         show_hide_if_master();
     });
 
-    function update(undo_redo = false)
+    function update(undo_redo = false, reload_menu = true)
     {
         console.log("updating");
 
@@ -422,7 +422,7 @@ global $reports;
 
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
         
-        add_scenarios_to_menu();
+        if (reload_menu) add_scenarios_to_menu();
 
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
