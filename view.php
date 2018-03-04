@@ -588,8 +588,10 @@ global $reports;
         var s = $(this).attr('scenario');
         //  if (s != scenario) {
         window.location = '#' + s + '/' + page;
+        
+        var visible = $(this).find(".menu-content").is(":visible");
         $(".menu-content").hide();
-        $(this).find(".menu-content").show();
+        if (!visible) $(this).find(".menu-content").show();
         /*
          data = project[scenario];
          load_view("#content", page);
