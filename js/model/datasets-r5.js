@@ -37,6 +37,9 @@ var datasets = {
         '24-hour heating tariff': {category: 'Electricity', standingcharge: 40, fuelcost: 7.75, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 35},
         // Do not remove the following fuels from the datasets, they are required by the model
         'Standard Tariff': {category: 'Electricity', standingcharge: 66, fuelcost: 15.06, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 30},
+        'Green Tariff 2016': {category: 'Electricity', standingcharge: 66, fuelcost: 15.06, co2factor: 0.218, primaryenergyfactor: 2.50, SAP_code: 30},
+        'Green Tariff + 25% natural gas backup': {category: 'Electricity', standingcharge: 66, fuelcost: 15.06, co2factor: 0.090, primaryenergyfactor: 1.70, SAP_code: 30},
+        '100% Green Tariff': {category: 'Electricity', standingcharge: 66, fuelcost: 15.06, co2factor: 0.0, primaryenergyfactor: 1.60, SAP_code: 30},
         'generation': {category: 'generation', standingcharge: 0, fuelcost: 15.06, co2factor: 0.381, primaryenergyfactor: 3.28, SAP_code: 0}
     },
     
