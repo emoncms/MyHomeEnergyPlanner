@@ -397,8 +397,6 @@ global $reports;
 
     function update(undo_redo = false, reload_menu = true)
     {
-        console.log("updating");
-
         // We need to calculate the periods of heating off here because if we try to do it in household.js it happens after the update
         if (project.master.household != undefined) {
             for (var s in project) { // we ensure all the scenarios have the same household data and heating off periods
@@ -580,11 +578,12 @@ global $reports;
             console.log(key + " changed from " + lastval + " to " + val);
             changelog += key + " changed from " + lastval + " to " + val + "<br>";
         }
-        update();
+        update(false,false);
     });
 
     // Scenarios menu interactions
     $("#openbem").on('click', ".block-header", function () {
+    
         var s = $(this).parent().attr('scenario');
         //  if (s != scenario) {
         window.location = '#' + s + '/' + page;
