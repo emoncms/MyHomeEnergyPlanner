@@ -91,8 +91,18 @@ calc.start = function (data)
         data.altitude = 0;
     if (data.LAC_calculation_type == undefined)
         data.LAC_calculation_type = 'SAP';
+        
     if (data.fuels == undefined)
         data.fuels = datasets.fuels;
+     
+    // Copy over any new fuels added in datasets to local assessment copy
+    // this does not overwrite any local changes   
+    for (var fuel in datasets.fuels) {
+        if (data.fuels[fuel]==undefined) {
+            data.fuels[fuel] = datasets.fuels[fuel];
+        }
+    }  
+        
     data.num_of_floors = 0;
     data.TFA = 0;
     data.volume = 0;
