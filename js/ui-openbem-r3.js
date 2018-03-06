@@ -109,8 +109,9 @@ function draw_openbem_graphics()
         value: value,
         units: units,
         targets: {
+            
+            "Zero Carbon": 0,
             "80% by 2050": 17,
-            // "Zero Carbon": 0,
             "UK Average": datasets.uk_average_values.co2_emission_rate
         }
     };

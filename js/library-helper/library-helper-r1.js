@@ -107,7 +107,9 @@ libraryHelper.prototype.add_events = function () {
         myself.onEditLibraryItemOk(library_id);
     });
     this.container.on('click', '.edit-item', function () {
-        myself.onEditItem($(this));
+        // myself.onEditItem($(this));
+        myself.init(); // Reload the lobrary before we display it
+        myself.onAddItemFromLib($(this));
     });
     this.container.on('click', '.edit-item-ok', function () {
         myself.onEditItemOk();
@@ -986,10 +988,19 @@ libraryHelper.prototype.systems_library_to_html = function (origin, library_id) 
 };
 libraryHelper.prototype.elements_library_to_html = function (origin, library_id) {
     var tag = [];
-    if (origin != undefined)
+    var selected_lib = false;
+    var element_row = false;
+    
+    if (origin != undefined) {
         tag = $(origin).attr('tags').split(',');
-    else
+        element_row = $(origin).attr('row');
+        selected_lib = data.fabric.elements[element_row].lib;
+        
+        if (selected_lib==undefined) selected_lib = false;
+    } else {
         tag = ['Wall'];
+    }
+        
     //if ($('#library-select').val() != undefined)
     //library_id = $('#library-select').val();
     var element_library = this.get_library_by_id(library_id).data;
@@ -1015,7 +1026,8 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     out += '<table>';
     for (z in element_library) {
         if (tag.indexOf(element_library[z].tags[0]) != -1) {
-            out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
+            var selected_class = ""; if (z==selected_lib) selected_class = "selected_lib";
+            out += "<tr class='librow "+selected_class+"' lib='" + z + "' type='" + tag + "'>";
             out += "<td>" + z + "</td>";
             out += "<td>" + element_library[z].name;
             out += "<br><span style='font-size:13px'><b>Source:</b> " + element_library[z].source + "</span>";
@@ -1036,7 +1048,15 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
             out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             // out += "<i class='icon-trash' style='margin-left:20px'></i>";
-            out += "<button class='add-element use-from-lib btn' style='margin-left:20px' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "'>use</button</i>";
+            
+            // add-element & change-element handled in elements.js
+            var action = "add-element";
+            var row_attr = "";
+            if (selected_lib) { 
+                action = "change-element";
+                row_attr = "row="+element_row;
+            }
+            out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "'>use</button</i>";
             out += "</td>";
             out += "</tr>";
         }

@@ -3,6 +3,8 @@ if (typeof library_helper != "undefined")
     library_helper.type = 'elements';
 else
     var library_helper = new libraryHelper('elements', $("#openbem"));
+    
+// button defined in: libraryHelper:elements_library_to_html
 $("#openbem").on("click", '.add-element', function () {
 
     var lib = $(this).attr("lib");
@@ -42,6 +44,30 @@ $("#openbem").on("click", '.add-element', function () {
     update();
     $('#myModal').modal('hide');
 });
+
+// button defined in: libraryHelper:elements_library_to_html
+$("#openbem").on("click", '.change-element', function () {
+
+    var row = $(this).attr("row");
+    var lib = $(this).attr("lib");
+    var type = $(this).attr("type");
+    type = type.charAt(0).toUpperCase() + type.slice(1); // Ensure first letter is capital
+    
+    console.log("change element row="+row+" lib="+lib);
+
+    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    
+    data.fabric.elements[row].lib = lib;
+    if (lib != undefined) {
+        for (var z in library[lib]) {
+            if (z!='location')
+                data.fabric.elements[row][z] = library[lib][z];
+        }
+    }
+    
+    update();
+});
+
 $("#openbem").on("click", '.delete-element', function () {
     var row = $(this).attr('row');
     var item_id = 1.0 * $(this).attr('item_id');
@@ -50,6 +76,7 @@ $("#openbem").on("click", '.delete-element', function () {
     elements_initUI();
     update();
 });
+
 $("#openbem").on("click", '#apply-measure-TB', function () {
     $('#TB-measure-value').val(data.fabric.thermal_bridging_yvalue);
     $('#apply-measure-TB-modal').modal('show');
@@ -243,6 +270,7 @@ function add_element(id, z)
 {
     var element = data.fabric.elements[z];
     $(id).append($("#element-template").html());
+    var row = $(id + " [row='template']");
     $(id + " [key='data.fabric.elements.template.type']").attr('key', 'data.fabric.elements.' + z + '.type');
     $(id + " [key='data.fabric.elements.template.name']").attr('key', 'data.fabric.elements.' + z + '.name');
     $(id + " [key='data.fabric.elements.template.location']").attr('key', 'data.fabric.elements.' + z + '.location');
@@ -257,11 +285,11 @@ function add_element(id, z)
     $(id + " [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
     $(id + " [key='data.fabric.elements.template.EWI']").html(data.fabric.elements[z].EWI == true ? 'EWI' : '');
     $(id + " [key='data.fabric.elements.template.EWI']").removeAttr('key');
-    $(id + " [row='template']").attr('row', z);
-    $(id + " [item_id='template']").attr('item_id', data.fabric.elements[z].id);
-    $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
-    $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
-
+    row.attr('row', z);
+    row.attr('item_id', data.fabric.elements[z].id);
+    row.attr('item', JSON.stringify(data.fabric.elements[z]));
+    row.attr('tags', data.fabric.elements[z].type);
+    
     // Revert to original
     init_revert_to_original(id, z);
 
@@ -272,6 +300,7 @@ function add_floor(z)
     var id = "#floors";
     var element = data.fabric.elements[z];
     $(id).append($("#floor-template").html());
+    var row = $(id + " [row='template']");
     $(id + " [key='data.fabric.elements.template.type']").attr('key', 'data.fabric.elements.' + z + '.type');
     $(id + " [key='data.fabric.elements.template.name']").attr('key', 'data.fabric.elements.' + z + '.name');
     $(id + " [key='data.fabric.elements.template.location']").attr('key', 'data.fabric.elements.' + z + '.location');
@@ -283,10 +312,11 @@ function add_floor(z)
     $(id + " [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
     $(id + " [key='data.fabric.elements.template.EWI']").html(data.fabric.elements[z].EWI == true ? 'EWI' : '');
     $(id + " [key='data.fabric.elements.template.EWI']").removeAttr('key');
-    $(id + " [row='template']").attr('row', z);
-    $(id + " [item_id='template']").attr('item_id', data.fabric.elements[z].id);
-    $(id + " [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
-    $(id + " [tag='template']").attr('tag', data.fabric.elements[z].lib);
+    row.attr('row', z);
+    row.attr('item_id', data.fabric.elements[z].id);
+    row.attr('item', JSON.stringify(data.fabric.elements[z]));
+    row.attr('tags', data.fabric.elements[z].type);
+
     if (data.fabric.elements[z].uvalue == 0)
         $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color', 'red');
 
@@ -298,6 +328,7 @@ function add_window(z)
 {
     var element = data.fabric.elements[z];
     $("#windows").append($("#window-template").html());
+    var row = $("#windows [row='template']");
     $("#windows [key='data.fabric.elements.template.lib']").attr('key', 'data.fabric.elements.' + z + '.lib');
     $("#windows [key='data.fabric.elements.template.name']").attr('key', 'data.fabric.elements.' + z + '.name');
     $("#windows [key='data.fabric.elements.template.location']").attr('key', 'data.fabric.elements.' + z + '.location');
@@ -323,7 +354,7 @@ function add_window(z)
         $('#windows .window_fields_template').html('');
     }
     $("#windows [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
-    $("#windows [tag='template']").attr('tag', data.fabric.elements[z].lib);
+    
     $('#windows .window_fields_template').removeClass('window_fields_template');
     data.fabric.elements[z].name = String(data.fabric.elements[z].name);
     var name = data.fabric.elements[z].name;
@@ -340,9 +371,11 @@ function add_window(z)
         $("#windows [key='data.fabric.elements." + z + ".name']").parent().parent().css('background-color', '#ddeeff');
     }
 
-    $("#windows [row='template']").attr('row', z);
-    $("#windows [item_id='template']").attr('item_id', data.fabric.elements[z].id);
-    $("#windows [item='template']").attr('item', JSON.stringify(data.fabric.elements[z]));
+    row.attr('row', z);
+    row.attr('item_id', data.fabric.elements[z].id);
+    row.attr('item', JSON.stringify(data.fabric.elements[z]));
+    row.attr('tags', data.fabric.elements[z].type);
+    
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
         // here
