@@ -326,15 +326,21 @@ calc.fabric = function (data, solar_acces_factor)
                 }
             }
         }
+        
+        var uvalue = data.fabric.elements[z].uvalue;
+        if (typeof data.fabric.elements[z].uvalue === 'object') uvalue = typeof data.fabric.elements[z].uvalue.mean;
 
-        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window' || data.fabric.elements[z].type == 'Roof_light')
-            data.fabric.elements[z].wk = data.fabric.elements[z].netarea * (1 / (1 / data.fabric.elements[z].uvalue + 0.04)); // SAP assumes we are using curtains: paragraph 3.2, p. 15, SAP2012
-        else
-            data.fabric.elements[z].wk = data.fabric.elements[z].netarea * data.fabric.elements[z].uvalue;
+        if (data.fabric.elements[z].type == 'window' || data.fabric.elements[z].type == 'Window' || data.fabric.elements[z].type == 'Roof_light') {
+
+        
+            data.fabric.elements[z].wk = data.fabric.elements[z].netarea * (1.0/ (1.0/ uvalue + 0.04)); // SAP assumes we are using curtains: paragraph 3.2, p. 15, SAP2012
+        } else { 
+            data.fabric.elements[z].wk = data.fabric.elements[z].netarea * uvalue;
+        }
         data.fabric.total_heat_loss_WK += data.fabric.elements[z].wk;
         // By checking that the u-value is not 0 = internal walls we can calculate total external area
-        //if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].netarea != undefined) {
-        if (data.fabric.elements[z].uvalue != 0 && data.fabric.elements[z].type != 'party_wall' && data.fabric.elements[z].type != 'Party_wall') {
+        //if (uvalue != 0 && data.fabric.elements[z].netarea != undefined) {
+        if (uvalue != 0 && data.fabric.elements[z].type != 'party_wall' && data.fabric.elements[z].type != 'Party_wall') {
             if (data.fabric.elements[z].netarea == undefined)
                 data.fabric.elements[z].netarea = 0;
             data.fabric.total_external_area += data.fabric.elements[z].netarea;

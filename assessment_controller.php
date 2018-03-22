@@ -236,6 +236,11 @@ function assessment_controller() {
 
         if ($route->action == 'deletelibraryitem' && $session['write'])
             $result = $assessment->deletelibraryitem($session['userid'], get('library_id'), get('tag'));
+            
+        if ($route->action == 'load-lib' && $session['write']) {
+            $master = file_get_contents("/var/lib/mhep/master.json");
+            $result = json_decode($master);
+        }
 // -------------------------------------------------------------------------------------------------------------
 // Image gallery
 // -------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,156 @@
+<style>
+
+#libmanout {
+    border: 1px solid #ccc;
+}
+
+#libman-m1-bound {
+    width:250px;
+    border-right: 1px solid #ccc;
+    background-color:#dbd6ce;
+    float:left;
+}
+
+#libman-m2-bound {
+    width:100px;
+    border-right: 1px solid #ccc;
+    background-color:#e9e6e1;
+    float:left;
+}
+
+#libman-m3-bound {
+    border-right: 1px solid #ccc;
+    background-color:#f7f6f5;
+    float:left;
+}
+
+.libman-item {
+    padding:3px;
+    border-bottom: 1px solid #ccc;
+    cursor:pointer;
+}
+
+.libman-item:hover {
+    background-color:#dbd6ce;
+}
+
+input[type=text] {
+    width:500px;
+    border:0;
+    background:none;
+    padding:0;
+    margin:0;
+    line-height:18px;
+    height:18px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+input[type=text]:focus {
+
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.key { width:200px; display:inline-block; font-weight:bold; }
+
+</style>
+
+
+<div id="librariesmanager" class="page">
+    <hr>
+    <h3>Library Manager</h3>
+    <hr><br>
+    
+    <div id="libmanout">
+    
+    <div id="libman-m1-bound">
+    <div id="libman-m1"></div>
+    </div>
+    
+    <div id="libman-m2-bound">
+    <div id="libman-m2"></div>
+    </div>
+    
+    <div id="libman-m3-bound">    
+    <div id="libman-m3"></div>
+    </div>
+    
+    <div style="clear:both"></div>
+    </div>
+
+</div>
+
+<script>
+
+var l1 = false;
+var l2 = false;
+var l3 = false;
+
+var out = "";
+for (var z in standard_library) {
+    out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
+}
+$("#libman-m1").html(out);
+
+$("#libmanout").on("click",".libman-item",function() {
+
+    var level = $(this).attr("level");
+    var value = $(this).attr("value");
+
+    if (level==1) {
+    
+        $("#libman-m3").html("");
+    
+        l1 = value
+    
+        var out = "";
+        for (var z in standard_library[l1]) {
+            out += "<div class='libman-item' level=2 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
+        }
+        $("#libman-m2").html(out);
+    }
+
+    if (level==2) {
+    
+        l2 = value
+        console.log(l2);
+    
+        var out = "";
+        for (var z in standard_library[l1][l2]) {
+            out += "<div class='libman-item' level=3 value='"+z+"'><div class='key'>"+z.ucfirst().replace(/_/g," ")+":</div>";
+            
+            
+            var val = ""+standard_library[l1][l2][z];
+            if (val.length<100) {
+            
+            out += "<input type='text' value='"+standard_library[l1][l2][z]+"' />";
+            
+            } else { out += standard_library[l1][l2][z]; }
+            
+            out += "</div>";
+        }
+        $("#libman-m3").html(out);
+    }
+    
+    var height = 0;
+    var h1 = $("#libman-m1").height();
+    var h2 = $("#libman-m2").height();
+    var h3 = $("#libman-m3").height();
+    if (h1>height) height = h1;
+    if (h2>height) height = h2;
+    if (h3>height) height = h3;
+    $("#libman-m1-bound").height(height);
+    $("#libman-m2-bound").height(height);
+    $("#libman-m3-bound").height(height);
+    
+    
+    var l3w = $("#libmanout").width()-250-100-3;
+    $("#libman-m3").width(l3w);
+});
+
+
+
+</script>
