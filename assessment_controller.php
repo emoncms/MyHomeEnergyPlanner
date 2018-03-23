@@ -240,6 +240,10 @@ function assessment_controller() {
         if ($route->action == 'load-lib' && $session['write']) {
             $master = file_get_contents("/var/lib/mhep/master.json");
             $result = json_decode($master);
+            
+            //$fh = fopen("/var/lib/mhep/master.json","w");
+            //fwrite($fh,json_encode($result,JSON_PRETTY_PRINT));
+            //fclose($fh);
         }
 // -------------------------------------------------------------------------------------------------------------
 // Image gallery

@@ -48,7 +48,24 @@ input[type=text] {
 }
 
 input[type=text]:focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
 
+textarea {
+    width:500px;
+    border:0;
+    background:none;
+    padding:0;
+    margin:0;
+    height:100px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+textarea:focus {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -57,6 +74,8 @@ input[type=text]:focus {
 .key { width:200px; display:inline-block; font-weight:bold; }
 
 </style>
+
+<div id="defaults"></div>
 
 
 <div id="librariesmanager" class="page">
@@ -85,12 +104,39 @@ input[type=text]:focus {
 
 <script>
 
+var master = {};
+$.ajax({ url: path+"assessment/load-lib.json", dataType: 'json', async: false, success: function(result){master = result;} });
+
+var defaults = {};
+
+for (var z in master) {
+    defaults[z] = {};
+    for (var x in master[z]) {
+        for (var i in master[z][x]) {
+            
+            switch(typeof master[z][x][i]) {
+                case "string":
+                    defaults[z][i] = "";
+                    break;
+                case "number":
+                    defaults[z][i] = 0.0;
+                    break;
+            }
+        }
+        
+    }
+}
+
+$("#defaults").html(JSON.stringify(defaults));
+
+
+
 var l1 = false;
 var l2 = false;
 var l3 = false;
 
 var out = "";
-for (var z in standard_library) {
+for (var z in master) {
     out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
 }
 $("#libman-m1").html(out);
@@ -107,7 +153,7 @@ $("#libmanout").on("click",".libman-item",function() {
         l1 = value
     
         var out = "";
-        for (var z in standard_library[l1]) {
+        for (var z in master[l1]) {
             out += "<div class='libman-item' level=2 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
         }
         $("#libman-m2").html(out);
@@ -119,16 +165,16 @@ $("#libmanout").on("click",".libman-item",function() {
         console.log(l2);
     
         var out = "";
-        for (var z in standard_library[l1][l2]) {
+        for (var z in master[l1][l2]) {
             out += "<div class='libman-item' level=3 value='"+z+"'><div class='key'>"+z.ucfirst().replace(/_/g," ")+":</div>";
             
             
-            var val = ""+standard_library[l1][l2][z];
+            var val = ""+master[l1][l2][z];
             if (val.length<100) {
-            
-            out += "<input type='text' value='"+standard_library[l1][l2][z]+"' />";
-            
-            } else { out += standard_library[l1][l2][z]; }
+                out += "<input type='text' value='"+master[l1][l2][z]+"' />";
+            } else { 
+                out += "<textarea>"+master[l1][l2][z]+"</textarea>"; 
+            }
             
             out += "</div>";
         }
@@ -145,7 +191,6 @@ $("#libmanout").on("click",".libman-item",function() {
     $("#libman-m1-bound").height(height);
     $("#libman-m2-bound").height(height);
     $("#libman-m3-bound").height(height);
-    
     
     var l3w = $("#libmanout").width()-250-100-3;
     $("#libman-m3").width(l3w);
