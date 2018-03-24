@@ -11,13 +11,14 @@ $("#openbem").on("click", '.add-element', function () {
     var type = $(this).attr("type");
     type = type.charAt(0).toUpperCase() + type.slice(1); // Ensure first letter is capital
     var item_id = 1 + get_elements_max_id();
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    
+    var elements = library_helper.library.elements;
     // Create default element
     var element = {type: type, name: type, lib: lib, l: 0, h: 0, area: 0, uvalue: 0, kvalue: 0, wk: 0, id: item_id};
     // If library is defined replace defaults with parameters from library
     if (lib != undefined) {
-        for (z in library[lib])
-            element[z] = library[lib][z];
+        for (z in elements[lib])
+            element[z] = elements[lib][z];
     }
 
 // Set a default value for orientation and overshading
@@ -55,13 +56,13 @@ $("#openbem").on("click", '.change-element', function () {
     
     console.log("change element row="+row+" lib="+lib);
 
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
+    var elements = library_helper.library.elements;
     
     data.fabric.elements[row].lib = lib;
     if (lib != undefined) {
-        for (var z in library[lib]) {
+        for (var z in elements[lib]) {
             if (z!='location')
-                data.fabric.elements[row][z] = library[lib][z];
+                data.fabric.elements[row][z] = elements[lib][z];
         }
     }
     

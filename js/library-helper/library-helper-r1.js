@@ -321,17 +321,17 @@ String.prototype.ucfirst = function()
 function libraryHelper(type, container) {
     this.container = container;
     this.library_list = {};
+    this.library = {};
     this.library_permissions = {};
     // Variables to link the view with the controller
     this.type = type;
-    this.library_id = 0;
     this.library_names = {}; // I know this should not be here :p
     //this.library_html_strings ={};
 
     this.init();
     this.append_modals();
     this.add_events();
-    //$('#modal-share-library').modal('show');
+
 
 
 }
@@ -344,7 +344,7 @@ function libraryHelper(type, container) {
 
 libraryHelper.prototype.init = function () {
     this.load_user_libraries(); // Populates this.library_list
-    this.get_library_permissions(); // Populates this.library_permissions
+
     this.library_names = {
         'elements': 'Fabric elements',
         'systems': 'Energy systems',
@@ -376,18 +376,7 @@ libraryHelper.prototype.add_events = function () {
         myself.init(); // Reload the lobrary before we display it
         myself.onAddItemFromLib($(this));
     });
-    this.container.on('click', '#open-share-library', function () {
-        myself.onOpenShareLib($(this).attr('library-id'));
-    });
-    this.container.on('click', "#share-library", function () {
-        var library = null;
-        if ($(this).attr('library-id') != '')
-            library_id = $(this).attr('library-id');
-        myself.onShareLib(library_id);
-    });
-    this.container.on('click', '.remove-user', function () {
-        myself.onRemoveUserFromSharedLib($(this).attr('username'), $(this).attr('library-id'));
-    });
+
     this.container.on('change', '#library-select', function () {
         myself.onSelectingLibraryToShow($(this));
     });
@@ -395,18 +384,10 @@ libraryHelper.prototype.add_events = function () {
         myself.onChangeEmptyOrCopyLibrary();
     });
     this.container.on('click', '#newlibrary', function () {
-        myself.onCreateNewLibrary();
+        // myself.onCreateNewLibrary();
     });
     this.container.on('click', '.use-from-lib', function () {
         $('.modal').modal('hide');
-    });
-    this.container.on('click', '#create-in-library', function () {
-        library_id = $(this).attr('library-id');
-        myself.onCreateInLibrary(library_id);
-    });
-    this.container.on('click', '#create-in-library-ok', function () {
-        library_id = $(this).attr('library-id');
-        myself.onCreateInLibraryOk(library_id);
     });
     this.container.on('change', "[name=empty_or_copy_item]", function () {
         myself.onChangeEmptyOrCopyItem();
@@ -419,12 +400,6 @@ libraryHelper.prototype.add_events = function () {
     });
     this.container.on('click', '.edit-library-item', function () {
         myself.onEditLibraryItem($(this));
-    });
-    this.container.on('click', '.edit-library-item-ok', function () {
-        var library_id = null;
-        if ($(this).attr('library-id') != '')
-            library_id = $(this).attr('library-id');
-        myself.onEditLibraryItemOk(library_id);
     });
     this.container.on('click', '.edit-item', function () {
         // myself.onEditItem($(this));
@@ -458,10 +433,6 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '#edit-library-name-ok', function () {
         myself.onEditLibraryNameOk();
     });
-    this.container.on('click', '.show-items', function () {
-        myself.init(); // Reload the lobrary before we display it
-        myself.onShowLibraryItems($(this).attr('library-id'));
-    });
 
     this.container.on('change', '#show-library-items-modal .element-type select', function () {
         myself.onChangeTypeOfElementsToShow($(this));
@@ -473,10 +444,6 @@ libraryHelper.prototype.add_events = function () {
         myself.show_temporally_hidden_modals();
     });
 
-    this.container.on('click', '.manage-users', function () {
-        myself.init(); // Reload the lobrary before we display it
-        myself.onOpenShareLib($(this).attr('library-id'));
-    });
     this.container.on('click', '.create-new-library', function () {
         myself.type = $(this).attr('library-type');
         myself.onNewLibraryOption();
@@ -487,12 +454,7 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '#delete-library-ok', function () {
         myself.onDeleteLibraryOk($(this).attr('library-id'));
     });
-    this.container.on('click', '.add-item', function () {
-        myself.init(); // Reload the lobrary before we display it
-        var library_id = $(this).attr('library-id');
-        myself.type = myself.get_library_by_id(library_id).type;
-        myself.onCreateInLibrary(library_id);
-    });
+
     this.container.on('click', '.delete-library-item', function () {
         $('#delete-library-item-ok').attr('library-id', $(this).attr('library'));
         $('#delete-library-item-ok').attr('tag', $(this).attr('tag'));
@@ -555,11 +517,8 @@ libraryHelper.prototype.add_events = function () {
             $('.item-sfp').parent().parent().show();
         }
     });
-    this.container.on('click', '#show-library-modal-edit-mode #save', function () {
-        var library_id = $(this).attr('library-id');
-        myself.onSaveLibraryEditMode('#show-library-modal-edit-mode', library_id);
-    });
 };
+
 libraryHelper.prototype.append_modals = function () {
     var html;
     var myself = this;
@@ -572,81 +531,15 @@ libraryHelper.prototype.append_modals = function () {
  * Events methods
  *************************************/
 libraryHelper.prototype.onAddItemFromLib = function (origin) {
-    // Check if the user has a library of this type and if not create it. THIS HAS BEEN IMPLEMENTED IN projects.php
-    /* if (this.library_list[this.type] === undefined) {
-     this.library_list[this.type] = [];
-     var library_name = "StandardLibrary - " + p.author;
-     var myself = this;
-     $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + myself.type, datatype: "json", async: false, success: function (result) {
-     library_id = result;
-     myself.library_list[myself.type] = [{id: library_id, name: library_name, type: myself.type, data: standard_library[myself.type]}];
-     myself.library_permissions[library_id] = {write: 1};
-     $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + JSON.stringify(standard_library[myself.type]), success: function (result) {
-     console.log("save library result: " + result);
-     }});
-     }});
-     }*/
+    console.log('onAddItemFromLib');
+    
     this.populate_library_modal(origin);
     $("#show-library-modal").modal('show');
 };
-libraryHelper.prototype.onOpenShareLib = function (selected_library) {
-    //if ($('#library-select').val() != undefined)
-    //selected_library = $('#library-select').val();
-    this.display_library_users(selected_library);
-    $('#modal-share-library #share-library').attr('library-id', selected_library);
-    $('.modal').modal('hide');
-    $('#modal-share-library').modal('show');
-};
-libraryHelper.prototype.onShareLib = function (selected_library) {
-    $('#return-message').html('');
-    var username = $("#sharename").val();
-    var write_permissions = $('#write_permissions').is(":checked");
-    //if ($('#library-select').val() != undefined)
-    //selected_library = $('#library-select').val();
-    var myself = this;
-    if (selected_library != -1) {
-        $.ajax({
-            url: path + "assessment/sharelibrary.json",
-            data: "id=" + selected_library + "&name=" + username + "&write_permissions=" + write_permissions,
-            success: function (data) {
-                $('#return-message').html(data);
-                myself.display_library_users(selected_library);
-            }});
-    }
-};
-libraryHelper.prototype.onEditLibraryName = function (original_element) {
-    console.log(original_element);
-    $('#edit-library-name-modal #new-library-name').attr('placeholder', original_element.attr('library-name'));
-    $('#edit-library-name-modal #edit-library-name-ok').attr('library-id', original_element.attr('library-id'));
-    $('#edit-library-name-modal').modal('show');
-};
-libraryHelper.prototype.onEditLibraryNameOk = function () {
-    var library_id = $('#edit-library-name-modal #edit-library-name-ok').attr('library-id');
-    var library_new_name = $('#edit-library-name-modal #new-library-name').val();
-    var myself = this;
-    this.set_library_name(library_id, library_new_name, function (result) {
-        console.log(myself);
-        if (result == 1) {
-            var library = myself.get_library_by_id(library_id);
-            library.name = library_new_name;
-            UpdateUI(data);
-            $('.modal').modal('hide');
-        }
-        else
-            $('#edit-library-name-modal #message').html('Library name could not be changed: ' + result);
-    });
-    //this.set_library_name(library_id, library_new_name);
-};
-libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove, selected_library) {
-    $('#return-message').html('');
-    //var selected_library = $('#library-select').val();
-    var myself = this;
-    $.ajax({url: path + "assessment/removeuserfromsharedlibrary.json", data: 'library_id=' + selected_library + '&user_to_remove=' + user_to_remove, success: function (result) {
-            $('#return-message').html(result);
-            myself.display_library_users(selected_library);
-        }});
-};
+
 libraryHelper.prototype.onSelectingLibraryToShow = function (origin) {
+    console.log('onSelectingLibraryToShow');
+    
     var id = $('#library-select').val();
     if (id == -1)  // id is -1 when choosing "Create new"
         this.onNewLibraryOption();
@@ -656,21 +549,18 @@ libraryHelper.prototype.onSelectingLibraryToShow = function (origin) {
         out = this[function_name](origin, id);
         $("#library_table").html(out);
         $('#create-in-library').attr('library-id', id);
-        // Hide/show "share" option according to the permissions
-        if (this.library_permissions[id].write == 0)
-            $('.if-write').hide('fast');
-        else
-            $('.if-write').show('fast');
     }
 };
 libraryHelper.prototype.onNewLibraryOption = function () {
+    console.log('onNewLibraryOption');
+    
     $('#new-library-modal #new-library-type').html(this.library_names[this.type]);
     $('#create-library-message').html('');
     // Populate the select to choose library to copy
     var out = '';
-    this.library_list[this.type].forEach(function (library) {
-        out += "<option value=" + library.id + ">" + library.name + "</option>";
-    });
+    // this.library_list[this.type].forEach(function (library) {
+    //    out += "<option value=" + library.id + ">" + library.name + "</option>";
+    //});
     $("#library-to-copy-select").html(out);
     $('#new-library-name').val('New name');
     $(".modal").modal('hide');
@@ -679,12 +569,16 @@ libraryHelper.prototype.onNewLibraryOption = function () {
     $("#new-library-modal").modal('show');
 };
 libraryHelper.prototype.onChangeEmptyOrCopyLibrary = function () {
+    console.log('onChangeEmptyOrCopyLibrary');
+    
     if ($("input[name=empty_or_copy_library]:checked").val() == 'empty')
         $('#library-to-copy').hide('fast');
     else
         $('#library-to-copy').show('fast');
 };
 libraryHelper.prototype.onCreateNewLibrary = function () {
+    console.log('onCreateNewLibrary');
+    
     $("#create-library-message").html('');
     var myself = this;
     var callback = function (resultado) {
@@ -719,7 +613,9 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
         }
     }
 };
-libraryHelper.prototype.onCreateInLibrary = function (library_id) {
+libraryHelper.prototype.onCreateInLibrary = function () {
+    console.log('onCreateInLibrary');
+    
     $('#modal-create-in-library .modal-header h3').html('Create ' + page);
     $('#modal-create-in-library .btn').show('fast');
     $('#modal-create-in-library #create-in-library-finish').hide('fast');
@@ -732,7 +628,7 @@ libraryHelper.prototype.onCreateInLibrary = function (library_id) {
     // Populate the select to choose item to copy from
     out = '';
     var selected_library = this.get_library_by_id($('#origin-library-select').val());
-    for (item in selected_library.data) {
+    for (item in items) {
         out += "<option value=" + item + ">" + item + "</option>";
     }
     $("#item-to-copy-select").html(out);
@@ -746,44 +642,15 @@ libraryHelper.prototype.onCreateInLibrary = function (library_id) {
     $('.editable-field').removeAttr("disabled");
     this.hide_modals_temporaly();
     $('.modal').modal('hide');
-    if (library_id != undefined)
-        $('#create-in-library-ok').attr('library-id', library_id);
     // Preselect create empty one
     $('input:radio[name=empty_or_copy_item]').val(['empty']);
     $('#copy-item-from').hide('fast');
     $('#modal-create-in-library').modal('show');
 };
-libraryHelper.prototype.onCreateInLibraryOk = function (library_id) {
-    $("#create-in-library-message").html('');
-    //if ($('#library-select').val() != undefined)
-    //library_id = $('#library-select').val();
-    var selected_library = this.get_library_by_id(library_id);
-    var item = {};
-    // Call to specific function for the type
-    item = libraryHelper.get_item_to_save(this.type);
-    // Add item to library and save it
-    for (tag in item) {
-        if (tag === '')
-            $("#create-in-library-message").html("Tag cannot be empty");
-        else if (selected_library.data[tag] != undefined)
-            $("#create-in-library-message").html("Tag already exist, choose another one");
-        else {
-            //selected_library.data[tag] = item[tag];
-            var item_string = JSON.stringify(item[tag]);
-            item_string = item_string.replace(/&/g, 'and');
-            $.ajax({type: "POST", url: path + "assessment/additemtolibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + item_string, success: function (result) {
-                    if (result == true) {
-                        $("#create-in-library-message").html("Item added to the library");
-                        $('#modal-create-in-library button').hide('fast');
-                        $('#create-in-library-finish').show('fast');
-                    }
-                    else
-                        $("#create-in-library-message").html("There were problems saving the library");
-                }});
-        }
-    }
-};
+
 libraryHelper.prototype.onChangeEmptyOrCopyItem = function () {
+    console.log('onChangeEmptyOrCopyItem');
+    
     var out;
     if ($('[name=empty_or_copy_item]:checked').val() == 'empty') {
         out = this.item_to_html(this.type);
@@ -794,7 +661,7 @@ libraryHelper.prototype.onChangeEmptyOrCopyItem = function () {
         $('#copy-item-from').show('fast');
         // Display the item
         var selected_library = this.get_library_by_id($('#origin-library-select').val());
-        var selected_item = selected_library.data[$('#item-to-copy-select').val()];
+        var selected_item = items[$('#item-to-copy-select').val()];
         out = this.item_to_html(this.type,selected_item);
         
         $('.new-item-in-library').html(out);
@@ -802,109 +669,27 @@ libraryHelper.prototype.onChangeEmptyOrCopyItem = function () {
 
     }
 };
+
 libraryHelper.prototype.onChangeOriginLibrarySelect = function () {
+    console.log('onChangeOriginLibrarySelect');
+    
     // Populate the select to choose item to copy from
     var out = '';
     var selected_library = this.get_library_by_id($('#origin-library-select').val());
-    for (item in selected_library.data) {
+    for (item in items) {
         out += "<option value=" + item + ">" + item + "</option>";
     }
     $("#item-to-copy-select").html(out);
     // Display the item
-    var selected_item = selected_library.data[$('#item-to-copy-select').val()];
+    var selected_item = items[$('#item-to-copy-select').val()];
     out = this.item_to_html(this.type,selected_item);
      
     $('.new-item-in-library').html(out);
 };
-libraryHelper.prototype.onChangeItemToCopySelect = function () {
-    var out;
-    // Display the item
-    var selected_library = this.get_library_by_id($('#origin-library-select').val());
-    var selected_item = selected_library.data[$('#item-to-copy-select').val()];
-    out = this.item_to_html(this.type,selected_item);
-    
-    $('.new-item-in-library').html(out);
-    //$('#create-element-type').val(selected_item.tags[0]);
 
-}
-
-libraryHelper.prototype.onEditLibraryItem = function (origin) {
-//var selected_library = this.get_library_by_id($('#library-select').val());
-    var selected_library = this.get_library_by_id(origin.attr('library'));
-    var library_name = selected_library.name;
-    $('#library-to-edit-item').html(library_name);
-    var tag = origin.attr('tag');
-    var item = selected_library.data[tag];
-    // Call to specific function for the type
-    out = this.item_to_html(this.type,item);
-    
-    $('#library-to-edit-item').parent().show('fast');
-    $('.edit-item-in-library').html(out);
-    $('#edit-item-ok').attr('class', "btn edit-library-item-ok");
-    $('#edit-item-ok').attr('library-id', selected_library.id);
-    $('.item-tag').attr('disabled', 'true');
-    $('.editable-field').removeAttr("disabled");
-    $("#edit-item-message").html('');
-    $('#modal-edit-item button').show('fast');
-    $('#edit-item-finish').hide('fast');
-    $('.modal').modal('hide');
-    $('#modal-edit-item').modal('show');
-};
-libraryHelper.prototype.onEditLibraryItemOk = function (library_id) {
-    $("#edit-item-message").html('');
-    //if ($('#library-select').val() != undefined)
-    //library_id = $('#library-select').val();
-    var selected_library = this.get_library_by_id(library_id);
-    var item = {};
-    // Call to specific function for the type
-    item = libraryHelper.get_item_to_save(this.type);
-    
-    for (tag in item) {
-        var item_string = JSON.stringify(item[tag]).replace('+', '/plus'); // For a reason i have not been able to find why the character + becomes a carrier return when it is accesed in $_POST in the controller, because of this we escape + with \plus
-        item_string = item_string.replace(/&/g, 'and');
-        //item[tag].number_of_intermittentfans="\\+2";
-        $.ajax({type: "POST", url: path + "assessment/edititeminlibrary.json", data: "library_id=" + selected_library.id + "&tag=" + tag + "&item=" + item_string, success: function (result) {
-                if (result == true) {
-                    $("#edit-item-message").html("Item edited and library saved");
-                    $('#modal-edit-item button').hide('fast');
-                    $('#edit-item-finish').show('fast');
-                }
-                else
-                    $("#edit-item-message").html("There were problems saving the library - " + result);
-            }});
-    }
-};
-
-// called from elements.js edit-item on fabric element
-libraryHelper.prototype.onEditItem = function (origin) {
-    var item = JSON.parse(origin.attr('item'));
-    var tag = origin.attr('tag');
-    // Call to specific function for the type
-    out = this.item_to_html(this.type,tag);
-    $('.edit-item-in-library').html(out);
-    $('#library-to-edit-item').parent().hide('fast');
-    $('.item-tag').attr('disabled', 'true'); // comment to enable change of tag
-    $('.editable-field').attr('disabled', 'true'); // comment to enable change of tag
-    $('#edit-item-ok').attr('class', "btn edit-item-ok");
-    $("#edit-item-message").html('');
-    $('#edit-item-ok').attr('row', origin.attr('row'));
-    $('#edit-item-ok').attr('type-of-item', origin.attr('type-of-item'));
-    $('#modal-edit-item button').show('fast');
-    $('#edit-item-finish').hide('fast');
-    $('.modal').modal('hide');
-    $('#modal-edit-item').modal('show');
-};
-libraryHelper.prototype.onEditItemOk = function () {
-    $("#edit-item-message").html('');
-    // Call to specific function for the type
-    item = libraryHelper.get_item_to_save(this.type);
-
-    var index = $('#edit-item-ok').attr('row');
-    var item_subsystem = $('#edit-item-ok').attr('type-of-item');
-    edit_item(item, index, item_subsystem); // This function is declared in the view
-    $('.modal').modal('hide');
-};
 libraryHelper.prototype.onApplyMeasure = function (origin) {
+    console.log('onApplyMeasure');
+    
     // Add attributes to the "Ok" button
     $('#apply-measure-ok').attr('library', origin.attr('library'));
     $('#apply-measure-ok').attr('tag', origin.attr('tag'));
@@ -936,7 +721,10 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
         $('.replace_from_measure_library').hide();
     $('#apply-measure-modal').modal('show');
 };
+
 libraryHelper.prototype.onApplyMeasureOk = function (origin) {
+    console.log('onApplyMeasureOk');
+    
     var measure = {
         row: origin.attr('row'),
         item_id: origin.attr('item_id'),
@@ -950,17 +738,20 @@ libraryHelper.prototype.onApplyMeasureOk = function (origin) {
             break;
         case 'edit':
         case 'replace':
-            measure.item = libraryHelper.get_item_to_save(this.type);
+            measure.item = this.get_item_to_save(this.type);
             break;
         case'replace_from_measure_library':
-            measure.item = libraryHelper.get_item_to_save(this.type);
+            measure.item = this.get_item_to_save(this.type);
             break;
     }
     console.log(measure);
     apply_measure(measure);
     $('#apply-measure-modal').modal('hide');
 };
+
 libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
+    console.log('onChangeApplyMeasureWhatToDo');
+    
     switch ($('[name=radio-type-of-measure]:checked').val()) {
         case 'remove':
             $('#apply-measure-replace').hide('fast');
@@ -997,10 +788,13 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             break;
     }
 };
+
 libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_library) {
+    console.log('onChangeApplyMeasureReplaceFromLib');
+    
     var out = "";
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
-    var library = this.get_library_by_id($('#replace-from-lib').val()).data;
+    var library = this.library[type_of_library];
     for (item in library) {
         if (type_of_library == 'elements' || type_of_library == 'elements_measures') {
             if (library[item].tags[0].toUpperCase() == original_item.type.toUpperCase())
@@ -1014,12 +808,18 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_l
     $("#replace-from-lib-items").attr('library_type', type_of_library);
     this.populate_measure_new_item(type_of_library);
 };
+
 libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function (type_of_library) {
+    console.log('onChangeApplyMeasureReplaceFromLibItem');
+    
     this.populate_measure_new_item(type_of_library);
     //disable the possibility to change the type of the element
     $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
 };
+
 libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
+    console.log('onChangeTypeOnCreateElementLibItem');
+    
     var type = $('#modal-create-in-library .create-element-type').val();
     // Show window specific fields for a given type
     if (type == 'Window' || type == 'Door' || type == 'Roof_light')
@@ -1050,152 +850,64 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
         $('#modal-create-in-library .item-tag').val('New tag');
     }
 };
-libraryHelper.prototype.onShowLibraryItems = function (library_id) {
-    var library = this.get_library_by_id(library_id);
-    this.type = library.type;
-    //Header
-    $("#show-library-items-header").html(this.library_names[this.type]);
-    $('#show-library-items-library-name').html(library.name);
-    // Items
-    var function_name = library.type + '_library_to_html';
-    var out = this[function_name](null, library_id);
-    $("#show-library-items-modal #show-library-items-table").html(out);
-    // Add Library id to edit buttons
 
-    // Hide the Use buttons
-    $("#show-library-items-modal .use-from-lib").hide('fast');
-    // Hide Write options if no write access
-    if (this.library_permissions[library.id].write != 1)
-        $("#show-library-items-modal .if-write").hide('fast');
-    // Show the select to choose the type of fabric elements when library is "elements"
-    if (this.type == 'elements' || this.type == 'elements_measures')
-        $('#show-library-items-modal .element-type').show('fast');
-    // Add library id to Create new item and Save
-    $('#show-library-items-modal #create-in-library').attr('library-id', library_id);
-    $('#show-library-items-modal #save').attr('library-id', library_id);
-    // Show modal
-    $("#show-library-items-modal").modal('show');
-};
 libraryHelper.prototype.onChangeTypeOfElementsToShow = function (origin) {
+    console.log('onChangeTypeOfElementsToShow');
+    
     origin.attr('tags', [origin.val()]); //this is the type of elements to display
-    var library_id = origin.attr('library_id');
-    //var out = this.elements_library_to_html(origin, library_id);
+    //var out = this.elements_library_to_html(origin);
     var function_name = this.type + '_library_to_html';
-    var out = this[function_name](origin, library_id);
+    var out = this[function_name](origin);
     // Items
     $("#show-library-items-modal #show-library-items-table").html(out);
     // Add Library id to edit buttons
 
     // Hide the Use buttons
     $("#show-library-items-modal .use-from-lib").hide('fast');
-    // Hide Write options if no write access
-    if (this.library_permissions[library_id].write != 1)
-        $("#show-library-items-modal .if-write").hide('fast');
     // Show the select to choose the type of fabric elements when library is "elements"
     $('#show-library-items-modal .element-type').show('fast');
 };
-libraryHelper.prototype.onManageUsers = function (library_id) {
-
-}
-libraryHelper.prototype.onDeleteLibrary = function (library_id) {
-    $('#confirm-delete-library-modal #delete-library-ok').attr('library-id', library_id);
-    $('#confirm-delete-library-modal').modal('show');
-}
-libraryHelper.prototype.onDeleteLibraryOk = function (library_id) {
-    var myself = this;
-    $.ajax({url: path + "assessment/deletelibrary.json", data: "library_id=" + library_id, async: false, datatype: "json", success: function (result) {
-            if (result == 1) {
-                $('#confirm-delete-library-modal').modal('hide');
-                myself.init();
-                UpdateUI();
-            }
-            else
-                $('#confirm-delete-library-modal .message').html('Library could not be deleted - ' + result);
-        }});
-}
-libraryHelper.prototype.onSaveLibraryEditMode = function (selector, library_id) {
-    var data = {};
-    $(selector + ' .item').each(function () {
-        var tag = $(this).find('[index="tag"] input')[0].value;
-        data[tag] = {tags: [$(this).attr('tags')]};
-        $(this).children('td').each(function () {
-            var key = $(this).attr('index');
-            if (key != undefined) {
-                if ($(this).children('input')[0] != undefined) {
-                    if ($(this).children('input')[0].type == 'text' || $(this).children('input')[0].type == 'number')
-                        data[tag][key] = $(this).children('input')[0].value;
-                    else if ($(this).children('input')[0].type == 'checkbox') {
-                        if ($(this).children('input').is(":checked"))
-                            data[tag][key] = true;
-                        else
-                            data[tag][key] = false;
-                    }
-                    else
-                        console.error("Type of input not recognized: " + $(this).children('input')[0].type);
-                }
-                else if ($(this).children('select')[0] != undefined) {
-                    data[tag][key] = $(this).children('select')[0].value;
-                }
-                else
-                    console.error("Type of input not recognized: ");
-                /*if(element.type)
-                 data[tag][key] = $(this).find('input')[0].value;
-                 */
-            }
-        });
-    });
-
-    $.ajax({url: path + "assessment/savelibrary.json", method: 'post', data: 'data=' + JSON.stringify(data) + '&id=' + library_id, async: false, datatype: "json", success: function (result) {
-            if (result != true)
-                alert("Library could not be saved. The server said: " + result);
-            else {
-                $('#show-library-modal-edit-mode #save').attr('disabled', 'disabled');
-                $('#show-library-modal-edit-mode #message').html('Saved');
-            }
-        }});
-
-}
 
 /**********************************************
  * Libraries to html
  **********************************************/
 
-libraryHelper.prototype.default_library_to_html = function (origin, library_id) {
+libraryHelper.prototype.default_library_to_html = function (origin, category) {
     var out = "";
-    var selected_library = this.get_library_by_id(library_id);
-    this.orderObjectsByKeys(selected_library.data);
-    for (z in selected_library.data) {
-        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
+    var items = this.library[category];
+    //this.orderObjectsByKeys(items);
+    
+    for (z in items) {
+        out += "<tr><td>" + z + ': ' + items[z].name + "</td>";
         out += "<td style='text-align:right;width:250px'>";
         out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        // out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
         out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
     return out;
 };
-libraryHelper.prototype.default_library_by_category_to_html = function (origin, library_id) {
+libraryHelper.prototype.default_library_by_category_to_html = function (origin,category) {
     var out = "";
-    var selected_library = this.get_library_by_id(library_id);
-    this.orderObjectsByKeys(selected_library.data);
-    // order by category
+    var items = this.library[category];
+    
     var ordered_by_categories = {};
-    for (z in selected_library.data) {
-        var category = selected_library.data[z].category;
+    for (z in items) {
+        var category = items[z].category;
         if (ordered_by_categories[category] == undefined)
             ordered_by_categories[category] = {};
-        ordered_by_categories[category][z] = selected_library.data[z];
+        ordered_by_categories[category][z] = items[z];
     }
 
     // Prepare the output string
     for (category in ordered_by_categories) {
         out += "<tr><th colspan='2'>" + category + "</th></tr>";
         for (z in ordered_by_categories[category]) {
-            out += "<tr><td style='padding-left:50px'>" + z + ': ' + selected_library.data[z].name + "</td>";
+            out += "<tr><td style='padding-left:50px'>" + z + ': ' + items[z].name + "</td>";
             out += "<td style='text-align:right;width:250px'>";
             out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-            out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+            // out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
             out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
             out += "</td>";
             out += "</tr>";
@@ -1203,40 +915,38 @@ libraryHelper.prototype.default_library_by_category_to_html = function (origin, 
     }
     return out;
 };
-libraryHelper.prototype.systems_library_to_html = function (origin, library_id) {
+libraryHelper.prototype.systems_library_to_html = function (origin) {
     var eid = '';
     if (origin != undefined)
         eid = $(origin).attr('eid');
     else
         eid = '';
-    //if ($('#library-select').val() != undefined)
-    //library_id = $('#library-select').val();
-    var selected_library = this.get_library_by_id(library_id);
-    this.orderObjectsByKeys(selected_library.data);
+        
+    var items = this.library.systems;
+    this.orderObjectsByKeys(items);
     $('#library-select').attr('eid', eid);
     var out = "";
-    for (z in selected_library.data) {
-        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "<br>";
+    for (z in items) {
+        out += "<tr><td>" + z + ': ' + items[z].name + "<br>";
         out += "<span style='font-size:80%'>";
-        out += "<b>Efficiency:</b> " + Math.round(selected_library.data[z].efficiency * 100) + "%, ";
-        out += "<b>Winter:</b> " + Math.round(selected_library.data[z].winter * 100) + "%, ";
-        out += "<b>Summer:</b> " + Math.round(selected_library.data[z].summer * 100) + "%, ";
-        out += "<b>Fuel:</b> " + selected_library.data[z].fuel;
+        out += "<b>Efficiency:</b> " + Math.round(items[z].efficiency * 100) + "%, ";
+        out += "<b>Winter:</b> " + Math.round(items[z].winter * 100) + "%, ";
+        out += "<b>Summer:</b> " + Math.round(items[z].summer * 100) + "%, ";
+        out += "<b>Fuel:</b> " + items[z].fuel;
         out += "</span></td>";
         out += "<td></td>";
         out += "<td style='text-align:right;width:250px'>";
         out += "<button eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button style='margin-left:10px' eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        //out += "<button style='margin-left:10px' eid='" + eid + "' system='" + z + "' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
         out += "<button style='margin-left:10px' eid='" + eid + "' system='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
     return out;
 };
-libraryHelper.prototype.elements_library_to_html = function (origin, library_id) {
+libraryHelper.prototype.elements_library_to_html = function (origin) {
 
-    console.log("elements_item_to_html");
-    console.log(library_defaults);
+    console.log("elements_library_to_html");
     
     var tag = [];
     var selected_lib = false;
@@ -1253,17 +963,15 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     } else {
         tag = ['Wall'];
     }
-        
-    //if ($('#library-select').val() != undefined)
-    //library_id = $('#library-select').val();
-    var element_library = this.get_library_by_id(library_id).data;
+    
+    var element_library = this.library.elements;
     this.orderObjectsByKeys(element_library);
     $('#library-select').attr('tags', tag);
     var out = "";
     
     //Select to choose the type of element to display, not always used and is hidden by default
     out =  '<div class="input-prepend element-type" style="display:none" ><span class="add-on">Type</span>';
-    out += '<select library_id="' + library_id + '" >';
+    out += '<select>';
 
     var element_tags = ['Wall','Party_wall','Roof','Loft','Floor','Window','Door','Roof_light','Hatch'];
     for (var z in element_tags) {
@@ -1297,8 +1005,8 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
             }
             out += "</td>";
             out += "<td >";
-            out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
-            out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
+            out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
+            out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
             // out += "<i class='icon-trash' style='margin-left:20px'></i>";
             
             // add-element & change-element handled in elements.js
@@ -1308,7 +1016,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
                 action = "change-element";
                 row_attr = "row="+element_row;
             }
-            out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" library='" + library_id + "' lib='" + z + "' type='" + element_library[z].tags[0] + "'>use</button</i>";
+            out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" lib='" + z + "' type='" + element_library[z].tags[0] + "'>use</button</i>";
             out += "</td>";
             out += "</tr>";
         }
@@ -1316,104 +1024,104 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     out += '</table>';
     return out;
 };
-libraryHelper.prototype.elements_measures_library_to_html = function (origin, library_id) {
-    var out = this.elements_library_to_html(origin, library_id);
+libraryHelper.prototype.elements_measures_library_to_html = function (origin) {
+    var out = this.elements_library_to_html(origin);
     return out;
 };
-libraryHelper.prototype.draught_proofing_measures_library_to_html = function (origin, library_id) {
+libraryHelper.prototype.draught_proofing_measures_library_to_html = function (origin) {
     var out = "";
-    var selected_library = this.get_library_by_id(library_id);
-    this.orderObjectsByKeys(selected_library.data);
-    for (z in selected_library.data) {
-        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
-        out += "<td><b>q50:</b> " + selected_library.data[z].q50 + " m<sup>3</sup>/hm<sup>2</sup></td>";
+    var items = this.library.draught_proofing_measures;
+    this.orderObjectsByKeys(items);
+    for (z in items) {
+        out += "<tr><td>" + z + ': ' + items[z].name + "</td>";
+        out += "<td><b>q50:</b> " + items[z].q50 + " m<sup>3</sup>/hm<sup>2</sup></td>";
         out += "<td style='text-align:right;width:250px'>";
         out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        // out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
         out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-system use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
     return out;
 };
-libraryHelper.prototype.ventilation_systems_measures_library_to_html = function (origin, library_id) {
-    return this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.ventilation_systems_measures_library_to_html = function (origin) {
+    return this.default_library_to_html(origin,'ventilation_systems_measures');
 };
-libraryHelper.prototype.ventilation_systems_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.ventilation_systems_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin,'ventilation_systems');
     out = out.replace(/add-system/g, 'add-ventilation-system');
     return out;
 };
-libraryHelper.prototype.extract_ventilation_points_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.extract_ventilation_points_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin,'extract_ventilation_points');
     out = out.replace(/add-system/g, 'add-EVP');
     return out;
 };
-libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (origin, library_id) {
+libraryHelper.prototype.intentional_vents_and_flues_library_to_html = function (origin) {
     var out = "";
-    var selected_library = this.get_library_by_id(library_id);
-    this.orderObjectsByKeys(selected_library.data);
-    for (z in selected_library.data) {
-        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
-        out += "<td><b>Ventilation rate:</b> " + selected_library.data[z].ventilation_rate + " m<sup>3</sup>/hm<sup>2</sup></td>";
+    var items = this.library.intentional_vents_and_flues;
+    this.orderObjectsByKeys(items);
+    for (z in items) {
+        out += "<tr><td>" + z + ': ' + items[z].name + "</td>";
+        out += "<td><b>Ventilation rate:</b> " + items[z].ventilation_rate + " m<sup>3</sup>/hm<sup>2</sup></td>";
         out += "<td style='text-align:right;width:150px'>";
         out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        // out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
         out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-IVF use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
     return out;
 };
-libraryHelper.prototype.intentional_vents_and_flues_measures_library_to_html = function (origin, library_id) {
+libraryHelper.prototype.intentional_vents_and_flues_measures_library_to_html = function (origin) {
     var out = "";
-    var selected_library = this.get_library_by_id(library_id);
-    this.orderObjectsByKeys(selected_library.data);
-    for (z in selected_library.data) {
-        out += "<tr><td>" + z + ': ' + selected_library.data[z].name + "</td>";
-        out += "<td><b>Ventilation rate:</b> " + selected_library.data[z].ventilation_rate + " m<sup>3</sup>/hm<sup>2</sup></td>";
+    var items = this.library.intentional_vents_and_flues_measures;
+    this.orderObjectsByKeys(items);
+    for (z in items) {
+        out += "<tr><td>" + z + ': ' + items[z].name + "</td>";
+        out += "<td><b>Ventilation rate:</b> " + items[z].ventilation_rate + " m<sup>3</sup>/hm<sup>2</sup></td>";
         out += "<td style='text-align:right;width:150px'>";
         out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
-        out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
+        // out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
         out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn add-IVF-measure use-from-lib'>Use</button>"; //the functionnality to add the system to the data obkect is not part of the library, it must be defined in system.js or somewhere else: $("#openbem").on("click", '.add-system', function () {.......
         out += "</td>";
         out += "</tr>";
     }
     return out;
 };
-libraryHelper.prototype.water_usage_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.water_usage_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin, 'water_usage');
     out = out.replace(/add-system/g, 'add-water_usage');
     return out;
 };
-libraryHelper.prototype.storage_type_library_to_html = function (origin, library_id) {
-    var out = this.default_library_by_category_to_html(origin, library_id);
+libraryHelper.prototype.storage_type_library_to_html = function (origin) {
+    var out = this.default_library_by_category_to_html(origin,'storage_type');
     out = out.replace(/add-system/g, 'add-storage-type');
     return out;
 };
-libraryHelper.prototype.storage_type_measures_library_to_html = function (origin, library_id) {
-    var out = this.default_library_by_category_to_html(origin, library_id);
+libraryHelper.prototype.storage_type_measures_library_to_html = function (origin) {
+    var out = this.default_library_by_category_to_html(origin, 'storage_type_measures');
     out = out.replace(/add-system/g, 'add-storage-type-measure');
     return out;
 };
-libraryHelper.prototype.appliances_and_cooking_library_to_html = function (origin, library_id) {
+libraryHelper.prototype.appliances_and_cooking_library_to_html = function (origin) {
     var out = "";
-    var selected_library = this.get_library_by_id(library_id);
-    this.orderObjectsByKeys(selected_library.data);
+    var items = this.library.appliances_and_cooking
+    this.orderObjectsByKeys(items);
     // order by category
     var ordered_by_categories = {};
-    for (z in selected_library.data) {
-        var category = selected_library.data[z].category;
+    for (z in items) {
+        var category = items[z].category;
         if (ordered_by_categories[category] == undefined)
             ordered_by_categories[category] = {};
-        ordered_by_categories[category][z] = selected_library.data[z];
+        ordered_by_categories[category][z] = items[z];
     }
 
     // Prepare the output string
     for (category in ordered_by_categories) {
         out += "<tr><th colspan='2'>" + category + "</th></tr>";
         for (z in ordered_by_categories[category]) {
-            out += "<tr><td style='padding-left:50px'>" + z + ': ' + selected_library.data[z].name + "</td>";
+            out += "<tr><td style='padding-left:50px'>" + z + ': ' + items[z].name + "</td>";
             out += "<td style='text-align:right;width:250px'>";
             out += "<button tag='" + z + "' library='" + selected_library.id + "' class='btn if-write edit-library-item'>Edit</button>";
             out += "<button style='margin-left:10px' tag='" + z + "' library='" + selected_library.id + "' class='btn if-write delete-library-item'>Delete</button>";
@@ -1424,43 +1132,43 @@ libraryHelper.prototype.appliances_and_cooking_library_to_html = function (origi
     }
     return out;
 };
-libraryHelper.prototype.heating_control_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.heating_control_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin,'heating_control');
     out = out.replace(/add-system/g, 'add-heating-control');
     return out;
 };
-libraryHelper.prototype.heating_systems_library_to_html = function (origin, library_id) {
-    var out = this.default_library_by_category_to_html(origin, library_id);
+libraryHelper.prototype.heating_systems_library_to_html = function (origin) {
+    var out = this.default_library_by_category_to_html(origin,'heating_systems');
     out = out.replace(/add-system/g, 'add-heating-system');
     return out;
 };
-libraryHelper.prototype.heating_systems_measures_library_to_html = function (origin, library_id) {
-    var out = this.default_library_by_category_to_html(origin, library_id);
+libraryHelper.prototype.heating_systems_measures_library_to_html = function (origin) {
+    var out = this.default_library_by_category_to_html(origin,'heating_systems_measures');
     out = out.replace(/add-system/g, 'add-heating-system-measure');
     return out;
 };
-libraryHelper.prototype.pipework_insulation_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.pipework_insulation_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin,'pipework_insulation');
     out = out.replace(/add-system/g, 'add-pipework-insulation');
     return out;
 };
-libraryHelper.prototype.hot_water_control_type_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.hot_water_control_type_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin,'hot_water_control_type');
     out = out.replace(/add-system/g, 'add-storage-control-type');
     return out;
 };
-libraryHelper.prototype.space_heating_control_type_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.space_heating_control_type_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin,'space_heating_control_type');
     out = out.replace(/add-system/g, 'add-space-heating-control-type');
     return out;
 };
-libraryHelper.prototype.clothes_drying_facilities_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.clothes_drying_facilities_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin,'clothes_drying_facilities');
     out = out.replace(/add-system/g, 'add-clothes-drying-facilities');
     return out;
 };
-libraryHelper.prototype.generation_measures_library_to_html = function (origin, library_id) {
-    var out = this.default_library_to_html(origin, library_id);
+libraryHelper.prototype.generation_measures_library_to_html = function (origin) {
+    var out = this.default_library_to_html(origin,'generation_measures');
     out = out.replace(/add-system/g, 'add-generation');
     return out;
 };
@@ -1560,6 +1268,7 @@ libraryHelper.prototype.item_to_html = function (type, item, tag) {
 libraryHelper.prototype.get_item_to_save = function (type) {
     var item = {};
     var tag = $(".item-tag").val();
+    item[tag] = {};
     for (var property in libraryDefaults[type]) {
         switch (typeof libraryDefaults[type][property]) {
             case "string":
@@ -1580,76 +1289,39 @@ libraryHelper.prototype.get_item_to_save = function (type) {
  * Other methods
  ***************************************************/
 libraryHelper.prototype.load_user_libraries = function (callback) {
-    var mylibraries = {};
-    var myself = this;
-    $.ajax({url: path + "assessment/loaduserlibraries.json", async: false, datatype: "json", success: function (result) {
-            //result = JSON.parse(result);
-            for (library in result) {
-                if (mylibraries[result[library].type] === undefined)
-                    mylibraries[result[library].type] = [];
-                result[library].data = result[library].data.replace('\\/plus', '+'); // For a reason i have not been able to find why the character + becomes a carrier return when it is accesed in $_POST in the controller, because of this we escape + with \plus
-                result[library].data = JSON.parse(result[library].data);
-                mylibraries[result[library].type].push(result[library]);
-            }
-            if (callback !== undefined)
-                callback();
-            myself.library_list = mylibraries;
-        }});
+    
+    var master = {};
+    $.ajax({ url: path+"assessment/load-lib.json", dataType: 'json', async: false, success: function(result){master = result;} });
+    this.library = master;
+        
 };
-libraryHelper.prototype.get_library_permissions = function (callback) {
-    var mypermissions = {};
-    var myself = this;
-    $.ajax({url: path + "assessment/getuserpermissions.json", async: false, datatype: "json", success: function (result) {
-            if (callback !== undefined)
-                callback();
-            myself.library_permissions = result;
-        }});
-    //return mypermissions;
-};
-libraryHelper.prototype.display_library_users = function (library_id) {
-    $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + library_id, success: function (shared) {
-            var out = "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>";
-            var write = "";
-            for (var i in shared) {
-                write = shared[i].write == 1 ? 'Yes' : 'No';
-                if (shared[i].username != p.author)
-                    out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' library-id='" + library_id + "' username='" + shared[i].username + "'></i></td></tr>";
-                else
-                    out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td>&nbsp;</td></tr>";
-            }
-            if (out == "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>")
-                out = "<tr><td colspan='3'>This library is currently private</td></tr>";
-            $("#shared-with-table").html(out);
-        }});
-};
+
 libraryHelper.prototype.get_library_by_id = function (id) {
-    for (z in this.library_list) {
-        for (i in this.library_list[z]) {
-            if (this.library_list[z][i].id == id)
-                return this.library_list[z][i];
-        }
-    }
+    return this.library_list;
 };
+
 libraryHelper.prototype.populate_measure_new_item = function (type_of_library) {
+    console.log("populate_measure_new_item:"+type_of_library);
+    
     var item_index = $('#replace-from-lib-items').val();
-    var library = this.get_library_by_id($('#replace-from-lib').val()).data;
+    console.log("item_index:"+item_index);
+    
+    
+    var library = this.library[type_of_library];
+    
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var new_item = library[item_index];
     $('#apply-measure-item-fields').html('');
     var out = this.item_to_html(type_of_library, new_item, item_index);
     $('#apply-measure-item-fields').html(out);
 };
-libraryHelper.prototype.set_library_name = function (library_id, new_name, callback) {
-    $.ajax({url: path + "assessment/setlibraryname.json", data: "library_id=" + library_id + "&new_library_name=" + new_name, async: false, datatype: "json", success: function (result) {
-            callback(result);
-        }});
-};
+
 libraryHelper.prototype.populate_library_modal = function (origin) {
     // Populate the select to choose library to display
     var out = '';
-    this.library_list[this.type].forEach(function (library) {
-        out += "<option value=" + library.id + ">" + library.name + "</option>";
-    });
+    // this.library_list[this.type].forEach(function (library) {
+    //     out += "<option value=" + library.id + ">" + library.name + "</option>";
+    // });
     out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
     $("#library-select").html(out);
     // Heading of the modal
@@ -1662,34 +1334,13 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
     $("#library_table").html(out);
     // Add library id to "Add item from library" button
     $('#create-in-library').attr('library-id', id);
-    // Hide/show "share" option according to the permissions
-    if (this.library_permissions[id].write == 0)
-        $('.if-write').hide('fast');
-    else
-        $('.if-write').show('fast');
+
 };
 libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type_of_library) {
-    var out = '';
-    this.library_list[type_of_library].forEach(function (library) {
-        out += "<option value=" + library.id + ">" + library.name + "</option>";
-    });
-    $("#replace-from-lib").html(out);
+
     $("#replace-from-lib").attr('library_type', type_of_library);
     this.onChangeApplyMeasureReplaceFromLib(type_of_library); // This one to populate the select for items
 };
-libraryHelper.prototype.delete_library_item = function (library_id, tag) {
-    var myself = this;
-    $.ajax({url: path + "assessment/deletelibraryitem.json", data: "library_id=" + library_id + "&tag=" + tag, async: false, datatype: "json", success: function (result) {
-            if (result != true)
-                $('#confirm-delete-library-item-modal .message').html("Item could not be deleted - " + result);
-            else {
-                $('#confirm-delete-library-item-modal').modal('hide');
-                $('#show-library-items-modal [tag="' + tag + '"]').parent().parent().remove();
-                $('#show-library-modal-edit-mode tr[tag="' + tag + '"]').remove();
-                myself.load_user_libraries();
-            }
-        }});
-}
 
 libraryHelper.prototype.get_list_of_libraries_for_select = function (library_type) {
     var out = ''

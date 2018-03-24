@@ -1,36 +1,201 @@
+<style>
 
+#libmanout {
+    border: 1px solid #ccc;
+}
+
+#libman-m1-bound {
+    width:250px;
+    border-right: 1px solid #ccc;
+    background-color:#dbd6ce;
+    float:left;
+}
+
+#libman-m2-bound {
+    width:100px;
+    border-right: 1px solid #ccc;
+    background-color:#e9e6e1;
+    float:left;
+}
+
+#libman-m3-bound {
+    border-right: 1px solid #ccc;
+    background-color:#f7f6f5;
+    float:left;
+}
+
+.libman-item {
+    padding:3px;
+    border-bottom: 1px solid #ccc;
+    cursor:pointer;
+}
+
+.libman-item:hover {
+    background-color:#dbd6ce;
+}
+
+input[type=text] {
+    width:500px;
+    border:0;
+    background:none;
+    padding:0;
+    margin:0;
+    line-height:18px;
+    height:18px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+input[type=text]:focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+textarea {
+    width:500px;
+    border:0;
+    background:none;
+    padding:0;
+    margin:0;
+    height:100px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+textarea:focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.key { width:200px; display:inline-block; font-weight:bold; }
+
+</style>
+
+<div id="defaults"></div>
 
 
 <div id="librariesmanager" class="page">
     <hr>
-    <h3>Libraries</h3>
-    <hr>
+    <h3>Library Manager</h3>
+    <hr><br>
+    
+    <div id="libmanout">
+    
+    <div id="libman-m1-bound">
+    <div id="libman-m1"></div>
+    </div>
+    
+    <div id="libman-m2-bound">
+    <div id="libman-m2"></div>
+    </div>
+    
+    <div id="libman-m3-bound">    
+    <div id="libman-m3"></div>
+    </div>
+    
+    <div style="clear:both"></div>
+    </div>
 
-    <table>
-        <tbody id="library-table-header-template" style="display:none"> 
-            <tr style="background-color:#eee">
-                <th colspan="3" class="header" library-type="template"></th>
-                <th style="text-align:right"><button style="padding-top:2px; padding-bottom:2px" library-type="template" class="btn create-new-library"><i class="icon-plus"></i> Add</button></th></tr>
-            <tr>
-                <th></th>
-                <th>Library</th>
-                <th>Access</th>
-                <th></th>
-            </tr>
-        </tbody>
-    </table>
-
-    <table>
-        <tbody id="library-template" style="display:none">
-            <tr>
-                <td width="50px"><i library-id="template" library-name="template" class="icon-edit if-write-access edit-library-name" style="cursor:pointer;margin-right:5px"></i><i class="icon-trash delete-library if-write-access" library-id="template" style="cursor:pointer;margin-right:15px"></i></td>
-                <td library-name="template"></td>
-                <td library-access="template"></td>
-                <td><button library-id="template" library-type="template" class="add-item if-write-access" style="margin-right:15px">Add item</button><button library-id="template" class="show-items-edit-mode" style="margin-right:15px">Show items</button><button library-id="template" class="manage-users if-write-access">Manage users</button></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <table id="libraries-table" class="table">
-    </table>
 </div>
+
+<script>
+
+var master = {};
+$.ajax({ url: path+"assessment/load-lib.json", dataType: 'json', async: false, success: function(result){master = result;} });
+/*
+var defaults = {};
+
+for (var z in master) {
+    defaults[z] = {};
+    for (var x in master[z]) {
+        for (var i in master[z][x]) {
+            
+            switch(typeof master[z][x][i]) {
+                case "string":
+                    defaults[z][i] = "";
+                    break;
+                case "number":
+                    defaults[z][i] = 0.0;
+                    break;
+            }
+        }
+        
+    }
+}
+
+$("#defaults").html(JSON.stringify(defaults));
+*/
+
+
+var l1 = false;
+var l2 = false;
+var l3 = false;
+
+var out = "";
+for (var z in master) {
+    out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
+}
+$("#libman-m1").html(out);
+
+$("#libmanout").on("click",".libman-item",function() {
+
+    var level = $(this).attr("level");
+    var value = $(this).attr("value");
+
+    if (level==1) {
+    
+        $("#libman-m3").html("");
+    
+        l1 = value
+    
+        var out = "";
+        for (var z in master[l1]) {
+            out += "<div class='libman-item' level=2 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
+        }
+        $("#libman-m2").html(out);
+    }
+
+    if (level==2) {
+    
+        l2 = value
+        console.log(l2);
+    
+        var out = "";
+        for (var z in master[l1][l2]) {
+            out += "<div class='libman-item' level=3 value='"+z+"'><div class='key'>"+z.ucfirst().replace(/_/g," ")+":</div>";
+            
+            
+            var val = ""+master[l1][l2][z];
+            if (val.length<100) {
+                out += "<input type='text' value='"+master[l1][l2][z]+"' />";
+            } else { 
+                out += "<textarea>"+master[l1][l2][z]+"</textarea>"; 
+            }
+            
+            out += "</div>";
+        }
+        $("#libman-m3").html(out);
+    }
+    
+    var height = 0;
+    var h1 = $("#libman-m1").height();
+    var h2 = $("#libman-m2").height();
+    var h3 = $("#libman-m3").height();
+    if (h1>height) height = h1;
+    if (h2>height) height = h2;
+    if (h3>height) height = h3;
+    $("#libman-m1-bound").height(height);
+    $("#libman-m2-bound").height(height);
+    $("#libman-m3-bound").height(height);
+    
+    var l3w = $("#libmanout").width()-250-100-3;
+    $("#libman-m3").width(l3w);
+});
+
+
+
+</script>

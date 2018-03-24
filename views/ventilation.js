@@ -49,15 +49,8 @@ $('#openbem').on('click', '.add-ventilation-system-from-lib', function () {
 });
 $('#openbem').on('click', '.add-ventilation-system', function () {
     var tag = $(this).attr('tag');
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    var item = library[tag];
-    item.tag = tag;
-    data.ventilation.ventilation_type = item.ventilation_type;
-    data.ventilation.ventilation_name = item.name;
-    data.ventilation.ventilation_tag = tag;
-    data.ventilation.system_air_change_rate = item.system_air_change_rate;
-    data.ventilation.system_specific_fan_power = item.specific_fan_power;
-    data.ventilation.balanced_heat_recovery_efficiency = item.balanced_heat_recovery_efficiency;
+    var item = library_helper.library.ventilation_systems[tag];
+    for (var property in item) data.ventilation[property] = item[property];
     update();
 });
 $('#openbem').on('click', '.apply-ventilation-measure-from-lib', function () {
@@ -190,7 +183,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
             add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
             data.ventilation.ventilation_type = measure[tag].ventilation_type;
-            data.ventilation.ventilation_name = measure[tag].name;
+            data.ventilation.name = measure[tag].name;
             data.ventilation.system_air_change_rate = measure[tag].system_air_change_rate;
             data.ventilation.balanced_heat_recovery_efficiency = measure[tag].balanced_heat_recovery_efficiency;
             data.ventilation.system_specific_fan_power = measure[tag].specific_fan_power;
@@ -316,8 +309,7 @@ $('#openbem').on('click', '.add-CDF-from-lib', function () {
 });
 $('#openbem').on('click', '.add-IVF', function () {
     var tag = $(this).attr('tag');
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    var item = library[tag];
+    var item = library_helper.library.intentional_vents_and_flues[tag];
     item.tag = tag;
     item.id = get_IVF_max_id() + 1;
     data.ventilation.IVF.push(item);
@@ -325,8 +317,7 @@ $('#openbem').on('click', '.add-IVF', function () {
 });
 $('#openbem').on('click', '.add-EVP', function () {
     var tag = $(this).attr('tag');
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    var item = library[tag];
+    var item = library_helper.library.extract_ventilation_points[tag];
     item.tag = tag;
     item.id = get_EVP_max_id() + 1;
     data.ventilation.EVP.push(item);
@@ -334,8 +325,7 @@ $('#openbem').on('click', '.add-EVP', function () {
 });
 $('#openbem').on('click', '.add-clothes-drying-facilities', function () {
     var tag = $(this).attr('tag');
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    var item = library[tag];
+    var item = library_helper.library.clothes_drying_facilities[tag];
     item.tag = tag;
     item.id = get_CDF_max_id() + 1;
     data.ventilation.CDF.push(item);

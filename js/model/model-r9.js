@@ -499,7 +499,7 @@ calc.ventilation = function (data)
         percentage_draught_proofed: 0,
         number_of_sides_sheltered: 0,
         ventilation_type: 'NV',
-        ventilation_name: 'Natural ventilation',
+        name: 'Natural ventilation',
         system_air_change_rate: 0.5,
         system_specific_fan_power: 3,
         balanced_heat_recovery_efficiency: 65,
