@@ -6,11 +6,9 @@
             "description":"Measured U-value, ENGLEFIELD Brick 300mm with plaster + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":1.2,
-                "max":1.6,
-                "mean":1.4
-            },
+            "uvalue_min":1.2,
+            "uvalue_max":1.6,
+            "uvalue":1.4,
             "kvalue":150,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
@@ -20,11 +18,9 @@
             "description":"Calculated U-value, ENGLEFIELD Brick 300mm with plaster + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":1.5,
-                "max":1.7,
-                "mean":1.6
-            },
+            "uvalue_min":1.5,
+            "uvalue_max":1.7,
+            "uvalue":1.6,
             "kvalue":150,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
@@ -34,11 +30,9 @@
             "description":"Measured U-value, ENGLEFIELD Brick 300mm, drylined with plasterboard + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":1,
-                "max":1.1,
-                "mean":1.05
-            },
+            "uvalue_min":1.0,
+            "uvalue_max":1.1,
+            "uvalue":1.05,
             "kvalue":100,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
@@ -48,11 +42,9 @@
             "description":"Calculated U-value, ENGLEFIELD Brick 300mm, drylined with plasterboard + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":1.1,
-                "max":1.2,
-                "mean":1.15
-            },
+            "uvalue_min":1.1,
+            "uvalue_max":1.2,
+            "uvalue":1.15,
             "kvalue":100,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
@@ -62,11 +54,9 @@
             "description":"Measured U-value, SHREWSBURY Brick 225mm with plaster + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":1,
-                "max":1.5,
-                "mean":1.25
-            },
+            "uvalue_min":1.0,
+            "uvalue_max":1.5,
+            "uvalue":1.25,
             "kvalue":150,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
@@ -76,11 +66,9 @@
             "description":"Calculated U-value, SHREWSBURY Brick 225mm with plaster + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":1.8,
-                "max":2,
-                "mean":1.9
-            },
+            "uvalue_min":1.8,
+            "uvalue_max":2.0,
+            "uvalue":1.9,
             "kvalue":150,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
@@ -90,11 +78,9 @@
             "description":"Measured U-value, WALSALL Brick 225mm with plaster + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":1.9,
-                "max":2.3,
-                "mean":1.25
-            },
+            "uvalue_min":1.9,
+            "uvalue_max":2.3,
+            "uvalue":2.1,
             "kvalue":150,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
@@ -104,25 +90,21 @@
             "description":"Calculated U-value, WALSALL Brick 225mm with plaster + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":1.8,
-                "max":2,
-                "mean":1.9
-            },
+            "uvalue_min":1.8,
+            "uvalue_max":2.0,
+            "uvalue":1.9,
             "kvalue":150,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
         "EH_IBm":{
             "type":"Wall",
             "name":"Brick 225mm, drylined, insulated plasterboard",
-            "description":"Measured & calculated U-value, WALSALL Brick 225mm, drylined, insulated (25mm) plasterboard  + wallpaper or paint",
+            "description":"Measured + calculated U-value, WALSALL Brick 225mm, drylined, insulated (25mm) plasterboard  + wallpaper or paint",
             "location":"",
             "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue":{
-                "min":0.6,
-                "max":0.7,
-                "mean":0.65
-            },
+            "uvalue_min":0.6,
+            "uvalue_max":0.7,
+            "uvalue":0.65,
             "kvalue":50,
             "notes":"Wet bricks increases thermal conductivity significantly"
         },
@@ -132,11 +114,9 @@
             "description":"Measured U-value, Stonewall 600mm, plaster on laths",
             "location":"",
             "source":"Historic Scotland 2011, Page 21",
-            "uvalue":{
-                "min":0.9,
-                "max":1.3,
-                "mean":1.1
-            },
+            "uvalue_min":0.9,
+            "uvalue_max":1.3,
+            "uvalue":1.1,
             "kvalue":150,
             "notes":"Damp walls increase U-value significantly"
         },
@@ -146,11 +126,9 @@
             "description":"Measured U-value, Stonewall 600mm, drylined",
             "location":"",
             "source":"Historic Scotland 2011, Page 21",
-            "uvalue":{
-                "min":0.7,
-                "max":1.1,
-                "mean":0.9
-            },
+            "uvalue_min":0.7,
+            "uvalue_max":1.1,
+            "uvalue":0.9,
             "kvalue":100,
             "notes":"Damp walls increase U-value significantly"
         },
@@ -160,11 +138,9 @@
             "description":"Measured U-value, Sandstone 550mm, bare",
             "location":"",
             "source":"Historic Scotland 2011, Page 24",
-            "uvalue":{
-                "min":1.3,
-                "max":1.5,
-                "mean":1.4
-            },
+            "uvalue_min":1.3,
+            "uvalue_max":1.5,
+            "uvalue":1.4,
             "kvalue":150,
             "notes":"Damp walls increase U-value significantly"
         },
@@ -174,17 +150,15 @@
             "description":"Measured U-value, Sandstone 600mm, drylined",
             "location":"",
             "source":"Historic Scotland 2011, Page 24",
-            "uvalue":{
-                "min":1,
-                "max":1.2,
-                "mean":1.1
-            },
+            "uvalue_min":1.0,
+            "uvalue_max":1.2,
+            "uvalue":1.1,
             "kvalue":100,
             "notes":"Damp walls increase U-value significantly"
         },
         "EST_SSP":{
             "type":"Wall",
-            "name":"Stonewall 600mm, lath & plaster",
+            "name":"Stonewall 600mm, lath + plaster",
             "description":"Traditional sandstone (or granite) 600mm, internal lath and plaster finish (for the pre-1919 period), Energy Saving Trust, 2004, table 2",
             "location":"",
             "source":"Historic Scotland 2011, Page 28",
@@ -194,7 +168,7 @@
         },
         "EST_CW":{
             "type":"Wall",
-            "name":"Stonewall 600mm, lath & plaster",
+            "name":"Stonewall 600mm, lath + plaster",
             "description":"Cavity wall involving brick and block with external render (for 1919‐1975), Energy Saving Trust, 2004, table 2",
             "location":"",
             "source":"Historic Scotland 2011, Page 28",
@@ -204,7 +178,7 @@
         },
         "CIBSE_SS":{
             "type":"Wall",
-            "name":"Stonewall 600mm, airspace & plaster on laths.",
+            "name":"Stonewall 600mm, airspace + plaster on laths.",
             "description":"Stonewall 600mm with 50mm airspace and finished with 25mm dense plaster on laths. (Anderson, 2006a, table 3.49 and 3.50)",
             "location":"",
             "source":"Historic Scotland 2011, Page 28",
@@ -230,29 +204,9 @@
             "source":"Historic Scotland 2011, Page 28",
             "uvalue":1.41,
             "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "CIBSE_UB3":{
-            "type":"Wall",
-            "name":"Brick cavity wall, plaster ",
-            "description":"Brick/brick cavity wall with 105 mm brick, 50 mm airspace, 105 mm brick, and 13 mm dense plaster (Anderson, 2006a, table 3.49 and 3.50)",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 28",
-            "uvalue":1.44,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        }
-    },
-    "elements_measures":{
-        "CIBSE_UB2":{
-            "type":"Wall",
-            "name":"Solid Brick, 220 mm, drylined",
-            "description":"220 mm solid brick wall with 50 mm airspace/battens and 12.5 mm plasterboard (Anderson, 2006a, table 3.49 and 3.50)",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 28",
-            "uvalue":1.41,
-            "kvalue":150,
-            "notes":"",
+            "notes":"Damp walls increase U-value significantly",
+            
+            "measure":true,
             "performance":"1.41 W/m<sup>2</sup>.K",
             "cost_units":"sqm",
             "cost":175,
@@ -264,7 +218,18 @@
             "key_risks":"",
             "associated_work":"",
             "maintenance":""
+        },
+        "CIBSE_UB3":{
+            "type":"Wall",
+            "name":"Brick cavity wall, plaster ",
+            "description":"Brick/brick cavity wall with 105 mm brick, 50 mm airspace, 105 mm brick, and 13 mm dense plaster (Anderson, 2006a, table 3.49 and 3.50)",
+            "location":"",
+            "source":"Historic Scotland 2011, Page 28",
+            "uvalue":1.44,
+            "kvalue":150,
+            "notes":"Damp walls increase U-value significantly"
         }
+       
     },
     "draught_proofing_measures":{
 
