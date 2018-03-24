@@ -16,11 +16,16 @@
 - Local copy: [thermal-performance-traditional-brick-walls.pdf](thermal-performance-traditional-brick-walls.pdf)
 - Original source: [https://historicengland.org.uk/images-books/publications/research-thermal-performance-traditional-brick-walls/](https://historicengland.org.uk/images-books/publications/research-thermal-performance-traditional-brick-walls/)
 
+### Domestic Heating Design Guide
+
+- Local copy: [U-Values from Domestic Heating Design Guide v1.0.pdf](U-Values from Domestic Heating Design Guide v1.0.pdf)
+- Original source: [http://www.microgenerationcertification.org/images/U-Values%20from%20Domestic%20Heating%20Design%20Guide%20v1.0.pdf](http://www.microgenerationcertification.org/images/U-Values%20from%20Domestic%20Heating%20Design%20Guide%20v1.0.pdf)
+
 ## Heating systems
 
 ### Energy Saving Trust: The heat is on: heat pump field trials phase 2
 
-- Local copy: [TheHeatisOnweb%281%29.pdf](TheHeatisOnweb%281%29.pdf)
+- Local copy: [TheHeatisOnweb.pdf](TheHeatisOnweb.pdf)
 - Original source: [http://www.energysavingtrust.org.uk/sites/default/files/reports/TheHeatisOnweb%281%29.pdf](http://www.energysavingtrust.org.uk/sites/default/files/reports/TheHeatisOnweb%281%29.pdf)
 
 

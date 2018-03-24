@@ -228,6 +228,122 @@
             "uvalue":1.44,
             "kvalue":150,
             "notes":"Damp walls increase U-value significantly"
+        },
+        
+        "DHDG_UB1":{
+            "type":"Wall",
+            "name":"Brick 102 mm, plaster",
+            "description":"Solid brick wall 102 mm, dense plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":2.97,
+            "kvalue":150
+        },
+        "DHDG_UB2":{
+            "type":"Wall",
+            "name":"Brick 228 mm, plaster",
+            "description":"Solid brick wall 228 mm, dense plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":2.11,
+            "kvalue":150
+        },
+        "DHDG_UB3":{
+            "type":"Wall",
+            "name":"Brick 343 mm, plaster",
+            "description":"Solid brick wall 343 mm, dense plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":1.64,
+            "kvalue":150
+        }, 
+        
+        "DHDG_US1":{
+            "type":"Wall",
+            "name":"Stone 305mm (12in)",
+            "description":"Solid stone wall 305 mm, unplastered",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":2.78,
+            "kvalue":150
+        },
+        "DHDG_US2":{
+            "type":"Wall",
+            "name":"Stone 457mm (18in)",
+            "description":"Solid stone wall 457 mm, unplastered",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":2.23,
+            "kvalue":150
+        }, 
+        "DHDG_US3":{
+            "type":"Wall",
+            "name":"Stone 610mm (24in)",
+            "description":"Solid stone wall 610 mm, unplastered",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":1.68,
+            "kvalue":150
+        },
+        
+        "DHDG_UC1":{
+            "type":"Wall",
+            "name":"Concrete 102mm, plaster",
+            "description":"Solid concrete wall 102mm, dense plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":3.51,
+            "kvalue":150
+        },
+        "DHDG_UC2":{
+            "type":"Wall",
+            "name":"Concrete 152mm, plaster",
+            "description":"Solid concrete wall 152mm, dense plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":3.12,
+            "kvalue":150
+        },
+        "DHDG_UC3":{
+            "type":"Wall",
+            "name":"Concrete 204mm, plaster",
+            "description":"Solid concrete wall 204mm, dense plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":2.80,
+            "kvalue":150
+        },
+        "DHDG_UC4":{
+            "type":"Wall",
+            "name":"Concrete 254mm, plaster",
+            "description":"Solid concrete wall 254mm, dense plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":2.54,
+            "kvalue":150
+        },
+        
+        "DHDG_CW1":{
+            "type":"Wall",
+            "name":"Unfilled Cavity wall, lightweight plaster",
+            "description":"Brick 102mm, air-space, brick 102mm, 13mm plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":1.37,
+            "kvalue":150
+        },
+        "DHDG_CW2":{
+            "type":"Wall",
+            "name":"Filled Cavity wall, lightweight plaster",
+            "description":"Brick 102mm, Mineral Wool Slab 50mm, brick 102mm, 13mm plaster",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":0.56,
+            "kvalue":150
+        },
+        "DHDG_CW3":{
+            "type":"Wall",
+            "name":"Unfilled Cavity wall, plasterboard on dabs",
+            "description":"Brick 102mm, air-space, brick 102mm, 12.5mm plasterboard on dabs",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":1.21,
+            "kvalue":150
+        },
+        "DHDG_CW4":{
+            "type":"Wall",
+            "name":"Filled Cavity wall, plasterboard on dabs",
+            "description":"Brick 102mm, Mineral Wool Slab 50mm, brick 102mm, 12.5mm plasterboard on dabs",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue":0.53,
+            "kvalue":150
         }
        
     },
