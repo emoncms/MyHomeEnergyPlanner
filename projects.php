@@ -43,7 +43,6 @@ $d = $path . "Modules/assessment/";
 </style>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
 
 <div id="wrapper">
 
@@ -179,61 +178,11 @@ $d = $path . "Modules/assessment/";
 
     var projects = [];
     $.ajax({url: path + "assessment/list.json", success: function (result) {
-            projects = result;
-            draw_projects("#projects", projects);
-            $("#assessments-title").html("My Assessments");
-        }});
-// -----------------------------------------------------------------------------------
-// Check that the user at least one library of each type and if not create it from the default one
-// Check that all the elements in the default library are in the user's Standard library, copy over the ones that are not (kind of getting in sync)
-// -----------------------------------------------------------------------------------
-    var libraries = {};
-    $.ajax({url: path + "assessment/loaduserlibraries.json", async: true, datatype: "json", success: function (user_libraries) {
-            // Check that the user at least one library of each type and if not create it from the default one
-            var user_has_the_library = false;
-            for (library_type in standard_library) {
-                user_has_the_library = false;
-                for (library_index in user_libraries) {
-                    if (user_libraries[library_index].type == library_type)
-                        user_has_the_library = true;
-                }
-                if (user_has_the_library == false) {
-                    var library_name = "StandardLibrary - " + myusername;
-                    $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name + '&type=' + library_type, datatype: "json", async: false, success: function (result) {
-                            var library_id = result;
-                            var library_string = JSON.stringify(standard_library[library_type]);
-                            library_string = library_string.replace(/&/g, 'and');
-                            $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + library_id + "&data=" + library_string, success: function (result) {
-                                    console.log("Library: " + library_type + ' - ' + result);
-                                }});
-                        }});
-                }
-            }
-            // Check that all the elements in the default library are in the user's Standard library, copy over the ones that are not (kind of getting in sync)
-            for (library_type in standard_library) {
-                for (library_index in user_libraries) {
-                    var library_changed = false;
-                    if (user_libraries[library_index].type == library_type && user_libraries[library_index].name == "StandardLibrary - " + myusername) {
-                        var user_library = JSON.parse(user_libraries[library_index].data);
-                        for (item in standard_library[library_type]) {
-                            item = item.replace(/[^\w\s-+.",:{}\/'\[\]\\]/g, ''); // we apply the same validation than in the server
-                            if (user_library[item] == undefined) {
-                                user_library[item] = standard_library[library_type][item];
-                                library_changed = true;
-                            }
-                        }
-                    }
-                    if (library_changed === true) {
-                        var library_string = JSON.stringify(user_library);
-                        library_string = library_string.replace(/&/g, 'and');
-                        $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + user_libraries[library_index].id + "&data=" + library_string, success: function (result) {
-                                console.log("Library: " + library_type + ' - ' + result);
-                            }});
-                    }
-                }
-            }
-        }
-    });
+        projects = result;
+        draw_projects("#projects", projects);
+        $("#assessments-title").html("My Assessments");
+    }});
+
 // -----------------------------------------------------------------------------------
 // Create new assessment
 // -----------------------------------------------------------------------------------
