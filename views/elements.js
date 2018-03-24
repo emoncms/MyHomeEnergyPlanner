@@ -25,13 +25,13 @@ $("#openbem").on("click", '.add-element', function () {
     if (type == "Window" || type == "Door" || type == "Roof_light") {
         element.orientation = 3;
         element.overshading = 2;
+        // Set a default value for subtractfrom
+        element.subtractfrom = $('.subtractfrom')[0][0].value;
     }
 
-// Set a default value for subtractfrom
-    if (type == "Window" || type == "Door" || type == "Roof_light")
-        element.subtractfrom = $('.subtractfrom')[0][0].value;
     data.fabric.elements.push(element);
     var newelementid = data.fabric.elements.length - 1;
+    
     if (type == "Wall")
         add_element("#elements", newelementid);
     if (type == "Roof" || type == "Loft")
@@ -40,7 +40,7 @@ $("#openbem").on("click", '.add-element', function () {
         add_floor(newelementid);
     if (type == "Window" || type == "Door" || type == "Roof_light" || type == "Hatch")
         add_window(newelementid);
-    if (type == "Party_wall" || type == "party_wall")
+    if (type == "Party_wall")
         add_element("#party_walls", newelementid);
     update();
     $('#myModal').modal('hide');
@@ -108,7 +108,7 @@ $("#openbem").on("click", '.apply-bulk-measure', function () {
 // We use the modal from the library_helper but we modify it (remove/add buttons) to chang its behaviour
 // When we finsih with it -on("click", '#bulk-measure-next'- we leave it as it was originally
     $('#apply-measure-ok').hide();
-    $('#apply-measure-modal .modal-footer').append('<button id="bulk-measure-next" tags="' + $(this).attr('tags') + '" class="btn btn-primary">Next</button>');
+    $('#apply-measure-modal .modal-footer').append('<button id="bulk-measure-next" type="' + $(this).attr('type') + '" class="btn btn-primary">Next</button>');
     library_helper.onApplyMeasure($(this));
     $('#apply-measure-modal').on('hidden.bs.modal', function (e) { // Bind event to tidy up the modal when we dismiss it
         $('#apply-measure-modal .modal-body').show();
@@ -123,10 +123,10 @@ $("#openbem").on("click", '#bulk-measure-next', function () {
     var out = '<div id="modal-bulk-measure-body" style="padding: 15px" >';
     out += '<p>Choose elements to appply measures to.</p>';
     out += '<table class="table" style="margin-left:15px">';
-    var label = $(this).attr('tags') == 'Window' ? 'Substract from' : '';
+    var label = $(this).attr('type') == 'Window' ? 'Substract from' : '';
     out += '<tr><th><input type="checkbox" id="bulk-measure-check-all" /></th>\n\
         <th>Name</th><th>Label</th><th>' + label + '</th></tr>';
-    if ($(this).attr('tags') == 'Window') { // We sort them by the wall the windows are substrated from
+    if ($(this).attr('type') == 'Window') { // We sort them by the wall the windows are substrated from
         var window_by_wall = {};
         for (var row in data.fabric.elements) {
             var element = data.fabric.elements[row];
@@ -139,7 +139,7 @@ $("#openbem").on("click", '#bulk-measure-next', function () {
         for (var wall in window_by_wall) { // We display them
             for (var index in window_by_wall[wall]) {
                 var element = window_by_wall[wall][index].element;
-                if (element.type == $(this).attr('tags')) {
+                if (element.type == $(this).attr('type')) {
                     out += "<tr><td><input type='checkbox' class='bulk-element' element-row='" + window_by_wall[wall][index].row + "' /></td>";
                     out += '<td>' + element.name + "</td>";
                     out += "<td>" + element.location + "</td>";
@@ -152,7 +152,7 @@ $("#openbem").on("click", '#bulk-measure-next', function () {
     else {
         for (var row in data.fabric.elements) {
             var element = data.fabric.elements[row];
-            if (element.type == $(this).attr('tags')) {
+            if (element.type == $(this).attr('type')) {
                 out += "<tr><td><input type='checkbox' class='bulk-element' element-row='" + row + "' /></td>";
                 out += '<td>' + element.name + "</td>";
                 out += "<td>" + element.location + "</td>";
@@ -289,7 +289,7 @@ function add_element(id, z)
     row.attr('row', z);
     row.attr('item_id', data.fabric.elements[z].id);
     row.attr('item', JSON.stringify(data.fabric.elements[z]));
-    row.attr('tags', data.fabric.elements[z].type);
+    row.attr('type', data.fabric.elements[z].type);
     
     // Revert to original
     init_revert_to_original(id, z);
@@ -316,7 +316,7 @@ function add_floor(z)
     row.attr('row', z);
     row.attr('item_id', data.fabric.elements[z].id);
     row.attr('item', JSON.stringify(data.fabric.elements[z]));
-    row.attr('tags', data.fabric.elements[z].type);
+    row.attr('type', data.fabric.elements[z].type);
 
     if (data.fabric.elements[z].uvalue == 0)
         $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color', 'red');
@@ -375,7 +375,7 @@ function add_window(z)
     row.attr('row', z);
     row.attr('item_id', data.fabric.elements[z].id);
     row.attr('item', JSON.stringify(data.fabric.elements[z]));
-    row.attr('tags', data.fabric.elements[z].type);
+    row.attr('type', data.fabric.elements[z].type);
     
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
@@ -499,6 +499,9 @@ function get_elements_max_id() {
 
 
 function apply_measure(measure) {
+    console.log("elements.js > apply_measure");
+    console.log(measure);
+
     // Check is a measure has previously been applied as part of a bulk measure, if so then we delete it
     var applied_in_bulk = measure_applied_in_bulk(measure.item_id);
     if (applied_in_bulk != false)
@@ -510,8 +513,11 @@ function apply_measure(measure) {
         data.fabric.measures[measure.item_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[measure.row]));
     }
 
-    for (z in measure.item) // measure.item only has one element, we do it this way to the "property", in this case somemthing like "CV1" oof "ROOF1"
+    for (var z in measure.item) // measure.item only has one element, we do it this way to the "property", in this case somemthing like "CV1" oof "ROOF1"
         var lib = z;
+    
+    console.log(lib);
+        
     switch (measure.type) {
         case 'remove':
             var selector = '[row="' + measure.row + '"]'
@@ -543,37 +549,10 @@ function get_element_value(element) {
 }
 
 function check_and_add_measure_fields(element) {
-    console.log(element);
-    if (element.description == undefined || element.description == '')
-        element.description = '--';
-    if (element.performance == undefined || element.performance == '')
-        element.performance = '--';
-    if (element.performance_units == undefined || element.performance_units == '')
-        element.performance_units = '--';
-    if (element.benefits == undefined || element.benefits == '')
-        element.benefits = '--';
-    if (element.cost == undefined || element.cost == '')
-        element.cost = '--';
-    if (element.cost_units == undefined || element.cost_units == '')
-        element.cost_units = '--';
-    if (element.who_by == undefined || element.who_by == '')
-        element.who_by = '--';
-    if (element.who_by_units == undefined || element.who_by_units == '')
-        element.who_by_units = '--';
-    if (element.who_by_quantity == undefined || element.who_by_quantity == '')
-        element.who_by_quantity = '--';
-    if (element.who_by_total == undefined || element.who_by_total == '')
-        element.who_by_total = '--';
-    if (element.disruption == undefined || element.disruption == '')
-        element.disruption = '--';
-    if (element.associated_work == undefined || element.associated_work == '')
-        element.associated_work = '--';
-    if (element.key_risks == undefined || element.key_risks == '')
-        element.key_risks = '--';
-    if (element.notes == undefined || element.notes == '')
-        element.notes = '--';
-    if (element.maintenance == undefined || element.maintenance == '')
-        element.maintenance = '--';
+    // Load default values from libraryDefaults
+    for (var property in library_helper.libraryDefaults.elements_measures) {
+        if (element[property] == undefined) element[property] = library_helper.libraryDefaults.elements_measures[property];
+    }
 }
 
 function edit_item(element, row) {
@@ -583,7 +562,7 @@ function edit_item(element, row) {
         element[z].lib = z;
     }
     if (element[lib].type == undefined)
-        element[lib].type = element[lib].tags[0];
+        element[lib].type = element[lib].category;
     for (z in data.fabric.elements[row]) { // We copy over all the properties that are not asked when editting an element, this are the ones that the user inputed like "length" and "height"
         if (element[lib][z] == undefined)
             element[lib][z] = data.fabric.elements[row][z];
@@ -654,276 +633,3 @@ function init_revert_to_original(id, z) {
         $(id + ' .revert-to-original[item_id="' + data.fabric.elements[z].id + '"]').hide();
     }
 }
-
-//
-//-----------------------------------------------------------------------------------------------
-// Element library
-//-----------------------------------------------------------------------------------------------
-/*
- function loadlibrarylist(callback) {
- var mylibraries = [];
- 
- $.ajax({url: path + "assessment/listlibrary.json", datatype: "json", success: function (result) {
- mylibraries = result;
- 
- var standardlibcreated = false;
- for (z in mylibraries) {
- if (mylibraries[z].name.indexOf("StandardLibrary") > -1)
- standardlibcreated = true;
- }
- 
- if (!standardlibcreated)
- {
- var library_name = "StandardLibrary - " + p.author
- $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + library_name, datatype: "json", async: false, success: function (result) {
- selected_library = result;
- element_library = standard_element_library;
- mylibraries[0] = {id: selected_library, name: library_name};
- $.ajax({type: "POST", url: path + "assessment/savelibrary.json", data: "id=" + selected_library + "&data=" + JSON.stringify(element_library), success: function (result) {
- console.log("save library result: " + result);
- }});
- }});
- }
- 
- selected_library = mylibraries[0].id;
- 
- var out = "";
- for (z in mylibraries) {
- out += "<option value=" + mylibraries[z].id + ">" + mylibraries[z].name + "</option>";
- }
- 
- out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
- $("#library-select").html(out);
- $("#library-select").val(selected_library);
- 
- callback();
- }});
- }
- 
- function loadlibrary(id, callback) {
- element_library = {};
- // selected_library = id
- // try loading the library from the database
- $.ajax({url: path + "assessment/loadlibrary.json", data: "id=" + id, datatype: "json", success: function (result) {
- element_library = result;
- // check if library is empty
- var num = 0;
- for (z in element_library)
- num++;
- // if empty load standard library
- // if (num==0) element_library = standard_element_library;
- callback();
- }});
- }
- */
-/*$("#openbem").on("click", '.add-element-from-lib', function () {
- selected_library_tag = $(this).attr("tags");
- draw_library(selected_library_tag);
- });
- 
- function draw_library(tag)
- {
- var out = "";
- for (z in element_library) {
- if (element_library[z].tags.indexOf(tag) != -1) {
- out += "<tr class='librow' lib='" + z + "' type='" + tag + "'>";
- out += "<td style='width:20px;'>" + z + "</td>";
- 
- out += "<td style='width:200px;'>" + element_library[z].name;
- out += "<br><span style='font-size:13px'><b>Source:</b> " + element_library[z].source + "</span>";
- /*if (element_library[z].criteria.length)
- out += "<br><span style='font-size:13px'><b>Measure criteria:</b> " + element_library[z].criteria.join(", ") + "</span>";
- *//*
-  out += "</td>";
-  out += "<td style='width:200px; font-size:13px'>";
-  out += "<b>U-value:</b> " + element_library[z].uvalue + " W/K.m2";
-  out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/K.m2";
-  if (element_library[z].tags[0] == "Window") {
-  out += "<br><b>g:</b> " + element_library[z].g + ", ";
-  out += "<b>gL:</b> " + element_library[z].gL + ", ";
-  out += "<b>ff:</b> " + element_library[z].ff;
-  }
-  out += "</td>";
-  out += "<td style='width:120px' >";
-  out += "<i style='cursor:pointer' class='icon-pencil edit-element' lib='" + z + "' type='" + tag + "'></i>";
-  // out += "<i class='icon-trash' style='margin-left:20px'></i>";
-  out += "<button class='add-element btn' style='margin-left:20px' lib='" + z + "' type='" + tag + "'>use</button</i>";
-  out += "</td>";
-  out += "</tr>";
-  }
-  }
-  $("#element_library").html(out);
-  $('#myModal').css({left: '50%'});
-  $('#myModal').modal('show');
-  }*/
-/*
- $("#openbem").on("click", '.apply-measure-list', function () {
- var row = $(this).attr('row');
- var element = data.fabric.elements[row];
- var measure_options = ["description", "performance", "benefits", "cost", "who_by", "disruption", "associated_work", "key_risks", "notes", "maintenance"];
- // The header of the table
- var out = '<tr class="librow apply-measure"><th>Tag</th><th>Name</th><th>Source</th><th>U-value</th><th>K-value</th>';
- out += '<th class="element-window-option">g</th><th class="element-window-option">gL</th><th class="element-window-option">Frame factor (ff)</th>';
- out += '<th>Code</th><th>Description</th><th>Performance</th><th>Benefits</th><th>Cost</th><th>Who by</th><th>Disruption</th><th>Associated work</th><th>Key risks</th><th>Notes</th><th>Maintenance</th></tr>';
- // The rest of the table
- for (z in element_library) {
- /* for (i in measure_options) {
- if (element_library[z][i] === undefined)
- element_library[z][measure_options[i]] = "";
- }*/
-//if (element_library[z].criteria.indexOf(element.lib) != -1) {
-/*if (element_library[z].tags[0].toLowerCase() == element.type) {
- out += "<tr class='librow apply-measure' lib='" + z + "' row='" + row + "' item_id='" + element.id + "' style='cursor:pointer'>";
- out += "<td>" + z + "</td>";
- out += "<td>" + element_library[z].name + "</td>";
- out += "<td>" + element_library[z].source + "</td>";
- out += "<td>" + element_library[z].uvalue + " W/K.m2</td>";
- out += "<td>" + element_library[z].kvalue + " kJ/K.m2</td>";
- out += "<td class='element-window-option'>" + element_library[z].g + " kJ/K.m2</td>";
- out += "<td class='element-window-option'>" + element_library[z].gL + " kJ/K.m2</td>";
- out += "<td class='element-window-option'>" + element_library[z].ff + " kJ/K.m2</td>";
- out += "<td>" + element_library[z].description + "</td>";
- out += "<td>" + element_library[z].performance + "</td>";
- out += "<td>" + element_library[z].benefits + "</td>";
- out += "<td>" + element_library[z].cost + "</td>";
- out += "<td>" + element_library[z].who_by + "</td>";
- out += "<td>" + element_library[z].disruption + "</td>";
- out += "<td>" + element_library[z].associated_work + "</td>";
- out += "<td>" + element_library[z].key_risks + "</td>";
- out += "<td>" + element_library[z].notes + "</td>";
- out += "<td>" + element_library[z].maintenance + "</td>";
- // out += "<td>"+element_library[z].criteria.join(",")+"</td>";
- out += "</tr>";
- }
- }
- $("#element_library").html(out);
- if (element.type == "window") {
- $('.element-window-option').show('fast');
- $('#myModal').css({left: 450});
- }
- else {
- $('.element-window-option').hide('fast');
- $('#myModal').css({left: 650});
- }
- 
- $('#myModal').modal('show');
- });
- */
-/*$("#openbem").on("click", '.changed-apply-measure', function () {
- var lib = $(this).attr('lib');
- var row = $(this).attr('row');
- var item_id = $(this).attr('item_id');
- 
- if (data.fabric.measures[item_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
- data.fabric.measures[item_id] = {};
- data.fabric.measures[item_id].original_element = JSON.parse(JSON.stringify(data.fabric.elements[row]));
- }
- 
- if (lib != undefined) {
- for (z in element_library[lib])
- data.fabric.elements[row][z] = element_library[lib][z];
- data.fabric.elements[row].lib = lib;
- }
- 
- data.fabric.measures[item_id].measure = data.fabric.elements[row];
- update();
- $('#myModal').modal('hide');
- });*/
-
-
-
-/*
- $("#openbem").on("click", ".edit-element", function () {
- var lib = $(this).attr('lib');
- var type = element_library[lib].tags[0];
- $("#create-element-tag").val(lib);
- $("#create-element-name").val(element_library[lib].name);
- $("#create-element-source").val(element_library[lib].source);
- $("#create-element-uvalue").val(element_library[lib].uvalue);
- $("#create-element-kvalue").val(element_library[lib].kvalue);
- //$("#create-element-criteria").val(element_library[lib].criteria.join(","));
- 
- $("#create-element-type").val(type);
- if (type == "Window") {
- $("#create-element-g").val(element_library[lib].g);
- $("#create-element-gL").val(element_library[lib].gL);
- $("#create-element-ff").val(element_library[lib].ff);
- $(".create-element-window-options").show('fast');
- }
- else
- $(".create-element-window-options").hide('fast');
- $("#myModalcreateelement").modal('show');
- $('#myModal').modal('hide');
- });
- $("#openbem").on("click", ".newlibraryoption", function () {
- $(".library-select-view").hide('fast');
- $(".new-library-view").show('fast');
- });
- $("#openbem").on("click", "#newlibrary", function () {
- var name = $("#newlibrary-name").val();
- console.log("newlibrary:" + name);
- $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + name, datatype: "json", success: function (result) {
- console.log("result: " + result);
- loadlibrarylist();
- $(".library-select-view").show('fast');
- $(".new-library-view").hide('fast');
- }});
- });
- $("#library-select").change(function () {
- var id = $(this).val() * 1.0;
- if (id != -1) {
- console.log(id);
- selected_library = id;
- loadlibrary(id, function () {
- draw_library(selected_library_tag);
- });
- }
- });
- $("#openbem").on("click", "#cancelnewlibrary", function () {
- $(".library-select-view").show('fast');
- $(".new-library-view").hide('fast');
- });
- $("#open-share-library").click(function () {
- $("#modal-share-library").modal('show');
- $('#myModal').modal('hide');
- $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + selected_library, success: function (shared) {
- var out = "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>";
- var write = "";
- for (var i in shared) {
- console.log(shared);
- write = shared[i].write == 1 ? 'Yes' : 'No';
- // if (myusername!=shared[i].username) 
- out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' userid='" + shared[i].userid + "'></i></td></tr>";
- }
- if (out == "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>")
- out = "<tr><td colspan='3'>This library is currently private</td></tr>";
- $("#shared-with-table").html(out);
- }});
- });
- $("#share-library").click(function () {
- $('#return-message').html('');
- var username = $("#sharename").val();
- var write_permissions = $('#write_permissions').is(":checked");
- 
- if (selected_library != -1) {
- $.ajax({
- url: path + "assessment/sharelibrary.json",
- data: "id=" + selected_library + "&name=" + username + "&write_permissions=" + write_permissions,
- success: function (data) {
- $('#return-message').html(data);
- $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + selected_library, success: function (shared) {
- var out = "<tr><th>Shared with:</th><th>Has write persmissions</th></tr>";
- var write = "";
- for (var i in shared) {
- write = shared[i].write == 1 ? 'Yes' : 'No';
- // if (myusername!=shared[i].username) 
- out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td></tr>";
- }
- if (out == "")
- out = "<tr><td colspan='2'>This library is currently private</td></tr>";
- $("#shared-with-table").html(out);
- }});
- }});
- }
- });*/
-

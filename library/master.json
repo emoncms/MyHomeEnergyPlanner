@@ -1,9 +1,7 @@
 {
     "elements": {
         "SWU_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "225mm uninsulated brick wall",
             "description": "225mm uninslated solid brick wall, plaster internally",
             "location": "",
@@ -15,9 +13,7 @@
             "ff": 0
         },
         "SWU_02": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "300mm uninsulated solid granite or whinstone wall",
             "description": "",
             "location": "",
@@ -29,9 +25,7 @@
             "ff": 0
         },
         "SWU_03": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "450mm uninsulated solid granite or whinstone wall",
             "description": "",
             "location": "",
@@ -43,9 +37,7 @@
             "ff": 0
         },
         "SWU_04": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "300mm uninsulated solid granite or whinstone wall",
             "description": "",
             "location": "",
@@ -57,9 +49,7 @@
             "ff": 0
         },
         "SWU_05": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "450mm uninsulated solid granite or whinstone wall",
             "description": "",
             "location": "",
@@ -71,9 +61,7 @@
             "ff": 0
         },
         "CWU_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Cavity Wall as built (uninsulated) - 25mm",
             "description": "",
             "location": "",
@@ -85,9 +73,7 @@
             "ff": 0
         },
         "CWU_02": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Unfilled Cavity Masonry Wall - 50mm Cavity",
             "description": "",
             "location": "",
@@ -99,9 +85,7 @@
             "ff": 0
         },
         "CWU_03": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Unfilled Cavity Masonry Wall - 75mm Cavity",
             "description": "",
             "location": "",
@@ -112,9 +96,7 @@
             "ff": 0
         },
         "CWU_04": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Unfilled Cavity Masonry Wall - 100mm Cavity",
             "description": "",
             "location": "",
@@ -126,9 +108,7 @@
             "ff": 0
         },
         "TFWU_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Uninsulated timber frame wall to bay window",
             "description": "",
             "location": "",
@@ -140,9 +120,7 @@
             "ff": 0
         },
         "TFWU_02": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Uninsulated stud wall to unheated space in room in roof",
             "description": "",
             "location": "",
@@ -154,9 +132,7 @@
             "ff": 0
         },
         "CWEX_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "100-140mm External Wall Insulation EWI on filled cavity wall.",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -168,9 +144,7 @@
             "description": "100-140mm thick vapour permeable external wall insulation EWI with render finish on filled cavity wall.To include insulation to all window and door reveals and thresholds, treatment of roof eaves and verges junctions, taking insulation to at least 300mm below the level of the internal floor so thermal bridge is reduced. It will require adjustments of external drainage, and removal\/refixing of sundry items satellite dishes, telephone connections, alarm boxes, boiler flues, bird boxes, gates and fences etc. "
         },
         "CWF_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Filled Cavity Masonry Wall - 25mm Cavity",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -182,9 +156,7 @@
             "description": "Cavity fill insulation injected through outer face of brickwork behind External Wall Insulation to prevent thermal bypass chimney effect within cavity. On its own this would be a hard to treat cavity, which would not normally be cavity filled due to risks of bridging in the cavity and marginal gains."
         },
         "CWF_02": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Filled Cavity Masonry Wall - 50mm Cavity",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -196,9 +168,7 @@
             "description": "Cavity fill insulation injected through outer face of brickwork. This is used on its own or behind External Wall Insulation to prevent thermal bypass chimney effect within cavity. "
         },
         "CWF_03": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Filled Cavity Masonry Wall - 75mm Cavity",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -210,9 +180,7 @@
             "description": "Cavity fill insulation, recycled formaldehyde free glass fibre injected through outer face of brickwork. This is used on its own or behind External Wall Insulation to prevent thermal bypass chimney effect within cavity. "
         },
         "CWF_04": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Filled Cavity Masonry Wall - 100mm Cavity",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -228,14 +196,10 @@
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.35,
             "kvalue": 110,
-            "tags": [
-                "Wall"
-            ]
+            "type": "Wall"
         },
         "PWF_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Cavity masonry wall, filled. ",
             "location": "",
             "source": "SAP table S8B, p.134\/ table 1e, p.195",
@@ -247,9 +211,7 @@
             "description": "Cavity fill insulation injected into party wall to reduce chimney effect of thermal bypass in unfilled cavity. This assumes that it is not possible to effectively seal the edges and especially the top of the cavity. If this is possible - for example when re-roofing - the performance my be further improved. "
         },
         "PWUS_01": {
-            "tags": [
-                "Party_wall"
-            ],
+            "type": "Party_wall",
             "name": "225mm brick wall, plastered both sides. ",
             "description": "",
             "location": "",
@@ -261,9 +223,7 @@
             "ff": 0
         },
         "PWUC_01": {
-            "tags": [
-                "Party_wall"
-            ],
+            "type": "Party_wall",
             "name": "Cavity masonry wall, uncapped, unfilled. ",
             "description": "",
             "location": "",
@@ -275,9 +235,7 @@
             "ff": 0
         },
         "FLUT_01": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Uninsulated suspended timber ground floor",
             "description": "",
             "location": "",
@@ -289,9 +247,7 @@
             "ff": 0
         },
         "FLUT_02": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Uninsulated exposed suspended timber floor at upper storey. ",
             "description": "",
             "location": "",
@@ -303,9 +259,7 @@
             "ff": 0
         },
         "FLUT_03": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Uninsulated semi-exposed suspended timber floor at upper storey to unheated space, e.g. porch. ",
             "description": "",
             "location": "",
@@ -317,9 +271,7 @@
             "ff": 0
         },
         "FLUS_01": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Uninsulated Solid Ground Floor",
             "description": "",
             "location": "",
@@ -331,9 +283,7 @@
             "ff": 0
         },
         "FLIS_01": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Existing insulated solid floor ",
             "description": "",
             "location": "",
@@ -345,9 +295,7 @@
             "ff": 0
         },
         "LRA_01": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "New insulated loft hatch (1.2m x 0.6m)",
             "location": "Manufacturer (Welhofer)\/ SAP table 1e, p.195",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -358,9 +306,7 @@
             "ff": 0
         },
         "LRA_02": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "Insulate existing ceiling loft hatch. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -371,9 +317,7 @@
             "ff": 0
         },
         "LRA_03": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "New insulated wall hatch to loft space. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -384,9 +328,7 @@
             "ff": 0
         },
         "LRA_04": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "Insulate existing wall hatch to loft space. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -397,9 +339,7 @@
             "ff": 0
         },
         "LRA_05": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "Loft storage - extended joists. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -410,9 +350,7 @@
             "ff": 0
         },
         "LRA_06": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "Loft storage - rigid boards. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -423,9 +361,7 @@
             "ff": 0
         },
         "LRA_07": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "Uninsulated Loft Hatch",
             "location": "",
             "source": "URBED",
@@ -436,9 +372,7 @@
             "ff": 0
         },
         "LRU_01": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "Uninsulated loft space",
             "description": "Uninsulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -450,9 +384,7 @@
             "ff": 0
         },
         "LRI_0.5": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "50mm fibre loft insulation",
             "description": "Insulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -464,9 +396,7 @@
             "ff": 0
         },
         "LRI_0.75": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "75mm fibre loft insulation",
             "description": "Insulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -478,9 +408,7 @@
             "ff": 0
         },
         "LRI_01": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "100mm fibre loft insulation",
             "description": "Insulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -492,9 +420,7 @@
             "ff": 0
         },
         "LRI_01.5": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "150mm fibre loft insulation",
             "description": "Insulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -506,9 +432,7 @@
             "ff": 0
         },
         "LRI_02": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "200mm fibre loft insulation",
             "description": "Insulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -520,9 +444,7 @@
             "ff": 0
         },
         "LRI_02.5": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "250mm fibre loft insulation",
             "description": "Insulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -534,9 +456,7 @@
             "ff": 0
         },
         "LRI_02.7": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "270mm fibre loft insulation",
             "description": "Insulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -548,9 +468,7 @@
             "ff": 0
         },
         "LRI_03": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "300mm fibre loft insulation",
             "description": "Insulated loft space below pitched tiled or slated roof. ",
             "location": "",
@@ -562,9 +480,7 @@
             "ff": 0
         },
         "PRU_01": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Pitched roof room in roof or similar, no insulation. ",
             "description": "Pitched roof at room in roof or similar, no insulation. Plasterboard internal face, rafters, roofing. existing condition",
             "location": "",
@@ -576,9 +492,7 @@
             "ff": 0
         },
         "PRI_01": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Pitched roof room in roof or similar, 12-25mm insulation. ",
             "description": "Pitched roof at room in roof or similar, Insulation thickness dependent on material to achieve performance target. Plasterboard internal face, rafters with insulation, roofing. existing condition",
             "location": "",
@@ -590,9 +504,7 @@
             "ff": 0
         },
         "PRI_02": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Pitched roof room in roof or similar, 25-50mm insulation. ",
             "description": "Pitched roof at room in roof or similar, Insulation thickness dependent on material to achieve performance target. Plasterboard internal face, rafters with insulation, roofing. existing condition",
             "location": "",
@@ -604,9 +516,7 @@
             "ff": 0
         },
         "PRI_03": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Pitched roof room in roof or similar, 50-100mm insulation. ",
             "description": "Pitched roof at room in roof or similar, Insulation thickness dependent on material to achieve performance target. Plasterboard internal face, rafters with insulation, roofing. existing condition",
             "location": "",
@@ -618,9 +528,7 @@
             "ff": 0
         },
         "PRI_04": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Pitched roof room in roof or similar, 75-150mm insulation. ",
             "description": "Pitched roof at room in roof or similar, Insulation thickness dependent on material to achieve performance target. Plasterboard internal face, rafters with insulation, roofing. existing condition",
             "location": "",
@@ -632,9 +540,7 @@
             "ff": 0
         },
         "PRI_05": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Pitched roof room in roof or similar, 100-200mm insulation. ",
             "description": "Pitched roof at room in roof or similar, Insulation thickness dependent on material to achieve performance target. Plasterboard internal face, rafters with insulation, roofing. existing condition",
             "location": "",
@@ -646,9 +552,7 @@
             "ff": 0
         },
         "FRU_01": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Uninsulated flat roof existing condition",
             "description": "",
             "location": "",
@@ -660,9 +564,7 @@
             "ff": 0
         },
         "FRI_05": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Flat roof with 50mm rigid insulation existing condition",
             "description": "",
             "location": "",
@@ -674,9 +576,7 @@
             "ff": 0
         },
         "FRI_1": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Flat roof with 100mm rigid insulation existing condition",
             "description": "",
             "location": "",
@@ -688,9 +588,7 @@
             "ff": 0
         },
         "FRI_15": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Flat roof with 150mm rigid insulation existing condition",
             "description": "",
             "location": "",
@@ -711,9 +609,7 @@
             "g": "0.85",
             "gL": "0.9",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWAS_01": {
             "name": "Single glazed window aluminium frame",
@@ -725,9 +621,7 @@
             "g": "0.85",
             "gL": "0.9",
             "ff": "0.8",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWT2_01": {
             "name": "Secondary glaed window timber frame",
@@ -739,9 +633,7 @@
             "g": "0.76",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWTD_01": {
             "name": "Double glazed window, pre - 2002, 6mm timber",
@@ -753,9 +645,7 @@
             "g": "0.76",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWTD_02": {
             "name": "Double glazed window, pre - 2002, 12mm timber",
@@ -767,9 +657,7 @@
             "g": "0.76",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWTD_03": {
             "name": "Double glazed window, pre - 2002, 16mm timber",
@@ -781,9 +669,7 @@
             "g": "0.76",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWTD_04": {
             "name": "Double glazed window, post - 2002 6 - 12mm timber",
@@ -795,9 +681,7 @@
             "g": "0.76",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWTD_06": {
             "name": "Double glazed window, post - 2010 timber",
@@ -808,9 +692,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWPD_01": {
             "name": "Double glazed window, any age, 16mm uPVC",
@@ -822,9 +704,7 @@
             "g": "0.76",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWPD_02": {
             "name": "Double glazed window, pre 2002 20mm uPVC",
@@ -836,9 +716,7 @@
             "g": "0.76",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWPD_03": {
             "name": "Double glazed window, post - 2002 20mm uPVC",
@@ -850,9 +728,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWPD_04": {
             "name": "Double glazed window, post - 2010 uPVC",
@@ -864,9 +740,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWTD_05": {
             "name": "Double glazed window, post - 2002 16mm timber",
@@ -878,9 +752,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWAD_01": {
             "name": "Double glazed Aluminium frame Air filled 12mm",
@@ -892,14 +764,10 @@
             "g": "0.76",
             "gL": "0.8",
             "ff": "0.8",
-            "tags": [
-                "Window"
-            ]
+            "type": "Window"
         },
         "WWTT_01": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Triple glazed window (timber)",
             "location": "",
             "source": "Green Building Store",
@@ -910,9 +778,7 @@
             "ff": 0.7
         },
         "WWPT_01": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Triple glazed window (uPVC)",
             "location": "",
             "source": "Spectus",
@@ -923,9 +789,7 @@
             "ff": 0.7
         },
         "WWPT_02": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Replacement Triple Glazed unit in existing window",
             "location": "",
             "source": "",
@@ -945,9 +809,7 @@
             "g": "0.85",
             "gL": "0.9",
             "ff": "0.7",
-            "tags": [
-                "Roof_light"
-            ]
+            "type": "Roof_light"
         },
         "RLTD01": {
             "name": "Double glazed timber frame rooflight - 6mm",
@@ -959,9 +821,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Roof_light"
-            ]
+            "type": "Roof_light"
         },
         "RLTD02": {
             "name": "Double glazed timber frame rooflight - 12mm",
@@ -973,9 +833,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Roof_light"
-            ]
+            "type": "Roof_light"
         },
         "RLTD03": {
             "name": "Double glazed timber frame rooflight - 16mm",
@@ -987,9 +845,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Roof_light"
-            ]
+            "type": "Roof_light"
         },
         "RLTD04": {
             "name": "Double glazed timber frame rooflight - 24mm",
@@ -1001,9 +857,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Roof_light"
-            ]
+            "type": "Roof_light"
         },
         "RLTT01": {
             "name": "Triple glazed timber frame rooflight ",
@@ -1015,9 +869,7 @@
             "g": "0.58",
             "gL": "0.74",
             "ff": "0.7",
-            "tags": [
-                "Roof_light"
-            ]
+            "type": "Roof_light"
         },
         "DR01": {
             "name": "Solid Timber\/uPVC Door - no glazing ",
@@ -1029,9 +881,7 @@
             "g": "0",
             "gL": "0",
             "ff": "0",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRS01": {
             "name": "Solid Timber\/uPVC Door with Single Glazing 20",
@@ -1043,9 +893,7 @@
             "g": "0.85",
             "gL": "0.9",
             "ff": "0.2",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRS02": {
             "name": "Solid Timber\/uPVC Door with Single Glazing 20-50",
@@ -1057,9 +905,7 @@
             "g": "0.85",
             "gL": "0.9",
             "ff": "0.35",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRS03": {
             "name": "Solid Timber\/uPVC Door with Single Glazing 50-70",
@@ -1071,9 +917,7 @@
             "g": "0.85",
             "gL": "0.9",
             "ff": "0.6",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRS04": {
             "name": "Solid Timber\/uPVC Door with Single Glazing 70",
@@ -1085,9 +929,7 @@
             "g": "0.85",
             "gL": "0.9",
             "ff": "0.7",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRD01": {
             "name": "Solid Timber\/uPVC Door with Double Glazing 20",
@@ -1099,9 +941,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.2",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRD02": {
             "name": "Solid Timber\/uPVC Door with Double Glazing 20-50",
@@ -1113,9 +953,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.35",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRD03": {
             "name": "Solid Timber\/uPVC Door with Double Glazing 50-70",
@@ -1127,9 +965,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.6",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRD04": {
             "name": "Solid Timber\/uPVC Door with Double Glazing 70",
@@ -1141,9 +977,7 @@
             "g": "0.72",
             "gL": "0.8",
             "ff": "0.7",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRT01": {
             "name": "Solid Timber\/uPVC Door with Triple Glazing 20",
@@ -1155,9 +989,7 @@
             "g": "0.58",
             "gL": "0.74",
             "ff": "0.2",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRT02": {
             "name": "Solid Timber\/uPVC Door with Triple Glazing 20-50",
@@ -1169,9 +1001,7 @@
             "g": "0.58",
             "gL": "0.74",
             "ff": "0.35",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRT03": {
             "name": "Solid Timber\/uPVC Door with Triple Glazing 50-70",
@@ -1183,9 +1013,7 @@
             "g": "0.58",
             "gL": "0.74",
             "ff": "0.6",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DRT04": {
             "name": "Solid Timber\/uPVC Door with Triple Glazing 70",
@@ -1197,9 +1025,7 @@
             "g": "0.58",
             "gL": "0.74",
             "ff": "0.7",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "DR02": {
             "name": "Any existing door onto unheated corridor\/stairwell. ",
@@ -1211,80 +1037,60 @@
             "g": "0",
             "gL": "0",
             "ff": "0",
-            "tags": [
-                "Door"
-            ]
+            "type": "Door"
         },
         "SWU_06": {
             "name": "Uninsulated brick wall to unheated space e.g. cellar\/garage",
             "source": "URBED\/SAP table 1e, p.195",
             "uvalue": 1.29,
             "kvalue": 135,
-            "tags": [
-                "Wall"
-            ]
+            "type": "Wall"
         },
         "SWU_07": {
             "name": "Uninsulated retaining masonry wall against ground. ",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 2.1,
             "kvalue": 135,
-            "tags": [
-                "Wall"
-            ]
+            "type": "Wall"
         },
         "SWEX_02": {
             "name": "100mm External Wall Insulation on 215 brick wall",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.35,
             "kvalue": 135,
-            "tags": [
-                "Wall"
-            ]
+            "type": "Wall"
         },
         "TFWI_03": {
             "name": "Timber Frame Wall with rendered or tiled finish and 50mm insulation",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.7,
             "kvalue": 9,
-            "tags": [
-                "Wall"
-            ]
+            "type": "Wall"
         },
         "TFWI_04": {
             "name": "Timber Frame Wall with rendered or tiled finish and 100mm insulation",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.4,
             "kvalue": 9,
-            "tags": [
-                "Wall"
-            ]
+            "type": "Wall"
         },
         "TFWI_05": {
             "name": "Timber Frame Wall with rendered or tiled finish and 200mm insulation",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.25,
             "kvalue": 9,
-            "tags": [
-                "Wall"
-            ]
+            "type": "Wall"
         },
         "SWIN_02": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "75mm Internal Wall Insulation (mineral wool) (IWI) on 225mm brick wall",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
             "uvalue": 0.4,
             "kvalue": 17
-        }
-    },
-    "elements_measures": {
+        },
         "SWEX_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "160-220mm External Wall Insulation on 225mm brick wall",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1294,6 +1100,7 @@
             "gL": 0,
             "ff": 0,
             "description": "160-200mmmm thick vapour permeable external wall insulation system (EWI) with render finish. To include insulation to all window and door reveals and thresholds, treatment of roof eaves and verges junctions, taking insulation to at least 300mm below the level of the internal floor (so thermal bridge is reduced). It will also require adjustments of external drainage pipework, and removal\/refixing of sundry items (satellite dishes, telephone connections, alarm boxes, boiler flues, bird boxes, gates and fences etc). ",
+
             "performance": "0.2 W\/m2.K",
             "benefits": "Comfort + Carbon Emissions + Fuel Bills",
             "cost_units": "sqm",
@@ -1308,9 +1115,7 @@
             "maintenance": "MEDIUM: Render may need painting and repair after 10-30 years. All sealed junctions may need to be renewed periodically to prevent water ingress. "
         },
         "CWEX_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "100-140mm External Wall Insulation (EWI) on filled cavity wall.",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1334,9 +1139,7 @@
             "maintenance": "MEDIUM: Render may need painting and repair after 10-30 years. All sealed junctions may need to be renewed periodically to prevent water ingress. "
         },
         "SWIN_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "80mm Internal Wall Insulation (woodfibre) (IWI) on 225mm brick wall",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1359,9 +1162,7 @@
             "maintenance": "MINIMAL: Ensure outer face of wall retains integrity so no water can enter structure, and air-tightness is maintained on inner face. "
         },
         "SWIN_02": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "75mm Internal Wall Insulation (mineral wool) (IWI) on 225mm brick wall",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1384,9 +1185,7 @@
             "maintenance": "MINIMAL: Ensure outer face of wall retains integrity so no water can enter structure, and air-tightness is maintained on inner face. "
         },
         "SWIN_03": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Between Floor Internal Wall Insulation",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1409,9 +1208,7 @@
             "maintenance": "MINIMAL: Ensure outer face of wall retains integrity so no water can enter structure, and air-tightness is maintained on inner face. "
         },
         "CWF_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Filled Cavity Masonry Wall - 25mm Cavity",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -1434,9 +1231,7 @@
             "maintenance": "MINIMAL"
         },
         "CWF_02": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Filled Cavity Masonry Wall - 50mm Cavity",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -1459,9 +1254,7 @@
             "maintenance": "MINIMAL"
         },
         "CWF_03": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Filled Cavity Masonry Wall - 75mm Cavity",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -1484,9 +1277,7 @@
             "maintenance": "MINIMAL"
         },
         "CWF_04": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Filled Cavity Masonry Wall - 100mm Cavity",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -1509,9 +1300,7 @@
             "maintenance": "MINIMAL"
         },
         "TFWI_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Insulated Timber Frame Wall to Bay Window",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1534,9 +1323,7 @@
             "maintenance": "MINIMAL: Ensure outer face of wall retains integrity so no water can enter structure, and air-tightness is maintained on inner face. "
         },
         "TFWI_02": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "100mm fibre insulation timber stud wall to unheated space in room in roof",
             "location": "",
             "source": "SAP table S6, p.131\/ SAP table 1e, p.195",
@@ -1559,9 +1346,7 @@
             "maintenance": "MINIMAL: Ensure insulation stays in place over time. "
         },
         "PWF_01": {
-            "tags": [
-                "Wall"
-            ],
+            "type": "Wall",
             "name": "Cavity masonry wall, filled. ",
             "location": "",
             "source": "SAP table S8B, p.134\/ table 1e, p.195",
@@ -1584,9 +1369,7 @@
             "maintenance": "MINIMAL"
         },
         "FLIT_01": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Suspended timber floor with 175-200mm insulation between and below joists. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1609,9 +1392,7 @@
             "maintenance": "MINIMAL"
         },
         "FLIT_02": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Insulated exposed suspended timber floor at upper storey. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1634,9 +1415,7 @@
             "maintenance": "MINIMAL"
         },
         "FLIT_03": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Insulated semi-exposed suspended timber floor at upper storey (to unheated space, e.g. porch).",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1659,9 +1438,7 @@
             "maintenance": "MINIMAL"
         },
         "FLIS_02": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Existing slab with insulation over",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1684,9 +1461,7 @@
             "maintenance": "MINIMAL"
         },
         "FLIS_03": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "New insulated floor slab",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1709,9 +1484,7 @@
             "maintenance": "MINIMAL"
         },
         "FLISP_01": {
-            "tags": [
-                "Floor"
-            ],
+            "type": "Floor",
             "name": "Solid floor insulated at perimter.",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -1734,9 +1507,7 @@
             "maintenance": "MINIMAL"
         },
         "WWTD_06_2": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Double glazed window, post-2010 (timber)",
             "location": "",
             "source": "Part L 2010\/ Table 6b, p216",
@@ -1759,9 +1530,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
         "WWPD_04": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Double glazed window, post-2010 (uPVC)",
             "location": "",
             "source": "Part L 2010\/ Table 6b, p216",
@@ -1784,9 +1553,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "WWTD_07": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Double glazed window, best available (timber)",
             "location": "",
             "source": "Westport",
@@ -1809,9 +1576,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
         "WWPD_05": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Double glazed window, best available (uPVC)",
             "location": "",
             "source": "Spectus",
@@ -1834,9 +1599,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "WWTT_01": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Triple glazed window (timber)",
             "location": "",
             "source": "Green Building Store",
@@ -1859,9 +1622,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
         "WWPT_01": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Triple glazed window (uPVC)",
             "location": "",
             "source": "Spectus",
@@ -1884,9 +1645,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "WWPT_02": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Replacement Triple Glazed unit in existing window",
             "location": "",
             "source": "",
@@ -1909,9 +1668,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "WWTXX": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Night window vent - reduced overheating risk. ",
             "location": "",
             "source": "n\/a",
@@ -1934,9 +1691,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "WWT2_02": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Secondary glazed window (timber frame)",
             "location": "",
             "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
@@ -1959,9 +1714,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame. "
         },
         "WWTD_08": {
-            "tags": [
-                "Window"
-            ],
+            "type": "Window",
             "name": "Replacement Double Glazing in existing timber window",
             "location": "",
             "source": "Part L 2010\/ Table 6b, p216",
@@ -1984,9 +1737,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "LRI_04": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "400mm fibre loft insulation",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2009,9 +1760,7 @@
             "maintenance": "MINIMAL - ensure continuous and that is replaced properly if ever disturbed, for example by PV installers."
         },
         "LRA_01": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "New insulated loft hatch (1.2m x 0.6m)",
             "location": "Manufacturer (Welhofer)\/ SAP table 1e, p.195",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2034,9 +1783,7 @@
             "maintenance": "MINIMAL - ensure any ladders are properly maintained for safety. Air-tight seals may need to be replaced over time. "
         },
         "LRA_02": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "Insulate existing ceiling loft hatch. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2059,9 +1806,7 @@
             "maintenance": "MINIMAL - ensure any ladders are properly maintained for safety. Air-tight seals may need to be replaced over time. "
         },
         "LRA_03": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "New insulated wall hatch to loft space. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2084,9 +1829,7 @@
             "maintenance": "MINIMAL - Air-tight seals may need to be replaced over time. "
         },
         "LRA_04": {
-            "tags": [
-                "Hatch"
-            ],
+            "type": "Hatch",
             "name": "Insulate existing wall hatch to loft space. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2109,9 +1852,7 @@
             "maintenance": "MINIMAL - Air-tight seals may need to be replaced over time. "
         },
         "LRA_05": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "Loft storage - extended joists. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2134,9 +1875,7 @@
             "maintenance": "MINIMAL"
         },
         "LRA_06": {
-            "tags": [
-                "Loft"
-            ],
+            "type": "Loft",
             "name": "Loft storage - rigid boards. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2159,9 +1898,7 @@
             "maintenance": "MINIMAL"
         },
         "PRI_05": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Pitched roof, 175-250mm insulation, from inside. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2184,9 +1921,7 @@
             "maintenance": "MEDIUM - ensure all gutters and drainage systems to roof are kept free of debris and in good state of repair, carrying out annual inspections. Fix any broken or missing slates or tiles promptly to prevent water ingress. "
         },
         "PRI_06": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Pitched roof, 175-250mm insulation, from above. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2209,9 +1944,7 @@
             "maintenance": "MEDIUM - ensure all gutters and drainage systems to roof are kept free of debris and in good state of repair, carrying out annual inspections. Fix any broken or missing slates or tiles promptly to prevent water ingress. "
         },
         "PRI_07": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Insulation to bay window pitched roof, from inside. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2234,9 +1967,7 @@
             "maintenance": "MEDIUM - ensure all gutters and drainage systems to roof are kept free of debris and in good state of repair, carrying out annual inspections. Fix any broken or missing slates or tiles promptly to prevent water ingress. "
         },
         "PRI_08": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Insulation to bay window pitched roof, from above. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2259,9 +1990,7 @@
             "maintenance": "MEDIUM - ensure all gutters and drainage systems to roof are kept free of debris and in good state of repair, carrying out annual inspections. Fix any broken or missing slates or tiles promptly to prevent water ingress. "
         },
         "FRI_04": {
-            "tags": [
-                "Roof"
-            ],
+            "type": "Roof",
             "name": "Flat roof with 200mm rigid insulation applied on top. ",
             "location": "",
             "source": "URBED\/ SAP table 1e, p.195",
@@ -2284,9 +2013,7 @@
             "maintenance": "MEDIUM - ensure all gutters and drainage systems to roof are kept free of debris and in good state of repair, carrying out annual inspections. Take care to ensure that roof membrane not punctured, and repair immediately if this occurs. "
         },
         "RLTD06": {
-            "tags": [
-                "Roof_light"
-            ],
+            "type": "Roof_light",
             "name": "New double glazed timber frame rooflight - 24mm",
             "location": "",
             "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
@@ -2309,9 +2036,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "RLTD07": {
-            "tags": [
-                "Roof_light"
-            ],
+            "type": "Roof_light",
             "name": "Replacement double glazed timber frame rooflight - 24mm",
             "location": "",
             "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
@@ -2334,9 +2059,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "RLTT02": {
-            "tags": [
-                "Roof_light"
-            ],
+            "type": "Roof_light",
             "name": "New triple glazed timber frame rooflight ",
             "location": "New high performance aluminium clad timber frame rooflights in existing roof. Form new opening in roof and insert triple-glazed units.",
             "source": "Velux",
@@ -2359,9 +2082,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "RLTT03": {
-            "tags": [
-                "Roof_light"
-            ],
+            "type": "Roof_light",
             "name": "Replacement triple glazed timber frame rooflight ",
             "location": "",
             "source": "Velux",
@@ -2384,9 +2105,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking and replacing seals over time. "
         },
         "DRT(P)02": {
-            "tags": [
-                "Door"
-            ],
+            "type": "Door",
             "name": "Uninsulated Solid Door",
             "location": "",
             "source": "--",
@@ -2409,9 +2128,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
         "DRT(P)03": {
-            "tags": [
-                "Door"
-            ],
+            "type": "Door",
             "name": "Uninsulated Solid Door onto unheated space",
             "location": "",
             "source": "--",
@@ -2434,9 +2151,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
         "DRTI01": {
-            "tags": [
-                "Door"
-            ],
+            "type": "Door",
             "name": "Insulated Timber Door - no glazing",
             "location": "",
             "source": "--",
@@ -2459,9 +2174,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
         "DRTDI01": {
-            "tags": [
-                "Door"
-            ],
+            "type": "Door",
             "name": "Insulated Timber Door - double glazing (assumes glazing 30-60%)",
             "location": "",
             "source": "--",
@@ -2484,9 +2197,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
         "DRTTI01": {
-            "tags": [
-                "Door"
-            ],
+            "type": "Door",
             "name": "Insulated Timber Door - triple glazing (assumes glazing 30-60%)",
             "location": "",
             "source": "--",
@@ -2509,9 +2220,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Re-painting or re-varnishing externally to maintain weather protection of the timber frame in accordance with manufacturer's recommendations - usually every 5-10 years. "
         },
         "DRPI01": {
-            "tags": [
-                "Door"
-            ],
+            "type": "Door",
             "name": "Insulated uPVC Door - no glazing",
             "location": "",
             "source": "--",
@@ -2534,9 +2243,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking seals and replacing over time. "
         },
         "DRPDI01": {
-            "tags": [
-                "Door"
-            ],
+            "type": "Door",
             "name": "Insulated uPVC Door - double glazing (assumes glazing 30-60%)",
             "location": "",
             "source": "--",
@@ -2559,9 +2266,7 @@
             "maintenance": "Cleaning on a regular basis. Oiling hinges annually. Checking seals and replacing over time. "
         },
         "DRPTI01": {
-            "tags": [
-                "Door"
-            ],
+            "type": "Door",
             "name": "Insulated uPVC Door - double glazing (assumes glazing 30-60%)",
             "location": "",
             "source": "--",

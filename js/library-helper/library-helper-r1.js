@@ -11,19 +11,10 @@ var libraryDefaults =
         "g":"",
         "gL":"",
         "ff":"",
-        "ewi":[true,false]
-    },
-    "elements_measures":{
-        "name":"",
-        "type":['Wall','Party_wall','Roof','Loft','Floor','Window','Door','Roof_light','Hatch'],
-        "location":"",
-        "source":"",
-        "uvalue":0,
-        "kvalue":0,
-        "g":0,
-        "gL":0,
-        "ff":0,
-        "description":"",
+        "ewi":[true,false], // tip: <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" />
+        
+        // Measure properties
+        "measure":false, // perhaps extend with an array of elements this measure can be applied to
         "performance":"",
         "benefits":"",
         "cost_units":"",
@@ -34,9 +25,9 @@ var libraryDefaults =
         "associated_work":"",
         "key_risks":"",
         "notes":"",
-        "maintenance":"",
-        "ewi":[true,false] // tip: <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" />
+        "maintenance":""
     },
+    
     "draught_proofing_measures":{
         "name":"",
         "q50":0,
@@ -348,7 +339,6 @@ libraryHelper.prototype.init = function () {
     this.library_names = {
         'elements': 'Fabric elements',
         'systems': 'Energy systems',
-        'elements_measures': 'Fabric elements measures',
         'draught_proofing_measures': 'Draught proofing measures',
         'ventilation_systems_measures': 'Ventilation system measures',
         'ventilation_systems': 'Ventilation systems',
@@ -765,10 +755,7 @@ libraryHelper.prototype.onChangeApplyMeasureWhatToDo = function () {
             $('#apply-measure-item-fields').show('fast');
             break;
         case 'replace_from_measure_library':
-            if (this.type == 'elements')
-                var type = 'elements_measures';
-            else
-                var type = this.type;
+            var type = this.type;
             this.populate_selects_in_apply_measure_modal(type);
             this.onChangeApplyMeasureReplaceFromLib(type);
             this.onChangeApplyMeasureReplaceFromLibItem(type);
@@ -796,8 +783,8 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_l
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
     var library = this.library[type_of_library];
     for (item in library) {
-        if (type_of_library == 'elements' || type_of_library == 'elements_measures') {
-            if (library[item].tags[0].toUpperCase() == original_item.type.toUpperCase())
+        if (type_of_library == 'elements') {
+            if (library[item].type.toUpperCase() == original_item.type.toUpperCase())
                 out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
         }
         else
@@ -826,7 +813,7 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
         $('.window-element').show('fast');
     else
         $('.window-element').hide('fast');
-    if (type == "Wall" && this.type == 'elements_measures')
+    if (type == "Wall")
         $('#modal-create-in-library .EWI-row').show('fast');
     else
         $('#modal-create-in-library .EWI-row').hide('fast');
@@ -835,7 +822,7 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
     var library = this.get_library_by_id($('#modal-create-in-library #origin-library-select').val());
     var out = '';
     for (i in library.data) {
-        if (type.toUpperCase() == library.data[i].tags[0].toUpperCase())
+        if (type.toUpperCase() == library.data[i].type.toUpperCase())
             out += '<option value="' + i + '">' + i + '</option>';
     }
     $('#modal-create-in-library #item-to-copy-select').html(out);
@@ -853,8 +840,8 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
 
 libraryHelper.prototype.onChangeTypeOfElementsToShow = function (origin) {
     console.log('onChangeTypeOfElementsToShow');
-    
-    origin.attr('tags', [origin.val()]); //this is the type of elements to display
+    console.log(origin.val());
+    origin.attr('type', origin.val()); //this is the type of elements to display
     //var out = this.elements_library_to_html(origin);
     var function_name = this.type + '_library_to_html';
     var out = this[function_name](origin);
@@ -948,44 +935,43 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
 
     console.log("elements_library_to_html");
     
-    var tag = [];
+    var type = "Wall"; // default
     var selected_lib = false;
     var element_row = false;
     
     if (origin != undefined) {
-        tag = $(origin).attr('tags').split(',');
+        type = $(origin).attr('type');
+        console.log(type);
         element_row = $(origin).attr('row');
         
         if (data.fabric.elements[element_row]!=undefined)
             selected_lib = data.fabric.elements[element_row].lib;
         
         if (selected_lib==undefined) selected_lib = false;
-    } else {
-        tag = ['Wall'];
     }
     
     var element_library = this.library.elements;
     this.orderObjectsByKeys(element_library);
-    $('#library-select').attr('tags', tag);
+    $('#library-select').attr('type', type);
     var out = "";
     
     //Select to choose the type of element to display, not always used and is hidden by default
     out =  '<div class="input-prepend element-type" style="display:none" ><span class="add-on">Type</span>';
     out += '<select>';
 
-    var element_tags = ['Wall','Party_wall','Roof','Loft','Floor','Window','Door','Roof_light','Hatch'];
-    for (var z in element_tags) {
-        var selected = tag[0].toLowerCase() == element_tags[z].toLowerCase() ? "selected" : "";
-        out += '<option value="'+element_tags[z]+'" '+selected+'>'+element_tags[z]+'</option>';
+    var element_types = libraryDefaults.elements.type;
+    for (var z in element_types) {
+        var selected = type.toLowerCase() == element_types[z].toLowerCase() ? "selected" : "";
+        out += '<option value="'+element_types[z]+'" '+selected+'>'+element_types[z]+'</option>';
     }
     out += '</select></div>';
     
     // Elements
     out += '<table>';
     for (z in element_library) {
-        if (tag.indexOf(element_library[z].tags[0]) != -1) {
+        if (element_library[z].type == type) {
             var selected_class = ""; if (z==selected_lib) selected_class = "selected_lib";
-            out += "<tr class='librow "+selected_class+"' lib='" + z + "' type='" + tag + "'>";
+            out += "<tr class='librow "+selected_class+"' lib='" + z + "' type='" + type + "'>";
             out += "<td>" + z + "</td>";
             out += "<td>" + element_library[z].name;
             out += "<br><span style='font-size:13px'><b>Source:</b> " + element_library[z].source + "</span>";
@@ -998,15 +984,15 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
             var uvalue = element_library[z].uvalue; if (typeof element_library[z].uvalue === 'object') uvalue = element_library[z].uvalue.mean;
             out += "<b>U-value:</b> " + uvalue + " W/m<sup>2</sup>.K";
             out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/m<sup>2</sup>.K";
-            if (element_library[z].tags[0] == "Window" || element_library[z].tags[0] == "Door" || element_library[z].tags[0] == "Roof_light") {
+            if (element_library[z].type == "Window" || element_library[z].type == "Door" || element_library[z].type == "Roof_light") {
                 out += "<br><b>g:</b> " + element_library[z].g + ", ";
                 out += "<b>gL:</b> " + element_library[z].gL + ", ";
                 out += "<b>ff:</b> " + element_library[z].ff;
             }
             out += "</td>";
             out += "<td >";
-            out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
-            out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' lib='" + z + "' type='" + element_library[z].tags[0] + "' tag='" + z + "'></i>";
+            out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + element_library[z].type + "' tag='" + z + "'></i>";
+            out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' lib='" + z + "' type='" + element_library[z].type + "' tag='" + z + "'></i>";
             // out += "<i class='icon-trash' style='margin-left:20px'></i>";
             
             // add-element & change-element handled in elements.js
@@ -1016,7 +1002,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
                 action = "change-element";
                 row_attr = "row="+element_row;
             }
-            out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" lib='" + z + "' type='" + element_library[z].tags[0] + "'>use</button</i>";
+            out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" lib='" + z + "' type='" + element_library[z].type + "'>use</button</i>";
             out += "</td>";
             out += "</tr>";
         }
@@ -1354,8 +1340,8 @@ libraryHelper.prototype.get_list_of_items_for_select = function (libraryid) {
     var out = ''
     var library = this.get_library_by_id(libraryid);
     for (item in library.data) {
-        if (library.type == 'elements' || library.type == 'elements_measures') {
-            if (library.data[item].tags[0].toUpperCase() == original_item.type.toUpperCase())
+        if (library.type == 'elements') {
+            if (library.data[item].type.toUpperCase() == original_item.type.toUpperCase())
                 out += '<option value="' + item + '">' + item + ': ' + library.data[item].name + '</option>';
         }
         else
