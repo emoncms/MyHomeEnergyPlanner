@@ -105,7 +105,7 @@ textarea:focus {
     <pre id="local_changes"></pre>
     
     <button id="save-lib" class="btn hide">Save</button>
-
+    <button id="revert-changes" class="btn">Revert changes</button>
 </div>
 
 <script>
@@ -129,72 +129,76 @@ master_copy = apply_changes(master_copy, user_changes);
 var local_changes = json_diff(master,master_copy);
 $("#local_changes").html(JSON.stringify(local_changes,undefined,2));
 
+draw_library_manager();
 
-var out = "";
-for (var z in master_copy) {
-    out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
-}
-$("#libman-m1").html(out);
-
-$("#libmanout").on("click",".libman-item",function() {
-
-    var level = $(this).attr("level");
-    var value = $(this).attr("value");
-
-    if (level==1) {
-    
-        $("#libman-m3").html("");
-    
-        l1 = value
-    
-        var out = "";
-        for (var z in master_copy[l1]) {
-            out += "<div class='libman-item' level=2 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
-        }
-        $("#libman-m2").html(out);
+function draw_library_manager()
+{
+    var out = "";
+    for (var z in master_copy) {
+        out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
     }
+    $("#libman-m1").html(out);
 
-    if (level==2) {
-    
-        l2 = value
-        console.log(l2);
-    
-        var out = "";
-        for (var z in master_copy[l1][l2]) {
-            out += "<div class='libman-item' level=3 value='"+z+"'><div class='key'>"+z.ucfirst().replace(/_/g," ")+":</div>";
-            
-            
-            var val = ""+master_copy[l1][l2][z];
-            if (val.length<100) {
-                out += "<input class='libval' type='text' value='"+master_copy[l1][l2][z]+"' />";
-            } else { 
-                out += "<textarea class='libval'>"+master_copy[l1][l2][z]+"</textarea>"; 
+    $("#libmanout").on("click",".libman-item",function() {
+
+        var level = $(this).attr("level");
+        var value = $(this).attr("value");
+
+        if (level==1) {
+        
+            $("#libman-m3").html("");
+        
+            l1 = value
+        
+            var out = "";
+            for (var z in master_copy[l1]) {
+                out += "<div class='libman-item' level=2 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
             }
-            
-            out += "</div>";
+            $("#libman-m2").html(out);
         }
-        $("#libman-m3").html(out);
-    }
-    
-    if (level==3) {
-        l3 = value
-    }
-    
-    var height = 0;
-    var h1 = $("#libman-m1").height();
-    var h2 = $("#libman-m2").height();
-    var h3 = $("#libman-m3").height();
-    if (h1>height) height = h1;
-    if (h2>height) height = h2;
-    if (h3>height) height = h3;
-    $("#libman-m1-bound").height(height);
-    $("#libman-m2-bound").height(height);
-    $("#libman-m3-bound").height(height);
-    
-    var l3w = $("#libmanout").width()-250-100-3;
-    $("#libman-m3").width(l3w);
-    
-});
+
+        if (level==2) {
+        
+            l2 = value
+            console.log(l2);
+        
+            var out = "";
+            for (var z in master_copy[l1][l2]) {
+                out += "<div class='libman-item' level=3 value='"+z+"'><div class='key'>"+z.ucfirst().replace(/_/g," ")+":</div>";
+                
+                
+                var val = ""+master_copy[l1][l2][z];
+                if (val.length<100) {
+                    out += "<input class='libval' type='text' value='"+master_copy[l1][l2][z]+"' />";
+                } else { 
+                    out += "<textarea class='libval'>"+master_copy[l1][l2][z]+"</textarea>"; 
+                }
+                
+                out += "</div>";
+            }
+            $("#libman-m3").html(out);
+        }
+        
+        if (level==3) {
+            l3 = value
+        }
+        
+        var height = 0;
+        var h1 = $("#libman-m1").height();
+        var h2 = $("#libman-m2").height();
+        var h3 = $("#libman-m3").height();
+        if (h1>height) height = h1;
+        if (h2>height) height = h2;
+        if (h3>height) height = h3;
+        $("#libman-m1-bound").height(height);
+        $("#libman-m2-bound").height(height);
+        $("#libman-m3-bound").height(height);
+        
+        var l3w = $("#libmanout").width()-250-100-3;
+        $("#libman-m3").width(l3w);
+        
+    });
+}
 
 $("#libmanout").on("change",".libval",function() {
     var value = $(this).val();
@@ -208,6 +212,21 @@ $("#libmanout").on("change",".libval",function() {
 });
 
 $("#save-lib").click(function(){
+    $.ajax({ type: 'POST', url: path+"assessment/save-lib.json", data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
+        success: function(result){ 
+            console.log(result); 
+            $("#save-lib").hide();
+        } 
+    });
+});
+
+$("#revert-changes").click(function(){
+    master_copy = JSON.parse(JSON.stringify(master));
+    local_changes = {};
+    $("#local_changes").html(JSON.stringify(local_changes,undefined,2));
+    
+    draw_library_manager();
+
     $.ajax({ type: 'POST', url: path+"assessment/save-lib.json", data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
         success: function(result){ 
             console.log(result); 
