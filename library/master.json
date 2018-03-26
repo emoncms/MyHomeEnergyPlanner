@@ -1,276 +1,13 @@
 {
     "elements":{
-        "EH_UB1m":{
-            "type":"Wall",
-            "name":"Brick 300mm with internal plaster",
-            "description":"Measured U-value, ENGLEFIELD Brick 300mm with plaster + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":1.2,
-            "uvalue_max":1.6,
-            "uvalue":1.4,
-            "kvalue":150,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "EH_UB1c":{
-            "type":"Wall",
-            "name":"Brick 300mm with internal plaster",
-            "description":"Calculated U-value, ENGLEFIELD Brick 300mm with plaster + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":1.5,
-            "uvalue_max":1.7,
-            "uvalue":1.6,
-            "kvalue":150,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "EH_UBDm":{
-            "type":"Wall",
-            "name":"Brick 300mm, drylined",
-            "description":"Measured U-value, ENGLEFIELD Brick 300mm, drylined with plasterboard + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":1.0,
-            "uvalue_max":1.1,
-            "uvalue":1.05,
-            "kvalue":100,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "EH_UBDc":{
-            "type":"Wall",
-            "name":"Brick 300mm, drylined",
-            "description":"Calculated U-value, ENGLEFIELD Brick 300mm, drylined with plasterboard + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":1.1,
-            "uvalue_max":1.2,
-            "uvalue":1.15,
-            "kvalue":100,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "EH_UB2m":{
-            "type":"Wall",
-            "name":"Brick 225mm with internal plaster",
-            "description":"Measured U-value, SHREWSBURY Brick 225mm with plaster + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":1.0,
-            "uvalue_max":1.5,
-            "uvalue":1.25,
-            "kvalue":150,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "EH_UB2c":{
-            "type":"Wall",
-            "name":"Brick 225mm with internal plaster",
-            "description":"Calculated U-value, SHREWSBURY Brick 225mm with plaster + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":1.8,
-            "uvalue_max":2.0,
-            "uvalue":1.9,
-            "kvalue":150,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "EH_UB3m":{
-            "type":"Wall",
-            "name":"Brick 225mm with internal plaster",
-            "description":"Measured U-value, WALSALL Brick 225mm with plaster + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":1.9,
-            "uvalue_max":2.3,
-            "uvalue":2.1,
-            "kvalue":150,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "EH_UB3c":{
-            "type":"Wall",
-            "name":"Brick 225mm with internal plaster",
-            "description":"Calculated U-value, WALSALL Brick 225mm with plaster + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":1.8,
-            "uvalue_max":2.0,
-            "uvalue":1.9,
-            "kvalue":150,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "EH_IBm":{
-            "type":"Wall",
-            "name":"Brick 225mm, drylined, insulated plasterboard",
-            "description":"Measured + calculated U-value, WALSALL Brick 225mm, drylined, insulated (25mm) plasterboard  + wallpaper or paint",
-            "location":"",
-            "source":"English Heritage 2013, Page 9, Table 3",
-            "uvalue_min":0.6,
-            "uvalue_max":0.7,
-            "uvalue":0.65,
-            "kvalue":50,
-            "notes":"Wet bricks increases thermal conductivity significantly"
-        },
-        "HS_SP":{
-            "type":"Wall",
-            "name":"Stonewall 600mm, plaster on laths",
-            "description":"Measured U-value, Stonewall 600mm, plaster on laths",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 21",
-            "uvalue_min":0.9,
-            "uvalue_max":1.3,
-            "uvalue":1.1,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "HS_SDP":{
-            "type":"Wall",
-            "name":"Stonewall 600mm, drylined",
-            "description":"Measured U-value, Stonewall 600mm, drylined",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 21",
-            "uvalue_min":0.7,
-            "uvalue_max":1.1,
-            "uvalue":0.9,
-            "kvalue":100,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "HS_SS":{
-            "type":"Wall",
-            "name":"Sandstone 550mm, bare",
-            "description":"Measured U-value, Sandstone 550mm, bare",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 24",
-            "uvalue_min":1.3,
-            "uvalue_max":1.5,
-            "uvalue":1.4,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "HS_SSD":{
-            "type":"Wall",
-            "name":"Sandstone 600mm, drylined",
-            "description":"Measured U-value, Sandstone 600mm, drylined",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 24",
-            "uvalue_min":1.0,
-            "uvalue_max":1.2,
-            "uvalue":1.1,
-            "kvalue":100,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "EST_SSP":{
-            "type":"Wall",
-            "name":"Stonewall 600mm, lath + plaster",
-            "description":"Traditional sandstone (or granite) 600mm, internal lath and plaster finish (for the pre-1919 period), Energy Saving Trust, 2004, table 2",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 28",
-            "uvalue":1.7,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "EST_CW":{
-            "type":"Wall",
-            "name":"Stonewall 600mm, lath + plaster",
-            "description":"Cavity wall involving brick and block with external render (for 1919‐1975), Energy Saving Trust, 2004, table 2",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 28",
-            "uvalue":1.7,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "CIBSE_SS":{
-            "type":"Wall",
-            "name":"Stonewall 600mm, airspace + plaster on laths.",
-            "description":"Stonewall 600mm with 50mm airspace and finished with 25mm dense plaster on laths. (Anderson, 2006a, table 3.49 and 3.50)",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 28",
-            "uvalue":1.38,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "CIBSE_UB1":{
-            "type":"Wall",
-            "name":"Solid Brick, 220 mm, plaster ",
-            "description":"220 mm solid brick wall with 13 mm dense plaster. (Anderson, 2006a, table 3.49 and 3.50)",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 28",
-            "uvalue":2.09,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        "CIBSE_UB2":{
-            "type":"Wall",
-            "name":"Solid Brick, 220 mm, drylined",
-            "description":"220 mm solid brick wall with 50 mm airspace/battens and 12.5 mm plasterboard (Anderson, 2006a, table 3.49 and 3.50)",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 28",
-            "uvalue":1.41,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly",
-            
-            "measure":true,
-            "performance":"1.41 W/m<sup>2</sup>.K",
-            "cost_units":"sqm",
-            "cost":175,
-            "min_cost":100,
-            "EWI":false,
-            "who_by":"",
-            "disruption":"HIGH",
-            "benefits":"",
-            "key_risks":"",
-            "associated_work":"",
-            "maintenance":""
-        },
-        "CIBSE_UB3":{
-            "type":"Wall",
-            "name":"Brick cavity wall, plaster ",
-            "description":"Brick/brick cavity wall with 105 mm brick, 50 mm airspace, 105 mm brick, and 13 mm dense plaster (Anderson, 2006a, table 3.49 and 3.50)",
-            "location":"",
-            "source":"Historic Scotland 2011, Page 28",
-            "uvalue":1.44,
-            "kvalue":150,
-            "notes":"Damp walls increase U-value significantly"
-        },
-        
-        "DHDG_UB1":{
-            "type":"Wall",
-            "name":"Brick 102 mm, plaster",
-            "description":"Solid brick wall 102 mm, dense plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":2.97,
-            "kvalue":150
-        },
         "DHDG_UB2":{
             "type":"Wall",
             "name":"Brick 228 mm, plaster",
             "description":"Solid brick wall 228 mm, dense plaster",
             "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":2.11,
+            "uvalue":2.15,
             "kvalue":150
         },
-        "DHDG_UB3":{
-            "type":"Wall",
-            "name":"Brick 343 mm, plaster",
-            "description":"Solid brick wall 343 mm, dense plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":1.64,
-            "kvalue":150
-        }, 
-        
-        "DHDG_US1":{
-            "type":"Wall",
-            "name":"Stone 305mm (12in)",
-            "description":"Solid stone wall 305 mm, unplastered",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":2.78,
-            "kvalue":150
-        },
-        "DHDG_US2":{
-            "type":"Wall",
-            "name":"Stone 457mm (18in)",
-            "description":"Solid stone wall 457 mm, unplastered",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":2.23,
-            "kvalue":150
-        }, 
         "DHDG_US3":{
             "type":"Wall",
             "name":"Stone 610mm (24in)",
@@ -279,40 +16,6 @@
             "uvalue":1.68,
             "kvalue":150
         },
-        
-        "DHDG_UC1":{
-            "type":"Wall",
-            "name":"Concrete 102mm, plaster",
-            "description":"Solid concrete wall 102mm, dense plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":3.51,
-            "kvalue":150
-        },
-        "DHDG_UC2":{
-            "type":"Wall",
-            "name":"Concrete 152mm, plaster",
-            "description":"Solid concrete wall 152mm, dense plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":3.12,
-            "kvalue":150
-        },
-        "DHDG_UC3":{
-            "type":"Wall",
-            "name":"Concrete 204mm, plaster",
-            "description":"Solid concrete wall 204mm, dense plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":2.80,
-            "kvalue":150
-        },
-        "DHDG_UC4":{
-            "type":"Wall",
-            "name":"Concrete 254mm, plaster",
-            "description":"Solid concrete wall 254mm, dense plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":2.54,
-            "kvalue":150
-        },
-        
         "DHDG_CW1":{
             "type":"Wall",
             "name":"Unfilled Cavity wall, lightweight plaster",
@@ -329,23 +32,120 @@
             "uvalue":0.56,
             "kvalue":150
         },
-        "DHDG_CW3":{
-            "type":"Wall",
-            "name":"Unfilled Cavity wall, plasterboard on dabs",
-            "description":"Brick 102mm, air-space, brick 102mm, 12.5mm plasterboard on dabs",
+        
+        "LR100": {
+            "type": "Loft",
+            "name": "Insulated loft 100mm",
+            "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
             "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":1.21,
-            "kvalue":150
+            "uvalue": 0.34,
+            "kvalue": 9
         },
-        "DHDG_CW4":{
-            "type":"Wall",
-            "name":"Filled Cavity wall, plasterboard on dabs",
-            "description":"Brick 102mm, Mineral Wool Slab 50mm, brick 102mm, 12.5mm plasterboard on dabs",
+        "LR200": {
+            "type": "Loft",
+            "name": "Insulated loft 200mm",
+            "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
             "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":0.53,
-            "kvalue":150
+            "uvalue": 0.18,
+            "kvalue": 9
+        },
+        "LR300": {
+            "type": "Loft",
+            "name": "Insulated loft 300mm",
+            "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue": 0.12,
+            "kvalue": 9
+        },
+        
+        "WW01": {
+            "type": "Window",
+            "name": "Single glazed window timber or PVC",
+            "description": "",
+            "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+            "uvalue": 4.8,
+            "kvalue": 0,
+            "g": "0.85",
+            "gL": "0.9",
+            "ff": "0.7"
+        },
+        "WW02": {
+            "type": "Window",
+            "name": "Secondary glazed window timber or PVC",
+            "description": "",
+            "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+            "uvalue": 2.4,
+            "kvalue": 0,
+            "g": "0.76",
+            "gL": "0.8",
+            "ff": "0.7"
+        },
+        "WW03": {
+            "type": "Window",
+            "name": "Double glazed window, pre-2002, 12mm, timber or PVC",
+            "description": "",
+            "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+            "uvalue": 2.8,
+            "kvalue": 0,
+            "g": "0.76",
+            "gL": "0.8",
+            "ff": "0.7"
+        },
+        "WW04": {
+            "type": "Window",
+            "name": "Double glazed window, low-E glass, 12mm, timber or PVC",
+            "description": "",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue": 2.3,
+            "kvalue": 0,
+            "g": "0.76",
+            "gL": "0.8",
+            "ff": "0.7"
+        },
+        "WW05": {
+            "type": "Window",
+            "name": "Double glazed window, low-E glass, argon filled, 12mm, timber or PVC",
+            "description": "",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue": 2.1,
+            "kvalue": 0,
+            "g": "0.76",
+            "gL": "0.8",
+            "ff": "0.7"
+        },
+        "WW06": {
+            "type": "Window",
+            "name": "Triple glazed window, timber or PVC",
+            "description": "",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue": 2.1,
+            "kvalue": 0,
+            "g": "0.76",
+            "gL": "0.8",
+            "ff": "0.7"
+        },
+        "WW07": {
+            "type": "Window",
+            "name": "Triple glazed window, low-E glass, 12mm, timber or PVC",
+            "description": "",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue": 1.7,
+            "kvalue": 0,
+            "g": "0.76",
+            "gL": "0.8",
+            "ff": "0.7"
+        },
+        "WW08": {
+            "type": "Window",
+            "name": "Triple glazed window, low-E glass, argon filled, 12mm, timber or PVC",
+            "description": "",
+            "source":"Domestic Heating Design Guide v1.0",
+            "uvalue": 1.6,
+            "kvalue": 0,
+            "g": "0.76",
+            "gL": "0.8",
+            "ff": "0.7"
         }
-       
     },
     "draught_proofing_measures":{
 
@@ -375,75 +175,49 @@
 
     },
     "heating_systems":{
+        "CMBB5": {
+            "name": "New Gas\/LPG Combi Boiler with radiators, with storage",
+            "category": "Combi boilers",
+            "winter_efficiency": 90,
+            "summer_efficiency": 80,
+            "central_heating_pump": 120,
+            "fans_and_supply_pumps": 45,
+            "responsiveness": 1,
+            "combi_loss": "Storage combi boiler < 55 litres",
+            "primary_circuit_loss": "No",
+            "source": "---"
+        },
         "ASHP1":{
             "category":"Heat pumps",
-            "name":"Air-source heat pump (Energy Saving Trust 2013 average SPFH4: 2.45)",
-            "description":"Install a heat pump to provide heat to your home. The air-source heat pump upgrades the temperature of the ambient external air through a condenser unit to upgrade its temperature to be useful in your home. A heat pump is more efficient at low flow temperatures.",
-            "winter_efficiency":245,
-            "summer_efficiency":245,
-            "performance":"245%",
+            "name":"Air-source heat pump, high performance SPFH4: 3.0)",
+            "description":"Air-source heat pump with a performance on the upper end of those recorded in the Energy Saving Trust 2013 TheHeatIsOn trial (2 out of 15), achievable only with good system design and use.",
+            "winter_efficiency":300,
+            "summer_efficiency":300,
             "central_heating_pump":0,
             "fans_and_supply_pumps":0,
             "responsiveness":1,
             "primary_circuit_loss":"Yes",
             "source":"Energy Saving Trust 2013",
-            "benefits":"Fuel Bills and Carbon Emissions",
             "cost_units":"unit",
             "cost":8000,
-            "who_by":"",
-            "disruption":"MEDIUM",
             "associated_work":"advanced heating controls",
-            "key_risks":"poor design, installation and controls set-up. ",
-            "notes":"A heat pump requires careful design, installation and comissioning to ensure efficient operation. Works best with lower temperatures for space heating - so with underfloor heating or oversized radiators designed for lower flow and return temperatures.",
-            "maintenance":"Regular servicing and monitoring to ensure efficient operation. "
+            "notes":"A heat pump requires careful design, installation and comissioning to ensure efficient operation. Works best with lower temperatures for space heating - so with underfloor heating or oversized radiators designed for lower flow and return temperatures."
         },
-        "GSHP1":{
+        "ASHP2":{
             "category":"Heat pumps",
-            "name":"Ground-source heat pump (Energy Saving Trust 2013 average SPFH4: 2.82)",
-            "description":"Install a heat pump to provide heat to your home. A series of pipes in laid in the ground, or a borehole is dug, so that low-grade heat can be extracted from the ground, which remains at a roughly constant temperature throughout the year, this is then upgraded through a condenser unit to provide higher temperatures. A heat pump is more efficient at low flow temperatures.",
-            "winter_efficiency":282,
-            "summer_efficiency":282,
-            "performance":"282%",
+            "name":"Air-source heat pump, average performance SPFH4: 2.45)",
+            "description":"Average Air-source heat pump performance recorded in the Energy Saving Trust 2013 TheHeatIsOn trial",
+            "winter_efficiency":245,
+            "summer_efficiency":245,
             "central_heating_pump":0,
             "fans_and_supply_pumps":0,
             "responsiveness":1,
             "primary_circuit_loss":"Yes",
             "source":"Energy Saving Trust 2013",
-            "benefits":"Fuel Bills and Carbon Emissions",
-            "cost_units":"unit",
-            "cost":12000,
-            "who_by":"",
-            "disruption":"HIGH",
+            "cost_units":"unit", "cost":8000,
             "associated_work":"advanced heating controls",
-            "key_risks":"poor design, installation and controls set-up. ",
-            "notes":"A heat pump requires careful design, installation and comissioning to ensure efficient operation. Works best with lower temperatures for space heating - so with underfloor heating or oversized radiators designed for lower flow and return temperatures.",
-            "maintenance":"Regular servicing and monitoring to ensure efficient operation. "
-        },
-        "GSHP2":{
-            "category":"Heat pumps",
-            "name":"Ground-source heat pump (Energy Saving Trust 2013 high performance SPFH4: 3.40)",
-            "description":"Install a heat pump to provide heat to your home. A series of pipes in laid in the ground, or a borehole is dug, so that low-grade heat can be extracted from the ground, which remains at a roughly constant temperature throughout the year, this is then upgraded through a condenser unit to provide higher temperatures. A heat pump is more efficient at low flow temperatures.",
-            "winter_efficiency":340,
-            "summer_efficiency":340,
-            "performance":"340%",
-            "central_heating_pump":0,
-            "fans_and_supply_pumps":0,
-            "responsiveness":1,
-            "primary_circuit_loss":"Yes",
-            "source":"Energy Saving Trust 2013",
-            "benefits":"Fuel Bills and Carbon Emissions",
-            "cost_units":"unit",
-            "cost":12000,
-            "who_by":"",
-            "disruption":"HIGH",
-            "associated_work":"advanced heating controls",
-            "key_risks":"poor design, installation and controls set-up. ",
-            "notes":"A heat pump requires careful design, installation and comissioning to ensure efficient operation. Works best with lower temperatures for space heating - so with underfloor heating or oversized radiators designed for lower flow and return temperatures.",
-            "maintenance":"Regular servicing and monitoring to ensure efficient operation. "
+            "notes":"A heat pump requires careful design, installation and comissioning to ensure efficient operation. Works best with lower temperatures for space heating - so with underfloor heating or oversized radiators designed for lower flow and return temperatures."
         }
-    },
-    "heating_systems_measures":{
-
     },
     "pipework_insulation":{
 

@@ -238,13 +238,43 @@ function assessment_controller() {
             $result = $assessment->deletelibraryitem($session['userid'], get('library_id'), get('tag'));
             
         if ($route->action == 'load-lib' && $session['write']) {
-            $master = file_get_contents("/var/lib/mhep/master.json");
+            $library = "master";
+            $master = file_get_contents("/var/lib/mhep/master/$library.json");
             $result = json_decode($master);
-            
-            //$fh = fopen("/var/lib/mhep/master.json","w");
-            //fwrite($fh,json_encode($result,JSON_PRETTY_PRINT));
-            //fclose($fh);
         }
+        
+        if ($route->action == 'load-user-lib' && $session['write']) {
+            $library = "master";
+            $userid = $session['userid'];
+            if (file_exists("/var/lib/mhep/user_$userid")) {
+                $master = file_get_contents("/var/lib/mhep/user_$userid/$library.json");
+                $result = json_decode($master);
+            }
+        }
+
+        if ($route->action == 'save-lib' && $session['write']) {
+        
+            if (isset($_POST['data'])) {
+                // Decode and check
+                $data = json_decode($_POST['data']);
+                if ($data==null) return false;
+               
+                $userid = $session['userid'];
+                
+                // Create user folder
+                if (!file_exists("/var/lib/mhep/user_$userid")) {
+                    mkdir("/var/lib/mhep/user_$userid", 0777, true);
+                }
+                
+                $library = "master";
+                $fh = fopen("/var/lib/mhep/user_$userid/$library.json","w");
+                fwrite($fh,json_encode($data,JSON_PRETTY_PRINT));
+                fclose($fh);
+            }
+        }
+        
+        
+        
 // -------------------------------------------------------------------------------------------------------------
 // Image gallery
 // -------------------------------------------------------------------------------------------------------------

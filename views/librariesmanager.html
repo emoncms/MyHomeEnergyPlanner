@@ -99,44 +99,39 @@ textarea:focus {
     
     <div style="clear:both"></div>
     </div>
+    
+    <h4>My Changes</h4>
+
+    <pre id="local_changes"></pre>
+    
+    <button id="save-lib" class="btn hide">Save</button>
 
 </div>
 
 <script>
 
 var master = {};
+var user_changes = {};
+
 $.ajax({ url: path+"assessment/load-lib.json", dataType: 'json', async: false, success: function(result){master = result;} });
-/*
-var defaults = {};
-
-for (var z in master) {
-    defaults[z] = {};
-    for (var x in master[z]) {
-        for (var i in master[z][x]) {
-            
-            switch(typeof master[z][x][i]) {
-                case "string":
-                    defaults[z][i] = "";
-                    break;
-                case "number":
-                    defaults[z][i] = 0.0;
-                    break;
-            }
-        }
-        
-    }
-}
-
-$("#defaults").html(JSON.stringify(defaults));
-*/
-
+$.ajax({ url: path+"assessment/load-user-lib.json", dataType: 'json', async: false, success: function(result){user_changes = result;} });
 
 var l1 = false;
 var l2 = false;
 var l3 = false;
 
+// Create copy and unlink
+var master_copy = JSON.parse(JSON.stringify(master));
+
+// Apply user changes to master copy
+master_copy = apply_changes(master_copy, user_changes);
+
+var local_changes = json_diff(master,master_copy);
+$("#local_changes").html(JSON.stringify(local_changes,undefined,2));
+
+
 var out = "";
-for (var z in master) {
+for (var z in master_copy) {
     out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
 }
 $("#libman-m1").html(out);
@@ -153,7 +148,7 @@ $("#libmanout").on("click",".libman-item",function() {
         l1 = value
     
         var out = "";
-        for (var z in master[l1]) {
+        for (var z in master_copy[l1]) {
             out += "<div class='libman-item' level=2 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
         }
         $("#libman-m2").html(out);
@@ -165,20 +160,24 @@ $("#libmanout").on("click",".libman-item",function() {
         console.log(l2);
     
         var out = "";
-        for (var z in master[l1][l2]) {
+        for (var z in master_copy[l1][l2]) {
             out += "<div class='libman-item' level=3 value='"+z+"'><div class='key'>"+z.ucfirst().replace(/_/g," ")+":</div>";
             
             
-            var val = ""+master[l1][l2][z];
+            var val = ""+master_copy[l1][l2][z];
             if (val.length<100) {
-                out += "<input type='text' value='"+master[l1][l2][z]+"' />";
+                out += "<input class='libval' type='text' value='"+master_copy[l1][l2][z]+"' />";
             } else { 
-                out += "<textarea>"+master[l1][l2][z]+"</textarea>"; 
+                out += "<textarea class='libval'>"+master_copy[l1][l2][z]+"</textarea>"; 
             }
             
             out += "</div>";
         }
         $("#libman-m3").html(out);
+    }
+    
+    if (level==3) {
+        l3 = value
     }
     
     var height = 0;
@@ -194,8 +193,84 @@ $("#libmanout").on("click",".libman-item",function() {
     
     var l3w = $("#libmanout").width()-250-100-3;
     $("#libman-m3").width(l3w);
+    
 });
 
+$("#libmanout").on("change",".libval",function() {
+    var value = $(this).val();
+    //if (local_changes[l1]==undefined) local_changes[l1] = {};
+    //if (local_changes[l1][l2]==undefined) local_changes[l1][l2] = {};
+    master_copy[l1][l2][l3] = value;
+    local_changes = json_diff(master,master_copy);
+    
+    $("#local_changes").html(JSON.stringify(local_changes,undefined,2));
+    $("#save-lib").show();
+});
 
+$("#save-lib").click(function(){
+    $.ajax({ type: 'POST', url: path+"assessment/save-lib.json", data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
+        success: function(result){ 
+            console.log(result); 
+            $("#save-lib").hide();
+        } 
+    });
+});
 
+// ---------------------------------------------------------------------------------
+// Apply changes
+// ---------------------------------------------------------------------------------
+function apply_changes(A,changes) {
+    var result = A;
+    for (var cat in changes) {
+        for (var key in changes[cat]) {
+            for (var prop in changes[cat][key]) {
+                result[cat][key][prop] = changes[cat][key][prop];
+            }
+        }
+    }
+    return result;
+}
+
+// ---------------------------------------------------------------------------------
+// Basic property level diff - to be extended
+// ---------------------------------------------------------------------------------
+function json_diff(A,B) {
+    var C = {};
+    for (var cat in A) {
+        for (var key in A[cat]) {
+            for (var prop in A[cat][key]) {
+                if (A[cat][key][prop]!=B[cat][key][prop]) {
+                    if (C[cat]==undefined) C[cat] = {};
+                    if (C[cat][key]==undefined) C[cat][key] = {};
+                    C[cat][key][prop] = B[cat][key][prop];
+                }
+            }
+        }
+    }
+    return C;
+}
+
+// ---------------------------------------------------------------------------------
+// Generate libraryDefaults json
+// ---------------------------------------------------------------------------------
+function generate_defaults()
+{
+    var defaults = {};
+    for (var z in master) {
+        defaults[z] = {};
+        for (var x in master[z]) {
+            for (var i in master[z][x]) {
+                switch(typeof master[z][x][i]) {
+                    case "string":
+                        defaults[z][i] = "";
+                        break;
+                    case "number":
+                        defaults[z][i] = 0.0;
+                        break;
+                }
+            }
+        }
+    }
+    $("#defaults").html(JSON.stringify(defaults));
+}
 </script>
