@@ -6,5 +6,3 @@ My Home Energy Planner - Open Source home energy assessment software based on em
     
     
     sudo ln -s /var/www/mhep/Modules/assessment/library/. /var/lib/mhep/master
-    sudo chown -R www-data:www-data /var/lib/mhep/master
-    sudo chown -R www-data:www-data /var/lib/mhep/master/.
