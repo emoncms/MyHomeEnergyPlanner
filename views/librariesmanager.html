@@ -12,7 +12,7 @@
 }
 
 #libman-m2-bound {
-    width:100px;
+    width:200px;
     border-right: 1px solid #ccc;
     background-color:#e9e6e1;
     float:left;
@@ -152,7 +152,8 @@ function draw_library_manager()
         
             var out = "";
             for (var z in master_copy[l1]) {
-                out += "<div class='libman-item' level=2 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
+                var name = master_copy[l1][z].name;
+                out += "<div class='libman-item' level=2 value='"+z+"'>"+name.ucfirst().replace(/_/g," ")+"</div>";
             }
             $("#libman-m2").html(out);
         }
@@ -194,7 +195,7 @@ function draw_library_manager()
         $("#libman-m2-bound").height(height);
         $("#libman-m3-bound").height(height);
         
-        var l3w = $("#libmanout").width()-250-100-3;
+        var l3w = $("#libmanout").width()-250-200-3;
         $("#libman-m3").width(l3w);
         
     });

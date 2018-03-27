@@ -5,7 +5,7 @@
             "name":"Brick 228 mm, plaster",
             "description":"Solid brick wall 228 mm, dense plaster",
             "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":2.15,
+            "uvalue":2.11,
             "kvalue":150
         },
         "DHDG_US3":{
@@ -166,27 +166,335 @@
 
     },
     "storage_type":{
-
-    },
-    "storage_type_measures":{
-
+        "HWS1": {
+            "category": "Cylinders with inmersion",
+            "name": "Cylinder 210L 60mm factory fitted foam insulation",
+            "description": "",
+            "manufacturer_loss_factor": 0,
+            "temperature_factor_a": 0,
+            "storage_volume": 210,
+            "loss_factor_b": 0.0152,
+            "volume_factor_b": 0.817,
+            "temperature_factor_b": 0.6,
+            "declared_loss_factor_known": false,
+            "cost_units": "unit",
+            "cost": 500
+        }
     },
     "appliances_and_cooking":{
-
+       "LAU1": {
+            "name": "Clothes washing - cold feed",
+            "category": "Laundry",
+            "norm_demand": 1.1,
+            "units": "kWh per use",
+            "utilisation_factor": 1,
+            "frequency": 55,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "LAU2": {
+            "name": "Clothes Drying - electric dryer",
+            "category": "Laundry",
+            "norm_demand": 4,
+            "units": "kWh per use",
+            "utilisation_factor": 0.88,
+            "frequency": 57,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "FST1": {
+            "name": "Refrigerator",
+            "category": "Food storage",
+            "norm_demand": 0.65,
+            "units": "kWh per day",
+            "utilisation_factor": 1,
+            "frequency": 365,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "FST2": {
+            "name": "Upright Freezer",
+            "category": "Food storage",
+            "norm_demand": 0.89,
+            "units": "kWh per day",
+            "utilisation_factor": 1,
+            "frequency": 365,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "FST3": {
+            "name": "Chest Freezer",
+            "category": "Food storage",
+            "norm_demand": 1,
+            "units": "kWh per day",
+            "utilisation_factor": 1,
+            "frequency": 365,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "FST4": {
+            "name": "Fridge\/Freezer",
+            "category": "Food storage",
+            "norm_demand": 1.16,
+            "units": "kWh per day",
+            "utilisation_factor": 1,
+            "frequency": 365,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "COOK1": {
+            "name": "gas hob, gas oven",
+            "category": "Cooking",
+            "norm_demand": 0.25,
+            "units": "kWh per use",
+            "utilisation_factor": 1,
+            "frequency": 500,
+            "reference_quantity": 3,
+            "type_of_fuel": "Gas",
+            "efficiency": 1
+        },
+        "COOK2": {
+            "name": "gas hob",
+            "category": "Cooking",
+            "norm_demand": 0.25,
+            "units": "kWh per use",
+            "utilisation_factor": 1,
+            "frequency": 500,
+            "reference_quantity": 3,
+            "type_of_fuel": "Gas",
+            "efficiency": 1
+        },
+        "COOK3": {
+            "name": "electric oven",
+            "category": "Cooking",
+            "norm_demand": 0.25,
+            "units": "kWh per use",
+            "utilisation_factor": 1,
+            "frequency": 500,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "COOK4": {
+            "name": "electric hob, electric oven (standard)",
+            "category": "Cooking",
+            "norm_demand": 0.22,
+            "units": "kWh per use",
+            "utilisation_factor": 1,
+            "frequency": 500,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "COOK5": {
+            "name": "electric hob, electric oven (induction)",
+            "category": "Cooking",
+            "norm_demand": 0.2,
+            "units": "kWh per use",
+            "utilisation_factor": 1,
+            "frequency": 500,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "COOK6": {
+            "name": "range\/aga - oil",
+            "category": "Cooking",
+            "norm_demand": 425,
+            "units": "KWh per week",
+            "utilisation_factor": 1,
+            "frequency": 52,
+            "reference_quantity": 1,
+            "type_of_fuel": "Oil",
+            "efficiency": 1
+        },
+        "COOK7": {
+            "name": "range\/aga - gas",
+            "category": "Cooking",
+            "norm_demand": 425,
+            "units": "KWh per week",
+            "utilisation_factor": 1,
+            "frequency": 52,
+            "reference_quantity": 1,
+            "type_of_fuel": "Gas",
+            "efficiency": 1
+        },
+        "COOK8": {
+            "name": "range\/aga - electric",
+            "category": "Cooking",
+            "norm_demand": 220,
+            "units": "KWh per week",
+            "utilisation_factor": 1,
+            "frequency": 52,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "COOK9": {
+            "name": "microwave",
+            "category": "Cooking",
+            "norm_demand": 14,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "KTC1": {
+            "name": "electric kettle",
+            "category": "Other kitchen \/ cleaning",
+            "norm_demand": 20,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "KTC2": {
+            "name": "Dishwasher - cold feed",
+            "category": "Other kitchen \/ cleaning",
+            "norm_demand": 1.5,
+            "units": "kWh per use",
+            "utilisation_factor": 1,
+            "frequency": 65,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "TV1": {
+            "name": "TV - CRT",
+            "category": "TV",
+            "norm_demand": 118,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "TV2": {
+            "name": "TV - LCD\/LED",
+            "category": "TV",
+            "norm_demand": 199,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "TV3": {
+            "name": "TV - Plasma",
+            "category": "TV",
+            "norm_demand": 658,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "CMP1": {
+            "name": "Desktop",
+            "category": "Computing",
+            "norm_demand": 166,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "CMP2": {
+            "name": "Laptop",
+            "category": "Computing",
+            "norm_demand": 29,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "CMP3": {
+            "name": "Computer Peripherals",
+            "category": "Computing",
+            "norm_demand": 50,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "MSC1": {
+            "name": "Small Consumer Electronics",
+            "category": "Miscelanea",
+            "norm_demand": 0.08,
+            "units": "kW",
+            "utilisation_factor": 1,
+            "frequency": 550,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "MSC2": {
+            "name": "Other Small Appliances",
+            "category": "Miscelanea",
+            "norm_demand": 50,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 3,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        },
+        "MSC3": {
+            "name": "Standby",
+            "category": "Miscelanea",
+            "norm_demand": 343,
+            "units": "kWh",
+            "utilisation_factor": 1,
+            "frequency": 1,
+            "reference_quantity": 1,
+            "type_of_fuel": "Electricity",
+            "efficiency": 1
+        }
     },
     "heating_systems":{
-        "CMBB5": {
-            "name": "New Gas\/LPG Combi Boiler with radiators, with storage",
-            "category": "Combi boilers",
+        "GB1": {
+            "category": "System boilers",
+            "name": "High Efficiency Gas\/LPG Combi Boiler with radiators",
+            "description":"",
             "winter_efficiency": 90,
             "summer_efficiency": 80,
             "central_heating_pump": 120,
             "fans_and_supply_pumps": 45,
             "responsiveness": 1,
-            "combi_loss": "Storage combi boiler < 55 litres",
-            "primary_circuit_loss": "No",
-            "source": "---"
+            "combi_loss": 0,
+            "primary_circuit_loss": "Yes"
         },
+        "GB2": {
+            "category": "System boilers",
+            "name": "High Efficiency Gas\/LPG Combi Boiler with underfloor heating",
+            "description":"",
+            "winter_efficiency": 90,
+            "summer_efficiency": 80,
+            "central_heating_pump": 120,
+            "fans_and_supply_pumps": 45,
+            "responsiveness": 0.75,
+            "combi_loss": 0,
+            "primary_circuit_loss": "Yes"
+        },
+        
         "ASHP1":{
             "category":"Heat pumps",
             "name":"Air-source heat pump, high performance SPFH4: 3.0)",
@@ -217,21 +525,148 @@
             "cost_units":"unit", "cost":8000,
             "associated_work":"advanced heating controls",
             "notes":"A heat pump requires careful design, installation and comissioning to ensure efficient operation. Works best with lower temperatures for space heating - so with underfloor heating or oversized radiators designed for lower flow and return temperatures."
+        },
+        "WS1": {
+            "name": "High Efficiency Wood Burning Stove",
+            "category": "Room heaters",
+            "winter_efficiency": 80,
+            "summer_efficiency": 0,
+            "central_heating_pump": 0,
+            "fans_and_supply_pumps": 0,
+            "responsiveness": 0.5,
+            "combi_loss": 0,
+            "primary_circuit_loss": "No",
+            "cost_units": "unit",
+            "cost": 2000,
+            "notes":"Check for DEFRA \u2018Clean Air Act\u2019 compliance to ensure low emissions (NOx and particulates)"
+        },
+        "WB1": {
+            "category": "System boilers",
+            "name": "High Efficiency Gasifying Wood Chip/Pellet Boiler",
+            "description": "",
+            "winter_efficiency": 90,
+            "summer_efficiency": 80,
+            "central_heating_pump": 120,
+            "fans_and_supply_pumps": 45,
+            "responsiveness": 1,
+            "combi_loss": 0,
+            "primary_circuit_loss": "Yes",
+            "cost_units": "unit",
+            "cost": 4000,
+            "notes":"Check for DEFRA \u2018Clean Air Act\u2019 compliance to ensure low emissions (NOx and particulates) and HETAS approval"
         }
     },
+    
     "pipework_insulation":{
-
+        "PWINS": {
+            "name": "Accessible primary circuit hot water pipes insulated",
+            "pipework_insulation": "All accesible piperwok insulated",
+            "description": "Insulate all accessible hot water distribution pipes between heat source and hot water store with high quality pipework insulation.",
+            "cost_units": "unit",
+            "cost": 25
+        },
+        "PWINS2": {
+            "name": "All primary circuit hot water pipes fully insulated",
+            "pipework_insulation": "Fully insulated primary pipework",
+            "description": "Insulate all hot water distribution pipes between heat source and hot water store with high quality pipework insulation.",
+            "cost_units": "unit",
+            "cost": 75
+        },
+        "PWINS3": {
+            "name": "Accessible primary circuit hot water pipes insulated + space heating pipes in cold spaces",
+            "pipework_insulation": "All accesible piperwok insulated",
+            "description": "Insulate all accessible hot water distribution pipes between heat source and hot water store with high quality pipework insulation. Also insulate space heating pipes where they pass through a colder space - for example in the void below the ground floor.",
+            "cost_units": "unit",
+            "cost": 100
+        },
+        "PWINS4": {
+            "name": "All primary circuit hot water pipes insulated + space heating pipes in cold spaces",
+            "pipework_insulation": "Fully insulated primary pipework",
+            "description": "Insulate all hot water distribution pipes between heat source and hot water store with high quality pipework insulation. Also insulate space heating pipes where they pass through a colder space - for example in the void below the ground floor. ",
+            "cost_units": "unit",
+            "cost": 150
+        }
     },
+    
     "hot_water_control_type":{
-
+        "STGCTR3": {
+            "name": "Add advanced controls to hot water store",
+            "control_type": "Cylinder thermostat, water heating separately timed",
+            "description": "Add advanced controls to hot water storage system to allow greater controllability and reduce storage losses.",
+            "cost_units": "unit",
+            "cost": 150
+        }
     },
+    
     "space_heating_control_type":{
-
+        "SPCTR_20": {
+            "name": "Advanced Central Controls",
+            "control_type": 2,
+            "source": "Table 4e, SAP",
+            "description": "Includes timer, room thermostat and programmer.",
+            "cost_units": "unit",
+            "cost": 200
+        },
+        "SPCTR_21": {
+            "name": "Programmable TRVs",
+            "control_type": 2,
+            "source": "Table 4e, SAP",
+            "description": "Programmable Thermostatic Radiator Valves (TRVS) allow you to set a different termperature and time of use for each radiator.",
+            "cost_units": "unit",
+            "cost": 200
+        },
+        "SPCTR_30": {
+            "name": "Advanced Central Controls and Zone Control",
+            "control_type": 3,
+            "source": "Table 4e, SAP",
+            "description": "Includes timer, room thermostat and programmer with 2 or more zones to allow different areas of the home to be operated differently.",
+            "cost_units": "unit",
+            "cost": 400
+        }
     },
+    
     "clothes_drying_facilities":{
-
+        "LD_01": {
+            "name": "Clothes Drying Cupboard",
+            "description": "",
+            "cost_units": "unit",
+            "cost": 400
+        },
+        "LD_02": {
+            "name": "Clothes Drying Rack",
+            "description": "",
+            "cost_units": "unit",
+            "cost": 100
+        },
+        "LD_03": {
+            "name": "Clothes Drying Line (Outside)",
+            "description": "",
+            "cost_units": "unit",
+            "cost": 100
+        }
     },
+    
     "generation_measures":{
-
+        "PV1": {
+            "name": "Solar PV 1.4 kWp",
+            "description": "Approx 10 sq m of high-efficiency photovoltaic panels with grid-tie inverter and associated electrical works",
+            "cost_units": "unit",
+            "kWp": 1.4,
+            "cost": 2100
+        },
+        "PV2": {
+            "name": "Solar PV 2.7 kWp",
+            "description": "Approx 18 sq m of high-efficiency photovoltaic panels with grid-tie inverter and associated electrical works",
+            "cost_units": "unit",
+            "kWp": 2.7,
+            "cost": 4050
+        },
+        "PV3": {
+            "name": "Solar PV 3.9 kWp",
+            "description": "Approx 26 sq m of high-efficiency photovoltaic panels with grid-tie inverter and associated electrical works",
+            "cost_units": "unit",
+            "kWp": 3.9,
+            "cost": 5850
+        }
     }
 }
