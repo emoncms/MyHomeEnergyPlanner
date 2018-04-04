@@ -71,7 +71,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 
 </style>
 
-<link rel="stylesheet" href="<?php echo $d; ?>carbon.css">
 <script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
 <div id="openbem">
