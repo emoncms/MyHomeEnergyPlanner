@@ -1,7 +1,4 @@
 .sass-cache
 
-# Ignore all reports except OEM
-reports/*
-reports/*/ 
 images/*
 images/*/
