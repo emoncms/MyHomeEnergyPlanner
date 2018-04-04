@@ -1,3 +1,6 @@
-views/ccreport.html
-views/ccreport.js
 .sass-cache
+
+# Ignore all reports except OEM
+reports/*
+reports/*/
+!reports/oemreport/  
