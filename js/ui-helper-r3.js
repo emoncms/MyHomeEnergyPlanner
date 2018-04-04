@@ -1,4 +1,5 @@
 var view_html = {};
+var report_html = {};
 
 function load_view(eid, view)
 {
@@ -22,6 +23,31 @@ function load_view(eid, view)
     });
 
     view_html[view] = result_html;
+
+    return result_html;
+}
+function load_report(eid, view)
+{
+    if (report_html[view] != undefined) {
+        $(eid).html(report_html[view]);
+        return report_html[view];
+    }
+
+    var result_html = "";
+    $.ajax({url: jspath + "reports/" + view + "/" + view + ".html", async: false, cache: false, success: function (data) {
+            result_html = data;
+        }});
+
+    $(eid).html(result_html);
+
+    // Load js
+    $.ajax({
+        url: jspath + "reports/" + view + "/" + view + ".js",
+        dataType: 'script',
+        async: false
+    });
+
+    report_html[view] = result_html;
 
     return result_html;
 }
@@ -71,22 +97,40 @@ function varget(key)
         case 0:
             break;
         case 1:
-            try { val = window[p[0]]; } catch(err) { }
+            try {
+                val = window[p[0]];
+            } catch (err) {
+            }
             break;
         case 2:
-            try { val = window[p[0]][p[1]]; } catch(err) { }
+            try {
+                val = window[p[0]][p[1]];
+            } catch (err) {
+            }
             break;
         case 3:
-            try { val = window[p[0]][p[1]][p[2]]; } catch(err) { }
+            try {
+                val = window[p[0]][p[1]][p[2]];
+            } catch (err) {
+            }
             break;
         case 4:
-            try { val = window[p[0]][p[1]][p[2]][p[3]]; } catch(err) { }
+            try {
+                val = window[p[0]][p[1]][p[2]][p[3]];
+            } catch (err) {
+            }
             break;
         case 5:
-            try { val = window[p[0]][p[1]][p[2]][p[3]][p[4]]; } catch(err) { }
+            try {
+                val = window[p[0]][p[1]][p[2]][p[3]][p[4]];
+            } catch (err) {
+            }
             break;
         case 6:
-            try { val = window[p[0]][p[1]][p[2]][p[3]][p[4]][p[5]]; } catch(err) { }
+            try {
+                val = window[p[0]][p[1]][p[2]][p[3]][p[4]][p[5]];
+            } catch (err) {
+            }
             break;
     }
     return val;
@@ -111,11 +155,11 @@ function InitUI()
         for (var m = 0; m < 12; m++)
         {
             out += "<td key='" + name + "." + m + "' dp=" + dp + " units='" + units + "'></td>";
-            sum += varget(name+"."+m);
+            sum += varget(name + "." + m);
         }
         var mean = sum / 12.0;
-        
-        $(this).html("<tr><td>" + title + "</td><td>sum:"+sum.toFixed(dp)+"<br>mean:"+mean.toFixed(dp)+"</td>" + out + "</tr>");
+
+        $(this).html("<tr><td>" + title + "</td><td>sum:" + sum.toFixed(dp) + "<br>mean:" + mean.toFixed(dp) + "</td>" + out + "</tr>");
     });
 }
 

@@ -1,10 +1,20 @@
 <?php
-global $path,$app_color,$app_title,$app_description;
+global $path, $app_color, $app_title, $app_description;
 $d = $path . "Modules/assessment/";
 
 $projectid = (int) $_GET['id'];
 
-global $reports;
+$reports = array();
+$reports_dir = scandir("Modules/assessment/reports");
+for ($i = 2; $i < count($reports_dir); $i++) {
+    $dir = "Modules/assessment/reports/" . $reports_dir[$i];
+    if (filetype($dir) == 'dir' || filetype($dir) == 'link') {
+        if (file_exists($dir . '/report.json')) {
+            $json = json_decode(file_get_contents($dir . '/report.json'));  // Get JSON version information
+            array_push($reports, array('view' => $reports_dir[$i], 'name' => $json->name));
+        }
+    }
+}
 ?>        
 
 <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>-->
@@ -32,14 +42,14 @@ global $reports;
 
 <style>
     :root {
-        --app-color: <?php echo $app_color;?>;
+        --app-color: <?php echo $app_color; ?>;
     }
-    
+
     .cc {
         color: var(--app-color);
         font-weight: bold;
         padding-right:20px;
-        
+
     }
 
     .title {
@@ -47,7 +57,7 @@ global $reports;
         color:#888;
         float:left;
     }
-            
+
     .modal-backdrop
     {
         opacity:0.3 !important;
@@ -78,8 +88,7 @@ global $reports;
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
                 <!--<div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>-->
                 <div class="scenario-nav-heading">Other</div>
-                <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CarbonCoop">Carbon Coop Report</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CAfS">CAfS Report</a></div>
+                <div id="links-to-reports"></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
@@ -123,9 +132,9 @@ global $reports;
         <div id="scenario-list"></div>
 
         <div class="side-block">
-        <div id="create-new" class="block-header">
-            Create new scenario
-        </div>
+            <div id="create-new" class="block-header">
+                Create new scenario
+            </div>
         </div>
 
         <div style="background:none; padding:20px">
@@ -283,7 +292,12 @@ global $reports;
     // Side Menus
     add_scenarios_to_menu();
 
+    // Add links to reports in the menu
+    add_reports_to_menu();
+
     var tmp = (window.location.hash).substring(1).split('/');
+    if (tmp[2] != undefined)
+        report = tmp[2];
     var page = tmp[1];
     var scenario = tmp[0];
     if (!scenario)
@@ -301,7 +315,12 @@ global $reports;
     if (data.measures == undefined)
         data.measures = {};
 
-    load_view("#content", page);
+    if (page != 'report')
+        load_view("#content", page);
+    else {
+        load_report("#content", report);
+    }
+    
     InitUI();
     UpdateUI(data);
     draw_openbem_graphics();
@@ -344,13 +363,15 @@ global $reports;
         // Disable measures if master
         show_hide_if_master();
 
-        update(false,false);
+        update(false, false);
     });
 
 
     $(window).on('hashchange', function () {
         var tmp = (window.location.hash).substring(1).split('/');
-        page = tmp[1]; //scenario = tmp[0];
+        if (tmp[2] != undefined)
+            report = tmp[2];
+        page = tmp[1];
         scenario = tmp[0];
 
         if (!scenario)
@@ -372,7 +393,11 @@ global $reports;
          }*/
 
         // Render page
-        load_view("#content", page);
+        if (page != 'report')
+            load_view("#content", page);
+        else {
+            load_report("#content", report);
+        }
         InitUI();
         UpdateUI(data);
         draw_openbem_graphics();
@@ -419,8 +444,9 @@ global $reports;
         draw_openbem_graphics();
 
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
-        
-        if (reload_menu) add_scenarios_to_menu();
+
+        if (reload_menu)
+            add_scenarios_to_menu();
 
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
@@ -544,14 +570,22 @@ global $reports;
                     var original_scenario = JSON.parse(JSON.stringify(project[project[s].created_from]));
                     original_scenario.locked = false;
                     hash_original = generate_hash(JSON.stringify(original_scenario));
-                    if (project[s].creation_hash != generate_hash(JSON.stringify(original_scenario))){
+                    if (project[s].creation_hash != generate_hash(JSON.stringify(original_scenario))) {
                         $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + '*)');
-                    $("." + s + "_scenario_created_from").attr('title', 'The original scenario has changed since the creation of Scenario ' + s.split('scenario')[1]);
+                        $("." + s + "_scenario_created_from").attr('title', 'The original scenario has changed since the creation of Scenario ' + s.split('scenario')[1]);
                     }
                 }
             }
         }
         $('div [scenario="' + scenario + '"]').click();
+    }
+
+    function add_reports_to_menu() {
+        var reports = <?php echo json_encode($reports); ?>;
+        reports.forEach(function (report) {
+            var html = '<div class="scenario-nav"> <a class="project-menu-item" class="link-to-report" href="#master/report/' + report.view + '">' + report.name + '</a></div>';
+            $('#links-to-reports').append(html);
+        })
     }
 
     $("#openbem").on("change", '[key]', function () {
@@ -578,20 +612,21 @@ global $reports;
             console.log(key + " changed from " + lastval + " to " + val);
             changelog += key + " changed from " + lastval + " to " + val + "<br>";
         }
-        update(false,false);
+        update(false, false);
     });
 
     // Scenarios menu interactions
     $("#openbem").on('click', ".block-header", function () {
-    
+
         var s = $(this).parent().attr('scenario');
         //  if (s != scenario) {
         window.location = '#' + s + '/' + page;
-        
+
         var menu_content = $(this).parent().find(".menu-content");
         var visible = menu_content.is(":visible");
         $(".menu-content").hide();
-        if (!visible) menu_content.show();
+        if (!visible)
+            menu_content.show();
         /*
          data = project[scenario];
          load_view("#content", page);
@@ -769,60 +804,62 @@ global $reports;
     $(".house_graphic").html("Hide house graphic");
 
 
-var max_wrapper_width = 1150;
-var sidebar_enabled = true;
-var sidebar_visible = true;
+    var max_wrapper_width = 1150;
+    var sidebar_enabled = true;
+    var sidebar_visible = true;
 
-$("#assessment_menu").parent().attr("href","#");
-$("#assessment_menu").find("i").removeClass("icon-home");
-$("#assessment_menu").find("i").addClass("icon-list");
+    $("#assessment_menu").parent().attr("href", "#");
+    $("#assessment_menu").find("i").removeClass("icon-home");
+    $("#assessment_menu").find("i").addClass("icon-list");
 
-sidebar_resize();
-
-function sidebar_resize() {
-    var width = $(window).width();
-    var height = $(window).height();
-    var nav = $(".navbar").height();
-    $("#sidebar").height(height-nav);
-    
-    if (width<max_wrapper_width) {
-        hide_sidebar()
-    } else {
-        if (sidebar_enabled) show_sidebar()
-    }
-}
-
-$(window).resize(function(){
-    draw_openbem_graphics();
     sidebar_resize();
-});
 
-$("#assessment_menu").parent().click(function(){
-    if (sidebar_visible) {
-        sidebar_enabled = false;
-        hide_sidebar();
-    } else {
-        sidebar_enabled = true;
-        show_sidebar();
+    function sidebar_resize() {
+        var width = $(window).width();
+        var height = $(window).height();
+        var nav = $(".navbar").height();
+        $("#sidebar").height(height - nav);
+
+        if (width < max_wrapper_width) {
+            hide_sidebar()
+        } else {
+            if (sidebar_enabled)
+                show_sidebar()
+        }
     }
-});
 
-function show_sidebar() {
-    var width = $(window).width();
-    sidebar_visible = true;
-    $("#sidebar").css("left","340px");
-    if (width>=max_wrapper_width) $("#wrapper").css("padding-left","330px");
-    $("#wrapper").css("margin","0");
-    $("#sidenav-open").hide();
-    $("#sidenav-close").hide();
-}
+    $(window).resize(function () {
+        draw_openbem_graphics();
+        sidebar_resize();
+    });
 
-function hide_sidebar() {
-    sidebar_visible = false;
-    $("#sidebar").css("left","0");
-    $("#wrapper").css("padding-left","0");
-    $("#wrapper").css("margin","0 auto");
-    $("#sidenav-open").show();
-}
+    $("#assessment_menu").parent().click(function () {
+        if (sidebar_visible) {
+            sidebar_enabled = false;
+            hide_sidebar();
+        } else {
+            sidebar_enabled = true;
+            show_sidebar();
+        }
+    });
+
+    function show_sidebar() {
+        var width = $(window).width();
+        sidebar_visible = true;
+        $("#sidebar").css("left", "340px");
+        if (width >= max_wrapper_width)
+            $("#wrapper").css("padding-left", "330px");
+        $("#wrapper").css("margin", "0");
+        $("#sidenav-open").hide();
+        $("#sidenav-close").hide();
+    }
+
+    function hide_sidebar() {
+        sidebar_visible = false;
+        $("#sidebar").css("left", "0");
+        $("#wrapper").css("padding-left", "0");
+        $("#wrapper").css("margin", "0 auto");
+        $("#sidenav-open").show();
+    }
 
 </script>
