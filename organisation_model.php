@@ -95,7 +95,7 @@ class Organisation
             while($member_row = $member_result->fetch_object())
             {
                 global $user;
-                $username = $user->get_name($member_row->userid);
+                $username = $user->get_username($member_row->userid);
                 $members[] = array("userid"=>$member_row->userid, "name"=>$username, "lastactive"=>"?");
             }
             $organisations[$orgid]['members'] = $members;
