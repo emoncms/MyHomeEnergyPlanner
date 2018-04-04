@@ -295,7 +295,9 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     // Add links to reports in the menu
     add_reports_to_menu();
 
+
     var tmp = (window.location.hash).substring(1).split('/');
+    var report = undefined;
     if (tmp[2] != undefined)
         report = tmp[2];
     var page = tmp[1];
@@ -320,7 +322,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     else {
         load_report("#content", report);
     }
-    
+
     InitUI();
     UpdateUI(data);
     draw_openbem_graphics();
@@ -371,6 +373,8 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         var tmp = (window.location.hash).substring(1).split('/');
         if (tmp[2] != undefined)
             report = tmp[2];
+        else
+            report = undefined;
         page = tmp[1];
         scenario = tmp[0];
 

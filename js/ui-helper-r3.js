@@ -139,7 +139,10 @@ function varget(key)
 function InitUI()
 {
     // Call page specific updateui function
-    var functionname = page + "_initUI";
+    if (report == undefined)
+        var functionname = page + "_initUI";
+    else
+        var functionname = report + "_initUI";
     if (window[functionname] != undefined)
         window[functionname]();
 
@@ -166,7 +169,10 @@ function InitUI()
 function UpdateUI(data)
 {
     // Call page specific updateui function
-    var functionname = page + "_UpdateUI";
+    if (report == undefined)
+        var functionname = page + "_UpdateUI";
+    else
+        var functionname = report + "_UpdateUI";
     if (window[functionname] != undefined)
         window[functionname]();
 
