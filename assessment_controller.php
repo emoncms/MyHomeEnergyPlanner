@@ -236,15 +236,32 @@ function assessment_controller() {
 
         if ($route->action == 'deletelibraryitem' && $session['write'])
             $result = $assessment->deletelibraryitem($session['userid'], get('library_id'), get('tag'));
+        
+        if ($route->action == 'lib-list' && $session['write']) {
+            $libraries = array();
+            
+            foreach (scandir("/var/lib/mhep/master") as $file) {
+                $tmp = explode(".json",$file);
+                if (count($tmp)==2) $libraries[] = $tmp[0];
+            }
+            
+            $userid = $session['userid'];
+            foreach (scandir("/var/lib/mhep/user_$userid") as $file) {
+                $tmp = explode(".json",$file);
+                if (count($tmp)==2) $libraries[] = $tmp[0];
+            }
+            
+            $result = $libraries;
+        }
             
         if ($route->action == 'load-lib' && $session['write']) {
-            $library = "master";
+            $library = "master"; if (isset($_GET['name'])) $library = $_GET['name'];
             $master = file_get_contents("/var/lib/mhep/master/$library.json");
             $result = json_decode($master);
         }
         
         if ($route->action == 'load-user-lib' && $session['write']) {
-            $library = "master";
+            $library = "master"; if (isset($_GET['name'])) $library = $_GET['name'];
             $userid = $session['userid'];
             if (file_exists("/var/lib/mhep/user_$userid")) {
                 $master = file_get_contents("/var/lib/mhep/user_$userid/$library.json");
@@ -266,7 +283,7 @@ function assessment_controller() {
                     mkdir("/var/lib/mhep/user_$userid", 0777, true);
                 }
                 
-                $library = "master";
+                $library = "master"; if (isset($_GET['name'])) $library = $_GET['name'];
                 $fh = fopen("/var/lib/mhep/user_$userid/$library.json","w");
                 fwrite($fh,json_encode($data,JSON_PRETTY_PRINT));
                 fclose($fh);

@@ -83,6 +83,8 @@ textarea:focus {
     <h3>Library Manager</h3>
     <hr><br>
     
+    <select id="lib-list"></select>
+    
     <div id="libmanout">
     
     <div id="libman-m1-bound">
@@ -110,26 +112,49 @@ textarea:focus {
 
 <script>
 
+var libraries = {};
 var master = {};
 var user_changes = {};
-
-$.ajax({ url: path+"assessment/load-lib.json", dataType: 'json', async: false, success: function(result){master = result;} });
-$.ajax({ url: path+"assessment/load-user-lib.json", dataType: 'json', async: false, success: function(result){user_changes = result;} });
-
 var l1 = false;
 var l2 = false;
 var l3 = false;
+var master_copy = {};
+var local_changes = {};
+var selected_library = "master";
+    
 
-// Create copy and unlink
-var master_copy = JSON.parse(JSON.stringify(master));
+$.ajax({ url: path+"assessment/lib-list.json", dataType: 'json', async: false, success: function(result){
+    libraries = result;
+    var out = "";
+    for (var z in libraries) {
+        var selected = ""; if (libraries[z]==selected_library) selected = "selected";
+        out += "<option "+selected+">"+libraries[z]+"</option>";
+    }
+    $("#lib-list").html(out);
+}});
 
-// Apply user changes to master copy
-master_copy = apply_changes(master_copy, user_changes);
+load_library();
 
-var local_changes = json_diff(master,master_copy);
-$("#local_changes").html(JSON.stringify(local_changes,undefined,2));
+function load_library()
+{
+    $.ajax({ url: path+"assessment/load-lib.json?name="+selected_library, dataType: 'json', async: false, success: function(result){master = result;} });
+    $.ajax({ url: path+"assessment/load-user-lib.json?name="+selected_library, dataType: 'json', async: false, success: function(result){user_changes = result;} });
 
-draw_library_manager();
+    l1 = false;
+    l2 = false;
+    l3 = false;
+
+    // Create copy and unlink
+    master_copy = JSON.parse(JSON.stringify(master));
+
+    // Apply user changes to master copy
+    master_copy = apply_changes(master_copy, user_changes);
+
+    local_changes = json_diff(master,master_copy);
+    $("#local_changes").html(JSON.stringify(local_changes,undefined,2));
+
+    draw_library_manager();
+}
 
 function draw_library_manager()
 {
@@ -201,6 +226,11 @@ function draw_library_manager()
     });
 }
 
+$("#lib-list").change(function(){
+    selected_library = $(this).val();
+    load_library()
+});
+
 $("#libmanout").on("change",".libval",function() {
     var value = $(this).val();
     //if (local_changes[l1]==undefined) local_changes[l1] = {};
@@ -213,7 +243,7 @@ $("#libmanout").on("change",".libval",function() {
 });
 
 $("#save-lib").click(function(){
-    $.ajax({ type: 'POST', url: path+"assessment/save-lib.json", data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
+    $.ajax({ type: 'POST', url: path+"assessment/save-lib.json?name="+selected_library, data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
         success: function(result){ 
             console.log(result); 
             $("#save-lib").hide();
@@ -228,7 +258,7 @@ $("#revert-changes").click(function(){
     
     draw_library_manager();
 
-    $.ajax({ type: 'POST', url: path+"assessment/save-lib.json", data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
+    $.ajax({ type: 'POST', url: path+"assessment/save-lib.json?name="+selected_library, data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
         success: function(result){ 
             console.log(result); 
             $("#save-lib").hide();
