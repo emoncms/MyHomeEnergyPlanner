@@ -3,7 +3,7 @@ if (typeof library_helper != "undefined")
     library_helper.type = 'elements';
 else
     var library_helper = new libraryHelper('elements', $("#openbem"));
-    
+
 // button defined in: libraryHelper:elements_library_to_html
 $("#openbem").on("click", '.add-element', function () {
 
@@ -52,19 +52,19 @@ $("#openbem").on("click", '.change-element', function () {
     var lib = $(this).attr("lib");
     var type = $(this).attr("type");
     type = type.charAt(0).toUpperCase() + type.slice(1); // Ensure first letter is capital
-    
-    console.log("change element row="+row+" lib="+lib);
+
+    console.log("change element row=" + row + " lib=" + lib);
 
     var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    
+
     data.fabric.elements[row].lib = lib;
     if (lib != undefined) {
         for (var z in library[lib]) {
-            if (z!='location')
+            if (z != 'location')
                 data.fabric.elements[row][z] = library[lib][z];
         }
     }
-    
+
     update();
 });
 
@@ -257,7 +257,25 @@ $("#openbem").on("click", '.revert-to-original', function () {
     elements_initUI();
     update();
 });
+$("#openbem").on("click", '.calculate-floor-uvalue', function () {
+    var z = $(this).attr('z');
+    var area = $('[key="data.fabric.elements.' + z + '.area"]').val();
+    var perimeter = $('[key="data.fabric.elements.' + z + '.perimeter"]').val();
+    $('#openFUVC-modal #area input').val(area);
+    $('#openFUVC-modal #perimeter input').val(perimeter);
+    openFUVC_helper.launch_calculator(function (uvalue) {
+        $('[key="data.fabric.elements.' + z + '.uvalue"]').val(uvalue.toFixed(2));
+        if (area == "") {
+            area = $('#openFUVC-modal #area input').val();
+            $('[key="data.fabric.elements.' + z + '.area"]').val(area);
+        }
+        if (perimeter == "") {
+            perimeter = $('#openFUVC-modal #perimeter input').val();
+            $('[key="data.fabric.elements.' + z + '.perimeter"]').val(perimeter);
+        }
 
+    });
+});
 
 $("[key='data.fabric.global_TMP']").change(function () {
     value = $("[key='data.fabric.global_TMP']").is(":checked");
@@ -289,7 +307,7 @@ function add_element(id, z)
     row.attr('item_id', data.fabric.elements[z].id);
     row.attr('item', JSON.stringify(data.fabric.elements[z]));
     row.attr('tags', data.fabric.elements[z].type);
-    
+
     // Revert to original
     init_revert_to_original(id, z);
 
@@ -307,6 +325,7 @@ function add_floor(z)
     $(id + " [key='data.fabric.elements.template.lib']").attr('key', 'data.fabric.elements.' + z + '.lib');
     $(id + " [key='data.fabric.elements.template.perimeter']").attr('key', 'data.fabric.elements.' + z + '.perimeter');
     $(id + " [key='data.fabric.elements.template.area']").attr('key', 'data.fabric.elements.' + z + '.area');
+    $(id + " .calculate-floor-uvalue[z='template'").attr('z', z);
     $(id + " [key='data.fabric.elements.template.uvalue']").attr('key', 'data.fabric.elements.' + z + '.uvalue');
     $(id + " [key='data.fabric.elements.template.kvalue']").attr('key', 'data.fabric.elements.' + z + '.kvalue');
     $(id + " [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
@@ -354,7 +373,7 @@ function add_window(z)
         $('#windows .window_fields_template').html('');
     }
     $("#windows [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
-    
+
     $('#windows .window_fields_template').removeClass('window_fields_template');
     data.fabric.elements[z].name = String(data.fabric.elements[z].name);
     var name = data.fabric.elements[z].name;
@@ -375,7 +394,7 @@ function add_window(z)
     row.attr('item_id', data.fabric.elements[z].id);
     row.attr('item', JSON.stringify(data.fabric.elements[z]));
     row.attr('tags', data.fabric.elements[z].type);
-    
+
     var subtractfromhtml = "<option value='no' ></option>";
     for (i in data.fabric.elements) {
         // here

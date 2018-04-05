@@ -40,6 +40,11 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 <link rel="stylesheet" href="<?php echo $d; ?>js/jquery-ui-1.12.1/jquery-ui.min.css">
 <script src="<?php echo $d; ?>js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 
+<!-- open floor uvalue calculator -->
+<script type="text/javascript" src="<?php echo $d; ?>js/openFUVC/openFUVC.js"></script>
+<script type="text/javascript" src="<?php echo $d; ?>js/openFUVC/openFUVC-ui-helper.js"></script>
+<link rel="stylesheet" href='<?php echo $d; ?>js/openFUVC/openFUVC.css'>
+
 <style>
     :root {
         --app-color: <?php echo $app_color; ?>;

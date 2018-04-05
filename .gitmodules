@@ -1,0 +1,3 @@
+[submodule "js/openFUVC"]
+	path = js/openFUVC
+	url = https://github.com/carboncoop/openFUVC.git
