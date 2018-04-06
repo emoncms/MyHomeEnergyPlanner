@@ -32,5 +32,10 @@ My Home Energy Planner requires a Apache2, Mysql, PHP (LAMP) server, the install
 My Home Energy Planner - Open Source home energy assessment software based on emoncms framework + openbem
 
     cd /var/www/emoncms/Modules
-    git clone -b module https://github.com/emoncms/MyHomeEnergyPlanner.git assessment
-    
+    git clone -b development https://github.com/emoncms/MyHomeEnergyPlanner.git assessment
+
+My Home Energy Planner uses [openFUVC](http://openflooruvaluecalculator.carbon.coop/) to help assessors calculate floor u-values. This has been added as git submodule, you also need to clone it
+
+    cd /var/www/emoncms/Modules/assessment
+    git submodule init
+    git submodule update
