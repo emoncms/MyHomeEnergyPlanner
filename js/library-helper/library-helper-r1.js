@@ -582,6 +582,7 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
             $('#newlibrary').hide('fast');
             $('#finishcreatelibrary').show('fast');
             UpdateUI(data);
+            $("#openbem").trigger("new-library");
         }
         else
             $("#create-library-message").html(resultado)
@@ -1322,6 +1323,7 @@ libraryHelper.prototype.onDeleteLibraryOk = function (library_id) {
                 $('#confirm-delete-library-modal').modal('hide');
                 myself.init();
                 UpdateUI();
+                $("#openbem").trigger("delete-library");
             }
             else
                 $('#confirm-delete-library-modal .message').html('Library could not be deleted - ' + result);

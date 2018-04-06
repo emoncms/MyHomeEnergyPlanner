@@ -131,16 +131,22 @@ var l2 = false;
 var l3 = false;
 var master_copy = {};
 var local_changes = {};
-var selected_library = 1;
+var selected_library = false;
 
-var out = "";
-for (var z in libraries) {
-    var selected = ""; if (libraries[z].id==selected_library) selected = "selected";
-    out += "<option value="+libraries[z].id+" "+selected+">"+libraries[z].name+"</option>";
-}
-$("#lib-list").html(out);
-
+load_library_list();
 load_library();
+
+function load_library_list()
+{
+    if (!selected_library) selected_library = libraries[0].id;
+    
+    var out = "";
+    for (var z in libraries) {
+        var selected = ""; if (libraries[z].id==selected_library) selected = "selected";
+        out += "<option value="+libraries[z].id+" "+selected+">"+libraries[z].name+"</option>";
+    }
+    $("#lib-list").html(out);
+}
 
 function load_library()
 {
@@ -252,7 +258,7 @@ function draw_library_manager()
 
 $("#lib-list").change(function(){
     selected_library = $(this).val();
-    load_library()
+    load_library();
 });
 
 $("#libmanout").on("change",".libval",function() {
@@ -309,7 +315,21 @@ $("#share-library").click(function(){
     $('#modal-share-library').modal('show');
 });
 
+// Events
 
+$("#openbem").on("new-library",function() {
+    libraries = library_helper.library_list;
+    selected_library = libraries[libraries.length-1].id;
+    load_library_list();
+    load_library();
+});
+
+$("#openbem").on("delete-library",function() {
+    libraries = library_helper.library_list;
+    selected_library = false;
+    load_library_list();
+    load_library();
+});
 
 // ---------------------------------------------------------------------------------
 // Apply changes
