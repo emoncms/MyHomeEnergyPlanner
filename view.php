@@ -78,8 +78,6 @@ global $reports;
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
                 <!--<div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>-->
                 <div class="scenario-nav-heading">Other</div>
-                <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CarbonCoop">Carbon Coop Report</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" class="link-to-report" href="#master/carboncoopreport/org=CAfS">CAfS Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
