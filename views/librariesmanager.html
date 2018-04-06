@@ -84,7 +84,7 @@ textarea:focus {
     <hr><br>
     
     <button class="btn" id="delete-library" style="float:right"><i class="icon-trash"></i> Delete</button>
-    <button class="btn" id="share-library" style="float:right; margin-right:5px"><i class="icon-user"></i> Manage users</button>
+    <button class="btn" id="manage-users-library" style="float:right; margin-right:5px"><i class="icon-user"></i> Manage users</button>
     <button class="btn" id="new-library" style="float:right; margin-right:5px"><i class="icon-plus"></i> New</button>
 
     
@@ -310,8 +310,9 @@ $("#delete-library").click(function(){
     library_helper.onDeleteLibrary(selected_library);
 });
 
-$("#share-library").click(function(){
-    library_helper.display_library_users(selected_library);
+$("#manage-users-library").click(function(){
+    library_helper.selected_library = selected_library;
+    library_helper.display_library_users();
     $('#modal-share-library').modal('show');
 });
 

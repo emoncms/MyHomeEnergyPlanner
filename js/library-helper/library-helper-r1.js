@@ -366,7 +366,15 @@ libraryHelper.prototype.add_events = function () {
         myself.init(); // Reload the lobrary before we display it
         myself.onAddItemFromLib($(this));
     });
-
+    this.container.on('click', '#open-share-library', function () {
+        myself.onOpenShareLib();
+    });
+    this.container.on('click', "#share-library", function () {        
+        myself.onShareLib();
+    });
+    this.container.on('click', '.remove-user', function () {
+        myself.onRemoveUserFromSharedLib($(this).attr('username'));
+    });
     this.container.on('change', '#library-select', function () {
         myself.onSelectingLibraryToShow($(this));
     });
@@ -526,7 +534,58 @@ libraryHelper.prototype.onAddItemFromLib = function (origin) {
     this.populate_library_modal(origin);
     $("#show-library-modal").modal('show');
 };
-
+libraryHelper.prototype.onOpenShareLib = function () {
+    this.display_library_users();
+    $('.modal').modal('hide');
+    $('#modal-share-library').modal('show');
+};
+libraryHelper.prototype.onShareLib = function () {
+    $('#return-message').html('');
+    var username = $("#sharename").val();
+    var write_permissions = $('#write_permissions').is(":checked");
+    
+    var myself = this;
+    if (this.selected_library != -1) {
+        $.ajax({
+            url: path + "assessment/sharelibrary.json",
+            data: "id=" + this.selected_library + "&name=" + username + "&write_permissions=" + write_permissions,
+            success: function (data) {
+                $('#return-message').html(data);
+                myself.display_library_users();
+            }});
+    }
+};
+libraryHelper.prototype.onEditLibraryName = function (original_element) {
+    console.log(original_element);
+    $('#edit-library-name-modal #new-library-name').attr('placeholder', original_element.attr('library-name'));
+    $('#edit-library-name-modal #edit-library-name-ok').attr('library-id', original_element.attr('library-id'));
+    $('#edit-library-name-modal').modal('show');
+};
+libraryHelper.prototype.onEditLibraryNameOk = function () {
+    var library_id = $('#edit-library-name-modal #edit-library-name-ok').attr('library-id');
+    var library_new_name = $('#edit-library-name-modal #new-library-name').val();
+    var myself = this;
+    this.set_library_name(library_id, library_new_name, function (result) {
+        console.log(myself);
+        if (result == 1) {
+            var library = myself.get_library_by_id(library_id);
+            library.name = library_new_name;
+            UpdateUI(data);
+            $('.modal').modal('hide');
+        }
+        else
+            $('#edit-library-name-modal #message').html('Library name could not be changed: ' + result);
+    });
+    //this.set_library_name(library_id, library_new_name);
+};
+libraryHelper.prototype.onRemoveUserFromSharedLib = function (user_to_remove) {
+    $('#return-message').html('');
+    var myself = this;
+    $.ajax({url: path + "assessment/removeuserfromsharedlibrary.json", data: 'library_id=' + this.selected_library + '&user_to_remove=' + user_to_remove, success: function (result) {
+        $('#return-message').html(result);
+        myself.display_library_users(selected_library);
+    }});
+};
 libraryHelper.prototype.onSelectingLibraryToShow = function (origin) {
     console.log('onSelectingLibraryToShow');
     
@@ -1276,14 +1335,14 @@ libraryHelper.prototype.get_item_to_save = function (type) {
  * Other methods
  ***************************************************/
  
-libraryHelper.prototype.display_library_users = function (library_id) {
-    $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + library_id, success: function (shared) {
+libraryHelper.prototype.display_library_users = function () {
+    $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + this.selected_library, success: function (shared) {
         var out = "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>";
         var write = "";
         for (var i in shared) {
             write = shared[i].write == 1 ? 'Yes' : 'No';
             if (shared[i].username != p.author)
-                out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' library-id='" + library_id + "' username='" + shared[i].username + "'></i></td></tr>";
+                out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' library-id='" + this.selected_library + "' username='" + shared[i].username + "'></i></td></tr>";
             else
                 out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td>&nbsp;</td></tr>";
         }
