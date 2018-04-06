@@ -19,7 +19,7 @@
         },
         "DHDG_CW1":{
             "type":"Wall",
-            "name":"Unfilled Cavity wall, lightweight plaster",
+            "name":"Cavity wall, plaster",
             "description":"Brick 102mm, air-space, brick 102mm, 13mm plaster",
             "source":"Domestic Heating Design Guide v1.0",
             "uvalue":1.37,
@@ -27,7 +27,7 @@
         },
         "DHDG_CW2":{
             "type":"Wall",
-            "name":"Filled Cavity wall, lightweight plaster",
+            "name":"Filled Cavity wall, plaster",
             "description":"Brick 102mm, Mineral Wool Slab 50mm, brick 102mm, 13mm plaster",
             "source":"Domestic Heating Design Guide v1.0",
             "uvalue":0.56,
@@ -83,8 +83,8 @@
         },
         "WW03": {
             "type": "Window",
-            "name": "Double glazed window, pre-2002, 12mm, timber or PVC",
-            "description": "",
+            "name": "Double glazed window, 12mm, timber or PVC",
+            "description": "Double glazed window, pre-2002, 12mm, timber or PVC",
             "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
             "uvalue": 2.8,
             "kvalue": 0,
@@ -94,8 +94,8 @@
         },
         "WW04": {
             "type": "Window",
-            "name": "Double glazed window, low-E glass, 12mm, timber or PVC",
-            "description": "",
+            "name": "Double glazed window, low-E, 12mm, timber or PVC",
+            "description": "Double glazed window, low-E glass, 12mm, timber or PVC",
             "source":"Domestic Heating Design Guide v1.0",
             "uvalue": 2.3,
             "kvalue": 0,
@@ -105,8 +105,8 @@
         },
         "WW05": {
             "type": "Window",
-            "name": "Double glazed window, low-E glass, argon filled, 12mm, timber or PVC",
-            "description": "",
+            "name": "Double glazed window, low-E, argon, 12mm, timber or PVC",
+            "description": "Double glazed window, low-E glass, argon filled, 12mm, timber or PVC",
             "source":"Domestic Heating Design Guide v1.0",
             "uvalue": 2.1,
             "kvalue": 0,
@@ -127,8 +127,8 @@
         },
         "WW07": {
             "type": "Window",
-            "name": "Triple glazed window, low-E glass, 12mm, timber or PVC",
-            "description": "",
+            "name": "Triple glazed window, low-E, 12mm, timber or PVC",
+            "description": "Triple glazed window, low-E glass, 12mm, timber or PVC",
             "source":"Domestic Heating Design Guide v1.0",
             "uvalue": 1.7,
             "kvalue": 0,
@@ -138,8 +138,8 @@
         },
         "WW08": {
             "type": "Window",
-            "name": "Triple glazed window, low-E glass, argon filled, 12mm, timber or PVC",
-            "description": "",
+            "name": "Triple glazed window, low-E, argon, 12mm, timber or PVC",
+            "description": "Triple glazed window, low-E glass, argon filled, 12mm, timber or PVC",
             "source":"Domestic Heating Design Guide v1.0",
             "uvalue": 1.6,
             "kvalue": 0,
@@ -148,23 +148,259 @@
             "ff": "0.7"
         }
     },
-    "draught_proofing_measures":{
-
+    "draught_proofing_measures": {
+        "DP_01": {
+            "name": "Basic Draught-proofing",
+            "description": "Stopping draughts through gaps around windows, doors, skirting boards\/junctions, ceilings, accessible service penetrations, letter boxes, loft hatches and cat flaps using readily available sealants.",
+            "q50": 12.0,
+            "performance": "8-12 m3\/m2.hr@50pa",
+            "cost_units": "unit",
+            "cost": 300,
+            "notes": ""
+        },
+        "DP_02": {
+            "name": "Advanced Draught-proofing",
+            "q50": 7.5,
+            "description": "In addition to basic measures, a high performance air-tight envelope, air-tight fabric, use of membranes & tapes",
+            "performance": "3-7.5 m3\/m2.hr@50pa",
+            "cost_units": "unit",
+            "cost": 600,
+            "notes": ""
+        },
+        "DP_03": {
+            "name": "Very advanced Draughtproofing and air-tightness",
+            "description": "In addition to basic measures, a high performance air-tight envelope, air-tight fabric, use of membranes & tapes",
+            "q50": 2.5,
+            "performance": "2.5m3\/m2.hr@50pa",
+            "cost_units": "unit",
+            "cost": 1500,
+            "notes": ""
+        },
+        "DP_04": {
+            "name": "EnerPHit",
+            "description": "EnerPHit standard air-tightness, see: http://www.passivhaus.org.uk/page.jsp?id=20",
+            "q50": 1.0,
+            "performance": "1m3\/m2.hr@50pa",
+            "cost_units": "unit",
+            "cost": 2500,
+            "notes": ""
+        },
+        "DP_05": {
+            "name": "Draught Lobby",
+            "q50": -0.05,
+            "description": "Adding a draught lobby to the main entrance of your home can help reduce heat-loss and draughts by forming an air-lock between living spaces and outside air.",
+            "performance": "Deduct 0.05 from ach rate if present (see SAP2012 page 179).",
+            "cost_units": "unit",
+            "cost": 500,
+            "notes": ""
+        }
     },
-    "ventilation_systems":{
-
-    },
-    "ventilation_systems_measures":{
-
+    "ventilation_systems": {
+        "VS1": {
+            "name": "NV: Natural Ventilation",
+            "ventilation_type": "NV",
+            "system_air_change_rate": "n\/a",
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": "n\/a",
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS2": {
+            "name": "IE: Intermittent Extract Ventilation",
+            "ventilation_type": "IE",
+            "system_air_change_rate": "n\/a",
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": "n\/a",
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS3": {
+            "name": "PS: Whole house passive stack ventilation",
+            "ventilation_type": "PS",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": "n\/a",
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS4": {
+            "name": "DEV: Decentralised continous mechanical extract ventilation",
+            "ventilation_type": "DEV",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": 0.92,
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS5": {
+            "name": "MEV: Whole house continuous mechanical extract ventilation, centralised, flexible duct",
+            "ventilation_type": "MEV",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": 3.4,
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS6": {
+            "name": "MEV: Whole house continuous mechanical extract ventilation, centralised, rigid or semi-rigid duct",
+            "ventilation_type": "MEV",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": 2.8,
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS7": {
+            "name": "MEV: Whole house continuous mechanical extract ventilation, centralised, flexible duct",
+            "ventilation_type": "MEV",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": 3.2,
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS8": {
+            "name": "MV: Whole house balanced mechanical ventilation, flexible duct",
+            "ventilation_type": "MV",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": 3.4,
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS9": {
+            "name": "MV: Whole house balanced mechanical ventilation, rigid duct",
+            "ventilation_type": "MV",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": 2.8,
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS10": {
+            "name": "MV: Whole house balanced mechanical ventilation, flexible duct",
+            "ventilation_type": "MV",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": 3.2,
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS11": {
+            "name": "MV: Whole house balanced mechanical ventilation, rigid duct",
+            "ventilation_type": "MV",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": "n\/a",
+            "specific_fan_power": 2.5,
+            "source": "SFP derived from tables 4g and 4h - p. 214"
+        },
+        "VS12": {
+            "name": "MVHR: Whole house balanced mechanical ventilation with heat recovery, uninsulated flexible duct",
+            "ventilation_type": "MVHR",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": 46.2,
+            "specific_fan_power": 3.2,
+            "source": "SFP and HR efficiency derived from tables 4g and 4h - p. 214"
+        },
+        "VS13": {
+            "name": "MVHR: Whole house balanced mechanical ventilation with heat recovery, insulated flexible duct",
+            "ventilation_type": "MVHR",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": 56.1,
+            "specific_fan_power": 3.2,
+            "source": "SFP and HR efficiency derived from tables 4g and 4h - p. 214"
+        },
+        "VS14": {
+            "name": "MVHR: Whole house balanced mechanical ventilation with heat recovery, uninsulated rigid duct",
+            "ventilation_type": "MVHR",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": 46.2,
+            "specific_fan_power": 2.8,
+            "source": "SFP and HR efficiency derived from tables 4g and 4h - p. 214"
+        },
+        "VS15": {
+            "name": "MVHR: Whole house balanced mechanical ventilation with heat recovery, insulated rigid duct",
+            "ventilation_type": "MVHR",
+            "system_air_change_rate": 0.5,
+            "balanced_heat_recovery_efficiency": 56.1,
+            "specific_fan_power": 2.8,
+            "source": "SFP and HR efficiency derived from tables 4g and 4h - p. 214"
+        }
     },
     "extract_ventilation_points":{
-
+        "EV1": {
+            "name": "Individual Intermittent Extract Fan",
+            "type": "Intermittent fan",
+            "ventilation_rate": 10,
+            "description": ""
+        },
+        "EV2": {
+            "name": "Passive Stack Extract Vent",
+            "type": "Passive vent",
+            "ventilation_rate": 10,
+            "description": ""
+        }
     },
-    "intentional_vents_and_flues_measures":{
-
+    "intentional_vents_and_flues_measures": {
+        "IV_07": {
+            "name": "Chimney Balloon\/Pillow (low level)",
+            "source": "SAP (inferred)",
+            "type": "Measure",
+            "ventilation_rate": 20,
+            "description": ""
+        },
+        "IV_08": {
+            "name": "Chimney Balloon\/Pillow (high level)",
+            "source": "SAP",
+            "type": "Measure",
+            "ventilation_rate": 20,
+            "description": "Chimney balloon or pillow fitted at same level as loft insulation, reduces heat loss from rooms that chimney passes through."
+        },
+        "IV_09": {
+            "name": "Cap and fill Chimney",
+            "type": "Measure",
+            "ventilation_rate": 0,
+            "description": "Chimney sealed if not needed for ventilation, and filled with granular inert insulation. New weather-shield chimney pot fitted to top to prevent water ingress from above whilst allowing low level ventilation. "
+        },
+        "IV_10": {
+            "name": "Remove flueless gas fire",
+            "type": "Measure",
+            "ventilation_rate": 0,
+            "description": "Flueless gas fires are inefficient, cause draughts and carry risks of build up of carbon dioxide and carbon monoxide. They should be removed and avoided whererever possible. "
+        },
+        "IV_11": {
+            "name": "Remove open flue",
+            "type": "Measure",
+            "ventilation_rate": 0,
+            "description": "Open flues are usually associated with fuel burning appliances, for example flues or smaller chimneys (<200mm diameter) for older non-room sealed boilers and flues for solid fuel appliances. Where not needed, and where possible, these could be removed. "
+        },
+        "IV_12": {
+            "name": "Remove gas fire",
+            "type": "Measure",
+            "ventilation_rate": 0,
+            "description": "Gas fires are inefficient, cause draughts and carry risks of build up of carbon dioxide and carbon monoxide. They should be removed and avoided whererever possible. ",
+        }
     },
-    "water_usage":{
-
+    "water_usage": {
+        "HW_01": {
+            "name": "Standard Water Use",
+            "source": "",
+            "description": ""
+        },
+        "HW_02": {
+            "name": "Spray Taps",
+            "source": "",
+            "description": "Low flow taps fitted to reduce hot water consumption. Kitchen & utility room taps could allow manual over-ride of low-flow when needed for filling sinks\/ buckets etc.",
+            "performance": "4 litres\/minute"
+        },
+        "HW_03": {
+            "name": "Flow Restrictor for Taps",
+            "source": "",
+            "description": "Retrofit flow-restrictors to existing hot water taps to reduce hot water cons",
+            "performance": "4 litres\/minute"
+        },
+        "HW_04": {
+            "name": "Low-Flow Shower Head",
+            "source": "",
+            "description": "Fit new aerating spray head shower head to reduce water flow and hot water demand.",
+            "performance": "8 litres\/minute"
+        },
+        "HW_05": {
+            "name": "Replace Electric Shower with Direct Feed from Hot Water supply.",
+            "source": "",
+            "description": "New direct hot water feed low-flow shower to reduce hot water consumption and energy use (uses mains hot water system rather than own electric heating element).",
+            "performance": "8 litres\/minute"
+        }
     },
     "storage_type":{
         "HWS1": {
