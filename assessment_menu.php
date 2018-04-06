@@ -5,7 +5,7 @@
     $menu_left[] = array(
         'id'=>"assessment_menu",
         'name'=>"MyHomeEnergyPlanner", 
-        'path'=>"assessment/list" , 
+        'path'=>"assessment/projects" , 
         'session'=>"write", 
         'order' => 0,
         'icon'=>'icon-home icon-white',
@@ -25,7 +25,7 @@
     $menu_dropdown[] = array(
         'id'=>"assessment_menu_extras",
         'name'=>"MyHomeEnergyPlanner", 
-        'path'=>"assessment/list" , 
+        'path'=>"assessment/projects" , 
         'session'=>"write", 
         'order' => 0,
         'icon'=>'icon-home'

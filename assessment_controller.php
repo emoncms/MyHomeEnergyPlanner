@@ -32,7 +32,7 @@ function assessment_controller() {
     } else if ($route->action == "print") {
         $route->format = 'html';
         $result = view("Modules/assessment/print.php", array());
-    } else if ($route->action == "list") {
+    } else if ($route->action == "projects") {
         $route->format = 'html';
         $result = view("Modules/assessment/projects.php", array());
     }
@@ -190,11 +190,18 @@ function assessment_controller() {
                 $result = $assessment->deletelibrary($session['userid'], get('library_id'));
 
             else if ($route->action == 'setuplibraries') { 
+                $route->format = "text";
                 $name = "master";
-                if ($result = $mysqli->query("INSERT INTO mhep_library (`name`) VALUES ('$name')")) {
-                    $id = $mysqli->insert_id;
-                    $mysqli->query("INSERT INTO mhep_library_access (`id`,`userid`,`orgid`,`write`,`public`) VALUES ('$id','0','0','0','1')");
-                    $result = $id;
+                $result = $mysqli->query("SELECT COUNT(*) FROM mhep_library");
+                $row = $result->fetch_row();
+                if ($row[0]==0) {
+                    if ($result = $mysqli->query("INSERT INTO mhep_library (`name`) VALUES ('$name')")) {
+                        $id = $mysqli->insert_id;
+                        $mysqli->query("INSERT INTO mhep_library_access (`id`,`userid`,`orgid`,`write`,`public`) VALUES ('$id','0','0','0','1')");
+                        $result = $id;
+                    }
+                } else {
+                    $result = "libraries already setup";
                 }
             }
         }
