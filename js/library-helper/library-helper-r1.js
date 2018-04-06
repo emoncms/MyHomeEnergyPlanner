@@ -313,6 +313,7 @@ function libraryHelper(type, container) {
     this.container = container;
     this.library_list = {};
     this.library = {};
+    this.selected_library = 0;
     this.library_permissions = {};
     // Variables to link the view with the controller
     this.type = type;
@@ -1361,9 +1362,13 @@ libraryHelper.prototype.load_user_libraries = function (callback) {
     }});
     this.library_list = test;
     
-    //$.ajax({ url: path+"assessment/load-lib.json", dataType: 'json', async: false, success: function(result){
-    //   this.library = result;
-    //} });
+    if (!this.selected_library) this.selected_library = this.library_list[0].id;
+    
+    var test = {};
+    $.ajax({ url: path+"assessment/loadlibrary.json?id="+this.selected_library, dataType: 'json', async: false, success: function(result){
+        test = result;
+    }});
+    this.library = test;
       
 };
 
@@ -1411,7 +1416,6 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
     for (var z in this.library_list) {
         out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";
     }
-    out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
     $("#library-select").html(out);
     // Heading of the modal
     $('#show-library-modal .modal-header h3').html(this.library_names[this.type]);

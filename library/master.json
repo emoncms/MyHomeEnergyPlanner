@@ -2,7 +2,7 @@
     "inherit":false,
     "elements":{
         "DHDG_UB2":{
-            "type":"Wall",
+            "category":"Wall",
             "name":"Brick 228 mm, plaster",
             "description":"Solid brick wall 228 mm, dense plaster",
             "source":"Domestic Heating Design Guide v1.0",
@@ -10,7 +10,7 @@
             "kvalue":150
         },
         "DHDG_US3":{
-            "type":"Wall",
+            "category":"Wall",
             "name":"Stone 610mm (24in)",
             "description":"Solid stone wall 610 mm, unplastered",
             "source":"Domestic Heating Design Guide v1.0",
@@ -18,7 +18,7 @@
             "kvalue":150
         },
         "DHDG_CW1":{
-            "type":"Wall",
+            "category":"Wall",
             "name":"Cavity wall, plaster",
             "description":"Brick 102mm, air-space, brick 102mm, 13mm plaster",
             "source":"Domestic Heating Design Guide v1.0",
@@ -26,7 +26,7 @@
             "kvalue":150
         },
         "DHDG_CW2":{
-            "type":"Wall",
+            "category":"Wall",
             "name":"Filled Cavity wall, plaster",
             "description":"Brick 102mm, Mineral Wool Slab 50mm, brick 102mm, 13mm plaster",
             "source":"Domestic Heating Design Guide v1.0",
@@ -35,7 +35,7 @@
         },
         
         "LR100": {
-            "type": "Loft",
+            "category": "Loft",
             "name": "Insulated loft 100mm",
             "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
             "source":"Domestic Heating Design Guide v1.0",
@@ -43,7 +43,7 @@
             "kvalue": 9
         },
         "LR200": {
-            "type": "Loft",
+            "category": "Loft",
             "name": "Insulated loft 200mm",
             "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
             "source":"Domestic Heating Design Guide v1.0",
@@ -51,7 +51,7 @@
             "kvalue": 9
         },
         "LR300": {
-            "type": "Loft",
+            "category": "Loft",
             "name": "Insulated loft 300mm",
             "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
             "source":"Domestic Heating Design Guide v1.0",
@@ -60,7 +60,7 @@
         },
         
         "WW01": {
-            "type": "Window",
+            "category": "Window",
             "name": "Single glazed window timber or PVC",
             "description": "",
             "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
@@ -71,7 +71,7 @@
             "ff": "0.7"
         },
         "WW02": {
-            "type": "Window",
+            "category": "Window",
             "name": "Secondary glazed window timber or PVC",
             "description": "",
             "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
@@ -82,7 +82,7 @@
             "ff": "0.7"
         },
         "WW03": {
-            "type": "Window",
+            "category": "Window",
             "name": "Double glazed window, 12mm, timber or PVC",
             "description": "Double glazed window, pre-2002, 12mm, timber or PVC",
             "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
@@ -93,7 +93,7 @@
             "ff": "0.7"
         },
         "WW04": {
-            "type": "Window",
+            "category": "Window",
             "name": "Double glazed window, low-E, 12mm, timber or PVC",
             "description": "Double glazed window, low-E glass, 12mm, timber or PVC",
             "source":"Domestic Heating Design Guide v1.0",
@@ -104,7 +104,7 @@
             "ff": "0.7"
         },
         "WW05": {
-            "type": "Window",
+            "category": "Window",
             "name": "Double glazed window, low-E, argon, 12mm, timber or PVC",
             "description": "Double glazed window, low-E glass, argon filled, 12mm, timber or PVC",
             "source":"Domestic Heating Design Guide v1.0",
@@ -115,7 +115,7 @@
             "ff": "0.7"
         },
         "WW06": {
-            "type": "Window",
+            "category": "Window",
             "name": "Triple glazed window, timber or PVC",
             "description": "",
             "source":"Domestic Heating Design Guide v1.0",
@@ -126,7 +126,7 @@
             "ff": "0.7"
         },
         "WW07": {
-            "type": "Window",
+            "category": "Window",
             "name": "Triple glazed window, low-E, 12mm, timber or PVC",
             "description": "Triple glazed window, low-E glass, 12mm, timber or PVC",
             "source":"Domestic Heating Design Guide v1.0",
@@ -137,7 +137,7 @@
             "ff": "0.7"
         },
         "WW08": {
-            "type": "Window",
+            "category": "Window",
             "name": "Triple glazed window, low-E, argon, 12mm, timber or PVC",
             "description": "Triple glazed window, low-E glass, argon filled, 12mm, timber or PVC",
             "source":"Domestic Heating Design Guide v1.0",
