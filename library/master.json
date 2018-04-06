@@ -333,14 +333,14 @@
     },
     "intentional_vents_and_flues_measures": {
         "IV_07": {
-            "name": "Chimney Balloon\/Pillow (low level)",
+            "name": "Chimney Balloon (low level)",
             "source": "SAP (inferred)",
             "type": "Measure",
             "ventilation_rate": 20,
             "description": ""
         },
         "IV_08": {
-            "name": "Chimney Balloon\/Pillow (high level)",
+            "name": "Chimney Balloon (high level)",
             "source": "SAP",
             "type": "Measure",
             "ventilation_rate": 20,
@@ -350,54 +350,49 @@
             "name": "Cap and fill Chimney",
             "type": "Measure",
             "ventilation_rate": 0,
-            "description": "Chimney sealed if not needed for ventilation, and filled with granular inert insulation. New weather-shield chimney pot fitted to top to prevent water ingress from above whilst allowing low level ventilation. "
+            "description": "Chimney sealed if not needed for ventilation, and filled with granular inert insulation. New weather-shield chimney pot fitted to top to prevent water ingress from above whilst allowing low level ventilation"
         },
         "IV_10": {
             "name": "Remove flueless gas fire",
             "type": "Measure",
             "ventilation_rate": 0,
-            "description": "Flueless gas fires are inefficient, cause draughts and carry risks of build up of carbon dioxide and carbon monoxide. They should be removed and avoided whererever possible. "
+            "description": "Flueless gas fires are inefficient, cause draughts and carry risks of build up of carbon dioxide and carbon monoxide"
         },
         "IV_11": {
             "name": "Remove open flue",
             "type": "Measure",
             "ventilation_rate": 0,
-            "description": "Open flues are usually associated with fuel burning appliances, for example flues or smaller chimneys (<200mm diameter) for older non-room sealed boilers and flues for solid fuel appliances. Where not needed, and where possible, these could be removed. "
+            "description": ""
         },
         "IV_12": {
             "name": "Remove gas fire",
             "type": "Measure",
             "ventilation_rate": 0,
-            "description": "Gas fires are inefficient, cause draughts and carry risks of build up of carbon dioxide and carbon monoxide. They should be removed and avoided whererever possible. ",
+            "description": "Gas fires are inefficient, cause draughts and carry risks of build up of carbon dioxide and carbon monoxide"
         }
     },
     "water_usage": {
         "HW_01": {
             "name": "Standard Water Use",
-            "source": "",
             "description": ""
         },
         "HW_02": {
             "name": "Spray Taps",
-            "source": "",
             "description": "Low flow taps fitted to reduce hot water consumption. Kitchen & utility room taps could allow manual over-ride of low-flow when needed for filling sinks\/ buckets etc.",
             "performance": "4 litres\/minute"
         },
         "HW_03": {
             "name": "Flow Restrictor for Taps",
-            "source": "",
             "description": "Retrofit flow-restrictors to existing hot water taps to reduce hot water cons",
             "performance": "4 litres\/minute"
         },
         "HW_04": {
             "name": "Low-Flow Shower Head",
-            "source": "",
             "description": "Fit new aerating spray head shower head to reduce water flow and hot water demand.",
             "performance": "8 litres\/minute"
         },
         "HW_05": {
             "name": "Replace Electric Shower with Direct Feed from Hot Water supply.",
-            "source": "",
             "description": "New direct hot water feed low-flow shower to reduce hot water consumption and energy use (uses mains hot water system rather than own electric heating element).",
             "performance": "8 litres\/minute"
         }
