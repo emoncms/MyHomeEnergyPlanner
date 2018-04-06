@@ -374,7 +374,7 @@ libraryHelper.prototype.add_events = function () {
         myself.onChangeEmptyOrCopyLibrary();
     });
     this.container.on('click', '#newlibrary', function () {
-        // myself.onCreateNewLibrary();
+        myself.onCreateNewLibrary();
     });
     this.container.on('click', '.use-from-lib', function () {
         $('.modal').modal('hide');
@@ -513,9 +513,9 @@ libraryHelper.prototype.append_modals = function () {
     var html;
     var myself = this;
     $.ajax({url: path + "Modules/assessment/js/library-helper/library-helper.html", datatype: "json", success: function (result) {
-            html = result;
-            myself.container.append(html);
-        }});
+        html = result;
+        myself.container.append(html);
+    }});
 };
 /************************************
  * Events methods
@@ -548,9 +548,9 @@ libraryHelper.prototype.onNewLibraryOption = function () {
     $('#create-library-message').html('');
     // Populate the select to choose library to copy
     var out = '';
-    // this.library_list[this.type].forEach(function (library) {
-    //    out += "<option value=" + library.id + ">" + library.name + "</option>";
-    //});
+    for (var z in this.library_list) {
+        out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";
+    }
     $("#library-to-copy-select").html(out);
     $('#new-library-name').val('New name');
     $(".modal").modal('hide');
@@ -576,7 +576,7 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
             $("#create-library-message").html('Library could not be created');
         if (typeof resultado == 'number') {
             myself.load_user_libraries();
-            myself.get_library_permissions();
+            // myself.get_library_permissions();
             $("#create-library-message").html('Library created');
             $('#cancelnewlibrary').hide('fast');
             $('#newlibrary').hide('fast');
@@ -593,13 +593,13 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
         console.log("newlibrary:" + name);
         if ($("input[name=empty_or_copy_library]:checked").val() == 'copy') {
             var id = $('#library-to-copy-select').val();
-            $.ajax({url: path + "assessment/copylibrary.json", data: "name=" + name + "&id=" + id + "&type=" + this.type, datatype: "json", success: function (result) {
-                    callback(result);
-                }});
+            $.ajax({url: path + "assessment/copylibrary.json", data: "name="+name+"&id="+id+"&linked=1", datatype: "json", success: function (result) {
+                callback(result);
+            }});
         } else {
             $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + name + "&type=" + this.type, datatype: "json", success: function (result) {
-                    callback(result);
-                }});
+                callback(result);
+            }});
         }
     }
 };
@@ -611,9 +611,9 @@ libraryHelper.prototype.onCreateInLibrary = function () {
     $('#modal-create-in-library #create-in-library-finish').hide('fast');
     // Populate the select to choose library to copy from
     var out = '';
-    this.library_list[this.type].forEach(function (library) {
-        out += "<option value=" + library.id + ">" + library.name + "</option>";
-    });
+    for (var z in this.library_list) {
+        out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";
+    }
     $("#origin-library-select").html(out);
     // Populate the select to choose item to copy from
     out = '';
@@ -693,9 +693,9 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     // Populate the selects library to choose a library and an item (used when replace the item with one from library)
     //Moved to onChangeApplyMeasureWhatToDo
     /*var out = '';
-     this.library_list[this.type].forEach(function (library) {
-     out += "<option value=" + library.id + ">" + library.name + "</option>";
-     });
+    for (var z in this.library_list) {
+        out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";
+    }
      $("#replace-from-lib").html(out);
      this.onChangeApplyMeasureReplaceFromLib(); // This one to populate the select for items
      */
@@ -1274,17 +1274,59 @@ libraryHelper.prototype.get_item_to_save = function (type) {
 /***************************************************
  * Other methods
  ***************************************************/
+ 
+libraryHelper.prototype.display_library_users = function (library_id) {
+    $.ajax({url: path + "assessment/getsharedlibrary.json", data: "id=" + library_id, success: function (shared) {
+        var out = "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>";
+        var write = "";
+        for (var i in shared) {
+            write = shared[i].write == 1 ? 'Yes' : 'No';
+            if (shared[i].username != p.author)
+                out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td><i style='cursor:pointer' class='icon-trash remove-user' library-id='" + library_id + "' username='" + shared[i].username + "'></i></td></tr>";
+            else
+                out += "<tr><td>" + shared[i].username + "</td><td>" + write + "</td><td>&nbsp;</td></tr>";
+        }
+        if (out == "<tr><th>Shared with:</th><th>Has write persmissions</th><th></th></tr>")
+            out = "<tr><td colspan='3'>This library is currently private</td></tr>";
+        $("#shared-with-table").html(out);
+    }});
+};
+ 
+ 
 libraryHelper.prototype.load_user_libraries = function (callback) {
+
+    var test = [];
+    $.ajax({ url: path+"assessment/listlibrary", dataType: 'json', async: false, success: function(result){
+        test = result;
+    }});
+    this.library_list = test;
     
-    var master = {};
-    $.ajax({ url: path+"assessment/load-lib.json", dataType: 'json', async: false, success: function(result){master = result;} });
-    this.library = master;
-        
+    //$.ajax({ url: path+"assessment/load-lib.json", dataType: 'json', async: false, success: function(result){
+    //   this.library = result;
+    //} });
+      
 };
 
 libraryHelper.prototype.get_library_by_id = function (id) {
     return this.library_list;
 };
+
+libraryHelper.prototype.onDeleteLibrary = function (library_id) {
+    $('#confirm-delete-library-modal #delete-library-ok').attr('library-id', library_id);
+    $('#confirm-delete-library-modal').modal('show');
+}
+libraryHelper.prototype.onDeleteLibraryOk = function (library_id) {
+    var myself = this;
+    $.ajax({url: path + "assessment/deletelibrary.json", data: "library_id=" + library_id, async: false, datatype: "json", success: function (result) {
+            if (result == 1) {
+                $('#confirm-delete-library-modal').modal('hide');
+                myself.init();
+                UpdateUI();
+            }
+            else
+                $('#confirm-delete-library-modal .message').html('Library could not be deleted - ' + result);
+        }});
+}
 
 libraryHelper.prototype.populate_measure_new_item = function (type_of_library) {
     console.log("populate_measure_new_item:"+type_of_library);
@@ -1305,9 +1347,9 @@ libraryHelper.prototype.populate_measure_new_item = function (type_of_library) {
 libraryHelper.prototype.populate_library_modal = function (origin) {
     // Populate the select to choose library to display
     var out = '';
-    // this.library_list[this.type].forEach(function (library) {
-    //     out += "<option value=" + library.id + ">" + library.name + "</option>";
-    // });
+    for (var z in this.library_list) {
+        out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";
+    }
     out += "<option value=-1 class='newlibraryoption' style='background-color:#eee'>Create new</option>";
     $("#library-select").html(out);
     // Heading of the modal
@@ -1330,9 +1372,9 @@ libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type
 
 libraryHelper.prototype.get_list_of_libraries_for_select = function (library_type) {
     var out = ''
-    this.library_list[library_type].forEach(function (library) {
-        out += "<option value=" + library.id + ">" + library.name + "</option>";
-    });
+    for (var z in this.library_list) {
+        out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";
+    }
     return out;
 }
 

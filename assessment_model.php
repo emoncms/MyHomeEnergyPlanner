@@ -293,17 +293,17 @@ class Assessment {
 
     public function listlibrary($userid) {
         $userid = (int) $userid;
-        $result = $this->mysqli->query("SELECT id FROM element_library_access WHERE `userid`='$userid'");
+        $result = $this->mysqli->query("SELECT id FROM mhep_library_access WHERE `userid`='$userid' OR `public`='1'");
 
         $loadedlibs = array();
 
         $libraries = array();
         while ($row = $result->fetch_object()) {
             $id = $row->id;
-            $libresult = $this->mysqli->query("SELECT id,name,type FROM element_library WHERE `id`='$id'");
+            $libresult = $this->mysqli->query("SELECT id,name FROM mhep_library WHERE `id`='$id'");
             $librow = $libresult->fetch_object();
             if (!in_array($id, $loadedlibs))
-                $libraries[] = json_encode(json_decode($librow));
+                $libraries[] = $librow;
             $loadedlibs[] = $id;
         }
 
@@ -311,10 +311,10 @@ class Assessment {
         $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");   // get list of org that user belongs to
         while ($row = $result->fetch_object()) {
             $orgid = $row->orgid;
-            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");     // get list of libraries that belong to org
+            $result2 = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `orgid`='$orgid'");     // get list of libraries that belong to org
             while ($row2 = $result2->fetch_object()) {
                 $id = $row2->id;
-                $libresult = $this->mysqli->query("SELECT id,name,type FROM element_library WHERE `id`='$id'");      // get library id and name
+                $libresult = $this->mysqli->query("SELECT id,name FROM mhep_library WHERE `id`='$id'");      // get library id and name
                 $librow = $libresult->fetch_object();
                 if (!in_array($id, $loadedlibs))
                     $libraries[] = json_encode(json_decode($librow));
@@ -326,42 +326,8 @@ class Assessment {
     }
 
     public function loaduserlibraries($userid) {
-        $userid = (int) $userid;
-        $result = $this->mysqli->query("SELECT id FROM element_library_access WHERE `userid`='$userid'");
-
-        $loadedlibs = array();
-
-        $libraries = array();
-        while ($row = $result->fetch_object()) {
-            $id = $row->id;
-            $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");
-            if ($libresult->num_rows > 0) {
-                $librow = $libresult->fetch_object();
-                if (!in_array($id, $loadedlibs)) {
-                    $librow->data = json_encode(json_decode($librow->data));
-                    $libraries[] = $librow;
-                }
-                $loadedlibs[] = $id;
-            }
-        }
-
-        // Load organisation libraries
-        $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");   // get list of org that user belongs to
-        while ($row = $result->fetch_object()) {
-            $orgid = $row->orgid;
-            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");     // get list of libraries that belong to org
-            while ($row2 = $result2->fetch_object()) {
-                $id = $row2->id;
-                $libresult = $this->mysqli->query("SELECT id,name,type,data FROM element_library WHERE `id`='$id'");      // get library id and name
-                $librow = $libresult->fetch_object();
-                if (!in_array($id, $loadedlibs)) {
-                    $librow->data = json_encode(json_decode($librow->data));
-                    $libraries[] = $librow;
-                }
-                $loadedlibs[] = $id;
-            }
-        }
-
+        $libraries = listlibrary($userid);
+        // Load in data content here
         return $libraries;
     }
 
@@ -369,97 +335,78 @@ class Assessment {
         $userid = (int) $userid;
         $id = (int) $id;
         if (!$this->has_access_library($userid, $id))
-            return false;
+            return array("success"=>false,"message"=>"you do not have read access to this library");
 
-        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id`='$id'");
-
-        if ($result->num_rows == 1) {
-            $row = $result->fetch_object();
-            return json_decode($row->data);
-        } else {
-            return new stdClass();
-        }
+        $library = file_get_contents("/var/lib/mhep/$id.json");
+        return json_decode($library);
     }
 
-    public function newlibrary($userid, $name, $type = 'elements') {
+    public function newlibrary($userid, $name) {
         $userid = (int) $userid;
         $name = preg_replace('/[^\w\s-]/', '', $name);
-        $type = preg_replace('/[^\w\s-]/', '', $type);
-
-        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `name`='$name' AND `type`='$type'");
-        if ($result->num_rows == 1) {
-            return "Name already exists";
-        }
-
-        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`,`type`) VALUES ('$userid','$name','{}','$type')");
+        
+        $result = $this->mysqli->query("INSERT INTO mhep_library (`name`) VALUES ('$name')");
         $id = $this->mysqli->insert_id;
 
-        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
+        $result = $this->mysqli->query("INSERT INTO mhep_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
+        
+        $fh = fopen("/var/lib/mhep/$id.json","w");
+        fwrite($fh,json_encode(array("inherit"=>false),JSON_PRETTY_PRINT));
+        fclose($fh);
+        
         return $id;
     }
 
-    public function copylibrary($userid, $name, $type = 'elements', $id) {
+    public function copylibrary($userid, $name, $id, $linked) {
         $userid = (int) $userid;
         $name = preg_replace('/[^\w\s-]/', '', $name);
-        $type = preg_replace('/[^\w\s-]/', '', $type);
         $id = (int) $id;
+        $linked = (int) $linked;
 
-        if (!$this->has_access_library($userid, $id))
-            return "You have not got access to that library";
+        if (!$library = $this->loadlibrary($userid, $id)) return false;
 
-        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `name`='$name' AND `type`='$type'");
-        if ($result->num_rows == 1) {
-            return "Name already exists";
-        }
+        $result = $this->mysqli->query("INSERT INTO mhep_library (`name`) VALUES ('$name')");
+        $new_id = $this->mysqli->insert_id;
+        
+        if ($linked==1) $library = array("inherit"=>$id);
+        
+        $fh = fopen("/var/lib/mhep/$new_id.json","w");
+        fwrite($fh,json_encode($library,JSON_PRETTY_PRINT));
+        fclose($fh);
 
-        $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id`='$id'");
-        if ($result->num_rows == 1) {
-            $row = $result->fetch_object();
-        } else {
-            return "Library not found";
-        }
-
-        $result = $this->mysqli->query("INSERT INTO element_library (`userid`,`name`,`data`,`type`) VALUES ('$userid','$name','$row->data','$type')");
-        $id = $this->mysqli->insert_id;
-
-        $result = $this->mysqli->query("INSERT INTO element_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$id','$userid','0','1')");
-        return $id;
+        $result = $this->mysqli->query("INSERT INTO mhep_library_access (`id`,`userid`,`orgid`,`write`) VALUES ('$new_id','$userid','0','1')");
+        return $new_id;
     }
 
     public function savelibrary($userid, $id, $data) {
         $userid = (int) $userid;
         $id = (int) $id;
         if (!$this->has_write_access_library($userid, $id))
-            return false;
-
-        $data = $this->escape_item($data);
+            return array("success"=>false,"message"=>"you do not have write access to this library");
+            
+        // Decode and check
         $data = json_decode($data);
         if ($data==null) return false;
+                
+        $fh = fopen("/var/lib/mhep/$id.json","w");
+        fwrite($fh,json_encode($data,JSON_PRETTY_PRINT));
+        fclose($fh);
         
-        $data = json_encode($data);
-        
-        $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE userid=? AND id=?");
-        $stmt->bind_param("sii", $data, $userid, $id);
-        $stmt->execute();
-        $affected_rows = $stmt->affected_rows;
-        $stmt->close();
-        if ($affected_rows == 1) return true;
-        
-        return false;
+        return true;
     }
 
     public function has_access_library($userid, $id) {
         $id = (int) $id;
         $userid = (int) $userid;
         // Check if user has direct or shared access
-        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid' AND `id`='$id'");
+        $result = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `id`='$id' AND (`userid`='$userid' OR `public`='1')");
         if ($result->num_rows == 1)
             return true;
 
         $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
         while ($row = $result->fetch_object()) {
             $orgid = $row->orgid;
-            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid' AND `id`='$id'");
+            $result2 = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `orgid`='$orgid' AND `id`='$id'");
             if ($result2->num_rows == 1)
                 return true;
         }
@@ -469,14 +416,14 @@ class Assessment {
         $id = (int) $id;
         $userid = (int) $userid;
         // Check if user has direct or shared access
-        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid' AND `id`='$id' AND `write`='1'");
+        $result = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `userid`='$userid' AND `id`='$id' AND `write`='1'");
         if ($result->num_rows == 1)
             return true;
 
         $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
         while ($row = $result->fetch_object()) {
             $orgid = $row->orgid;
-            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid' AND `id`='$id' AND `write`='1'");
+            $result2 = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `orgid`='$orgid' AND `id`='$id' AND `write`='1'");
             if ($result2->num_rows == 1)
                 return true;
         }
@@ -501,36 +448,36 @@ class Assessment {
                 $row = $result->fetch_object();
                 $orgid = $row->id;
 
-                $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id' AND `orgid`='$orgid'");
+                $result = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `id` = '$id' AND `orgid`='$orgid'");
                 if ($result->num_rows == 1) {
                     // 1.1. Library already shared with this organisation, check if we have to update write permissions
                     $row = $result->fetch_object();
                     if ($row->write != $write_permissions) {
-                        $result = $this->mysqli->query("UPDATE `element_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `orgid`='$orgid'");
+                        $result = $this->mysqli->query("UPDATE `mhep_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `orgid`='$orgid'");
                         return "Already shared, write permissions updated";
                     } else
                         return "Already shared";
                 }
 
                 // $this->org_access($id,$orgid,1);
-                $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '$write_permissions'");
+                $this->mysqli->query("INSERT INTO mhep_library_access SET `id` = '$id', `userid` = '0', `orgid` = '$orgid', `write` = '$write_permissions'");
                 return "Library shared";
             }
         } else {
             // 2. Check if already shared with user
-            $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id' AND `userid`='$userid'");
+            $result = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `id` = '$id' AND `userid`='$userid'");
             if ($result->num_rows == 1) {
                 // 2.1. Library already shared with this user, check if we have to update write permissions
                 $row = $result->fetch_object();
                 if ($row->write != $write_permissions) {
-                    $result = $this->mysqli->query("UPDATE `element_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `userid`='$userid'");
+                    $result = $this->mysqli->query("UPDATE `mhep_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `userid`='$userid'");
                     return "Already shared, write permissions updated";
                 } else
                     return "Already shared";
             }
 
             // 3. Register share
-            $this->mysqli->query("INSERT INTO element_library_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '$write_permissions'");
+            $this->mysqli->query("INSERT INTO mhep_library_access SET `id` = '$id', `userid` = '$userid', `orgid` = '0', `write` = '$write_permissions'");
             return "Library shared";
         }
         return 'User or organisation not found';
@@ -542,12 +489,15 @@ class Assessment {
         if (!$this->has_access_library($userid, $id))
             return false;
 
-        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `id` = '$id'");
+        $result = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `id` = '$id'");
         $users = array();
         while ($row = $result->fetch_object()) {
             global $user;
+            $username = "public";
             if ($row->userid != 0)
                 $username = $user->get_name($row->userid);
+                if ($username==null) $username = $user->get_username($row->userid);
+                
             if ($row->orgid != 0) {
                 $orgid = $row->orgid;
                 $orgresult = $this->mysqli->query("SELECT * FROM organisations WHERE `id`='$orgid'");
@@ -563,7 +513,7 @@ class Assessment {
         $userid = (int) $userid;
         $user_permisions = array();
 
-        $result = $this->mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid'");
+        $result = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `userid`='$userid'");
         while ($row = $result->fetch_object()) {
             $user_permisions[$row->id] = array('write' => $row->write);
         }
@@ -571,7 +521,7 @@ class Assessment {
         $result = $this->mysqli->query("SELECT orgid FROM organisation_membership WHERE `userid`='$userid'");
         while ($row = $result->fetch_object()) {
             $orgid = $row->orgid;
-            $result2 = $this->mysqli->query("SELECT * FROM element_library_access WHERE `orgid`='$orgid'");
+            $result2 = $this->mysqli->query("SELECT * FROM mhep_library_access WHERE `orgid`='$orgid'");
             while ($row = $result2->fetch_object()) {
                 $user_permisions[$row->id] = array('write' => $row->write);
             }
@@ -598,14 +548,14 @@ class Assessment {
                 $row = $result->fetch_object();
                 $orgid = $row->id;
 
-                $result = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$selected_library' AND `orgid`='$orgid'");
+                $result = $this->mysqli->query("DELETE FROM mhep_library_access WHERE `id` = '$selected_library' AND `orgid`='$orgid'");
                 $result = $result == true ? 'Organisation removed' : 'Organisation could not be removed';
                 return $result;
             }
         } else { // $user_to_remove is a user
             if ($userid == $user_to_remove_id)
                 return "You cannot remove yourself";
-            $result = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$selected_library' AND `userid`='$user_to_remove_id'");
+            $result = $this->mysqli->query("DELETE FROM mhep_library_access WHERE `id` = '$selected_library' AND `userid`='$user_to_remove_id'");
             $result = $result == true ? 'User removed' : 'User could not be removed';
             return $result;
         }
@@ -621,7 +571,7 @@ class Assessment {
         if (!$this->has_write_access_library($userid, $library_id))
             return "You haven't got enough permissions";
         else {
-            $stmt = $this->mysqli->prepare("UPDATE element_library SET name=? WHERE id=?");
+            $stmt = $this->mysqli->prepare("UPDATE mhep_library SET name=? WHERE id=?");
             $stmt->bind_param("si", $new_library_name, $library_id);
             $stmt->execute();
             $affected_rows = $stmt->affected_rows;
@@ -639,99 +589,14 @@ class Assessment {
         if (!$this->has_write_access_library($userid, $library_id))
             return "You haven't got enough permissions";
         else {
-            $result1 = $this->mysqli->query("DELETE FROM element_library WHERE `id` = '$library_id'");
-            $result2 = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$library_id'");
-            if ($result1 == 1 && $result2 == 1)
+            $result1 = $this->mysqli->query("DELETE FROM mhep_library WHERE `id` = '$library_id'");
+            $result2 = $this->mysqli->query("DELETE FROM mhep_library_access WHERE `id` = '$library_id'");
+            if ($result1 == 1 && $result2 == 1) {
+                unlink("/var/lib/mhep/$library_id.json");
                 return 1;
-            else
+            } else { 
                 return 'There was a problem deleting the library from the database';
-        }
-    }
-
-    public function deletelibraryitem($userid, $library_id, $tag) {
-        $userid = (int) $userid;
-        $library_id = (int) $library_id;
-        $tag = preg_replace('/[^\w\s]/', '', $tag);
-        if (!$this->has_write_access_library($userid, $library_id))
-            return "You haven't got enough permissions";
-        else {
-            $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id` = '$library_id'");
-            $row = $result->fetch_object();
-            $library = json_decode($row->data, true);
-            if (!isset($library[$tag]))
-                return "Tag could not be found in the library - tag: $tag";
-            unset($library[$tag]);
-            $library = json_encode($library);
-            
-            // Save with prepared statement
-            $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE id=?");
-            $stmt->bind_param("si", $library, $library_id);
-            $stmt->execute();
-            $affected_rows = $stmt->affected_rows;
-            $stmt->close();
-            if ($affected_rows == 1) return true;
-            
-            return false;
-        }
-    }
-
-    public function additemtolibrary($userid, $library_id, $item, $tag) {
-        $userid = (int) $userid;
-        $library_id = (int) $library_id;
-        //$item = preg_replace('/[^\w\s"\':\,{}]/', '', $item);
-        //$item=  json_decode($item);//$item = json_encode(json_decode($item));
-        $item = $this->escape_item($item);
-        $item = json_decode($item);
-        $tag = preg_replace('/[^\w\s]/', '', $tag);
-        if (!$this->has_write_access_library($userid, $library_id)) {
-            return "You haven't got enough permissions";
-        } else {
-            $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id` = '$library_id'");
-            $row = $result->fetch_object();
-            $library = json_decode($row->data, true);
-
-            $library[$tag] = $item;                     // add item to library object
-            $library = json_encode($library);           // covert to json string
-            
-            // Save with prepared statement
-            $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE id=?");
-            $stmt->bind_param("si", $library, $library_id);
-            $stmt->execute();
-            $affected_rows = $stmt->affected_rows;
-            $stmt->close();
-            if ($affected_rows == 1) return true;
-            
-            return false;
-        }
-    }
-
-    public function edititeminlibrary($userid, $library_id, $item, $tag) {
-        $result = $this->additemtolibrary($userid, $library_id, $item, $tag);
-        return $result;
-    }
-
-    public function escape_item($item) {
-        $item = preg_replace('/[^\w\s-+."%,:{}\/\[\]\\\]/', '', $item);
-        //$item = str_replace("'", "\\'", $item);
-        return $item;
-    }
-
-    public function edit_item_in_all_libraries($library_type, $tag, $field, $value) {
-    
-        $library_type = preg_replace('/[^\w\s-]/', '', $library_type); // Not stricly needed as only used internally
-    
-        $libresult = $this->mysqli->query("SELECT id,data FROM element_library WHERE `type` = '" . $library_type . "'");
-        foreach ($libresult as $row) {
-            $library = json_decode($row['data']);
-            foreach ($library as $key => $item) {
-                if ($key == $tag) {
-                    $item->$field = $value;
-                }
             }
-            $req = $this->mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
-            $library = json_encode($library);
-            $req->bind_param('si', $library, $row['id']);
-            $req->execute();
         }
     }
 

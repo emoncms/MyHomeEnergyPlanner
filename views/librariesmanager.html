@@ -34,7 +34,7 @@
     background-color:#dbd6ce;
 }
 
-input[type=text] {
+.libval[type=text] {
     width:500px;
     border:0;
     background:none;
@@ -47,7 +47,7 @@ input[type=text] {
     box-shadow: none;
 }
 
-input[type=text]:focus {
+.libval[type=text]:focus {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -83,7 +83,15 @@ textarea:focus {
     <h3>Library Manager</h3>
     <hr><br>
     
-    <select id="lib-list"></select>
+    <button class="btn" id="delete-library" style="float:right"><i class="icon-trash"></i> Delete</button>
+    <button class="btn" id="share-library" style="float:right; margin-right:5px"><i class="icon-user"></i> Manage users</button>
+    <button class="btn" id="new-library" style="float:right; margin-right:5px"><i class="icon-plus"></i> New</button>
+
+    
+    <div class="input-append input-prepend">
+      <span class="add-on">Select library</span>
+      <select id="lib-list"></select>
+    </div>
     
     <div id="libmanout">
     
@@ -110,9 +118,12 @@ textarea:focus {
     <button id="revert-changes" class="btn">Revert changes</button>
 </div>
 
+
 <script>
 
-var libraries = {};
+var library_helper = new libraryHelper("",$("#openbem"));
+var libraries = library_helper.library_list;
+
 var master = {};
 var user_changes = {};
 var l1 = false;
@@ -120,26 +131,33 @@ var l2 = false;
 var l3 = false;
 var master_copy = {};
 var local_changes = {};
-var selected_library = "master";
-    
+var selected_library = 1;
 
-$.ajax({ url: path+"assessment/lib-list.json", dataType: 'json', async: false, success: function(result){
-    libraries = result;
-    var out = "";
-    for (var z in libraries) {
-        var selected = ""; if (libraries[z]==selected_library) selected = "selected";
-        out += "<option "+selected+">"+libraries[z]+"</option>";
-    }
-    $("#lib-list").html(out);
-}});
+var out = "";
+for (var z in libraries) {
+    var selected = ""; if (libraries[z].id==selected_library) selected = "selected";
+    out += "<option value="+libraries[z].id+" "+selected+">"+libraries[z].name+"</option>";
+}
+$("#lib-list").html(out);
 
 load_library();
 
 function load_library()
 {
-    $.ajax({ url: path+"assessment/load-lib.json?name="+selected_library, dataType: 'json', async: false, success: function(result){master = result;} });
-    $.ajax({ url: path+"assessment/load-user-lib.json?name="+selected_library, dataType: 'json', async: false, success: function(result){user_changes = result;} });
-
+    $.ajax({ url: path+"assessment/loadlibrary?id="+selected_library, dataType: 'json', async: false, success: function(result){
+    
+        if (result.inherit!=false) {
+            user_changes = result;
+            
+            $.ajax({ url: path+"assessment/loadlibrary?id="+result.inherit, dataType: 'json', async: false, success: function(result){
+                master = result;
+            }});
+        } else {
+            master = result;
+            user_changes = {};
+        }
+    }});
+    
     l1 = false;
     l2 = false;
     l3 = false;
@@ -158,9 +176,15 @@ function load_library()
 
 function draw_library_manager()
 {
+    $("#libman-m1").html("");
+    $("#libman-m2").html("");
+    $("#libman-m3").html("");
+    
     var out = "";
     for (var z in master_copy) {
-        out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
+        if (["inherit"].indexOf(z)<0) {
+            out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
+        }
     }
     $("#libman-m1").html(out);
 
@@ -243,9 +267,12 @@ $("#libmanout").on("change",".libval",function() {
 });
 
 $("#save-lib").click(function(){
-    $.ajax({ type: 'POST', url: path+"assessment/save-lib.json?name="+selected_library, data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
+    $.ajax({ type: 'POST', url: path+"assessment/savelibrary", data: "id="+selected_library+"&data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
         success: function(result){ 
-            console.log(result); 
+            if (result.success!=undefined && !result.success) {
+                alert(result.message.ucfirst());
+            } 
+            console.log(result);
             $("#save-lib").hide();
         } 
     });
@@ -258,27 +285,50 @@ $("#revert-changes").click(function(){
     
     draw_library_manager();
 
-    $.ajax({ type: 'POST', url: path+"assessment/save-lib.json?name="+selected_library, data: "data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
+    $.ajax({ type: 'POST', url: path+"assessment/savelibrary", data: "id="+selected_library+"&data="+JSON.stringify(local_changes), dataType: 'json', async: true, 
         success: function(result){ 
+            if (result.success!=undefined && !result.success) {
+                alert(result.message.ucfirst());
+            }
             console.log(result); 
             $("#save-lib").hide();
         } 
     });
 });
 
+$("#new-library").click(function(){
+    library_helper.onNewLibraryOption();
+});
+
+$("#delete-library").click(function(){
+    library_helper.onDeleteLibrary(selected_library);
+});
+
+$("#share-library").click(function(){
+    library_helper.display_library_users(selected_library);
+    $('#modal-share-library').modal('show');
+});
+
+
+
 // ---------------------------------------------------------------------------------
 // Apply changes
 // ---------------------------------------------------------------------------------
-function apply_changes(A,changes) {
-    var result = A;
-    for (var cat in changes) {
-        for (var key in changes[cat]) {
-            for (var prop in changes[cat][key]) {
-                result[cat][key][prop] = changes[cat][key][prop];
+function apply_changes(A,B) {
+    var C = A;
+    for (var cat in B) {
+    
+        if (["array","object"].indexOf(typeof B[cat])>=0) {
+            for (var key in B[cat]) {
+                for (var prop in B[cat][key]) {
+                    C[cat][key][prop] = B[cat][key][prop];
+                }
             }
+        } else {
+            C[cat] = B[cat];
         }
     }
-    return result;
+    return C;
 }
 
 // ---------------------------------------------------------------------------------
@@ -287,14 +337,18 @@ function apply_changes(A,changes) {
 function json_diff(A,B) {
     var C = {};
     for (var cat in A) {
-        for (var key in A[cat]) {
-            for (var prop in A[cat][key]) {
-                if (A[cat][key][prop]!=B[cat][key][prop]) {
-                    if (C[cat]==undefined) C[cat] = {};
-                    if (C[cat][key]==undefined) C[cat][key] = {};
-                    C[cat][key][prop] = B[cat][key][prop];
+        if (["array","object"].indexOf(typeof A[cat])>=0) {
+            for (var key in A[cat]) {
+                for (var prop in A[cat][key]) {
+                    if (A[cat][key][prop]!=B[cat][key][prop]) {
+                        if (C[cat]==undefined) C[cat] = {};
+                        if (C[cat][key]==undefined) C[cat][key] = {};
+                        C[cat][key][prop] = B[cat][key][prop];
+                    }
                 }
             }
+        } else {
+            if (A[cat]!=B[cat]) C[cat] = B[cat];
         }
     }
     return C;

@@ -6,50 +6,9 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 function assessment_controller() {
     global $session, $route, $mysqli, $fullwidth;
     $fullwidth = true;
-
-    /* --------------------------------------------------------------------------
-      // Backwards compatibility:
-      // During development, i am finding many situations when we need to do something
-      // make what is implemented compatible with the previous version. This section
-      // is here fot his pourpose and will be deleted when the final realease is made
-      //---------------------------------------------------------------------------- */
-    /* if (!isset($_SESSION['backwards_comp'])) { // We only run when we start the session
-      $_SESSION['backwards_comp'] = true;
-      }
-     */
-
-    /*$libresult = $mysqli->query("SELECT `id`, `data` FROM `element_library` WHERE `type`='elements_measures'");
-    foreach ($libresult as $row) {
-        $data = json_decode($row['data']);
-        foreach ($data as $element) {
-            $element->min_cost = 100;
-        }
-        $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
-        $data = json_encode($data);
-        $req->bind_param('si', $data, $row['id']);
-        $req->execute();
-    }*/
-    //require "Modules/assessment/assessment_model.php";
-    //$assessment = new Assessment($mysqli);
-    //$assessment->edit_item_in_all_libraries('elements', 'DRD04', 'uvalue', 2.6);
-
-
-    /* $libresult = $mysqli->query("SELECT id,data FROM assessment");
-      $i = 0;
-      foreach ($libresult as $row) {
-      $data = json_decode($row['data']);
-      $fuel = "7-Hour tariff - High Rate";
-      $data->master->fuels->$fuel->standingcharge = 79;
-      $fuel = "10-hour tariff - High Rate";
-      $data->master->fuels->$fuel->standingcharge = 77;
-      $req = $mysqli->prepare("UPDATE `assessment` SET `data`=? WHERE `id`=?");
-      $data = json_encode($data);
-      $req->bind_param('si', $data, $row['id']);
-      $req->execute();
-      } */
-
-    /* End backwards compatibility section */
-
+    
+    // Default route format
+    $route->format = 'json';
 
 // -------------------------------------------------------------------------
 // Check if session has been authenticated, if not redirect to login page (html) 
@@ -67,14 +26,15 @@ function assessment_controller() {
 // Session is authenticated so we run the action
 // -------------------------------------------------------------------------
     $result = false;
-    if ($route->format == 'html') {
-        if ($route->action == "view" && $session['write'])
-            $result = view("Modules/assessment/view.php", array());
-        if ($route->action == "print" && $session['write'])
-            $result = view("Modules/assessment/print.php", array());
-
-        if ($route->action == "list" && $session['write'])
-            $result = view("Modules/assessment/projects.php", array());
+    if ($route->action == "view") {
+        $route->format = 'html';
+        $result = view("Modules/assessment/view.php", array());
+    } else if ($route->action == "print") {
+        $route->format = 'html';
+        $result = view("Modules/assessment/print.php", array());
+    } else if ($route->action == "list") {
+        $route->format = 'html';
+        $result = view("Modules/assessment/projects.php", array());
     }
 
     if ($route->format == 'json') {
@@ -88,7 +48,7 @@ function assessment_controller() {
 // -------------------------------------------------------------------------------------------------------------
 // Create assessment
 // -------------------------------------------------------------------------------------------------------------
-        if ($route->action == 'create' && $session['write']) {
+        if ($route->action == 'create') {
             $result = $assessment->create($session['userid'], get('name'), get('description'));
 
             if (isset($_GET['org'])) {
@@ -100,7 +60,7 @@ function assessment_controller() {
 // -------------------------------------------------------------------------------------------------------------
 // List assessments
 // -------------------------------------------------------------------------------------------------------------
-        if ($route->action == 'list' && $session['write']) {
+        if ($route->action == 'list') {
             if (isset($_GET['orgid'])) {
                 $orgid = $_GET['orgid'];
                 $result = $assessment->get_org_list($orgid);
@@ -110,23 +70,23 @@ function assessment_controller() {
             }
         }
 
-        if ($route->action == 'delete' && $session['write'])
+        if ($route->action == 'delete')
             $result = $assessment->delete($session['userid'], get('id'));
-        if ($route->action == 'share' && $session['write'])
+        if ($route->action == 'share')
             $result = $assessment->share($session['userid'], get('id'), get('username'));
-        if ($route->action == 'getshared' && $session['write'])
+        if ($route->action == 'getshared')
             $result = $assessment->getshared($session['userid'], get('id'));
-        if ($route->action == 'get' && $session['write'])
+        if ($route->action == 'get')
             $result = $assessment->get($session['userid'], get('id'));
 
-        if ($route->action == 'setstatus' && $session['write']) {
+        if ($route->action == 'setstatus') {
             if (isset($_GET['status'])) {
                 $status = $_GET['status'];
                 $result = $assessment->set_status($session['userid'], get('id'), $status);
             }
         }
 
-        if ($route->action == 'setdata' && $session['write']) {
+        if ($route->action == 'setdata') {
             $data = null;
             if (isset($_POST['data']))
                 $data = $_POST['data'];
@@ -136,7 +96,7 @@ function assessment_controller() {
                 $result = $assessment->set_data($session['userid'], post('id'), $data);
         }
 
-        if ($route->action == 'setnameanddescription' && $session['write']) {
+        if ($route->action == 'setnameanddescription') {
             $name = null;
             if (isset($_POST['name']))
                 $name = $_POST['name'];
@@ -156,7 +116,7 @@ function assessment_controller() {
 // -------------------------------------------------------------------------------------------------------------
 // Organisation
 // -------------------------------------------------------------------------------------------------------------
-        if ($route->action == 'neworganisation' && $session['write'] && isset($_GET['orgname'])) {
+        if ($route->action == 'neworganisation' && isset($_GET['orgname'])) {
             $orgname = $_GET['orgname'];
             $orgid = $organisation->create($orgname, $session['userid']);
             if ($orgid) {
@@ -167,11 +127,11 @@ function assessment_controller() {
             }
         }
 
-        if ($route->action == 'getorganisations' && $session['write']) {
+        if ($route->action == 'getorganisations') {
             $result = $organisation->get_organisations($session['userid']);
         }
 
-        if ($route->action == "organisationaddmember" && $session['write']) {
+        if ($route->action == "organisationaddmember") {
             $orgid = (int) $_GET['orgid'];
             $username = $_GET['membername'];
             global $user;
@@ -190,103 +150,52 @@ function assessment_controller() {
 
 // -------------------------------------------------------------------------------------------------------------
 // Library
-// -------------------------------------------------------------------------------------------------------------        
-        if ($route->action == 'listlibrary' && $session['write'])
-            $result = $assessment->listlibrary($session['userid']);
+// -------------------------------------------------------------------------------------------------------------  
+        if ($session['write']) {
+              
+            if ($route->action == 'listlibrary')
+                $result = $assessment->listlibrary($session['userid']);
 
-        if ($route->action == 'newlibrary' && $session['write'])
-            $result = $assessment->newlibrary($session['userid'], get('name'), get('type'));
+            else if ($route->action == 'newlibrary')
+                $result = $assessment->newlibrary($session['userid'], get('name'));
 
-        if ($route->action == 'copylibrary' && $session['write'])
-            $result = $assessment->copylibrary($session['userid'], get('name'), get('type'), get('id'));
-        if ($route->action == 'savelibrary' && $session['write'] && isset($_POST['data'])) {
-            $result = $assessment->savelibrary($session['userid'], post('id'), $_POST['data']);
-        }
-        if ($route->action == 'additemtolibrary' && $session['write']) {
-            $result = $assessment->additemtolibrary($session['userid'], post('library_id'), $_POST["item"], $_POST['tag']);
-        }
-
-        if ($route->action == 'edititeminlibrary' && $session['write']) {
-            $result = $assessment->edititeminlibrary($session['userid'], post('library_id'), $_POST["item"], $_POST['tag']);
-        }
-
-        if ($route->action == 'loadlibrary' && $session['write'])
-            $result = $assessment->loadlibrary($session['userid'], get('id'));
-
-        if ($route->action == 'loaduserlibraries' && $session['write'])
-            $result = $assessment->loaduserlibraries($session['userid']);
-
-        if ($route->action == 'sharelibrary' && $session['write'])
-            $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'), get('write_permissions'));
-
-        if ($route->action == 'getsharedlibrary' && $session['write'])
-            $result = $assessment->getsharedlibrary($session['userid'], get('id'));
-
-        if ($route->action == 'getuserpermissions' && $session['write'])
-            $result = $assessment->getuserpermissions($session['userid']);
-
-        if ($route->action == 'removeuserfromsharedlibrary' && $session['write'])
-            $result = $assessment->removeuserfromsharedlibrary($session['userid'], get('library_id'), get('user_to_remove'));
-
-        if ($route->action == 'setlibraryname' && $session['write'])
-            $result = $assessment->setlibraryname($session['userid'], get('library_id'), get('new_library_name'));
-
-        if ($route->action == 'deletelibrary' && $session['write'])
-            $result = $assessment->deletelibrary($session['userid'], get('library_id'));
-
-        if ($route->action == 'deletelibraryitem' && $session['write'])
-            $result = $assessment->deletelibraryitem($session['userid'], get('library_id'), get('tag'));
-        
-        if ($route->action == 'lib-list' && $session['write']) {
-            $libraries = array();
-            
-            foreach (scandir("/var/lib/mhep/master") as $file) {
-                $tmp = explode(".json",$file);
-                if (count($tmp)==2) $libraries[] = $tmp[0];
-            }
-            
-            $userid = $session['userid'];
-            foreach (scandir("/var/lib/mhep/user_$userid") as $file) {
-                $tmp = explode(".json",$file);
-                if (count($tmp)==2) $libraries[] = $tmp[0];
-            }
-            
-            $result = $libraries;
-        }
-            
-        if ($route->action == 'load-lib' && $session['write']) {
-            $library = "master"; if (isset($_GET['name'])) $library = $_GET['name'];
-            $master = file_get_contents("/var/lib/mhep/master/$library.json");
-            $result = json_decode($master);
-        }
-        
-        if ($route->action == 'load-user-lib' && $session['write']) {
-            $library = "master"; if (isset($_GET['name'])) $library = $_GET['name'];
-            $userid = $session['userid'];
-            if (file_exists("/var/lib/mhep/user_$userid")) {
-                $master = file_get_contents("/var/lib/mhep/user_$userid/$library.json");
-                $result = json_decode($master);
-            }
-        }
-
-        if ($route->action == 'save-lib' && $session['write']) {
-        
-            if (isset($_POST['data'])) {
-                // Decode and check
-                $data = json_decode($_POST['data']);
-                if ($data==null) return false;
-               
-                $userid = $session['userid'];
+            else if ($route->action == 'copylibrary')
+                $result = $assessment->copylibrary($session['userid'], get('name'), get('id'), get('linked'));
                 
-                // Create user folder
-                if (!file_exists("/var/lib/mhep/user_$userid")) {
-                    mkdir("/var/lib/mhep/user_$userid", 0777, true);
+            else if ($route->action == 'savelibrary' && isset($_POST['data']))
+                $result = $assessment->savelibrary($session['userid'], post('id'), $_POST['data']);
+                
+            else if ($route->action == 'loadlibrary')
+                $result = $assessment->loadlibrary($session['userid'], get('id'));
+
+            else if ($route->action == 'loaduserlibraries')
+                $result = $assessment->loaduserlibraries($session['userid']);
+
+            else if ($route->action == 'sharelibrary')
+                $result = $assessment->sharelibrary($session['userid'], get('id'), get('name'), get('write_permissions'));
+
+            else if ($route->action == 'getsharedlibrary')
+                $result = $assessment->getsharedlibrary($session['userid'], get('id'));
+
+            else if ($route->action == 'getuserpermissions')
+                $result = $assessment->getuserpermissions($session['userid']);
+
+            else if ($route->action == 'removeuserfromsharedlibrary')
+                $result = $assessment->removeuserfromsharedlibrary($session['userid'], get('library_id'), get('user_to_remove'));
+
+            else if ($route->action == 'setlibraryname')
+                $result = $assessment->setlibraryname($session['userid'], get('library_id'), get('new_library_name'));
+
+            else if ($route->action == 'deletelibrary')
+                $result = $assessment->deletelibrary($session['userid'], get('library_id'));
+
+            else if ($route->action == 'setuplibraries') { 
+                $name = "master";
+                if ($result = $mysqli->query("INSERT INTO mhep_library (`name`) VALUES ('$name')")) {
+                    $id = $mysqli->insert_id;
+                    $mysqli->query("INSERT INTO mhep_library_access (`id`,`userid`,`orgid`,`write`,`public`) VALUES ('$id','0','0','0','1')");
+                    $result = $id;
                 }
-                
-                $library = "master"; if (isset($_GET['name'])) $library = $_GET['name'];
-                $fh = fopen("/var/lib/mhep/user_$userid/$library.json","w");
-                fwrite($fh,json_encode($data,JSON_PRETTY_PRINT));
-                fclose($fh);
             }
         }
         
@@ -295,10 +204,10 @@ function assessment_controller() {
 // -------------------------------------------------------------------------------------------------------------
 // Image gallery
 // -------------------------------------------------------------------------------------------------------------
-        // if ($route->action == 'uploadimages' && $session['write'])
+        // if ($route->action == 'uploadimages')
         // $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
 
-        // if ($route->action == 'deleteimage' && $session['write'])
+        // if ($route->action == 'deleteimage')
         // $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
 
 

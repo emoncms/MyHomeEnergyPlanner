@@ -28,19 +28,17 @@ $schema['organisation_membership'] = array(
     'userid' => array('type' => 'int(11)')
 );
 
-$schema['element_library'] = array(
+$schema['mhep_library'] = array(
     'id' => array('type' => 'int(11)', 'Null'=>'NO', 'Key'=>'PRI', 'Extra'=>'auto_increment'),
-    'userid' => array('type' => 'int(11)'),
-    'name' => array('type' => 'text'),
-    'type' => array('type' => 'text'),
-    'data' => array('type' => 'MEDIUMTEXT')
+    'name' => array('type' => 'text')
 );
 
-$schema['element_library_access'] = array(
+$schema['mhep_library_access'] = array(
     'id' => array('type' => 'int(11)'),
     'userid' => array('type' => 'int(11)'),
     'orgid' => array('type' => 'int(11)'),
-    'write' => array('type' => 'int(11)')
+    'write' => array('type' => 'int(11)'),
+    'public'=> array('type' => 'int(11)')
 );
 
 
