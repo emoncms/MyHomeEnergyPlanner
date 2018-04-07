@@ -1,151 +1,140 @@
 {
     "inherit":false,
     "elements":{
-        "DHDG_UB2":{
-            "type":"Wall",
-            "name":"Brick 228 mm, plaster",
-            "description":"Solid brick wall 228 mm, dense plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":2.11,
-            "kvalue":150
+        "Wall": {
+            "DHDG_UB2":{
+                "name":"Brick 228 mm, plaster",
+                "description":"Solid brick wall 228 mm, dense plaster",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue":2.11,
+                "kvalue":150
+            },
+            "DHDG_US3":{
+                "name":"Stone 610mm (24in)",
+                "description":"Solid stone wall 610 mm, unplastered",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue":1.68,
+                "kvalue":150
+            },
+            "DHDG_CW1":{
+                "name":"Cavity wall, plaster",
+                "description":"Brick 102mm, air-space, brick 102mm, 13mm plaster",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue":1.37,
+                "kvalue":150
+            },
+            "DHDG_CW2":{
+                "name":"Filled Cavity wall, plaster",
+                "description":"Brick 102mm, Mineral Wool Slab 50mm, brick 102mm, 13mm plaster",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue":0.56,
+                "kvalue":150
+            }
         },
-        "DHDG_US3":{
-            "type":"Wall",
-            "name":"Stone 610mm (24in)",
-            "description":"Solid stone wall 610 mm, unplastered",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":1.68,
-            "kvalue":150
+        "Loft":{
+            "LR100": {
+                "name": "Insulated loft 100mm",
+                "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue": 0.34,
+                "kvalue": 9
+            },
+            "LR200": {
+                "name": "Insulated loft 200mm",
+                "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue": 0.18,
+                "kvalue": 9
+            },
+            "LR300": {
+                "name": "Insulated loft 300mm",
+                "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue": 0.12,
+                "kvalue": 9
+            }
         },
-        "DHDG_CW1":{
-            "type":"Wall",
-            "name":"Cavity wall, plaster",
-            "description":"Brick 102mm, air-space, brick 102mm, 13mm plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":1.37,
-            "kvalue":150
-        },
-        "DHDG_CW2":{
-            "type":"Wall",
-            "name":"Filled Cavity wall, plaster",
-            "description":"Brick 102mm, Mineral Wool Slab 50mm, brick 102mm, 13mm plaster",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue":0.56,
-            "kvalue":150
-        },
-        
-        "LR100": {
-            "type": "Loft",
-            "name": "Insulated loft 100mm",
-            "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue": 0.34,
-            "kvalue": 9
-        },
-        "LR200": {
-            "type": "Loft",
-            "name": "Insulated loft 200mm",
-            "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue": 0.18,
-            "kvalue": 9
-        },
-        "LR300": {
-            "type": "Loft",
-            "name": "Insulated loft 300mm",
-            "description": "Slates or tiles, sarking felt, ventilated air space, insulation between joists, 9.5 mm plasterboard",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue": 0.12,
-            "kvalue": 9
-        },
-        
-        "WW01": {
-            "type": "Window",
-            "name": "Single glazed window timber or PVC",
-            "description": "",
-            "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
-            "uvalue": 4.8,
-            "kvalue": 0,
-            "g": "0.85",
-            "gL": "0.9",
-            "ff": "0.7"
-        },
-        "WW02": {
-            "type": "Window",
-            "name": "Secondary glazed window timber or PVC",
-            "description": "",
-            "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
-            "uvalue": 2.4,
-            "kvalue": 0,
-            "g": "0.76",
-            "gL": "0.8",
-            "ff": "0.7"
-        },
-        "WW03": {
-            "type": "Window",
-            "name": "Double glazed window, 12mm, timber or PVC",
-            "description": "Double glazed window, pre-2002, 12mm, timber or PVC",
-            "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
-            "uvalue": 2.8,
-            "kvalue": 0,
-            "g": "0.76",
-            "gL": "0.8",
-            "ff": "0.7"
-        },
-        "WW04": {
-            "type": "Window",
-            "name": "Double glazed window, low-E, 12mm, timber or PVC",
-            "description": "Double glazed window, low-E glass, 12mm, timber or PVC",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue": 2.3,
-            "kvalue": 0,
-            "g": "0.76",
-            "gL": "0.8",
-            "ff": "0.7"
-        },
-        "WW05": {
-            "type": "Window",
-            "name": "Double glazed window, low-E, argon, 12mm, timber or PVC",
-            "description": "Double glazed window, low-E glass, argon filled, 12mm, timber or PVC",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue": 2.1,
-            "kvalue": 0,
-            "g": "0.76",
-            "gL": "0.8",
-            "ff": "0.7"
-        },
-        "WW06": {
-            "type": "Window",
-            "name": "Triple glazed window, timber or PVC",
-            "description": "",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue": 2.1,
-            "kvalue": 0,
-            "g": "0.76",
-            "gL": "0.8",
-            "ff": "0.7"
-        },
-        "WW07": {
-            "type": "Window",
-            "name": "Triple glazed window, low-E, 12mm, timber or PVC",
-            "description": "Triple glazed window, low-E glass, 12mm, timber or PVC",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue": 1.7,
-            "kvalue": 0,
-            "g": "0.76",
-            "gL": "0.8",
-            "ff": "0.7"
-        },
-        "WW08": {
-            "type": "Window",
-            "name": "Triple glazed window, low-E, argon, 12mm, timber or PVC",
-            "description": "Triple glazed window, low-E glass, argon filled, 12mm, timber or PVC",
-            "source":"Domestic Heating Design Guide v1.0",
-            "uvalue": 1.6,
-            "kvalue": 0,
-            "g": "0.76",
-            "gL": "0.8",
-            "ff": "0.7"
+        "Window":{
+            "WW01": {
+                "name": "Single glazed window timber or PVC",
+                "description": "",
+                "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+                "uvalue": 4.8,
+                "kvalue": 0,
+                "g": "0.85",
+                "gL": "0.9",
+                "ff": "0.7"
+            },
+            "WW02": {
+                "name": "Secondary glazed window timber or PVC",
+                "description": "",
+                "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+                "uvalue": 2.4,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "WW03": {
+                "name": "Double glazed window, 12mm, timber or PVC",
+                "description": "Double glazed window, pre-2002, 12mm, timber or PVC",
+                "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+                "uvalue": 2.8,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "WW04": {
+                "name": "Double glazed window, low-E, 12mm, timber or PVC",
+                "description": "Double glazed window, low-E glass, 12mm, timber or PVC",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue": 2.3,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "WW05": {
+                "name": "Double glazed window, low-E, argon, 12mm, timber or PVC",
+                "description": "Double glazed window, low-E glass, argon filled, 12mm, timber or PVC",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue": 2.1,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "WW06": {
+                "name": "Triple glazed window, timber or PVC",
+                "description": "",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue": 2.1,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "WW07": {
+                "name": "Triple glazed window, low-E, 12mm, timber or PVC",
+                "description": "Triple glazed window, low-E glass, 12mm, timber or PVC",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue": 1.7,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "WW08": {
+                "name": "Triple glazed window, low-E, argon, 12mm, timber or PVC",
+                "description": "Triple glazed window, low-E glass, argon filled, 12mm, timber or PVC",
+                "source":"Domestic Heating Design Guide v1.0",
+                "uvalue": 1.6,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            }
         }
     },
     "draught_proofing_measures": {
@@ -899,6 +888,171 @@
             "cost_units": "unit",
             "kWp": 3.9,
             "cost": 5850
+        }
+    },
+    
+    "fuels":{
+        "Gas": {
+            "Mains Gas":{
+                "standingcharge":101,
+                "fuelcost":4.25,
+                "co2factor":0.222,
+                "primaryenergyfactor":1.28,
+                "SAP_code":1
+            },
+            "Bulk LPG":{
+                "standingcharge":70,
+                "fuelcost":8.46,
+                "co2factor":0.242,
+                "primaryenergyfactor":1.166,
+                "SAP_code":2
+            },
+            "Bottled LPG ":{
+                "standingcharge":0,
+                "fuelcost":10.61,
+                "co2factor":0.242,
+                "primaryenergyfactor":1.166,
+                "SAP_code":3
+            }
+        },
+        "Oil":{
+            "Heating Oil":{
+                "standingcharge":0,
+                "fuelcost":5.43,
+                "co2factor":0.298,
+                "primaryenergyfactor":1.189,
+                "SAP_code":4
+            }
+        },
+        "Solid fuel":{
+            "House Coal":{
+                "standingcharge":0,
+                "fuelcost":4.01,
+                "co2factor":0.416,
+                "primaryenergyfactor":1.079,
+                "SAP_code":11
+            },
+            "Anthracite":{
+                "standingcharge":0,
+                "fuelcost":4.02,
+                "co2factor":0.416,
+                "primaryenergyfactor":1.079,
+                "SAP_code":15
+            },
+            "Manufactured smokeless fuel":{
+                "standingcharge":0,
+                "fuelcost":5.04,
+                "co2factor":0.490,
+                "primaryenergyfactor":1.265,
+                "SAP_code":12
+            },
+            "Wood Logs":{
+                "standingcharge":0,
+                "fuelcost":4.65,
+                "co2factor":0.390,
+                "primaryenergyfactor":1.058,
+                "SAP_code":20
+            },
+            "Wood Pellets secondary heating in bags":{
+                "standingcharge":0,
+                "fuelcost":6.3,
+                "co2factor":0.390,
+                "primaryenergyfactor":1.32,
+                "SAP_code":22
+            },
+            "Wood pellets main heating bulk supply":{
+                "standingcharge":0,
+                "fuelcost":5.7,
+                "co2factor":0.390,
+                "primaryenergyfactor":1.32,
+                "SAP_code":23
+            },
+            "Wood chips":{
+                "standingcharge":0,
+                "fuelcost":3.36,
+                "co2factor":0.390,
+                "primaryenergyfactor":1.174,
+                "SAP_code":21
+            },
+            "Dual Fuel Appliance":{
+                "standingcharge":0,
+                "fuelcost":4.36,
+                "co2factor":0.108,
+                "primaryenergyfactor":1.062,
+                "SAP_code":10
+            }
+        },
+        "Electricity":{
+            "7-Hour tariff - High Rate":{
+                "standingcharge":79,
+                "fuelcost":17.81,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":32
+            },
+            "7 Hour tariff - Low Rate":{
+                "standingcharge":0,
+                "fuelcost":6.67,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":31
+            },
+            "10-hour tariff - High Rate":{
+                "standingcharge":77,
+                "fuelcost":17.1,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":34
+            },
+            "10-hour tariff - Low Rate":{
+                "standingcharge":0,
+                "fuelcost":9.25,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":33
+            },
+            "24-hour heating tariff":{
+                "standingcharge":40,
+                "fuelcost":7.75,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":35
+            },
+            "Standard Tariff":{
+                "standingcharge":66,
+                "fuelcost":15.06,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":30
+            },
+            "Green Tariff 2016":{
+                "standingcharge":66,
+                "fuelcost":15.06,
+                "co2factor":0.218,
+                "primaryenergyfactor":2.50,
+                "SAP_code":30
+            },
+            "Green Tariff + 25% natural gas backup":{
+                "standingcharge":66,
+                "fuelcost":15.06,
+                "co2factor":0.090,
+                "primaryenergyfactor":1.70,
+                "SAP_code":30
+            },
+            "100% Green Tariff":{
+                "standingcharge":66,
+                "fuelcost":15.06,
+                "co2factor":0.0,
+                "primaryenergyfactor":1.60,
+                "SAP_code":30
+            },
+            "generation":{
+                "standingcharge":0,
+                "fuelcost":15.06,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":0
+            }
         }
     }
 }

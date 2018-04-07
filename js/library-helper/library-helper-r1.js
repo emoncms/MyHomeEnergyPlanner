@@ -1020,53 +1020,50 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
     out =  '<div class="input-prepend element-type" style="display:none" ><span class="add-on">Type</span>';
     out += '<select>';
 
-    var element_types = libraryDefaults.elements.type;
-    for (var z in element_types) {
-        var selected = type.toLowerCase() == element_types[z].toLowerCase() ? "selected" : "";
-        out += '<option value="'+element_types[z]+'" '+selected+'>'+element_types[z]+'</option>';
+    // var element_types = libraryDefaults.elements.type;
+    for (var z in element_library) {
+        var selected = type.toLowerCase() == z.toLowerCase() ? "selected" : "";
+        out += '<option value="'+z+'" '+selected+'>'+z+'</option>';
     }
     out += '</select></div>';
     
     // Elements
     out += '<table>';
-    for (z in element_library) {
-        if (element_library[z].type == type) {
-            var selected_class = ""; if (z==selected_lib) selected_class = "selected_lib";
-            out += "<tr class='librow "+selected_class+"' lib='" + z + "' type='" + type + "'>";
-            out += "<td>" + z + "</td>";
-            out += "<td>" + element_library[z].name;
-            out += "<br><span style='font-size:13px'><b>Source:</b> " + element_library[z].source + "</span>";
-            /*if (element_library[z].criteria.length)
-             out += "<br><span style='font-size:13px'><b>Measure criteria:</b> " + element_library[z].criteria.join(", ") + "</span>";
-             */
-            out += "</td>";
-            out += "<td style='font-size:13px'>";
-            
-            var uvalue = element_library[z].uvalue; if (typeof element_library[z].uvalue === 'object') uvalue = element_library[z].uvalue.mean;
-            out += "<b>U-value:</b> " + uvalue + " W/m<sup>2</sup>.K";
-            out += "<br><b>k-value:</b> " + element_library[z].kvalue + " kJ/m<sup>2</sup>.K";
-            if (element_library[z].type == "Window" || element_library[z].type == "Door" || element_library[z].type == "Roof_light") {
-                out += "<br><b>g:</b> " + element_library[z].g + ", ";
-                out += "<b>gL:</b> " + element_library[z].gL + ", ";
-                out += "<b>ff:</b> " + element_library[z].ff;
-            }
-            out += "</td>";
-            out += "<td >";
-            out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + element_library[z].type + "' tag='" + z + "'></i>";
-            out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' lib='" + z + "' type='" + element_library[z].type + "' tag='" + z + "'></i>";
-            // out += "<i class='icon-trash' style='margin-left:20px'></i>";
-            
-            // add-element & change-element handled in elements.js
-            var action = "add-element";
-            var row_attr = "";
-            if (selected_lib) { 
-                action = "change-element";
-                row_attr = "row="+element_row;
-            }
-            out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" lib='" + z + "' type='" + element_library[z].type + "'>use</button</i>";
-            out += "</td>";
-            out += "</tr>";
+    for (var z in element_library[type]) {
+        var element = element_library[type][z];
+        
+        var selected_class = ""; if (z==selected_lib) selected_class = "selected_lib";
+        out += "<tr class='librow "+selected_class+"' lib='" + z + "' type='" + type + "'>";
+        out += "<td>" + z + "</td>";
+        out += "<td>" + element.name;
+        out += "<br><span style='font-size:13px'><b>Source:</b> " + element.source + "</span>";
+
+        out += "</td>";
+        out += "<td style='font-size:13px'>";
+        
+        out += "<b>U-value:</b> " + element.uvalue + " W/m<sup>2</sup>.K";
+        out += "<br><b>k-value:</b> " + element.kvalue + " kJ/m<sup>2</sup>.K";
+        if (["Window","Door","Roof_light"].indexOf(type)>=0) {
+            out += "<br><b>g:</b> " + element.g + ", ";
+            out += "<b>gL:</b> " + element.gL + ", ";
+            out += "<b>ff:</b> " + element.ff;
         }
+        out += "</td>";
+        out += "<td >";
+        out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + type + "' tag='" + z + "'></i>";
+        out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' lib='" + z + "' type='" + type + "' tag='" + z + "'></i>";
+        // out += "<i class='icon-trash' style='margin-left:20px'></i>";
+        
+        // add-element & change-element handled in elements.js
+        var action = "add-element";
+        var row_attr = "";
+        if (selected_lib) { 
+            action = "change-element";
+            row_attr = "row="+element_row;
+        }
+        out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" lib='" + z + "' type='" + type + "'>use</button</i>";
+        out += "</td>";
+        out += "</tr>";
     }
     out += '</table>';
     return out;

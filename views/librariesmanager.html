@@ -4,38 +4,32 @@
     border: 1px solid #ccc;
 }
 
-#libman-m1-bound {
-    width:250px;
+.level-bound {
     border-right: 1px solid #ccc;
-    background-color:#dbd6ce;
     float:left;
 }
 
-#libman-m2-bound {
-    width:200px;
-    border-right: 1px solid #ccc;
-    background-color:#e9e6e1;
-    float:left;
-}
-
-#libman-m3-bound {
-    border-right: 1px solid #ccc;
-    background-color:#f7f6f5;
-    float:left;
-}
+.m1 { background-color:#dbd6ce; }
+.m2 { background-color:#e9e6e1; max-width:250px; }
+.m3 { background-color:#efedea; }
+.m4 { background-color:#f7f6f5; }
 
 .libman-item {
-    padding:3px;
+    padding: 3px 8px 3px 8px;
     border-bottom: 1px solid #ccc;
     cursor:pointer;
 }
 
+.active {
+    background-color:rgba(0,0,0,0.1);
+}
+
 .libman-item:hover {
-    background-color:#dbd6ce;
+    background-color:rgba(0,0,0,0.1);
 }
 
 .libval[type=text] {
-    width:500px;
+    width:100%;
     border:0;
     background:none;
     padding:0;
@@ -53,8 +47,10 @@
     box-shadow: none;
 }
 
+
+
 textarea {
-    width:500px;
+    width:100%;
     border:0;
     background:none;
     padding:0;
@@ -95,17 +91,21 @@ textarea:focus {
     
     <div id="libmanout">
     
-    <div id="libman-m1-bound">
-    <div id="libman-m1"></div>
-    </div>
-    
-    <div id="libman-m2-bound">
-    <div id="libman-m2"></div>
-    </div>
-    
-    <div id="libman-m3-bound">    
-    <div id="libman-m3"></div>
-    </div>
+      <div class="level-bound m1">
+        <div id="libman-m1"></div>
+      </div>
+      
+      <div class="level-bound m2">
+        <div id="libman-m2"></div>
+      </div>
+      
+      <div class="level-bound m3">    
+        <div id="libman-m3"></div>
+      </div>
+      
+      <div class="level-bound m4">    
+        <div id="libman-m4"></div>
+      </div>
     
     <div style="clear:both"></div>
     </div>
@@ -129,6 +129,7 @@ var user_changes = {};
 var l1 = false;
 var l2 = false;
 var l3 = false;
+var l4 = false;
 var master_copy = {};
 var local_changes = {};
 var selected_library = false;
@@ -164,10 +165,6 @@ function load_library()
         }
     }});
     
-    l1 = false;
-    l2 = false;
-    l3 = false;
-
     // Create copy and unlink
     master_copy = JSON.parse(JSON.stringify(master));
 
@@ -180,92 +177,122 @@ function load_library()
     draw_library_manager();
 }
 
+// -----------------------------------------------------------------------------
+// Draw a library manager
+// -----------------------------------------------------------------------------
 function draw_library_manager()
 {
-    $("#libman-m1").html("");
-    $("#libman-m2").html("");
-    $("#libman-m3").html("");
+    l1 = false;
+    l2 = false;
+    l3 = false;
+    l4 = false;
     
-    var out = "";
-    for (var z in master_copy) {
-        if (["inherit"].indexOf(z)<0) {
-            out += "<div class='libman-item' level=1 value='"+z+"'>"+z.ucfirst().replace(/_/g," ")+"</div>";
-        }
-    }
-    $("#libman-m1").html(out);
+    // out += "<div class='libman-item' level=2><i class='icon-plus'></i> New item</div>";
+
+    draw_level(master_copy,1);
 
     $("#libmanout").on("click",".libman-item",function() {
+    
+        $(".libman-item").removeClass("active");
+        $(this).addClass("active");
 
-        var level = $(this).attr("level");
+        var level = 1*$(this).attr("level");
         var value = $(this).attr("value");
 
         if (level==1) {
-        
-            $("#libman-m3").html("");
-        
             l1 = value
-        
-            var out = "";
-            for (var z in master_copy[l1]) {
-                var name = master_copy[l1][z].name;
-                out += "<div class='libman-item' level=2 value='"+z+"'>"+name.ucfirst().replace(/_/g," ")+"</div>";
-            }
-            $("#libman-m2").html(out);
+            draw_level(master_copy[l1],level+1);
         }
 
-        if (level==2) {
-        
+        else if (level==2) {
             l2 = value
-            console.log(l2);
-        
-            var out = "";
-            for (var z in master_copy[l1][l2]) {
-                out += "<div class='libman-item' level=3 value='"+z+"'><div class='key'>"+z.ucfirst().replace(/_/g," ")+":</div>";
-                
-                
-                var val = ""+master_copy[l1][l2][z];
-                if (val.length<100) {
-                    out += "<input class='libval' type='text' value='"+master_copy[l1][l2][z]+"' />";
-                } else { 
-                    out += "<textarea class='libval'>"+master_copy[l1][l2][z]+"</textarea>"; 
-                }
-                
-                out += "</div>";
-            }
-            $("#libman-m3").html(out);
+            draw_level(master_copy[l1][l2],level+1);
         }
         
-        if (level==3) {
+        else if (level==3) {
             l3 = value
+            draw_level(master_copy[l1][l2][l3],level+1)
         }
         
-        var height = 0;
-        var h1 = $("#libman-m1").height();
-        var h2 = $("#libman-m2").height();
-        var h3 = $("#libman-m3").height();
-        if (h1>height) height = h1;
-        if (h2>height) height = h2;
-        if (h3>height) height = h3;
-        $("#libman-m1-bound").height(height);
-        $("#libman-m2-bound").height(height);
-        $("#libman-m3-bound").height(height);
+        else if (level==4) {
+            l4 = value
+            draw_level(master_copy[l1][l2][l3][l4],level+1)
+        }
         
-        var l3w = $("#libmanout").width()-250-200-3;
-        $("#libman-m3").width(l3w);
-        
+        library_manager_resize();
     });
 }
 
+// -----------------------------------------------------------------------------
+// Draw a library manager level - code reused for each level in json tree
+// -----------------------------------------------------------------------------
+function draw_level(data,level)
+{
+    if (typeof data == "object") {
+        var out = "";
+        for (var z in data) {
+            // Draw list of openable options e.g: categories and sub categories
+            if (typeof data[z] == "object") {
+                var name = z;
+                if (data[z].name!=undefined) name = data[z].name;
+                out += "<div class='libman-item' level="+level+" value='"+z+"'>"+name.ucfirst().replace(/_/g," ")+"</div>";
+                
+            } else {
+            // Draw key:value entry
+                if (z!="inherit") {
+                    out += "<div class='libman-item' level="+level+" value='"+z+"'><div class='key'>"+z.ucfirst().replace(/_/g," ")+":</div>";
+                    
+                    // Draw input for certain length and text area for multi line lengths
+                    var val = ""+data[z];
+                    if (val.length<100) {
+                        out += "<input class='libval' type='text' level="+level+" value='"+val+"' />";
+                    } else { 
+                        out += "<textarea class='libval' level="+level+">"+val+"</textarea>"; 
+                    }
+                    
+                    out += "</div>";
+                }
+            }
+        }
+        $("#libman-m"+level).html(out);
+    }
+    for (var i=level+1; i<=4; i++) $("#libman-m"+i).html("");
+}
+
+// -----------------------------------------------------------------------------
+// Library manager level auto height
+// -----------------------------------------------------------------------------
+function library_manager_resize()
+{
+    var width = 0;
+    var height = 0;
+    for (var i=1; i<=4; i++) {
+        var w = $("#libman-m"+i).width();
+        width += w;
+        var h = $("#libman-m"+i).height();
+        if (h>height) height = h;
+    }
+    $(".level-bound").height(height);
+
+    var width = $("#libmanout").width()-width-4;
+    //$("#libman-m4").width(width);
+}
+
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 $("#lib-list").change(function(){
     selected_library = $(this).val();
     load_library();
 });
 
 $("#libmanout").on("change",".libval",function() {
+    var level = $(this).attr("level");
     var value = $(this).val();
-    //if (local_changes[l1]==undefined) local_changes[l1] = {};
-    //if (local_changes[l1][l2]==undefined) local_changes[l1][l2] = {};
-    master_copy[l1][l2][l3] = value;
+    
+    if (level==1) master_copy[l1] = value;
+    if (level==2) master_copy[l1][l2] = value;
+    if (level==3) master_copy[l1][l2][l3] = value;
+    if (level==4) master_copy[l1][l2][l3][l4] = value;
     local_changes = json_diff(master,master_copy);
     
     $("#local_changes").html(JSON.stringify(local_changes,undefined,2));
@@ -336,41 +363,83 @@ $("#openbem").on("delete-library",function() {
 // Apply changes
 // ---------------------------------------------------------------------------------
 function apply_changes(A,B) {
-    var C = A;
-    for (var cat in B) {
+
+    var keyvalA = object_to_keyval(A)
+    var keyvalB = object_to_keyval(B)
+    var keyvalC = keyvalA
     
-        if (["array","object"].indexOf(typeof B[cat])>=0) {
-            for (var key in B[cat]) {
-                for (var prop in B[cat][key]) {
-                    C[cat][key][prop] = B[cat][key][prop];
-                }
-            }
-        } else {
-            C[cat] = B[cat];
+    for (var z in keyvalB) {
+      
+        if (keyvalA[z]!=keyvalB[z]) {
+            keyvalC[z] = keyvalB[z];
         }
     }
+    
+    var C = keyval_to_object(keyvalC);
     return C;
 }
 
-// ---------------------------------------------------------------------------------
-// Basic property level diff - to be extended
-// ---------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------
+// JSON diff
+// ----------------------------------------------------------------------------------------
 function json_diff(A,B) {
-    var C = {};
-    for (var cat in A) {
-        if (["array","object"].indexOf(typeof A[cat])>=0) {
-            for (var key in A[cat]) {
-                for (var prop in A[cat][key]) {
-                    if (A[cat][key][prop]!=B[cat][key][prop]) {
-                        if (C[cat]==undefined) C[cat] = {};
-                        if (C[cat][key]==undefined) C[cat][key] = {};
-                        C[cat][key][prop] = B[cat][key][prop];
-                    }
-                }
-            }
-        } else {
-            if (A[cat]!=B[cat]) C[cat] = B[cat];
+
+    var keyvalA = object_to_keyval(A)
+    var keyvalB = object_to_keyval(B)
+    var keyvalC = {}
+    
+    for (var z in keyvalB) {
+      
+        if (keyvalA[z]!=keyvalB[z]) {
+            keyvalC[z] = keyvalB[z];
         }
+    }
+
+    var C = keyval_to_object(keyvalC);
+    return C;
+}
+
+
+// ----------------------------------------------------------------------------------------
+// Recursive object to keyval
+// conversion to keyval assoc array e.g key='elements.wall.W1.uvalue' val=1.2
+// ----------------------------------------------------------------------------------------
+function object_to_keyval(r)
+{
+    var keyval = {};
+    object_to_keyval_R(keyval,r,[])
+    return keyval;
+}
+
+function object_to_keyval_R(result,r,key)
+{
+    if (typeof r=="object") {
+        for (var x in r) {
+            key.push(x);
+            object_to_keyval_R(result,r[x],key)
+            key.pop();
+        }
+    } else {
+        result[key.join(".")] = r;
+    }
+}
+
+function keyval_to_object(keyval) {
+    var C = {};
+    for (var z in keyval) {
+        var tmp = z.split(".");
+        var l = tmp.length;
+
+        if (l>=2 && C[tmp[0]]==undefined) C[tmp[0]] = {};
+        if (l>=3 && C[tmp[0]][tmp[1]]==undefined) C[tmp[0]][tmp[1]] = {};
+        if (l>=4 && C[tmp[0]][tmp[1]][tmp[2]]==undefined) C[tmp[0]][tmp[1]][tmp[2]] = {};
+        if (l>=5 && C[tmp[0]][tmp[1]][tmp[2]][tmp[3]]==undefined) C[tmp[0]][tmp[1]][tmp[2]][tmp[3]] = {};
+        
+        if (l==1) C[tmp[0]] = keyval[z];
+        if (l==2) C[tmp[0]][tmp[1]] = keyval[z];
+        if (l==3) C[tmp[0]][tmp[1]][tmp[2]] = keyval[z];
+        if (l==4) C[tmp[0]][tmp[1]][tmp[2]][tmp[3]] = keyval[z];
+        if (l==5) C[tmp[0]][tmp[1]][tmp[2]][tmp[3]][tmp[4]] = keyval[z];
     }
     return C;
 }
