@@ -29,6 +29,50 @@
                 "source":"Domestic Heating Design Guide v1.0",
                 "uvalue":0.56,
                 "kvalue":150
+            },
+            "SW1":{
+                "name":"Stone 550mm",
+                "description":"Cement render, stone wall, plaster on hard. Estimated mean U-value.",
+                "source":"Custom",
+                "uvalue":1.7,
+                "kvalue":150
+            },
+            "SW2":{
+                "name":"Stone 550mm",
+                "description":"Cement render, stone wall, plaster on hard. Estimated minimum U-value.",
+                "source":"Custom",
+                "uvalue":1.3,
+                "kvalue":150
+            },
+            "SW3":{
+                "name":"Stone 550mm",
+                "description":"Cement render, stone wall, plaster on hard. Estimated maximum U-value.",
+                "source":"Custom",
+                "uvalue":2.1,
+                "kvalue":150
+            }
+        },
+        "Party_wall":{
+            "PW1": {
+                "name": "225mm brick, plastered",
+                "description": "225mm brick wall, plastered both sides",
+                "source": "SAP table S8B, p.134\/ table 1e, p.195",
+                "uvalue": 0,
+                "kvalue": 110
+            },
+            "PW2": {
+                "name": "Stone 550mm",
+                "description": "Stone wall 550mm, plastered both sides",
+                "source": "Custom",
+                "uvalue": 0,
+                "kvalue": 150
+            },
+            "PW3": {
+                "name": "Cavity masonry wall, uncapped, unfilled",
+                "description": "Cavity masonry wall, uncapped, unfilled",
+                "source": "SAP table S8B, p.134\/ table 1e, p.195",
+                "uvalue": 0.5,
+                "kvalue": 110
             }
         },
         "Loft":{
@@ -54,38 +98,76 @@
                 "kvalue": 9
             }
         },
-        "Window":{
-            "WW01": {
-                "name": "Single glazed window timber or PVC",
+        "Floor":{
+            "FLUS1": {
+                "type": "Floor",
+                "name": "Uninsulated Solid Ground Floor",
                 "description": "",
-                "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+                "source": "BS EN ISO 6946, 13370, 13789, BRE 443, 497 \/ SAP table 1e, p.195",
+                "uvalue": 0,
+                "kvalue": 110
+            },
+            "FLIS1": {
+                "type": "Floor",
+                "name": "Existing insulated solid floor ",
+                "description": "",
+                "source": "BS EN ISO 6946, 13370, 13789, BRE 443, 497 \/ SAP table 1e, p.195",
+                "uvalue": 0,
+                "kvalue": 110
+            }
+        },
+        "Window":{
+            "W1": {
+                "name": "Single glazed, timber or PVC",
+                "description": "",
+                "source": "SAP2012, Table 6e, p.218",
                 "uvalue": 4.8,
                 "kvalue": 0,
                 "g": "0.85",
                 "gL": "0.9",
                 "ff": "0.7"
             },
-            "WW02": {
-                "name": "Secondary glazed window timber or PVC",
+            "W2": {
+                "name": "Secondary glazed, timber or PVC",
                 "description": "",
-                "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+                "source": "SAP2012, Table 6e, p.218",
                 "uvalue": 2.4,
                 "kvalue": 0,
                 "g": "0.76",
                 "gL": "0.8",
                 "ff": "0.7"
             },
-            "WW03": {
-                "name": "Double glazed window, 12mm, timber or PVC",
-                "description": "Double glazed window, pre-2002, 12mm, timber or PVC",
-                "source": "SAP2012, Table S14, p.139\/ Table 6b, p.216",
+            "W3": {
+                "name": "Double glazed 6mm, air-filled, timber or PVC",
+                "description": "",
+                "source": "SAP2012, Table 6e, p.217",
+                "uvalue": 3.1,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "W4": {
+                "name": "Double glazed 12mm, air-filled, timber or PVC",
+                "description": "",
+                "source": "SAP2012, Table 6e, p.217",
                 "uvalue": 2.8,
                 "kvalue": 0,
                 "g": "0.76",
                 "gL": "0.8",
                 "ff": "0.7"
             },
-            "WW04": {
+            "W5": {
+                "name": "Double glazed 16mm, air-filled, timber or PVC",
+                "description": "",
+                "source": "SAP2012, Table 6e, p.217",
+                "uvalue": 2.7,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "W6": {
                 "name": "Double glazed window, low-E, 12mm, timber or PVC",
                 "description": "Double glazed window, low-E glass, 12mm, timber or PVC",
                 "source":"Domestic Heating Design Guide v1.0",
@@ -95,7 +177,7 @@
                 "gL": "0.8",
                 "ff": "0.7"
             },
-            "WW05": {
+            "W7": {
                 "name": "Double glazed window, low-E, argon, 12mm, timber or PVC",
                 "description": "Double glazed window, low-E glass, argon filled, 12mm, timber or PVC",
                 "source":"Domestic Heating Design Guide v1.0",
@@ -105,7 +187,7 @@
                 "gL": "0.8",
                 "ff": "0.7"
             },
-            "WW06": {
+            "W8": {
                 "name": "Triple glazed window, timber or PVC",
                 "description": "",
                 "source":"Domestic Heating Design Guide v1.0",
@@ -115,7 +197,7 @@
                 "gL": "0.8",
                 "ff": "0.7"
             },
-            "WW07": {
+            "W9": {
                 "name": "Triple glazed window, low-E, 12mm, timber or PVC",
                 "description": "Triple glazed window, low-E glass, 12mm, timber or PVC",
                 "source":"Domestic Heating Design Guide v1.0",
@@ -125,7 +207,7 @@
                 "gL": "0.8",
                 "ff": "0.7"
             },
-            "WW08": {
+            "W10": {
                 "name": "Triple glazed window, low-E, argon, 12mm, timber or PVC",
                 "description": "Triple glazed window, low-E glass, argon filled, 12mm, timber or PVC",
                 "source":"Domestic Heating Design Guide v1.0",
@@ -388,14 +470,28 @@
     },
     "storage_type":{
         "HWS1": {
-            "category": "Cylinders with inmersion",
-            "name": "Cylinder 210L 60mm factory fitted foam insulation",
+            "category": "Cylinders",
+            "name": "Cylinder 120L 25mm factory fitted foam insulation",
             "description": "",
             "manufacturer_loss_factor": 0,
             "temperature_factor_a": 0,
-            "storage_volume": 210,
+            "storage_volume": 120,
+            "loss_factor_b": 0.0240,
+            "volume_factor_b": 1.0,
+            "temperature_factor_b": 0.6,
+            "declared_loss_factor_known": false,
+            "cost_units": "unit",
+            "cost": 500
+        },
+        "HWS2": {
+            "category": "Cylinders",
+            "name": "Cylinder 120L 50mm factory fitted foam insulation",
+            "description": "",
+            "manufacturer_loss_factor": 0,
+            "temperature_factor_a": 0,
+            "storage_volume": 120,
             "loss_factor_b": 0.0152,
-            "volume_factor_b": 0.817,
+            "volume_factor_b": 1.0,
             "temperature_factor_b": 0.6,
             "declared_loss_factor_known": false,
             "cost_units": "unit",
@@ -896,155 +992,143 @@
             "Standard Tariff":{
                 "standingcharge":66,
                 "fuelcost":15.06,
-                "co2factor":0.381,
+                "co2factor":0.367,
                 "primaryenergyfactor":3.28,
-                "SAP_code":30
+                "SAP_code":30,
+                "source":"Custom"
             },
             "Green Tariff 2016":{
                 "standingcharge":66,
                 "fuelcost":15.06,
                 "co2factor":0.218,
                 "primaryenergyfactor":2.50,
-                "SAP_code":30
+                "SAP_code":30,
+                "source":"Custom"
             },
             "Green Tariff + 25% natural gas backup":{
                 "standingcharge":66,
                 "fuelcost":15.06,
                 "co2factor":0.090,
                 "primaryenergyfactor":1.70,
-                "SAP_code":30
+                "SAP_code":30,
+                "source":"Custom"
             },
             "100% Green Tariff":{
                 "standingcharge":66,
                 "fuelcost":15.06,
                 "co2factor":0.0,
                 "primaryenergyfactor":1.60,
-                "SAP_code":30
+                "SAP_code":30,
+                "source":"Custom"
             },
             "Onsite Generation":{
                 "standingcharge":0,
-                "fuelcost":0.0,
-                "co2factor":0.0,
-                "primaryenergyfactor":1.0,
+                "fuelcost":15.06,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
                 "SAP_code":0
-            },
-            "7-Hour tariff - High Rate":{
-                "standingcharge":79,
-                "fuelcost":17.81,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":32
-            },
-            "7 Hour tariff - Low Rate":{
-                "standingcharge":0,
-                "fuelcost":6.67,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":31
-            },
-            "10-hour tariff - High Rate":{
-                "standingcharge":77,
-                "fuelcost":17.1,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":34
-            },
-            "10-hour tariff - Low Rate":{
-                "standingcharge":0,
-                "fuelcost":9.25,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":33
             }
         },
         "Gas": {
             "Mains Gas":{
-                "standingcharge":101,
-                "fuelcost":4.25,
-                "co2factor":0.222,
-                "primaryenergyfactor":1.28,
-                "SAP_code":1
+                "standingcharge":120,
+                "fuelcost":3.48,
+                "co2factor":0.216,
+                "primaryenergyfactor":1.22,
+                "SAP_code":1,
+                "source":"SAP Table 12"
             },
             "Bulk LPG":{
                 "standingcharge":70,
-                "fuelcost":8.46,
-                "co2factor":0.242,
-                "primaryenergyfactor":1.166,
-                "SAP_code":2
+                "fuelcost":7.60,
+                "co2factor":0.241,
+                "primaryenergyfactor":1.09,
+                "SAP_code":2,
+                "source":"SAP Table 12"
             },
             "Bottled LPG ":{
                 "standingcharge":0,
-                "fuelcost":10.61,
-                "co2factor":0.242,
-                "primaryenergyfactor":1.166,
-                "SAP_code":3
+                "fuelcost":10.30,
+                "co2factor":0.241,
+                "primaryenergyfactor":1.09,
+                "SAP_code":3,
+                "source":"SAP Table 12"
             }
         },
         "Oil":{
             "Heating Oil":{
                 "standingcharge":0,
-                "fuelcost":5.43,
+                "fuelcost":5.44,
                 "co2factor":0.298,
-                "primaryenergyfactor":1.189,
-                "SAP_code":4
+                "primaryenergyfactor":1.10,
+                "SAP_code":4,
+                "source":"SAP Table 12"
             }
         },
         "Solid fuel":{
             "House Coal":{
                 "standingcharge":0,
-                "fuelcost":4.01,
-                "co2factor":0.416,
-                "primaryenergyfactor":1.079,
-                "SAP_code":11
+                "fuelcost":3.67,
+                "co2factor":0.394,
+                "primaryenergyfactor":1.0,
+                "SAP_code":11,
+                "source":"SAP Table 12"
             },
             "Anthracite":{
                 "standingcharge":0,
-                "fuelcost":4.02,
-                "co2factor":0.416,
-                "primaryenergyfactor":1.079,
-                "SAP_code":15
+                "fuelcost":3.64,
+                "co2factor":0.394,
+                "primaryenergyfactor":1.0,
+                "SAP_code":15,
+                "source":"SAP Table 12"
             },
             "Manufactured smokeless fuel":{
                 "standingcharge":0,
-                "fuelcost":5.04,
-                "co2factor":0.490,
-                "primaryenergyfactor":1.265,
-                "SAP_code":12
+                "fuelcost":4.61,
+                "co2factor":0.433,
+                "primaryenergyfactor":1.21,
+                "SAP_code":12,
+                "source":"SAP Table 12"
             },
             "Wood Logs":{
                 "standingcharge":0,
-                "fuelcost":4.65,
-                "co2factor":0.390,
-                "primaryenergyfactor":1.058,
-                "SAP_code":20
+                "fuelcost":4.23,
+                "co2factor":0.019,
+                "primaryenergyfactor":1.04,
+                "SAP_code":20,
+                "source":"SAP Table 12"
             },
             "Wood Pellets secondary heating in bags":{
                 "standingcharge":0,
-                "fuelcost":6.3,
-                "co2factor":0.390,
-                "primaryenergyfactor":1.32,
-                "SAP_code":22
+                "fuelcost":5.81,
+                "co2factor":0.039,
+                "primaryenergyfactor":1.26,
+                "SAP_code":22,
+                "source":"SAP Table 12"
             },
             "Wood pellets main heating bulk supply":{
                 "standingcharge":0,
-                "fuelcost":5.7,
-                "co2factor":0.390,
-                "primaryenergyfactor":1.32,
-                "SAP_code":23
+                "fuelcost":5.26,
+                "co2factor":0.039,
+                "primaryenergyfactor":1.26,
+                "SAP_code":23,
+                "source":"SAP Table 12"
             },
             "Wood chips":{
                 "standingcharge":0,
-                "fuelcost":3.36,
-                "co2factor":0.390,
-                "primaryenergyfactor":1.174,
-                "SAP_code":21
+                "fuelcost":3.07,
+                "co2factor":0.016,
+                "primaryenergyfactor":1.12,
+                "SAP_code":21,
+                "source":"SAP Table 12"
             },
             "Dual Fuel Appliance":{
                 "standingcharge":0,
-                "fuelcost":4.36,
-                "co2factor":0.108,
-                "primaryenergyfactor":1.062,
-                "SAP_code":10
+                "fuelcost":3.99,
+                "co2factor":0.226,
+                "primaryenergyfactor":1.02,
+                "SAP_code":10,
+                "source":"SAP Table 12"
             }
         }
     }

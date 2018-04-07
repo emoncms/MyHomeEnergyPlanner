@@ -2277,20 +2277,22 @@ calc.currentenergy = function (data) {
     var primaryenergy_annual_kwh = 0;
     var enduse_annual_kwh = 0;
     for (var fuel in data.currentenergy.use_by_fuel) {
-        // Calculations for current fuel
-        var f_use = data.currentenergy.use_by_fuel[fuel];
-        f_use.annual_co2 = f_use.annual_use * data.fuels[fuel].co2factor;
-        f_use.primaryenergy = f_use.annual_use * data.fuels[fuel].primaryenergyfactor;
-        if (f_use.annual_use > 0)
-            f_use.annualcost = f_use.annual_use * data.fuels[fuel].fuelcost / 100 + data.fuels[fuel].standingcharge;
-        else
-            f_use.annualcost = 0;
+        if (data.fuels[fuel]!=undefined) {
+            // Calculations for current fuel
+            var f_use = data.currentenergy.use_by_fuel[fuel];
+            f_use.annual_co2 = f_use.annual_use * data.fuels[fuel].co2factor;
+            f_use.primaryenergy = f_use.annual_use * data.fuels[fuel].primaryenergyfactor;
+            if (f_use.annual_use > 0)
+                f_use.annualcost = f_use.annual_use * data.fuels[fuel].fuelcost / 100 + data.fuels[fuel].standingcharge;
+            else
+                f_use.annualcost = 0;
 
-        // Calculation of totals
-        total_co2 += f_use.annual_co2;
-        total_cost += f_use.annualcost;
-        primaryenergy_annual_kwh += f_use.primaryenergy;
-        enduse_annual_kwh += f_use.annual_use;
+            // Calculation of totals
+            total_co2 += f_use.annual_co2;
+            total_cost += f_use.annualcost;
+            primaryenergy_annual_kwh += f_use.primaryenergy;
+            enduse_annual_kwh += f_use.annual_use;
+        }
     }
 
     if (data.currentenergy.onsite_generation === 1) { // See issue 304
