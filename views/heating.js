@@ -54,8 +54,8 @@ $('#openbem').on('click', '.add-heating-system-from-lib', function () {
 });
 $('#openbem').on('click', '.add-water_usage', function () {
     var tag = $(this).attr('tag');
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    var item = library[tag];
+    
+    var item = library_helper.library.water_usage[tag];
     item.tag = tag;
     item.id = get_WU_max_id(data.water_heating.water_usage) + 1;
     data.water_heating.water_usage.push(item);
@@ -93,7 +93,8 @@ $('#openbem').on('click', '.apply-water-heating-measure', function () {
     // Populate body of modal
     var tag = $('#apply-measure-water-heating-items-select').val();
     var function_name = library_helper.type + '_item_to_html';
-    var item = library_helper.get_library_by_id(library_id).data[tag];
+
+    var item = library_helper.library.heating_systems[tag];
     out = library_helper[function_name](item, tag);
     $('#apply-measure-water-heating-modal .modal-body').html(out);
     // 3. Specific action for each type of measure
@@ -289,8 +290,8 @@ $('#openbem').on('click', '.select-type-of-storage-from-lib', function () {
 });
 $('#openbem').on('click', '.add-storage-type ', function () {
     var tag = $(this).attr('tag');
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    var item = library[tag];
+    
+    var item = library_helper.library.storage_type[tag];
     item.tag = tag;
     data.water_heating.storage_type = item;
     update();
@@ -303,8 +304,8 @@ $('#openbem').on('click', '.delete-storage', function () {
 });
 $('#openbem').on('click', '.add-heating-system', function () {
     var tag = $(this).attr('tag');
-    var library = library_helper.get_library_by_id($(this).attr('library')).data;
-    var item = library[tag];
+
+    var item = library_helper.library.heating_systems[tag];
     item.tag = tag;
     if (item.category = 'Warm air systems')
         item.fans_and_supply_pumps = 0.4 * item.sfp * data.volume;
