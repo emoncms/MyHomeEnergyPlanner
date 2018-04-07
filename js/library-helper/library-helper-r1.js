@@ -994,7 +994,8 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
     if (origin != undefined) {
         tag = $(origin).attr('tags').split(',');
         element_row = $(origin).attr('row');
-        selected_lib = data.fabric.elements[element_row].lib;
+        if (element_row != undefined)
+            selected_lib = data.fabric.elements[element_row].lib;
 
         if (selected_lib == undefined)
             selected_lib = false;
@@ -1646,7 +1647,7 @@ libraryHelper.prototype.heating_systems_measures_library_to_html_edit_mode = fun
             out += '<tr tag="' + z + '" title="' + z + '" class="item"><td index="tag"><input class="w100" type="text" value="' + z + '" /></td>';
             //out += '<td index="name" title="' + item.name + '"><input class="w350" type="text" value="' + item.name + '" /></td>';
             // Carlos remember to remove the test2 class in the table tag
-            out+= "<style>table.test2 td{  vertical-align:top;  padding-right:10px}</style>";
+            out += "<style>table.test2 td{  vertical-align:top;  padding-right:10px}</style>";
             out += '<td index="name" title="' + item.name + '"><textarea rows=2" columns=25>' + item.name + '"</textarea></td>';
             out += '<td index="category"><select class="w200" value="' + item.category + '">'
             var categories = ['Combi boilers', 'System boilers', 'Heat pumps', 'Room heaters', 'Warm air systems', 'Hot water only'];
