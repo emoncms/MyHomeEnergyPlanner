@@ -892,6 +892,71 @@
     },
     
     "fuels":{
+        "Electricity":{
+            "Standard Tariff":{
+                "standingcharge":66,
+                "fuelcost":15.06,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":30
+            },
+            "Green Tariff 2016":{
+                "standingcharge":66,
+                "fuelcost":15.06,
+                "co2factor":0.218,
+                "primaryenergyfactor":2.50,
+                "SAP_code":30
+            },
+            "Green Tariff + 25% natural gas backup":{
+                "standingcharge":66,
+                "fuelcost":15.06,
+                "co2factor":0.090,
+                "primaryenergyfactor":1.70,
+                "SAP_code":30
+            },
+            "100% Green Tariff":{
+                "standingcharge":66,
+                "fuelcost":15.06,
+                "co2factor":0.0,
+                "primaryenergyfactor":1.60,
+                "SAP_code":30
+            },
+            "Onsite Generation":{
+                "standingcharge":0,
+                "fuelcost":0.0,
+                "co2factor":0.0,
+                "primaryenergyfactor":1.0,
+                "SAP_code":0
+            },
+            "7-Hour tariff - High Rate":{
+                "standingcharge":79,
+                "fuelcost":17.81,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":32
+            },
+            "7 Hour tariff - Low Rate":{
+                "standingcharge":0,
+                "fuelcost":6.67,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":31
+            },
+            "10-hour tariff - High Rate":{
+                "standingcharge":77,
+                "fuelcost":17.1,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":34
+            },
+            "10-hour tariff - Low Rate":{
+                "standingcharge":0,
+                "fuelcost":9.25,
+                "co2factor":0.381,
+                "primaryenergyfactor":3.28,
+                "SAP_code":33
+            }
+        },
         "Gas": {
             "Mains Gas":{
                 "standingcharge":101,
@@ -980,78 +1045,6 @@
                 "co2factor":0.108,
                 "primaryenergyfactor":1.062,
                 "SAP_code":10
-            }
-        },
-        "Electricity":{
-            "7-Hour tariff - High Rate":{
-                "standingcharge":79,
-                "fuelcost":17.81,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":32
-            },
-            "7 Hour tariff - Low Rate":{
-                "standingcharge":0,
-                "fuelcost":6.67,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":31
-            },
-            "10-hour tariff - High Rate":{
-                "standingcharge":77,
-                "fuelcost":17.1,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":34
-            },
-            "10-hour tariff - Low Rate":{
-                "standingcharge":0,
-                "fuelcost":9.25,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":33
-            },
-            "24-hour heating tariff":{
-                "standingcharge":40,
-                "fuelcost":7.75,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":35
-            },
-            "Standard Tariff":{
-                "standingcharge":66,
-                "fuelcost":15.06,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":30
-            },
-            "Green Tariff 2016":{
-                "standingcharge":66,
-                "fuelcost":15.06,
-                "co2factor":0.218,
-                "primaryenergyfactor":2.50,
-                "SAP_code":30
-            },
-            "Green Tariff + 25% natural gas backup":{
-                "standingcharge":66,
-                "fuelcost":15.06,
-                "co2factor":0.090,
-                "primaryenergyfactor":1.70,
-                "SAP_code":30
-            },
-            "100% Green Tariff":{
-                "standingcharge":66,
-                "fuelcost":15.06,
-                "co2factor":0.0,
-                "primaryenergyfactor":1.60,
-                "SAP_code":30
-            },
-            "generation":{
-                "standingcharge":0,
-                "fuelcost":15.06,
-                "co2factor":0.381,
-                "primaryenergyfactor":3.28,
-                "SAP_code":0
             }
         }
     }

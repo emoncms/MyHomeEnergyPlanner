@@ -1,9 +1,4 @@
 console.log('debug elements.js');
-if (typeof library_helper != "undefined")
-    library_helper.type = 'elements';
-else
-    var library_helper = new libraryHelper('elements', $("#openbem"));
-    
 // button defined in: libraryHelper:elements_library_to_html
 $("#openbem").on("click", '.add-element', function () {
 

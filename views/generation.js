@@ -1,10 +1,5 @@
 console.log('debug generation.js');
 
-if (typeof library_helper != "undefined")
-    library_helper.type = 'generation_measures';
-else
-    var library_helper = new libraryHelper('generation_measures', $("#openbem"));
-
 function generation_initUI() {
     if (data.generation.use_PV_calculator == 1) {
         $('#PV_calculator').show();

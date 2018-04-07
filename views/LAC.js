@@ -1,9 +1,3 @@
-console.log('debug lac.js');
-
-if (typeof library_helper != "undefined")
-    library_helper.type = 'appliances_and_cooking';
-else
-    var library_helper = new libraryHelper('appliances_and_cooking', $("#openbem"));
 
 function LAC_initUI() {
     //data.appliancelist.list = [];

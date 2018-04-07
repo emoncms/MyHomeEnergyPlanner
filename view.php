@@ -81,7 +81,6 @@ global $reports;
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
-                <div class="scenario-nav"><a class="project-menu-item" href="#master/fuelsmanager">Fuels manager</a></div>
             </div>
         </div>
 
@@ -233,6 +232,8 @@ global $reports;
     var path = "<?php echo $path; ?>";
     var jspath = path + "Modules/assessment/";
 
+    var library_helper = new libraryHelper($("#openbem"));
+
 //var c=document.getElementById("rating");
     //var ctx=c.getContext("2d");
 
@@ -266,11 +267,11 @@ global $reports;
     run_backwards_compatibility();
 
     // Ensure all the scenarios have the same fuels
-    if (project.master.fuels == undefined)
-        project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));
-    ;
-    for (scenario in project)
-        project[scenario].fuels = project.master.fuels;
+    // if (project.master.fuels == undefined)
+    //     project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));
+    // ;
+    // for (scenario in project)
+    //    project[scenario].fuels = project.master.fuels;
 
     for (s in project) {
         // QUESTION: do you really want to do calc.run twice here?
@@ -298,6 +299,18 @@ global $reports;
 
     if (data.measures == undefined)
         data.measures = {};
+    
+    
+    // This needs to be handled properly
+    var fuels = {};
+    for (var z in library_helper.library.fuels) {
+        for (var x in library_helper.library.fuels[z]) {
+            var fueltmp = library_helper.library.fuels[z][x];
+            fueltmp.category = z;
+            fuels[x] = fueltmp;
+        }
+    }
+    data.fuels = fuels
 
     load_view("#content", page);
     InitUI();

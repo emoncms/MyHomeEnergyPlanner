@@ -309,14 +309,13 @@ String.prototype.ucfirst = function()
     return this.charAt(0).toUpperCase() + this.substr(1);
 }
 
-function libraryHelper(type, container) {
+function libraryHelper(container) {
     this.container = container;
     this.library_list = {};
     this.library = {};
     this.selected_library = 0;
     this.library_permissions = {};
     // Variables to link the view with the controller
-    this.type = type;
     this.library_names = {}; // I know this should not be here :p
     //this.library_html_strings ={};
 
@@ -1050,9 +1049,7 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
         }
         out += "</td>";
         out += "<td >";
-        out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + type + "' tag='" + z + "'></i>";
-        out += "<i style='cursor:pointer;margin-left:20px' class='icon-trash if-write delete-library-item' lib='" + z + "' type='" + type + "' tag='" + z + "'></i>";
-        // out += "<i class='icon-trash' style='margin-left:20px'></i>";
+        // out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + type + "' tag='" + z + "'></i>";
         
         // add-element & change-element handled in elements.js
         var action = "add-element";

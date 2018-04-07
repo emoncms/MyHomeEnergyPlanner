@@ -93,16 +93,8 @@ calc.start = function (data)
         data.LAC_calculation_type = 'SAP';
         
     if (data.fuels == undefined)
-        data.fuels = datasets.fuels;
+        data.fuels = {};
      
-    // Copy over any new fuels added in datasets to local assessment copy
-    // this does not overwrite any local changes   
-    for (var fuel in datasets.fuels) {
-        if (data.fuels[fuel]==undefined) {
-            data.fuels[fuel] = datasets.fuels[fuel];
-        }
-    }  
-        
     data.num_of_floors = 0;
     data.TFA = 0;
     data.volume = 0;
@@ -1207,14 +1199,16 @@ calc.fuel_requirements = function (data) {
     data.energy_delivered = 0
     for (z in data.fuel_totals)
     {
-        data.fuel_totals[z].annualcost = data.fuel_totals[z].quantity * data.fuels[z].fuelcost / 100 + data.fuels[z].standingcharge;
-        //data.fuel_totals[z].fuelcost = data.fuels[z].fuelcost;
-        data.fuel_totals[z].primaryenergy = data.fuel_totals[z].quantity * data.fuels[z].primaryenergyfactor;
-        data.fuel_totals[z].annualco2 = data.fuel_totals[z].quantity * data.fuels[z].co2factor;
-        data.total_cost += data.fuel_totals[z].annualcost;
-        data.energy_use += data.fuel_totals[z].quantity;
-        data.primary_energy_use += data.fuel_totals[z].primaryenergy;
-        data.annualco2 += data.fuel_totals[z].annualco2;
+        if (data.fuels[z]!=undefined) {
+            data.fuel_totals[z].annualcost = data.fuel_totals[z].quantity * data.fuels[z].fuelcost / 100 + data.fuels[z].standingcharge;
+            //data.fuel_totals[z].fuelcost = data.fuels[z].fuelcost;
+            data.fuel_totals[z].primaryenergy = data.fuel_totals[z].quantity * data.fuels[z].primaryenergyfactor;
+            data.fuel_totals[z].annualco2 = data.fuel_totals[z].quantity * data.fuels[z].co2factor;
+            data.total_cost += data.fuel_totals[z].annualcost;
+            data.energy_use += data.fuel_totals[z].quantity;
+            data.primary_energy_use += data.fuel_totals[z].primaryenergy;
+            data.annualco2 += data.fuel_totals[z].annualco2;
+        }
     }
     data.energy_delivered = data.energy_use;
     // Annual CO2, primary energy and cost saved due to generation. Be aware generation is not used for the calculation of Energy use
@@ -1253,7 +1247,9 @@ calc.primary_energy_by_requirement = function (data) {
             var fuel_input = data.fuel_requirements[req].list[z].fuel_input;
             var fuel = data.fuel_requirements[req].list[z].fuel;
 
-            data.primary_energy_use_by_requirement[req] += fuel_input * data.fuels[fuel].primaryenergyfactor;
+            if (data.fuels[fuel]!=undefined) {
+                data.primary_energy_use_by_requirement[req] += fuel_input * data.fuels[fuel].primaryenergyfactor;
+            }
         }
     }
 };
