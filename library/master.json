@@ -50,6 +50,13 @@
                 "source":"Custom",
                 "uvalue":2.1,
                 "kvalue":150
+            },
+            "SWI1":{
+                "name":"EWI Stone 550mm",
+                "description":"Ty Mawr external wall, breathable woodfibre board and lime insulation system",
+                "source":"Custom",
+                "uvalue":0.3,
+                "kvalue":150
             }
         },
         "Party_wall":{
@@ -212,6 +219,16 @@
                 "description": "Triple glazed window, low-E glass, argon filled, 12mm, timber or PVC",
                 "source":"Domestic Heating Design Guide v1.0",
                 "uvalue": 1.6,
+                "kvalue": 0,
+                "g": "0.76",
+                "gL": "0.8",
+                "ff": "0.7"
+            },
+            "W11": {
+                "name": "Advanced Triple Glazed Window",
+                "description": "Green Building Store Performance range triple glazed window",
+                "source":"Green Building Store",
+                "uvalue": 0.85,
                 "kvalue": 0,
                 "g": "0.76",
                 "gL": "0.8",

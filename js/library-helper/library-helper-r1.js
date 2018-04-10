@@ -841,14 +841,14 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_l
     
     var out = "";
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
-    var library = this.library[type_of_library];
-    for (item in library) {
-        if (type_of_library == 'elements') {
-            if (library[item].type.toUpperCase() == original_item.type.toUpperCase())
-                out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
-        }
-        else
-            out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
+    var items = this.library[type_of_library];
+    
+    var type = original_item.type.toUpperCase();
+    
+    if (type_of_library == 'elements') items = items[type];
+    
+    for (var item in items) {
+        out += '<option value="' + item + '">' + item + ': ' + library[item].name + '</option>';
     }
 
     $('#replace-from-lib-items').html(out);
