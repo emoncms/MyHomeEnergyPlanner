@@ -1,31 +1,33 @@
 var libraryDefaults = 
 {
     "elements":{
-        "name":"",
-        "type":['Wall','Party_wall','Roof','Loft','Floor','Window','Door','Roof_light','Hatch'],
-        "description":"",
-        "location":"",
-        "source":"",
-        "uvalue":0,
-        "kvalue":0,
-        "g":"",
-        "gL":"",
-        "ff":"",
-        "ewi":[true,false], // tip: <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" />
-        
-        // Measure properties
-        "measure":false, // perhaps extend with an array of elements this measure can be applied to
-        "performance":"",
-        "benefits":"",
-        "cost_units":"",
-        "cost":0,
-        "min_cost":0, // tip: <icon class="icon-question-sign" title="Total cost of measure = minimum cost + (area x unit cost)" />
-        "who_by":"",
-        "disruption":"",
-        "associated_work":"",
-        "key_risks":"",
-        "notes":"",
-        "maintenance":""
+        "Wall":{
+            "name":"",
+            "type":['Wall','Party_wall','Roof','Loft','Floor','Window','Door','Roof_light','Hatch'],
+            "description":"",
+            "location":"",
+            "source":"",
+            "uvalue":0,
+            "kvalue":0,
+            "g":"",
+            "gL":"",
+            "ff":"",
+            "ewi":[true,false], // tip: <i class="icon-question" title="Ticking this box will increase the area of the wall by 1.15" />
+            
+            // Measure properties
+            "measure":false, // perhaps extend with an array of elements this measure can be applied to
+            "performance":"",
+            "benefits":"",
+            "cost_units":"",
+            "cost":0,
+            "min_cost":0, // tip: <icon class="icon-question-sign" title="Total cost of measure = minimum cost + (area x unit cost)" />
+            "who_by":"",
+            "disruption":"",
+            "associated_work":"",
+            "key_risks":"",
+            "notes":"",
+            "maintenance":""
+        }
     },
     
     "draught_proofing_measures":{
@@ -407,20 +409,27 @@ libraryHelper.prototype.add_events = function () {
     this.container.on('click', '.edit-item-ok', function () {
         myself.onEditItemOk();
     });
+
+    // -----------------------------------------------------------------------
+    // Apply measure modal events
+    // -----------------------------------------------------------------------
     this.container.on('click', '.apply-measure', function () {
-        myself.onApplyMeasure($(this));
+        myself.apply_measure($(this));
     });
     this.container.on('click', '#apply-measure-ok', function () {
-        myself.onApplyMeasureOk($(this));
+        myself.apply_measure_ok($(this));
     });
+    this.container.on('change', '#apply-measure-select-library', function () {
+        myself.apply_measure_populate_items($(this));
+    });
+    this.container.on('change', '#apply-measure-select-item', function () {
+        myself.apply_measure_populate_item_fields($(this));
+    });
+
+    // -----------------------------------------------------------------------
+    
     this.container.on('change', '[name=radio-type-of-measure]', function () {
         myself.onChangeApplyMeasureWhatToDo();
-    });
-    this.container.on('change', '#replace-from-lib', function () {
-        myself.onChangeApplyMeasureReplaceFromLib($(this).attr('library_type')); // This one to populate the select for items();
-    });
-    this.container.on('change', '#replace-from-lib-items', function () {
-        myself.onChangeApplyMeasureReplaceFromLibItem($(this).attr('library_type'));
     });
     this.container.on('change', '#modal-create-in-library .create-element-type', function () {
         myself.onChangeTypeOnCreateElementLibItem();
@@ -737,29 +746,38 @@ libraryHelper.prototype.onChangeOriginLibrarySelect = function () {
     $('.new-item-in-library').html(out);
 };
 
-libraryHelper.prototype.onApplyMeasure = function (origin) {
-    console.log('onApplyMeasure');
-    
-    // Add attributes to the "Ok" button
-    $('#apply-measure-ok').attr('library', origin.attr('library'));
-    $('#apply-measure-ok').attr('tag', origin.attr('tag'));
-    $('#apply-measure-ok').attr('row', origin.attr('row'));
-    $('#apply-measure-ok').attr('item_id', origin.attr('item_id'));
-    $('#apply-measure-ok').attr('item', origin.attr('item'));
-    $('#apply-measure-ok').attr('type-of-item', origin.attr('type-of-item')); // Used for energy_systems
-    //// Check replacefrom library manually (option by default)
-    $('[name=radio-type-of-measure]').filter('[value=replace]').click();
-    $('[name=radio-type-of-measure]').filter('[value=replace_from_measure_library]').click();
-    // Populate the selects library to choose a library and an item (used when replace the item with one from library)
-    //Moved to onChangeApplyMeasureWhatToDo
-    /*var out = '';
-    for (var z in this.library_list) {
-        out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";
-    }
-     $("#replace-from-lib").html(out);
-     this.onChangeApplyMeasureReplaceFromLib(); // This one to populate the select for items
-     */
+// ---------------------------------------------------------------------------------------------
+// Apply measure
+// ---------------------------------------------------------------------------------------------
 
+libraryHelper.prototype.apply_measure = function (origin) {
+    console.log('apply_measure');
+
+    var category = origin.attr('type');
+    var item = JSON.parse(origin.attr('item'));
+
+    library_helper.category = category;
+    // Check replacefrom library manually (option by default)
+    // $('[name=radio-type-of-measure]').filter('[value=replace]').click();
+    // $('[name=radio-type-of-measure]').filter('[value=replace_from_measure_library]').click();
+
+    // Library list
+    $("#apply-measure-select-library").html(library_helper.get_list_of_libraries_for_select());
+    
+    // Populate list of measures
+    var out = "";
+    for (var tag in library_helper.library[library_helper.type][category]) {
+        out += '<option value="' + tag + '">' + tag + ': ' + library_helper.library[library_helper.type][category][tag].name + '</option>';
+    }
+    $('#apply-measure-select-item').html(out);
+    
+    // Populate body of modal
+    var tag = $('#apply-measure-select-item').val();
+    var item = library_helper.library[library_helper.type][category][tag];
+    var out = library_helper.item_to_html(library_helper.type, item, tag);
+    $('#apply-measure-item-fields').html(out);    
+
+    /*
     // Show/hide modals
     $('#apply-measure-finish').hide('fast');
     $('.modal').modal('hide');
@@ -769,12 +787,29 @@ libraryHelper.prototype.onApplyMeasure = function (origin) {
     //If we are in fabric Systems remove show the option to Apply Measure from Measures Library
     if (this.type == 'systems')
         $('.replace_from_measure_library').hide();
+    */
+    
     $('#apply-measure-modal').modal('show');
 };
 
-libraryHelper.prototype.onApplyMeasureOk = function (origin) {
-    console.log('onApplyMeasureOk');
+libraryHelper.prototype.apply_measure_populate_item_fields = function (origin) {
+    console.log("apply_measure_populate_item_fields");
     
+    var tag = $('#apply-measure-select-item').val();
+    var item = library_helper.library[library_helper.type][library_helper.category][tag];
+    var out = library_helper.item_to_html(library_helper.type, item, tag);
+    $('#apply-measure-item-fields').html(out);
+}
+
+libraryHelper.prototype.apply_measure_ok = function (origin) {
+    console.log('apply_measure_ok');
+    
+    var measure = {};
+    measure.item = this.get_item_to_save(this.type);
+    console.log(measure.item);
+    
+    
+    /*
     var measure = {
         row: origin.attr('row'),
         item_id: origin.attr('item_id'),
@@ -794,8 +829,12 @@ libraryHelper.prototype.onApplyMeasureOk = function (origin) {
             measure.item = this.get_item_to_save(this.type);
             break;
     }
-    console.log(measure);
-    apply_measure(measure);
+    */
+    
+    var function_name = this.type+"_apply_measure";
+    if (window[function_name]!=undefined)
+        window[function_name](measure);
+    
     $('#apply-measure-modal').modal('hide');
 };
 
@@ -1236,10 +1275,15 @@ libraryHelper.prototype.item_to_html = function (type, item, tag) {
     
     var out = '<table class="table" style="margin:15px 0 0 25px"><tbody>';
     
-    for (var property in libraryDefaults[type]) {
+    var defaultItem = libraryDefaults[type];
+    if (typeof libraryDefaults[type] == "object") {
+        defaultItem = libraryDefaults[type]["Wall"];
+    }
+    
+    for (var property in defaultItem) {
         var property_nicename = property.ucfirst().replace(/_/g," ");
         
-        switch (typeof libraryDefaults[type][property]) {
+        switch (typeof defaultItem[property]) {
             case "string":
                 out += '<tr><td>'+property_nicename+'</td><td><input type="text" class="item-'+property+'" required value="'+item[property]+'"/></td></tr>';
                 break;
@@ -1249,20 +1293,20 @@ libraryHelper.prototype.item_to_html = function (type, item, tag) {
             case "array":
                 out += '<tr><td>'+property_nicename+'</td><td>';
                 out += '<select class="item-'+property+'">';
-                for (var option in libraryDefaults[type][property]) {
+                for (var option in defaultItem[property]) {
                     var selected = "";
-                    if (libraryDefaults[type][property][option]==item[property]) selected = "selected";
-                    out += '<option '+selected+'>'+libraryDefaults[type][property][option]+'</option>';
+                    if (defaultItem[property][option]==item[property]) selected = "selected";
+                    out += '<option '+selected+'>'+defaultItem[property][option]+'</option>';
                 }
                 out += '</select></td></tr>';
                 break;
             case "object":
                 out += '<tr><td>'+property_nicename+'</td><td>';
                 out += '<select class="item-'+property+'">';
-                for (var option in libraryDefaults[type][property]) {
+                for (var option in defaultItem[property]) {
                     var selected = "";
-                    if (libraryDefaults[type][property][option]==item[property]) selected = "selected";
-                    out += '<option '+selected+' value='+option+'>'+libraryDefaults[type][property][option]+'</option>';
+                    if (defaultItem[property][option]==item[property]) selected = "selected";
+                    out += '<option '+selected+' value='+option+'>'+defaultItem[property][option]+'</option>';
                 }
                 out += '</select></td></tr>';
                 break;
@@ -1307,21 +1351,27 @@ libraryHelper.prototype.item_to_html = function (type, item, tag) {
  * Get item to save in library (when editing or creating new item)
  *****************************************************************/
 libraryHelper.prototype.get_item_to_save = function (type) {
+
+    var defaultItem = libraryDefaults[type];
+    if (typeof libraryDefaults[type] == "object") {
+        defaultItem = libraryDefaults[type]["Wall"];
+    }
+
     var item = {};
-    var tag = $(".item-tag").val();
-    item[tag] = {};
-    for (var property in libraryDefaults[type]) {
-        switch (typeof libraryDefaults[type][property]) {
+    for (var property in defaultItem) {
+        switch (typeof defaultItem[property]) {
             case "string":
-                item[tag][property] = $(".item-"+property).val();
+                item[property] = $(".item-"+property).val();
                 break;
             case "number":
-                item[tag][property] = 1*$(".item-"+property).val();
+                item[property] = 1*$(".item-"+property).val();
                 break;
             case "array":
-                item[tag][property] = $(".item-"+property).val();
+                item[property] = $(".item-"+property).val();
                 break;
         }
+        if (item[property]=="undefined") delete item[property];
+        
     }
     return item;
 };
@@ -1394,7 +1444,6 @@ libraryHelper.prototype.populate_measure_new_item = function (type_of_library) {
     var item_index = $('#replace-from-lib-items').val();
     console.log("item_index:"+item_index);
     
-    
     var library = this.library[type_of_library];
     
     var original_item = JSON.parse($('#apply-measure-ok').attr('item'));
@@ -1429,7 +1478,7 @@ libraryHelper.prototype.populate_selects_in_apply_measure_modal = function (type
     this.onChangeApplyMeasureReplaceFromLib(type_of_library); // This one to populate the select for items
 };
 
-libraryHelper.prototype.get_list_of_libraries_for_select = function (library_type) {
+libraryHelper.prototype.get_list_of_libraries_for_select = function () {
     var out = ''
     for (var z in this.library_list) {
         out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";

@@ -495,14 +495,16 @@ function get_elements_max_id() {
 }
 
 
-function apply_measure(measure) {
+function elements_apply_measure(measure) {
     console.log("elements.js > apply_measure");
     console.log(measure);
 
+    return false;
+
     // Check is a measure has previously been applied as part of a bulk measure, if so then we delete it
-    var applied_in_bulk = measure_applied_in_bulk(measure.item_id);
-    if (applied_in_bulk != false)
-        delete(data.fabric.measures[applied_in_bulk].original_elements[measure.item_id]);
+    // var applied_in_bulk = measure_applied_in_bulk(measure.item_id);
+    // if (applied_in_bulk != false)
+    //     delete(data.fabric.measures[applied_in_bulk].original_elements[measure.item_id]);
 
     // The first time we apply a measure to an element we record its original stage
     if (data.fabric.measures[measure.item_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
