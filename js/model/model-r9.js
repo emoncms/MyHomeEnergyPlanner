@@ -32,7 +32,7 @@
  a change of inputs to the model. Changes of the minor values are due to changes only in the code.
  */
 
-var version = 9.21;
+var version = 10.00;
 
 var calc = {data: {}};
 
@@ -91,18 +91,18 @@ calc.start = function (data)
         data.altitude = 0;
     if (data.LAC_calculation_type == undefined)
         data.LAC_calculation_type = 'SAP';
-        
+
     if (data.fuels == undefined)
         data.fuels = datasets.fuels;
-     
+
     // Copy over any new fuels added in datasets to local assessment copy
     // this does not overwrite any local changes   
     for (var fuel in datasets.fuels) {
-        if (data.fuels[fuel]==undefined) {
+        if (data.fuels[fuel] == undefined) {
             data.fuels[fuel] = datasets.fuels[fuel];
         }
-    }  
-        
+    }
+
     data.num_of_floors = 0;
     data.TFA = 0;
     data.volume = 0;
@@ -2437,7 +2437,8 @@ calc.fans_and_pumps_and_combi_keep_hot = function (data) {
  // Calculates gains for "metabolic", "losses", "fans and pumps"
  //
  // Inputs from other modules:  
- //      - data.space_heating.use_utilfactor_forgains
+ //     - data.space_heating.use_utilfactor_forgains
+ //     - data.heating_systems  
  //	- data.occupancy
  //	- data.ventilation.ventilation_type
  //	- data.ventilation.system_specific_fan_power
@@ -2471,6 +2472,18 @@ calc.metabolic_losses_fans_and_pumps_gains = function (data) {
     //  Fans and Pumps - SAP2012 table 5, p. 215
     var monthly_heat_gains = 0;
     data.gains_W['fans_and_pumps'] = new Array();
+
+    // From heating systems
+    data.heating_systems.forEach(function (system) {
+        if (system.category == 'Warm air system') {
+            var power = system.system.fans_and_supply_pumps * 1000 / (24 * 365); // kWh/year to W
+            monthly_heat_gains += 1.0 * power * 0.04 * data.volume;
+        }
+        else if (system.central_heating_pump_inside != undefined && system.central_heating_pump_inside === "Yes") {
+            var power = system.system.central_heating_pump * 1000 / (24 * 365); // kWh/year to W
+            monthly_heat_gains += power;
+        }
+    });
     // Note: From if there was an oil boiler with pump inside dweling we should add 10W of gains, the problem is that i don't know where in MHEP we can as this. Therefor we assume taht in the case of havin an oil boiler the pump is outside :(
 
     // From ventilation
