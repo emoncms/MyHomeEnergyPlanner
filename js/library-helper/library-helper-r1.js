@@ -703,7 +703,9 @@ libraryHelper.prototype.onChangeApplyMeasureReplaceFromLib = function (type_of_l
 libraryHelper.prototype.onChangeApplyMeasureReplaceFromLibItem = function (type_of_library) {
     this.populate_measure_new_item(type_of_library);
     //disable the possibility to change the type of the element
-    $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
+    var item = JSON.parse($("#apply-measure-ok").attr('item'));
+    if (item.type != 'Loft' && item.type != 'Roof')
+        $("#apply-measure-item-fields .create-element-type").prop('disabled', true);
 };
 libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
     var type = $('#modal-create-in-library .create-element-type').val();

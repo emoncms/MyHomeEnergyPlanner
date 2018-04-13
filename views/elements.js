@@ -306,7 +306,10 @@ function add_element(id, z)
     row.attr('row', z);
     row.attr('item_id', data.fabric.elements[z].id);
     row.attr('item', JSON.stringify(data.fabric.elements[z]));
-    row.attr('tags', data.fabric.elements[z].type);
+    if (data.fabric.elements[z].type != "Loft" && data.fabric.elements[z].type != "Roof")
+        row.attr('tags', data.fabric.elements[z].type);
+    else
+        row.attr('tags', 'Roof,Loft');
 
     // Revert to original
     init_revert_to_original(id, z);
