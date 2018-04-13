@@ -5,6 +5,7 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 
 function assessment_controller() {
     global $session, $route, $mysqli, $fullwidth;
+    global $MHEP_image_gallery; // Should be set in settings.php to allow image gallery functionality
     $fullwidth = true;
 
     /* --------------------------------------------------------------------------
@@ -18,17 +19,17 @@ function assessment_controller() {
       }
      */
 
-    /*$libresult = $mysqli->query("SELECT `id`, `data` FROM `element_library` WHERE `type`='elements_measures'");
-    foreach ($libresult as $row) {
-        $data = json_decode($row['data']);
-        foreach ($data as $element) {
-            $element->min_cost = 100;
-        }
-        $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
-        $data = json_encode($data);
-        $req->bind_param('si', $data, $row['id']);
-        $req->execute();
-    }*/
+    /* $libresult = $mysqli->query("SELECT `id`, `data` FROM `element_library` WHERE `type`='elements_measures'");
+      foreach ($libresult as $row) {
+      $data = json_decode($row['data']);
+      foreach ($data as $element) {
+      $element->min_cost = 100;
+      }
+      $req = $mysqli->prepare("UPDATE `element_library` SET `data`=? WHERE `id`=?");
+      $data = json_encode($data);
+      $req->bind_param('si', $data, $row['id']);
+      $req->execute();
+      } */
     //require "Modules/assessment/assessment_model.php";
     //$assessment = new Assessment($mysqli);
     //$assessment->edit_item_in_all_libraries('elements', 'DRD04', 'uvalue', 2.6);
@@ -239,11 +240,13 @@ function assessment_controller() {
 // -------------------------------------------------------------------------------------------------------------
 // Image gallery
 // -------------------------------------------------------------------------------------------------------------
-        // if ($route->action == 'uploadimages' && $session['write'])
-        // $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
+        if ($MHEP_image_gallery === true) {
+            if ($route->action == 'uploadimages' && $session['write'])
+                $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
 
-        // if ($route->action == 'deleteimage' && $session['write'])
-        // $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
+            if ($route->action == 'deleteimage' && $session['write'])
+                $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
+        }
 
 
 // Upgrade (temporary)    

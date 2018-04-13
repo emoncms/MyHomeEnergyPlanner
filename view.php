@@ -1,5 +1,5 @@
 <?php
-global $path, $app_color, $app_title, $app_description;
+global $path, $app_color, $app_title, $app_description, $MHEP_image_gallery;
 $d = $path . "Modules/assessment/";
 
 $projectid = (int) $_GET['id'];
@@ -90,7 +90,9 @@ for ($i = 2; $i < count($reports_dir); $i++) {
                 <div class="scenario-nav-heading">Project input</div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
-                <!--<div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>-->
+                <?php if ($MHEP_image_gallery === true) { ?>
+                    <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
+                <?php } ?>
                 <div class="scenario-nav-heading">Other</div>
                 <div id="links-to-reports"></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/compare">MHEP Report</a></div>

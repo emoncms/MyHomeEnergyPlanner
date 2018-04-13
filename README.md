@@ -1,3 +1,4 @@
+
 ## My Home Energy Planner
 
 Open source home energy assessment based on emoncms and emoncms module openbem:
@@ -39,3 +40,12 @@ My Home Energy Planner uses [openFUVC](http://openflooruvaluecalculator.carbon.c
     cd /var/www/emoncms/Modules/assessment
     git submodule init
     git submodule update
+
+In order to enable the "Image gallery" the following variable needs to be added to _settings.php_:
+	
+	  $MHEP_image_gallery = true;
+
+Also you may need to change the ownership and permissions for the _images_ directory:
+
+	chown :www-data images
+	chmod 774 images
