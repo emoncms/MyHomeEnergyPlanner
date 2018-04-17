@@ -265,15 +265,17 @@ $("#openbem").on("click", '.calculate-floor-uvalue', function () {
     $('#openFUVC-modal #perimeter input').val(perimeter);
     openFUVC_helper.launch_calculator(function (uvalue) {
         $('[key="data.fabric.elements.' + z + '.uvalue"]').val(uvalue.toFixed(2));
-        if (area == "") {
-            area = $('#openFUVC-modal #area input').val();
-            $('[key="data.fabric.elements.' + z + '.area"]').val(area);
+        $('[key="data.fabric.elements.' + z + '.uvalue"]').change();
+        if (area == "" || area != $('#openFUVC-modal #area input').val()) {
+            var new_area = $('#openFUVC-modal #area input').val();
+            $('[key="data.fabric.elements.' + z + '.area"]').val(new_area);
+            $('[key="data.fabric.elements.' + z + '.area"]').change();
         }
-        if (perimeter == "") {
-            perimeter = $('#openFUVC-modal #perimeter input').val();
-            $('[key="data.fabric.elements.' + z + '.perimeter"]').val(perimeter);
+        if (perimeter == "" || perimeter != $('#openFUVC-modal #perimeter input')) {
+            var new_perimeter = $('#openFUVC-modal #perimeter input').val();
+            $('[key="data.fabric.elements.' + z + '.perimeter"]').val(new_perimeter);
+            $('[key="data.fabric.elements.' + z + '.perimeter"]').change();
         }
-
     });
 });
 
