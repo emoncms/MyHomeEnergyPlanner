@@ -382,7 +382,11 @@ function add_heating_systems() {
 
     $('#heating-systems').html('');
     var out = "<tr><th>Tag</th><th>Name</th><th>Provides</th><th>Space heating / Winter efficiency</th><th>Water heating / Summer efficiency</th>\n\
-<th>Fuel</th><th>Fraction  <i class='icon-question-sign' title='This defines what proportion of the space heating or water heating for a home is provided by the system listed. For example, a standard assumption might be that a gas boiler provides 90% (0.9) of the space heating, and an open fire or room stove provides 10% (0.1). However, this can be adjusted using assessors informed judgement as required - and as many systems as are present can be included. If there are two main heating systems identified, the proportion of heat provided by each system should be taken as the relative heated floor area served by each system' /></th><th>Main heating system <i class='icon-question-sign' title='The main heating system is that which heats the largest proportion of the dwelling, and often provided hot water as well as space heating. If there is more than one main heating system identified, main system 1 always heats the living space. Secondary heating systems are room heaters - such as open fires or wood-stoves. If portable room heaters are used, they should be included in the calculations (note this is a deviation from standard SAP - ref p.40 SAP 9.92)' /></th><th>Responsiveness <i class='icon-question-sign' title='Refer to Table 4d, p.209 SAP 9.92' /></th><th>Temperature adjustment <i class='icon-question-sign' title='SAP2012, table 4e, p.210'></i></th><th>Space heating controls <i class='icon-question-sign' title='Refer to Table 4e, p.210 SAP 9.92' /></th><th>Instantaneous water heating?</th></tr>"
+<th>Fuel</th><th>Fraction  <i class='icon-question-sign' title='This defines what proportion of the space heating or water heating for a home is provided by the system listed. For example, a standard assumption might be that a gas boiler provides 90% (0.9) of the space heating, and an open fire or room stove provides 10% (0.1). However, this can be adjusted using assessors informed judgement as required - and as many systems as are present can be included. If there are two main heating systems identified, the proportion of heat provided by each system should be taken as the relative heated floor area served by each system' /></th><th>Main heating system <i class='icon-question-sign' title='The main heating system is that which heats the largest proportion of the dwelling, and often provided hot water as well as space heating. If there is more than one main heating system identified, main system 1 always heats the living space. Secondary heating systems are room heaters - such as open fires or wood-stoves. If portable room heaters are used, they should be included in the calculations (note this is a deviation from standard SAP - ref p.40 SAP 9.92)' /></th>\n\
+<th>Responsiveness <i class='icon-question-sign' title='Refer to Table 4d, p.209 SAP 9.92' /></th>\n\
+<th>Temperature adjustment <i class='icon-question-sign' title='SAP2012, table 4e, p.210'></i></th>\n\
+<th>Space heating controls <i class='icon-question-sign' title='Refer to Table 4e, p.210 SAP 9.92' /></th>\n\
+<th>Instantaneous water heating?</th><th>Central heating pump inside dwelling</th></tr>"
     $('#heating-systems').append(out);
 
     // Generate html string
@@ -424,7 +428,9 @@ function add_heating_systems() {
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.temperature_adjustment" max = "1" step = "0.01" min = "0" /> </td>';
         out += '<td class = "if-SH" style = "text-align:center" > <input class="controls-input" style = "width:40px" type = "number" key = "data.heating_systems.' + z + '.heating_controls" max = "3" step = "1" min = "1" /> \n\
         <br /> <span class = "apply-water-heating-measure if-not-master" type = "space_heating_control_type" item-index = "' + z + '" style = "cursor:pointer" > <button class = "btn if-not-locked" > Apply measure </button></span > </td>';
-        out += '<td class = "if-WH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.instantaneous_water_heating" /> </td></tr > ';
+        out += '<td class = "if-WH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.instantaneous_water_heating" /> </td>';
+        out += '<td class = "if-SH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.central_heating_pump_inside" /> </td>';
+       out+='</tr>';
 
         $('#heating-systems').append(out);
         if(scenario != 'master')
