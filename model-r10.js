@@ -2479,8 +2479,8 @@ calc.metabolic_losses_fans_and_pumps_gains = function (data) {
             var power = system.system.fans_and_supply_pumps * 1000 / (24 * 365); // kWh/year to W
             monthly_heat_gains += 1.0 * power * 0.04 * data.volume;
         }
-        else if (system.central_heating_pump_inside != undefined && system.central_heating_pump_inside === "Yes") {
-            var power = system.system.central_heating_pump * 1000 / (24 * 365); // kWh/year to W
+        else if (system.central_heating_pump_inside != undefined && system.central_heating_pump_inside !== false) {
+            var power = system.central_heating_pump * 1000 / (24 * 365); // kWh/year to W
             monthly_heat_gains += power;
         }
     });

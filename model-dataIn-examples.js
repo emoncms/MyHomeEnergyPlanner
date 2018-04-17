@@ -54,7 +54,7 @@ var dataIn_model_r9 = {
     temperature: {
         target: 21,
         living_area: 20,
-        hours_off:{weekday: [7, 8], weekend: [8]}
+        hours_off: {weekday: [7, 8], weekend: [8]}
     },
     heating_systems: [// the lines with "//" are the ones that I haven't found as inputs yet so they may not be needed as inputs
         {
@@ -62,6 +62,7 @@ var dataIn_model_r9 = {
             "winter_efficiency": 90,
             "summer_efficiency": 80,
             "central_heating_pump": 120, //
+            "central_heating_pump_inside": false,
             "fans_and_supply_pumps": null, //
             "responsiveness": 1, // Refer to Table 4d, p.209 SAP 9.92
             "combi_loss": "Instantaneous, without keep hot-facility", // Instantaneous, without keep hot-facility || Instantaneous, with keep-hot facility controlled by time clock || Instantaneous, with keep-hot facility not controlled by time clock || Storage combi boiler >= 55 litres || Storage combi boiler < 55 litres
@@ -152,7 +153,7 @@ var dataIn_model_r9 = {
         volume_ratio: 0.5	// Volume ratio Veff/Vd,avera
     },
     water_heating: {
-        low_water_use_design: false,    //
+        low_water_use_design: false, //
         override_annual_energy_content: false, // true || false
         annual_energy_content: 0, // input to the module when override_annual_energy_content is set to true
         hot_water_control_type: 'no_cylinder_thermostat', // no_cylinder_thermostat || Cylinder thermostat, water heating not separately timed || Cylinder thermostat, water heating separately timed
