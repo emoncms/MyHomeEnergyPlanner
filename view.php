@@ -118,9 +118,9 @@ for ($i = 2; $i < count($reports_dir); $i++) {
                         <div class="scenario-nav"><a href="#template/LAC">Lighting, Appliances & Cooking</a></div>
                         <div class="scenario-nav"><a href="#template/heating">Heating</a></div>                        
                         <div class="scenario-nav"><a href="#template/fuel_requirements">Fuel requirements</a></div>                        
+                        <div class="scenario-nav"><a href="#template/generation">Generation</a></div>
                         <div class="scenario-nav-heading">Extended input</a></div>
                         <div class="scenario-nav"><input type="checkbox" key="data.use_SHW"/> <a href="#template/solarhotwater">Solar Hot Water heating</a></div>
-                        <div class="scenario-nav"><input type="checkbox" key="data.use_generation"/> <a href="#template/generation">Generation</a></div>
                         <div class="scenario-nav-heading">Other</a></div>
                         <!--<div class="scenario-nav"><a href="#template/compare">Show difference</a></div>
                         <div class="scenario-nav"><a href="#template/detail">Detailed view</a></div>-->

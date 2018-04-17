@@ -21,7 +21,7 @@ function fuel_requirements_UpdateUI()
     $('[key="data.energy_requirements.fans_and_pumps.name"]').parent().append(button);
 
     $('#generation').html("");
-    if (data.use_generation != 1) {
+    if (data.use_generation != 1 || (data.generation.solar_annual_kwh == 0 && data.generation.wind_annual_kwh == 0 && data.generation.hydro_annual_kwh == 0)) {
         $('#generation-container').hide();
         $("#fit_income").html('£0');
     }
@@ -52,7 +52,7 @@ function fuel_requirements_UpdateUI()
 
         if (z == 'generation')
             $("#fuel_totals [key='data.fuel_totals." + z + ".annualcost']").parent().append(' <i class="icon-question-sign" title="Savings due to generation take into account the fraction used onsite"></i>');
-    
+
     }
 }
 

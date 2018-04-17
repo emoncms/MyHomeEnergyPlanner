@@ -160,7 +160,7 @@ var openbem = {
         // LAC
         inputdata.LAC = data.LAC;
         inputdata.LAC_calculation_type = data.LAC_calculation_type;
-        inputdata.use_generation = data.use_generation;
+        inputdata.use_generation = 1;
         inputdata.generation = data.generation;
         inputdata.currentenergy = {
             //energyitems: data.currentenergy.energyitems,
