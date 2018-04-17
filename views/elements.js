@@ -261,8 +261,8 @@ $("#openbem").on("click", '.calculate-floor-uvalue', function () {
     var z = $(this).attr('z');
     var area = $('[key="data.fabric.elements.' + z + '.area"]').val();
     var perimeter = $('[key="data.fabric.elements.' + z + '.perimeter"]').val();
-    $('#openFUVC-modal #area input').val(area);
-    $('#openFUVC-modal #perimeter input').val(perimeter);
+    $('#openFUVC-modal #area input').val(area).change();
+    $('#openFUVC-modal #perimeter input').val(perimeter).change();
     openFUVC_helper.launch_calculator(function (uvalue) {
         $('[key="data.fabric.elements.' + z + '.uvalue"]').val(uvalue.toFixed(2));
         $('[key="data.fabric.elements.' + z + '.uvalue"]').change();
