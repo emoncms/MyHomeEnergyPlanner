@@ -37,7 +37,7 @@ function currentenergy_UpdateUI()
         units: "kWh/m" + String.fromCharCode(178),
         targets: {
             "Passivhaus": 120,
-            "UK Average": 350
+            "UK Average": 360
         }
     };
     targetbar("currentenergy-primaryenergy", options);
@@ -48,7 +48,7 @@ function currentenergy_UpdateUI()
         units: "kgCO" + String.fromCharCode(8322) + "/m" + String.fromCharCode(178),
         targets: {
             "80% by 2050": 17,
-            "UK Average": 85
+            "UK Average": 50.3
         }
     };
     targetbar("currentenergy-co2", options);
