@@ -138,7 +138,7 @@ function draw_openbem_graphics()
     // ---------------------------------------------------------------------------------
     if(scenario != undefined){
         if(scenario != 'master')
-            $('#measures-costs').html('Measures cost: £' + measures_costs(scenario));
+            $('#measures-costs').html('Measures cost: £' + measures_costs(scenario).toFixed(2));
         else
             $('#measures-costs').html('');
     }
