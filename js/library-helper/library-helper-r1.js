@@ -155,6 +155,23 @@ libraryHelper.prototype.add_events = function () {
         $('#modal-create-in-library #create-in-library-message').html('');
         myself.show_temporally_hidden_modals();
     });
+    this.container.on('change', '.create-element-type', function () {
+        var item_type = $(this).val();
+        var library_type = $('#replace-from-lib').attr('library_type');
+        var library_id = $('#replace-from-lib').val();
+        var library = myself.get_library_by_id(library_id);
+        ;
+        var options = '';
+        for (var item in library.data) {
+            if (library.type == 'elements' || library.type == 'elements_measures') {
+                if (library.data[item].tags[0].toUpperCase() == item_type.toUpperCase())
+                    options += '<option value="' + item + '">' + item + ': ' + library.data[item].name + '</option>';
+            }
+            else
+                options += '<option value="' + item + '">' + item + ': ' + library.data[item].name + '</option>';
+        }
+        $('#replace-from-lib-items').html(options);
+    });
 
     this.container.on('click', '.manage-users', function () {
         myself.init(); // Reload the lobrary before we display it
