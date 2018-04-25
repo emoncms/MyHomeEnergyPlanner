@@ -2600,10 +2600,10 @@ libraryHelper.prototype.heating_systems_item_to_html = function (item, tag) {
     out += '<tr><td>Central heating pump (kWh/year)</td><td><input type="text" class="item-central_heating_pump" required value="' + item.central_heating_pump + '"/></td></tr>';
     if (item.category != 'Warm air systems') {
         out += '<tr><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
-        out += '<tr style="display: none"><td>Specific fan power (kW) <i class="icon-question-sign" title="For the calculation of fans and supply pumps energy" /></td><td><input type="text" class="item-sfp" required value="' + item.sfp + '"/></td></tr>';
+        out += '<tr style="display: none"><td>Specific fan power (W/l/s) <i class="icon-question-sign" /></td><td><input type="text" class="item-sfp" required value="' + item.sfp + '"/></td></tr>';
     }
     else {
-        out += '<tr style="display: none"><td>Fans and supply pumps (kWh/year) <i class="icon-question-sign" title="For the calculation of fans and supply pumps energy" /></td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
+        out += '<tr style="display: none"><td>Fans and supply pumps (kWh/year)</td><td><input type="text" class="item-fans_and_supply_pumps " required value="' + item.fans_and_supply_pumps + '"/></td></tr>';
         out += '<tr><td>Specific fan power (kW)</td><td><input type="text" class="item-sfp" required value="' + item.sfp + '"/></td></tr>';
     }
     out += '<tr><td>Responsiveness</td><td><input type="text" class="item-responsiveness" required value="' + item.responsiveness + '"/></td></tr>';
