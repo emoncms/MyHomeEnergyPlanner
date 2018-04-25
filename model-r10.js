@@ -2350,7 +2350,7 @@ calc.fans_and_pumps_and_combi_keep_hot = function (data) {
         if (system.category != 'Warm air system')
             annual_energy += 1.0 * system.fans_and_supply_pumps;
         else
-            annual_energy += 0.4 * 1.5 * data.volume;
+            annual_energy += 0.4 * system.sfp * data.volume;
         switch (system.combi_loss) {
             case 'Instantaneous, with keep-hot facility controlled by time clock':
                 annual_energy += 600;
@@ -2476,8 +2476,7 @@ calc.metabolic_losses_fans_and_pumps_gains = function (data) {
     // From heating systems
     data.heating_systems.forEach(function (system) {
         if (system.category == 'Warm air system') {
-            var power = system.system.fans_and_supply_pumps * 1000 / (24 * 365); // kWh/year to W
-            monthly_heat_gains += 1.0 * power * 0.04 * data.volume;
+            monthly_heat_gains += 1.0 * system.sfp * 0.04 * data.volume;
         }
         else if (system.central_heating_pump_inside != undefined && system.central_heating_pump_inside !== false) {
             var power = system.central_heating_pump * 1000 / (24 * 365); // kWh/year to W
