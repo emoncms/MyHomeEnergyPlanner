@@ -46,23 +46,24 @@ Here we show a list of differences between OpenBEM and SAP2012. Being humble, th
  - [calc.ventilation](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/model-r10.js#L461): despite SAP doesn't make a difference between ventilation and infiltration loses, the loses due to Extract Ventilation Points (intermittent fans and passive vents) is in the part of the formula that corresponds with "infiltration". OpenBEM considers them to be loses due to the ventilation system. See [issue 177](https://github.com/emoncms/MyHomeEnergyPlanner/issues/177)
  - [calc.ventilation](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/model-r10.js#L461): SAP has a magnificient mistake when calculating the Infiltration Rate if a pressurisation test has been carried out. Formula 18 in worksheet adds q50 (m<sup>3</sup>/hm<sup>2</sup> of envelope area) with ACH (air changes per hour). In the case of using q50 we first convert it from m<sup>3</sup>/hm<sup>2</sup> of envelope area to ACH and then calculate the infiltration rate (ACH) 
  -  [calc.ventilation](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/model-r10.js#L461): SAP only considers 4 type of ventilation systems:
-  - a: Balanced mechanical ventilation with heat recovery (MVHR)
-  - b: Balanced mechanical ventilation without heat recovery (MV)
-  - c: Whole house extract ventilation or positive input ventilation from outside
-  - d: Natural ventilation or whole house positive input ventilation from loft
-**But OpenBEM considers:** 
-  - NV: natural ventilation (type 'd' in SAP)
-  - IE: Intermittent Extract Ventilations (type 'd' in SAP)
-  - PS: Passive Stack (type 'd' in SAP)
-  - DEV: Decentralised continous mechanical extract ventilation (type 'c' in SAP)
-  - MEV: Centralised Mechanical Continuous Extract Ventilation (type 'c' in SAP)
-  - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
-  - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)
+   - a: Balanced mechanical ventilation with heat recovery (MVHR)
+   - b: Balanced mechanical ventilation without heat recovery (MV)
+   - c: Whole house extract ventilation or positive input ventilation from outside
+   - d: Natural ventilation or whole house positive input ventilation from loft
+ - But OpenBEM considers:
+   - NV: natural ventilation (type 'd' in SAP)
+   - IE: Intermittent Extract Ventilations (type 'd' in SAP)
+   - PS: Passive Stack (type 'd' in SAP)
+   - DEV: Decentralised continous mechanical extract ventilation (type 'c' in SAP)
+   - MEV: Centralised Mechanical Continuous Extract Ventilation (type 'c' in SAP)
+   - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
+   - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)
  - SAP defines fixed values for ventilation rates of Extract Ventilation Points, these can be changed in OpenBEM to their actual specification
+ - In SAP, the energy requirements for Intermittent Extract Ventilations (type 'd' in SAP) are 0, OpenBEM adds 28kWh/year per Extract Ventilation Point (BREDEM)
  - [calc.temperature](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/Modules/assessment/js/model/model-r10.js#L708): SAP assumes specific periods with heating off in week or weekend days (table 9). OpenBEM allows the user to define the number and length of the periods
  - SAP doesn't take into account the energy used for appliances and cooking for the calculations of total cost, primary energy and CO<sub>2</sub> emissions. OpenBEM does
  - When using SAP calculation for LAC: 
-  - The energy requirements for cooking are calculated from the CO<sub>2</sub> emissions applying a emission factor of 0.519 (we just assume cooking is done with electricity. 
+   - The energy requirements for cooking are calculated from the CO<sub>2</sub> emissions applying a emission factor of 0.519 (we just assume cooking is done with electricity. 
  - OpenBEM has *energy_efficient_appliances* as input. When set to true: reduced internal heat gains are assumed (as per SAP) and also a coefficient of 0.9 is applied in the calculation of the annual energy used for appliances
  - OpenBEM allows to calculate energy requirements, gains and CO<sub>2</sub> for LAC inputing a detailed list of items with info about the power they use, efficiency and time of use. This method can be more accurate than SAP
  - OpenBEM allows to calculate energy requirements, gains and CO<sub>2</sub> for Appliances and Cooking using items from a Carbon Co-op library. This method can be more accurate than SAP
