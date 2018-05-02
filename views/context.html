@@ -58,6 +58,7 @@
     
     <table class="table">
     <tr><td width="60%">Dwelling UK region:</td><td>
+        <i id="find-post-code" class="icon-list-alt" title="Find region by postcode" style="margin-right:5px; cursor:pointer"></i>
         <select key="data.region">
             <option value=0>UK average</option>
             <option value=1>Thames</option>
@@ -95,4 +96,21 @@
         <tr><td>Custom occupancy</td><td><input type="text" key="data.custom_occupancy" style="width:60px" /></td></tr>
     </table>
     
+</div>
+
+<div id="region-postcodes-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Regions by post</h3>
+        <p style="margin-top:10px">The regions shown below applie to all postcodes in the postcode area except those for which specific postcode districts are given.</p><p> Please type the first letter of your postcode.</p>
+    </div>
+    <div class="modal-body">
+        <p>Postcode <input id="postcode" type="text" /></p>
+        <div id="regions-by-postcode"></div>
+    </div>
+    <div class="modal-footer">
+        <p id="region-postcodes-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="region-postcodes-ok" class="btn btn-primary">Ok</button>
+       </div>
 </div>

@@ -33,3 +33,29 @@ function context_initUI()
         add_floor(z);
     }
 }
+
+$('#openbem').on('click','#find-post-code', function(){
+    $('#postcode').val('');
+   $('#regions-by-postcode').html('');
+   $('#region-postcodes-ok').prop('disabled',true);
+   $('#region-postcodes-modal').modal('show');
+});
+
+$('#openbem').on('change keyup','#region-postcodes-modal #postcode', function(){
+   var postcode = $(this).val();
+   $('#regions-by-postcode').html('');
+   datasets.table_U6_region_from_postcode.forEach(function(element){
+       if (element[0].indexOf(postcode.toUpperCase()) == 0) // element[0] is the postcod
+           $('#regions-by-postcode').append('<p style="padding-left:15px"><input type="radio" name="region" value="'+element[1]+'"> ' + element[0] +' - ' + datasets.regions[element[1]]+'</p>');// element[1] is the region index
+   });
+});
+
+$('#openbem').on('click','#region-postcodes-modal input[name=region]', function(){
+    $('#region-postcodes-ok').prop('disabled',false);
+});
+
+$('#openbem').on('click','#region-postcodes-modal #region-postcodes-ok', function(){
+    $('#region-postcodes-modal').modal('hide');
+    var region = $('#region-postcodes-modal input[name=region]:checked').val();
+    $('select[key="data.region"]').val(region).change();  
+});
