@@ -14,10 +14,11 @@ function heating_UpdateUI()
         $('#annual_energy_content').html('<span key="data.water_heating.annual_energy_content" dp=0></span>  kWh/year');
     //Add "Hot water storage control type" and "Pipework insulation" if any of the systems requires it
     data.heating_systems.forEach(function (system) {
+        var show = false;
         if (system.primary_circuit_loss == 'Yes')
+            show = true;
+        if (show == true)
             $('.if-primary-circuit-loss').show();
-        else
-            $('.if-primary-circuit-loss').hide();
     });
     show_hide_if_master();
 }
@@ -430,11 +431,11 @@ function add_heating_systems() {
         <br /> <span class = "apply-water-heating-measure if-not-master" type = "space_heating_control_type" item-index = "' + z + '" style = "cursor:pointer" > <button class = "btn if-not-locked" > Apply measure </button></span > </td>';
         out += '<td class = "if-WH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.instantaneous_water_heating" /> </td>';
         out += '<td class = "if-SH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.central_heating_pump_inside" /> </td>';
-       out+='</tr>';
+        out += '</tr>';
 
         $('#heating-systems').append(out);
-        if(scenario != 'master')
-            $('.controls-input').attr("disabled",true);
+        if (scenario != 'master')
+            $('.controls-input').attr("disabled", true);
         switch (data.heating_systems[z].provides) {
             case 'heating':
                 $('.if-WH').html('');
@@ -472,7 +473,7 @@ function add_storage() {
             specific_st_info = '<td>' + st.loss_factor_b + '</td><td>' + st.volume_factor_b + '</td><td>' + st.temperature_factor_b + '</td>';
         }
         $('#type_of_storage').append('<tr><th>Type of storage </th><th>Volume</th>' + specific_header + '<th>Inside dwelling?</th><th style="width:150px">Contains dedicated solar storage or WWHRS volume? <i class="icon-question-sign" title="WWHRS: Waste Water Heat Recovery" /></th><th></th></tr>');
-        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td>'+ specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type_measures" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></td></tr>');
+        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type_measures" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></td></tr>');
     }
 
 }
