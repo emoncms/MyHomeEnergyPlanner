@@ -248,36 +248,67 @@ function compareVentilation(scenario) {
         out += '<tbody>';
         out += '<tr><td>The ventilation system has not changed - Type: <i>' + project[scenario].ventilation.ventilation_type + '</i></td></tr>';
         if ((project[scenario].ventilation.ventilation_type == 'IE'
-                || project[scenario].ventilation.ventilation_type == 'PS')
-                && project[scenario].measures.ventilation != undefined
-                && project[scenario].measures.ventilation.extract_ventilation_points != undefined) {
-            changed = true;
-            for (z in project[scenario].measures.ventilation.extract_ventilation_points) {
-                var EVP = project[scenario].measures.ventilation.extract_ventilation_points[z];
-                if (EVP.original == 'empty')
-                    out += '<tr><td>A new <i>' + EVP.measure.name + ' (' + EVP.measure.ventilation_rate + ' m<sup>3</sup>/h)</i> has been added to <i>'
-                            + EVP.measure.location + '</i> </td></tr>';
-                else {
-                    out += '<tr><td>The <i>' + EVP.original.name + ' (' + EVP.original.ventilation_rate
-                            + ' m<sup>3</sup>/h)</i> in <i>' + EVP.original.location
-                            + '</i> has been replaced with <i>' + EVP.measure.name + ' (' + EVP.measure.ventilation_rate
-                            + ' m<sup>3</sup>/h)</i></td></tr>';
+                || project[scenario].ventilation.ventilation_type == 'PS')) {
+            if (JSON.stringify(project.master.ventilation.EVP) != JSON.stringify(project[scenario].ventilation.EVP)) {
+                changed = true;
+                // Search for EVPs that in master and have been changed or removed in scenario
+                for (var z in project.master.ventilation.EVP) {
+                    var EVP_master = project.master.ventilation.EVP[z];
+                    var found = false;
+                    for (var i in project[scenario].ventilation.EVP) {
+                        var EVP_scenario = project[scenario].ventilation.EVP[i];
+                        if (EVP_master.id === EVP_scenario.id) {
+                            found = true;
+                            if (JSON.stringify(EVP_master) != JSON.stringify(EVP_scenario)) {
+                                out += '<tr><td>The <i>' + EVP_master.name + ' (' + EVP_master.ventilation_rate
+                                        + ' m<sup>3</sup>/h)</i> in <i>' + EVP_master.location
+                                        + '</i> has been replaced with <i>' + EVP_scenario.name + ' (' + EVP_scenario.ventilation_rate
+                                        + ' m<sup>3</sup>/h)</i></td></tr>';
+                            }
+                        }
+                    }
+                    if (found === false)
+                        out += '<tr><td>The <i>' + EVP_master.name + ' (' + EVP_master.ventilation_rate
+                                + ' m<sup>3</sup>/h)</i> in <i>' + EVP_master.location
+                                + '</i> has been removed</td></tr>';
+                }
+                // Search for new EVPs in scenario
+                for (var z in project[scenario].ventilation.EVP) {
+                    var EVP_scenario = project[scenario].ventilation.EVP[z];
+                    var found = false;
+                    for (var i in project.master.ventilation.EVP) {
+                        EVP_master = project.master.ventilation.EVP[i];
+                        if (EVP_master.id === EVP_scenario.id)
+                            found = true;
+                    }
+                    if (found === false)
+                        out += '<tr><td>A new <i>' + EVP_scenario.name + ' (' + EVP_scenario.ventilation_rate
+                                + ' m<sup>3</sup>/h)</i> has been added to <i>' + EVP_scenario.location + '</td></tr>';
                 }
             }
-        }
-        else { // DEV, MV, MEV, MVHR
-            properties_to_check = [
-                ['Air change rate', 'ventilation.system_air_change_rate'], ['Specific Fan Power', 'ventilation.system_specific_fan_power'],
-                ['Heat recovery efficiency', 'ventilation.balanced_heat_recovery_efficiency']
-            ];
-            var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
-            if (possible_changes.changed === true) {
-                changed = true;
-                out += possible_changes.html;
+            else { // DEV, MV, MEV, MVHR
+                properties_to_check = [
+                    ['Air change rate', 'ventilation.system_air_change_rate'], ['Specific Fan Power', 'ventilation.system_specific_fan_power'],
+                    ['Heat recovery efficiency', 'ventilation.balanced_heat_recovery_efficiency']
+                ];
+                var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
+                if (possible_changes.changed === true) {
+                    changed = true;
+                    out += possible_changes.html;
+                }
             }
-        }
 
-        out += '</tbody>';
+            out += '</tbody>';
+        }
+    }
+    // Totals
+    properties_to_check = [
+        ['Loses due to ventilation (WK)', 'ventilation.average_ventilation_WK']
+    ];
+    var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
+    if (possible_changes.changed === true) {
+        changed = true;
+        out += possible_changes.html;
     }
 
     return {html: out, changed: changed};
@@ -286,9 +317,16 @@ function compareVentilation(scenario) {
 function compareInfiltration(scenario) {
     var out = "";
     var changed = false;
+    var properties_to_check = [
+        ['Number of sides sheltered', 'ventilation.number_of_sides_sheltered']
+    ];
+    var changes = comparePropertiesInArray(scenario, properties_to_check);
+    if (changes.changed === true) {
+        changed = true;
+        out += changes.html;
+    }
     if (project.master.ventilation.air_permeability_test === false && project[scenario].ventilation.air_permeability_test === false) {
         var properties_to_check = [
-            ['Number of sides sheltered', 'ventilation.number_of_sides_sheltered'],
             ['Walls', 'ventilation.dwelling_construction'], ['Floors', 'ventilation.suspended_wooden_floor'],
             ['Percentage of windows and doors draught proofed', 'ventilation.percentage_draught_proofed'],
             ['Draught Lobby', 'ventilation.draught_lobby']
@@ -299,56 +337,44 @@ function compareInfiltration(scenario) {
             out += changes.html;
         }
     }
-    else if (project.master.ventilation.air_permeability_test === false
-            && project[scenario].ventilation.air_permeability_test === true
-            && project[scenario].measures.ventilation != undefined
-            && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
-        changed = true;
-        out += '<tr><td>The structural infiltration due to dwelling construction was changed applying <i>'
-                + project[scenario].measures.ventilation.draught_proofing_measures.measure.name
-                + '</i> with q50 = <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.q50
-                + ' cubic metres per hour per square metre of envelope</i> </td></tr>';
-        out += '<tr><td>The structural infiltration due to dwelling construction was <i>'
-                + project[scenario].measures.ventilation.draught_proofing_measures.original_structural_infiltration
-                + ' ACH</i>, after applying the measures: <i>' + project[scenario].ventilation.structural_infiltration.toFixed(2)
-                + ' ACH</i></td></tr>';
-        +'</i></td></tr>';
-    }
-    else if (project[scenario].measures.ventilation != undefined
-            && project[scenario].measures.ventilation.draught_proofing_measures != undefined) {
-        changed = true;
-        out += '<tr><td>The original Infiltration due to dweling construction was calculated \n\
-        based on air tightness test with q50 = <i>' + project.master.ventilation.air_permeability_value
-                + ' cubic metres per hour per square metre of envelope area</i>. \n\
-        After applying <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.name
-                + '</i>,  q50 = <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.q50
-                + '</i></td></tr>';
-        out += '<tr><td>The structural infiltration due to dwelling construction was <i>'
-                + project[scenario].measures.ventilation.draught_proofing_measures.original_structural_infiltration
-                + ' ACH</i>, after applying the measures: <i>' + project[scenario].measures.ventilation.draught_proofing_measures.measure.structural_infiltration
-                + ' ACH</i></td></tr>';
-        +'</i></td></tr>';
-    }
-    if (project[scenario].measures.ventilation != undefined
-            && project[scenario].measures.ventilation.intentional_vents_and_flues != undefined) {
-        changed = true;
-        for (z in project[scenario].measures.ventilation.intentional_vents_and_flues) {
-            var IVF = project[scenario].measures.ventilation.intentional_vents_and_flues[z];
-            out += '<tr><td>A new <i>' + IVF.measure.name + ' (' + IVF.measure.ventilation_rate + ' m<sup>3</sup>/h)</i> has been added to <i>'
-                    + IVF.measure.location + '</i> </td></tr>';
-        }
-    }
-    if (project[scenario].measures.ventilation != undefined
-            && project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined) {
-        for (z in project[scenario].measures.ventilation.intentional_vents_and_flues_measures) {
-            var IVF = project[scenario].measures.ventilation.intentional_vents_and_flues_measures[z];
-            out += '<tr><td>The <i>' + IVF.original.name + ' (' + IVF.original.ventilation_rate
-                    + ' m<sup>3</sup>/h)</i> in <i>' + IVF.original.location
-                    + '</i> has been replaced with <i>' + IVF.measure.name + ' (' + IVF.measure.ventilation_rate
-                    + ' m<sup>3</sup>/h)</i></td></tr>';
-        }
-    }
 
+    if (JSON.stringify(project.master.ventilation.IVF) != JSON.stringify(project[scenario].ventilation.IVF)) {
+        changed = true;
+        // Search for IVFs that in master and have been changed or removed in scenario
+        for (var z in project.master.ventilation.IVF) {
+            var IVF_master = project.master.ventilation.IVF[z];
+            var found = false;
+            for (var i in project[scenario].ventilation.IVF) {
+                var IVF_scenario = project[scenario].ventilation.IVF[i];
+                if (IVF_master.id === IVF_scenario.id) {
+                    found = true;
+                    if (JSON.stringify(IVF_master) != JSON.stringify(IVF_scenario)) {
+                        out += '<tr><td>The <i>' + IVF_master.name + ' (' + IVF_master.ventilation_rate
+                                + ' m<sup>3</sup>/h)</i> in <i>' + IVF_master.location
+                                + '</i> has been replaced with <i>' + IVF_scenario.name + ' (' + IVF_scenario.ventilation_rate
+                                + ' m<sup>3</sup>/h)</i></td></tr>';
+                    }
+                }
+            }
+            if (found === false)
+                out += '<tr><td>The <i>' + IVF_master.name + ' (' + IVF_master.ventilation_rate
+                        + ' m<sup>3</sup>/h)</i> in <i>' + IVF_master.location
+                        + '</i> has been removed</td></tr>';
+        }
+        // Search for new IVFs in scenario
+        for (var z in project[scenario].ventilation.IVF) {
+            var IVF_scenario = project[scenario].ventilation.IVF[z];
+            var found = false;
+            for (var i in project.master.ventilation.IVF) {
+                IVF_master = project.master.ventilation.IVF[i];
+                if (IVF_master.id === IVF_scenario.id)
+                    found = true;
+            }
+            if (found === false)
+                out += '<tr><td>A new <i>' + IVF_scenario.name + ' (' + IVF_scenario.ventilation_rate
+                        + ' m<sup>3</sup>/h)</i> has been added to <i>' + IVF_scenario.location + '</td></tr>';
+        }
+    }
     var properties_to_check = [
         ['Structural infiltration', 'ventilation.infiltration_rate_incorp_shelter_factor']
     ];
@@ -360,7 +386,7 @@ function compareInfiltration(scenario) {
 
 // Totals
     properties_to_check = [
-        ['Loses due to ventilation and infiltration (WK)', 'ventilation.average_WK']
+        ['Loses due to infiltration (WK)', 'ventilation.average_infiltration_WK']
     ];
     var possible_changes = comparePropertiesInArray(scenario, properties_to_check);
     if (possible_changes.changed === true) {
@@ -388,12 +414,9 @@ function compareClothesDryingFacilities(scenario) {
 
     });
     // Check if any has been added
-    if (project[scenario].measures.ventilation != undefined
-            && project[scenario].measures.ventilation.clothes_drying_facilities != undefined) {
-        for (z in project[scenario].measures.ventilation.clothes_drying_facilities) {
-            changed = true;
-            out += '<tr><td>A new <i>' + project[scenario].measures.ventilation.clothes_drying_facilities[z].measure.name + '</i> has been added</td></tr>';
-        }
+    for (var z in project[scenario].ventilation.CDF) {
+        changed = true;
+        out += '<tr><td>A new <i>' + project[scenario].ventilation.CDF[z].name + '</i> has been added</td></tr>';
     }
 
     return {html: out, changed: changed};
@@ -402,17 +425,57 @@ function compareClothesDryingFacilities(scenario) {
 function compareFabric(scenario) {
     var out = "";
     var changed = false;
-    if (project[scenario].fabric.measures != undefined && Object.keys(project[scenario].fabric.measures).length > 0) {
-        changed = true;
-        for (z in project[scenario].fabric.measures) {
-            var measure = project[scenario].fabric.measures[z];
-            if (measure.original_element != undefined) // Measure applied to only one element
-                out += compareFabricElement(measure.original_element, measure.measure);
-            if (measure.original_elements != undefined) { // Bulk Measure 
-                for (var id in measure.original_elements)
-                    out += compareFabricElement(measure.original_elements[id], measure.measure);
-            }
 
+    // Search for elements that are in master and have been changed or removed in scenario
+    for (var z in project.master.fabric.elements) {
+        var element_master = project.master.fabric.elements[z];
+        var found = false;
+        for (var i in project[scenario].fabric.elements) {
+            var element_scenario = project[scenario].fabric.elements[i];
+            if (element_master.id === element_scenario.id) {
+                found = true;
+                if (element_master.uvalue * element_master.netarea != element_scenario.uvalue * element_scenario.netarea) {
+                    changed = true;
+                    out += compareFabricElement(element_master, element_scenario);
+                }
+            }
+        }
+        if (found === false) {
+            changed = true;
+            out += "<tr><td>" + element_master.location + ' - ' + element_master.name + "<br><i>Net area: " + element_master.netarea.toFixed(2)
+                    + "m<sup>2</sup>, U-value " + element_master.uvalue + ":, k-value: "
+                    + element_master.kvalue;
+            if (element_master.type == "Window" || element_master.type == "window"
+                    || element_master.type == "Door" || element_master.type == "Roof_light")
+                out += ', g: ' + element_master.g + ', gL: ' + element_master.gL + ', ff:' + element_master.ff;
+            out += '</i></td>';
+            out += "<td style='padding-left:3px;padding-right:5px'>" + (element_master.uvalue * element_master.netarea).toFixed(2) + " W/K</td>";
+            out += "<td colspan=2>Element removed</td></tr>";
+        }
+    }
+    // Search for new elements in scenario
+    for (var z in project[scenario].fabric.elements) {
+        var element_scenario = project[scenario].fabric.elements[z];
+        var found = false;
+        for (var i in project.master.fabric.elements) {
+            element_master = project.master.fabric.elements[i];
+            if (element_master.id === element_scenario.id)
+                found = true;
+        }
+        if (found === false) {
+            changed = true;
+            out += '<tr><td colspan=2>Not present</td>';
+            out += "<td>" + element_scenario.location + ' - ' + element_scenario.name + "<br><i>Net area: " + element_scenario.netarea.toFixed(2)
+                    + "m<sup>2</sup>, U-value " + element_scenario.uvalue + ":, k-value: "
+                    + element_scenario.kvalue;
+            if (element_scenario.type == "Window" || element_scenario.type == "window"
+                    || element_scenario.type == "Door" || element_scenario.type == "Roof_light")
+                out += ', g: ' + element_scenario.g + ', gL: ' + element_scenario.gL + ', ff:' + element_scenario.ff;
+            out += '</i></td>';
+            out += "<td style='padding-left:3px;padding-right:5px'>" + (element_scenario.uvalue * element_scenario.netarea).toFixed(2) + " W/K</td>";
+            out += "<td>";
+            out += "<span style='color:#aa0000'>+" + element_scenario.uvalue * element_scenario.netarea + " W/K</span></td>";
+            out += "</tr>";
         }
     }
 
@@ -450,7 +513,10 @@ function compareFabricElement(element, measure) {
 function compareHeating(scenario) {
     var out = "";
     var changed = false;
+
+    ///////////////////
     // Hot water demand
+    ////////////////////
     var properties_to_check = [["Designed water use is not more than 125 litres per person per day", 'water_heating.low_water_use_design'],
         ['Do you know how much energy you use for water heating?', 'water_heating.override_annual_energy_content'],
         ['Annual average hot water usage', 'water_heating.Vd_average'],
@@ -462,11 +528,15 @@ function compareHeating(scenario) {
         out += DWU.html;
     }
 
-// Check if any water usage has been deleted
+    ///////////////////
+    // Water efficiency
+    ///////////////////
+
+    //   Check if any water usage has been deleted
     project.master.water_heating.water_usage.forEach(function (wu_in_master, key) {
         var found = false;
         project[scenario].water_heating.water_usage.forEach(function (wu_in_scenario, key) {
-            if (wu_in_master.id === wu_in_scenario.id && wu_in_master.tag === wu_in_scenario.tag)
+            if (wu_in_master.id === wu_in_scenario.id)
                 found = true;
         });
         if (found === false) {
@@ -475,15 +545,20 @@ function compareHeating(scenario) {
         }
     });
     // Check if any water usage has been added
-    if (project[scenario].measures.water_heating != undefined
-            && project[scenario].measures.water_heating.water_usage != undefined
-            && Object.keys(project[scenario].measures.water_heating.water_usage).length > 0) {
-        changed = true;
-        for (var key in project[scenario].measures.water_heating.water_usage)
-            out += '<tr><td>A new <i>' + project[scenario].measures.water_heating.water_usage[key].measure.name + '</i> has been added</td></tr>';
-    }
+    project[scenario].water_heating.water_usage.forEach(function (wu_in_scenario, key) {
+        var found = false;
+        project.master.water_heating.water_usage.forEach(function (wu_in_master, key) {
+            if (wu_in_master.id === wu_in_scenario.id)
+                found = true;
+        });
+        if (found === false)
+            out += '<tr><td>A new <i>' + wu_in_scenario.name + '</i> has been added</td></tr>';
+    });
 
-// Space heating demand
+    ///////////////////////
+    // Space heating demand
+    ///////////////////////
+
     var properties_to_check = [
         ['Living area', 'temperature.living_area'],
         ['Target temperature', 'temperature.target'],
@@ -495,42 +570,58 @@ function compareHeating(scenario) {
         out += SHD.html;
     }
 
-// Heating systems
-    if (project[scenario].measures.heating_systems != undefined
-            && Object.keys(project[scenario].measures.heating_systems).length > 0) {
-        changed = true;
-        for (id in project[scenario].measures.heating_systems) {
-            var heating_system = project[scenario].measures.heating_systems[id];
-            if (heating_system.original != 'empty')
-                out += '<tr><td><i>' + heating_system.original.name + '</i> has been replaced with <i>' + heating_system.measure.name + '</i></td></tr>';
-            else
-                out += '<tr><td>A new heating system has been added: <i>' + heating_system.measure.name + '</i></td></tr>';
+    ////////////////////
+    // Heating systems
+    ///////////////////
+
+    //   Check if any heating system has been changed
+    var hs_changed = false;
+    var out_hs = '<tr><td><h4>Heating systems</h4></td></tr><tbody><tr><th style="width:47%">Before</th><th style="width:47%">After</th></tr>';
+    project.master.heating_systems.forEach(function (hs_in_master, key) {
+        var found = false;
+        project[scenario].heating_systems.forEach(function (hs_in_scenario, key) {
+            if (hs_in_master.id === hs_in_scenario.id) {
+                var hs_in_master_noeff = hs_in_master;
+                var hs_in_scenario_noeff = hs_in_scenario;
+                delete hs_in_master_noeff.efficiency; // In order to be able to compare below the two objects, we need to remove the efficiency as it is a calculated value and may be different in the objects. The efficiency depends on other variables that are not exclusive to the heating systemkm (like data.energy_requirements.waterheating.quantity)
+                delete hs_in_scenario_noeff.efficiency;
+                found = true;
+                if (JSON.stringify(hs_in_master_noeff) !== JSON.stringify(hs_in_scenario_noeff)) {
+                    hs_changed = true;
+                    out_hs += '<tr>';
+                    out_hs += '<td>' + get_heating_system_html(hs_in_master, hs_in_scenario) + '</td>';
+                    out_hs += '<td>' + get_heating_system_html(hs_in_scenario, hs_in_master) + '</td>';
+                    out_hs += '</tr>';
+                }
+            }
+        });
+        if (found === false) {
+            hs_changed = true;
+            out_hs += '<tr><td>' + get_heating_system_html(hs_in_master) + '</td><td>Heating system removed</td></tr>';
         }
+    });
+    // Check if any heating system has been added
+    project[scenario].heating_systems.forEach(function (hs_in_scenario, key) {
+        var found = false;
+        project.master.heating_systems.forEach(function (hs_in_master, key) {
+            if (hs_in_master.id === hs_in_scenario.id)
+                found = true;
+        });
+        if (found === false) {
+            hs_changed = true;
+            out_hs += '<tr><td>Not present</td><td>' + get_heating_system_html(hs_in_scenario) + '</td></tr>';
+        }
+    });
+
+    out_hs += '</tbody>';
+    if (hs_changed === true) {
+        changed = true;
+        out += out_hs;
     }
 
-//Heating systems deleted and change on their parameters
-    /*project.master.heating_systems.forEach(function (hs_in_master, index) {
-     var hs_in_scenario = getHeatingSystemById(hs_in_master.id, scenario);
-     for (var parameter in hs_in_master) {
-     if (hs_in_master[parameter] != hs_in_scenario[parameter]) {
-     changed = true;
-     out += '<tr><td>The <i>' + parameter + '</i> of <i>' + hs_in_master.name + '</i> has changed from <i>'
-     + hs_in_master[parameter] + '</i> to <i>' + hs_in_scenario[parameter] + '</i> </td></tr>';
-     }
-     }
-     });*/
-
-// Space heating system controls
-    if (project[scenario].measures.space_heating_control_type != undefined
-            && Object.keys(project[scenario].measures.space_heating_control_type).length > 0) {
-        changed = true;
-        for (var id in project[scenario].measures.space_heating_control_type) {
-            var heating_system_control = project[scenario].measures.space_heating_control_type[id];
-            out += '<tr><td>The control of <i>' + getHeatingSystemById(id, scenario).name + '</i> has been replaced with <i>' + heating_system_control.measure.name + '</i></td></tr>';
-        }
-    }
-
-//Hot water systems
+    /////////////////////
+    //Hot water systems
+    ////////////////////
     var properties_to_check = [
         ['Include solar hot water?', 'water_heating.solar_water_heating']
     ];
@@ -540,30 +631,36 @@ function compareHeating(scenario) {
         out += SHW.html;
     }
 
-// Check if the hot water storage control type has changed 
-    if (project[scenario].measures.water_heating != undefined
-            && project[scenario].measures.water_heating.hot_water_control_type != undefined) {
+    // Check if the storage has changed
+    var st_changed = false;
+    var out_st = '<tbody><tr><td><h4>Storage</h4></td></tr><tbody><tr><th style="width:47%">Before</th><th style="width:47%">After</th></tr>';
+    if (JSON.stringify(project.master.water_heating.storage_type) != JSON.stringify(project[scenario].water_heating.storage_type)) {
+        st_changed = true;
+        out_st += '<tr><td>' + get_storage_html(project.master.water_heating.storage_type, project[scenario].water_heating.storage_type) + '</td>';
+        out_st += '<td>' + get_storage_html(project[scenario].water_heating.storage_type, project.master.water_heating.storage_type) + '</td></tr>';
+    }
+    out_st += '</tr></tbody>';
+    if (st_changed) {
         changed = true;
-        out += '<tr><td>The hot water storage control type has changed from <i>' + project[scenario].measures.water_heating.hot_water_control_type.original + '</i> to <i>' + project[scenario].measures.water_heating.hot_water_control_type.measure.control_type
-                + '</i></td></tr>';
+        out += out_st;
     }
 
-// Check if the primary pipework insulation has changed 
-    if (project[scenario].measures.water_heating != undefined
-            && project[scenario].measures.water_heating.pipework_insulation != undefined) {
+    // Other
+
+    var properties_to_check = [
+        ['Storage inside dwelling', 'water_heating.hot_water_store_in_dwelling'],
+        ['Contains dedicated solar storage or WWHRS volume?', 'water_heating.contains_dedicated_solar_storage_or_WWHRS'],
+        ['Hot water storage control type', 'water_heating.hot_water_control_type'],
+        ['Primary circuit pipework insulation', 'water_heating.pipework_insulation'],
+        ['', 'water_heating.'],
+        ['', 'water_heating.'],
+        ['', 'water_heating.'],
+        ['', 'water_heating.']
+    ];
+    var SHW = comparePropertiesInArray(scenario, properties_to_check);
+    if (SHW.changed === true) {
         changed = true;
-        out += '<tr><td>The primary circuit pipework insulation has changed from <i>'
-                + project[scenario].measures.water_heating.pipework_insulation.original
-                + '</i> to <i>' + project[scenario].measures.water_heating.pipework_insulation.measure.pipework_insulation
-                + '</i></td></tr>';
-    }
-// Storage type
-    if (project[scenario].measures.water_heating != undefined
-            && project[scenario].measures.water_heating.storage_type_measures != undefined) {
-        changed = true;
-        out += '<tr><td>The type of storage has changed from <i>'
-                + project[scenario].measures.water_heating.storage_type_measures.original.name + '</i> to <i>' + project[scenario].measures.water_heating.storage_type_measures.measure.name
-                + '</i></td></tr>';
+        out += SHW.html;
     }
 
     return {html: out, changed: changed};
@@ -681,20 +778,20 @@ function compareGeneration(scenario) {
     var properties_to_check = [
         ['Solar PV Annual Generation', 'generation.solar_annual_kwh'],
         ['Solar PV Fraction used on-site', 'generation.solar_fraction_used_onsite'],
-        ['Solar PV Feed in tariff (£/kWh)', 'generation.solar_FIT'],
+        ['Solar PV Feed in tariff Generation (£/kWh)', 'generation.solar_FIT'],
+        ['Solar PV Feed in tariff Export (£/kWh)', 'generation.solar_export_FIT'],
         ['Wind Annual Generation', 'generation.wind_annual_kwh'],
         ['Wind Fraction used on-site', 'generation.wind_fraction_used_onsite'],
-        ['Wind Feed in tariff (£/kWh)', 'generation.wind_FIT'],
+        ['Wind Feed in tariff Generation (£/kWh)', 'generation.wind_FIT'],
+        ['Wind Feed in tariff Export (£/kWh)', 'generation.solar_export_FIT'],
         ['Hydro Annual Generation', 'generation.hydro_annual_kwh'],
         ['Hydro Fraction used on-site', 'generation.hydro_fraction_used_onsite'],
-        ['Hydro Feed in tariff (£/kWh)', 'generation.hydro_FIT'],
-        ['Array Installed Capacity kWp (PV calculator)', 'generation.solarpv_kwp_installed'],
-        ['Array Orientation (PV calculator)', 'generation.solarpv_orientation'],
-        ['Array Inclination (PV calculator)', 'generation.solarpv_inclination'],
-        ['Overshading factor (PV calculator)', 'generation.solarpv_overshading'],
-        ['Annual generation (PV calculator)', 'generation.solarpv_annual_kwh'],
-        ['Fraction used on-site (PV calculator)', 'generation.solarpv_fraction_used_onsite'],
-        ['Feed in tariff (£/kWh) (PV calculator)', 'generation.solarpv_FIT']
+        ['Hydro Feed in tariff Generation (£/kWh)', 'generation.hydro_FIT'],
+        ['Hydro Feed in tariff Export (£/kWh)', 'generation.solar_export_FIT'],
+        //['Array Installed Capacity kWp (PV calculator)', 'generation.solarpv_kwp_installed'],
+        //['Array Orientation (PV calculator)', 'generation.solarpv_orientation'],
+        //['Array Inclination (PV calculator)', 'generation.solarpv_inclination'],
+        //['Overshading factor (PV calculator)', 'generation.solarpv_overshading']
     ];
     var DWU = comparePropertiesInArray(scenario, properties_to_check);
     if (DWU.changed === true) {
@@ -725,4 +822,51 @@ function getHeatingSystemById(id, scenario) {
             return project[scenario].heating_systems[index];
     }
     return false;
+}
+
+
+function get_heating_system_html(system, compare_to) {
+    if (compare_to == undefined)
+        compare_to = system;
+    var bold = [];
+    for (var key in system) {
+        if (system[key] != compare_to[key])
+            bold[key] = ['<b>', '</b>'];
+        else
+            bold[key] = ['', ''];
+    }
+    if (bold['central_heating_pump_inside'] == undefined)
+        bold['central_heating_pump_inside'] = ['', ''];
+
+    var out = "";
+    out = '<b>' + system.name + '</b><br /><div style="padding-left:15px"><i>' + bold['fuel'][0] + 'Fuel: ' + system.fuel + bold['fuel'][1] + ', ' + bold['winter_efficiency'][0] + 'Winter eff: ' + system.winter_efficiency + '%, ' + bold['winter_efficiency'][1] + bold['summer_efficiency'][0] + 'Summer eff: ' + system.summer_efficiency + '%' + bold['summer_efficiency'][1];
+    var provides = system.provides == 'heating' ? 'Heating' : system.provides == 'water' ? 'Water' : 'Space and water heating';
+    out += '<br />' + bold['main_space_heating_system'][0] + 'Provides: ' + provides;
+    if (system.provides != "water") {
+        var main = system.main_space_heating_system == "mainHS1" ? 'Main heating system' : system.main_space_heating_system == "mainHS2_whole_house" ? '2nd Main heating system - whole house' : system.main_space_heating_system == "mainHS2_part_of_the_house" ? '2nd Main heating system - different part of the house ' : 'Secondary heating system';
+        out += "<br />" + main + bold['main_space_heating_system'][1];
+    }
+    out += '<br />' + bold['central_heating_pump'][0] + ' Central heating pump: ' + system.central_heating_pump + ' kWh/year' + bold['central_heating_pump'][1] + ',' + bold['fans_and_supply_pumps'][0] + ' Fans and supply pumps: ' + system.fans_and_supply_pumps + ' kWh/year' + bold['fans_and_supply_pumps'][1] + '<br />' + bold['responsiveness'][0] + ' Responsiveness: ' + system.responsiveness + bold['responsiveness'][1] + ',' + bold['combi_loss'][0] + ' Combi loss: ' + system.combi_loss + bold['combi_loss'][1] + ', ' + bold['primary_circuit_loss'][0] + 'Primary circuit loss: ' + system.primary_circuit_loss + bold['primary_circuit_loss'][1] + '<br />';
+    out += bold['fraction_space'][0] + 'Fraction space: ' + system.fraction_space + bold['fraction_space'][1] + ', ' + bold['fraction_water_heating'][0] + 'Fraction water: ' + system.fraction_water_heating + bold['fraction_water_heating'][1] + '<br />' + bold['temperature_adjustment'][0] + ' Temperature adjustment : ' + system.temperature_adjustment + bold['temperature_adjustment'][1] + ', ' + bold['heating_controls'][0] + 'Space heating controls: ' + system.heating_controls + bold['heating_controls'][1] + '<br />' + bold['instantaneous_water_heating'][0] + ' Instantaneous water heating: ' + system.instantaneous_water_heating + bold['instantaneous_water_heating'][1] + ', ' + bold['central_heating_pump_inside'][0] + 'Central heating pump inside dwelling: ' + system.central_heating_pump_inside + bold['central_heating_pump_inside'][1] + '</i></div>';
+    return out;
+}
+
+function get_storage_html(storage, compare_to) {
+    if (compare_to == undefined)
+        compare_to = storage;
+    var bold = [];
+    for (var key in storage) {
+        if (storage[key] != compare_to[key])
+            bold[key] = ['<b>', '</b>'];
+        else
+            bold[key] = ['', ''];
+    }
+
+    var out = "";
+    out = '<b>' + storage.name + '</b><br /><div style="padding-left:15px"><i>' + bold['storage_volume'][0] + 'Storage volume: ' + storage.storage_volume + bold['storage_volume'][1] + '<br />' + bold['declared_loss_factor_known'][0] + 'Manufacturer\'s declared loss factor known: ' + storage.declared_loss_factor_known + bold['declared_loss_factor_known'][1];
+    if (storage.declared_loss_factor_known != false)
+        out += '<br />' + bold['manufacturer_loss_factor'][0] + 'Hot water storage loss factor : ' + storage.manufacturer_loss_factor + ' kWh/litre/day' + bold['manufacturer_loss_factor'][1] + '<br />' + bold['temperature_factor_a'][0] + 'Temperature factor : ' + storage.temperature_factor_a + bold['temperature_factor_a'][1];
+    else
+        out += '<br />' + bold['loss_factor_b'][0] + ' Hot water storage loss factor : ' + storage.loss_factor_b + ' kWh/litre/day' + bold['loss_factor_b'][1] + bold['volume_factor_b'][0] + '<br /> Volume factor: ' + storage.volume_factor_b + bold['volume_factor_b'][1] + ',' + bold['temperature_factor_b'][0] + '<br />Temperature factor: ' + storage.temperature_factor_b + bold['temperature_factor_b'][1] + '</i></div>';
+    return out;
 }
