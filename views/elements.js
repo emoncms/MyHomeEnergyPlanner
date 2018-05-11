@@ -179,8 +179,9 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
                 delete(data.fabric.measures[element_id]);
             // applied as part of a bulk measure
             var applied_in_bulk = measure_applied_in_bulk(element_id);
-            if (applied_in_bulk != false)
-                delete(data.fabric.measures[applied_in_bulk].original_elements[element_id]);
+            if (applied_in_bulk != false) {
+                delete_element_from_bulk_measure(element_id, applied_in_bulk);
+            }
         }
     });
 
@@ -193,7 +194,7 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
     measure[lib].location = '';
     var area = 0;
 
-    // Save original elements and calculate totals of bulk measure
+    // Save original elements
     data.fabric.measures[measure[lib].id] = {};
     data.fabric.measures[measure[lib].id].original_elements = {};
     $('.bulk-element').each(function (i, obj) { // For each window checked
@@ -207,9 +208,6 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
             }
         }
     });
-    measure[lib].quantity = area;
-    measure[lib].cost_total = measure[lib].quantity * measure[lib].cost;
-    data.fabric.measures[measure[lib].id].measure = measure[lib];
 
     //Apply measure to the selected elements
     $('.bulk-element').each(function (i, obj) {
@@ -222,7 +220,11 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
             measure[lib].type = data.fabric.elements[row].type; // I know this shouldn't be here, but it is the only place where I can get the type of the element to add it to the measure
         }
     });
-
+    
+    // Save measure and calculate totals
+    data.fabric.measures[measure[lib].id].measure = measure[lib];
+    add_quantity_and_cost_to_bulk_fabric_measure(measure[lib].id);
+    
     elements_initUI();
     update();
 
@@ -525,7 +527,7 @@ function apply_measure(measure) {
     // Check is a measure has previously been applied as part of a bulk measure, if so then we delete it
     var applied_in_bulk = measure_applied_in_bulk(measure.item_id);
     if (applied_in_bulk != false)
-        delete(data.fabric.measures[applied_in_bulk].original_elements[measure.item_id]);
+        delete_element_from_bulk_measure(measure.item_id, applied_in_bulk);
 
     // The first time we apply a measure to an element we record its original stage
     if (data.fabric.measures[measure.item_id] == undefined) { // If it is the first time we apply a measure to this element iin this scenario
@@ -660,6 +662,27 @@ function measure_applied_in_bulk(element_id) { // returns false if measure is no
         }
     }
     return false;
+}
+
+function delete_element_from_bulk_measure(element_id, measure_id) {
+    delete(data.fabric.measures[measure_id].original_elements[element_id]);
+    if (Object.keys(data.fabric.measures[measure_id].original_elements).length == 0)
+        delete(data.fabric.measures[measure_id]);
+    else  // recalculate cost and quantity
+        add_quantity_and_cost_to_bulk_fabric_measure(measure_id);
+}
+
+function add_quantity_and_cost_to_bulk_fabric_measure(measure_id) {
+    measure_id = 1.0 * measure_id;
+    var measure = data.fabric.measures[measure_id].measure;
+    measure.quantity = 0;
+    measure.cost_total = 0;
+    for (var id in data.fabric.measures[measure_id].original_elements) {
+        var single_measure = get_element_by_id(id); // Assumes that the measure has already been applied to the element
+        add_quantity_and_cost_to_measure(single_measure);
+        measure.quantity += single_measure.quantity;
+        measure.cost_total += single_measure.cost_total;
+    }
 }
 
 function init_revert_to_original(id, z) {

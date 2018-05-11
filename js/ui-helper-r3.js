@@ -472,10 +472,10 @@ function add_quantity_and_cost_to_measure(measure) { // Add extra properties to 
         if (measure.EWI != undefined && measure.EWI == true) // are of EWI is bigger than the actual area of the wall
             measure.area != undefined ? measure.quantity = 1.15 * measure.area : measure.quantity = 0;
         else
-            measure.area != undefined ? measure.quantity = measure.area : measure.quantity = 0;
+            measure.area != undefined ? measure.quantity = 1.0 * measure.area : measure.quantity = 0;
     }
     else if (measure.cost_units == 'ln m')
-        measure.perimeter != undefined ? measure.quantity = measure.perimeter : measure.quantity = 0;
+        measure.perimeter != undefined ? measure.quantity = 1.0 * measure.perimeter : measure.quantity = 0;
     else if (measure.cost_units == 'unit')
         measure.quantity = 1;
     else {
@@ -483,9 +483,9 @@ function add_quantity_and_cost_to_measure(measure) { // Add extra properties to 
         measure.cost_units = 'unit';
     }
     if (measure.min_cost != undefined)
-        measure.cost_total = 1.0 * measure.min_cost + measure.quantity * measure.cost;
+        measure.cost_total = 1.0 * measure.min_cost + 1.0 * measure.quantity * measure.cost;
     else
-        measure.cost_total = measure.quantity * measure.cost;
+        measure.cost_total = 1.0 * measure.quantity * measure.cost;
 
 }
 
