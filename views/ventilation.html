@@ -7,19 +7,19 @@
     <br>
 
     <h4>Ventilation type <i class="icon-question-sign" title="SAP only considers 4 type of ventilation systems:
-    - a: Balanced mechanical ventilation with heat recovery (MVHR)
-    - b: Balanced mechanical ventilation without heat recovery (MV)
-    - c: Whole house extract ventilation or positive input ventilation from outside
-    - d: Natural ventilation or whole house positive input ventilation from loft
-    
- But MHEP considers:
-    - NV: natural ventilation (type 'd' in SAP)
-    - IE: Intermittent Extract Ventilations (type 'd' in SAP)
-    - PS: Passive Stack (type 'd' in SAP)
-    - DEV: Decentralised continous mechanical extract ventilation (type 'c' in SAP)
-    - MEV: Centralised Mechanical Continuous Extract Ventilation (type 'c' in SAP)
-    - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
-    - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)"></i></h4>
+                            - a: Balanced mechanical ventilation with heat recovery (MVHR)
+                            - b: Balanced mechanical ventilation without heat recovery (MV)
+                            - c: Whole house extract ventilation or positive input ventilation from outside
+                            - d: Natural ventilation or whole house positive input ventilation from loft
+
+                            But MHEP considers:
+                            - NV: natural ventilation (type 'd' in SAP)
+                            - IE: Intermittent Extract Ventilations (type 'd' in SAP)
+                            - PS: Passive Stack (type 'd' in SAP)
+                            - DEV: Decentralised continous mechanical extract ventilation (type 'c' in SAP)
+                            - MEV: Centralised Mechanical Continuous Extract Ventilation (type 'c' in SAP)
+                            - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
+                            - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)"></i></h4>
 
     <table class="table">
         <tr><th>System</th><th>Air change rate <i class="icon-question-sign" title="If exhaust air heat pump see Appendix N SAP21012"></i></th><th>Specific Fan Power</th><th>Heat recovery efficiency allowing for in-use factor</th><th></th></tr>
@@ -117,7 +117,7 @@
                 <span class="add-IVF-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
                 <span class="apply-ventilation-measure-from-lib if-not-master" type="add_intentional_vents_and_flues" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
             </td></tr>
-        <tr><th width="150px"></th><th width="220px">Location</th><th width="100px">Type</th><th>Ventilation rate (m<sup>3</sup>/h)</th><th></th></tr>
+        <tr><th width="150px"></th><th width="220px">Location</th><th width="100px">Type</th><th>Ventilation rate (m<sup>3</sup>/h)</th><th><span id="apply-IVF-bulk-measure" class="if-not-master" type="bulk_measure_intentional_vents_and_flues" style="cursor:pointer"><button>Apply bulk measure</button></span></th></tr>
         <tbody id="IVF">        </tbody>
     </table>
 
@@ -125,7 +125,7 @@
     <h3>Clothes drying facilities</h3>
     <hr>
     <table class="table" id="CDF">
-        
+
     </table>
     <span class="add-CDF-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
     <span class="apply-ventilation-measure-from-lib if-not-master" type="add_CDF" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
@@ -153,6 +153,20 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
             <button id="apply-measure-ventilation-ok" class="btn btn-primary">Apply measure</button>
             <button id="apply-measure-ventilation-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+        </div>
+    </div>
+
+    <div id="apply-IVF-bulk-measure-modal" style="position: absolute" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Apply bulk measure to intentional vents and flues</h3>
+            <p id="myModalIntroText"><br />Choose below the elements to apply the measure to</p>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button id="apply-IVF-bulk-measure-next" class="apply-ventilation-measure-from-lib btn btn-primary" type="bulk_measure_intentional_vents_and_flues">Next</button>
         </div>
     </div>
 
