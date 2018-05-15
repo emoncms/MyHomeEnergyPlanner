@@ -687,19 +687,15 @@ for ($i = 2; $i < count($reports_dir); $i++) {
                 });
         project = JSON.parse(JSON.stringify(temp_project));
 
-
-
-        /*var mastermenu = $("#scenario-menu-template").html();
-         var tmp = mastermenu.replace(/template/g, s);
-         tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));*/
-
         $(".menu-content").hide();
         add_scenarios_to_menu();
         $('#modal-create-scenario').modal('hide');
 
         scenario = s;
+        page = 'context';
         update();
-        $('div [scenario="' + s + '"]').click();
+        $(".scenario-block[scenario=" + s + "] .block-header").click();
+        $(window).scrollTop(0);
     });
     $("#openbem").on('click', ".delete-scenario-launch", function () {
         var s = $(this).parent().parent().parent().attr('scenario');
@@ -714,12 +710,14 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         if (s != "master")
             delete project[s];
         $(".scenario-block[scenario=" + s + "]").hide();
-
-        scenario = "master";
-        $(".scenario-block[scenario=master]").find(".menu-content").click();
+        scenario = 'master';
+        page = "context"
 
         update();
         $("#modal-delete-scenario").modal("hide");
+        $(".scenario-block[scenario=master] .block-header").click();
+        $(window).scrollTop(0);
+
     });
 
     // Project's name and description management
@@ -812,7 +810,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     $("#topgraphic").show();
     $("#rating").hide();
     $(".house_graphic").html("Hide house graphic");
-
 
     var max_wrapper_width = 1150;
     var sidebar_enabled = true;
