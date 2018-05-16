@@ -154,9 +154,11 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 
     <div id="wrapper">
         <div style="height:10px"></div>
+        <div class="scenario-name"></div>
         <div id="topgraphic"></div>
         <div id="bound">
-            <div id="content"></div>
+            <div id="content">
+            </div>
         </div>
     </div>
 </div>
@@ -374,62 +376,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         update(false, false);
     });
 
-
-    $(window).on('hashchange', function () {
-        var tmp = (window.location.hash).substring(1).split('/');
-        if (tmp[2] != undefined)
-            report = tmp[2];
-        else
-            report = undefined;
-        page = tmp[1];
-        scenario = tmp[0];
-
-        if (!scenario)
-            scenario = "master";
-        if (!page)
-            page = "context";
-
-        if (project[scenario] == undefined)
-            scenario = 'master';
-
-        data = project[scenario];
-
-        // Update the type of the libraries we are using
-        /*if (typeof library_helper != "undefined") {
-         if (page == "system")
-         library_helper.type = 'systems';
-         else
-         library_helper.type = page;
-         }*/
-
-        // Render page
-        if (page != 'report')
-            load_view("#content", page);
-        else {
-            load_report("#content", report);
-        }
-        InitUI();
-        UpdateUI(data);
-        draw_openbem_graphics();
-
-        // Add lock functionality to buttons and icons
-        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
-            $('#content button').addClass('if-not-locked');
-            $('#content i').addClass('if-not-locked');
-        }
-
-        // Disable measures if master
-        show_hide_if_master();
-
-        if (data.locked)
-            $('.if-not-locked').hide();
-        else
-            $('.if-not-locked').show();
-
-        // Disable measures if master
-        show_hide_if_master();
-    });
-
     function update(undo_redo = false, reload_menu = true)
     {
         // We need to calculate the periods of heating off here because if we try to do it in household.js it happens after the update
@@ -626,6 +572,63 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     });
 
     // Scenarios menu interactions
+    $(window).on('hashchange', function () {
+        var tmp = (window.location.hash).substring(1).split('/');
+        if (tmp[2] != undefined)
+            report = tmp[2];
+        else
+            report = undefined;
+        page = tmp[1];
+        scenario = tmp[0];
+
+        if (!scenario)
+            scenario = "master";
+        if (!page)
+            page = "context";
+
+        if (project[scenario] == undefined)
+            scenario = 'master';
+
+        data = project[scenario];
+
+        // Update the type of the libraries we are using
+        /*if (typeof library_helper != "undefined") {
+         if (page == "system")
+         library_helper.type = 'systems';
+         else
+         library_helper.type = page;
+         }*/
+
+        // Render page
+        if (page != 'report')
+            load_view("#content", page);
+        else {
+            load_report("#content", report);
+        }
+        InitUI();
+        UpdateUI(data);
+        draw_openbem_graphics();
+
+        // Add lock functionality to buttons and icons
+        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
+            $('#content button').addClass('if-not-locked');
+            $('#content i').addClass('if-not-locked');
+        }
+
+        // Disable measures if master
+        show_hide_if_master();
+
+        if (data.locked)
+            $('.if-not-locked').hide();
+        else
+            $('.if-not-locked').show();
+
+        // Disable measures if master
+        show_hide_if_master();
+    });    
+    $("#openbem").on('click', ".scenario-nav", function () {
+        $(window).scrollTop(650);
+    });
     $("#openbem").on('click', ".block-header", function () {
 
         var s = $(this).parent().attr('scenario');
@@ -637,18 +640,13 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         $(".menu-content").hide();
         if (!visible)
             menu_content.show();
-        /*
-         data = project[scenario];
-         load_view("#content", page);
-         InitUI();
-         UpdateUI(data);
-         draw_openbem_graphics();
-         */
-        // }
+        
+        $(window).scrollTop(0);
     });
     $('#openbem').on('click', '.project-menu-item', function () {
         $('.scenario-block[scenario=master]').click();
         $('.menu-content').hide();
+        $(window).scrollTop(0);
     });
 
     // Scenarios management

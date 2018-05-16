@@ -164,6 +164,8 @@ function InitUI()
 
         $(this).html("<tr><td>" + title + "</td><td>sum:" + sum.toFixed(dp) + "<br>mean:" + mean.toFixed(dp) + "</td>" + out + "</tr>");
     });
+        
+    $('.scenario-name').html("<h2>" + scenario.charAt(0).toUpperCase() + scenario.slice(1) + ' - ' + data.scenario_name + "</h2>");
 }
 
 function UpdateUI(data)
