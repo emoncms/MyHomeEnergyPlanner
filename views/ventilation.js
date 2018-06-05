@@ -265,6 +265,7 @@ $('#openbem').on('click', '#apply-measure-ventilation-ok', function () {
                 data.measures.ventilation[library_helper.type][measure[tag].id] = {};
                 data.measures.ventilation[library_helper.type][measure[tag].id].original = 'empty';
             }
+            data.measures.ventilation[library_helper.type][measure[tag].id].measure = measure[tag];
             $('#apply-measure-ventilation-modal').modal('hide');
             break;
     }
