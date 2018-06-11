@@ -6,6 +6,7 @@ $schema['assessment'] = array(
     'description' => array('type' => 'text'),
     'userid' => array('type' => 'int(11)'),
     'author' => array('type' => 'varchar(30)'),
+    'initialisation_vector'=>array('type' => 'binary(16)'),
     'mdate' => array('type' => 'int(11)'),
     'status' => array('type' => 'text'),
     'data' => array('type' => 'mediumtext')

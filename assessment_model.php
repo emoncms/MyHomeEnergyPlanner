@@ -134,7 +134,14 @@ class Assessment {
         $result = $this->mysqli->query("SELECT * FROM " . $this->tablename . " WHERE `id` = '$id'");
         $row = $result->fetch_object();
 
-        $row->data = json_decode($row->data);
+        $data = json_decode($row->data);
+        if (is_null($data)) { // if $data is not null, it means that it's not encrypted
+            global $MHEP_key;
+            $row->data = json_decode(openssl_decrypt($row->data, 'AES-256-CBC', $MHEP_key, 0, $row->initialisation_vector));
+            unset($row->initialisation_vector); // we don't want to return it!
+        }
+        else
+            $row->data = $data;
         return $row;
     }
 
@@ -168,12 +175,21 @@ class Assessment {
 
         // Dont save if json_decode fails
         if ($data != null) {
-
+            global $MHEP_key;
             $data = json_encode($data);
-
-            $stmt = $this->mysqli->prepare("UPDATE " . $this->tablename . " SET `data` = ?, `mdate` = ? WHERE `id` = ?");
-            $stmt->bind_param("ssi", $data, $mdate, $id);
-            $stmt->execute();
+            if (isset($MHEP_key)) {
+                $ini_vector = openssl_random_pseudo_bytes(16); // 16 bytes = 128 bits iv
+                //$data = $this->pkcs7_pad($data, 16);
+                $data = openssl_encrypt($data, 'AES-256-CBC', $MHEP_key, 0, $ini_vector);
+                $stmt = $this->mysqli->prepare("UPDATE " . $this->tablename . " SET `data` = ?, `mdate` = ?, `initialisation_vector` = ? WHERE `id` = ?");
+                $stmt->bind_param("sssi", $data, $mdate, $ini_vector, $id);
+                $stmt->execute();
+            }
+            else {
+                $stmt = $this->mysqli->prepare("UPDATE " . $this->tablename . " SET `data` = ?, `mdate` = ? WHERE `id` = ?");
+                $stmt->bind_param("sbi", $data, $mdate, $id);
+                $stmt->execute();
+            }
 
             if ($this->mysqli->affected_rows == 1)
                 return true;
@@ -183,6 +199,11 @@ class Assessment {
         else {
             return false;
         }
+    }
+
+    private function pkcs7_pad($data, $size) {
+        $length = $size - strlen($data) % $size;
+        return $data . str_repeat(chr($length), $length);
     }
 
     public function set_name_and_description($userid, $id, $name, $description) {
@@ -376,7 +397,8 @@ class Assessment {
         if ($result->num_rows == 1) {
             $row = $result->fetch_object();
             return json_decode($row->data);
-        } else {
+        }
+        else {
             return new stdClass();
         }
     }
@@ -415,7 +437,8 @@ class Assessment {
         $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id`='$id'");
         if ($result->num_rows == 1) {
             $row = $result->fetch_object();
-        } else {
+        }
+        else {
             return "Library not found";
         }
 
@@ -434,17 +457,19 @@ class Assessment {
 
         $data = $this->escape_item($data);
         $data = json_decode($data);
-        if ($data==null) return false;
-        
+        if ($data == null)
+            return false;
+
         $data = json_encode($data);
-        
+
         $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE userid=? AND id=?");
         $stmt->bind_param("sii", $data, $userid, $id);
         $stmt->execute();
         $affected_rows = $stmt->affected_rows;
         $stmt->close();
-        if ($affected_rows == 1) return true;
-        
+        if ($affected_rows == 1)
+            return true;
+
         return false;
     }
 
@@ -508,7 +533,8 @@ class Assessment {
                     if ($row->write != $write_permissions) {
                         $result = $this->mysqli->query("UPDATE `element_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `orgid`='$orgid'");
                         return "Already shared, write permissions updated";
-                    } else
+                    }
+                    else
                         return "Already shared";
                 }
 
@@ -525,7 +551,8 @@ class Assessment {
                 if ($row->write != $write_permissions) {
                     $result = $this->mysqli->query("UPDATE `element_library_access` SET `write`='$write_permissions' WHERE `id` = '$id' AND `userid`='$userid'");
                     return "Already shared, write permissions updated";
-                } else
+                }
+                else
                     return "Already shared";
             }
 
@@ -602,7 +629,8 @@ class Assessment {
                 $result = $result == true ? 'Organisation removed' : 'Organisation could not be removed';
                 return $result;
             }
-        } else { // $user_to_remove is a user
+        }
+        else { // $user_to_remove is a user
             if ($userid == $user_to_remove_id)
                 return "You cannot remove yourself";
             $result = $this->mysqli->query("DELETE FROM element_library_access WHERE `id` = '$selected_library' AND `userid`='$user_to_remove_id'");
@@ -626,8 +654,9 @@ class Assessment {
             $stmt->execute();
             $affected_rows = $stmt->affected_rows;
             $stmt->close();
-            if ($affected_rows == 1) return true;
-            
+            if ($affected_rows == 1)
+                return true;
+
             return false;
         }
     }
@@ -662,15 +691,16 @@ class Assessment {
                 return "Tag could not be found in the library - tag: $tag";
             unset($library[$tag]);
             $library = json_encode($library);
-            
+
             // Save with prepared statement
             $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE id=?");
             $stmt->bind_param("si", $library, $library_id);
             $stmt->execute();
             $affected_rows = $stmt->affected_rows;
             $stmt->close();
-            if ($affected_rows == 1) return true;
-            
+            if ($affected_rows == 1)
+                return true;
+
             return false;
         }
     }
@@ -685,22 +715,23 @@ class Assessment {
         $tag = preg_replace('/[^\w\s]/', '', $tag);
         if (!$this->has_write_access_library($userid, $library_id)) {
             return "You haven't got enough permissions";
-        } else {
+        }
+        else {
             $result = $this->mysqli->query("SELECT * FROM element_library WHERE `id` = '$library_id'");
             $row = $result->fetch_object();
             $library = json_decode($row->data, true);
 
             $library[$tag] = $item;                     // add item to library object
             $library = json_encode($library);           // covert to json string
-            
             // Save with prepared statement
             $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE id=?");
             $stmt->bind_param("si", $library, $library_id);
             $stmt->execute();
             $affected_rows = $stmt->affected_rows;
             $stmt->close();
-            if ($affected_rows == 1) return true;
-            
+            if ($affected_rows == 1)
+                return true;
+
             return false;
         }
     }
@@ -717,9 +748,9 @@ class Assessment {
     }
 
     public function edit_item_in_all_libraries($library_type, $tag, $field, $value) {
-    
+
         $library_type = preg_replace('/[^\w\s-]/', '', $library_type); // Not stricly needed as only used internally
-    
+
         $libresult = $this->mysqli->query("SELECT id,data FROM element_library WHERE `type` = '" . $library_type . "'");
         foreach ($libresult as $row) {
             $library = json_decode($row['data']);
@@ -780,7 +811,8 @@ class Assessment {
                 }
                 if (file_exists(__DIR__ . "/images/" . $id . "/" . $filename)) {
                     $message = "File already exists";
-                } else {
+                }
+                else {
                     // Move file
                     ini_set('display_errors', 0); // We don't display errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
                     $move_result = move_uploaded_file($image["tmp_name"], __DIR__ . "/images/" . $id . "/" . $filename);
@@ -800,12 +832,13 @@ class Assessment {
         error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
         if (!file_exists(__DIR__ . "/images/" . $projectid . "/" . $filename)) { // if for a reason the file doesn't exist in the server but it does in the data object we allow to delete it
             $result = 1;
-        } else {
+        }
+        else {
             $result = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
         }
-        switch ($result){
+        switch ($result) {
             case 1:
-                $message= 'File could not be found in the server. Image gallery list updated';
+                $message = 'File could not be found in the server. Image gallery list updated';
                 break;
             case false:
                 $message = "File couldn't be deleted";

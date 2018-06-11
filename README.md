@@ -49,3 +49,9 @@ Also you may need to change the ownership and permissions for the _images_ direc
 
 	chown :www-data images
 	chmod 774 images
+
+### emonCMS settings
+The following variables can be added to setting.php
+
+ - $MHEP_image_gallery = true; // If true then the image gallery will be available
+ - $MHEP_key = "a 32 byte key"; // If set MHEP will encrypt the assessment data in the database . Command to generate it (32 bytes = 256 bits): openssl rand -hex 32
