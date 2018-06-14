@@ -287,7 +287,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     // Ensure all the scenarios have the same fuels
     if (project.master.fuels == undefined)
         project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));
-    ;
+    
     for (scenario in project)
         project[scenario].fuels = project.master.fuels;
 
@@ -376,7 +376,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         update(false, false);
     });
 
-    function update(undo_redo = false, reload_menu = true)
+    function update(undo_redo = false, reload_menu = false)
     {
         // We need to calculate the periods of heating off here because if we try to do it in household.js it happens after the update
         if (project.master.household != undefined) {
@@ -401,8 +401,8 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
 
-        if (reload_menu)
-            add_scenarios_to_menu();
+        /*if (reload_menu)
+            add_scenarios_to_menu();*/
 
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
