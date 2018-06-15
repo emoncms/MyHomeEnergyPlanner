@@ -471,8 +471,8 @@ function cost_of_measures_by_id(list_of_measures_by_id) {
 }
 function add_quantity_and_cost_to_measure(measure) { // Add extra properties to measure 
     if (measure.cost_units == 'sqm') {
-        if (measure.EWI != undefined && measure.EWI == true) // are of EWI is bigger than the actual area of the wall
-            measure.area != undefined ? measure.quantity = 1.15 * measure.area : measure.quantity = 0;
+        if (measure.EWI != undefined && measure.EWI == true) // ares of EWI is bigger than the actual area of the wall
+            measure.area != undefined ? measure.quantity = 1.15 * measure.area : measure.quantity = 0; // We use measure.area not measure.netarea (See issue 382: https://github.com/emoncms/MyHomeEnergyPlanner/issues/382#event-1681266801)
         else
             measure.area != undefined ? measure.quantity = 1.0 * measure.area : measure.quantity = 0;
     }
