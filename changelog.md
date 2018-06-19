@@ -8,6 +8,12 @@ Given a version number MAJOR.MINOR.PATCH:
 ## Version 1.1.0 (2018-06-08)
 
  - Issue 384: assessment data object encrypted in database
+ - Issue 382: clarification about the use of area instead of netarea for the cost os a wall measure
+ - Issue 371: values for each drop down option displayed (openFUVC)
+ - Revert to master not displayed when scenario is locked
+ - Issue 375: menu doesn't collapse when applying measure anymore
+ - Issue 270: added link to flood zone and flood resiliance to context page
+ - Issue  381: administration menu item added to Theme
 
 ## Version 1.0.0 (2018-06-08)
 Despite MHEP has being fully functional for some years now I am calling it, at this stage, version 1.0.0 because we need a starting point.
