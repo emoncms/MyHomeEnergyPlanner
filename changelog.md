@@ -15,6 +15,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 270: added link to flood zone and flood resiliance to context page
  - Issue  381: administration menu item added to Theme
  - Issue 373: measures cost figure removed from onscreen report pages (not printed)
+ - Issue 347: Create a new graph in the report that shows 'Fabric Energy Efficiency' rather than 'Space Heating Demand'.
 
 ## Version 1.0.0 (2018-06-08)
 Despite MHEP has being fully functional for some years now I am calling it, at this stage, version 1.0.0 because we need a starting point.

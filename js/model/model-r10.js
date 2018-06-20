@@ -32,7 +32,7 @@
  a change of inputs to the model. Changes of the minor values are due to changes only in the code.
  */
 
-var version = 10.00;
+var version = 10.01;
 
 var calc = {data: {}};
 
@@ -66,6 +66,7 @@ calc.run = function (datain)
     calc.heating_systems(calc.data);
     calc.fuel_requirements(calc.data);
     calc.primary_energy_by_requirement(calc.data);
+    calc.fabric_energy_efficiency(calc.data);
     calc.SAP(calc.data);
     calc.data.totalWK = calc.data.fabric_total_heat_loss_WK + calc.data.ventilation.average_WK;
     calc.data.primary_energy_use_m2 = calc.data.primary_energy_use / calc.data.TFA;
@@ -132,6 +133,7 @@ calc.start = function (data)
     data.space_heating_demand_m2 = 0;
     data.primary_energy_use_by_requirement = {};
     data.totalWK = 0;
+    data.FEE = 0;
 
     return data;
 }
@@ -185,7 +187,8 @@ calc.occupancy = function (data)
         data.custom_occupancy = 1;
     if (data.TFA > 13.9) {
         data.occupancy = 1 + 1.76 * (1 - Math.exp(-0.000349 * Math.pow((data.TFA - 13.9), 2))) + 0.0013 * (data.TFA - 13.9);
-    } else {
+    }
+    else {
         data.occupancy = 1;
     }
 
@@ -636,7 +639,8 @@ calc.ventilation = function (data)
                     effective_air_change_rate[m] = data.ventilation.system_air_change_rate;
                     infiltration_WK[m] = 0;
                     ventilation_WK[m] = data.volume * 0.33 * data.ventilation.system_air_change_rate;
-                } else {
+                }
+                else {
                     effective_air_change_rate[m] = adjusted_infiltration[m] + (0.5 * data.ventilation.system_air_change_rate);
                     infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
                     ventilation_WK[m] = data.volume * 0.33 * 0.5 * data.ventilation.system_air_change_rate;
@@ -651,7 +655,8 @@ calc.ventilation = function (data)
                     effective_air_change_rate[m] = adjusted_infiltration[m] + adjusted_EVP_air_changes[m];
                     infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
                     ventilation_WK[m] = data.volume * 0.33 * adjusted_EVP_air_changes[m];
-                } else {
+                }
+                else {
                     effective_air_change_rate[m] = 0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5;
                     infiltration_WK[m] = data.volume * 0.33 * (0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5 + adjusted_infiltration[m] * adjusted_EVP_air_changes[m]);
                     ventilation_WK[m] = data.volume * 0.33 * Math.pow(adjusted_EVP_air_changes[m], 2) * 0.5;
@@ -999,7 +1004,8 @@ calc.space_heating = function (data)
         // Apply utilisation factor if chosen:
         if (data.space_heating.use_utilfactor_forgains) {
             useful_gains[m] = total_gains[m] * utilisation_factor[m];
-        } else {
+        }
+        else {
             useful_gains[m] = total_gains[m];
         }
 
@@ -1033,7 +1039,8 @@ calc.space_heating = function (data)
                 // Apply utilisation factor if chosen:
                 if (data.space_heating.use_utilfactor_forgains) {
                     annual_useful_gains_kWh_m2[gains_source] += (utilisation_factor[m] * data.gains_W[z][m] * 0.024 * datasets.table_1a[m]) / data.TFA;
-                } else {
+                }
+                else {
                     annual_useful_gains_kWh_m2[gains_source] += data.gains_W[z][m] * 0.024 / data.TFA;
                 }
             }
@@ -1072,21 +1079,21 @@ calc.space_heating = function (data)
 /*---------------------------------------------------------------------------------------------
  // HEATING SYSTEMS
  //  
- // Calculates fuel requirements for water heating   */
-//  and space heating                                */
-//
-// Inputs from user: 
-//      - data.heating_systems
-//      
-// Inputs from other modules: 
-//      - data.energy_requirements.waterheating
-//	- data.energy_requirements.space_heating
-//      
-// Global Outputs: 
-//	- data.fuel_requirements.waterheating
-//	- data.fuel_requirements.space_heating
-//
-//---------------------------------------------------------------------------------------------*/
+ // Calculates fuel requirements for water heating   
+ //  and space heating                                
+ //
+ // Inputs from user: 
+ //      - data.heating_systems
+ //      
+ // Inputs from other modules: 
+ //      - data.energy_requirements.waterheating
+ //	- data.energy_requirements.space_heating
+ //      
+ // Global Outputs: 
+ //	- data.fuel_requirements.waterheating
+ //	- data.fuel_requirements.space_heating
+ //
+ //---------------------------------------------------------------------------------------------*/
 
 calc.heating_systems = function (data) {
     if (data.heating_systems == undefined)
@@ -1298,7 +1305,8 @@ calc.SAP = function (data)
     data.SAP.primary_energy_use_m2SAP = dataSAP.primary_energy_use / data.TFA;
     if (data.SAP.energy_cost_factor >= 3.5) {
         data.SAP.rating = 117 - 121 * (Math.log(data.SAP.energy_cost_factor) / Math.LN10);
-    } else {
+    }
+    else {
         data.SAP.rating = 100 - 13.95 * data.SAP.energy_cost_factor;
     }
     var CF = data.SAP.annualco2SAP / (data.TFA + 45);
@@ -1386,7 +1394,8 @@ calc.LAC_SAP = function (data) {
         data.LAC.C2 = 0;
         if (data.GL <= 0.095) {
             data.LAC.C2 = 52.2 * Math.pow(data.GL, 2) - 9.94 * data.GL + 1.433;
-        } else {
+        }
+        else {
             data.LAC.C2 = 0.96;
         }
 
@@ -1564,7 +1573,8 @@ calc.SHW = function (data) {
     data.SHW.collector_performance_factor = 0;
     if (data.SHW.collector_performance_ratio < 20) {
         data.SHW.collector_performance_factor = 0.97 - 0.0367 * data.SHW.collector_performance_ratio + 0.0006 * Math.pow(data.SHW.collector_performance_ratio, 2);
-    } else {
+    }
+    else {
         data.SHW.collector_performance_factor = 0.693 - 0.0108 * data.SHW.collector_performance_ratio;
     }
     if (data.SHW.collector_performance_factor < 0)
@@ -1572,7 +1582,8 @@ calc.SHW = function (data) {
     data.SHW.Veff = 0;
     if (data.SHW.combined_cylinder_volume > 0) {
         data.SHW.Veff = data.SHW.Vs + 0.3 * (data.SHW.combined_cylinder_volume - data.SHW.Vs);
-    } else {
+    }
+    else {
         data.SHW.Veff = data.SHW.Vs;
     }
 
@@ -1726,7 +1737,8 @@ calc.water_heating = function (data) {
                         var hours_per_day = 0;
                         if (m >= 5 && m <= 8) {
                             hours_per_day = 3;
-                        } else {
+                        }
+                        else {
                             if (data.water_heating.hot_water_control_type == "no_cylinder_thermostat")
                                 hours_per_day = 11;
                             if (data.water_heating.hot_water_control_type == "Cylinder thermostat, water heating not separately timed")
@@ -1798,7 +1810,8 @@ calc.water_heating = function (data) {
         //Daily loss
         if (data.water_heating.storage_type.declared_loss_factor_known) {
             energy_lost_from_water_storage = data.water_heating.storage_type.manufacturer_loss_factor * data.water_heating.storage_type.temperature_factor_a;
-        } else {
+        }
+        else {
             energy_lost_from_water_storage = data.water_heating.storage_type.storage_volume * data.water_heating.storage_type.loss_factor_b * data.water_heating.storage_type.volume_factor_b * data.water_heating.storage_type.temperature_factor_b;
         }
         // Monthly 
@@ -1830,7 +1843,8 @@ calc.water_heating = function (data) {
 
         if (data.water_heating.solar_water_heating && data.SHW != undefined && data.SHW.Qs_monthly != undefined) {
             hot_water_heater_output[m] = total_heat_required[m] + data.SHW.Qs_monthly[m]; // Beware that data.SHW.Qs_monthly[m] is negative, that makes sense!!!
-        } else {
+        }
+        else {
             hot_water_heater_output[m] = total_heat_required[m];
         }
 
@@ -1839,7 +1853,8 @@ calc.water_heating = function (data) {
         annual_waterheating_demand += hot_water_heater_output[m];
         if (data.water_heating.hot_water_store_in_dwelling || data.water_heating.community_heating) {
             heat_gains_from_water_heating[m] = 0.25 * (0.85 * monthly_energy_content[m] + data.water_heating.combi_loss[m]) + 0.8 * (data.water_heating.distribution_loss[m] + data.water_heating.monthly_storage_loss[m] + data.water_heating.primary_circuit_loss[m]);
-        } else {
+        }
+        else {
             heat_gains_from_water_heating[m] = 0.25 * (0.85 * monthly_energy_content[m] + data.water_heating.combi_loss[m]) + 0.8 * (data.water_heating.distribution_loss[m] + data.water_heating.primary_circuit_loss[m]);
         }
 
@@ -2563,6 +2578,111 @@ calc.gains_summary = function (data) {
 
     return data;
 }
+
+
+/*---------------------------------------------------------------------------------------------
+ // fabric_energy_efficiency
+ // Calculates Fabric Energy Efficiency according to the procedure defined in SAP2012 p.31
+ // Basically we run the model again using the same data object with modifications to make it "standard"
+ // so houses can be compared                                                                                                                                                        
+ //
+ // Inputs from other modules:  
+ //      - None
+ //
+ // Global Outputs:
+ //	- data.FEE
+ //	  
+ //---------------------------------------------------------------------------------------------*/
+
+calc.fabric_energy_efficiency = function (data) {
+    var data_FEE = JSON.parse(JSON.stringify(data));
+
+    // correct openBEM deviations from SAP
+    data_FEE.use_custom_occupancy = false;
+    data_FEE.water_heating.override_annual_energy_content = false;
+
+    // climate is UK average for heating and cooling
+    data_FEE.region = 0;
+
+    // natural ventilation with intermittent extract fans
+    // 2 extract fans for total floor area up to 70 m², 3 for total floor area > 70 m² and up to 100 m², 4 for total floor area > 100 m²
+    data_FEE.ventilation.ventilation_type = 'IE'; // Intermittent extract ventilation (same than natural for calculations but allows for the addtition of fans)
+    data_FEE.EVP = [{id: 1, ventilation_rate: 10}, {id: 2, ventilation_rate: 10}];
+    if (data_FEE.TFA > 70)
+        data_FEE.EVP.push({id: 3, ventilation_rate: 10});
+    if (data_FEE.TFA > 100)
+        data_FEE.EVP.push({id: 4, ventilation_rate: 10});
+
+    // for calculation of heat gains from the hot water system worksheet (46) to (61) inclusive and (63) are set to zero (equivalent to an instantaneous water heater)
+    data_FEE.heating_systems.forEach(function (system) {
+        if (system.provides == 'water' || system.provides == 'heating_and_water')
+            system.instantaneous_water_heating = 1;
+    });
+
+    // 100% low energy lights
+    data_FEE.LAC_calculation_type = 'SAP';
+    data_FEE.LAC.LLE = data_FEE.LAC.LLE + data_FEE.LAC.L;
+    data_FEE.LAC.L = 0;
+
+    // column (B) of Table 5 is used for internal gains in the heating calculation
+    data_FEE.space_heating.use_utilfactor_forgains = true; // for metabolic gains and loses
+    data_FEE.LAC.reduced_heat_gains_lighting = true;
+    data_FEE.LAC.energy_efficient_appliances = true;
+    data_FEE.LAC.energy_efficient_cooking = true;
+
+    // column (A) of Table 5 is used for internal gains in the cooling calculation
+    // N/A
+
+    // overshading of windows not less than average (i.e. very little is changed to average)
+    data_FEE.fabric.elements.forEach(function (element) {
+        if (element.type == 'window' || element.type == 'Window' || element.type == 'Door' || element.type == 'Roof_light') {
+            if (element.overshading == 3)
+                element.overshading = 2;
+        }
+    });
+
+    // no heat gains from pumps or fans
+    // Set after metabolic_losses_fans_and_pumps_gains calculation
+
+    // the heating system has responsiveness 1.0 and control type 2, no temperature adjustment, 
+    data_FEE.heating_systems.forEach(function (system) {
+        if (system.provides == 'heating' || system.provides == 'heating_and_water') {
+            system.responsiveness = 1;
+            system.heating_controls = 2;
+            system.temperature_adjustment = 0;
+        }
+    });
+
+    // temperature and heating periods according to Table 9 irrespective of the actual heating system
+    data_FEE.temperature.target = 21;
+    data_FEE.temperature.hours_off['weekday'] = [7, 8];
+    data_FEE.temperature.hours_off['weekend'] = [8];
+
+    // cooled fraction is 1.0
+    // N/A
+
+    // Run the model
+    calc.start(data_FEE);
+    calc.floors(data_FEE);
+    calc.occupancy(data_FEE);
+    calc.fabric(data_FEE);
+    calc.ventilation(data_FEE);
+    calc.LAC_SAP(data_FEE);
+    calc.water_heating(data_FEE);
+    calc.SHW(data_FEE);
+    calc.applianceCarbonCoop(data_FEE);
+    calc.appliancelist(data_FEE);
+    calc.generation(data_FEE);
+    calc.currentenergy(data_FEE);
+    calc.metabolic_losses_fans_and_pumps_gains(data_FEE);
+    data_FEE.gains_W['fans_and_pumps'] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    calc.temperature(data_FEE);
+    calc.fans_and_pumps_and_combi_keep_hot(data_FEE);
+    calc.gains_summary(data_FEE);
+    calc.space_heating(data_FEE);
+
+    data.FEE = data_FEE.space_heating_demand_m2;
+};
 
 //---------------------------------------------------------------------------------------------
 // SEPERATED MODEL FUNCTIONS
