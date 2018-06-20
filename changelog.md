@@ -16,6 +16,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue  381: administration menu item added to Theme
  - Issue 373: measures cost figure removed from onscreen report pages (not printed)
  - Issue 347: Create a new graph in the report that shows 'Fabric Energy Efficiency' rather than 'Space Heating Demand'.
+ - Issue 339: Fixed: detailed list (LAC) mad behaviour: changing any of the inputs was adding an extra item to the list
 
 ## Version 1.0.0 (2018-06-08)
 Despite MHEP has being fully functional for some years now I am calling it, at this stage, version 1.0.0 because we need a starting point.

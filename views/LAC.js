@@ -33,6 +33,7 @@ function LAC_initUI() {
     }
 
     // Detailed list
+    $('#appliancelist').html('');
     for (z in data.appliancelist.list)
         add_applianceDetailedList(z);
 
