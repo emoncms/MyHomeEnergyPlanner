@@ -72,9 +72,9 @@
             <tr>
                 <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span> - <span key="data.fabric.elements.template.name" style="width:60px"></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m<sup>2</sup></span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m<sup>2</sup></span></td>
                 <td><input type="text" class="label-location" key="data.fabric.elements.template.location" /></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:40px"/></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:40px"/></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.l" style="width:50px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.h" style="width:50px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" key="data.fabric.elements.template.area" style="width:50px"/></td>
                 <td><span key="data.fabric.elements.template.windowarea" dp=2>0.0</span>m<sup>2</sup></td>
                 <td><span key="data.fabric.elements.template.netarea" dp=2>0.0</span>m<sup>2</sup></td>
                 <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>                
@@ -198,9 +198,9 @@
             <tr>
                 <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span> - <span key="data.fabric.elements.template.name" style="width:60px"></span></b><br><!--U-value: <span key="data.fabric.elements.template.uvalue"></span><span style="font-size:0.8em">W/K.m<sup>2</sup></span>, --> k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m<sup>2</sup></span></td>
                 <td><input type="text" class="label-location" key="data.fabric.elements.template.location" /></td>
-                <td><i class="icon-list-alt calculate-floor-uvalue" z="template" style="margin-right:5px; cursor:pointer"></i><input type="text" class="floor-uvalue" value="0" key="data.fabric.elements.template.uvalue"  dp=2 style="width:40px"/></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.perimeter" dp=2 style="width:40px"/></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.area" dp=2 style="width:40px"/></td>
+                <td><i class="icon-list-alt calculate-floor-uvalue" z="template" style="margin-right:5px; cursor:pointer"></i><input type="number" min="0" dp="2" step="0.01" class="floor-uvalue" value="0" key="data.fabric.elements.template.uvalue"  dp=2 style="width:40px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.perimeter" dp=2 style="width:50px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.area" dp=2 style="width:50px"/></td>
                 <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>   
                 <td>
                     <button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button>
@@ -288,10 +288,10 @@
                     </select>
                 </td>
 
-                <td><input type="text" value="0" key="data.fabric.elements.template.l" style="width:20px"/></td>
-                <td><input type="text" value="0" key="data.fabric.elements.template.h" style="width:20px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.l" style="width:50px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.h" style="width:50px"/></td>
 
-                <td><input type="text" value="0" key="data.fabric.elements.template.area" style="width:40px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.area" style="width:50px"/></td>
 
                 <td>
                     <select key="data.fabric.elements.template.orientation" style="width:80px">

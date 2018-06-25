@@ -5,7 +5,7 @@ Given a version number MAJOR.MINOR.PATCH:
 - MINOR version MUST be incremented if new, backwards compatible functionality is introduced to the public API. It MUST be incremented if any public API functionality is marked as deprecated. It MAY be incremented if substantial new functionality or improvements are introduced within the private code. It MAY include patch level changes.
 - PATCH version MUST be incremented if only backwards compatible bug fixes are introduced. A bug fix is defined as an internal change that fixes incorrect behaviour.
 
-## Version 1.1.0 (2018-06-08)
+## Version 1.1.0 (2018-25-08)
 
  - Issue 384: assessment data object encrypted in database
  - Issue 382: clarification about the use of area instead of netarea for the cost os a wall measure
@@ -17,6 +17,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 373: measures cost figure removed from onscreen report pages (not printed)
  - Issue 347: Create a new graph in the report that shows 'Fabric Energy Efficiency' rather than 'Space Heating Demand'.
  - Issue 339: Fixed: detailed list (LAC) mad behaviour: changing any of the inputs was adding an extra item to the list
+ - Issue 309: inputs for length, heigh, area, perimeter in fabric elements changed from type text to number
 
 ## Version 1.0.0 (2018-06-08)
 Despite MHEP has being fully functional for some years now I am calling it, at this stage, version 1.0.0 because we need a starting point.
