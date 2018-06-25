@@ -18,6 +18,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 347: Create a new graph in the report that shows 'Fabric Energy Efficiency' rather than 'Space Heating Demand'.
  - Issue 339: Fixed: detailed list (LAC) mad behaviour: changing any of the inputs was adding an extra item to the list
  - Issue 309: inputs for length, heigh, area, perimeter in fabric elements changed from type text to number
+ - Issue 288: text and arrows on the sides are lighter for clarity in terms of which text goes with which arrow
 
 ## Version 1.0.0 (2018-06-08)
 Despite MHEP has being fully functional for some years now I am calling it, at this stage, version 1.0.0 because we need a starting point.
