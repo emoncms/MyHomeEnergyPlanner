@@ -20,6 +20,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 309: inputs for length, heigh, area, perimeter in fabric elements changed from type text to number
  - Issue 288: text and arrows on the sides are lighter for clarity in terms of which text goes with which arrow
  - Issue 285: moving fabric elements up and donw in the list
+ - Delete user hook for deleting user data
 
 ## Version 1.0.0 (2018-06-08)
 Despite MHEP has being fully functional for some years now I am calling it, at this stage, version 1.0.0 because we need a starting point.
