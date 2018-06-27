@@ -266,6 +266,12 @@ libraryHelper.prototype.append_modals = function () {
     $.ajax({url: path + "Modules/assessment/js/library-helper/library-helper.html", datatype: "json", success: function (result) {
             html = result;
             myself.container.append(html);
+            // Make modals draggable
+            $("#openbem .modal").css("position", "fixed");
+            $("#openbem .modal-header").css("cursor", "move");
+            $("#openbem .modal").draggable({
+                handle: ".modal-header"
+            });
         }});
 };
 /************************************
@@ -412,7 +418,8 @@ libraryHelper.prototype.onCreateNewLibrary = function () {
             $.ajax({url: path + "assessment/copylibrary.json", data: "name=" + name + "&id=" + id + "&type=" + this.type, datatype: "json", success: function (result) {
                     callback(result);
                 }});
-        } else {
+        }
+        else {
             $.ajax({url: path + "assessment/newlibrary.json", data: "name=" + name + "&type=" + this.type, datatype: "json", success: function (result) {
                     callback(result);
                 }});
@@ -746,7 +753,8 @@ libraryHelper.prototype.onChangeTypeOnCreateElementLibItem = function () {
     $('#modal-create-in-library #item-to-copy-select').html(out);
     if ($('#modal-create-in-library [name="empty_or_copy_item"]:checked').val() == 'empty') {
         out = this.elements_item_to_html();
-    } else { // Copy from existing one
+    }
+    else { // Copy from existing one
         // Replace item with the first one in the list
         $('#modal-create-in-library #new-item-in-library').html('');
         var tag = $('#modal-create-in-library #item-to-copy-select').val();
@@ -1018,7 +1026,8 @@ libraryHelper.prototype.elements_library_to_html = function (origin, library_id)
 
         if (selected_lib == undefined)
             selected_lib = false;
-    } else {
+    }
+    else {
         tag = ['Wall'];
     }
 

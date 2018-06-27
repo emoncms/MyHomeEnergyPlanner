@@ -361,11 +361,6 @@ $("[key='data.fabric.global_TMP']").change(function () {
         $("[key='data.fabric.global_TMP_value']").prop('disabled', true);
 });
 
-$("#myModal").draggable({
-    handle: ".modal-header"
-}); 
-
-
 function add_element(id, z)
 {
     var element = data.fabric.elements[z];

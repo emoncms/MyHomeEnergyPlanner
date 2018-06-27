@@ -9,6 +9,7 @@ Given a version number MAJOR.MINOR.PATCH:
 ## Version 1.1.1 
 
  - Removed commented text
+ - Issue 284: modals can be dragged around
 
 
 ## Version 1.1.0 

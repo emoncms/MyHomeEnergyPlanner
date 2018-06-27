@@ -287,7 +287,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     // Ensure all the scenarios have the same fuels
     if (project.master.fuels == undefined)
         project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));
-    
+
     for (scenario in project)
         project[scenario].fuels = project.master.fuels;
 
@@ -358,6 +358,12 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     // Disable measures if master
     show_hide_if_master();
 
+    // Make modals draggable
+    $("#openbem .modal-header").css("cursor", "move");
+    $("#openbem .modal").draggable({
+        handle: ".modal-header"
+    });
+
     $("#openbem").on('click', '.lock', function () {
         if (data.locked == false) {
             data.locked = true;
@@ -402,7 +408,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
 
         /*if (reload_menu)
-            add_scenarios_to_menu();*/
+         add_scenarios_to_menu();*/
 
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
@@ -625,7 +631,13 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 
         // Disable measures if master
         show_hide_if_master();
-    });    
+
+        // Make modals draggable
+        $("#openbem .modal-header").css("cursor", "move");
+        $("#openbem .modal").draggable({
+            handle: ".modal-header"
+        });
+    });
     $("#openbem").on('click', ".scenario-nav", function () {
         $(window).scrollTop(650);
     });
@@ -640,7 +652,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         $(".menu-content").hide();
         if (!visible)
             menu_content.show();
-        
+
         $(window).scrollTop(0);
     });
     $('#openbem').on('click', '.project-menu-item', function () {
@@ -798,7 +810,8 @@ for ($i = 2; $i < count($reports_dir); $i++) {
             $("#topgraphic").show();
             $("#rating").hide();
             $(".house_graphic").html("Hide house graphic");
-        } else {
+        }
+        else {
             $("#topgraphic").hide();
             $("#rating").show();
             $(".house_graphic").html("Show house graphic");
@@ -827,7 +840,8 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 
         if (width < max_wrapper_width) {
             hide_sidebar()
-        } else {
+        }
+        else {
             if (sidebar_enabled)
                 show_sidebar()
         }
@@ -842,7 +856,8 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         if (sidebar_visible) {
             sidebar_enabled = false;
             hide_sidebar();
-        } else {
+        }
+        else {
             sidebar_enabled = true;
             show_sidebar();
         }
