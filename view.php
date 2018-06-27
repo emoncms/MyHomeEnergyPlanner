@@ -339,6 +339,10 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
         $('#content button').addClass('if-not-locked');
         $('#content i').addClass('if-not-locked');
+        $('#content .revert-to-original').each(function () {
+            if ($(this).css('display') != 'none')
+                $(this).addClass('if-not-locked');
+        });
     }
     if (project[scenario].locked != undefined && project[scenario].locked == true)
         $('.if-not-locked').hide();
@@ -619,6 +623,10 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
             $('#content button').addClass('if-not-locked');
             $('#content i').addClass('if-not-locked');
+            $('#content .revert-to-original').each(function () {
+                if ($(this).css('display') != 'none')
+                    $(this).addClass('if-not-locked');
+            });
         }
 
         // Disable measures if master
