@@ -11,6 +11,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Removed commented text
  - Issue 284: modals can be dragged around
  - Issue 389: revert to master in fabric not working
+ - Removed backwards compatibility and old comments from view.php
 
 
 ## Version 1.1.0 
