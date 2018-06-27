@@ -46,9 +46,16 @@ function assessment_on_delete_user($args) {
     }
     if ($result1 = $mysqli->query("SELECT * FROM element_library_access WHERE `userid`='$userid'")) {
         if ($result1->num_rows > 0) {
-            $result .= "- access to $result1->num_rows MHEP shared libraries\n";
+            $result .= "- access to $result1->num_rows MHEP libraries\n";
             if ($args['mode'] == "permanentdelete")
                 $mysqli->query("DELETE FROM element_library_access WHERE `userid`='$userid'");
+        }
+    }
+    if ($result1 = $mysqli->query("SELECT * FROM organisation_membership WHERE `userid`='$userid'")) {
+        if ($result1->num_rows > 0) {
+            $result .= "- membership from $result1->num_rows MHEP organizations\n";
+            if ($args['mode'] == "permanentdelete")
+                $mysqli->query("DELETE FROM organisation_membership WHERE `userid`='$userid'");
         }
     }
     return $result;
