@@ -220,11 +220,11 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
             measure[lib].type = data.fabric.elements[row].type; // I know this shouldn't be here, but it is the only place where I can get the type of the element to add it to the measure
         }
     });
-    
+
     // Save measure and calculate totals
     data.fabric.measures[measure[lib].id].measure = measure[lib];
     add_quantity_and_cost_to_bulk_fabric_measure(measure[lib].id);
-    
+
     elements_initUI();
     update();
 
@@ -279,6 +279,78 @@ $("#openbem").on("click", '.calculate-floor-uvalue', function () {
             $('[key="data.fabric.elements.' + z + '.perimeter"]').change();
         }
     });
+});
+$("#openbem").on("click", '.move-up', function () {
+    var original_element = JSON.parse($(this).attr('item'));
+    var index_original_element = $(this).attr('row');
+    var move = false;
+    // Find next item  of the same type up
+    for (var i = 1.0 * index_original_element - 1; i >= 0; i--) {
+        if (original_element.type == "Wall" || original_element.type == "Party_wall" || original_element.type == "Floor") {
+            if (original_element.type == data.fabric.elements[i].type) {
+                move = true;
+                data.fabric.elements[index_original_element] = JSON.parse(JSON.stringify(data.fabric.elements[i]));
+                data.fabric.elements[i] = original_element;
+                break;
+            }
+        }
+        else if (original_element.type == "Roof" || original_element.type == "Loft") {
+            move = true;
+            if (data.fabric.elements[i].type == "Roof" || data.fabric.elements[i].type == "Loft") {
+                data.fabric.elements[index_original_element] = JSON.parse(JSON.stringify(data.fabric.elements[i]));
+                data.fabric.elements[i] = original_element;
+                break;
+            }
+        }
+        else {
+            if (data.fabric.elements[i].type == "Window" || data.fabric.elements[i].type == "Door" || data.fabric.elements[i].type == "Roof_light" || data.fabric.elements[i].type == "Hatch") {
+                move = true;
+                data.fabric.elements[index_original_element] = JSON.parse(JSON.stringify(data.fabric.elements[i]));
+                data.fabric.elements[i] = original_element;
+                break;
+            }
+        }
+    }
+    if (move == true) {
+        elements_initUI();
+        update();
+    }
+});
+$("#openbem").on("click", '.move-down', function () {
+    var original_element = JSON.parse($(this).attr('item'));
+    var index_original_element = $(this).attr('row');
+    var move = false;
+    // Find next item  of the same type up
+    for (var i = 1.0 * index_original_element + 1; i < data.fabric.elements.length; i++) {
+        if (original_element.type == "Wall" || original_element.type == "Party_wall" || original_element.type == "Floor") {
+            if (original_element.type == data.fabric.elements[i].type) {
+                move = true;
+                data.fabric.elements[index_original_element] = JSON.parse(JSON.stringify(data.fabric.elements[i]));
+                data.fabric.elements[i] = original_element;
+                break;
+            }
+        }
+        else if (original_element.type == "Roof" || original_element.type == "Loft") {
+            move = true;
+            if (data.fabric.elements[i].type == "Roof" || data.fabric.elements[i].type == "Loft") {
+                data.fabric.elements[index_original_element] = JSON.parse(JSON.stringify(data.fabric.elements[i]));
+                data.fabric.elements[i] = original_element;
+                break;
+            }
+        }
+        else {
+            if (data.fabric.elements[i].type == "Window" || data.fabric.elements[i].type == "Door" || data.fabric.elements[i].type == "Roof_light" || data.fabric.elements[i].type == "Hatch") {
+                move = true;
+                data.fabric.elements[index_original_element] = JSON.parse(JSON.stringify(data.fabric.elements[i]));
+                data.fabric.elements[i] = original_element;
+                break;
+            }
+        }
+    }
+    if (move == true) {
+        elements_initUI();
+        update();
+    }
 });
 
 $("[key='data.fabric.global_TMP']").change(function () {
@@ -431,13 +503,17 @@ function elements_initUI()
         //type = type.charAt(0).toUpperCase() + type.slice(1); // Ensure first letter is capital
         if (type == 'Wall' || type == 'wall') {
             add_element("#elements", z);
-        } else if (type == 'Floor' || type == 'floor') {
+        }
+        else if (type == 'Floor' || type == 'floor') {
             add_floor(z);
-        } else if (type == 'Roof' || type == 'roof' || type == 'Loft') {
+        }
+        else if (type == 'Roof' || type == 'roof' || type == 'Loft') {
             add_element("#roofs", z);
-        } else if (type == 'Window' || type == 'window' || type == 'Door' || type == 'Roof_light' || type == 'Hatch') {
+        }
+        else if (type == 'Window' || type == 'window' || type == 'Door' || type == 'Roof_light' || type == 'Hatch') {
             add_window(z);
-        } else if (type == 'Party_wall' || type == 'party_wall') {
+        }
+        else if (type == 'Party_wall' || type == 'party_wall') {
             add_element("#party_walls", z);
         }
     }
