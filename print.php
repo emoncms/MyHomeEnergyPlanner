@@ -8,7 +8,7 @@ $projectid = (int) $_GET['id'];
 global $reports;
 ?>        
 
-<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="<?php echo $d; ?>style.css">
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>

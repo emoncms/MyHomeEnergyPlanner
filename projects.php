@@ -4,7 +4,7 @@ global $path, $session, $app_color,$app_title,$app_description;
 $d = $path . "Modules/assessment/";
 ?>
 
-<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="<?php echo $d; ?>style.css">
 
 <style>

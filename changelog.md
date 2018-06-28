@@ -14,6 +14,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Removed backwards compatibility and old comments from view.php
  - Tidy up view.php
  - Fetch report from query string ni a more sensible way
+ - Load google fonts with https
 
 
 ## Version 1.1.0 
