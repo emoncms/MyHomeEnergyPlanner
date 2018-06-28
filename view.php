@@ -4,7 +4,7 @@ $d = $path . "Modules/assessment/";
 
 $projectid = (int) $_GET['id'];
 
-$reports = array();
+/*$reports = array();
 $reports_dir = scandir("Modules/assessment/reports");
 for ($i = 2; $i < count($reports_dir); $i++) {
     $dir = "Modules/assessment/reports/" . $reports_dir[$i];
@@ -14,7 +14,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
             array_push($reports, array('view' => $reports_dir[$i], 'name' => $json->name));
         }
     }
-}
+}*/
 ?>        
 
 <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>-->
@@ -619,7 +619,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         $('div [scenario="' + scenario + '"]').click();
     }
     function add_reports_to_menu() {
-        var reports = <?php echo json_encode($reports); ?>;
+        var reports = <?php echo json_encode($args['reports']); ?>;
         reports.forEach(function (report) {
             var html = '<div class="scenario-nav"> <a class="project-menu-item" class="link-to-report" href="#master/report/' + report.view + '">' + report.name + '</a></div>';
             $('#links-to-reports').append(html);

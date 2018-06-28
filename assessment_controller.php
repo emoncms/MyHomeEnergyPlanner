@@ -64,13 +64,17 @@ function assessment_controller() {
         return array('content' => $result);
     }
 
+    require_once "Modules/assessment/assessment_model.php";
+    $assessment = new Assessment($mysqli);
 // -------------------------------------------------------------------------    
 // Session is authenticated so we run the action
 // -------------------------------------------------------------------------
     $result = false;
     if ($route->format == 'html') {
-        if ($route->action == "view" && $session['write'])
-            $result = view("Modules/assessment/view.php", array());
+        if ($route->action == "view" && $session['write']) {
+            $reports = $assessment->accesible_reports($session['userid']);
+            $result = view("Modules/assessment/view.php", array('reports' => $reports));
+        }
         if ($route->action == "print" && $session['write'])
             $result = view("Modules/assessment/print.php", array());
 
@@ -79,9 +83,6 @@ function assessment_controller() {
     }
 
     if ($route->format == 'json') {
-
-        require_once "Modules/assessment/assessment_model.php";
-        $assessment = new Assessment($mysqli);
 
         require_once "Modules/assessment/organisation_model.php";
         $organisation = new Organisation($mysqli);

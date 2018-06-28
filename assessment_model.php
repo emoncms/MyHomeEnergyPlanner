@@ -301,6 +301,32 @@ class Assessment {
         return $users;
     }
 
+    public function accesible_reports($userid) {
+        require_once "Modules/assessment/organisation_model.php";
+        $organisation = new Organisation($this->mysqli);
+        $reports = [];
+        $orgs = $organisation->get_organisations($userid);
+        foreach ($orgs as $org) {
+            $report_name = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', $org['name']));
+            $report = $this->get_report_info($report_name);
+            if ($report != false)
+                array_push($reports, $report);
+        }
+        return $reports;
+    }
+
+    public function get_report_info($name) {
+        $result = false;
+        $name2 = strtolower(preg_replace('/[^A-Za-z0-9\-]/', '', $name));
+        if ($name != $name2) // Not a valid report name
+            return false;
+        if (file_exists("Modules/assessment/reports/$name")) {
+            $json = json_decode(file_get_contents("Modules/assessment/reports/$name/report.json"));  // Get JSON version information
+            $result = array('view' => "$name", 'name' => $json->name);
+        }
+        return $result;
+    }
+
     // ------------------------------------------------------------------------------------------------
     // LIBRARY
     // ------------------------------------------------------------------------------------------------

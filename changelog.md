@@ -15,6 +15,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Tidy up view.php
  - Fetch report from query string ni a more sensible way
  - Load google fonts with https
+ - Only accessible reports (that match the organization name) are displayed in the menu
 
 
 ## Version 1.1.0 
