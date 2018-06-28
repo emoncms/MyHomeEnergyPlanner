@@ -242,21 +242,28 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 
 
 <script>
-
+    //************
+    // Variables
+    //************
     var changelog = "";
     var selected_library = -1;
     var selected_library_tag = "Wall";
     var printmode = false;
-    //var org_report = ''; //
+    var report = undefined;
 
     var path = "<?php echo $path; ?>";
     var jspath = path + "Modules/assessment/";
 
-//var c=document.getElementById("rating");
-    //var ctx=c.getContext("2d");
+    var keys = {};
 
+    //*******************
+    // Load top graphic
+    //*******************
     load_view("#topgraphic", 'topgraphic');
 
+    //*********************
+    // Initialize project
+    //********************
     var projectid = <?php echo $projectid; ?>;
     var p = openbem.get(projectid);
 
@@ -268,7 +275,10 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         p.data = {'master': {}};
     var project = p.data;
 
-    var historical = []; // used for the undo functionality
+    //********************************
+    // Initialize undo functionality
+    //*******************************
+    var historical = [];
     var historical_index; // pointer for the historical array, pointing the current version of project
     historical.unshift(JSON.stringify(project));
     historical_index = 0;
@@ -276,96 +286,66 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     $('ul.nav.pull-right').prepend('<li id="undo"><a><img src="' + path + 'Modules/assessment/img-assets/undo.gif" title="Undo" style="width:14px" / > </a></li > ');
     refresh_undo_redo_buttons();
 
+    //**************************
+    // Initialize some menus
+    //**************************
     $(".menu-content").hide();
     $(".scenario-block[scenario=master]").find(".delete-scenario-launch").hide();
     $(".scenario-block[scenario=master]").find(".menu-content").show();
 
-    var keys = {};
-
-    // Ensure all the scenarios have the same fuels
+    //*******************************************************************
+    // Initialize fuels: ensure all the scenarios have the same fuels
+    //*******************************************************************
     if (project.master.fuels == undefined)
         project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));
 
     for (scenario in project)
         project[scenario].fuels = project.master.fuels;
 
+    //******************************
+    // Calculate scenarios
+    //******************************
     for (s in project) {
-        // QUESTION: do you really want to do calc.run twice here?
-        project[s] = calc.run(calc.run(project[s]));
+        project[s] = calc.run(project[s]);
         $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
     }
 
+    //************************
     // Side Menus
+    //************************
     add_scenarios_to_menu();
 
+    //***********************************
     // Add links to reports in the menu
+    //***********************************
     add_reports_to_menu();
 
+    //**********************************************
+    // Fetch from hash the view to load and load it
+    //**********************************************
+    load_page_from_hash();
 
-    var tmp = (window.location.hash).substring(1).split('/');
-    var report = undefined;
-    if (tmp[2] != undefined)
-        report = tmp[2];
-    var page = tmp[1];
-    var scenario = tmp[0];
-    if (!scenario)
-        scenario = "master";
-    if (!page)
-        page = "context";
+    //*****************
+    // Top graphic
+    //*****************
+    $("#topgraphic").show();
+    $("#rating").hide();
+    $(".house_graphic").html("Hide house graphic");
 
-    $(".menu-content").hide();
-    $('[scenario="' + scenario + '"]').find(".menu-content").show();
+    //****************
+    // Sidebar
+    //****************
+    var max_wrapper_width = 1150;
+    var sidebar_enabled = true;
+    var sidebar_visible = true;
+    $("#assessment_menu").parent().attr("href", "#");
+    $("#assessment_menu").find("i").removeClass("icon-home");
+    $("#assessment_menu").find("i").addClass("icon-list");
+    sidebar_resize();
 
-    if (project[scenario] == undefined)
-        scenario = 'master';
-    data = project[scenario];
-
-    if (data.measures == undefined)
-        data.measures = {};
-
-    if (page != 'report')
-        load_view("#content", page);
-    else {
-        load_report("#content", report);
-    }
-
-    InitUI();
-    UpdateUI(data);
-    draw_openbem_graphics();
-
-    // Lock/unlock
-    if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
-        $('#content button').addClass('if-not-locked');
-        $('#content i').addClass('if-not-locked');
-        $('#content .revert-to-original').each(function () {
-            if ($(this).css('display') != 'none')
-                $(this).addClass('if-not-locked');
-        });
-    }
-    if (project[scenario].locked != undefined && project[scenario].locked == true)
-        $('.if-not-locked').hide();
-    else
-        $('.if-not-locked').show();
-
-    // Show lock in scenario
-    for (s in project) {
-        if (project[s].locked == undefined)
-            project[s].locked = false;
-        if (project[s].locked == false)
-            $(".scenario-block[scenario=" + s + "]").find(".lock").html('Lock');
-        else
-            $(".scenario-block[scenario=" + s + "]").find(".lock").html('<i class="icon-lock"></i> Unlock');
-    }
-
-    // Disable measures if master
-    show_hide_if_master();
-
-    // Make modals draggable
-    $("#openbem .modal-header").css("cursor", "move");
-    $("#openbem .modal").draggable({
-        handle: ".modal-header"
-    });
-
+    //**********
+    // Events
+    //**********
     $("#openbem").on('click', '.lock', function () {
         if (data.locked == false) {
             data.locked = true;
@@ -383,87 +363,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 
         update(false, false);
     });
-
-    function update(undo_redo = false, reload_menu = false)
-    {
-        // We need to calculate the periods of heating off here because if we try to do it in household.js it happens after the update
-        if (project.master.household != undefined) {
-            for (var s in project) { // we ensure all the scenarios have the same household data and heating off periods
-                project[s].household = project.master.household;
-                project[s].temperature.hours_off.weekday = get_hours_off_weekday(project[s]);
-                project[s].temperature.hours_off.weekend = get_hours_off_weekend(project[s]);
-            }
-        }
-
-        project[scenario] = calc.run(project[scenario]);
-        data = project[scenario];
-        if (undo_redo === false) {
-            historical.splice(0, historical_index); // reset the historical removing all the elements that were still there because of undoing
-            historical.unshift(JSON.stringify(project));
-            historical_index = 0;
-            refresh_undo_redo_buttons();
-        }
-
-        UpdateUI(data);
-        draw_openbem_graphics();
-
-        $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
-
-        openbem.set(projectid, project, function (result) {
-            alertifnotlogged(result);
-        });
-    }
-
-    function show_hide_if_master()
-    {
-        if (scenario == 'master')
-            $('#content .if-not-master').hide();
-        else {
-            $('#content .if-master').hide();
-            $('#content .disabled-if-not-master').attr('disabled', 'true');
-        }
-    }
-
-    function add_scenarios_to_menu() {
-        $("#scenario-list").html('');
-        var mastermenu = $("#scenario-menu-template").html();
-        for (s in project) {
-            var tmp = mastermenu.replace(/template/g, s);
-            tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
-            var name = "";
-            if (project[s].scenario_name != undefined)
-                name = project[s].scenario_name;
-            tmp = tmp.replace("scenarioname", " " + String(name).charAt(0).toUpperCase() + String(name).slice(1));
-            $("#scenario-list").append(tmp);
-        }
-        for (s in project) {
-            //project[s] = calc.run(calc.run(project[s]));
-            $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
-            if (s != 'master' && project[s].created_from != undefined) {
-                $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + ')');
-                // Check if the original scenario has changed since the the creation of the current one
-                if (project[s].creation_hash != undefined) {
-                    var original_scenario = JSON.parse(JSON.stringify(project[project[s].created_from]));
-                    original_scenario.locked = false;
-                    hash_original = generate_hash(JSON.stringify(original_scenario));
-                    if (project[s].creation_hash != generate_hash(JSON.stringify(original_scenario))) {
-                        $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + '*)');
-                        $("." + s + "_scenario_created_from").attr('title', 'The original scenario has changed since the creation of Scenario ' + s.split('scenario')[1]);
-                    }
-                }
-            }
-        }
-        $('div [scenario="' + scenario + '"]').click();
-    }
-
-    function add_reports_to_menu() {
-        var reports = <?php echo json_encode($reports); ?>;
-        reports.forEach(function (report) {
-            var html = '<div class="scenario-nav"> <a class="project-menu-item" class="link-to-report" href="#master/report/' + report.view + '">' + report.name + '</a></div>';
-            $('#links-to-reports').append(html);
-        })
-    }
-
     $("#openbem").on("change", '[key]', function () {
         if (data.locked == true && page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy')
             $('#modal-scenario-locked').modal('show');
@@ -490,64 +389,22 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         }
         update(false, false);
     });
-
-    // Scenarios menu interactions
     $(window).on('hashchange', function () {
-        var tmp = (window.location.hash).substring(1).split('/');
-        if (tmp[2] != undefined)
-            report = tmp[2];
-        else
-            report = undefined;
-        page = tmp[1];
-        scenario = tmp[0];
-
-        if (!scenario)
-            scenario = "master";
-        if (!page)
-            page = "context";
-
-        if (project[scenario] == undefined)
-            scenario = 'master';
-
-        data = project[scenario];
-
-        // Render page
-        if (page != 'report')
-            load_view("#content", page);
-        else {
-            load_report("#content", report);
-        }
-        InitUI();
-        UpdateUI(data);
-        draw_openbem_graphics();
-
-        // Add lock functionality to buttons and icons
-        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
-            $('#content button').addClass('if-not-locked');
-            $('#content i').addClass('if-not-locked');
-            $('#content .revert-to-original').each(function () {
-                if ($(this).css('display') != 'none')
-                    $(this).addClass('if-not-locked');
-            });
-        }
-
-        // Disable measures if master
-        show_hide_if_master();
-
-        if (data.locked)
-            $('.if-not-locked').hide();
-        else
-            $('.if-not-locked').show();
-
-        // Disable measures if master
-        show_hide_if_master();
-
-        // Make modals draggable
-        $("#openbem .modal-header").css("cursor", "move");
-        $("#openbem .modal").draggable({
-            handle: ".modal-header"
-        });
+        load_page_from_hash();
     });
+    $(".house_graphic").click(function () {
+        if ($(".house_graphic").html() == "Show house graphic") {
+            $("#topgraphic").show();
+            $("#rating").hide();
+            $(".house_graphic").html("Hide house graphic");
+        }
+        else {
+            $("#topgraphic").hide();
+            $("#rating").show();
+            $(".house_graphic").html("Show house graphic");
+        }
+    });
+    // Scenarios interactions
     $("#openbem").on('click', ".scenario-nav", function () {
         $(window).scrollTop(650);
     });
@@ -570,7 +427,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         $('.menu-content').hide();
         $(window).scrollTop(0);
     });
-
     // Scenarios management
     $("#openbem").on('click', "#create-new", function () {
         // Reset select
@@ -639,7 +495,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         $(window).scrollTop(0);
 
     });
-
     // Project's name and description management
     $("#edit-project-name-and-description").on('click', function () {
         $("#project-name-input").val(p.name);
@@ -654,11 +509,9 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         $("#modal-edit-project-name-and-description").modal("hide");
         openbem.set_name_and_description(projectid, p.name, p.description);
     });
-
     $("#modal-error-submitting-data-done").on('click', function () {
         location.reload();
     });
-
     // Do/undo
     $('ul.nav.pull-right').on('click', '#undo', function () {
         if (historical_index < historical.length - 1) {
@@ -678,6 +531,166 @@ for ($i = 2; $i < count($reports_dir); $i++) {
 
         refresh_undo_redo_buttons();
     });
+    // Side menu
+    $(window).resize(function () {
+        draw_openbem_graphics();
+        sidebar_resize();
+    });
+    $("#assessment_menu").parent().click(function () {
+        if (sidebar_visible) {
+            sidebar_enabled = false;
+            hide_sidebar();
+        }
+        else {
+            sidebar_enabled = true;
+            show_sidebar();
+        }
+    });
+
+
+    //*************
+    // Functions
+    //*************
+    function update(undo_redo = false, reload_menu = false) {
+        // We need to calculate the periods of heating off here because if we try to do it in household.js it happens after the update
+        if (project.master.household != undefined) {
+            for (var s in project) { // we ensure all the scenarios have the same household data and heating off periods
+                project[s].household = project.master.household;
+                project[s].temperature.hours_off.weekday = get_hours_off_weekday(project[s]);
+                project[s].temperature.hours_off.weekend = get_hours_off_weekend(project[s]);
+            }
+        }
+
+        project[scenario] = calc.run(project[scenario]);
+        data = project[scenario];
+        if (undo_redo === false) {
+            historical.splice(0, historical_index); // reset the historical removing all the elements that were still there because of undoing
+            historical.unshift(JSON.stringify(project));
+            historical_index = 0;
+            refresh_undo_redo_buttons();
+        }
+
+        UpdateUI(data);
+        draw_openbem_graphics();
+
+        $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
+
+        openbem.set(projectid, project, function (result) {
+            alertifnotlogged(result);
+        });
+    }
+    function show_hide_if_master() {
+        if (scenario == 'master')
+            $('#content .if-not-master').hide();
+        else {
+            $('#content .if-master').hide();
+            $('#content .disabled-if-not-master').attr('disabled', 'true');
+        }
+    }
+    function add_scenarios_to_menu() {
+        $("#scenario-list").html('');
+        var mastermenu = $("#scenario-menu-template").html();
+        for (s in project) {
+            var tmp = mastermenu.replace(/template/g, s);
+            tmp = tmp.replace("title", s.charAt(0).toUpperCase() + s.slice(1));
+            var name = "";
+            if (project[s].scenario_name != undefined)
+                name = project[s].scenario_name;
+            tmp = tmp.replace("scenarioname", " " + String(name).charAt(0).toUpperCase() + String(name).slice(1));
+            $("#scenario-list").append(tmp);
+        }
+        for (s in project) {
+            //project[s] = calc.run(calc.run(project[s]));
+            $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
+            if (s != 'master' && project[s].created_from != undefined) {
+                $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + ')');
+                // Check if the original scenario has changed since the the creation of the current one
+                if (project[s].creation_hash != undefined) {
+                    var original_scenario = JSON.parse(JSON.stringify(project[project[s].created_from]));
+                    original_scenario.locked = false;
+                    hash_original = generate_hash(JSON.stringify(original_scenario));
+                    if (project[s].creation_hash != generate_hash(JSON.stringify(original_scenario))) {
+                        $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + '*)');
+                        $("." + s + "_scenario_created_from").attr('title', 'The original scenario has changed since the creation of Scenario ' + s.split('scenario')[1]);
+                    }
+                }
+            }
+        }
+        $('div [scenario="' + scenario + '"]').click();
+    }
+    function add_reports_to_menu() {
+        var reports = <?php echo json_encode($reports); ?>;
+        reports.forEach(function (report) {
+            var html = '<div class="scenario-nav"> <a class="project-menu-item" class="link-to-report" href="#master/report/' + report.view + '">' + report.name + '</a></div>';
+            $('#links-to-reports').append(html);
+        })
+    }
+    function load_page_from_hash() {
+        var tmp = (window.location.hash).substring(1).split('/');
+        if (tmp[2] != undefined)
+            report = tmp[2];
+        else
+            report = undefined;
+        page = tmp[1];
+        scenario = tmp[0];
+
+        if (!scenario)
+            scenario = "master";
+        if (!page)
+            page = "context";
+
+        if (project[scenario] == undefined)
+            scenario = 'master';
+
+        data = project[scenario];
+
+        // Render page
+        if (page != 'report')
+            load_view("#content", page);
+        else {
+            load_report("#content", report);
+        }
+        InitUI();
+        UpdateUI(data);
+        draw_openbem_graphics();
+
+        // Add lock functionality to buttons and icons
+        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
+            $('#content button').addClass('if-not-locked');
+            $('#content i').addClass('if-not-locked');
+            $('#content .revert-to-original').each(function () {
+                if ($(this).css('display') != 'none')
+                    $(this).addClass('if-not-locked');
+            });
+        }
+
+        // Add lock functionality to buttons and icons
+        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
+            $('#content button').addClass('if-not-locked');
+            $('#content i').addClass('if-not-locked');
+            $('#content .revert-to-original').each(function () {
+                if ($(this).css('display') != 'none')
+                    $(this).addClass('if-not-locked');
+            });
+        }
+
+        // Disable measures if master
+        show_hide_if_master();
+
+        if (data.locked)
+            $('.if-not-locked').hide();
+        else
+            $('.if-not-locked').show();
+
+        // Disable measures if master
+        show_hide_if_master();
+
+        // Make modals draggable
+        $("#openbem .modal-header").css("cursor", "move");
+        $("#openbem .modal").draggable({
+            handle: ".modal-header"
+        });
+    }
     function refresh_undo_redo_buttons() {
         if (historical_index == historical.length - 1) {
             $('#undo').css('opacity', 0.1);
@@ -697,7 +710,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
             $('#redo').css('cursor', 'default');
         }
     }
-
     function generate_hash(string) {
         var hash = 0, i, chr;
         if (string.length === 0)
@@ -709,39 +721,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         }
         return hash;
     }
-    ;
-
-
-    //-----
-    //-------------------------------------------------------------------
-
-    $(".house_graphic").click(function () {
-        if ($(".house_graphic").html() == "Show house graphic") {
-            $("#topgraphic").show();
-            $("#rating").hide();
-            $(".house_graphic").html("Hide house graphic");
-        }
-        else {
-            $("#topgraphic").hide();
-            $("#rating").show();
-            $(".house_graphic").html("Show house graphic");
-        }
-    }
-    );
-    $("#topgraphic").show();
-    $("#rating").hide();
-    $(".house_graphic").html("Hide house graphic");
-
-    var max_wrapper_width = 1150;
-    var sidebar_enabled = true;
-    var sidebar_visible = true;
-
-    $("#assessment_menu").parent().attr("href", "#");
-    $("#assessment_menu").find("i").removeClass("icon-home");
-    $("#assessment_menu").find("i").addClass("icon-list");
-
-    sidebar_resize();
-
     function sidebar_resize() {
         var width = $(window).width();
         var height = $(window).height();
@@ -756,23 +735,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
                 show_sidebar()
         }
     }
-
-    $(window).resize(function () {
-        draw_openbem_graphics();
-        sidebar_resize();
-    });
-
-    $("#assessment_menu").parent().click(function () {
-        if (sidebar_visible) {
-            sidebar_enabled = false;
-            hide_sidebar();
-        }
-        else {
-            sidebar_enabled = true;
-            show_sidebar();
-        }
-    });
-
     function show_sidebar() {
         var width = $(window).width();
         sidebar_visible = true;
@@ -783,7 +745,6 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         $("#sidenav-open").hide();
         $("#sidenav-close").hide();
     }
-
     function hide_sidebar() {
         sidebar_visible = false;
         $("#sidebar").css("left", "0");
