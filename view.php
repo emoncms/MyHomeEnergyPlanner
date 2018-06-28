@@ -627,12 +627,13 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     }
     function load_page_from_hash() {
         var tmp = (window.location.hash).substring(1).split('/');
-        if (tmp[2] != undefined)
+        page = tmp[1];
+        scenario = tmp[0];
+        
+        if (page=="report" && tmp[2] != undefined)
             report = tmp[2];
         else
             report = undefined;
-        page = tmp[1];
-        scenario = tmp[0];
 
         if (!scenario)
             scenario = "master";

@@ -13,6 +13,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 389: revert to master in fabric not working
  - Removed backwards compatibility and old comments from view.php
  - Tidy up view.php
+ - Fetch report from query string ni a more sensible way
 
 
 ## Version 1.1.0 
