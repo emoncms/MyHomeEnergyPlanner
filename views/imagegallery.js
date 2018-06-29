@@ -1,32 +1,26 @@
 console.log('Debug imagegallery.js');
 
 function imagegallery_initUI() {
-    if (data.imagegallery == undefined) // Normally this is done in model-rX.js. The model is intended for calculations so i prefer to initialize data.imagegallery here
+    if (data.imagegallery == undefined)
         data.imagegallery = [];
+
+    if (data.imagegallery_notes == undefined)
+        data.imagegallery_notes = [];
 
     if (data.featuredimage == undefined)
         data.featuredimage = '';
 
     data = project['master'];
 
-    /*$(document).ready(function () {
-     $('#gallery').magnificPopup({
-     delegate: 'a', // child items selector, by clicking on it popup will open
-     type: 'image'
-     // other options
-     })
-     });
-     */
-    
     for (z in data.imagegallery) {
+        if (data.imagegallery_notes[z] == undefined)
+            data.imagegallery_notes[z] = "Add a note";
         add_image(z);
     }
 }
 
 function imagegallery_updateUI() {
-    /*for (z in data.imagegallery) {
-     $('#gallery [key = data.imagegallery]')
-     }*/
+
 }
 
 
@@ -42,8 +36,6 @@ $('#openbem #upload_form').submit(function (e) {
     }
 
     openbem.upload_images(projectid, form_data, upload_images_callback);
-
-
 });
 
 function upload_images_callback(result) {
@@ -67,7 +59,7 @@ function upload_images_callback(result) {
 
 function add_image(z) {
     var url = path + "Modules/assessment/images/" + projectid + "/" + data.imagegallery[z];
-    var html = "<div style='display:inline-block; padding:15px'><a class='image-in-gallery' key='data.imagegallery.";
+    var html = "<div style='display:inline-block; padding:15px; vertical-align:top'><a class='image-in-gallery' key='data.imagegallery.";
     html += z;
     html += "' href='";
     html += url;
@@ -81,7 +73,9 @@ function add_image(z) {
     }
     html += "' index='"
     html += z;
-    html += "' title='Feature this image'></i> </div>";
+    html += "' title='Feature this image'></i>";
+    html += "<p style='margin:10px' class='note' index=" + z + ">" + data.imagegallery_notes[z] + " <i class='icon-edit edit-note' style='cursor:pointer' index=" + z + "></p>"
+    html += "</div>";
     $('#gallery').append(html);
     //$('#gallery').append("<img class='image-in-gallery' key='data.imagegallery." + z + "' src='" + url + "' width='200' />");
 }
@@ -105,6 +99,17 @@ $('#gallery').on('click', '.icon-star-empty', function () {
 $('#modal-delete-image').on('click', '#delete-file-confirm', function () {
     openbem.delete_image(projectid, data.imagegallery[$(this).attr('index')], delete_image_callback);
     $("#modal-delete-image").modal("hide");
+});
+
+$('#gallery').on('click', '.edit-note', function () {
+    var index = $(this).attr('index');
+    $('.note[index=' + index + ']').html('<input type="text" index=' + index + ' style="width: 185px; margin-left: -10px" value="' + data.imagegallery_notes[index] + '" /><br /><button class="btn save-note" index=' + index + '>Save</button>');
+});
+$('#gallery').on('click', '.save-note', function () {
+    var index = $(this).attr('index');
+    data.imagegallery_notes[index] = $('input[index=' + index + ']').val();
+    $('.note[index=' + index + ']').html(data.imagegallery_notes[index] + " <i class='icon-edit edit-note' style='cursor:pointer' index=" + index + ">");
+    update();
 });
 
 function delete_image_callback(result) {

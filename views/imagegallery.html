@@ -30,29 +30,4 @@
     </div>
 </div>
 
-<!--
-<form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
-    <label>Select a file:</label><br>
-    <input type="file" name="file" required />
-    <input type="submit" value="Upload" />
-</form>
 
-<script type="text/javascript">
-    function submitForm() {
-        console.log("submit event");
-        var fd = new FormData(document.getElementById("fileinfo"));
-        fd.append("label", "WEBUPLOAD");
-        $.ajax({
-            url: path + "assessment/uploadimage.json",
-            type: "POST",
-            data: fd,
-            enctype: 'multipart/form-data',
-            processData: false, // tell jQuery not to process the data
-            contentType: false   // tell jQuery not to set contentType
-        }).done(function (data) {
-            console.log("PHP Output:");
-            console.log(data);
-        });
-        return false;
-    }
-</script>
