@@ -788,10 +788,10 @@ function compareGeneration(scenario) {
         ['Hydro Fraction used on-site', 'generation.hydro_fraction_used_onsite'],
         ['Hydro Feed in tariff Generation (£/kWh)', 'generation.hydro_FIT'],
         ['Hydro Feed in tariff Export (£/kWh)', 'generation.solar_export_FIT'],
-        //['Array Installed Capacity kWp (PV calculator)', 'generation.solarpv_kwp_installed'],
-        //['Array Orientation (PV calculator)', 'generation.solarpv_orientation'],
-        //['Array Inclination (PV calculator)', 'generation.solarpv_inclination'],
-        //['Overshading factor (PV calculator)', 'generation.solarpv_overshading']
+                //['Array Installed Capacity kWp (PV calculator)', 'generation.solarpv_kwp_installed'],
+                //['Array Orientation (PV calculator)', 'generation.solarpv_orientation'],
+                //['Array Inclination (PV calculator)', 'generation.solarpv_inclination'],
+                //['Overshading factor (PV calculator)', 'generation.solarpv_overshading']
     ];
     var DWU = comparePropertiesInArray(scenario, properties_to_check);
     if (DWU.changed === true) {
@@ -852,11 +852,11 @@ function get_heating_system_html(system, compare_to) {
 }
 
 function get_storage_html(storage, compare_to) {
-    if (compare_to == undefined)
-        compare_to = storage;
+    if (storage == undefined)
+        return 'Not present';
     var bold = [];
     for (var key in storage) {
-        if (storage[key] != compare_to[key])
+        if (compare_to != undefined && storage[key] != compare_to[key])
             bold[key] = ['<b>', '</b>'];
         else
             bold[key] = ['', ''];

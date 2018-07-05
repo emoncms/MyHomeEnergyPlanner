@@ -19,6 +19,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 252: added picture notes
  - Issues 119 and 323: 'Measured applied" added everywhere where a measure has been applied
  - Fixed bug: when adding a new heating system as a measure the id of the heating system was wrong
+ - Fixed bug: MHEP report breakeing when there was a water storage in master but there wasn't in the scenario
 
 
 ## Version 1.1.0 
