@@ -53,8 +53,6 @@ function heating_initUI() {
         data.measures = {};
     if (data.measures.water_heating == undefined)
         data.measures.water_heating = {};
-    if (data.measures.space_heating == undefined)
-        data.measures.space_heating = {};
     // Water heating
     $('#solarhotwater-link').prop('href', 'view?id=' + p.id + '#' + scenario + '/solarhotwater');
     // Space heating

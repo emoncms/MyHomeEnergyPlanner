@@ -449,10 +449,6 @@ function measures_costs(scenario) {
         measures_total_cost += cost_of_measures_by_id(project[scenario].measures.space_heating_control_type);
     if (project[scenario].measures.heating_systems != undefined)
         measures_total_cost += cost_of_measures_by_id(project[scenario].measures.heating_systems);
-    if (project[scenario].measures.space_heating != undefined) {
-        if (project[scenario].measures.space_heating.heating_control != undefined)
-            measures_total_cost += project[scenario].measures.space_heating.heating_control.measure.cost_total;
-    }
     if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
         measures_total_cost += project[scenario].measures.PV_generation.measure.cost_total;
     }
