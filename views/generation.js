@@ -21,7 +21,9 @@ function generation_initUI() {
         $('[key="data.generation.use_PV_calculator"]').hide().append('See PV calculator');
         $('#solarpv_kwp_installed').html('<span key="data.generation.solarpv_kwp_installed" /> kWp');
         $('#PV_calculator_message').show();
+        $('#PV_generation-measure-applied').show()
     }
+    
 }
 
 function generation_UpdateUI() {

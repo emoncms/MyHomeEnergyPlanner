@@ -21,6 +21,30 @@ function heating_UpdateUI()
             $('.if-primary-circuit-loss').show();
     });
     show_hide_if_master();
+
+    // Measures applied
+    if (data.measures.water_heating != undefined) {
+        if (data.measures.water_heating.water_usage != undefined) {
+            for (var id in data.measures.water_heating.water_usage)
+                $('.WU-measure-applied[item-id=' + id + ']').show();
+        }
+        if (data.measures.water_heating.pipework_insulation != undefined)
+            $('#pipework_insulation-measure-applied').show();
+        if (data.measures.water_heating.storage_type_measures != undefined)
+            $('#storage-type-measure-applied').show();
+        if (data.measures.water_heating.hot_water_control_type != undefined)
+            $('#hot_water_control_type-measure-applied').show();
+    }
+    if (data.measures.space_heating_control_type != undefined) {
+        for (var id in data.measures.space_heating_control_type)
+            $('.space_heating_control_type-measure-applied[item-id=' + id + ']').show();
+
+    }
+    if (data.measures.heating_systems != undefined) {
+        for (var id in data.measures.heating_systems)
+            $('.heating_systems-measure-applied[item-id=' + id + ']').show();
+
+    }
 }
 
 function heating_initUI() {
@@ -173,12 +197,12 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
             for (z in measure)
                 var tag = z;
             measure[tag].tag = tag;
-            measure.id = get_WU_max_id(data.water_heating.water_usage) + 1;
+            measure[tag].id = get_WU_max_id(data.water_heating.water_usage) + 1;
             add_quantity_and_cost_to_measure(measure[tag]);
             // Update data object and add measure
-            data.measures.water_heating[library_helper.type][measure.id] = {};
-            data.measures.water_heating[library_helper.type][measure.id].original = 'empty';
-            data.measures.water_heating[library_helper.type][measure.id].measure = measure[tag];
+            data.measures.water_heating[library_helper.type][measure[tag].id] = {};
+            data.measures.water_heating[library_helper.type][measure[tag].id].original = 'empty';
+            data.measures.water_heating[library_helper.type][measure[tag].id].measure = measure[tag];
             data.water_heating.water_usage.push(measure[tag]);
             break;
         case 'storage_type_measures':
@@ -269,7 +293,6 @@ $('#openbem').on('click', '#apply-measure-water-heating-ok', function () {
                 measure[tag].fans_and_supply_pumps = 0.4 * measure[tag].sfp * data.volume;
             add_quantity_and_cost_to_measure(measure[tag]);
             // Add extra properties to measure 
-            measure[tag].id = get_HS_max_id() + 1;
             measure[tag].fuel = 'Standard Tariff';
             measure[tag].fraction_space = 1;
             measure[tag].fraction_water_heating = 1;
@@ -345,7 +368,7 @@ function get_WU_max_id() {
         if (z > max_id)
             max_id = z;
     }
-    return max_id;
+    return 1.0 * max_id;
 }
 function get_HS_max_id() {
     var max_id = 0;
@@ -358,7 +381,7 @@ function get_HS_max_id() {
         if (z > max_id)
             max_id = z;
     }
-    return max_id;
+    return 1.0 * max_id;
 }
 function add_water_usage() {
     if (data.water_heating.water_usage.length > 0)
@@ -368,10 +391,11 @@ function add_water_usage() {
     $('#water-usage').html('');
     for (z in data.water_heating.water_usage) {
         var item = data.water_heating.water_usage[z];
-        var out = '<tr><td style="padding-left:75px;width:250px;border:none">' + item.tag + ': ' + item.name + '</td><td style="border:none">';
+        var out = '<tr><td style="padding-left:75px;width:250px;border:none">' + item.tag + ': ' + item.name + '</td>';
         //out += '<button class="apply-water-heating-measure if-not-master" type="water_usage" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
-        out += '<span class="edit-item-water-usage" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
-        out += '<span class = "delete-water-usage" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
+        out += '<td style="border:none"><span class="edit-item-water-usage" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
+        out += '<span class = "delete-water-usage" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td>';
+        out += '<td style="border:none"><p class="WU-measure-applied" item-id="' + item.id + '" style="display: none">Measure applied</p></td></tr> ';
         $('#water-usage').append(out);
     }
 }
@@ -398,7 +422,7 @@ function add_heating_systems() {
         out = '<tr><td style="text-align:center">' + item.tag + '<br /><br />';
         out += '<span class="edit-item-heating-system if-master" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
         out += '<span class = "delete-heating-system if-master" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
-        out += '<span class="apply-water-heating-measure if-not-master" type="heating_systems_measures" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked" style="margin-left: 20px">Apply measure</button></span></td><td>' + item.name + '</td>';
+        out += '<span class="apply-water-heating-measure if-not-master" type="heating_systems_measures" item-index="' + z + '" style="cursor:pointer"><button class="btn if-not-locked" style="">Apply measure</button></span><p class="heating_systems-measure-applied" item-id="' + item.id + '" style="margin-top: 10px;display:none">Measure applied</p></td><td>' + item.name + '</td>';
         out += '<td><select style="width:100px" key="data.heating_systems.' + z + '.provides"><option value="heating">Space heating</option><option value="water">Water heating</option><option value="heating_and_water">Space and water heating</option></select></td>';
         out += '<td class="if-SH">' + item.winter_efficiency + '</td><td class="if-WH">' + item.summer_efficiency + '</td>';
         out += '<td><select style="width:150px" key="data.heating_systems.' + z + '.fuel">' + get_fuels_for_select() + '</select></td>';
@@ -428,7 +452,7 @@ function add_heating_systems() {
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.responsiveness" max = "1" step = "0.01" min = "0" /> </td>';
         out += '<td class = "if-SH" > <input style = "width:55px" type = "number" key = "data.heating_systems.' + z + '.temperature_adjustment" max = "1" step = "0.01" min = "0" /> </td>';
         out += '<td class = "if-SH" style = "text-align:center" > <input class="controls-input" style = "width:40px" type = "number" key = "data.heating_systems.' + z + '.heating_controls" max = "3" step = "1" min = "1" /> \n\
-        <br /> <span class = "apply-water-heating-measure if-not-master" type = "space_heating_control_type" item-index = "' + z + '" style = "cursor:pointer" > <button class = "btn if-not-locked" > Apply measure </button></span > </td>';
+        <br /> <span class = "apply-water-heating-measure if-not-master" type="space_heating_control_type" item-index = "' + z + '" style = "cursor:pointer" > <button class = "btn if-not-locked" > Apply measure </button></span ><p class="space_heating_control_type-measure-applied" item-id="' + item.id + '" style="margin-top: 10px;display:none">Measure applied</p></td>';
         out += '<td class = "if-WH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.instantaneous_water_heating" /> </td>';
         out += '<td class = "if-SH" > <input type = "checkbox" key = "data.heating_systems.' + z + '.central_heating_pump_inside" /> </td>';
         out += '</tr>';
@@ -473,7 +497,7 @@ function add_storage() {
             specific_st_info = '<td>' + st.loss_factor_b + '</td><td>' + st.volume_factor_b + '</td><td>' + st.temperature_factor_b + '</td>';
         }
         $('#type_of_storage').append('<tr><th>Type of storage </th><th>Volume</th>' + specific_header + '<th>Inside dwelling?</th><th style="width:150px">Contains dedicated solar storage or WWHRS volume? <i class="icon-question-sign" title="WWHRS: Waste Water Heat Recovery" /></th><th></th></tr>');
-        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type_measures" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span></td></tr>');
+        $('#type_of_storage').append('<tr><td>' + st.tag + ': ' + st.name + '</td><td>' + st.storage_volume + '</td>' + specific_st_info + '<td><input type="checkbox" key="data.water_heating.hot_water_store_in_dwelling" /></td><td><input style="width:54px" type="number" min="0" key="data.water_heating.contains_dedicated_solar_storage_or_WWHRS" /> litres</td><td style="width:200px"><span class="delete-storage" style="cursor:pointer" title="Deleting an element this way is not considered a Measure"><a> <i class="icon-trash"></i></a></span><span class="select-type-of-storage-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Replace from library</button></span><span class="apply-water-heating-measure if-not-master" type="storage_type_measures" style="cursor:pointer"><button class="btn" style="margin-left: 20px"> Apply measure</button></span><p id="storage-type-measure-applied" style="margin:10px 40px; display:none">Measure applied</p></td></tr>');
     }
 
 }

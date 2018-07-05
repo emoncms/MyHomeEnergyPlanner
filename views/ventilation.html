@@ -28,9 +28,10 @@
             <td><span class="system_air_change_rate_input"><input key="data.ventilation.system_air_change_rate" type="number" style="width:50px" min="0" step="0.1" /> ACH</span></td>
             <td><span class="system_air_change_rate_input"><input key="data.ventilation.system_specific_fan_power" type="number" min="0" max="100" step="0.1" style="width:50px" /> W/(litre.sec)</span></td>
             <td><span class="balanced_heat_recovery_efficiency_input"><input key="data.ventilation.balanced_heat_recovery_efficiency" type="text" style="width:50px" /> %</span></td>
-            <td>
+            <td style="text-align: center">
                 <button class="add-ventilation-system-from-lib if-master" style="margin:0 0 10px 25px">Change system</button>
-                <button class="apply-ventilation-measure-from-lib if-not-master" type="ventilation_systems_measures" style="margin:0 0 10px 25px">Apply Measure</button>
+                <button class="apply-ventilation-measure-from-lib if-not-master" type="ventilation_systems_measures" style="margin: 0 0 5px">Apply Measure</button>
+                <p id="ventilation-type-measured-applied" style="display:none;">Measure applied</p>
             </td>
         </tr>
     </table>
@@ -55,11 +56,11 @@
     <table class="table" >
         <tr>
             <th style="text-align:left" width="20%"><h4>Structural infiltration</h4></th>
-        <th style='padding:0 0 20px 0; vertical-align: bottom' width="15%"><span key="data.ventilation.infiltration_rate_incorp_shelter_factor" dp="2"></span> ACH</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+            <th style='padding:0 0 20px 0; vertical-align: bottom' width="15%"><span key="data.ventilation.infiltration_rate_incorp_shelter_factor" dp="2"></span> ACH</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
         <tr><td style="text-align:left">Number of sides sheltered</td>
             <td colspan="5"><input key="data.ventilation.number_of_sides_sheltered" type="text" style="width:50px"/></td>

@@ -532,6 +532,10 @@ function elements_initUI()
                 data.fabric.elements[z].subtractfrom = $('.subtractfrom')[0][0].value;
         }
     }
+
+    // Show "Measured applied" in thermal bridge
+    if (data.measures.thermal_bridging != undefined)
+        $('#TB-measured-applied').show();
 }
 
 function elements_UpdateUI()

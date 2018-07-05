@@ -36,7 +36,8 @@ $("[key='data.ventilation.air_permeability_test']").change(function () {
     if (val == true) {
         $("#structural").hide('slow');
         $("#air_permeability_value_tbody").show('slow');
-    } else {
+    }
+    else {
         $("#structural").show('slow');
         $("#air_permeability_value_tbody").hide('slow');
     }
@@ -367,7 +368,8 @@ function ventilation_initUI() {
     if (data.ventilation.air_permeability_test) {
         $("#structural").hide('slow');
         $("#air_permeability_value_tbody").show('slow');
-    } else {
+    }
+    else {
         $("#structural").show('slow');
         $("#air_permeability_value_tbody").hide('slow');
     }
@@ -444,7 +446,8 @@ function ventilation_initUI() {
         var out = '<tr><td>' + item.tag + ': ' + item.name + '</td><td><input type="text" style="width: 190px" key="data.ventilation.IVF.' + z + '.location"></td><td>' + item.type + '</td><td style="padding-left:100px">' + item.ventilation_rate + '</td>';
         out += '<td> <button class="apply-ventilation-measure-from-lib if-not-master" type="intentional_vents_and_flues_measures" item_id="' + item.id + '" style="margin-right:25px">Apply Measure</button>'
         out += '<span class="edit-item-IVF" row="' + z + '" tag="' + item.tag + '" style="cursor:pointer; margin-right:15px" item=\'' + JSON.stringify(item) + '\' title="Editing a system this way is not considered a Measure"> <a><i class = "icon-edit"> </i></a></span>';
-        out += '<span class = "delete-IVF" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td></tr> ';
+        out += '<span class = "delete-IVF" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span>';
+        out += '<p class="IVF-measured-applied" item_id="' + item.id + '" style="display:none; margin-top: 5px">Measure applied</p></td></tr> ';
         $('#IVF').append(out);
     }
 
@@ -453,13 +456,28 @@ function ventilation_initUI() {
     for (z in data.ventilation.CDF) {
         var item = data.ventilation.CDF[z];
         var out = '<tr><td style="padding-left:75px;width:5px;border:none"><span class = "delete-CDF" row="' + z + '" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" ><a> <i class="icon-trash" ></i></a></span></td>'
-        out += '<td>' + item.tag + ': ' + item.name + '</td></tr>';
+        out += '<td>' + item.tag + ': ' + item.name + '</td>';
+        out+= '<td><span style="display:none; margin-left: 25px" class="CDF-measure-applied" item_id="' + data.ventilation.CDF[z].id + '">Measure applied</span></td></tr>';
         $('#CDF').append(out);
     }
 
-    // Darught proofing measure applied
+    // Measure applied
     if (data.measures.ventilation['draught_proofing_measures'] != undefined)
         $('#draught-proofing_measure-applied').html('Measure applied: ' + data.measures.ventilation['draught_proofing_measures'].measure.name);
+    if (data.measures.ventilation['ventilation_systems_measures'] != undefined)
+        $('#ventilation-type-measured-applied').show();
+    if (data.measures.ventilation['intentional_vents_and_flues'] != undefined) {
+        for (var id in data.measures.ventilation['intentional_vents_and_flues'])
+            $('.IVF-measured-applied[item_id=' + id + ']').show();
+    }
+    if (data.measures.ventilation['intentional_vents_and_flues_measures'] != undefined) {
+        for (var id in data.measures.ventilation['intentional_vents_and_flues_measures'])
+            $('.IVF-measured-applied[item_id=' + id + ']').show();
+    }
+    if (data.measures.ventilation['clothes_drying_facilities'] != undefined) {
+        for (var id in data.measures.ventilation['clothes_drying_facilities'])
+            $('.CDF-measure-applied[item_id=' + id + ']').show();
+    }
 
     show_hide_if_master();
 }

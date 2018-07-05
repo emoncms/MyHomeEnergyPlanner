@@ -31,6 +31,9 @@ function LAC_initUI() {
             $('#LAC-cooking-fuels').append(out);
         }
     }
+    // Show "Measured applied" in lighting
+    if (data.measures.LAC != undefined && data.measures.LAC.lighting != undefined)
+        $('#lighting-measure-applied').show();
 
     // Detailed list
     $('#appliancelist').html('');
@@ -120,7 +123,7 @@ $('#openbem').on('click', '.add_LAC_fuel', function () { // Fix index
 $('#openbem').on('click', '.delete-LAC-fuel', function () { // Fix index
     var array_name = $(this).attr('type');
     var index = $(this).attr('index');
-    data.LAC[array_name].splice(index,1);
+    data.LAC[array_name].splice(index, 1);
     // Update
     LAC_initUI();
     update();
@@ -214,6 +217,7 @@ function apply_LAC_measure(type) {
             data.measures.LAC.lighting.measure.cost_total = n_bulbs_to_change * data.measures.LAC.lighting.measure.cost;
 
             data.LAC.LLE = data.LAC.L;
+            $('#lighting-measure-applied').show();
 
             break;
     }
