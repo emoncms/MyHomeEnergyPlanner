@@ -53,6 +53,7 @@ function generateSummary() {
         ['CO<sub>2</sub> emission rate (kgCO<sub>2</sub>/m<sup>2</sup>.a)', 'kwhdpp'],
         ['Per person energy use (kWh/m<sup>2</sup>.a)', 'kgco2perm2'],
         ['SAP rating', 'SAP', 'rating'],
+        ['Fabric Energy Efficiency', 'FEE'],
         ['', ''],
         ['<b>Gains/losses (kWh/m<sup>2</sup>)</b>', ''],
         ['Internal gains', 'annual_useful_gains_kWh_m2', 'Internal'],

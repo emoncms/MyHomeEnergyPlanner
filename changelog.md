@@ -23,6 +23,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Removed wrong information about how the comparison tables are built
  - Remove measure.space_heating as it is not longer used (who knows from when)
  - Issue 119: measures tables added to MHEP report
+ - Fabric Energy Efficiency added to comparison tables MHEP report
 
 
 ## Version 1.1.0 
