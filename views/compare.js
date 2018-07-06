@@ -1,7 +1,7 @@
 console.log('Debug compare.js');
 function compare_initUI() {
     // Summary
-    generateSummary('#summary');
+    $('#summary').append(generateSummary());
 
     // Comparison tables
     for (var scenario in project) {
@@ -9,7 +9,7 @@ function compare_initUI() {
             $('#compare').append('<h3 style="margin-top:25px">Master/' + scenario + ' Comparison table</h3>');
             $('#compare').append('<hr />');
             $('#compare').append('<div id="comparison-' + scenario + '" style="margin-left:25px">');
-            compareCarbonCoop(scenario, "#comparison-" + scenario);
+            $("#comparison-" + scenario).html(compareCarbonCoop(scenario));
         }
     }
 
@@ -41,7 +41,7 @@ function compare_initUI() {
 //******************************
 // Functions for Summary
 //******************************
-function generateSummary(outputElement) {
+function generateSummary() {
     var out = '<tr><th />';
     for (var scenario in project)
         out += '<th>' + scenario + '<br />' + project[scenario].scenario_name + '</th>'
@@ -117,7 +117,7 @@ function generateSummary(outputElement) {
     rows.forEach(function (value) {
         out += getValuesForScenarios(value);
     });
-    $(outputElement).append(out);
+    return out;
 }
 
 function getValuesForScenarios(value) {
@@ -144,7 +144,7 @@ function getValuesForScenarios(value) {
 //**********************************
 // Functions for comparison tables
 //**********************************
-function compareCarbonCoop(scenario, outputElement) {
+function compareCarbonCoop(scenario) {
 
     var out = "";
     // Basic dwelling data
@@ -208,7 +208,7 @@ function compareCarbonCoop(scenario, outputElement) {
     out += '<tr><td>Total income</td><td><i>£' + project.master.total_income.toFixed(0) + '</i></td><td><i>£' + project[scenario].total_income.toFixed(0) + '</i></td></tr>';
     out += '<tr><td>SAP rating</td><td><i>' + project.master.SAP.rating.toFixed(0) + '</i></td><td><i>' + project[scenario].SAP.rating.toFixed(0) + '</i></td></tr>';
     out += '</table></br>';
-    $(outputElement).html(out);
+    return out;
 }
 
 function comparePropertiesInArray(scenario, changes) {
