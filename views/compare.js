@@ -2,6 +2,7 @@ console.log('Debug compare.js');
 function compare_initUI() {
     // Summary
     generateSummary('#summary');
+
     // Comparison tables
     for (var scenario in project) {
         if (scenario != 'master') {
@@ -11,8 +12,35 @@ function compare_initUI() {
             compareCarbonCoop(scenario, "#comparison-" + scenario);
         }
     }
+
+    // Summary of measures
+    for (var scenario in project) {
+        if (scenario != 'master') {
+            $('#summary-measures').append('<h3 style="margin-top:25px">' + scenario.charAt(0).toUpperCase() + scenario.slice(1) + ' - summary of measures</h3>');
+            $('#summary-measures').append('<hr />');
+            $('#summary-measures').append('<div id="summary-measures-' + scenario + '" style="margin-left:25px">');
+            $("#summary-measures-" + scenario).append(getMeasuresSummaryTable(scenario));
+        }
+    }
+    $('.measures-summary-table').addClass('table');
+
+    // Complete measures tables
+    for (var scenario in project) {
+        if (scenario != 'master') {
+            $('#complete-measures').append('<h3 style="margin-top:25px">' + scenario.charAt(0).toUpperCase() + scenario.slice(1) + ' - comple list of measures</h3>');
+            $('#complete-measures').append('<hr />');
+            $('#complete-measures').append('<div id="complete-measures-' + scenario + '" style="margin-left:25px">');
+            $("#complete-measures-" + scenario).append(getMeasuresCompleteTables(scenario));
+        }
+    }
+    $('.complete-measures-table').addClass('table');
+    $('#complete-measures').hide(); // We don't want to show this one for now
+    
 }
 
+//******************************
+// Functions for Summary
+//******************************
 function generateSummary(outputElement) {
     var out = '<tr><th />';
     for (var scenario in project)
@@ -113,6 +141,9 @@ function getValuesForScenarios(value) {
 }
 
 
+//**********************************
+// Functions for comparison tables
+//**********************************
 function compareCarbonCoop(scenario, outputElement) {
 
     var out = "";
@@ -824,7 +855,6 @@ function getHeatingSystemById(id, scenario) {
     return false;
 }
 
-
 function get_heating_system_html(system, compare_to) {
     if (compare_to == undefined)
         compare_to = system;
@@ -869,4 +899,414 @@ function get_storage_html(storage, compare_to) {
     else
         out += '<br />' + bold['loss_factor_b'][0] + ' Hot water storage loss factor : ' + storage.loss_factor_b + ' kWh/litre/day' + bold['loss_factor_b'][1] + bold['volume_factor_b'][0] + '<br /> Volume factor: ' + storage.volume_factor_b + bold['volume_factor_b'][1] + ',' + bold['temperature_factor_b'][0] + '<br />Temperature factor: ' + storage.temperature_factor_b + bold['temperature_factor_b'][1] + '</i></div>';
     return out;
+}
+
+//*******************************************
+// Functions for Summary of measures tables
+//*******************************************
+function getMeasuresSummaryTable(scenario) {
+    var out = '<table class="measures-summary-table"><tr><th>Name</th><th>Label/location</th><th>Performance target</th><th>Benefits (in order)</th><th>Cost</th><th>Completed By</th><th>Disruption</th></tr>';
+
+    // Fabric
+    if (project[scenario].fabric.measures != undefined)
+        out += measuresByIdForSummaryTable(project[scenario].fabric.measures);
+
+    if (project[scenario].measures != undefined) {
+        // Ventilation
+        if (project[scenario].measures.ventilation != undefined) {
+            if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
+                out += measuresByIdForSummaryTable(project[scenario].measures.ventilation.extract_ventilation_points);
+            if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined)
+                out += measuresByIdForSummaryTable(project[scenario].measures.ventilation.intentional_vents_and_flues);
+            if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
+                out += measuresByIdForSummaryTable(project[scenario].measures.ventilation.intentional_vents_and_flues_measures);
+            if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
+                out += measureForSummaryTable(project[scenario].measures.ventilation.draught_proofing_measures.measure);
+            if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
+                out += measureForSummaryTable(project[scenario].measures.ventilation.ventilation_systems_measures.measure);
+            if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined)
+                out += measuresByIdForSummaryTable(project[scenario].measures.ventilation.clothes_drying_facilities);
+        }
+        // Water heating
+        if (project[scenario].measures.water_heating != undefined) {
+            if (project[scenario].measures.water_heating.water_usage != undefined)
+                out += measuresByIdForSummaryTable(project[scenario].measures.water_heating.water_usage);
+            if (project[scenario].measures.water_heating.storage_type != undefined)
+                out += measureForSummaryTable(project[scenario].measures.water_heating.storage_type.measure);
+            if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+                out += measureForSummaryTable(project[scenario].measures.water_heating.pipework_insulation.measure);
+            if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+                out += measureForSummaryTable(project[scenario].measures.water_heating.hot_water_control_type.measure);
+        }
+        // Heating controls
+        if (project[scenario].measures.space_heating_control_type != undefined)
+            out += measuresByIdForSummaryTable(project[scenario].measures.space_heating_control_type);
+        // Heating systems
+        if (project[scenario].measures.heating_systems != undefined)
+            out += measuresByIdForSummaryTable(project[scenario].measures.heating_systems);
+        // Generation
+        if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
+            out += measureForSummaryTable(project[scenario].measures.PV_generation.measure);
+        }
+        // Lighting
+        if (project[scenario].measures.LAC != undefined) {
+            if (project[scenario].measures.LAC.lighting != undefined)
+                out += measureForSummaryTable(project[scenario].measures.LAC.lighting.measure);
+        }
+    }
+
+    out += '</table>';
+    return out;
+}
+
+function measureForSummaryTable(measure) {
+    // Name
+    var html = '<tr><td>' + measure.name + '</td>';
+
+    // Location
+    if (typeof measure.location != 'undefined') {
+        measure.location = measure.location.replace(/,br/g, ', '); // for measures applied in bulk to fabric elements the location has the form of: W9,brW10,brW21,brD3,brW4,brW5,brW6a,brW16 , and we dont want that
+        if (measure.location[measure.location.length - 2] == ',' && measure.location[measure.location.length - 1] == ' ')
+            measure.location = measure.location.substring(0, measure.location.length - 2);
+        if (measure.location.length > 50)
+            measure.location = "Various";
+        html += '<td><div class="text-width-limiter">' + measure.location + '</div>';
+    }
+    else
+        html += '<td><div class="text-width-limiter">Whole house</div>';
+    html += '</td>';
+
+    // Performance
+    if (typeof (measure.performance) != 'string')
+        var perf = "";
+    else {
+        var perf = format_performance_string(measure.performance); // We have realized that some units were inputted wrong in the library
+    }
+    html += '<td>' + perf + '</td>';
+
+    // Benefits
+    html += '<td>' + measure.benefits + '</td>';
+
+    // Cost
+    html += '<td class="cost">£' + Number(measure.cost).toFixed(0) + '</td>';
+
+    // Who by
+    html += '<td>' + measure.who_by + '</td>';
+
+    // Disruption
+    if (typeof (disruption) == 'string')
+        html += '<td>' + disruption.replace('MEDIUMHIGH', 'MEDIUM / HIGH') + '</td>';
+    else
+        html += '<td></td>';
+
+
+    // Finish
+    html += '</tr>';
+    return(html);
+}
+
+function measuresByIdForSummaryTable(measures_by_id) {
+    var out = '';
+    for (var id in measures_by_id)
+        out += measureForSummaryTable(measures_by_id[id].measure);
+    return out;
+}
+
+function format_performance_string(performance) {
+    return performance.replace("WK.m2", "W/m<sup>2</sup>.K")
+            .replace("W/K.m2", "W/m<sup>2</sup>.K")
+            .replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+            .replace('m3/m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+            .replace('W/msup2/sup.K', ' W/m<sup>2</sup>.K')
+            .replace('msup3/sup/msup2/sup.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+            .replace('na', 'n/a');
+}
+
+//*******************************************
+// Functions for Complete measures tables
+//*******************************************
+
+function getMeasuresCompleteTables(scenario) {
+    var out = '';
+
+    // Fabric
+    if (project[scenario].fabric.measures != undefined)
+        out += measuresByIdForCompleteTable(project[scenario].fabric.measures);
+
+    if (project[scenario].measures != undefined) {
+        // Ventilation
+        if (project[scenario].measures.ventilation != undefined) {
+            if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
+                out += measuresByIdForCompleteTable(project[scenario].measures.ventilation.extract_ventilation_points);
+            if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined)
+                out += measuresByIdForCompleteTable(project[scenario].measures.ventilation.intentional_vents_and_flues);
+            if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
+                out += measuresByIdForCompleteTable(project[scenario].measures.ventilation.intentional_vents_and_flues_measures);
+            if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
+                out += measureForCompleteTable(project[scenario].measures.ventilation.draught_proofing_measures.measure);
+            if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
+                out += measureForCompleteTable(project[scenario].measures.ventilation.ventilation_systems_measures.measure);
+            if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined)
+                out += measuresByIdForCompleteTable(project[scenario].measures.ventilation.clothes_drying_facilities);
+        }
+        // Water heating
+        if (project[scenario].measures.water_heating != undefined) {
+            if (project[scenario].measures.water_heating.water_usage != undefined)
+                out += measuresByIdForCompleteTable(project[scenario].measures.water_heating.water_usage);
+            if (project[scenario].measures.water_heating.storage_type != undefined)
+                out += measureForCompleteTable(project[scenario].measures.water_heating.storage_type.measure);
+            if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+                out += measureForCompleteTable(project[scenario].measures.water_heating.pipework_insulation.measure);
+            if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+                out += measureForCompleteTable(project[scenario].measures.water_heating.hot_water_control_type.measure);
+        }
+        // Heating controls
+        if (project[scenario].measures.space_heating_control_type != undefined)
+            out += measuresByIdForCompleteTable(project[scenario].measures.space_heating_control_type);
+        // Heating systems
+        if (project[scenario].measures.heating_systems != undefined)
+            out += measuresByIdForCompleteTable(project[scenario].measures.heating_systems);
+        // Generation
+        if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
+            out += measureForCompleteTable(project[scenario].measures.PV_generation.measure);
+        }
+        // Lighting
+        if (project[scenario].measures.LAC != undefined) {
+            if (project[scenario].measures.LAC.lighting != undefined)
+                out += measureForCompleteTable(project[scenario].measures.LAC.lighting.measure);
+        }
+    }
+    return out;
+}
+
+function measureForCompleteTable(measure) {
+    var html = "<table class='complete-measures-table'>";
+    html += '<tr><td style="width:13%"><strong>Measure: </strong></td><td colspan=3>' + measure.name + '</td></tr>';
+    if (typeof measure.location != 'undefined') {
+        var location = measure.location.replace(/,br/g, ', '); // for measures applied in bulk to fabric elements the location has the form of: W9,brW10,brW21,brD3,brW4,brW5,brW6a,brW16 , and we dont want that
+        if (location[location.length - 2] == ',' && location[location.length - 1] == ' ')
+            location = location.substring(0, location.length - 2);
+        html += '<tr><td><strong>Label/location: </strong></td><td colspan=3>' + location + '</td></tr>';
+    }
+    else
+        html += '<tr><td><strong>Label/location: </strong></td><td colspan=3> Whole house</td></tr>';
+    html += '<tr><td><strong>Description: </strong></td><td colspan=3>' + measure.description + '</td></tr>';
+    html += '<tr><td><strong>Associated work: </strong></td><td colspan=3>' + measure.associated_work + '</td></tr>';
+    if (measure.maintenance != 'undefined')
+        html += '<tr><td><strong>Maintenance: </strong></td><td colspan=3>' + measure.maintenance + '</td></tr>';
+    else
+        html += '<tr><td><strong>Maintenance: </strong></td><td colspan=3> N/A</td></tr>';
+    html += '<tr><td><strong>Special and other considerations: </strong></td><td colspan=3>' + measure.notes + '</td></tr>';
+    html += '<tr><td><strong>Who by: </strong></td><td style="width:35%">' + measure.who_by + '</td>';
+    html += '<td style="width:13%"><strong>Key risks: </strong></td><td>' + measure.key_risks + '</td></tr>';
+    html += '<tr><td><strong>Benefits: </strong></td><td>' + measure.benefits + '</td>';
+    if (measure.disruption != undefined)
+        html += '<td><strong>Dirt and disruption: </strong></td><td>' + measure.disruption.replace('MEDIUMHIGH', 'MEDIUM / HIGH') + '</td></tr>';
+    else
+        html += '<td><strong>Dirt and disruption: </strong></td><td></td></tr>';
+    if (measure.performance == undefined)
+        var perf = '';
+    else
+        format_performance_string(measure.performance); // We have realized that some units were inputted wrong in the library
+    html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + perf + '</td>';
+    html += '<td colspan=2><table  style="width:100%">';
+    html += measure.min_cost == undefined ? '' : '<tr><td><strong>Minimum cost</strong></td><td colspan=3>' + measure.min_cost + '</td></tr>';
+    html += '<tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.cost_units + '</td></tr>';
+    html += '<tr><td><strong>Quantity (units): </strong></td><td>' + (1.0 * measure.quantity).toFixed(2) + '</td><td><strong>Total cost (£): </strong></td><td>' + (1.0 * measure.cost_total).toFixed(2) + '</td></tr></table></td></tr>';
+    html += "</table>";
+
+    return html;
+}
+
+function measuresByIdForCompleteTable(measures_by_id) {
+    var out = '';
+    for (var id in measures_by_id)
+        out += measureForCompleteTable(measures_by_id[id].measure);
+    return out;
+}
+
+
+
+
+function populateMeasuresTable(scenario, tableSelector, summaryTableSelector, listSelector) {
+    if (project[scenario].fabric.measures != undefined)
+        addListOfMeasuresByIdToSummaryTable(project[scenario].fabric.measures, tableSelector, summaryTableSelector, listSelector);
+    if (project[scenario].measures != undefined) {
+        if (project[scenario].measures.ventilation != undefined) {
+            if (project[scenario].measures.ventilation.extract_ventilation_points != undefined)
+                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.extract_ventilation_points, tableSelector, summaryTableSelector, listSelector);
+            if (project[scenario].measures.ventilation.intentional_vents_and_flues != undefined)
+                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.intentional_vents_and_flues, tableSelector, summaryTableSelector, listSelector);
+            if (project[scenario].measures.ventilation.intentional_vents_and_flues_measures != undefined)
+                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.intentional_vents_and_flues_measures, tableSelector, summaryTableSelector, listSelector);
+            if (project[scenario].measures.ventilation.draught_proofing_measures != undefined)
+                addMeasureToSummaryTable(project[scenario].measures.ventilation.draught_proofing_measures, tableSelector, summaryTableSelector, listSelector);
+            if (project[scenario].measures.ventilation.ventilation_systems_measures != undefined)
+                addMeasureToSummaryTable(project[scenario].measures.ventilation.ventilation_systems_measures, tableSelector, summaryTableSelector, listSelector);
+            if (project[scenario].measures.ventilation.clothes_drying_facilities != undefined)
+                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.ventilation.clothes_drying_facilities, tableSelector, summaryTableSelector, listSelector);
+        }
+        if (project[scenario].measures.water_heating != undefined) {
+            if (project[scenario].measures.water_heating.water_usage != undefined)
+                addListOfMeasuresByIdToSummaryTable(project[scenario].measures.water_heating.water_usage, tableSelector, summaryTableSelector, listSelector);
+            if (project[scenario].measures.water_heating.storage_type != undefined)
+                addMeasureToSummaryTable(project[scenario].measures.water_heating.storage_type, tableSelector, summaryTableSelector, listSelector);
+            if (project[scenario].measures.water_heating.pipework_insulation != undefined)
+                addMeasureToSummaryTable(project[scenario].measures.water_heating.pipework_insulation, tableSelector, summaryTableSelector, listSelector);
+            if (project[scenario].measures.water_heating.hot_water_control_type != undefined)
+                addMeasureToSummaryTable(project[scenario].measures.water_heating.hot_water_control_type, tableSelector, summaryTableSelector, listSelector);
+        }
+        if (project[scenario].measures.space_heating_control_type != undefined)
+            addListOfMeasuresByIdToSummaryTable(project[scenario].measures.space_heating_control_type, tableSelector, summaryTableSelector, listSelector);
+        if (project[scenario].measures.heating_systems != undefined)
+            addListOfMeasuresByIdToSummaryTable(project[scenario].measures.heating_systems, tableSelector, summaryTableSelector, listSelector);
+        if (project[scenario].measures.space_heating != undefined) {
+            if (project[scenario].measures.space_heating.heating_control != undefined)
+                addMeasureToSummaryTable(project[scenario].measures.space_heating.heating_control, tableSelector, summaryTableSelector, listSelector);
+        }
+        if (project[scenario].use_generation == 1 && project[scenario].measures.PV_generation != undefined) {
+            addMeasureToSummaryTable(project[scenario].measures.PV_generation, tableSelector, summaryTableSelector, listSelector);
+        }
+        if (project[scenario].measures.LAC != undefined) {
+            if (project[scenario].measures.LAC.lighting != undefined)
+                addMeasureToSummaryTable(project[scenario].measures.LAC.lighting, tableSelector, summaryTableSelector, listSelector);
+        }
+    }
+}
+function addListOfMeasuresByIdToSummaryTable(listOfMeasures, tableSelector, summaryTableSelector, listSelector) {
+    for (var measureID in listOfMeasures) {
+        var measure = listOfMeasures[measureID];
+        addMeasureToSummaryTable(measure, tableSelector, summaryTableSelector, listSelector);
+    }
+}
+function addMeasureToSummaryTable(measure, tableSelector, summaryTableSelector, listSelector) {
+    // Complete table
+    var html = "<tr>";
+    var row = $('<tr></tr>');
+    for (var i = 0; i < measuresTableColumns.length; i++) {
+        var cell = $('<td></td>');
+        cell.html(isNaN(measure.measure[measuresTableColumns[i]]) ? measure.measure[measuresTableColumns[i]] : (1.0 * measure.measure[measuresTableColumns[i]]).toFixed(2));
+        row.append(cell);
+    }
+    $(tableSelector).append(row);
+    //Summary table
+    addRowToSummaryTable(summaryTableSelector, measure.measure.name, measure.measure.location, measure.measure.description, measure.measure.performance,
+            measure.measure.benefits, (1.0 * measure.measure.cost_total).toFixed(2), measure.measure.who_by, measure.measure.disruption);
+
+    //List
+    html = "<table class='no-break'>";
+    html += '<tr><td style="width:13%"><strong>Measure: </strong></td><td colspan=3>' + measure.measure.name + '</td></tr>';
+    if (typeof measure.measure.location != 'undefined') {
+        var location = measure.measure.location.replace(/,br/g, ', '); // for measures applied in bulk to fabric elements the location has the form of: W9,brW10,brW21,brD3,brW4,brW5,brW6a,brW16 , and we dont want that
+        if (location[location.length - 2] == ',' && location[location.length - 1] == ' ')
+            location = location.substring(0, location.length - 2);
+        html += '<tr><td><strong>Label/location: </strong></td><td colspan=3>' + location + '</td></tr>';
+    }
+    else
+        html += '<tr><td><strong>Label/location: </strong></td><td colspan=3> Whole house</td></tr>';
+    html += '<tr><td><strong>Description: </strong></td><td colspan=3>' + measure.measure.description + '</td></tr>';
+    html += '<tr><td><strong>Associated work: </strong></td><td colspan=3>' + measure.measure.associated_work + '</td></tr>';
+    if (measure.measure.maintenance != 'undefined')
+        html += '<tr><td><strong>Maintenance: </strong></td><td colspan=3>' + measure.measure.maintenance + '</td></tr>';
+    else
+        html += '<tr><td><strong>Maintenance: </strong></td><td colspan=3> N/A</td></tr>';
+    html += '<tr><td><strong>Special and other considerations: </strong></td><td colspan=3>' + measure.measure.notes + '</td></tr>';
+    html += '<tr><td><strong>Who by: </strong></td><td style="width:35%">' + measure.measure.who_by + '</td>';
+    html += '<td style="width:13%"><strong>Key risks: </strong></td><td>' + measure.measure.key_risks + '</td></tr>';
+    html += '<tr><td><strong>Benefits: </strong></td><td>' + measure.measure.benefits + '</td>';
+    if (measure.measure.disruption != undefined)
+        html += '<td><strong>Dirt and disruption: </strong></td><td>' + measure.measure.disruption.replace('MEDIUMHIGH', 'MEDIUM / HIGH') + '</td></tr>';
+    else
+        html += '<td><strong>Dirt and disruption: </strong></td><td></td></tr>';
+    if (measure.measure.performance == undefined)
+        var perf = '';
+    else
+        var perf = measure.measure.performance.replace("WK.m2", "W/m<sup>2</sup>.K")
+                .replace("W/K.m2", "W/m<sup>2</sup>.K")
+                .replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+                .replace('m3/m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+                .replace('W/msup2/sup.K', ' W/m<sup>2</sup>.K')
+                .replace('msup3/sup/msup2/sup.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+                .replace('na', 'n/a'); // We have realized that some units were inputted wrong in the library
+    html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + perf + '</td>';
+    html += '<td colspan=2><table  style="width:100%">';
+    html += measure.measure.min_cost == undefined ? '' : '<tr><td><strong>Minimum cost</strong></td><td colspan=3>' + measure.measure.min_cost + '</td></tr>';
+    html += '<tr><td style="width:25%"><strong>Cost (£/unit): </strong></td><td>' + measure.measure.cost + '</td><td style="width:30%"><strong>Units: </strong></td><td>' + measure.measure.cost_units + '</td></tr>';
+    html += '<tr><td><strong>Quantity (units): </strong></td><td>' + (1.0 * measure.measure.quantity).toFixed(2) + '</td><td><strong>Total cost (£): </strong></td><td>' + (1.0 * measure.measure.cost_total).toFixed(2) + '</td></tr></table></td></tr>';
+    html += "</table>";
+    $(listSelector).append(html);
+}
+
+function initialiseMeasuresTable(tableSelector) {
+    var html = '<tr>\
+     <th class="tg-yw4l" rowspan="2">Measure</th>\<th class="tg-yw4l" rowspan="2">Label/location</th>\
+     <th class="tg-yw4l" rowspan="2">Description</th>\
+     <th class="tg-yw4l" rowspan="2">Performance Target</th>\         <th class="tg-yw4l" rowspan="2">Benefits (in order)</th>\
+     <th class="tg-yw4l" colspan="4">How Much?</th>\
+     <th class="tg-yw4l" rowspan="2">Who by?</th>\
+     <th class="tg-yw4l" rowspan="2">Key risks</th>\
+     <th class="tg-yw4l" rowspan="2">Dirt and disruption?</th>\
+     <th class="tg-yw4l" rowspan="2">Associated work?</th>\
+     <th class="tg-yw4l" rowspan="2">Maintenace</th>\
+     <th class="tg-yw4l" rowspan="2">Special and other considerations</th>\
+     </tr>\
+     <tr>\
+     <td class="th">Rate (£)</td>\ 						    <td class="th">Unit</td>\
+     <td class="th">Quantity</td>\
+     <td class="th">Total</td>\
+     </tr>';
+    return $(tableSelector).html(html);
+}
+function createMeasuresTable(scenario, tableSelector, summaryTableSelector, listSelector) {
+    initialiseMeasuresTable(tableSelector);
+    initiliaseMeasuresSummaryTable(summaryTableSelector);
+    populateMeasuresTable(scenario, tableSelector, summaryTableSelector, listSelector);
+}
+
+function initiliaseMeasuresSummaryTable(summaryTableSelector) {
+    var html = "<thead>\
+     <tr>\
+     <th>Name</th>\<th>Label/location</th>\ <th>Performance target</th>\         <th>Benefits (in order)</th>\ 	 	 	<th>Cost</th>\
+     <th>Completed By</th>\
+     <th>Disruption</th>\
+     </tr>\ 			</thead>\
+     <tbody>\
+     </tbody>";
+    return $(summaryTableSelector).html(html);
+}
+
+function addRowToSummaryTable(tableSelector, name, location, description, performance, benefits, cost, who_by, disruption) {
+    var html = '<tr><td class="highlighted-col">' + name + '</td>';
+    if (typeof location != 'undefined') {
+        location = location.replace(/,br/g, ', '); // for measures applied in bulk to fabric elements the location has the form of: W9,brW10,brW21,brD3,brW4,brW5,brW6a,brW16 , and we dont want that
+        if (location[location.length - 2] == ',' && location[location.length - 1] == ' ')
+            location = location.substring(0, location.length - 2);
+        if (location.length > 50)
+            location = "Various";
+        html += '<td><div class="text-width-limiter">' + location + '</div>';
+    }
+    else
+        html += '<td><div class="text-width-limiter">Whole house</div>';
+    html += '</td>';
+    if (typeof (performance) != 'string')
+        var perf = "";
+    else {
+        var perf = performance.replace("WK.m2", "W/m<sup>2</sup>.K")
+                .replace("W/K.m2", "W/m<sup>2</sup>.K")
+                .replace('m3m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+                .replace('m3/m2.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+                .replace('W/msup2/sup.K', ' W/m<sup>2</sup>.K')
+                .replace('msup3/sup/msup2/sup.hr50pa', 'm<sup>3</sup>/m<sup>2</sup>.hr50pa')
+                .replace('na', 'n/a'); // We have realized that some units were inputted wrong in the library
+    }
+    html += '<td>' + perf + '</td>';
+    html += '<td>' + benefits + '</td>';
+    html += '<td class="cost">£' + Number(cost).toFixed(0) + '</td>';
+    html += '<td>' + who_by + '</td>';
+    if (typeof (disruption) == 'string')
+        html += '<td>' + disruption.replace('MEDIUMHIGH', 'MEDIUM / HIGH') + '</td>';
+    else
+        html += '<td></td>';
+    html += '</tr>';
+    $(tableSelector + " tbody").append($(html));
 }

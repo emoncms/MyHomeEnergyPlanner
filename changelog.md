@@ -22,6 +22,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Fixed bug: MHEP report breaking when there was a water storage in master but there wasn't in the scenario
  - Removed wrong information about how the comparison tables are built
  - Remove measure.space_heating as it is not longer used (who knows from when)
+ - Issue 119: measures tables added to MHEP report
 
 
 ## Version 1.1.0 
