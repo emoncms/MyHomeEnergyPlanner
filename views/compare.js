@@ -35,7 +35,7 @@ function compare_initUI() {
     }
     $('.complete-measures-table').addClass('table');
     $('#complete-measures').hide(); // We don't want to show this one for now
-    
+
 }
 
 //******************************
@@ -906,7 +906,8 @@ function get_storage_html(storage, compare_to) {
 // Functions for Summary of measures tables
 //*******************************************
 function getMeasuresSummaryTable(scenario) {
-    var out = '<table class="measures-summary-table"><tr><th>Name</th><th>Label/location</th><th>Performance target</th><th>Benefits (in order)</th><th>Cost</th><th>Completed By</th><th>Disruption</th></tr>';
+    var out = '<table class="measures-summary-table"><thead><tr><th>Name</th><th>Label/location</th><th>Performance target</th><th>Benefits (in order)</th><th>Cost</th><th>Completed By</th><th>Disruption</th></tr></thead>';
+    out += '<tbody>';
 
     // Fabric
     if (project[scenario].fabric.measures != undefined)
@@ -956,6 +957,7 @@ function getMeasuresSummaryTable(scenario) {
         }
     }
 
+    out += '</tbody>';
     out += '</table>';
     return out;
 }

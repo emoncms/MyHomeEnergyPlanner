@@ -4,17 +4,17 @@ $d = $path . "Modules/assessment/";
 
 $projectid = (int) $_GET['id'];
 
-/*$reports = array();
-$reports_dir = scandir("Modules/assessment/reports");
-for ($i = 2; $i < count($reports_dir); $i++) {
-    $dir = "Modules/assessment/reports/" . $reports_dir[$i];
-    if (filetype($dir) == 'dir' || filetype($dir) == 'link') {
-        if (file_exists($dir . '/report.json')) {
-            $json = json_decode(file_get_contents($dir . '/report.json'));  // Get JSON version information
-            array_push($reports, array('view' => $reports_dir[$i], 'name' => $json->name));
-        }
-    }
-}*/
+/* $reports = array();
+  $reports_dir = scandir("Modules/assessment/reports");
+  for ($i = 2; $i < count($reports_dir); $i++) {
+  $dir = "Modules/assessment/reports/" . $reports_dir[$i];
+  if (filetype($dir) == 'dir' || filetype($dir) == 'link') {
+  if (file_exists($dir . '/report.json')) {
+  $json = json_decode(file_get_contents($dir . '/report.json'));  // Get JSON version information
+  array_push($reports, array('view' => $reports_dir[$i], 'name' => $json->name));
+  }
+  }
+  } */
 ?>        
 
 <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>-->
@@ -343,6 +343,7 @@ for ($i = 2; $i < count($reports_dir); $i++) {
     $("#assessment_menu").find("i").addClass("icon-list");
     sidebar_resize();
 
+
     //**********
     // Events
     //**********
@@ -629,8 +630,8 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         var tmp = (window.location.hash).substring(1).split('/');
         page = tmp[1];
         scenario = tmp[0];
-        
-        if (page=="report" && tmp[2] != undefined)
+
+        if (page == "report" && tmp[2] != undefined)
             report = tmp[2];
         else
             report = undefined;
@@ -649,8 +650,24 @@ for ($i = 2; $i < count($reports_dir); $i++) {
         if (page != 'report')
             load_view("#content", page);
         else {
+            // Load MHEP report and make the html available for the report we are loading
+            scenarios_comparison = {};
+            scenarios_measures_summary = {};
+            scenarios_measures_complete = {}
+            if (view_html['compare'] == undefined) {
+                $.ajax({url: jspath + "views/compare.js", async: false, cache: false});
+            }
+            for (var scenario in project) {
+                if (scenario != 'master') {
+                    scenarios_comparison[scenario] = compareCarbonCoop(scenario);
+                    scenarios_measures_summary[scenario] = getMeasuresSummaryTable(scenario);
+                    scenarios_measures_complete[scenario] = getMeasuresCompleteTables(scenario);
+                }
+            }
+
             load_report("#content", report);
         }
+
         InitUI();
         UpdateUI(data);
         draw_openbem_graphics();

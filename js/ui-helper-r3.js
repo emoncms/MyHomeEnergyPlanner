@@ -28,11 +28,13 @@ function load_view(eid, view)
 }
 function load_report(eid, view)
 {
+    // if report in cache, we load it from there
     if (report_html[view] != undefined) {
         $(eid).html(report_html[view]);
         return report_html[view];
     }
 
+    // Load report html 
     var result_html = "";
     $.ajax({url: jspath + "reports/" + view + "/" + view + ".html", async: false, cache: false, success: function (data) {
             result_html = data;
@@ -40,7 +42,7 @@ function load_report(eid, view)
 
     $(eid).html(result_html);
 
-    // Load js
+    // Load the report javascript
     $.ajax({
         url: jspath + "reports/" + view + "/" + view + ".js",
         dataType: 'script',
