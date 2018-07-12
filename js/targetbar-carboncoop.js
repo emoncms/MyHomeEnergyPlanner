@@ -7,7 +7,7 @@ function targetbarCarboncoop(element, options)
     $("#" + element).html("<div style='padding-bottom:5px; font-size:18px; color:rgba(99,86,71,0.8);'>" + options.name + "</div>");
     var titleheight = $("#" + element + " div").height();
     var barheight = height - titleheight - 5;
-    var barheight = 90;
+    var barheight = 25 * options.values.length;
     $("#" + element).append('<canvas id="' + element + '-canvas" width="' + width + '" height="' + barheight + '" style="max-width:100%"></canvas>');
 
     var c = document.getElementById(element + "-canvas");
