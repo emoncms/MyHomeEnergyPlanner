@@ -1034,13 +1034,16 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
 
     console.log("elements_library_to_html");
     
-    var type = "Wall"; // default
+    var types = ["Wall"]; // default
     var selected_lib = false;
     var element_row = false;
     
     if (origin != undefined) {
-        type = $(origin).attr('type');
-        console.log(type);
+        var types_str = $(origin).attr('type');
+        
+        types = types_str.split(",");
+        
+        console.log(types);
         element_row = $(origin).attr('row');
         
         if (data.fabric.elements[element_row]!=undefined)
@@ -1051,55 +1054,63 @@ libraryHelper.prototype.elements_library_to_html = function (origin) {
     
     var element_library = this.library.elements;
     this.orderObjectsByKeys(element_library);
-    $('#library-select').attr('type', type);
+    $('#library-select').attr('type', types[0]);
     var out = "";
     
     //Select to choose the type of element to display, not always used and is hidden by default
-    out =  '<div class="input-prepend element-type" style="display:none" ><span class="add-on">Type</span>';
-    out += '<select>';
+    // out =  '<div class="input-prepend element-type" style="display:none" ><span class="add-on">Type</span>';
+    // out += '<select>';
 
     // var element_types = libraryDefaults.elements.type;
-    for (var z in element_library) {
-        var selected = type.toLowerCase() == z.toLowerCase() ? "selected" : "";
-        out += '<option value="'+z+'" '+selected+'>'+z+'</option>';
-    }
-    out += '</select></div>';
+    // for (var z in element_library) {
+    //    var selected = types[0].toLowerCase() == z.toLowerCase() ? "selected" : "";
+    //    out += '<option value="'+z+'" '+selected+'>'+z+'</option>';
+    // }
+    // out += '</select></div>';
     
     // Elements
     out += '<table>';
-    for (var z in element_library[type]) {
-        var element = element_library[type][z];
-        
-        var selected_class = ""; if (z==selected_lib) selected_class = "selected_lib";
-        out += "<tr class='librow "+selected_class+"' lib='" + z + "' type='" + type + "'>";
-        out += "<td>" + z + "</td>";
-        out += "<td>" + element.name;
-        out += "<br><span style='font-size:13px'><b>Source:</b> " + element.source + "</span>";
+    
+    console.log(element_library);
+    
+    for (var x in types) {
+    
+        var type = types[x];
+    
+        for (var z in element_library[type]) {
+            var element = element_library[type][z];
+            
+            var selected_class = ""; if (z==selected_lib) selected_class = "selected_lib";
+            out += "<tr class='librow "+selected_class+"' lib='" + z + "' type='" + type + "'>";
+            out += "<td>" + z + "</td>";
+            out += "<td>" + element.name;
+            out += "<br><span style='font-size:13px'><b>Source:</b> " + element.source + "</span>";
 
-        out += "</td>";
-        out += "<td style='font-size:13px'>";
-        
-        out += "<b>U-value:</b> " + element.uvalue + " W/m<sup>2</sup>.K";
-        out += "<br><b>k-value:</b> " + element.kvalue + " kJ/m<sup>2</sup>.K";
-        if (["Window","Door","Roof_light"].indexOf(type)>=0) {
-            out += "<br><b>g:</b> " + element.g + ", ";
-            out += "<b>gL:</b> " + element.gL + ", ";
-            out += "<b>ff:</b> " + element.ff;
+            out += "</td>";
+            out += "<td style='font-size:13px'>";
+            
+            out += "<b>U-value:</b> " + element.uvalue + " W/m<sup>2</sup>.K";
+            out += "<br><b>k-value:</b> " + element.kvalue + " kJ/m<sup>2</sup>.K";
+            if (["Window","Door","Roof_light"].indexOf(type)>=0) {
+                out += "<br><b>g:</b> " + element.g + ", ";
+                out += "<b>gL:</b> " + element.gL + ", ";
+                out += "<b>ff:</b> " + element.ff;
+            }
+            out += "</td>";
+            out += "<td >";
+            // out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + type + "' tag='" + z + "'></i>";
+            
+            // add-element & change-element handled in elements.js
+            var action = "add-element";
+            var row_attr = "";
+            if (selected_lib) { 
+                action = "change-element";
+                row_attr = "row="+element_row;
+            }
+            out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" lib='" + z + "' type='" + type + "'>use</button</i>";
+            out += "</td>";
+            out += "</tr>";
         }
-        out += "</td>";
-        out += "<td >";
-        // out += "<i style='cursor:pointer' class='icon-pencil if-write edit-library-item' lib='" + z + "' type='" + type + "' tag='" + z + "'></i>";
-        
-        // add-element & change-element handled in elements.js
-        var action = "add-element";
-        var row_attr = "";
-        if (selected_lib) { 
-            action = "change-element";
-            row_attr = "row="+element_row;
-        }
-        out += "<button class='"+action+" use-from-lib btn' style='margin-left:20px' "+row_attr+" lib='" + z + "' type='" + type + "'>use</button</i>";
-        out += "</td>";
-        out += "</tr>";
     }
     out += '</table>';
     return out;
@@ -1460,12 +1471,14 @@ libraryHelper.prototype.populate_library_modal = function (origin) {
         out += "<option value=" + this.library_list[z].id + ">" + this.library_list[z].name + "</option>";
     }
     $("#library-select").html(out);
+    
     // Heading of the modal
     $('#show-library-modal .modal-header h3').html(this.library_names[this.type]);
     // Draw the library
     var id = $('#library-select').val();
     $('#library_table').html('');
     var function_name = this.type + '_library_to_html';
+    
     out = this[function_name](origin, id);
     $("#library_table").html(out);
     // Add library id to "Add item from library" button
