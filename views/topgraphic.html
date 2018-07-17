@@ -1,0 +1,55 @@
+<div id="bound">
+    <hr>
+    <h3>Overview</h3>
+    <a class="house_graphic" style="margin-top:-30px; float:right">Show house graphic</a>
+    <hr>
+
+    <div id="targetbars" style="width:40%; float:right;">
+        <br><br><br>
+        <div id="spaceheating"></div><br>
+        <div id="primaryenergy"></div><br>
+        <div id="co2"></div><br>
+        <div id="perperson"></div>
+    </div>
+
+    <br><br>
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" style="width:50%; max-width:500px" viewBox="0 0 1000 800" preserveAspectRatio="xMinYMin" xml:space="preserve">           
+        <image x="250" y="100" width="500" height="500" xlink:href="../Modules/assessment/views/house.svg"/>
+
+        <g id="house-floor" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+        <g id="house-ventilation" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow-light.svg" transform="translate(0,-50)"/></g>
+        <g id="house-windows" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow-light.svg" transform="translate(0,-50)"/></g>
+        <g id="house-walls" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow-light.svg" transform="translate(0,-50)"/></g>
+        <g id="house-roof" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+        <g id="house-thermalbridge" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow-light.svg" transform="translate(0,-50)"/></g>
+        <g id="house-infiltration" transform="scale(0)"><image width="100" height="100" xlink:href="../Modules/assessment/views/arrow.svg" transform="translate(0,-50)"/></g>
+
+        <g style="font-size:36px; fill:rgba(99,86,71,0.8)">
+            <text x="540" y="648" style="font-weight:bold;">Floor</text>
+            <text id="house-floorwk" x="540" y="680">50 W/K</text>
+
+            <text x="530" y="50" style="font-weight:bold">Roof</text>
+            <text id="house-roofwk" x="530" y="85">50 W/K</text>
+
+            <text x="740" y="640" style="font-weight:bold; fill:rgba(99,86,71,0.6)">Walls</text>
+            <text id="house-wallswk" x="740" y="675" style="fill:rgba(99,86,71,0.6)">50 W/K</text>
+
+            <text x="260" y="640" style="font-weight:bold; fill:rgba(99,86,71,0.6)" text-anchor="end">Ventilation</text>
+            <text id="house-ventilationwk" x="260" y="675" text-anchor="end" style="fill:rgba(99,86,71,0.6)">50 W/K</text>
+
+            <text x="260" y="200" style="font-weight:bold; fill:rgba(99,86,71,0.6)" text-anchor="end">Windows</text>
+            <text id="house-windowswk" x="260" y="235" text-anchor="end" style="fill:rgba(99,86,71,0.6)">50 W/K</text>
+
+            <text x="500" y="400" style="font-weight:bold;" text-anchor="middle">TOTAL</text>
+            <text id="house-totalwk" x="500" y="435" text-anchor="middle">50 W/K</text>
+
+            <text x="710" y="200" style="font-weight:bold; fill:rgba(99,86,71,0.6)">Thermal bridging</text>
+            <text id="house-thermalbridgewk" x="710" y="235" style="fill:rgba(99,86,71,0.6)">50 W/K</text>
+            
+            <text x="315" y="50" style="font-weight:bold">Infiltration</text>
+            <text id="house-infiltrationwk" x="315" y="85">50 W/K</text>
+        </g>
+    </svg>
+    <div id="measures-costs" dp="2"></div>
+    <div style="clear:both"></div>
+</div>

@@ -1,0 +1,116 @@
+<h3>Generation</h3>
+
+<p>Add sources of renewable domestic energy generation: Solar PV, Wind & Hydro</p>
+
+<style>
+    #gen-table th,#gen-table td{
+        text-align: right;
+    }
+</style>
+<table class="table" id="gen-table">
+    <tr>
+        <th style="width: 135px"></th>
+        <th style="width: 135px">Annual Generation</th>
+        <th style="width: 115px"></th>
+        <th style="width: 155px">Fraction used on-site</th>
+        <th style="width: 155px">Feed in tariff<br />Generation (£/kWh)</th>
+        <th style="width: 155px">Feed in tariff<br />Export (£/kWh)</th>
+        <th></th>
+    </tr>
+    <tr>
+        <td style="text-align:left">Solar PV</td>
+        <td>
+            <input type="number" step="1" min="0" key="data.generation.solar_annual_kwh" dp="0" style="width:60px" />
+            <span id="solar_annual_kwh" style="display:none" />
+        </td>
+        <td style="text-align:left;width:85px"><input type="checkbox" key="data.generation.use_PV_calculator" /> Use PV calculator</td>
+        <td><input type="number" min="0" max="1" step="0.01" dp="2"" value="0" key="data.generation.solar_fraction_used_onsite" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.solar_FIT" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.solar_export_FIT" style="width:60px" /></td>
+        <td><button class="if-not-master apply-generation-measure-from-lib" style="max-width:109px">Apply measure</button><p id="PV_generation-measure-applied" style="margin-top:10px;display:none">Measure applied</p></td>
+    </tr>
+    <tr>
+        <td style="text-align:left">Wind</td>
+        <td><input  type="number" step="1" min="0" value="0" key="data.generation.wind_annual_kwh" style="width:60px" /></td>
+        <td></td>
+        <td><input type="number" min="0" max="1" step="0.01" dp="2" value="0" key="data.generation.wind_fraction_used_onsite" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.wind_FIT" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.wind_export_FIT" style="width:60px" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="text-align:left">Hydro</td>
+        <td><input  type="number" step="1" min="0" value="0" key="data.generation.hydro_annual_kwh" style="width:60px" /></td>
+        <td></td>
+        <td><input type="number" min="0" max="1" step="0.01" dp="2" value="0" key="data.generation.hydro_fraction_used_onsite" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.hydro_FIT" style="width:60px" /></td>
+        <td><input type="number" min="0" value="0" key="data.generation.hydro_export_FIT" style="width:60px" /></td>
+        <td></td>
+    </tr>
+</table>
+
+<div id="PV_calculator" style="display:none">
+    <hr><h3>Solar PV Calculator</h3><hr>
+    <p id="PV_calculator_message" style="display:none;margin:10px 25px"><b><span key="data.measures.PV_generation.measure.tag" /></b> measure has been applied:<br /><span key="data.measures.PV_generation.measure.description" /> </p>
+
+    <table class="table">
+
+        <tr>
+            <td>Array Installed Capacity kWp</td>
+            <td id="solarpv_kwp_installed"><input type="text" value="0" key="data.generation.solarpv_kwp_installed" style="width:60px" /> kWp</td>
+        </tr>
+
+        <tr>
+            <td>Array Orientation</td>
+            <td>
+                <select key="data.generation.solarpv_orientation" style="width:250px">
+                    <option value=0>North</option>
+                    <option value=1>NE/NW</option>
+                    <option value=2>East/West</option>
+                    <option value=3>SE/SW</option>
+                    <option value=4>South</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Array Inclination (degrees i.e 35 degrees)</td>
+            <td><input type="number" min="0" max="90" step="1" value="0" key="data.generation.solarpv_inclination" style="width:60px" /> degrees</td>
+        </tr>
+
+        <tr>
+            <td>Overshading factor</td>
+            <td>
+                <select key="data.generation.solarpv_overshading" style="width:250px">
+                    <option value=0.5>Heavy > 80%</option>
+                    <option value=0.65>Significant 60% - 80%</option>
+                    <option value=0.8>Modest 20% - 60%</option>
+                    <option value=1>None or very little, less than 20%</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<div id="apply-measure-generation-modal" style="position: fixed" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Apply measure</h3>
+        <p id="myModalIntroText">Choose below</p>
+    </div>
+    <div style="padding: 15px" id='apply-measure-generation-library-item-selects'>
+        <select id="apply-measure-generation-library-select"></select>
+        <select id="apply-measure-generation-items-select"></select>            
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+        <p id="apply-measure-generation-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="apply-measure-generation-ok" class="btn btn-primary">Apply measure</button>
+        <button id="apply-measure-generation-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+    </div>
+</div>
+
+

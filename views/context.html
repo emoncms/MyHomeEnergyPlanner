@@ -1,0 +1,116 @@
+<div class="page">
+    <hr>
+    <h3>Context</h3>
+    <hr>
+    <br>
+    <p>Scenario name:<br><input type="text" value="" key="data.scenario_name" style="width:300px" /></p>
+    <br>
+    
+    <h4>Overall building dimensions</h4>
+    
+    <table class="table">
+    
+        <tr>
+            <th style="text-align:left">Name</th>
+            <th>Area (m<sup>2</sup>)</th>
+            <th></th>
+            <th>Storey height (m)</th>
+            <th></th>
+            <th>Volume (m<sup>3</sup>)</th>
+            <th></th>
+        </tr>
+        
+        <tbody id="template" style="display:none">
+            <tr>
+                <td style="text-align:left"><input style="text-align:left; width:200px" type="text" key="data.floors.template.name" value=""></td>
+                <td><input type="text" value="0" key="data.floors.template.area" style="width:60px" /> m<sup>2</sup></th>
+                <td>x</td>
+                <td><input type="text" value="0" key="data.floors.template.height" style="width:60px" /> m</th>
+                <td>=</td>
+                <td><span key="data.floors.template.volume" dp="1">0</span> m<sup>3</sup></td>
+                <td><span class="delete-floor" row="template" style="cursor:pointer"><a>Delete<i class="icon-trash"></i></a></span></td>
+            </tr>
+        </tbody>
+        
+        <tbody id="floors"></tbody>
+
+        <tr>
+            <td style="text-align:left">
+                <button id="add-floor" class="btn">Add new floor</button>
+            </td>
+            <td></th>
+            <td></td>
+            <td></th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        
+    </table>
+    
+    <h4>Total area and volume</h4>
+    <table class="table">
+        <tr><td width="60%">Total floor area:</td><td><span key="data.TFA" dp=1>0</span> m2</td></tr>
+        <tr><td>Total dwelling volume:</td><td><span key="data.volume" dp=1>0</span> m3</td></tr>
+    </table>
+    
+    <h4>Location</h4>
+    <p>Long term flood risk assessment for locations in England can be found <a href="https://flood-warning-information.service.gov.uk/long-term-flood-risk" target="blank">here</a></p>
+    <table class="table">
+    <tr><td width="60%">Dwelling UK region:</td><td>
+        <i id="find-post-code" class="icon-list-alt" title="Find region by postcode" style="margin-right:5px; cursor:pointer"></i>
+        <select key="data.region">
+            <option value=0>UK average</option>
+            <option value=1>Thames</option>
+            <option value=2>South East England</option>
+            <option value=3>Southern England</option>
+            <option value=4>South West England</option>
+            <option value=5>Severn Wales / Severn England</option>
+            <option value=6>Midlands</option>
+            <option value=7>West Pennines Wales / West Pennines England</option>
+            <option value=8>North West England / South West Scotland</option>
+            <option value=9>Borders Scotland / Borders England</option>
+            <option value=10>North East England</option>
+            <option value=11>East Pennines</option>
+            <option value=12>East Anglia</option>
+            <option value=13>Wales</option>
+            <option value=14>West Scotland</option>
+            <option value=15>East Scotland</option>
+            <option value=16>North East Scotland</option>
+            <option value=17>Highland</option>
+            <option value=18>Western Isles</option>
+            <option value=19>Orkney</option>
+            <option value=20>Shetland</option>
+            <option value=21>Northern Ireland</option>
+            
+        </select>
+    </td></tr>
+    <tr><td>Dwelling altitude:<br/><span style="font-size:12px"><a href="https://www.daftlogic.com/sandbox-google-maps-find-altitude.htm" target="blank">Find it here</a></span></td><td><input type="text" key="data.altitude" style="width:60px" /> m</td></tr>
+    </table>
+    
+    <h4>Occupancy</h4>
+    
+    <table class="table">
+        <tr><td width="60%">SAP Occupancy based on floor area:</td><td><span type="text" key="data.occupancy" dp=3></span> person</td></tr>
+        <tr><td>Use custom occupancy figure</td><td><input type="checkbox" key="data.use_custom_occupancy" /></td></tr>
+        <tr><td>Custom occupancy</td><td><input type="text" key="data.custom_occupancy" style="width:60px" /></td></tr>
+    </table>
+    
+</div>
+
+<div id="region-postcodes-modal" style="position: fixed" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Regions by post</h3>
+        <p style="margin-top:10px">The regions shown below applie to all postcodes in the postcode area except those for which specific postcode districts are given.</p><p> Please type the first letter of your postcode.</p>
+    </div>
+    <div class="modal-body">
+        <p>Postcode <input id="postcode" type="text" /></p>
+        <div id="regions-by-postcode"></div>
+    </div>
+    <div class="modal-footer">
+        <p id="region-postcodes-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="region-postcodes-ok" class="btn btn-primary">Ok</button>
+       </div>
+</div>

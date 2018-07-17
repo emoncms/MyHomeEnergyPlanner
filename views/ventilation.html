@@ -1,0 +1,177 @@
+
+<div class="page">
+
+    <hr>
+    <h3>Ventilation</h3>
+    <hr>
+    <br>
+
+    <h4>Ventilation type <i class="icon-question-sign" title="SAP only considers 4 type of ventilation systems:
+                            - a: Balanced mechanical ventilation with heat recovery (MVHR)
+                            - b: Balanced mechanical ventilation without heat recovery (MV)
+                            - c: Whole house extract ventilation or positive input ventilation from outside
+                            - d: Natural ventilation or whole house positive input ventilation from loft
+
+                            But MHEP considers:
+                            - NV: natural ventilation (type 'd' in SAP)
+                            - IE: Intermittent Extract Ventilations (type 'd' in SAP)
+                            - PS: Passive Stack (type 'd' in SAP)
+                            - DEV: Decentralised continous mechanical extract ventilation (type 'c' in SAP)
+                            - MEV: Centralised Mechanical Continuous Extract Ventilation (type 'c' in SAP)
+                            - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
+                            - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)"></i></h4>
+
+    <table class="table">
+        <tr><th>System</th><th>Air change rate <i class="icon-question-sign" title="If exhaust air heat pump see Appendix N SAP21012"></i></th><th>Specific Fan Power</th><th>Heat recovery efficiency allowing for in-use factor</th><th></th></tr>
+        <tr>
+            <td><span key="data.ventilation.ventilation_tag" /> - <span key="data.ventilation.ventilation_type" /></br><span key="data.ventilation.ventilation_name" /></td>
+            <td><span class="system_air_change_rate_input"><input key="data.ventilation.system_air_change_rate" type="number" style="width:50px" min="0" step="0.1" /> ACH</span></td>
+            <td><span class="system_air_change_rate_input"><input key="data.ventilation.system_specific_fan_power" type="number" min="0" max="100" step="0.1" style="width:50px" /> W/(litre.sec)</span></td>
+            <td><span class="balanced_heat_recovery_efficiency_input"><input key="data.ventilation.balanced_heat_recovery_efficiency" type="text" style="width:50px" /> %</span></td>
+            <td style="text-align: center">
+                <button class="add-ventilation-system-from-lib if-master" style="margin:0 0 10px 25px">Change system</button>
+                <button class="apply-ventilation-measure-from-lib if-not-master" type="ventilation_systems_measures" style="margin: 0 0 5px">Apply Measure</button>
+                <p id="ventilation-type-measured-applied" style="display:none;">Measure applied</p>
+            </td>
+        </tr>
+    </table>
+
+    <div id="fans_and_vents_div">
+        <table class='table'>
+            <tr><td colspan="5"><b>Extract ventilation points: intermittent fans and passive vents</b>
+                    <span class="add-EVP-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
+                    <span class="apply-ventilation-measure-from-lib if-not-master" type="add_extract_ventilation_points" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
+                </td>
+            </tr>
+            <tr><th width="150px"></th><th width="220px">Location</th><th width="100px">Type</th><th>Ventilation rate (m<sup>3</sup>/h)</th><th></th></tr>
+            <tbody id="EVP">        </tbody>
+        </table>
+    </div>
+
+
+    <br />
+    <h3>Infiltration</h3>
+    <hr>
+
+    <table class="table" >
+        <tr>
+            <th style="text-align:left" width="20%"><h4>Structural infiltration</h4></th>
+            <th style='padding:0 0 20px 0; vertical-align: bottom' width="15%"><span key="data.ventilation.infiltration_rate_incorp_shelter_factor" dp="2"></span> ACH</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr><td style="text-align:left">Number of sides sheltered</td>
+            <td colspan="5"><input key="data.ventilation.number_of_sides_sheltered" type="text" style="width:50px"/></td>
+        </tr>
+        <tr>
+            <td style="text-align:left">Calculate infiltration rate based on air tightness test:</td>
+            <td colspan="5">
+                <input key="data.ventilation.air_permeability_test" class="if-master" type="checkbox" />
+                <button class="apply-ventilation-measure-from-lib if-not-master" type="draught_proofing_measures" style="margin:0 0 10px 25px">Apply Measure</button>
+            </td>
+        </tr>
+        <tbody id="air_permeability_value_tbody">
+            <tr>
+                <td style="text-align:left">Air permeability value, q50, expressed in cubic metres per hour per square metre of envelope area:</td>
+                <td colspan="5"><input class="disabled-if-not-master" key="data.ventilation.air_permeability_value" type="text" style="width:60px"/><span id="draught-proofing_measure-applied" style="margin-left: 25px"></span>                </td>
+            </tr>
+        </tbody>
+        <tbody id="structural">
+            <tr>
+                <td style="text-align:right;padding-left:55px">Walls</td>
+                <td style="text-align:right">
+                    <select key="data.ventilation.dwelling_construction" style="width:180px">
+                        <option value='timberframe'>Timber Frame (+0.2)</option>
+                        <option value='masonry'>Masonry (+0.35)</option>
+                    </select>
+                </td>
+                <td style="text-align:right">Percentage of windows and<br>doors draught proofed</td>
+                <td style="text-align:left">
+                    <div class="input-append">
+                        <input key="data.ventilation.percentage_draught_proofed" type="text" style="width:50px">
+                        <span class="add-on">%</span>
+                    </div>
+                </td>  
+                <td style="text-align:right">Number of storeys</td>
+                <td><span key="data.num_of_floors"></span></td>
+            </tr>
+            <tr>
+                <td style="text-align:right">Floor</td>
+                <td style="text-align:left">
+                    <select key="data.ventilation.suspended_wooden_floor" style="width:180px">
+                        <option value="unsealed" >Suspended unsealed wooden floor (+0.2)</option>
+                        <option value="sealed">Suspended sealed wooden floor (+0.1)</option>
+                        <option value="0">Solid floor (+0)</option>
+                    </select>
+                </td>
+                <td style="text-align:right">Draught Lobby</td>
+                <td style="text-align:left"><input key="data.ventilation.draught_lobby" type="checkbox" /></td>
+                <td colspan="2"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class='table'>
+        <tr><td colspan="5"><h4 style='display:inline'>Chimneys, open flues and flueless gas fires</h4>
+                <span class="add-IVF-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
+                <span class="apply-ventilation-measure-from-lib if-not-master" type="add_intentional_vents_and_flues" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
+            </td></tr>
+        <tr><th width="150px"></th><th width="220px">Location</th><th width="100px">Type</th><th>Ventilation rate (m<sup>3</sup>/h)</th><th><span id="apply-IVF-bulk-measure" class="if-not-master" type="bulk_measure_intentional_vents_and_flues" style="cursor:pointer"><button>Apply bulk measure</button></span></th></tr>
+        <tbody id="IVF">        </tbody>
+    </table>
+
+    <br />
+    <h3>Clothes drying facilities</h3>
+    <hr>
+    <table class="table" id="CDF">
+
+    </table>
+    <span class="add-CDF-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
+    <span class="apply-ventilation-measure-from-lib if-not-master" type="add_CDF" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
+
+    <br>
+
+    <div id="apply-measure-ventilation-modal" style="position: fixed" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Apply measure</h3>
+            <p id="myModalIntroText">Choose below</p>
+        </div>
+        <div id='number-EVP-to-add' style="margin:25px 0 0 25px">
+            <p>How many extract ventilation points to add <input type='number' min=1 style="margin-left:15px; width:50px" value="1" /></p>
+        </div>
+        <div style="padding: 15px" id="apply-measure-ventilation-what-to-do">
+            <p style="margin-left: 25px;"><input type="radio" name="apply-measure-ventilation-what-to-do" value="remove" /> Remove</p>
+            <p style="margin-left: 25px;"><input type="radio" name="apply-measure-ventilation-what-to-do" value="replace" /> Replace</p>
+        </div>
+        <div style="padding: 15px" id='apply-measure-ventilation-library-item-selects'>
+            <select id="apply-measure-ventilation-library-select"></select>
+            <select id="apply-measure-ventilation-items-select"></select>            
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <p id="apply-measure-ventilation-message" style="font-weight: bold"></p>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button id="apply-measure-ventilation-ok" class="btn btn-primary">Apply measure</button>
+            <button id="apply-measure-ventilation-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+        </div>
+    </div>
+
+    <div id="apply-IVF-bulk-measure-modal" style="position: fixed" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Apply bulk measure to intentional vents and flues</h3>
+            <p id="myModalIntroText"><br />Choose below the elements to apply the measure to</p>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button id="apply-IVF-bulk-measure-next" class="apply-ventilation-measure-from-lib btn btn-primary" type="bulk_measure_intentional_vents_and_flues">Next</button>
+        </div>
+    </div>
+
+</div>

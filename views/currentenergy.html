@@ -1,0 +1,108 @@
+<hr>
+<h3>Current Energy Use</h3>
+<hr>
+<br>
+<p>The figures shown below are the totals for your actual energy use. If the inputted data is accurate, these figures represent real values.</p>
+<p>The figures shown in the overview above are the result of running your house through the model. According to the characteristics of the building, your target temperature, your type of fuel, etc. the model calculates the theoretical amount of energy you need to run your house.</p>
+<p>Comparing your Current Energy Figures against the model ones can give an idea of how well the model represents your specific situation</p>
+<br>
+
+<table style="width:100%">
+    <tr>
+        <td>
+            <p><b>Totals</b></p><br>
+            <table class="table">
+                <tr><td>Total primary energy consumption <i class="icon-question-sign" title="Takes into account energy from all the different sources (gas, electricity grid, etc. including the fraction used onsite from renewable generation) minus the total savings due to generation">:</td><td><span key="data.currentenergy.primaryenergy_annual_kwh" dp=0></span> kWh</td></tr>
+                <tr><td>Total CO<sub>2</sub> emissions <i class="icon-question-sign" title="Takes into account CO2 from all the different sources (gas, electricity grid, etc. including the fraction used onsite from renewable generation minus) the total savings due to generation">:</td><td><span key="data.currentenergy.total_co2" dp=0></span> kg</td></tr>
+                <tr><td>Total energy cost <i class="icon-question-sign" title='Exclusively from your bills'>:</td><td>£<span key="data.currentenergy.total_cost" dp=0></span></td></tr>
+                <tr><td>Net energy cost <i class="icon-question-sign" title="Includes FIT income">:</td><td>£<span key="data.currentenergy.annual_net_cost" dp=0></span></td></tr>
+
+
+                <tr><td>Total primary energy consumption per m<sup>2</sup> floor area:</td><td><span key="data.currentenergy.primaryenergy_annual_kwhm2" dp=0></span> kWh/m<sup>2</sup></td></tr>
+                <tr><td>Total co2 emissions per m<sup>2</sup> floor area:</td><td><span key="data.currentenergy.total_co2m2" dp=0></span> kgCO2/m<sup>2</sup>/year</td></tr>
+            </table>
+        </td>
+        <td>
+            <div style="width:500px; float:right;">
+                <div id="currentenergy-primaryenergy" style="width:500px; height:60px"></div><br>
+                <div id="currentenergy-co2" style="width:500px; height:65px"></div><br>
+                <div id="currentenergy-perperson" style="width:500px; height:65px"></div>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<br><br>
+
+<table class="table" style="background-color:#f0f0f0">
+    <tr>
+        <th style="width:100px"></th>
+        <th>Annual use<br />kWh <i class="icon-question-sign" title="Conversion factors:
+                                   - Wood Logs*: 1m3 = 1380 kWh
+                                   - Wood Pellets: 1m3 = 4230 kWh 
+                                   - Mains gas**: 1m3 = 11.18 kWh
+                                   - Mains gas**: 1ft3 = 31.7 kWh
+                                   - Oil: 1L = 10.35 kWh
+                                   - Bottled gas (LPG): 1L = 7.11kWh
+                                   - Bottled gas (LPG): 1kg = 13.89kWh
+                                   - Coal: 1kg = 8.34kWh
+                                   - Smokeless fuel: 1kg = 8.9kWh
+                                   - Anthracite: 1kg = 9.66kWh
+
+                                   * Assumes stacked measure, with gaps
+                                   ** Note, calorific value of mains gas does vary over time and by region - you can check against current figures, or use this as an approximation" ></i></th>
+        <th>CO<sub>2</sub> factor<br />kgCO<sub>2</sub>/kWh</th>
+        <th>Annual kgCO<sub>2</sub></th>
+        <th>Primary Energy Factor</th>
+        <th>Primary Energy<br />kWh</th>
+        <th>Unit cost<br />p/kWh</th>
+        <th>Annual Standing charge<br />£/year</th>
+        <th>Annual cost</th>
+        <th></th>
+    </tr>
+
+    <tbody id="currentenergy_use_by_fuel"></tbody>
+
+</table>
+
+<div class="input-prepend input-append">
+    <span class="add-on">Type of fuel</span>
+    <select id="type_of_fuel_select"></select><button id="add_use_by_fuel" class="btn">Add</button>
+</div>
+
+<br><br>
+<p>Is there any on-site generation? <input style="margin-left:15px" type="checkbox" key="data.currentenergy.onsite_generation" /></p>
+<table id="onsite-generation" class="table" style="background-color:#f0f0f0; display:none">
+    <tr>
+        <th>Annual generation<br />kWh </th>
+        <th>CO<sub>2</sub> factor<br />kgCO<sub>2</sub>/kWh</th>
+        <th>Annual kgCO<sub>2</sub> saved <i class="icon-question-sign" title="Due to total generation: includes energy used on-site and exported" ></i></th>
+        <th>Primary Energy Factor</th>
+        <th>Primary Energy saved <br />kWh <i class="icon-question-sign" title="Due to total generation: includes energy used on-site and exported" ></i></th>
+        <th>Unit cost<br /> p/kWh</th>
+        <th>Fraction used on-site</th>
+        <th>Annual savings <i class="icon-question-sign" title="Due to energy used on-site. This amount would be part of your bills if you did not have generation." ></i></th>
+        <th>FIT annual income</th>
+
+    <tbody>
+        <tr>
+            <td><input style="width: 70px" type="number" key="data.currentenergy.generation.annual_generation" dp="2" /></td>
+            <td>x<span key="data.fuels.generation.co2factor" dp="2" /></td>
+            <td><span key="data.currentenergy.generation.annual_CO2" dp="2" /></td>
+            <td>x<span key="data.fuels.generation.primaryenergyfactor" dp="2" /></td>
+            <td><span key="data.currentenergy.generation.primaryenergy" dp="2" /></td>
+            <td><span key="data.fuels.generation.fuelcost" dp="2" /></td>
+            <td><input style="width: 70px" max="1" step="0.01" type="number" key="data.currentenergy.generation.fraction_used_onsite" dp="2" value="0.25" /></td>
+            <td>£<span key="data.currentenergy.generation.annual_savings" dp="2" /></td>
+            <td>£ <input type="number" step="1" min="0" key="data.currentenergy.generation.annual_FIT_income" style="width: 70px"></input></td>
+        </tr>
+    </tbody>
+
+</table>
+<!--<p class="alert alert-success"><b>100% green electricity tariff?</b> <input type="checkbox" key="data.currentenergy.greenenergy" /><br>Ticking the green electricity tariff button here reduces electricity co2 emissions from <b>0.519kgCO2/kWh</b> to <b>0.02 kgCO2/kWh</b> and the primary energy factor is also reduced from <b>3.07</b> that relates to ~58% energy loss in coal and gas electricity generation to <b>1.3</b></p>-->
+
+
+
+
+
+

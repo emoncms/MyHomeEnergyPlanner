@@ -1,0 +1,335 @@
+<style>
+    .librow {
+        /*cursor:pointer;*/
+
+    }
+
+    .librow:hover {
+        background-color: #eee;
+    } 
+
+    #myModal{
+        width:auto;
+    }
+    .apply-measure td{
+        max-width: 200px;
+    }
+
+    #modal-bulk-measure-body table td, #modal-bulk-measure-body table th{
+        padding:4px 10px;
+        vertical-align: top;
+        text-align: left;
+    }
+
+
+</style>
+
+<div id="elements-container" class="page">
+
+
+    <h3> Thermal Mass Parameter (TMP)</h3>
+    <hr>
+    <p><input type="checkbox" key="data.fabric.global_TMP" style="margin:0 15px"/>Use global TMP value (ignore the k value of individual elements)</p>
+    <div id="global_TMP_value" style="margin-left:40px">
+        <select key="data.fabric.global_TMP_value">
+            <option value="100">Low TMP</option>
+            <option value="250">Medium TMP</option>
+            <option value="450">High TMP</option>
+        </select>
+
+    </div>
+    <br />
+    <hr>
+
+
+    <h3>Walls</h3>
+    <p><i>Note: If the element length and height is given it will automatically calculate and override the area calculation. Leave length and height blank and enter area for ceilings and floors and other elements where its easier to enter the area directly.</i></p>
+    <hr>
+    <br>
+
+
+    <table class="table">
+
+        <tr>
+            <th></th>
+            <th style="text-align:left">Element</th>
+            <th>Label/Location</th>
+            <th>Length<br>(m)</th>
+            <th>Height<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Window<br>Area<br>(m<sup>2</sup>)</th>
+            <th>Net<br>Area<br>(m<sup>2</sup>)</th>
+            <th>W/K</th>
+            <th class="only-for-walls">EWI<i class="icon-question-sign" title="When EWI has been applied the area taken into account for the calculation of the cost of the measure is the original area of the wall increased by 1.15"></i></th>
+            <th style="text-align: center"><button class=" if-not-master apply-bulk-measure" tags="Wall" style="max-width:109px"
+                                                   item='{"type":"Wall","name":"--","lib":"--","l":0,"h":0,"area":0,"uvalue":0,"id":0,"location":"","description":"","kvalue":"","orientation":0,"overshading":0,"g":"0","gL":"0","ff":"0","performance":"","benefits":"","cost":"","who_by":"","disruption":"","associated_work":"","notes":"","maintenance":"","netarea":0,"wk":0,"gain":0}'
+                                                   tag="--" item_id="0" row="13">Apply bulk measure
+                </button>
+            </th>
+
+        </tr>
+
+        <tbody id="element-template" style="display:none">
+            <tr>
+                <td style="width:20px"><i class="icon-arrow-up if-not-locked move-up" style="cursor:pointer" row="template" /><i class="icon-arrow-down if-not-locked move-down" style="cursor:pointer" row="template" /></td>
+                <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span> - <span key="data.fabric.elements.template.name" style="width:60px"></span></b><br>U-value: <span key="data.fabric.elements.template.uvalue"></span> <span style="font-size:0.8em">W/K.m<sup>2</sup></span>, k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m<sup>2</sup></span></td>
+                <td><input type="text" class="label-location" key="data.fabric.elements.template.location" /></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.l" style="width:50px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.h" style="width:50px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" key="data.fabric.elements.template.area" style="width:50px"/></td>
+                <td><span key="data.fabric.elements.template.windowarea" dp=2>0.0</span>m<sup>2</sup></td>
+                <td><span key="data.fabric.elements.template.netarea" dp=2>0.0</span>m<sup>2</sup></td>
+                <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>                
+                <td class="only-for-walls"><span key="data.fabric.elements.template.EWI">0</span> </td>
+                <td style="text-align:center">
+                    <button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button>
+                    <br /><p style="margin-top:5px; display:none; cursor: pointer" class="revert-to-original if-not-master" row="template" item_id="template"><img src="" class="revert-to-original-icon" title="Revert to master" style="width:14px" /> Revert to master</p>
+                </td>
+                <td><span class="edit-item if-master" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tags="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
+                <td><span class="delete-element" row="template" style="cursor:pointer" item_id="template"  title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span></td>
+            </tr>
+        </tbody>
+
+        <tbody id="elements"></tbody>
+    </table>
+
+    <p><button class="btn add-from-lib" tags="Wall">Add wall from library</button></p>
+    <p>Total wall area: <span key="data.fabric.total_wall_area" dp=1></span> m<sup>2</sup></p>
+
+    <hr>
+
+    <h3>Party walls</h3>
+    <hr>
+    <br>
+
+    <table class="table">
+        <tr>
+            <th></th>
+            <th style="text-align:left">Element</th>
+            <th>Label/Location</th>
+            <th>Length<br>(m)</th>
+            <th>Height<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Window<br>Area<br>(m<sup>2</sup>)</th>
+            <th>Net<br>Area<br>(m<sup>2</sup>)</th>
+            <th>W/K</th>
+        </tr>
+
+        <tbody id="party_walls"></tbody>
+    </table>
+
+    <p><button class="btn add-from-lib" tags="Party_wall">Add party wall from library</button></p>
+    <p>Total party wall area: <span key="data.fabric.total_party_wall_area" dp=1></span> m<sup>2</sup></p>
+
+    <hr>
+
+    <hr>
+    <h3>Roofs and lofts</h3>
+    <p><i>Note: When creating a roof or loft element only add that area which forms part of the thermal envelope of the building. Do not add a 'roof' where it sits above a loft which is insulated at ceiling level. Do not add a 'loft' where it sits below a roof which is insulated at rafter level</i></p>
+    <hr>
+
+    <table class="table">
+        <tr>
+            <th></th>
+            <th style="text-align:left">Element</th>
+            <th>Label/Location</th>
+            <th>Length<br>(m)</th>
+            <th>Height<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Window<br>Area<br>(m<sup>2</sup>)</th>
+            <th>Net<br>Area<br>(m<sup>2</sup>)</th>
+            <th>W/K</th>
+        </tr>
+        <tbody id="roofs"></tbody>
+    </table>
+
+    <p><button class="btn add-from-lib" tags="Roof,Loft">Add roof or loft from library</button></p>
+    <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m<sup>2</sup></p>
+    <hr>
+
+
+
+    <h3>Floors</h3>
+    <hr>
+
+    <table class="table">
+        <tr>
+            <th></th>
+            <th style="text-align:left">Element</th>
+            <th>Label/Location</th>
+            <th>U-value <i class="icon-question-sign" title="Floor U-values to be calculated conforming to the standards: BS EN ISO 6946, 13370, 13789, BRE 443, 497"></i></th>
+            <th>Exposed perimeter<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>W/K</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody id="floor-template" style="display:none">
+            <tr>
+                <td style="width:20px"><i class="icon-arrow-up if-not-locked move-up" style="cursor:pointer" row="template" /><i class="icon-arrow-down if-not-locked move-down" style="cursor:pointer" row="template" /></td>
+                <td style="text-align:left;max-width: 200px"><b><span key="data.fabric.elements.template.lib" style="width:60px"></span> - <span key="data.fabric.elements.template.name" style="width:60px"></span></b><br><!--U-value: <span key="data.fabric.elements.template.uvalue"></span><span style="font-size:0.8em">W/K.m<sup>2</sup></span>, --> k-value: <span key="data.fabric.elements.template.kvalue"></span> <span style="font-size:0.8em">kJ/K.m<sup>2</sup></span></td>
+                <td><input type="text" class="label-location" key="data.fabric.elements.template.location" /></td>
+                <td><i class="icon-list-alt calculate-floor-uvalue" z="template" style="margin-right:5px; cursor:pointer"></i><input type="number" min="0" dp="2" step="0.01" class="floor-uvalue" value="0" key="data.fabric.elements.template.uvalue"  dp=2 style="width:40px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.perimeter" dp=2 style="width:50px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.area" dp=2 style="width:50px"/></td>
+                <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>   
+                <td>
+                    <button class="apply-measure if-not-master" tag="template" row="template" item="template" item_id="template">Apply Measure</button>
+                    <br /><p style="margin-top:5px; display:none; cursor: pointer" class="revert-to-original if-not-master" row="template" item_id="template"><img src="" class="revert-to-original-icon" title="Revert to master" style="width:14px" /> Revert to master</p>
+                </td>
+                <td><span class="edit-item if-master" row="template" style="cursor:pointer" item="template" item_id="template" type-of-item="not used for element" tag="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
+                <td><span class="delete-element" row="template" style="cursor:pointer" item_id="template"  title="Deleting an element this way is not considered a Measure"><a><i class="icon-trash"></i></a></span></td>
+            </tr>
+        </tbody>
+        <tbody id="floors"></tbody>
+
+    </table>
+    <p> <button class="btn add-from-lib" tags="Floor">Add floor from library</button></p>
+    <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m<sup>2</sup></p>
+
+
+
+    <hr>
+    <h3>Windows, doors, roof-lights and hatches</h3>
+    <hr>
+
+    <div style="float:left"><b>Key:</b></div>
+    <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#fff; float:left"></div>
+    <div style="float:left">Windows</div>
+    <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#eeffee; float:left"></div>
+    <div style="float:left">Roof-lights</div>
+    <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#ffeeee; float:left"></div>
+    <div style="float:left">Doors</div>
+    <div style="margin: 4px 5px 0px 8px; border:1px solid #000; width:10px; height:10px; background-color:#ddeeff; float:left"></div>
+    <div style="float:left">Hatches</div>
+    <br><br>
+
+    <table class="table">
+
+        <tr>
+            <!--<th>Type</th>-->
+            <th></th>
+            <th style="text-align:left; ">Element</th>
+            <th>Label/Location</th>
+            <th>subtract<br>from:</th>
+            <th>Width<br>(m)</th>
+            <th>Height<br>(m)</th>
+            <th>Area<br>(m<sup>2</sup>)</th>
+            <th>Orient<br>-ation</th>
+            <th>Over<br>shading <i class="icon-question-sign" title="MHEP applies same solar access factor to roof lights than any other windows. This is a deviation from SAP2012 (p.26 note 2) where solar factors for roof lights are always 1 independent of the overshading"></i></th>
+            <th>Gain</th>
+            <th>W/K</th>
+            <th style="text-align: center"><button class=" if-not-master apply-bulk-measure" tags="Window" 
+                                                   item='{"type":"Window","name":"--","lib":"--","l":0,"h":0,"area":0,"uvalue":0,"id":0,"location":"","description":"","kvalue":"","orientation":0,"overshading":0,"g":"0","gL":"0","ff":"0","performance":"","benefits":"","cost":"","who_by":"","disruption":"","associated_work":"","notes":"","maintenance":"","netarea":0,"wk":0,"gain":0}'
+                                                   tag="--" item_id="0" row="13">Apply bulk measure
+                </button>
+            </th>
+        </tr>
+
+        <tbody id="window-template" style="display:none">
+            <tr>
+                <!--
+                <td>
+                    <select key="data.fabric.elements.template.openingtype" style="width:50px">
+                        <option>Window</option>
+                        <option>Roof-light</option>
+                        <option>Door</option>
+                    </select>
+                </td>
+                -->
+                <td style="width:150px"><i class="icon-arrow-up if-not-locked move-up" style="cursor:pointer" row="template" /><i class="icon-arrow-down if-not-locked move-down" style="cursor:pointer" row="template" /></td>
+                <td style="text-align:left">
+                    <b><span key="data.fabric.elements.template.lib"></span>: <span key="data.fabric.elements.template.name"></span></b> <br />
+                    U-value: <span key="data.fabric.elements.template.uvalue"></span>, K-value: <span key="data.fabric.elements.template.kvalue"></span><span class="window_fields_template">, g:<span key="data.fabric.elements.template.g"> </span>, gL:<span key="data.fabric.elements.template.gL"></span>, ff:<span key="data.fabric.elements.template.ff"></span>
+                </td>
+                <td><input type="text" key="data.fabric.elements.template.location" style="width:150px" /></td>
+                <td>
+                    <select class="subtractfrom" key="data.fabric.elements.template.subtractfrom" style="width:150px">
+
+                    </select>
+                </td>
+
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.l" style="width:50px"/></td>
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.h" style="width:50px"/></td>
+
+                <td><input type="number" min="0" dp="2" step="0.01" value="0" key="data.fabric.elements.template.area" style="width:50px"/></td>
+
+                <td>
+                    <select key="data.fabric.elements.template.orientation" style="width:80px">
+                        <option value=0 >North</option>
+                        <option value=1 >NE/NW</option>
+                        <option value=2 >East/West</option>
+                        <option value=3 >SE/SW</option>
+                        <option value=4 >South</option>
+                    </select>
+
+                </td>
+                <td>
+                    <select key="data.fabric.elements.template.overshading" style="width:85px">
+                        <option value=0 >Heavy > 80%</option>
+                        <option value=1 >More than average > 60%-80%</option>
+                        <option value=2 >Average or unknown 20-60%</option>
+                        <option value=3 >Very little < 20% </option>
+                    </select>
+                </td>
+
+                <td><span key="data.fabric.elements.template.gain" dp=2>0</span>W</td>
+                <td><span key="data.fabric.elements.template.wk" dp=2>0</span> W/K</td>
+                <td>
+                    <button class="apply-measure if-not-master" row="template" item="template" tag="template" item_id="template">Apply Measure</button>
+                    <br /><p style="margin-top:5px; display:none; cursor: pointer" class="revert-to-original if-not-master" row="template" item_id="template"><img src="" class="revert-to-original-icon" title="Revert to master" style="width:14px" /> Revert to master</p>
+                </td>
+                <td><span class="edit-item if-master" row="template" style="cursor:pointer" item="template" tag="template" item_id="template"  title="Editing an element this way is not considered a Measure"><a><i class="icon-edit"></i></a></span></td>
+                <td><span class="delete-element" row="template" style="cursor:pointer" title="Deleting an element this way is not considered a Measure" item_id="template"><i class="icon-trash"></i></span></td>
+
+            </tr>
+        </tbody>
+
+        <tbody id="windows"></tbody>
+    </table>
+    
+    <p><button class="btn add-from-lib" tags="Window,Door,Roof_light,Hatch">Add window, door, roof light or hatch from library</button></p>
+
+    <p>Total window, door, roof_light and hatch area: <span key="data.fabric.total_window_area" dp=2></span> m<sup>2</sup></p>
+
+    <hr>
+    <h3>Thermal Bridging</h3><hr>
+    <table class="table">
+        <tr><td>Total External Area: </td><td colspan="2"><span key="data.fabric.total_external_area" dp=2></span> m<sup>2</sup></td></tr>
+        <tr><td>Thermal bridging heat loss factor (y)</td><td><input type="number" step="0.01" min="0" value="0.15" key="data.fabric.thermal_bridging_yvalue" style="width:60px" /> W/m<sup>2</sup>.K</td><td><button id="apply-measure-TB" class="if-not-master" style="vertical-align: 25%">Apply measure</button><p id="TB-measured-applied" style="display:none;margin-top:5px">Measure applied</p></td></tr>
+        <tr><td>Thermal bridging heat loss: </td><td colspan="2"><span key="data.fabric.thermal_bridging_heat_loss" dp=2></span> W/K</td></tr>
+    </table>
+
+    <hr><h3>Totals</h3><hr>
+    <table class="table">
+        <tr><td>Total fabric heat loss:</td><td><span key="data.fabric.total_heat_loss_WK" dp=2>0</span> W/K</td></tr>
+        <tr><td>Ventilation heat loss:</td><td><span key="data.ventilation.average_WK" dp=2>0</span> W/K</td></tr>
+        <tr><td>Total W/K heat loss:</td><td><span key="data.totalWK" dp=2>0</span> W/K</td></tr>
+
+
+        <tr><td>Total fabric thermal capacity:</td><td><span key="data.fabric.total_thermal_capacity" dp=2>0</span> kJ/K.m3</td></tr>
+        <tr><td>Annual solar gains:</td><td><span key="data.fabric.annual_solar_gain" dp=2>0</span> W (<span key="data.fabric.annual_solar_gain_kwh" dp=0>0</span> kWh)</td></tr>
+
+
+    </table>    
+</div>
+
+<div id="apply-measure-TB-modal" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Apply measure to Thermal Bridging</h3>
+    </div>
+    <div class="modal-body">
+        <p>Please, introduce a new value and the description of the measure.</p>
+        <table class="table">
+            <tr><td>Value: </td><td><input style="width:60px" id="TB-measure-value" type="number" min="0" step="0.01" /></td></tr>
+            <tr><td>Description:</td><td><input id="TB-measure-description" type="text" /></td></tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn btn-primary" id="apply-measure-TB-modal-ok">OK</button>
+    </div>
+</div>
+

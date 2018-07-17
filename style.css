@@ -1,0 +1,149 @@
+:root {
+  --app-color: #ff2712;;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Ubuntu', sans-serif;
+    background-color:#EEECE5;
+    padding:0px;
+    margin:0px;
+}
+
+h1 { 
+    color: var(--app-color);
+}
+
+h3 { 
+    color: var(--app-color);
+    font-size:20px;
+    line-height: 22px;
+}
+
+hr {
+    background: var(--app-color);
+    border: 0; height: 1px;
+    margin:0px;
+}
+
+a {
+    text-decoration: none;
+    color:#000;
+}
+
+a:hover {
+    text-decoration: none;
+    color: var(--app-color);
+}
+
+#sidebar {
+  margin-top:0px;
+  margin-left: -340px;
+  left: 340px;
+  width: 340px;
+  background: #d6d4ce;
+  position: fixed;
+  overflow-y: auto;
+  z-index: 1000; 
+}
+
+#wrapper {
+  padding:0px;
+  margin:0 auto;
+  padding-left: 0px;
+  max-width:1150px;
+}
+
+.block-header {
+    background-color:#dbd6ce;
+    color:#897A67; 
+    padding:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.block-header:hover {
+    background-color:#e2ded7;
+}
+
+.side-block {
+    background-color:#f7f6f5;
+    border-bottom: 1px solid #edeae6;
+}
+
+.main-block {
+    width:100%;
+    height: auto;
+    text-align: left;
+    background-color:#fff;
+    
+    margin-top:10px;
+}
+
+.scenario-nav {
+    padding:5px;
+    font-size:16px;
+}
+
+.scenario-nav-heading {
+    padding-top:20px;
+    padding-bottom:5px;
+    font-size:14px;
+    font-weight:bold;
+    color:#555;
+}
+
+input[type="checkbox"] {
+  padding:0px;
+  margin:0px;
+}
+
+#bound {
+  max-width:1200px;
+  height: auto;
+  text-align: left;
+  background-color:#fff;
+  
+  padding:30px;
+  
+}
+
+
+.body-login {
+	background-color: #1d8dbc;
+}
+
+    
+#gallery i{
+  vertical-align:top;
+  cursor:pointer;
+}
+
+body .modal {
+  /* new custom width */
+  width: 1080px;
+  /* must be half of the width, minus scrollbar on the left (30px) */
+  margin-left: -540px;
+}
+
+.modal-body {
+  max-height: 800px;
+}
+
+@media (max-width: 767px) {
+  body {padding:0};
+}
+
+@media (max-width: 450px) {
+  .row { padding:10px; }
+  .col2 { width:100%; }  
+  .col1-inner { padding:5px; }
+  .col2-inner { padding:5px; }
+}
+    
+@media (min-width: 450px) and (max-width: 960px) { 
+  .col2 { width:100%; } 
+}
+@media (min-width: 960px) { }
+
+

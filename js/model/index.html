@@ -1,0 +1,15 @@
+<script language="javascript" type="text/javascript" src="datasets-r5.js"></script>
+<script language="javascript" type="text/javascript" src="model-dataIn-examples.js"></script>
+<script language="javascript" type="text/javascript" src="model-r10.js"></script>
+
+<body>
+<p>This is a very basic example of using OpenBEM, check the console.</p>
+</body>
+
+<script>
+console.log('This is the input to the model');
+console.log(JSON.parse(JSON.stringify(dataIn_model_r9)));
+console.log('This is the data object after running the model');
+console.log(calc.run(dataIn_model_r9));
+
+</script>

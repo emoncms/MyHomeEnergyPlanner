@@ -1,0 +1,115 @@
+<style>
+    h4{margin-top: 30px}
+</style>
+
+<h3>Heating</h3>
+
+<h4>Hot water demand</h4>
+<table class="table">
+    <tr>
+        <td>Designed water use is not more than 125 litres per person per day (all water use, hot and cold)</td>
+        <td style="text-align:center"><input key="data.water_heating.low_water_use_design" type="checkbox" /></td>
+        <td></td>
+    </tr>
+    <tr><th colspan="2" style="border-bottom:none"><b>Water efficiency</b>
+            <span class="add-water-efficiency-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
+            <span class="apply-water-heating-measure if-not-master" type="water_usage" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Apply measure</button></span>
+        </th>
+        <th></th>
+    </tr>
+    <tbody id="water-usage" style="display:none; border:none"></tbody>
+</table>
+
+<table class="table">    
+    <tr>
+        <td>Do you know how much energy you use for water heating? Checking this box will overwrite SAP calculations</td>
+        <td style="text-align:center"><input key="data.water_heating.override_annual_energy_content" type="checkbox" /></td>
+    </tr>
+    <tr>
+        <td>Annual average hot water usage V d,average</td>
+        <td style="text-align:center"><span key="data.water_heating.Vd_average" dp=2></span> litres/day</td>
+    </tr>
+    <tr>
+        <td>Annual energy content:</td>
+        <td style="text-align:center; width:150px" id="annual_energy_content"></td>
+    </tr>
+
+</table>
+
+<h4>Space heating demand</h4>
+<table class="table">
+    <tr><td>Living area <i class="icon-question-sign" title="The 'Living Area' is the floor area of the lounge or living room or largest reception room in the home, including any rooms not separated from this by doors. It does not, however, extend over more than one storey, even when stairs enter the living area directly" /></td><td><input key="data.temperature.living_area" type="text" style="width:40px; margin-right:15px" />m<sup>2</sup></td></tr>
+    <tr>
+        <td>Target temperature: <i class="icon-question-sign" title="The target temperature will usually be based on the householder's normal thermostat setting. If the thermostat is in the living room, its setting would be the demand temperature. If it is outside the living room (e.g. hall), add 3ºC to the thermostat setting to estimate the temperature achieved in the living room." /></td>
+        <td><input key="data.temperature.target" type="text" style="width:40px; margin-right: 15px" /><sup>o</sup>C</td>
+    </tr>    
+    <tr><td>Heating off for the whole summer  <i class="icon-question-sign" title="Summer is defined as May to August, inclusive" /></td><td><input key="data.space_heating.heating_off_summer" type="checkbox" /> </td></tr>
+    <tr><td>Hours of heating off per week day <i class="icon-question-sign" title="Calculated from household questionaire"></i></td><td id="hours-off-weekday"></td></tr>
+    <tr><td>Hours of heating off per weekend day</td><td id="hours-off-weekend"></td></tr>
+</table>
+
+<h4>Heating systems
+    <span class="add-heating-system-from-lib if-master" style="cursor:pointer"><button class="btn" style="margin-left: 20px"><i class="icon-plus"></i> Add</button></span>
+    <span class="apply-water-heating-measure if-not-master" type="add_heating_systems_measure" style="cursor:pointer"><button class="btn if-not-locked" style="margin-left: 20px"><i class="icon-plus" />Apply measure</button></span>
+</h4>
+<table id="heating-systems" class="table" style="display:none"></table>
+
+<h4>Hot Water system</h4>
+<table class="table">
+    <tr><td>Include solar hot water?</td><td><input type="checkbox" key="data.water_heating.solar_water_heating" /> </td><td></td></tr>
+    <tr class="if-primary-circuit-loss">
+        <td>Hot water storage control type:   </td>
+        <td style="text-align:right">
+            <select style="width:380px" class="disabled-if-not-master" key="data.water_heating.hot_water_control_type">
+                <option value="no_cylinder_thermostat" >No cylinder thermostat</option>
+                <option value="Cylinder thermostat, water heating not separately timed">Cylinder thermostat, water heating not separately timed</option>
+                <option value="Cylinder thermostat, water heating separately timed">Cylinder thermostat, water heating separately timed</option>
+            </select>
+        </td>
+        <td style='text-align:center'><span class="apply-water-heating-measure if-not-master" type="hot_water_control_type" style="cursor:pointer"><button class="btn" style=""><i class="icon-plus"></i> Apply measure</button></span><p id="hot_water_control_type-measure-applied" style="margin-top:10px;display:none">Measure applied</p></td>
+    </tr>
+    <tr class="if-primary-circuit-loss">
+        <td>Is the primary pipework insulated?</td>
+        <td style="text-align:right"><select class="disabled-if-not-master" key="data.water_heating.pipework_insulation">
+                <option value="Uninsulated primary pipework">Uninsulated primary pipework</option>
+                <option value="First 1m from cylinder insulated">First 1m from cylinder insulated</option>
+                <option value="All accesible piperwok insulated">All accesible piperwok insulated</option>
+                <option value="Fully insulated primary pipework">Fully insulated primary pipework</option>
+            </select>
+        </td>
+        <td style='text-align:center'><span class="apply-water-heating-measure if-not-master" type="pipework_insulation" style="cursor:pointer"><button class="btn" style=""><i class="icon-plus"></i> Apply measure</button></span><p id="pipework_insulation-measure-applied" style="margin-top:10px;display:none">Measure applied</p></td>
+    </tr>
+</table>
+
+<table class="table" id="type_of_storage">            </table>
+
+<h4>Heating requirements</h4>
+<p>Hot water energy requirement       <span key="data.water_heating.annual_waterheating_demand" dp="2" /> kWh/year</p>
+<p>Space heating energy requirement       <span key="data.space_heating.annual_heating_demand" dp="2" /> kWh/year</p>
+
+
+
+
+<div id="apply-measure-water-heating-modal" style="position: fixed" class="modal hide" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Apply measure</h3>
+        <p id="myModalIntroText">Choose below</p>
+    </div>
+    <div style="padding: 15px" id="apply-measure-water-heating-what-to-do">
+        <p style="margin-left: 25px;"><input type="radio" name="apply-measure-water-heating-what-to-do" value="remove" /> Remove</p>
+        <p style="margin-left: 25px;"><input type="radio" name="apply-measure-water-heating-what-to-do" value="replace" /> Replace</p>
+    </div>
+    <div style="padding: 15px" id='apply-measure-water-heating-library-item-selects'>
+        <select id="apply-measure-water-heating-library-select"></select>
+        <select id="apply-measure-water-heating-items-select"></select>            
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+        <p id="apply-measure-water-heating-message" style="font-weight: bold"></p>
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="apply-measure-water-heating-ok" class="btn btn-primary">Apply measure</button>
+        <button id="apply-measure-water-heating-finish" data-dismiss="modal" class="btn btn-primary" style="display:none">Finish</button>
+    </div>
+</div>

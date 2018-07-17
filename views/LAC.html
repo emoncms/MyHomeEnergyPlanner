@@ -1,0 +1,167 @@
+
+<div id="LAC-container">
+    <h3>Energy use and gains from Lighting, Appliances and Cooking</h3>
+
+    <div class="input-prepend input-append" style="margin-bottom:35px">
+        <span class="add-on">Calculation to use </span>
+        <select id="LAC_calculation_type" key="data.LAC_calculation_type">
+            <option value="detailedlist">Detailed list</option>
+            <option value="SAP">SAP</option>
+            <option value="carboncoop_SAPlighting">SAP for lighting and Carbon Coop for appliances and cooking </option>
+        </select>
+    </div>
+
+
+
+    <div id="lighting-SAP" class="to-be-hidden" style="display:none;margin-bottom:35px">
+        <h3>Lighting - SAP calculation</h3>
+        <table class="table">
+            <tr>
+                <td>Reduced internal heat gains for lighting: </td>
+                <td colspan="4"><input key="data.LAC.reduced_heat_gains_lighting" type="checkbox" /></td>
+            </tr>
+            <tr><td>The number of fixed low energy lighting outlets (LLE)</td>
+                <td colspan="4"><input class="disabled-if-not-master" key="data.LAC.LLE" type="text" style="width:80px;vertical-align: top" />
+                    <div style="display:inline-block"><button class="btn if-not-master" id="apply-measure-lighting" style="margin-left:25px">Apply measure<br />Replace all with LLE</button><p id="lighting-measure-applied" style="display:none;margin:5px 40px">Measure applied</p></div></td></tr>
+            <tr>
+                <td>The total number of fixed lighting outlets (L)</td>
+                <td colspan="4"><input key="data.LAC.L" class="disabled-if-not-master" type="text" style="width:80px" /></td>
+            </tr>
+            <tr><td>The initial value of the annual energy used for lighting:</td><td><span key="data.LAC.EL" dp=2></span> kWh/year</td><td>Annual energy use:</td><td><span dp="2" key="data.energy_requirements.lighting.quantity" /> kWh/year</td></tr>
+            <tr><td></td><th>Fuel</th><th>Fraction</th><th>Fuel input <i class="icon-question-sign" title="Assuming system efficiency to be 1"></i></th><td></td></tr>
+            <tr><td></td><td><select key="data.LAC.fuels_lighting.0.fuel" style="margin-right:20px" class="fuels" category="Electricity"></select><td><input type='number' style="width:55px;" step='0.01' max='1' key='data.LAC.fuels_lighting.0.fraction' default='1'></td><td><span style="margin:0 5px" dp="2" key='data.LAC.fuels_lighting.0.fuel_input' /></td><td> <button class="add_LAC_fuel btn" style="margin-left:15px" type='lighting'>Add fuel</button></td></tr>
+            <tbody id="LAC-lighting-fuels"></tbody>
+        </table>
+    </div>
+
+
+
+    <div id="appliances-SAP" class="to-be-hidden" style="display:none;margin-bottom:35px">
+        <h3>Appliances - SAP calculation</h3>
+        <table class="table">
+            <tr><td>Energy efficient appliances and reduced internal heat gains: </td><td colspan="4"><input key="data.LAC.energy_efficient_appliances" type="checkbox" /></td></tr>
+            <tr><td>Annual electrical appliances energy use:</td><td colspan="4"><span key="data.LAC.EA" dp=2></span> kWh/year</td></tr>
+            <tr><td></td><th>Fuel</th><th>Fraction</th><th>Fuel input <i class="icon-question-sign" title="Assuming system efficiency to be 1"></i></th><td></td></tr>
+            <tr><td></td><td><select style="margin-right:15px" key="data.LAC.fuels_appliances.0.fuel" class="fuels" category="Electricity"></select></td><td><input type='number' style="width:55px;margin-left:5px" step='0.01' max='1' key='data.LAC.fuels_appliances.0.fraction' default='1'></td><td><span style="margin:0 5px" dp="2" key='data.LAC.fuels_appliances.0.fuel_input' /></td><td><button style="margin-left:15px" class='add_LAC_fuel' type='appliances'>Add fuel</button></td></tr>
+            <tbody id="LAC-appliances-fuels"></tbody>
+        </table>
+    </div>
+
+    <div id="cooking-SAP" class="to-be-hidden" style="display:none;margin-bottom:35px">
+        <h3>Cooking - SAP calculation</h3>
+        <table class="table">
+            <tr><td>Reduced internal heat gains for cooking: </td><td colspan="4"><input key="data.LAC.energy_efficient_cooking" type="checkbox" /></td></tr>
+            <tr><td>Annual cooking energy use:</td><td colspan="4"><span key="data.LAC.EC" dp=2></span> kWh/year</td></tr>
+            <tr><td></td><th>Fuel  <i class="icon-question-sign" title="SAP calculations for cooking are very limited, in order to calculate annual fuel input we need the assumption of fuel to be electric" /></th><th>Fraction</th><th>Fuel input <i class="icon-question-sign" title="Assuming system efficiency to be 1"></i></th><td></td></tr>
+            <tr><td></td><td><select style="margin-right:15px" key="data.LAC.fuels_cooking.0.fuel" class="fuels" category="Electricity"></select></td><td><input type='number' style="width:55px;margin-left:5px" step='0.01' max='1' key='data.LAC.fuels_cooking.0.fraction' default='1'></td><td><span style="margin:0 5px" dp="2" key="data.LAC.fuels_cooking.0.fuel_input"></span></td><td> <button style="margin-left:15px" class='add_LAC_fuel' type='cooking'>Add fuel</button></td></tr>
+            <tbody id="LAC-cooking-fuels"></tbody>
+        </table>
+    </div>
+
+
+
+    <div id="detailed-list" class="to-be-hidden" style="display:none;margin-bottom:35px">
+        <h3>Lighting, appliances and cooking - Detailed List</h3>
+        <p>This module provides an alternate method of calculating energy use and gains from lighting, cooking and appliances.</p>
+        <p>Start by calculating an estimate for <b>daily</b> electricity consumption by making a list of all lighting, cooking and appliances in your home. Enter an estimate for how many hours each item is used and how much power in Watt's it consumes. (Do not include electric space heaters as these are calculated seperatly) </p>
+        <br />
+        <table class="table">
+            <tr>
+                <th style="text-align:left">Item name</th>
+                <th>Category</th>
+                <th>Power (W)</th>
+                <th>Use time (hours per day)</th>
+                <th>Fuel</th>
+                <th>Daily energy (Wh)</th>
+                <th>Efficiency</th>
+                <th>Daily fuel input (Wh)</th>
+            </tr>
+            <tbody id="template-detailedlist" style="display:none">
+                <tr>
+                    <td style="text-align:left"><input style="text-align:left; width:200px" type="text" key="data.appliancelist.list.z.name"></td>
+                    <td><select key="data.appliancelist.list.z.category" style="width:200px">
+                            <option value="lighting" selected>Lighting</option>
+                            <option value="appliances">Appliances</option>
+                            <option value="cooking">Cooking</option>
+                        </select></td>
+                    <td><input type="number" value="0" key="data.appliancelist.list.z.power" style="width:60px" /></td>
+                    <td><input type="number" value="0" key="data.appliancelist.list.z.hours" style="width:60px" /></td>
+                    <td><select class="fuels" key="data.appliancelist.list.z.fuel"></select></td>
+                    <td><span key="data.appliancelist.list.z.energy"></span> Wh</th>
+                    <td><input type="number" value="1" max="1" step="0.01" key="data.appliancelist.list.z.efficiency" style="width:60px" /></td>
+                    <td><span dp="2" key="data.appliancelist.list.z.fuel_input"/></td>
+                </tr>
+            </tbody>
+            <tbody id="appliancelist"></tbody>
+            <tr>
+                <td style="text-align:left">
+                    <button id="add-item-detailedlist" class="btn">Add new item</button>
+                </td>
+                <td></th>
+                <td></td>
+                <td></th>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <h4>Totals</h4>
+        <table class="table">
+            <tr><th></th><th>Total annual energy demand (kWh)</th><th>Total annual fuel input (kWh)</th></tr>
+            <tr><td>Appliances: </td><td><span key="data.appliancelist.appliances.annualkwh" dp="2"></span></td><td><span key="data.appliancelist.appliances.annual_fuel_input_kwh" dp="2"></span></td></tr>
+            <tr><td>Cooking: </td><td><span key="data.appliancelist.cooking.annualkwh"></span></td><td><span key="data.appliancelist.cooking.annual_fuel_input_kwh" dp="2"></span></td></tr>
+            <tr><td>Lighting: </td><td><span key="data.appliancelist.lighting.annualkwh"></span></td><td><span dp="2" key="data.appliancelist.lighting.annual_fuel_input_kwh" dp="2"></span></td></tr></table>
+    </div>
+
+
+
+    <div id="CarbonCoop" class="to-be-hidden" style="display:none;margin-bottom:35px">
+        <style>
+            #library_table td{ width:30%}
+        </style>
+        <h3>Appliances and cooking - CarbonCoop calculations</h3>
+        <table class="table" id="applianceCarbonCoop">
+            <tr>
+                <th style="text-align:left">Appliance name</th>
+                <th>Number used</th>
+                <th>A+ rated</th>
+                <th>Norm demand</th>
+                <th>Units</th>
+                <th>Utilisation factor</th>
+                <th>Frequency</th>
+                <th>Reference quantity</th>
+                <th>Type of fuel</th>
+                <th>Fuel</th>
+                <th>Energy demand (kWh)</th>  
+                <th>Efficiency  <i class="icon-question-sign" title="For electric items efficiency set to 1"/></th>
+                <th>Fuel input (kWh)</th>
+                <th></th>
+            </tr>
+
+
+            <tbody id="applianceCarbonCoop-Computing" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Computing</b></td></tr></tbody>
+            <tbody id="applianceCarbonCoop-Cooking" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Cooking</b></td></tr></tbody>
+            <tbody id="applianceCarbonCoop-Food-storage" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Food storage</b></td></tr></tbody>
+            <tbody id="applianceCarbonCoop-Other-kitchen-cleaning" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Other kitchen/cleaning</b></td></tr></tbody>
+            <tbody id="applianceCarbonCoop-Laundry" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Laundry</b></td></tr></tbody>
+            <tbody id="applianceCarbonCoop-Miscelanea" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>Miscelanea</b></td></tr></tbody>
+            <tbody id="applianceCarbonCoop-TV" class="appliances-Carbon-Coop-category" style="display:none"><tr><td colspan="10"><b>TV</b></td></tr></tbody>
+
+            <tr>
+                <td style="text-align:left" colspan="12">
+                    <!--<button id="add-item-CarbonCoop" class="btn">Add new item (old)</button>-->
+                    <button class="add-CarbonCoop-from-lib btn">Add new item</button>
+                </td>
+            </tr>
+
+        </table>
+        <h4>Totals</h4>
+        <table class="table">
+            <tr><th></th><th>Total annual energy demand (kWh)</th><th>Total annual fuel input (kWh)</th></tr>
+            <tr><td>Appliances: </td><td><span key="data.applianceCarbonCoop.energy_demand_total.appliances" dp="2"></span></td><td><span key="data.applianceCarbonCoop.fuel_input_total.appliances" dp="2"></span></td></tr>
+            <tr><td>Cooking: </td><td><span key="data.applianceCarbonCoop.energy_demand_total.cooking"></span></td><td><span key="data.applianceCarbonCoop.fuel_input_total.cooking" dp="2"></span></td></tr>
+        </table>
+
+    </div>
+
+</div>
