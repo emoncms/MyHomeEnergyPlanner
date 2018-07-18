@@ -24,6 +24,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Remove measure.space_heating as it is not longer used (who knows from when)
  - Issue 119: measures tables added to MHEP report
  - Fabric Energy Efficiency added to comparison tables MHEP report
+ - Issue 357: Take 'Commentary' off Householder Questionnaire Page
 
 
 ## Version 1.1.0 

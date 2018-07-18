@@ -89,6 +89,7 @@ $projectid = (int) $_GET['id'];
 
                 <div class="scenario-nav-heading">Project input</div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/householdquestionnaire">Household Questionnaire</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/commentary">Commentary</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/currentenergy">Current Energy</a></div>
                 <?php if ($MHEP_image_gallery === true) { ?>
                     <div class="scenario-nav"><a class="project-menu-item" href="#master/imagegallery">Image gallery</a></div>
@@ -365,7 +366,7 @@ $projectid = (int) $_GET['id'];
         update(false, false);
     });
     $("#openbem").on("change", '[key]', function () {
-        if (data.locked == true && page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy')
+        if (data.locked == true && page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy' && page != 'commentary')
             $('#modal-scenario-locked').modal('show');
         else {
             var key = $(this).attr('key');
@@ -673,17 +674,7 @@ $projectid = (int) $_GET['id'];
         draw_openbem_graphics();
 
         // Add lock functionality to buttons and icons
-        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
-            $('#content button').addClass('if-not-locked');
-            $('#content i').addClass('if-not-locked');
-            $('#content .revert-to-original').each(function () {
-                if ($(this).css('display') != 'none')
-                    $(this).addClass('if-not-locked');
-            });
-        }
-
-        // Add lock functionality to buttons and icons
-        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy') {
+        if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy' && page != 'commentary') {
             $('#content button').addClass('if-not-locked');
             $('#content i').addClass('if-not-locked');
             $('#content .revert-to-original').each(function () {
