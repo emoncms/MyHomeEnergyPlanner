@@ -93,8 +93,11 @@
         <tbody id="elements"></tbody>
     </table>
 
-    <p><button class="btn add-from-lib" tags="Wall">Add wall from library</button></p>
-    <p>Total wall area: <span key="data.fabric.total_wall_area" dp=1></span> m<sup>2</sup></p>
+    <div style="float:right">
+        <p> Total loss: <span key="data.fabric.total_wall_WK" dp="2"></span> W/K</p>
+        <p>Total wall area: <span key="data.fabric.total_wall_area" dp=1></span> m<sup>2</sup></p>
+    </div>
+    <p style="margin-bottom:50px"><button class="btn add-from-lib" tags="Wall">Add wall from library</button></p>
 
     <hr>
 
@@ -118,8 +121,8 @@
         <tbody id="party_walls"></tbody>
     </table>
 
-    <p><button class="btn add-from-lib" tags="Party_wall">Add party wall from library</button></p>
-    <p>Total party wall area: <span key="data.fabric.total_party_wall_area" dp=1></span> m<sup>2</sup></p>
+    <p style="float:right">Total party wall area: <span key="data.fabric.total_party_wall_area" dp=1></span> m<sup>2</sup></p>
+    <p style="margin-bottom:50px"><button class="btn add-from-lib" tags="Party_wall">Add party wall from library</button></p>
 
     <hr>
 
@@ -143,8 +146,11 @@
         <tbody id="roofs"></tbody>
     </table>
 
-    <p><button class="btn add-from-lib" tags="Roof,Loft">Add roof or loft from library</button></p>
-    <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m<sup>2</sup></p>
+    <div style="float:right;">
+        <p> Total loss: <span key="data.fabric.total_roof_WK" dp="2"></span> W/K</p>
+        <p>Total roof area: <span key="data.fabric.total_roof_area" dp=1></span> m<sup>2</sup></p>
+    </div>
+    <p style="margin-bottom:50px"><button class="btn add-from-lib" tags="Roof,Loft">Add roof or loft from library</button></p>
     <hr>
 
 
@@ -185,8 +191,11 @@
         <tbody id="floors"></tbody>
 
     </table>
-    <p> <button class="btn add-from-lib" tags="Floor">Add floor from library</button></p>
-    <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m<sup>2</sup></p>
+    <div style="float:right;">
+        <p> Total loss: <span key="data.fabric.total_floor_WK" dp="2"></span> W/K</p>
+        <p>Total floor area: <span key="data.fabric.total_floor_area" dp=1></span> m<sup>2</sup></p>
+    </div>
+    <p style="margin-bottom: 50px"> <button class="btn add-from-lib" tags="Floor">Add floor from library</button></p>
 
 
 
@@ -288,10 +297,14 @@
 
         <tbody id="windows"></tbody>
     </table>
-    
-    <p><button class="btn add-from-lib" tags="Window,Door,Roof_light,Hatch">Add window, door, roof light or hatch from library</button></p>
 
-    <p>Total window, door, roof_light and hatch area: <span key="data.fabric.total_window_area" dp=2></span> m<sup>2</sup></p>
+    <div style="float:right;">
+        <p>Total gains: <span key="data.fabric.annual_solar_gain" dp="2"></span> W</p>
+        <p>Total loss: <span key="data.fabric.total_window_WK" dp="2"></span> W/K</p>
+        <p>Total window, door, roof_light and hatch area: <span key="data.fabric.total_window_area" dp=2></span> m<sup>2</sup></p>
+    </div>
+    <p style="margin-bottom: 75px"><button class="btn add-from-lib" tags="Window,Door,Roof_light,Hatch">Add window, door, roof light or hatch from library</button></p>
+
 
     <hr>
     <h3>Thermal Bridging</h3><hr>

@@ -25,6 +25,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 119: measures tables added to MHEP report
  - Fabric Energy Efficiency added to comparison tables MHEP report
  - Issue 357: Take 'Commentary' off Householder Questionnaire Page
+ - Issue 354: added total loss per type of fabric element to bottom of tables
 
 
 ## Version 1.1.0 
