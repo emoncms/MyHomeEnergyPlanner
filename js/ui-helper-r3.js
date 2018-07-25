@@ -496,7 +496,7 @@ function add_quantity_and_cost_to_measure(measure) { // Add extra properties to 
 function init_revert_to_original_by_id(selector, item_id, type_of_item) {
     selector = selector + ' .revert-to-original[item-id="' + item_id + '"]';
     if (scenario != 'master') {
-        if (measure_applied_to_item_by_id(type_of_item, item_id) != false || data.created_from == undefined) {
+        if (measure_applied_to_item_by_id(type_of_item, item_id) != false && data.created_from != undefined) {
             if (data.created_from == 'master')
                 $(selector + ' .text').html('Revert to master');
             else {
