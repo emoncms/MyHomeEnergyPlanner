@@ -251,6 +251,7 @@ $projectid = (int) $_GET['id'];
     var selected_library_tag = "Wall";
     var printmode = false;
     var report = undefined;
+    scenario = ""; //I put it here to be clear this is a global variable, it will be set later on from the hash in URL
 
     var path = "<?php echo $path; ?>";
     var jspath = path + "Modules/assessment/";
@@ -300,8 +301,8 @@ $projectid = (int) $_GET['id'];
     if (project.master.fuels == undefined)
         project.master.fuels = JSON.parse(JSON.stringify(datasets.fuels));
 
-    for (scenario in project)
-        project[scenario].fuels = project.master.fuels;
+    for (s in project)
+        project[s].fuels = project.master.fuels;
 
     //******************************
     // Calculate scenarios
@@ -311,6 +312,11 @@ $projectid = (int) $_GET['id'];
         $("." + s + "_scenario_emissions").html(project[s].kgco2perm2.toFixed(0));
     }
 
+    //**********************************************
+    // Fetch from hash the view to load and load it
+    //**********************************************
+    load_page_from_hash();
+    
     //************************
     // Side Menus
     //************************
@@ -320,11 +326,6 @@ $projectid = (int) $_GET['id'];
     // Add links to reports in the menu
     //***********************************
     add_reports_to_menu();
-
-    //**********************************************
-    // Fetch from hash the view to load and load it
-    //**********************************************
-    load_page_from_hash();
 
     //*****************
     // Top graphic
@@ -660,7 +661,7 @@ $projectid = (int) $_GET['id'];
             if (view_html['compare'] == undefined) {
                 $.ajax({url: jspath + "views/compare.js", async: false, cache: false});
             }
-            for (var scenario in project) {
+            for (var s in project) {
                 if (scenario != 'master') {
                     scenarios_comparison[scenario] = compareCarbonCoop(scenario);
                     scenarios_measures_summary[scenario] = getMeasuresSummaryTable(scenario);

@@ -29,6 +29,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 396: fixed bug when parent scenario has been deleted then the tool crashes because it can't check if it has to show the * that says that parent scenario has changed
  - Fixed error shown in console in fabric view when data.measures object doesn't exist
  - Fixed bug when trying to initialize 'revert to original' when there is no create_from scenario
+ - Fixed bug global variable scenario was always set to last scenario.I guess this was introduced in 'Tidy up view.php'
 
 
 ## Version 1.1.0 
