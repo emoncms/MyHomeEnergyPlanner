@@ -27,6 +27,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 357: Take 'Commentary' off Householder Questionnaire Page
  - Issue 354: added total loss per type of fabric element to bottom of tables
  - Issue 396: fixed bug when parent scenario has been deleted then the tool crashes because it can't check if it has to show the * that says that parent scenario has changed
+ - Fixed error shown in console in fabric view when data.measures object doesn't exist"
 
 
 ## Version 1.1.0 

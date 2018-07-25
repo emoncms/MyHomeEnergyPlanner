@@ -534,7 +534,7 @@ function elements_initUI()
     }
 
     // Show "Measured applied" in thermal bridge
-    if (data.measures.thermal_bridging != undefined)
+    if (data.measures != undefined && data.thermal_bridging != undefined)
         $('#TB-measured-applied').show();
 }
 
