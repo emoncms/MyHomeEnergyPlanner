@@ -254,7 +254,7 @@ $("#openbem").on("click", '.revert-to-original', function () {
         if (applied_in_bulk == false)
             delete(data.fabric.measures[element_id]);
         else
-            delete(data.fabric.measures[applied_in_bulk].original_elements[element_id]);
+            delete_element_from_bulk_measure(element_id, applied_in_bulk);
     }
     elements_initUI();
     update();

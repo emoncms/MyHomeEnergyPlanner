@@ -30,6 +30,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Fixed error shown in console in fabric view when data.measures object doesn't exist
  - Fixed bug when trying to initialize 'revert to original' when there is no create_from scenario
  - Fixed bug global variable scenario was always set to last scenario.I guess this was introduced in 'Tidy up view.php'
+ - Issue 394: bulk measure cost recalculated when reverting a fabric element to original
 
 
 ## Version 1.1.0 
