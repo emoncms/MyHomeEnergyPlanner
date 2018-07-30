@@ -63,18 +63,18 @@ function add_image(z) {
     html += z;
     html += "' href='";
     html += url;
-    html += "'><img src='";
+    html += "' name='"+ data.imagegallery[z]+"'><img src='";
     html += url;
-    html += "' width='200' /></a><i style='cursor:pointer' class='icon-trash' index='";
+    html += "' width='200' /></a><input type='checkbox' index='" + z + "' name='"+ data.imagegallery[z]+"' /><i style='cursor:pointer' class='icon-trash' index='";
     html += z;
-    html += "'></i><i style='cursor:pointer' class='icon-star";
+    html += "' name='"+ data.imagegallery[z]+"'></i><i style='cursor:pointer' class='icon-star";
     if (data.imagegallery[z] != data.featuredimage) {
         html += "-empty";
     }
     html += "' index='"
     html += z;
-    html += "' title='Feature this image'></i>";
-    html += "<p style='margin:10px' class='note' index=" + z + ">" + data.imagegallery_notes[z] + " <i class='icon-edit edit-note' style='cursor:pointer' index=" + z + "></p>"
+    html += "' title='Feature this image' name='"+ data.imagegallery[z]+"'></i>";
+    html += "<p style='margin:10px' class='note' index=" + z + " name='"+ data.imagegallery[z]+"'>" + (data.imagegallery_notes[z] == undefined ? "Add a note" : data.imagegallery_notes[z]) + " <i class='icon-edit edit-note' style='cursor:pointer' index=" + z + "></p>"
     html += "</div>";
     $('#gallery').append(html);
     //$('#gallery').append("<img class='image-in-gallery' key='data.imagegallery." + z + "' src='" + url + "' width='200' />");
@@ -88,7 +88,36 @@ $('#gallery').on('click', '.icon-trash', function () {
     $('#delete-file-confirm').attr('index', $(this).attr('index'));
     $("#modal-delete-image").modal("show");
 });
-
+$('#gallery').on('click', 'input[type=checkbox]', function () {
+    $('#delete-files').prop('disabled', true);
+    var any_checked = false;
+    $('#gallery input[type=checkbox]').each(function () {
+        if ($(this).is(':checked'))
+            any_checked = true;
+    });
+    if (any_checked == true)
+        $('#delete-images').prop('disabled', false);
+});
+$('#gallery').on('click', '#delete-images', function () {
+    $('#upload_result').html("");
+    $('#delete_result').html("");
+    var files = '';
+    var indexes = '[';
+    $('#gallery input[type=checkbox]:checked').each(function (index) {
+        if (index == 0) {
+            files += data.imagegallery[$(this).attr('index')];
+            indexes += $(this).attr('index');
+        }
+        else {
+            files += ', ' + data.imagegallery[$(this).attr('index')];
+            indexes += ', ' + $(this).attr('index');
+        }
+    });
+    indexes += ']';
+    $("#files-to-delete").html(files);
+    $('#delete-files-confirm').attr('indexes', indexes);
+    $("#modal-delete-images").modal('show');
+});
 $('#gallery').on('click', '.icon-star-empty', function () {
     data.featuredimage = data.imagegallery[$(this).attr('index')];
     $('#gallery .icon-star').removeClass(".icon-star").addClass("icon-star-empty");
@@ -99,6 +128,16 @@ $('#gallery').on('click', '.icon-star-empty', function () {
 $('#modal-delete-image').on('click', '#delete-file-confirm', function () {
     openbem.delete_image(projectid, data.imagegallery[$(this).attr('index')], delete_image_callback);
     $("#modal-delete-image").modal("hide");
+});
+$('#modal-delete-images').on('click', '#delete-files-confirm', function () {
+    var indexes = JSON.parse($(this).attr('indexes'));
+    var deleted_files = 0;
+    indexes.forEach(function (index) {
+        openbem.delete_image(projectid, data.imagegallery[index - deleted_files], delete_image_callback);
+        deleted_files++;
+    });
+    //$('#delete_result').html("<p>Images deleted</p>");
+    $("#modal-delete-images").modal("hide");
 });
 
 $('#gallery').on('click', '.edit-note', function () {
@@ -113,18 +152,22 @@ $('#gallery').on('click', '.save-note', function () {
 });
 
 function delete_image_callback(result) {
-    for (image_name in result) {
+    for (var image_name in result) {
         $('#delete_result').append("<p>" + image_name + " - " + result[image_name] + "</p>"); // Display the result message of the deletion
         if (result[image_name] === "File deleted" || result[image_name] === "File could not be found in the server. Image gallery list updated") {
             // Find the image in the data object and remove it
-            for (z in data.imagegallery) {
+            for (var z in data.imagegallery) {
                 if (image_name === data.imagegallery[z]) {
                     data.imagegallery.splice(z, 1);
+                    data.imagegallery_notes.splice(z, 1);
+                    break;
                 }
             }
             // Remove from view
-            $('a[key = "data.imagegallery.' + z + '"]').remove(); // Image
-            $('i[index = "' + z + '"]').remove();
+            $('a[name = "' + image_name + '"]').remove(); // Image
+            $('i[name = "' + image_name + '"]').remove();
+            $('input[name = "' + image_name + '"]').remove();
+            $('p[name = "' + image_name + '"]').remove();
         }
     }
     update();

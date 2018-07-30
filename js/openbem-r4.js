@@ -78,7 +78,8 @@ var openbem = {
     {
         var result = false;
         $.ajax({type: 'POST', url: path + "assessment/deleteimage.json", data: "id=" + id + "&filename=" + filename, async: false, success: function (data) {
-                callback(data);
+                if (callback != undefined)
+                    callback(data);
             }});
     },
     extract_inputdata: function (data)

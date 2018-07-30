@@ -857,22 +857,17 @@ class Assessment {
         $result = 0;
         error_reporting(0); // We disable errors/warnings notification as it messes up the headers to be returned and the return text doesn't reach the client
         if (!file_exists(__DIR__ . "/images/" . $projectid . "/" . $filename)) { // if for a reason the file doesn't exist in the server but it does in the data object we allow to delete it
-            $result = 1;
+            $result = 'no_exist';
         }
         else {
             $result = unlink(__DIR__ . "/images/" . $projectid . "/" . $filename);
         }
-        switch ($result) {
-            case 1:
-                $message = 'File could not be found in the server. Image gallery list updated';
-                break;
-            case false:
-                $message = "File couldn't be deleted";
-                break;
-            case true:
-                $message = "File deleted";
-                break;
-        }
+        if ($result === 'no_exist')
+            $message = 'File could not be found in the server. Image gallery list updated';
+        else if ($result === false)
+            $message = "File couldn't be deleted";
+        else
+            $message = "File deleted";
         $to_return = array();
         $to_return[$filename] = $message;
         return $to_return;

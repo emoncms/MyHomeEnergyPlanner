@@ -13,6 +13,7 @@
 
 <div id="gallery">
     <h4 style="margin: 15px 0 0 0">Gallery</h4>
+    <button class="btn" id="delete-images" disabled>Delete selected images</button>
     <div id="delete_result" style="margin: 0 0 25px 25px"></div>
 </div>
 
@@ -27,6 +28,20 @@
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         <button id="delete-file-confirm" index="" class="btn btn-primary">Yes</button>
+    </div>
+</div>
+
+<div id="modal-delete-images" class="modal modal-sm hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Delete images</h3>
+    </div>
+    <div class="modal-body">
+        <p>Are you sure you want to delete <span id="files-to-delete"/></p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button id="delete-files-confirm" index="" class="btn btn-primary">Yes</button>
     </div>
 </div>
 
