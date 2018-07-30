@@ -33,6 +33,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 394: bulk measure cost recalculated when reverting a fabric element to original
  - Issue 351: Display the cost of an applied measure on line for that element in the tool dialogue
  - Issue 301: Bulk delete of images in gallery
+ - Issue 188: ability top delete a fuel for fans and pumps in Fuel requirements
 
 
 ## Version 1.1.0 

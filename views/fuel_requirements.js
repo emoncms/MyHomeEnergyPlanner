@@ -74,7 +74,10 @@ function add_fuel_requirement(z, x) // z = energy_requirement  --  x = fuel_requ
     $(prefixA + ".fuel_input']").attr('key', prefixB + '.fuel_input');
 
     if (z == 'fans_and_pumps') {
-        $("#energyrequirements [key='data.fuel_requirements.fans_and_pumps.list." + x + ".fuel']").parent().html('<select key="data.fans_and_pumps.' + x + '.fuel">' + get_fuels_for_select('Electricity') + '</select>');
+        var remove_fuel = '';
+        if (data.fans_and_pumps.length > 1)
+            remove_fuel = '<i class="icon-trash remove-fans-and-pumps-fuel" index="' + x + '" style="margin-right:10px; cursor: pointer"></i>';
+        $("#energyrequirements [key='data.fuel_requirements.fans_and_pumps.list." + x + ".fuel']").parent().html(remove_fuel + '<select key="data.fans_and_pumps.' + x + '.fuel">' + get_fuels_for_select('Electricity') + '</select>');
         $("#energyrequirements [key='data.fuel_requirements.fans_and_pumps.list." + x + ".fraction']").parent().html('<input key="data.fans_and_pumps.' + x + '.fraction" type="number" min="0" max="1" step="0.01" style="width: 55px" />');
     }
 
@@ -91,3 +94,8 @@ $('#openbem').on('click', '.add-fans-and-pumps-fuel', function () {
     data.fans_and_pumps.push({fuel: 'Standard Tariff', fraction: 1});
     update();
 });
+$('#openbem').on('click', '.remove-fans-and-pumps-fuel', function () {
+    data.fans_and_pumps.splice($(this).attr('index'), 1);
+    update();
+});
+
