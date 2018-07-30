@@ -487,6 +487,7 @@ function add_quantity_and_cost_to_measure(measure) { // Add extra properties to 
     else
         measure.cost_total = 1.0 * measure.quantity * measure.cost;
 
+        measure.cost_total = 1.0 * measure.cost_total.toFixed(2);
 }
 
 

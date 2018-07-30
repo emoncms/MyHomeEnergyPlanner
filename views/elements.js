@@ -173,7 +173,7 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
     $('.bulk-element').each(function (i, obj) { // For each window checked
         if (obj.checked == true) {
             var row = $(obj).attr('element-row');
-            var element_id = data.fabric.elements[row].id
+            var element_id = data.fabric.elements[row].id;
             // applied as single measure
             if (data.fabric.measures[element_id] != undefined)
                 delete(data.fabric.measures[element_id]);
@@ -213,6 +213,7 @@ $("#openbem").on("click", '#bulk-measure-finish', function () {
     $('.bulk-element').each(function (i, obj) {
         if (obj.checked == true) {
             var row = $(obj).attr('element-row');
+            add_quantity_and_cost_to_measure(data.fabric.elements[row]); // // We also save the cost of the measure in the element in order to display it inline, see Issue 351
             for (var attr in measure[lib]) {
                 if (attr != 'location' && attr != 'id')
                     data.fabric.elements[row][attr] = measure[lib][attr];
@@ -383,6 +384,11 @@ function add_element(id, z)
     row.attr('row', z);
     row.attr('item_id', data.fabric.elements[z].id);
     row.attr('item', JSON.stringify(data.fabric.elements[z]));
+    if (data.fabric.elements[z].cost_total != undefined)
+        $(id + " [key='data.fabric.elements.template.cost_total']").attr('key', '').html('<br />£' + data.fabric.elements[z].cost_total).show();
+    else
+        $(id + " [key='data.fabric.elements.template.cost_total']").attr('key', '')
+
     if (data.fabric.elements[z].type != "Loft" && data.fabric.elements[z].type != "Roof")
         row.attr('tags', data.fabric.elements[z].type);
     else
@@ -415,6 +421,10 @@ function add_floor(z)
     row.attr('item_id', data.fabric.elements[z].id);
     row.attr('item', JSON.stringify(data.fabric.elements[z]));
     row.attr('tags', data.fabric.elements[z].type);
+    if (data.fabric.elements[z].cost_total != undefined)
+        $(id + " [key='data.fabric.elements.template.cost_total']").attr('key', '').html('<br />£' + data.fabric.elements[z].cost_total).show();
+    else
+        $(id + " [key='data.fabric.elements.template.cost_total']").attr('key', '');
 
     if (data.fabric.elements[z].uvalue == 0)
         $(id + " [key='data.fabric.elements." + z + ".uvalue']").css('color', 'red');
@@ -453,6 +463,10 @@ function add_window(z)
         $('#windows .window_fields_template').html('');
     }
     $("#windows [key='data.fabric.elements.template.wk']").attr('key', 'data.fabric.elements.' + z + '.wk');
+    if (data.fabric.elements[z].cost_total != undefined)
+        $("#windows [key='data.fabric.elements.template.cost_total']").attr('key', '').html('<br />£' + data.fabric.elements[z].cost_total).show();
+    else
+        $("#windows [key='data.fabric.elements.template.cost_total']").attr('key', '');
 
     $('#windows .window_fields_template').removeClass('window_fields_template');
     data.fabric.elements[z].name = String(data.fabric.elements[z].name);
@@ -633,6 +647,7 @@ function apply_measure(measure) {
                     measure.item[lib][z] = data.fabric.elements[measure.row][z];
             }
             add_quantity_and_cost_to_measure(measure.item[lib]);
+            //add_quantity_and_cost_to_measure(measure.row); // We also save the cost of the measure in the element in order to display it inline, see Issue 351
             // Update element and add measure
             data.fabric.elements[measure.row] = measure.item[lib];
             data.fabric.measures[measure.item_id].measure = measure.item[lib];

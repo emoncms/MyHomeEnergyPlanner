@@ -136,6 +136,8 @@ var openbem = {
             };
             if (data.fabric.elements[z].EWI != undefined)
                 inputdata.fabric.elements[z].EWI = data.fabric.elements[z].EWI;
+            if (data.fabric.elements[z].cost_total != undefined)
+                inputdata.fabric.elements[z].cost_total = data.fabric.elements[z].cost_total;
         }
 
 // Ventilation

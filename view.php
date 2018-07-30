@@ -316,7 +316,7 @@ $projectid = (int) $_GET['id'];
     // Fetch from hash the view to load and load it
     //**********************************************
     load_page_from_hash();
-    
+
     //************************
     // Side Menus
     //************************
@@ -455,6 +455,10 @@ $projectid = (int) $_GET['id'];
         project[s].creation_hash = generate_hash(JSON.stringify(project[s]));
         project[s].measures = {};
         project[s].fabric.measures = {};
+        project[s].fabric.elements.forEach(function (element) {
+            if (element.cost_total != undefined)
+                delete element.cost_total;
+        });
         project[s].created_from = $('#select-scenario').val();
 
         //sort project alphabetically
@@ -608,7 +612,7 @@ $projectid = (int) $_GET['id'];
             if (s != 'master' && project[s].created_from != undefined) {
                 $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + ')');
                 // Check if the original scenario has changed since the the creation of the current one
-                if(project[project[s].created_from] == undefined) // If the parent scenario has been deleted
+                if (project[project[s].created_from] == undefined) // If the parent scenario has been deleted
                     $("." + s + "_scenario_created_from").html("(From " + project[s].created_from + ' - deleted)');
                 else if (project[s].creation_hash != undefined) {
                     var original_scenario = JSON.parse(JSON.stringify(project[project[s].created_from]));
