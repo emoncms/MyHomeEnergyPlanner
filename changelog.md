@@ -35,6 +35,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 301: Bulk delete of images in gallery
  - Issue 188: ability top delete a fuel for fans and pumps in Fuel requirements
  - Issue 256: added scenario's overviews of commentary view
+ - Removed targetbar-carboncoop.js
 
 
 ## Version 1.1.0 
