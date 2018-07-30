@@ -156,7 +156,8 @@ $projectid = (int) $_GET['id'];
     <div id="wrapper">
         <div style="height:10px"></div>
         <div class="scenario-name"></div>
-        <div id="topgraphic"></div>
+        <a class="house_graphic" style="margin:-30px 30px; float:right; cursor:pointer">Show house graphic</a>
+        <div id="topgraphic" class="overview"></div>
         <div id="bound">
             <div id="content">
             </div>
@@ -397,12 +398,12 @@ $projectid = (int) $_GET['id'];
     });
     $(".house_graphic").click(function () {
         if ($(".house_graphic").html() == "Show house graphic") {
-            $("#topgraphic").show();
+            $(".overview").show();
             $("#rating").hide();
             $(".house_graphic").html("Hide house graphic");
         }
         else {
-            $("#topgraphic").hide();
+            $(".overview").hide();
             $("#rating").show();
             $(".house_graphic").html("Show house graphic");
         }
@@ -540,7 +541,7 @@ $projectid = (int) $_GET['id'];
     });
     // Side menu
     $(window).resize(function () {
-        draw_openbem_graphics();
+        draw_openbem_graphics('#topgraphic');
         sidebar_resize();
     });
     $("#assessment_menu").parent().click(function () {
@@ -578,7 +579,7 @@ $projectid = (int) $_GET['id'];
         }
 
         UpdateUI(data);
-        draw_openbem_graphics();
+        draw_openbem_graphics('#topgraphic');
 
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
 
@@ -678,7 +679,7 @@ $projectid = (int) $_GET['id'];
 
         InitUI();
         UpdateUI(data);
-        draw_openbem_graphics();
+        draw_openbem_graphics('#topgraphic');
 
         // Add lock functionality to buttons and icons
         if (page != "librariesmanager" && page != 'imagegallery' && page != 'export' && page != 'householdquestionnaire' && page != 'currentenergy' && page != 'commentary') {

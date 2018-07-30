@@ -1,12 +1,12 @@
 function targetbar(element, options)
 {
-    var width = $("#"+element).width();
-    var height = $("#"+element).height();
+    var width = $(element).width();
+    var height = $(element).height();
     
-    $("#"+element).html("<div style='padding-bottom:5px; font-size:16px; color:rgba(99,86,71,0.8);'>"+options.name+": <b style='float:right'>"+options.value+" "+options.units+"</b></div>");
-    var titleheight = $("#"+element+" div").height();
+    $(element).html("<div style='padding-bottom:5px; font-size:16px; color:rgba(99,86,71,0.8);'>"+options.name+": <b style='float:right'>"+options.value+" "+options.units+"</b></div>");
+    var titleheight = $(element+" div").height();
     var barheight = height - titleheight - 5;    
-    $("#"+element).append('<canvas id="'+element+'-canvas" width="'+width+'" height="'+barheight+'"></canvas>');
+    $(element).append('<canvas id="'+element+'-canvas" width="'+width+'" height="'+barheight+'"></canvas>');
 
     var c = document.getElementById(element+"-canvas");  
     var ctx = c.getContext("2d");

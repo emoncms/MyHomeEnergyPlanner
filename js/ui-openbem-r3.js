@@ -1,4 +1,4 @@
-function draw_openbem_graphics()
+function draw_openbem_graphics(parent)
 {
     var floorwk = data.fabric.total_floor_WK;
     var ventilationwk = data.ventilation.average_ventilation_WK;
@@ -20,37 +20,37 @@ function draw_openbem_graphics()
     var s6 = Math.sqrt(thermalbridgewk / uscale);
     var s7 = Math.sqrt(infiltrationwk / uscale);
 
-    $("#house-floor").attr("transform", "translate(460,620) rotate(90) scale(" + s1 + ")");
-    $("#house-ventilation").attr("transform", "translate(260,535) rotate(180) scale(" + s2 + ")");
-    $("#house-windows").attr("transform", "translate(260,345) rotate(180) scale(" + s3 + ")");
-    $("#house-walls").attr("transform", "translate(730,535) rotate(0) scale(" + s4 + ")");
-    $("#house-roof").attr("transform", "translate(640,185) rotate(-55) scale(" + s5 + ")");
-    $("#house-thermalbridge").attr("transform", "translate(730,345) rotate(0) scale(" + s6 + ")");
-    $("#house-infiltration").attr("transform", "translate(340,205) rotate(235) scale(" + s7 + ")");
+    $(parent + " #house-floor").attr("transform", "translate(460,620) rotate(90) scale(" + s1 + ")");
+    $(parent + " #house-ventilation").attr("transform", "translate(260,535) rotate(180) scale(" + s2 + ")");
+    $(parent + " #house-windows").attr("transform", "translate(260,345) rotate(180) scale(" + s3 + ")");
+    $(parent + " #house-walls").attr("transform", "translate(730,535) rotate(0) scale(" + s4 + ")");
+    $(parent + " #house-roof").attr("transform", "translate(640,185) rotate(-55) scale(" + s5 + ")");
+    $(parent + " #house-thermalbridge").attr("transform", "translate(730,345) rotate(0) scale(" + s6 + ")");
+    $(parent + " #house-infiltration").attr("transform", "translate(340,205) rotate(235) scale(" + s7 + ")");
 
-    $("#house-floorwk").html(Math.round(floorwk) + " W/K");
-    $("#house-ventilationwk").html(Math.round(ventilationwk) + " W/K");
-    $("#house-windowswk").html(Math.round(windowswk) + " W/K");
-    $("#house-wallswk").html(Math.round(wallswk) + " W/K");
-    $("#house-roofwk").html(Math.round(roofwk) + " W/K");
-    $("#house-thermalbridgewk").html(Math.round(thermalbridgewk) + " W/K");
-    $("#house-infiltrationwk").html(Math.round(infiltrationwk) + " W/K");
-    $("#house-totalwk").html(Math.round(totalwk) + " W/K");
+    $(parent + " #house-floorwk").html(Math.round(floorwk) + " W/K");
+    $(parent + " #house-ventilationwk").html(Math.round(ventilationwk) + " W/K");
+    $(parent + " #house-windowswk").html(Math.round(windowswk) + " W/K");
+    $(parent + " #house-wallswk").html(Math.round(wallswk) + " W/K");
+    $(parent + " #house-roofwk").html(Math.round(roofwk) + " W/K");
+    $(parent + " #house-thermalbridgewk").html(Math.round(thermalbridgewk) + " W/K");
+    $(parent + " #house-infiltrationwk").html(Math.round(infiltrationwk) + " W/K");
+    $(parent + " #house-totalwk").html(Math.round(totalwk) + " W/K");
 
-    var targetbarwidth = $("#targetbars").width();
+    var targetbarwidth = $(parent + " #targetbars").width();
 
-    $("#spaceheating").css("width", targetbarwidth);
-    $("#primaryenergy").css("width", targetbarwidth);
-    $("#co2").css("width", targetbarwidth);
-    $("#perperson").css("width", targetbarwidth);
+    $(parent + " #spaceheating").css("width", targetbarwidth);
+    $(parent + " #primaryenergy").css("width", targetbarwidth);
+    $(parent + " #co2").css("width", targetbarwidth);
+    $(parent + " #perperson").css("width", targetbarwidth);
 
     var targetbarheight = 60;// 0.13 * targetbarwidth;
     if (targetbarheight < 60)
         targetbarheight = 60;
-    $("#spaceheating").css("height", targetbarheight);
-    $("#primaryenergy").css("height", targetbarheight);
-    $("#co2").css("height", targetbarheight);
-    $("#perperson").css("height", targetbarheight);
+    $(parent + " #spaceheating").css("height", targetbarheight);
+    $(parent + " #primaryenergy").css("height", targetbarheight);
+    $(parent + " #co2").css("height", targetbarheight);
+    $(parent + " #perperson").css("height", targetbarheight);
 
     // ---------------------------------------------------------------------------------
     var value = '';
@@ -75,7 +75,7 @@ function draw_openbem_graphics()
             "UK Average": datasets.uk_average_values.space_heating_demand
         }
     };
-    targetbar("spaceheating", options);
+    targetbar(parent + " #spaceheating", options);
     // ---------------------------------------------------------------------------------
     if (isNaN(data.primary_energy_use_m2) == true) {
         value = 'No data yet';
@@ -94,7 +94,7 @@ function draw_openbem_graphics()
             "UK Average": datasets.uk_average_values.primary_energy_demand
         }
     };
-    targetbar("primaryenergy", options);
+    targetbar(parent + " #primaryenergy", options);
     // ---------------------------------------------------------------------------------
     if (isNaN(data.kgco2perm2) == true) {
         value = 'No data yet';
@@ -109,13 +109,13 @@ function draw_openbem_graphics()
         value: value,
         units: units,
         targets: {
-            
+
             "Zero Carbon": 0,
             "80% by 2050": 17,
             "UK Average": datasets.uk_average_values.co2_emission_rate
         }
     };
-    targetbar("co2", options);
+    targetbar(parent + " #co2", options);
     // ---------------------------------------------------------------------------------
     if (isNaN(data.kwhdpp) == true) {
         value = 'No data yet';
@@ -134,10 +134,10 @@ function draw_openbem_graphics()
             "UK Average": datasets.uk_average_values.energy_use_per_person
         }
     };
-    targetbar("perperson", options);
+    targetbar(parent + " #perperson", options);
     // ---------------------------------------------------------------------------------
-    if(scenario != undefined){
-        if(page != 'report' && scenario != 'master')
+    if (scenario != undefined) {
+        if (page != 'report' && scenario != 'master')
             $('#measures-costs').html('Measures cost: £' + measures_costs(scenario).toFixed(2));
         else
             $('#measures-costs').html('');

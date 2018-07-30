@@ -40,7 +40,7 @@ function currentenergy_UpdateUI()
             "UK Average": 360
         }
     };
-    targetbar("currentenergy-primaryenergy", options);
+    targetbar("#currentenergy-primaryenergy", options);
     // ---------------------------------------------------------------------------------
     var options = {
         name: "CO2 Emission rate",
@@ -51,7 +51,7 @@ function currentenergy_UpdateUI()
             "UK Average": 50.3
         }
     };
-    targetbar("currentenergy-co2", options);
+    targetbar("#currentenergy-co2", options);
     // ---------------------------------------------------------------------------------
     var options = {
         name: "Per person energy use",
@@ -62,7 +62,7 @@ function currentenergy_UpdateUI()
             "UK Average": 19.6
         }
     };
-    targetbar("currentenergy-perperson", options);
+    targetbar("#currentenergy-perperson", options);
 }
 
 

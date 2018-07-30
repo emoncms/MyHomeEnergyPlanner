@@ -151,7 +151,7 @@ global $reports;
         data = project[scenario];
 
         UpdateUI(data);
-        draw_openbem_graphics();
+        draw_openbem_graphics('#topgraphic');
 
         $("." + scenario + "_sap_rating").html(project[scenario].SAP.rating.toFixed(0));
 
