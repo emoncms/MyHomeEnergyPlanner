@@ -262,8 +262,10 @@ $projectid = (int) $_GET['id'];
     var selected_library_tag = "Wall";
     var printmode = false;
     var report = undefined;
+    var page= undefined;
     var locked = <?php echo json_encode($args['locked']); ?>;
     scenario = ""; //I put it here to be clear this is a global variable, it will be set later on from the hash in URL
+    var data = {};
 
     var path = "<?php echo $path; ?>";
     var jspath = path + "Modules/assessment/";
