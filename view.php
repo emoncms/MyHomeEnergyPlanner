@@ -257,7 +257,7 @@ $projectid = (int) $_GET['id'];
     var selected_library_tag = "Wall";
     var printmode = false;
     var report = undefined;
-    var page= undefined;
+    var page = undefined;
     var locked = <?php echo json_encode($args['locked']); ?>;
     scenario = ""; //I put it here to be clear this is a global variable, it will be set later on from the hash in URL
     var data = {};
@@ -675,8 +675,10 @@ $projectid = (int) $_GET['id'];
         data = project[scenario];
 
         // Render page
-        if (page != 'report')
+        if (page != 'report') {
             load_view("#content", page);
+            $('#topgraphic').show();
+        }
         else {
             // Load MHEP report and make the html available for the report we are loading
             scenarios_comparison = {};
