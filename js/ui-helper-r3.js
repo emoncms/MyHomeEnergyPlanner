@@ -273,6 +273,11 @@ function alertifnotlogged(data) {
         $('#modal-error-submitting-data').show();
     }
 }
+function alert_if_assessment_locked(data) {
+    if (data === "Assessment locked") {
+        $('#modal-assessment-locked').modal('show');
+    }
+}
 
 function get_fuels_for_select(category_to_show) {
     // Group fuels by category

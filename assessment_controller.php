@@ -72,8 +72,9 @@ function assessment_controller() {
     $result = false;
     if ($route->format == 'html') {
         if ($route->action == "view" && $session['write']) {
+            $locked = $assessment->completed(get('id'));
             $reports = $assessment->accesible_reports($session['userid']);
-            $result = view("Modules/assessment/view.php", array('reports' => $reports));
+            $result = view("Modules/assessment/view.php", array('reports' => $reports, 'locked' => $locked));
         }
         if ($route->action == "print" && $session['write'])
             $result = view("Modules/assessment/print.php", array());
@@ -128,31 +129,43 @@ function assessment_controller() {
             }
         }
 
+// -------------------------------------------------------------------------------------------------------------
+// Assessment data
+// -------------------------------------------------------------------------------------------------------------        
+
         if ($route->action == 'setdata' && $session['write']) {
-            $data = null;
-            if (isset($_POST['data']))
-                $data = $_POST['data'];
-            if (!isset($_POST['data']) && isset($_GET['data']))
-                $data = $_GET['data'];
-            if ($data && $data != null)
-                $result = $assessment->set_data($session['userid'], post('id'), $data);
+            if (!$assessment->completed(post('id'))) {
+                $data = null;
+                if (isset($_POST['data']))
+                    $data = $_POST['data'];
+                if (!isset($_POST['data']) && isset($_GET['data']))
+                    $data = $_GET['data'];
+                if ($data && $data != null)
+                    $result = $assessment->set_data($session['userid'], post('id'), $data);
+            }
+            else
+                $result = "Assessment locked";
         }
 
         if ($route->action == 'setnameanddescription' && $session['write']) {
-            $name = null;
-            if (isset($_POST['name']))
-                $name = $_POST['name'];
-            if (!isset($_POST['name']) && isset($_GET['name']))
-                $name = $_GET['name'];
+            if (!$assessment->completed(post('id'))) {
+                $name = null;
+                if (isset($_POST['name']))
+                    $name = $_POST['name'];
+                if (!isset($_POST['name']) && isset($_GET['name']))
+                    $name = $_GET['name'];
 
-            $description = null;
-            if (isset($_POST['description']))
-                $description = $_POST['description'];
-            if (!isset($_POST['description']) && isset($_GET['description']))
-                $description = $_GET['description'];
+                $description = null;
+                if (isset($_POST['description']))
+                    $description = $_POST['description'];
+                if (!isset($_POST['description']) && isset($_GET['description']))
+                    $description = $_GET['description'];
 
-            if ($name && $name != null && $description && $description != null)
-                $result = $assessment->set_name_and_description($session['userid'], post('id'), $name, $description);
+                if ($name && $name != null && $description && $description != null)
+                    $result = $assessment->set_name_and_description($session['userid'], post('id'), $name, $description);
+            }
+            else
+                $result = "Assessment locked";
         }
 
 // -------------------------------------------------------------------------------------------------------------
@@ -242,11 +255,19 @@ function assessment_controller() {
 // Image gallery
 // -------------------------------------------------------------------------------------------------------------
         if ($MHEP_image_gallery === true) {
-            if ($route->action == 'uploadimages' && $session['write'])
-                $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
+            if ($route->action == 'uploadimages' && $session['write']) {
+                if (!$assessment->completed(post('id')))
+                    $result = $assessment->saveimages($session['userid'], post('id'), $_FILES);
+                else
+                    $result = "Assessment locked";
+            }
 
-            if ($route->action == 'deleteimage' && $session['write'])
-                $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
+            if ($route->action == 'deleteimage' && $session['write']) {
+                if (!$assessment->completed(post('id')))
+                    $result = $assessment->deleteimage($session['userid'], post('id'), post('filename'));
+                else
+                    $result = "Assessment locked";
+            }
         }
 
 

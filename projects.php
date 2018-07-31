@@ -91,7 +91,7 @@ $d = $path . "Modules/assessment/";
                         <th>Name</th>
                         <th>Description</th>
                         <th>Author</th>
-                        <th>Status</th>
+                        <th>Status <i class="icon-question-sign" title="Completed assessments are locked"></i></th>
                         <th>Modified</th>
                         <th style="width:40px"></th>
                         <th style="width:30px"></th>

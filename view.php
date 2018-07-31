@@ -196,6 +196,18 @@ $projectid = (int) $_GET['id'];
         <button id="modal-error-submitting-data-done" class="btn btn-danger">Done</button>
     </div>
 </div>
+<div id="modal-assessment-locked" class="modal alert-danger hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
+    <div class="modal-header">
+        <h3>The assessment is locked!</h3>
+    </div>
+    <div class="modal-body">
+        <p>Your changes won't be saved.</p>
+        <p>To unlock the assessment change the status from "Complete" to "In progress".</p>
+    </div>
+    <div class="modal-footer">
+        <button id="modal-assessment-locked-done" data-dismiss="modal" class="btn btn-danger">Done</button>
+    </div>
+</div>
 
 <div id="modal-delete-scenario" class="modal alert-danger hide" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="true">
     <div class="modal-header">
@@ -205,7 +217,7 @@ $projectid = (int) $_GET['id'];
         Are you sure you want to delete this scenario?
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true"><?php echo _('Cancel'); ?></button>
+        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true"><?php echo _('Cancel'); ?></button>
         <button id="delete-scenario-confirm" class="btn btn-primary"><?php echo _('Delete'); ?></button>
     </div>
 </div>
@@ -250,6 +262,7 @@ $projectid = (int) $_GET['id'];
     var selected_library_tag = "Wall";
     var printmode = false;
     var report = undefined;
+    var locked = <?php echo json_encode($args['locked']); ?>;
     scenario = ""; //I put it here to be clear this is a global variable, it will be set later on from the hash in URL
 
     var path = "<?php echo $path; ?>";
@@ -343,6 +356,16 @@ $projectid = (int) $_GET['id'];
     $("#assessment_menu").find("i").removeClass("icon-home");
     $("#assessment_menu").find("i").addClass("icon-list");
     sidebar_resize();
+
+    //*********************
+    // Assessment locked?
+    //*********************
+    if (locked === true) {
+        setTimeout(function () {
+            $('#modal-assessment-locked').modal('show');
+        }, 1);
+    }
+
 
 
     //**********
@@ -583,6 +606,7 @@ $projectid = (int) $_GET['id'];
 
         openbem.set(projectid, project, function (result) {
             alertifnotlogged(result);
+            alert_if_assessment_locked(result);
         });
     }
     function show_hide_if_master() {

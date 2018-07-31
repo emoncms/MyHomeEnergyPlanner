@@ -327,6 +327,17 @@ class Assessment {
         return $result;
     }
 
+    public function completed($id) {
+        $id = (int) $id;
+
+        $result = $this->mysqli->query("SELECT * FROM assessment WHERE id='$id' and status='Complete'");
+        if ($result->num_rows>0)
+            return true;
+        else
+            return false;
+        
+    }
+
     // ------------------------------------------------------------------------------------------------
     // LIBRARY
     // ------------------------------------------------------------------------------------------------
