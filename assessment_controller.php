@@ -76,8 +76,6 @@ function assessment_controller() {
             $reports = $assessment->accesible_reports($session['userid']);
             $result = view("Modules/assessment/view.php", array('reports' => $reports, 'locked' => $locked));
         }
-        if ($route->action == "print" && $session['write'])
-            $result = view("Modules/assessment/print.php", array());
 
         if ($route->action == "list" && $session['write'])
             $result = view("Modules/assessment/projects.php", array());

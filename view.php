@@ -27,14 +27,11 @@ $projectid = (int) $_GET['id'];
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r5.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r10.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>graph-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
-<!--<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/vectormath-r3.js"></script>-->
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-helper/library-helper-r1.js"></script>
 
 <!--<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/canvas-barchart/barchart.js"></script>-->
-<link rel="stylesheet" href="<?php echo $d; ?>js/magnific-popup/magnific-popup.css">
 <link rel="stylesheet" href="<?php echo $d; ?>js/jquery-ui-1.12.1/jquery-ui.min.css">
 <script src="<?php echo $d; ?>js/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 
@@ -73,8 +70,6 @@ $projectid = (int) $_GET['id'];
     }
 
 </style>
-
-<script type="text/javascript" src="<?php echo $d; ?>data.js"></script>
 
 <div id="openbem">
     <div id="sidebar">

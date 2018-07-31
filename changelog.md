@@ -8,6 +8,7 @@ Given a version number MAJOR.MINOR.PATCH:
 ## Version 1.1.2 - Prerelease (still adding commits)
  - Issue 33: assessments with a "Complete status" are locked
  - Issue 185: added notes_for_developers.md
+ - Cleanup of unused files
 
 ## Version 1.1.1 
 

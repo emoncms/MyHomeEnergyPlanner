@@ -469,7 +469,7 @@ $d = $path . "Modules/assessment/";
         var members = myorganisations[orgid].members;
         for (var z in members) {
             out += "<div class='recent-activity-item' style='height:40px'>";
-            out += "<img src='<?php echo $path; ?>Modules/assessment/defaultuser.png' style='height:40px; float:left; padding-right:5px'/ >";
+            out += "<img src='<?php echo $path; ?>Modules/assessment/img-assets/defaultuser.png' style='height:40px; float:left; padding-right:5px'/ >";
             out += "<b>" + members[z].name + "</b><br>Last active: " + members[z].lastactive;
             out += "</div>";
         }

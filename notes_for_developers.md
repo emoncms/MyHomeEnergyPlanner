@@ -21,7 +21,6 @@ My Home Energy Planner is an emonCMS module. Some information on [how to develop
     - targetbar-rX: draws the horizontal bars graph next to the house at the top of an assessment page
     - ui-helper-rX.js: functions used in MHEP
     - ui-openbem-rX.js: draws the house at the top of the assessment page
-    - vectormath.js: some maths calculations
 
 ## Javascript global variables in an assessment
 The following variables can be used in your views javascript:
