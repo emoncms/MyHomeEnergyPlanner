@@ -2,6 +2,17 @@
 <h3>General</h3>
 <hr>
 <br>
+<div id ="load-questionnaire" style="float:right;width:300px">
+    <h4>Upload questionnaire</h4>
+    <form style="margin-bottom:5px" action="#" id="upload_questionnaire" method="post" enctype="multipart/form-data" >
+        <input type="file" id="file_to_upload">
+        <p>Max. size: 1MB</p>
+        <input class="btn" type="submit" value="Import file" />
+    </form>
+
+
+    <p id="upload-result"></p>
+</div>
 <p>Assessment date (dd-mm-yyyy):<br>
     <input type="text" value="" key="data.household.assessment_date" style="width:300px" /></p>
 <p>Assessor's name:<br>
@@ -373,7 +384,7 @@
 <h3>4 Appliances, cooking and laundry</h3>
 <hr>
 <br>
-<p><b>4a Kitchen appliances and cooking (section removed, use <i>Extended input</i>)</b></p>
+<p><b>4a Kitchen appliances and cooking (section removed, use <i>Lighting, Appliances & Cooking</i>)</b></p>
 
 <!--<table class="table">
     <tr><th></th><th>Number</th><th>A+?</th></tr>
@@ -487,7 +498,7 @@
 <p><b>4b Laundry</b></p>
 
 <table class="table">
-    <tr><th></th><th>Number</th><th>A+?</th></tr>
+    <tr><th></th><th>Number</th><th></th></tr>
     <!--<tr><th>Clothes washing</th><td></td><td></td></tr>
 
     <tr>
