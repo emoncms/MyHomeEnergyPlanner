@@ -688,10 +688,10 @@ $projectid = (int) $_GET['id'];
                 $.ajax({url: jspath + "views/compare.js", async: false, cache: false});
             }
             for (var s in project) {
-                if (scenario != 'master') {
-                    scenarios_comparison[scenario] = compareCarbonCoop(scenario);
-                    scenarios_measures_summary[scenario] = getMeasuresSummaryTable(scenario);
-                    scenarios_measures_complete[scenario] = getMeasuresCompleteTables(scenario);
+                if (s != 'master') {
+                    scenarios_comparison[s] = compareCarbonCoop(s);
+                    scenarios_measures_summary[s] = getMeasuresSummaryTable(s);
+                    scenarios_measures_complete[s] = getMeasuresCompleteTables(s);
                 }
             }
 
