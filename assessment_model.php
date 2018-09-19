@@ -125,6 +125,16 @@ class Assessment {
         return array("Deleted");
     }
 
+    public function delete_all_from_user($userid) {
+        $userid = (int) $userid;
+        $assessments = $this->get_list($userid);
+
+        foreach ($assessments as $assessment) {
+            $this->delete($userid, $assessment->id);
+        }
+        return array("Deleted");
+    }
+
     public function get($userid, $id) {
         $id = (int) $id;
         $userid = (int) $userid;
@@ -331,11 +341,10 @@ class Assessment {
         $id = (int) $id;
 
         $result = $this->mysqli->query("SELECT * FROM assessment WHERE id='$id' and status='Complete'");
-        if ($result->num_rows>0)
+        if ($result->num_rows > 0)
             return true;
         else
             return false;
-        
     }
 
     // ------------------------------------------------------------------------------------------------

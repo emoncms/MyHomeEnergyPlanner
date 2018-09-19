@@ -113,6 +113,8 @@ function assessment_controller() {
 
         if ($route->action == 'delete' && $session['write'])
             $result = $assessment->delete($session['userid'], get('id'));
+        if ($route->action == 'deleteallfromuser' && $session['write'])
+            $result = $assessment->delete_all_from_user($session['userid']);
         if ($route->action == 'share' && $session['write'])
             $result = $assessment->share($session['userid'], get('id'), get('username'));
         if ($route->action == 'getshared' && $session['write'])
