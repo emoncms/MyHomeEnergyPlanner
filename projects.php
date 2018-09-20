@@ -381,7 +381,7 @@ $d = $path . "Modules/assessment/";
                     }
 
 
-                    out += '<td><a href="' + path + 'assessment/view?id=' + projects[z].id + '"><span class="label label-info">Open <i class="icon-folder-open icon-white"></i></span></a></td>';
+                    out += '<td><a id="open-project-' + projects[z].id + '" href="' + path + 'assessment/view?id=' + projects[z].id + '"><span class="label label-info">Open <i class="icon-folder-open icon-white"></i></span></a></td>';
                     out += '<td><span class="share-project-openmodal" projectid=' + projects[z].id + ' z=' + z + ' style="cursor:pointer"><span class="label label-info"><i class="icon-share icon-white"></i></span></td>';
                     out += '<td><span class="delete-project" projectid=' + projects[z].id + ' z=' + z + ' style="cursor:pointer"><span class="label label-important"><i class="icon-trash icon-white"></i></span></td>';
                     out += "</tr>";
