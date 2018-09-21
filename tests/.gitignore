@@ -1,8 +1,4 @@
 errorShots
 node_modules
-chromedriver
-geckodriver
-login_details.js
-selenium-server-standalone-3.14.0.jar
-wdio.conf.js
-start_selenium_server.sh
+Lib/login_details.js
+npm-debug.log

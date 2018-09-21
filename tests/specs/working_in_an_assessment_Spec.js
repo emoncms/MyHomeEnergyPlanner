@@ -32,4 +32,4 @@ describe('In an assessment a MHEP ', function () {
         helper.deleteAssessment(assessment_id);
         helper.logout();
     });
-}
+});
