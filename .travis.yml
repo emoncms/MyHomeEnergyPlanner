@@ -1,0 +1,78 @@
+language: node_js
+node_js:
+    - "8"
+dist: trusty
+sudo: required
+services:
+    - mysql 
+addons:
+  chrome: stable  
+  firefox: stable
+before_install:
+    # Install Apache + PHP - https://docs.travis-ci.com/user/languages/php/
+    - sudo apt-get update
+    - sudo apt-get install apache2 libapache2-mod-fastcgi -y
+    ## enable php-fpm
+    - sudo cp ~/.phpenv/versions/5.6/etc/php-fpm.conf.default ~/.phpenv/versions/5.6/etc/php-fpm.conf
+    - sudo a2enmod rewrite actions fastcgi alias
+    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/5.6/etc/php.ini
+    - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
+    - sudo chown -R travis:travis /var/lib/apache2/fastcgi
+    - ~/.phpenv/versions/5.6/sbin/php-fpm
+    ## configure apache virtual hosts
+    - sudo cp -f travis-CI/travis-ci-apache /etc/apache2/sites-available/000-default.conf
+    - sudo service apache2 restart
+install:
+    # Install emonCMS - adapted from https://github.com/emoncms/emoncms/blob/master/docs/LinuxInstall.md
+    ## Setup in apache
+    - sudo apt-get install php-pear redis-server build-essential php5-dev g++ wget -y
+    #- sudo pear channel-discover pear.swiftmailer.org
+    #- printf "\n" | sudo pecl install swift/swift redis
+    #- printf "extension=redis.so" | sudo tee /etc/php5/mods-available/redis.ini 1>&2
+    #- sudo php5enmod redis
+    - sudo cp ./travis-CI/emoncms.conf /etc/apache2/sites-available/emoncms.conf
+    - sudo a2ensite emoncms
+    - sudo service apache2 reload
+    - cd /var/www/
+    - sudo chown $USER html
+    ## Clone emonCMS
+    - cd html
+    - git clone -b stable https://github.com/emoncms/emoncms.git
+    - cd /var/www/html/emoncms
+    - git pull
+    ## Setup database and feeds
+    - mysql -e 'CREATE DATABASE IF NOT EXISTS emoncms DEFAULT CHARACTER SET utf8;'
+    - sudo mkdir /var/lib/phpfiwa
+    - sudo mkdir /var/lib/phpfina
+    - sudo mkdir /var/lib/phptimeseries
+    - sudo chown www-data:root /var/lib/phpfiwa
+    - sudo chown www-data:root /var/lib/phpfina
+    - sudo chown www-data:root /var/lib/phptimeseries
+    ## Create settings.php
+    - cd /var/www/html/emoncms/
+    - cp default.settings.php settings.php
+    - sed -i 's/_DB_USER_/travis/g' settings.php
+    - sed -i 's/_DB_PASSWORD_//g' settings.php
+     ### Not setting up SMTP    
+    ## Install MHEP
+    - cd /var/www/html/emoncms/Modules
+    - git clone --depth=50 --branch=CI https://github.com/cagabi/MyHomeEnergyPlanner.git assessment
+    - cd assessment
+    - git submodule update --init --recursive
+    ## Setup test suite
+    - cd tests
+    - npm install
+    - ./node_modules/.bin/selenium-standalone install
+    - ./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 & 
+    - mkdir webdrivers
+    - cd webdrivers
+    - wget https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip 
+    - unzip chromedriver_linux64.zip 
+    - sudo chmod +x chromedriver
+    - wget https://github.com/mozilla/geckodriver/releases/download/v0.22.0/geckodriver-v0.22.0-linux64.tar.gz
+    - tar -xvzf geckodriver-v0.22.0-linux64.tar.gz
+    - sudo chmod +x geckodriver
+    - export PATH=$PATH:/var/www/html/emoncms/Modules/assessment/tests/webdrivers    
+script:
+    - cd /var/www/html/emoncms/Modules/assessment/tests
+    - HEADLESS=true ./node_modules/.bin/wdio wdio.conf.js 
