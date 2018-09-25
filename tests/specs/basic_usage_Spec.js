@@ -10,7 +10,7 @@
  *   
  * **********************************************/
 
-let login_details = require('../Lib/login_details');
+let login_details = require('../Lib/login_details.js');
 let helper = require('../Lib/assessment_tests_helper.js');
 
 describe('A MHEP user ', function () {
