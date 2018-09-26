@@ -1,17 +1,5 @@
-/************************************************
- * This test will login in an emonCMS installation.
- * It looks for the login details in the file '../Lib/login_details.js'
- * This files looks like: 
- *      module.exports = {
- *          login_url: 'http://your_emonCMS_installation',
- *          username1: 'an_existing_user',
- *          password1: 'the_password'
- *      };
- *   
- * **********************************************/
-
-let login_details = require('../Lib/login_details.js');
 let helper = require('../Lib/assessment_tests_helper.js');
+let login_details = helper.getLoginDetails();
 
 describe('A MHEP user ', function () {
     it('can login', function () {
@@ -22,10 +10,10 @@ describe('A MHEP user ', function () {
         expect(browser.isExisting('a*=Logout')).toBe(true);
     });
     
-    it('is in the Assessment page after login', function () {
+    /*it('is in the Assessment page after login', function () {
         helper.logIfDebug('\nSpecification: is in the Assessment after login\n---------------------');
         expect(browser.getTitle()).toBe('Emoncms - assessment list');
-    });
+    });*/
 
     it('can logout', function () {
         helper.logIfDebug('\nSpecification: A MHEP user can logout');

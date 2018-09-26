@@ -1,17 +1,5 @@
-/************************************************
- * This test will login in an emonCMS installation.
- * It looks for the login details in the file '../Lib/login_details.js'
- * This files looks like: 
- *      module.exports = {
- *          login_url: 'http://your_emonCMS_installation',
- *          username1: 'an_existing_user',
- *          password1: 'the_password'
- *      };
- *   
- * **********************************************/
-
-let login_details = require('../Lib/login_details.js');
-let helper = require('./Lib/assessment_tests_helper.js');
+let helper = require('../Lib/assessment_tests_helper.js');
+let login_details = helper.getLoginDetails();
 
 describe('In an assessment a MHEP ', function () {
 

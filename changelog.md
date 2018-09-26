@@ -10,7 +10,7 @@ Given a version number MAJOR.MINOR.PATCH:
  - Issue 185: added notes_for_developers.md
  - Cleanup of unused files
  - Issue 102: form that could populate the ‘householdquestionnaire’ in advance of the visit
-- Added tests
+ - Added tests
 
 ## Version 1.1.1 
 

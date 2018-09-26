@@ -31,3 +31,13 @@ Run the test with debug info:
 
 By default tests are run in Chrome, to use Firefox:
 `BROWSER=firefox ./node_modules/.bin/wdio wdio.conf.js`
+
+## Specs
+There are 2 sets of tests specifications.
+ - The ones to run during the Script job in Travis (in travis_specs/): the main aim is to create the users that MHEP needs for its own tests and ensure correct basic functionality of emonCMS
+ - The ones to test MHEP functionality (in specs/). These tests are to be run locally, as part of the Script job in Travis or after deploying to the staging server
+
+## emonCMS users for the tests
+The Travis build sets up a new emonCMS installation. It creates its own emonCMS users and they are the ones used in the tests during the Script job. They are in `./Lib/travis_login_details.js`. To run MHEP tests with this users we have added the environmental variable to the wdio command `TRAVIS=true` in the Script job in the Travis build
+
+For running the tests in a existing emonCMS installations (local machine or staging server) the tests users need to exist already because we cannot rely on the availability of the Register option. The test users are in `./Lib/login_details_for_an_existing_installation.js`. This file is .gitignored. The structure of the file is the same than `./Lib/travis_login_details.js`

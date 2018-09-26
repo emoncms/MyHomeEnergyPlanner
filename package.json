@@ -3,10 +3,6 @@
   "description": "Travis Continuous Integration for MyHomeEnergyPlanner",
   "author": "Carbon Co-op",
   "version": "0.0.1",
-  "devDependencies": {
-    
-  },
-  "scripts": {
-    "test": "tests/node_modules/.bin/wdio tests/wdio.conf.js"
+  "devDependencies": {    
   }
 }

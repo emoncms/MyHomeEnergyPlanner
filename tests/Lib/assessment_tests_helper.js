@@ -1,19 +1,20 @@
-/************************************************
- * This helper uses login detailsfrom the file './login_details.js'
- * This files looks like: 
- *      module.exports = {
- *          login_url: 'http://your_emonCMS_installation',
- *          username1: 'an_existing_user',
- *          password1: 'the_password'
- *      };
- *   
- * **********************************************/
-
-let login_details = require('./login_details');
 let debug = process.env.DEBUG;
+let travis = process.env.TRAVIS;
+let login_details = getLoginDetails();
+
+function getLoginDetails() { // Info about users can be found in the readme.md file
+    if (travis)
+        return require('./travis_login_details');
+    else
+        return require('./login_details_for_an_existing_installation');
+}
 
 module.exports = {
+    getLoginDetails: function () {
+        return getLoginDetails();
+    },
     loginDefaultUser1: function () {
+        this.logIfDebug('Loging as ' + login_details.username1 + ' - ' + login_details.password1);
         login(login_details.login_url, login_details.username1, login_details.password1);
     },
     goToAssessmentPage: function () {
@@ -65,7 +66,6 @@ module.exports = {
         }
     }
 };
-
 function login(url, username, password) {
     if (debug)
         console.log('Logging: ' + url + ' - ' + username + ' - ' + password);
