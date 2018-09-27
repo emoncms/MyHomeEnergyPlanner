@@ -5,8 +5,6 @@ Open source home energy assessment based on emoncms and emoncms module openbem:
 
 see original: [https://github.com/emoncms/openbem](https://github.com/emoncms/openbem)
 
-![MyHomeEnergyPlanner.png](docs/files/MyHomeEnergyPlanner.png)
-
 ### Getting to Zero Carbon
     
 Achieving zero carbon is often a two step process, first power down - reduction in energy demand through efficiency, and second powering up the remaining energy demand with sustainable energy.
