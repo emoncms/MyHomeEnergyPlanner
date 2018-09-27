@@ -1,6 +1,8 @@
 
 ## My Home Energy Planner
 
+[![Build Status](https://travis-ci.org/emoncms/emoncms.svg?branch=master)](https://travis-ci.org/emoncms/MyHomeEnergyPlanner)
+
 Open source home energy assessment based on emoncms and emoncms module openbem:
 
 see original: [https://github.com/emoncms/openbem](https://github.com/emoncms/openbem)
