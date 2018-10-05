@@ -87,3 +87,4 @@ script:
     - cd /var/www/html/emoncms/Modules/assessment/tests
     - HEADLESS=true ./node_modules/.bin/wdio wdio.conf.js --spec travis_specs/emonCMS-setup.js
     - HEADLESS=true DEBUG=true TRAVIS=true ./node_modules/.bin/wdio wdio.conf.js
+    
