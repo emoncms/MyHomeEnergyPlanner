@@ -1,15 +1,17 @@
 language: node_js
 node_js:
-    - "8"
+    - '8'
 dist: trusty
 sudo: required
 services:
-    - mysql 
+- mysql
 addons:
-  chrome: stable  
-  firefox: stable
+  chrome: stable
+  firefox: latest
+env:
+    - EMONCMS_REPO="https://github.com/emoncms/emoncms.git" EMONCMS_BRANCH="stable"
 before_install:
-    # Install Apache + PHP - https://docs.travis-ci.com/user/languages/php/
+    # Install Apache + PHP - adapted from https://docs.travis-ci.com/user/languages/php/
     - sudo apt-get update
     - sudo apt-get install apache2 libapache2-mod-fastcgi -y
     ## enable php-fpm
@@ -18,18 +20,19 @@ before_install:
     - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/5.6/etc/php.ini
     - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
     - sudo chown -R travis:travis /var/lib/apache2/fastcgi
-    - ~/.phpenv/versions/5.6/sbin/php-fpm
+    - "~/.phpenv/versions/5.6/sbin/php-fpm"
     ## configure apache virtual hosts
     - sudo cp -f travis-CI/travis-ci-apache /etc/apache2/sites-available/000-default.conf
     - sudo service apache2 restart
+       
 install:
     # Install emonCMS - adapted from https://github.com/emoncms/emoncms/blob/master/docs/LinuxInstall.md
     ## Setup in apache
     - sudo apt-get install php-pear redis-server build-essential php5-dev g++ wget -y
     #- sudo pear channel-discover pear.swiftmailer.org
-    #- printf "\n" | sudo pecl install swift/swift redis
-    #- printf "extension=redis.so" | sudo tee /etc/php5/mods-available/redis.ini 1>&2
-    #- sudo php5enmod redis
+    - printf "\n" | sudo pecl install swift/swift redis
+    - printf "extension=redis.so" | sudo tee /etc/php5/mods-available/redis.ini 1>&2
+    - sudo php5enmod redis
     - sudo cp ./travis-CI/emoncms.conf /etc/apache2/sites-available/emoncms.conf
     - sudo a2ensite emoncms
     - sudo service apache2 reload
@@ -37,7 +40,7 @@ install:
     - sudo chown $USER html
     ## Clone emonCMS
     - cd html
-    - git clone -b stable https://github.com/emoncms/emoncms.git
+    - git clone --depth=50 -b $EMONCMS_BRANCH $EMONCMS_REPO
     - cd /var/www/html/emoncms
     - git pull
     ## Setup database and feeds
@@ -53,26 +56,34 @@ install:
     - cp default.settings.php settings.php
     - sed -i 's/_DB_USER_/travis/g' settings.php
     - sed -i 's/_DB_PASSWORD_//g' settings.php
-     ### Not setting up SMTP    
+    - sed -i 's/$enable_multi_user = false;/$enable_multi_user = true;/g' settings.php
+    ### Not setting up SMTP - needs to be done if we want to test emails features
+    ## Install MHEP theme
+    - cd /var/www/html/emoncms/Theme
+    - git clone --depth=50 https://github.com/carboncoop/MHEP_theme.git CCoop
+    - cd /var/www/html/emoncms/
+    - sed -i 's/$theme = "basic";/$theme = "CCoop";/g' settings.php
     ## Install MHEP
     - cd /var/www/html/emoncms/Modules
-    - git clone --depth=50 --branch=CI https://github.com/cagabi/MyHomeEnergyPlanner.git assessment
+    - git clone --depth=50 --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG assessment
     - cd assessment
     - git submodule update --init --recursive
     ## Setup test suite
-    - cd tests
+    - cd /var/www/html/emoncms/Modules/assessment/tests
     - npm install
-    - ./node_modules/.bin/selenium-standalone install
-    - ./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 & 
+    - "./node_modules/.bin/selenium-standalone install"
+    - "./node_modules/.bin/selenium-standalone start > /dev/null 2>&1 &"
     - mkdir webdrivers
     - cd webdrivers
-    - wget https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip 
-    - unzip chromedriver_linux64.zip 
+    - wget https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip
+    - unzip chromedriver_linux64.zip
     - sudo chmod +x chromedriver
     - wget https://github.com/mozilla/geckodriver/releases/download/v0.22.0/geckodriver-v0.22.0-linux64.tar.gz
     - tar -xvzf geckodriver-v0.22.0-linux64.tar.gz
     - sudo chmod +x geckodriver
-    - export PATH=$PATH:/var/www/html/emoncms/Modules/assessment/tests/webdrivers    
+    - export PATH=$PATH:/var/www/html/emoncms/Modules/assessment/tests/webdrivers
 script:
+    - curl -vL http://127.0.0.1/emoncms
     - cd /var/www/html/emoncms/Modules/assessment/tests
-    - HEADLESS=true ./node_modules/.bin/wdio wdio.conf.js 
+    - HEADLESS=true ./node_modules/.bin/wdio wdio.conf.js --spec travis_specs/emonCMS-setup.js
+    - HEADLESS=true DEBUG=true TRAVIS=true ./node_modules/.bin/wdio wdio.conf.js
