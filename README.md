@@ -1,11 +1,13 @@
 
 ## My Home Energy Planner
 
+[![Build Status](https://travis-ci.org/emoncms/emoncms.svg?branch=master)](https://travis-ci.org/emoncms/MyHomeEnergyPlanner)
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9b4778924dfb4e76b3d1ebcbae5b3579)](https://www.codacy.com/app/emoncms/MyHomeEnergyPlanner?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=emoncms/MyHomeEnergyPlanner&amp;utm_campaign=Badge_Grade)
+
 Open source home energy assessment based on emoncms and emoncms module openbem:
 
 see original: [https://github.com/emoncms/openbem](https://github.com/emoncms/openbem)
-
-![MyHomeEnergyPlanner.png](docs/files/MyHomeEnergyPlanner.png)
 
 ### Getting to Zero Carbon
     
