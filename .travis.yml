@@ -28,7 +28,8 @@ before_install:
 install:
     # Install emonCMS - adapted from https://github.com/emoncms/emoncms/blob/master/docs/LinuxInstall.md
     ## Setup in apache
-    - sudo apt-get install php-pear redis-server build-essential php5-dev g++ wget -y
+    #- sudo apt-get install php-pear redis-server build-essential php5-dev g++ wget -y
+    - sudo apt-get install php-pear build-essential php5-dev g++ wget -y
     - sudo pear channel-discover pear.swiftmailer.org
     #- printf "\n" | sudo pecl install swift/swift redis
     #- printf "extension=redis.so" | sudo tee /etc/php5/mods-available/redis.ini 1>&2
