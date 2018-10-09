@@ -27,48 +27,44 @@ before_install:
        
 install:
     # Install emonCMS - adapted from https://github.com/emoncms/emoncms/blob/master/docs/LinuxInstall.md
-    ## Setup in apache
-    #- sudo apt-get install php-pear redis-server build-essential php5-dev g++ wget -y
+    ## Setup apache
     - sudo apt-get install php-pear build-essential php5-dev g++ wget -y
     - sudo pear channel-discover pear.swiftmailer.org
-    #- printf "\n" | sudo pecl install swift/swift redis
-    #- printf "extension=redis.so" | sudo tee /etc/php5/mods-available/redis.ini 1>&2
-    #- sudo php5enmod redis
     - sudo cp ./travis-CI/emoncms.conf /etc/apache2/sites-available/emoncms.conf
     - sudo a2ensite emoncms
     - sudo service apache2 reload
     - cd /var/www/
     - sudo chown $USER html
+    
     ## Clone emonCMS
     - cd html
     - git clone --depth=50 -b $EMONCMS_BRANCH $EMONCMS_REPO
     - cd /var/www/html/emoncms
     - git pull
-    ## Setup database and feeds
+    
+    ## Setup database
     - mysql -e 'CREATE DATABASE IF NOT EXISTS emoncms DEFAULT CHARACTER SET utf8;'
-    #- sudo mkdir /var/lib/phpfiwa
-    #- sudo mkdir /var/lib/phpfina
-    #- sudo mkdir /var/lib/phptimeseries
-    #- sudo chown www-data:root /var/lib/phpfiwa
-    #- sudo chown www-data:root /var/lib/phpfina
-    #- sudo chown www-data:root /var/lib/phptimeseries
+    
     ## Create settings.php
     - cd /var/www/html/emoncms/
     - cp default.settings.php settings.php
     - sed -i 's/_DB_USER_/travis/g' settings.php
     - sed -i 's/_DB_PASSWORD_//g' settings.php
     - sed -i 's/$enable_multi_user = false;/$enable_multi_user = true;/g' settings.php
-    ### Not setting up SMTP - needs to be done if we want to test emails features
+        ### Not setting up SMTP - needs to be done if we want to test emails features
+    
     ## Install MHEP theme
     - cd /var/www/html/emoncms/Theme
     - git clone --depth=3 https://github.com/carboncoop/MHEP_theme.git CCoop
     - cd /var/www/html/emoncms/
     - sed -i 's/$theme = "basic";/$theme = "CCoop";/g' settings.php
+    
     ## Install MHEP
     - cd /var/www/html/emoncms/Modules
     - git clone --depth=3 --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG assessment
     - cd assessment
     - git submodule update --init --recursive
+    
     ## Setup test suite
     - cd /var/www/html/emoncms/Modules/assessment/tests
     - npm install
@@ -83,9 +79,9 @@ install:
     - tar -xvzf geckodriver-v0.22.0-linux64.tar.gz
     - sudo chmod +x geckodriver
     - export PATH=$PATH:/var/www/html/emoncms/Modules/assessment/tests/webdrivers
+    
 script:
     #- curl -vL http://127.0.0.1/emoncms
     - cd /var/www/html/emoncms/Modules/assessment/tests
     - HEADLESS=true ./node_modules/.bin/wdio wdio.conf.js --spec travis_specs/emonCMS-setup.js
     - HEADLESS=true DEBUG=true TRAVIS=true ./node_modules/.bin/wdio wdio.conf.js
-    
