@@ -53,13 +53,13 @@ install:
     - sed -i 's/$enable_multi_user = false;/$enable_multi_user = true;/g' settings.php
         ### Not setting up SMTP - needs to be done if we want to test emails features
     
-    ## Install MHEP theme
+    # Install MHEP theme
     - cd /var/www/html/emoncms/Theme
     - git clone --depth=3 https://github.com/carboncoop/MHEP_theme.git CCoop
     - cd /var/www/html/emoncms/
     - sed -i 's/$theme = "basic";/$theme = "CCoop";/g' settings.php
     
-    ## Install MHEP
+    # Install MHEP
     - cd /var/www/html/emoncms/Modules
     - git clone --depth=3 --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG assessment
     - cd assessment
@@ -83,5 +83,7 @@ install:
 script:
     #- curl -vL http://127.0.0.1/emoncms
     - cd /var/www/html/emoncms/Modules/assessment/tests
+    # Create emonCMS admin user and run basic test
     - HEADLESS=true ./node_modules/.bin/wdio wdio.conf.js --spec travis_specs/emonCMS-setup.js
+    # Run MHEP tests
     - HEADLESS=true DEBUG=true TRAVIS=true ./node_modules/.bin/wdio wdio.conf.js
