@@ -43,10 +43,6 @@ My Home Energy Planner uses [openFUVC](http://openflooruvaluecalculator.carbon.c
     git submodule init
     git submodule update
 
-In order to enable the "Image gallery" the following variable needs to be added to _settings.php_:
-	
-	  $MHEP_image_gallery = true;
-
 Also you may need to change the ownership and permissions for the _images_ directory:
 
 	chown :www-data images

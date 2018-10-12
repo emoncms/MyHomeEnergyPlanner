@@ -64,6 +64,12 @@ install:
     - git clone --depth=3 --branch=$TRAVIS_BRANCH https://github.com/$TRAVIS_REPO_SLUG assessment
     - cd assessment
     - git submodule update --init --recursive
+    ## Add MHEP settings to settings.php - Do not reuse the key below in a productionn site!!!!
+    - echo "\$MHEP_image_gallery = true; // If true then the image gallery will be available" >> /var/www/html/emoncms/settings.php
+    - echo "\$MHEP_key = e5852d10bfcaf20de76435456ce162b0c36a1fb4469ef72f34103c2b37cb2cec" >> /var/www/html/emoncms/settings.php
+    ## Change ownership of images directory to allow MHEP save pictures
+    - chown :www-data images
+    - chmod 774 images
     
     ## Setup test suite
     - cd /var/www/html/emoncms/Modules/assessment/tests
