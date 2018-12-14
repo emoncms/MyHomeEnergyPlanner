@@ -7,7 +7,7 @@ services:
 - mysql
 addons:
   chrome: stable
-  firefox: latest
+  firefox: "60.0"
 env:
     - EMONCMS_REPO="https://github.com/emoncms/emoncms.git" EMONCMS_BRANCH="stable"
 before_install:
@@ -81,8 +81,8 @@ install:
     - wget https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip
     - unzip chromedriver_linux64.zip
     - sudo chmod +x chromedriver
-    - wget https://github.com/mozilla/geckodriver/releases/download/v0.22.0/geckodriver-v0.22.0-linux64.tar.gz
-    - tar -xvzf geckodriver-v0.22.0-linux64.tar.gz
+    - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz
+    - tar -xvzf geckodriver-v0.23.0-linux64.tar.gz
     - sudo chmod +x geckodriver
     - export PATH=$PATH:/var/www/html/emoncms/Modules/assessment/tests/webdrivers
     
