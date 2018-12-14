@@ -991,7 +991,7 @@ function measureForSummaryTable(measure) {
     html += '<td>' + measure.benefits + '</td>';
 
     // Cost
-    html += '<td class="cost">£' + Number(measure.cost).toFixed(0) + '</td>';
+    html += '<td class="cost">£' + (1.0 * measure.cost_total).toFixed(2) + '</td>';
 
     // Who by
     html += '<td>' + measure.who_by + '</td>';
