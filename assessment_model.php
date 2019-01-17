@@ -82,8 +82,8 @@ class Assessment {
 
     public function create($userid, $name, $description) {
         $userid = (int) $userid;
-        $name = preg_replace('/[^\w\s-.",:{}\[\]]/', '', $name);
-        $description = preg_replace('/[^\w\s-.",:{}\[\]]/', '', $description);
+        $name = preg_replace('/[^\w\s.",:{}\[\]-]/', '', $name);
+        $description = preg_replace('/[^\w\s.",:{}\[\]-]/', '', $description);
 
         $result = $this->mysqli->query("SELECT username FROM users WHERE `id`='$userid'");
         $row = $result->fetch_object();
@@ -178,7 +178,7 @@ class Assessment {
         if (!$this->has_access($userid, $id))
             return false;
 
-        $data = preg_replace('/[^\w\s-%.\/",:{}\'\[\]\\\]/', '', $data);
+        $data = preg_replace('/[^\w\s%.\/",:{}\'\[\]\\\-]/', '', $data);
         $data = json_decode($data);
 
         $mdate = time();
@@ -222,8 +222,8 @@ class Assessment {
         if (!$this->has_access($userid, $id))
             return false;
 
-        $name = preg_replace('/[^\w\s-.",:{}\[\]]/', '', $name);
-        $description = preg_replace('/[^\w\s-.",:{}\[\]]/', '', $description);
+        $name = preg_replace('/[^\w\s.",:{}\[\]-]/', '', $name);
+        $description = preg_replace('/[^\w\s.",:{}\[\]-]/', '', $description);
 
         $mdate = time();
 
@@ -788,7 +788,7 @@ class Assessment {
     }
 
     public function escape_item($item) {
-        $item = preg_replace('/[^\w\s-+."%,:{}\/\[\]\\\]/', '', $item);
+        $item = preg_replace('/[^\w\s+."%,:{}\/\[\]\\\-]/', '', $item);
         //$item = str_replace("'", "\\'", $item);
         return $item;
     }
