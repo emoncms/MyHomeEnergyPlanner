@@ -633,18 +633,26 @@ calc.ventilation = function (data)
         case 'c':
             for (var m = 0; m < 12; m++)
             {
+                // According to SAP 2012 p. 180
                 // if (22b)m < 0.5 × (23b), then (24c) = (23b); otherwise (24c) = (22b) m + 0.5 × (23b)
                 // effective_air_change_rate[m] =
-                if (adjusted_infiltration[m] < 0.5 * data.ventilation.system_air_change_rate) {
-                    effective_air_change_rate[m] = data.ventilation.system_air_change_rate;
-                    infiltration_WK[m] = 0;
-                    ventilation_WK[m] = data.volume * 0.33 * data.ventilation.system_air_change_rate;
-                }
-                else {
-                    effective_air_change_rate[m] = adjusted_infiltration[m] + (0.5 * data.ventilation.system_air_change_rate);
-                    infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
-                    ventilation_WK[m] = data.volume * 0.33 * 0.5 * data.ventilation.system_air_change_rate;
-                }
+                /*if (adjusted_infiltration[m] < 0.5 * data.ventilation.system_air_change_rate) {
+                 effective_air_change_rate[m] = data.ventilation.system_air_change_rate;
+                 infiltration_WK[m] = 0;
+                 ventilation_WK[m] = data.volume * 0.33 * data.ventilation.system_air_change_rate;
+                 }
+                 else {
+                 effective_air_change_rate[m] = adjusted_infiltration[m] + (0.5 * data.ventilation.system_air_change_rate);
+                 infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
+                 ventilation_WK[m] = data.volume * 0.33 * 0.5 * data.ventilation.system_air_change_rate;
+                 }*/
+
+                // But this SAP calculation leads to an underestimation of heat losses from infiltration in some cases. 
+                // So in openBEM for this case we always calculate effective_air_change_rate[m] as (24c) = (22b) m + 0.5 × (23b)
+                // See https://github.com/emoncms/MyHomeEnergyPlanner/issues/407
+                effective_air_change_rate[m] = adjusted_infiltration[m] + (0.5 * data.ventilation.system_air_change_rate);
+                infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
+                ventilation_WK[m] = data.volume * 0.33 * 0.5 * data.ventilation.system_air_change_rate;
             }
             break;
         case 'd':

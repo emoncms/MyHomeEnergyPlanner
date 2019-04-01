@@ -58,6 +58,7 @@ Here we show a list of differences between OpenBEM and SAP2012. Being humble, th
    - MEV: Centralised Mechanical Continuous Extract Ventilation (type 'c' in SAP)
    - MV: Balanced Mechanical Ventilations without heat recovery (type 'b' in SAP)
    - MVHR: Balanced mechanical ventilation with heat recovery (type 'a' in SAP)
+ - [calc.ventilation](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/js/model/model-r10.js#L634): for whole house extract ventilation or positive input ventilation from outside SAP calculation leads to an underestimation of heat losses from infiltration in some cases (it sets i to 0 when infiltration is much lower than the ventilation). OpenBEM will always take into account infiltration loses (second of 24c calculation)
  - SAP defines fixed values for ventilation rates of Extract Ventilation Points, these can be changed in OpenBEM to their actual specification
  - In SAP, the energy requirements for Intermittent Extract Ventilations (type 'd' in SAP) are 0, OpenBEM adds 28kWh/year per Extract Ventilation Point (BREDEM)
  - [calc.temperature](https://github.com/emoncms/MyHomeEnergyPlanner/blob/development/js/model/model-r10.js#L708): SAP assumes specific periods with heating off in week or weekend days (table 9). OpenBEM allows the user to define the number and length of the periods
