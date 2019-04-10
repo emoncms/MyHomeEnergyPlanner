@@ -673,9 +673,9 @@ calc.ventilation = function (data)
                 // But this SAP calculation leads to an underestimation of heat losses from infiltration in some cases. 
                 // So in openBEM for this case we always calculate effective_air_change_rate[m] as (24d)m = 0.5 + [(22b)m2 × 0.5]
                 // See https://github.com/emoncms/MyHomeEnergyPlanner/issues/407
-                effective_air_change_rate[m] = 0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5;
-                infiltration_WK[m] = data.volume * 0.33 * (0.5 + Math.pow(adjusted_infiltration[m], 2) * 0.5 + adjusted_infiltration[m] * adjusted_EVP_air_changes[m]);
-                ventilation_WK[m] = data.volume * 0.33 * Math.pow(adjusted_EVP_air_changes[m], 2) * 0.5;
+                 effective_air_change_rate[m] = adjusted_infiltration[m] + adjusted_EVP_air_changes[m];
+                 infiltration_WK[m] = data.volume * 0.33 * adjusted_infiltration[m];
+                 ventilation_WK[m] = data.volume * 0.33 * adjusted_EVP_air_changes[m];
             }
             break;
     }
