@@ -36,7 +36,7 @@ describe('A Group user', function () {
         expect(browser.isVisible('#project-title=' + assessment_name)).toBe(true);
     });
 
-    it('can share the assessment', function () {
+    /*it('can share the assessment', function () {
         helper.logIfDebug('\nSpecification: A MHEP user can share an a assessment\n---------------------');
         browser.setupInterceptor(); // capture ajax calls 
         helper.shareAssessment(login_details.username2, assessment_id);
@@ -44,7 +44,7 @@ describe('A Group user', function () {
         browser.click('.share-project-openmodal[projectid="' + assessment_id + '"]');
         expect(browser.isVisible('td=' + login_details.username2)).toBe(true);
         browser.click('#modal-share-project .close');
-    });
+    });*/
 
     it('can delete an assessment', function () {
         helper.logIfDebug('\nSpecification: A MHEP user can can delete an assessment\n---------------------');
