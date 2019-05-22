@@ -508,8 +508,8 @@ class Assessment {
 
         $data = json_encode($data);
 
-        $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE userid=? AND id=?");
-        $stmt->bind_param("sii", $data, $userid, $id);
+        $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE id=?");
+        $stmt->bind_param("si", $data, $id);
         $stmt->execute();
         $affected_rows = $stmt->affected_rows;
         $stmt->close();
