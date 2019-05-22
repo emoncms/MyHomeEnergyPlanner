@@ -887,7 +887,9 @@ libraryHelper.prototype.onShowLibraryItemsEditMode = function (library_id) {
         $('#show-library-modal-edit-mode .modal-body').height(new_height);
     })
     // Add events
-    $('#show-library-modal-edit-mode input').on('change', function () {
+    $('#show-library-modal-edit-mode input, \n\
+        #show-library-modal-edit-mode select,\n\
+        #show-library-modal-edit-mode textarea').on('change', function () {
         $(this).parent().parent().attr('changed', 'true');
         $('#show-library-modal-edit-mode #save').removeAttr('disabled');
         $('#show-library-modal-edit-mode #message').html('');
