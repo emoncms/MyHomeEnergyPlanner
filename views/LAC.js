@@ -32,7 +32,7 @@ function LAC_initUI() {
         }
     }
     // Show "Measured applied" in lighting
-    if (data.measures.LAC != undefined && data.measures.LAC.lighting != undefined)
+    if (data.measures != undefined && data.measures.LAC != undefined && data.measures.LAC.lighting != undefined)
         $('#lighting-measure-applied').show();
 
     // Detailed list
