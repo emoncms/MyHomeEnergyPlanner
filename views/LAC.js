@@ -31,6 +31,10 @@ function LAC_initUI() {
             $('#LAC-cooking-fuels').append(out);
         }
     }
+    
+    if(scenario != "master" && data.LAC.L == data.LAC.LLE)
+        $('#apply-measure-lighting').attr("disabled", "true");
+    
     // Show "Measured applied" in lighting
     if (data.measures != undefined && data.measures.LAC != undefined && data.measures.LAC.lighting != undefined)
         $('#lighting-measure-applied').show();
