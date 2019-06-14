@@ -82,6 +82,14 @@ var openbem = {
                     callback(data);
             }});
     },
+    'set_openBEM_version': function (id, version, callback)
+    {
+        $.ajax({type: 'POST', url: path + "assessment/setopenBEMversion.json", data: "id=" + id + "&openBEM_version=" + version, success: function (data) {
+                if(data == false)
+                    window.alert("There was an error updating openBEM version");
+                callback(data);
+            }});
+    },
     extract_inputdata: function (data)
     {
         var inputdata = {};

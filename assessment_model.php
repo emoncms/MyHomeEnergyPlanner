@@ -346,6 +346,34 @@ class Assessment {
         else
             return false;
     }
+    
+    public function get_openBEM_version($userid, $id) {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        if (!$this->has_access($userid, $id))
+            return false;
+
+        $result = $this->mysqli->query("SELECT * FROM " . $this->tablename . " WHERE `id` = '$id'");
+        $row = $result->fetch_object();
+
+        return $row->openBEM_version;
+    }
+           
+    public function set_openBEM_version($userid, $id, $version) {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        $status = preg_replace('/[^\w\s\.]/', '', $version);
+        if (!$this->has_access($userid, $id))
+            return false;
+
+        $stmt = $this->mysqli->prepare("UPDATE `assessment` SET `openBEM_version` = ? WHERE `id` = ?");
+        $stmt->bind_param("si", $version, $id);        
+
+        if ($stmt->execute())
+            return true;
+        else
+            return false;
+    }
 
     // ------------------------------------------------------------------------------------------------
     // LIBRARY

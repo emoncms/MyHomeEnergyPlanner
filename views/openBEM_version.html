@@ -1,0 +1,24 @@
+<h3>openBEM version</h3>
+
+<p>OpenBEM is an Open source Building Energy Model. The calculations follow the 
+    SAP2012 worksheets workflow. SAP is known because its inconsistencies and misleading 
+    assumptions. Because of them, openBEM implementation differs from SAP in all 
+    those situations where we thought it could be improved. A list of differences 
+    <a href="https://github.com/carboncoop/openBEM/#differences-with-sap2012">can be found here.</a></p>
+
+<p>From time to time openBEM is modified. It can be because a bug have being fixed, 
+    a calculation has been improved or a coefficient (like grid carbon intensities) 
+    has changed</p>
+
+<p>To ensure that these changes don't affect previous assessments, since openBEM 
+    10.1.0 we record the version of the model when the assessment is created. This 
+    way an assessment will remain the same every time it is accessed.
+    If you want you can still change the version of the model to run a newer or 
+    older one. Just be aware that the changes in the major number of the version 
+    (like from 9.0.0 to 10.0.0) may not be compatible with your assessment.</p>
+
+<p>This assessment is running version <span id="model-version"></span></p>
+
+<p>Change to a different version:</p>
+<select id="releases"></select> <button class="btn" id="apply-version">Apply</button>
+<p>Here you can see the <a href="https://github.com/carboncoop/openBEM/releases" target=blank">release notes</a></p>

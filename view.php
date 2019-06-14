@@ -1,21 +1,14 @@
 <?php
 global $path, $app_color, $app_title, $app_description, $MHEP_image_gallery;
-$d = $path . "Modules/assessment/";
 
+$d = $path . "Modules/assessment/";
 $projectid = (int) $_GET['id'];
 
-/* $reports = array();
-  $reports_dir = scandir("Modules/assessment/reports");
-  for ($i = 2; $i < count($reports_dir); $i++) {
-  $dir = "Modules/assessment/reports/" . $reports_dir[$i];
-  if (filetype($dir) == 'dir' || filetype($dir) == 'link') {
-  if (file_exists($dir . '/report.json')) {
-  $json = json_decode(file_get_contents($dir . '/report.json'));  // Get JSON version information
-  array_push($reports, array('view' => $reports_dir[$i], 'name' => $json->name));
-  }
-  }
-  } */
-?>        
+if (is_null($args["openBEM_version"]))
+    $openBEM_version = "10.1.0";  // first version of the model since we started recording it
+else
+    $openBEM_version = $args["openBEM_version"];
+?>       
 
 <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>-->
 <link rel="stylesheet" href="<?php echo $d; ?>style.css">
@@ -25,8 +18,8 @@ $projectid = (int) $_GET['id'];
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r5.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r10.js"></script>
+<script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/gh/carboncoop/openBEM@<?php echo $openBEM_version; ?>/datasets.js"></script>
+<script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/gh/carboncoop/openBEM@<?php echo $openBEM_version; ?>/openBEM.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-helper/library-helper-r1.js"></script>
@@ -93,6 +86,7 @@ $projectid = (int) $_GET['id'];
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/fuelsmanager">Fuels manager</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/openBEM_version">openBEM version</a></div>
             </div>
         </div>
 
@@ -249,6 +243,13 @@ $projectid = (int) $_GET['id'];
 
 
 <script>
+
+    //$('#openBem-model').load("https://cdn.jsdelivr.net/gh/carboncoop/openBEM@10.1.0/openBEM.js");
+    /*$.holdReady(true);
+     $.getScript("https://cdn.jsdelivr.net/gh/carboncoop/openBEM@10.1.0/openBEM.js", function () {
+     $.holdReady(false);
+     });*/
+
     //************
     // Variables
     //************
