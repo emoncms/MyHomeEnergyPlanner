@@ -21,7 +21,7 @@ function openBEM_version_initUI() {
 
 $('#openbem').on('click', '#apply-version', function () {
     p.openBEM_version = $('#releases').val();
-    openbem.set_openBEM_version(p.id, p.openBEM_version, function (result) {
+    mhep_helper.set_openBEM_version(p.id, p.openBEM_version, function (result) {
         if (result != false)
             location.reload();
     });

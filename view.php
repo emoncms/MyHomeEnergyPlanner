@@ -13,9 +13,9 @@ else
 <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>-->
 <link rel="stylesheet" href="<?php echo $d; ?>style.css">
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/mhep-helper.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-r3.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-mhep.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
 <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/gh/carboncoop/openBEM@<?php echo $openBEM_version; ?>/datasets.js"></script>
@@ -277,7 +277,7 @@ else
     // Initialize project
     //********************
     var projectid = <?php echo $projectid; ?>;
-    var p = openbem.get(projectid);
+    var p = mhep_helper.get(projectid);
 
     $("#project-title").html(p.name);
     $("#project-description").html(p.description);
@@ -534,7 +534,7 @@ else
         $("#project-title").html(p.name);
         $("#project-description").html(p.description);
         $("#modal-edit-project-name-and-description").modal("hide");
-        openbem.set_name_and_description(projectid, p.name, p.description);
+        mhep_helper.set_name_and_description(projectid, p.name, p.description);
     });
     $("#modal-error-submitting-data-done").on('click', function () {
         location.reload();
@@ -602,7 +602,7 @@ else
 
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
 
-        openbem.set(projectid, project, function (result) {
+        mhep_helper.set(projectid, project, function (result) {
             alertifnotlogged(result);
             alert_if_assessment_locked(result);
         });

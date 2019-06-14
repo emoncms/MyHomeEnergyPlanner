@@ -1,4 +1,4 @@
-var openbem = {
+var mhep_helper = {
     apikey: "",
     'getlist': function ()
     {
@@ -26,7 +26,7 @@ var openbem = {
         var inputdata = {};
         for (z in project)
         {
-            inputdata[z] = openbem.extract_inputdata(project[z]);
+            inputdata[z] = mhep_helper.extract_inputdata(project[z]);
         }
         var result = {};
         $.ajax({type: 'POST', url: path + "assessment/setdata.json", data: "id=" + parseInt(id) + "&data=" + JSON.stringify(inputdata), async: true, success: function (data) {
