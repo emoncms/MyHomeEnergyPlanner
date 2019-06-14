@@ -91,7 +91,7 @@ function assessment_controller() {
 // Create assessment
 // -------------------------------------------------------------------------------------------------------------
         if ($route->action == 'create' && $session['write']) {
-            $result = $assessment->create($session['userid'], get('name'), get('description'));
+            $result = $assessment->create($session['userid'], get('name'), get('description'), get('openBEM_version'));
 
             if (isset($_GET['org'])) {
                 $orgid = (int) $_GET['org'];

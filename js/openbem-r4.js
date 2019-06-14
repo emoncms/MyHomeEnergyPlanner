@@ -34,11 +34,19 @@ var openbem = {
             }});
         //console.log(JSON.stringify(inputdata));
     },
-    'create': function (name, description)
+    'create': function (name, description, orgid, callback)
     {
         var result = 0;
-        $.ajax({type: 'GET', url: path + "assessment/create.json", data: "name=" + name + "&description=" + description, async: false, success: function (data) {
-                result = data;
+        var openBEM_version = {}
+        $.ajax({type: 'GET', async: false, url: "https://api.github.com/repos/carboncoop/openBEM/releases/latest", success: function (data) {
+                openBEM_version = data.tag_name;
+            }
+        });
+        var query = "name=" + name + "&description=" + description + "&openBEM_version=" + openBEM_version;
+        if (orgid != undefined)
+            query += "&org=" + orgid;
+        $.ajax({type: 'GET', url: path + "assessment/create.json", data: query, async: false, success: function (data) {
+                callback(data);
             }});
         return result;
     },
@@ -85,7 +93,7 @@ var openbem = {
     'set_openBEM_version': function (id, version, callback)
     {
         $.ajax({type: 'POST', url: path + "assessment/setopenBEMversion.json", data: "id=" + id + "&openBEM_version=" + version, success: function (data) {
-                if(data == false)
+                if (data == false)
                     window.alert("There was an error updating openBEM version");
                 callback(data);
             }});

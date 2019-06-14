@@ -80,10 +80,11 @@ class Assessment {
         return $projects;
     }
 
-    public function create($userid, $name, $description) {
+    public function create($userid, $name, $description, $openBEM_version) {
         $userid = (int) $userid;
         $name = preg_replace('/[^\w\s.",:{}\[\]-]/', '', $name);
         $description = preg_replace('/[^\w\s.",:{}\[\]-]/', '', $description);
+        $openBEM_version = preg_replace('/[^\w\s\.]/', '', $openBEM_version);
 
         $result = $this->mysqli->query("SELECT username FROM users WHERE `id`='$userid'");
         $row = $result->fetch_object();
@@ -95,7 +96,7 @@ class Assessment {
         // Dont save if json_decode fails
 
         $data = false;
-        $result = $this->mysqli->query("INSERT INTO " . $this->tablename . " (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data')");
+        $result = $this->mysqli->query("INSERT INTO " . $this->tablename . " (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`,`openBEM_version`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data','$openBEM_version')");
         $id = $this->mysqli->insert_id;
 
 
@@ -106,7 +107,8 @@ class Assessment {
             'status' => $status,
             'userid' => $userid,
             'author' => $author,
-            'mdate' => $mdate
+            'mdate' => $mdate,
+            'openBEM_version' => $openBEM_version
         );
 
         $this->access($id, $userid, 1);

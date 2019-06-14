@@ -248,7 +248,16 @@ $d = $path . "Modules/assessment/";
         if (name == "") {
             alert("Please enter a project name");
         } else {
-            var orgselector = "";
+            var callback = function (project) {
+                    projects.push(project);
+                    draw_projects("#projects", projects);
+                    $("#noprojects").hide();
+                };
+            if (viewmode == "organisation" && orgid != 0)
+                openbem.create(name, description, orgid, callback);
+            else 
+                openbem.create(name, description, null, callback);
+            /*var orgselector = "";
             if (viewmode == "organisation" && orgid != 0)
                 orgselector += "&org=" + orgid;
             $.ajax({
@@ -259,7 +268,7 @@ $d = $path . "Modules/assessment/";
                     draw_projects("#projects", projects);
                     $("#noprojects").hide();
                 }
-            });
+            });*/
             $("#project-name-input").val("");
             $("#project-description-input").val("");
             $("#modal-assessment-create").modal("hide");
