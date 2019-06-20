@@ -44,7 +44,10 @@ var mhep_helper = {
                 if (orgid != undefined)
                     query += "&org=" + orgid;
                 $.ajax({type: 'GET', url: path + "assessment/create.json", data: query, async: false, success: function (data) {
-                        callback(data);
+                        if (data == false)
+                            window.alert("Assesment couldn't be created")
+                        else
+                            callback(data);
                     }});
             }
         });

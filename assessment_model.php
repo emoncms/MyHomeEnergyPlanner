@@ -97,24 +97,25 @@ class Assessment {
 
         $data = false;
         $result = $this->mysqli->query("INSERT INTO " . $this->tablename . " (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`,`openBEM_version`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data','$openBEM_version')");
-        //$result = $this->mysqli->query("INSERT INTO " . $this->tablename . " (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data')");
         $id = $this->mysqli->insert_id;
 
+        if ($id > 0) {
+            $project = array(
+                'id' => $id,
+                'name' => $name,
+                'description' => $description,
+                'status' => $status,
+                'userid' => $userid,
+                'author' => $author,
+                'mdate' => $mdate,
+                'openBEM_version' => $openBEM_version
+            );
 
-        $project = array(
-            'id' => $id,
-            'name' => $name,
-            'description' => $description,
-            'status' => $status,
-            'userid' => $userid,
-            'author' => $author,
-            'mdate' => $mdate,
-            'openBEM_version' => $openBEM_version
-        );
-
-        $this->access($id, $userid, 1);
-
-        return $project;
+            $this->access($id, $userid, 1);
+            return $project;
+        }
+        else 
+            return false;
     }
 
     public function delete($userid, $id) {
@@ -349,7 +350,7 @@ class Assessment {
         else
             return false;
     }
-    
+
     public function get_openBEM_version($userid, $id) {
         $id = (int) $id;
         $userid = (int) $userid;
@@ -361,7 +362,7 @@ class Assessment {
 
         return $row->openBEM_version;
     }
-           
+
     public function set_openBEM_version($userid, $id, $version) {
         $id = (int) $id;
         $userid = (int) $userid;
@@ -370,7 +371,7 @@ class Assessment {
             return false;
 
         $stmt = $this->mysqli->prepare("UPDATE `assessment` SET `openBEM_version` = ? WHERE `id` = ?");
-        $stmt->bind_param("si", $version, $id);        
+        $stmt->bind_param("si", $version, $id);
 
         if ($stmt->execute())
             return true;
