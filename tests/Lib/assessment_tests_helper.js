@@ -32,7 +32,7 @@ module.exports = {
                 .setValue('#project-name-input', name)
                 .setValue('#project-description-input', description)
                 .click('button=Create');
-        return browser.getRequest(0).response.body.id;
+        return browser.getRequest(1).response.body.id;
     },
     goToAssessment: function (id) {
         this.logIfDebug('Going to assessment ' + id);
@@ -52,7 +52,7 @@ module.exports = {
     },
     logout: function () {
         this.logIfDebug('Logging out');
-        browser.click('a*=Logout');
+        browser.click('.menu-assessment #logout-link');
     }
     ,
     logIfDebug(message) {
