@@ -97,6 +97,7 @@ class Assessment {
 
         $data = false;
         $result = $this->mysqli->query("INSERT INTO " . $this->tablename . " (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`,`openBEM_version`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data','$openBEM_version')");
+        //$result = $this->mysqli->query("INSERT INTO " . $this->tablename . " (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data')");
         $id = $this->mysqli->insert_id;
 
 

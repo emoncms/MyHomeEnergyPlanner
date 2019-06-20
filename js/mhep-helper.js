@@ -40,14 +40,14 @@ var mhep_helper = {
         var openBEM_version = {}
         $.ajax({type: 'GET', async: false, url: "https://api.github.com/repos/carboncoop/openBEM/releases/latest", success: function (data) {
                 openBEM_version = data.tag_name;
+                var query = "name=" + name + "&description=" + description + "&openBEM_version=" + openBEM_version;
+                if (orgid != undefined)
+                    query += "&org=" + orgid;
+                $.ajax({type: 'GET', url: path + "assessment/create.json", data: query, async: false, success: function (data) {
+                        callback(data);
+                    }});
             }
         });
-        var query = "name=" + name + "&description=" + description + "&openBEM_version=" + openBEM_version;
-        if (orgid != undefined)
-            query += "&org=" + orgid;
-        $.ajax({type: 'GET', url: path + "assessment/create.json", data: query, async: false, success: function (data) {
-                callback(data);
-            }});
         return result;
     },
     'delete': function (id)
