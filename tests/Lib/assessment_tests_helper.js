@@ -73,4 +73,15 @@ function login(url, username, password) {
             .setValue('[name=username]', username)
             .setValue('[name=password]', password)
             .click('#login');
+    if (isAlertPresent()) {
+        browser.alertAccept()
+    }
+}
+function isAlertPresent() {
+    try {
+        browser.alertText()
+        return true
+    } catch (err) {
+        return false
+    }
 }
