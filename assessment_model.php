@@ -652,7 +652,7 @@ class Assessment {
         while ($row = $result->fetch_object()) {
             global $user;
             if ($row->userid != 0)
-                $username = $user->get_name($row->userid);
+                $username = $user->get_username($row->userid);
             if ($row->orgid != 0) {
                 $orgid = $row->orgid;
                 $orgresult = $this->mysqli->query("SELECT * FROM organisations WHERE `id`='$orgid'");
