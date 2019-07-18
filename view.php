@@ -294,8 +294,8 @@ else
     var historical_index; // pointer for the historical array, pointing the current version of project
     historical.unshift(JSON.stringify(project));
     historical_index = 0;
-    $('ul.nav.pull-right').prepend('<li id="redo"><a><img src="' + path + 'Modules/assessment/img-assets/redo.gif" title="Redo" style="width:14px" /></a></li>');
-    $('ul.nav.pull-right').prepend('<li id="undo"><a><img src="' + path + 'Modules/assessment/img-assets/undo.gif" title="Undo" style="width:14px" / > </a></li > ');
+    $('.navbar-inner').append('<div style="display:inline" class="menu-assessment pull-right" id="redo"><a><img src="' + path + 'Modules/assessment/img-assets/redo.gif" title="Redo" style="width:14px" /></a></div>');
+    $('.navbar-inner').append('<div style="display:inline" class="menu-assessment pull-right" id="undo"><a><img src="' + path + 'Modules/assessment/img-assets/undo.gif" title="Undo" style="width:14px" / > </a></div> ');
     refresh_undo_redo_buttons();
 
     //**************************
@@ -540,7 +540,7 @@ else
         location.reload();
     });
     // Do/undo
-    $('ul.nav.pull-right').on('click', '#undo', function () {
+    $('#emoncms-navbar').on('click', '#undo', function () {
         if (historical_index < historical.length - 1) {
             historical_index++;
             project = JSON.parse(historical[historical_index]);
@@ -549,7 +549,7 @@ else
 
         refresh_undo_redo_buttons();
     });
-    $('ul.nav.pull-right').on('click', '#redo', function () {
+    $('#emoncms-navbar').on('click', '#redo', function () {
         if (historical_index > 0) {
             historical_index--;
             project = JSON.parse(historical[historical_index]);
