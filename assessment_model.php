@@ -201,7 +201,7 @@ class Assessment {
             }
             else {
                 $stmt = $this->mysqli->prepare("UPDATE " . $this->tablename . " SET `data` = ?, `mdate` = ? WHERE `id` = ?");
-                $stmt->bind_param("sbi", $data, $mdate, $id);
+                $stmt->bind_param("ssi", $data, $mdate, $id);
                 $stmt->execute();
             }
 
