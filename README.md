@@ -1,3 +1,9 @@
+# This project isn't actively maintained!
+
+Carbon Co-op, who were responsible for the bulk of the maintenance, have ported it over to Python and continued work there.  It remains open source - you can find it at https://gitlab.com/carboncoop/mhep.
+
+If *you* want to continue development here please get in touch and we can facilitate that.
+
 
 ## My Home Energy Planner
 
