@@ -59,3 +59,7 @@ The following variables can be added to setting.php
 
  - $MHEP_image_gallery = true; // If true then the image gallery will be available
  - $MHEP_key = "a 32 byte key"; // If set MHEP will encrypt the assessment data in the database . Command to generate it (32 bytes = 256 bits): openssl rand -hex 32
+
+## openBEM model https://github.com/carboncoop/openBEM
+
+## openFUVC model https://github.com/carboncoop/openFUVC
