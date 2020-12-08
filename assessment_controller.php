@@ -7,6 +7,9 @@ function assessment_controller() {
     global $session, $route, $mysqli, $fullwidth;
     global $MHEP_image_gallery; // Should be set in settings.php to allow image gallery functionality
     $fullwidth = true;
+    
+    global $MHEP_key;
+    if (!isset($MHEP_key)) $MHEP_key = "unsecure";
 
     /* --------------------------------------------------------------------------
       // Backwards compatibility:
