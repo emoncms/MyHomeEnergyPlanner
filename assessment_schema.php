@@ -9,6 +9,7 @@ $schema['assessment'] = array(
     'initialisation_vector'=>array('type' => 'binary(16)'),
     'mdate' => array('type' => 'int(11)'),
     'status' => array('type' => 'text'),
+    'openBEM_version' => array('type' => 'text'),
     'data' => array('type' => 'mediumtext')
 );
 

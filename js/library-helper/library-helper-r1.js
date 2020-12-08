@@ -887,7 +887,9 @@ libraryHelper.prototype.onShowLibraryItemsEditMode = function (library_id) {
         $('#show-library-modal-edit-mode .modal-body').height(new_height);
     })
     // Add events
-    $('#show-library-modal-edit-mode input').on('change', function () {
+    $('#show-library-modal-edit-mode input, \n\
+        #show-library-modal-edit-mode select,\n\
+        #show-library-modal-edit-mode textarea').on('change', function () {
         $(this).parent().parent().attr('changed', 'true');
         $('#show-library-modal-edit-mode #save').removeAttr('disabled');
         $('#show-library-modal-edit-mode #message').html('');
@@ -1527,139 +1529,139 @@ libraryHelper.prototype.generation_measures_library_to_html_edit_mode = function
     out += '</table></div>';
     return out;
 };
-/*libraryHelper.prototype.heating_systems_library_to_html_edit_mode = function (origin, library_id) {
- var out = "";
- var selected_library = this.get_library_by_id(library_id);
- var library = selected_library.data;
- var library_id = selected_library.id;
- this.orderObjectsByKeys(library);
- var out = '<div><table><tr><th>Tag</th><th>Name</th><th>Category</th><th>Winter efficiency (space heating)</th><th>Summer efficiency (water heating)</th><th>Central heating pump (kWh/year)</th><th>Fans and supply pumps (kWh/year)<i class="icon-question-sign" title="Taken into account for Warm air systems" /></th><th>Responsiveness</th><th>Combi loss</th><th>Primary circuit loss<i class="icon-question-sign" title="No primary loss for the following:\n\   - Electric inmersion heater.\n\   - Combi boiler\n\   - CPSU(including electric CPSU)\n\   - Boiler and thermal store within a single casing\n\   - Separate boiler and thermal store connected by no more than 1.5m of insulated pipework\n\ \n\For other cases (indirect cylinders and thermal stores connected by unsinsulated pipework or more than 1.5m of insulated pipework) the loss is calculated according to the amount of insulated pipework and the type of storage heating controls (in the Hot Water System section) - SAP2012 table 3, p. 199" /></th><th>Description</th><th></th></tr>';
- if (Object.keys(library).length == 0)
- out += '';
- else {
- for (z in library) {
- var item = library[z];
- out += '<tr tag="' + z + '" title="' + z + '" class="item"><td index="tag"><input class="w100" type="text" value="' + z + '" /></td>';
- out += '<td index="name" title="' + item.name + '"><input class="w350" type="text" value="' + item.name + '" /></td>';
- out += '<td index="category"><select class="w200" value="' + item.category + '">'
- var categories = ['Combi boilers', 'System boilers', 'Heat pumps', 'Room heaters', 'Warm air systems', 'Hot water only'];
- for (index in categories) {
- if (item.category == categories[index])
- out += '<option value="' + categories[index] + '" selected>' + categories[index] + '</option>';
- else
- out += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
- }
- out += '</select></td>';
- out += '<td index="winter_efficiency"><input class="w150" type="number" min="0" max="100" step="1" value="' + item.winter_efficiency + '" /></td>';
- out += '<td index="summer_efficiency"><input class="w150" type="number" min="0" max="100" step="1" value="' + item.summer_efficiency + '" /></td>';
- out += '<td index="central_heating_pump"><input class="w150" type="number" min="0" step="1" value="' + item.central_heating_pump + '" /></td>';
- out += '<td index="fans_and_supply_pumps"><input class="w150" type="number" min="0" step="1" value="' + item.fans_and_supply_pumps + '" /></td>';
- out += '<td index="responsiveness"><input class="w100" type="number" min="0" step="0.1" value="' + item.responsiveness + '" /></td>';
- out += '<td index="combi_loss"><select class="w200" value="' + item.combi_loss + '">'
- var options = ['0', 'Instantaneous, without keep hot-facility', 'Instantaneous, with keep-hot facility controlled by time clock', 'Instantaneous, with keep-hot facility not controlled by time clock', 'Storage combi boiler >= 55 litres', 'Storage combi boiler < 55 litres'];
- for (index in options) {
- if (item.instantaneous_water_heating == options[index])
- out += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
- else
- out += '<option value="' + options[index] + '">' + options[index] + '</option>';
- }
- out += '</select></td>';
- out += '<td index="primary_circuit_loss"><select class="w150" value="' + item.primary_circuit_loss + '">'
- var options = ['Yes', 'No'];
- for (index in options) {
- if (item.primary_circuit_loss == options[index])
- out += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
- else
- out += '<option value="' + options[index] + '">' + options[index] + '</option>';
- }
- out += '</select></td>';
- out += '<td index="source" title="' + item.name + '"><input class="w300" type="text" value="' + item.source + '" /></td>';
- //out += this.measure_fields_for_library_to_html_edit_mode(item);
- out += '<td><i class="icon-trash if-write delete-library-item" tag="' + z + '" library="' + library_id + '" style="cursor:pointer;margin-left:10px;margin-right:20px"></i></td>';
- out += '</tr>';
- }
- }
- out += '</table></div>';
- return out;
- };*/
 libraryHelper.prototype.heating_systems_library_to_html_edit_mode = function (origin, library_id) {
-    var out = "<style> table.test th{  text-align:left;  width: 250px}table.test td{  padding:10px 15px}</style>";
+    var out = "";
     var selected_library = this.get_library_by_id(library_id);
     var library = selected_library.data;
     var library_id = selected_library.id;
     this.orderObjectsByKeys(library);
-    out += '<div><table class="test">';
+    var out = '<div><table><tr><th>Tag</th><th>Name</th><th>Category</th><th>Winter efficiency (space heating)</th><th>Summer efficiency (water heating)</th><th>Central heating pump (kWh/year)</th><th>Fans and supply pumps (kWh/year)<i class="icon-question-sign" title="Taken into account for Warm air systems" /></th><th>Responsiveness</th><th>Combi loss</th><th>Primary circuit loss<i class="icon-question-sign" title="No primary loss for the following:\n\   - Electric inmersion heater.\n\   - Combi boiler\n\   - CPSU(including electric CPSU)\n\   - Boiler and thermal store within a single casing\n\   - Separate boiler and thermal store connected by no more than 1.5m of insulated pipework\n\ \n\For other cases (indirect cylinders and thermal stores connected by unsinsulated pipework or more than 1.5m of insulated pipework) the loss is calculated according to the amount of insulated pipework and the type of storage heating controls (in the Hot Water System section) - SAP2012 table 3, p. 199" /></th><th>Description</th><th></th></tr>';
     if (Object.keys(library).length == 0)
         out += '';
     else {
-        var tr = [];
-        tr[0] = '<tr><th>Tag</th>';
-        tr[1] = '<tr><th>Name</th>';
-        tr[2] = '<tr><th>Category</th>';
-        tr[3] = '<tr><th>Winter efficiency (space heating)</th>';
-        tr[4] = '<tr><th>Summer efficiency (water heating)</th>';
-        tr[5] = '<tr><th>Central heating pump (kWh/year)</th>';
-        tr[6] = '<tr><th>Fans and supply pumps (kWh/year)<i class="icon-question-sign" title="Taken into account for Warm air systems" /></th>';
-        tr[7] = '<tr><th>Responsiveness</th>';
-        tr[8] = '<tr><th>Combi loss</th>';
-        tr[9] = '<tr><th>Primary circuit loss<i class="icon-question-sign" title="No primary loss for the following:\n\   - Electric inmersion heater.\n\   - Combi boiler\n\   - CPSU(including electric CPSU)\n\   - Boiler and thermal store within a single casing\n\   - Separate boiler and thermal store connected by no more than 1.5m of insulated pipework\n\ \n\For other cases (indirect cylinders and thermal stores connected by unsinsulated pipework or more than 1.5m of insulated pipework) the loss is calculated according to the amount of insulated pipework and the type of storage heating controls (in the Hot Water System section) - SAP2012 table 3, p. 199" /></th>';
         for (z in library) {
             var item = library[z];
-            for (var field in item) {
-
-            }
-            tr[0] += '<td index="tag"><input class="w100" type="text" value="' + z + '" /></td>';
-            tr[1] += '<td index="name" title="' + item.name + '"><textarea rows=4 cols=50>' + item.name + '</textarea></td>';
-            tr[2] += '<td index="category"><select class="w200" value="' + item.category + '">'
+            out += '<tr tag="' + z + '" title="' + z + '" class="item"><td index="tag"><input class="w100" type="text" value="' + z + '" /></td>';
+            out += '<td index="name" title="' + item.name + '"><input class="w350" type="text" value="' + item.name + '" /></td>';
+            out += '<td index="category"><select class="w200" value="' + item.category + '">'
             var categories = ['Combi boilers', 'System boilers', 'Heat pumps', 'Room heaters', 'Warm air systems', 'Hot water only'];
             for (index in categories) {
                 if (item.category == categories[index])
-                    tr[2] += '<option value="' + categories[index] + '" selected>' + categories[index] + '</option>';
+                    out += '<option value="' + categories[index] + '" selected>' + categories[index] + '</option>';
                 else
-                    tr[2] += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
+                    out += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
             }
-            tr[2] += '</select></td>';
-            tr[3] += '<td index="winter_efficiency"><input class="w150" type="number" min="0" max="100" step="1" value="' + item.winter_efficiency + '" /></td>';
-            tr[4] += '<td index="summer_efficiency"><input class="w150" type="number" min="0" max="100" step="1" value="' + item.summer_efficiency + '" /></td>';
-            tr[5] += '<td index="central_heating_pump"><input class="w150" type="number" min="0" step="1" value="' + item.central_heating_pump + '" /></td>';
-            tr[6] += '<td index="fans_and_supply_pumps"><input class="w150" type="number" min="0" step="1" value="' + item.fans_and_supply_pumps + '" /></td>';
-            tr[7] += '<td index="responsiveness"><input class="w100" type="number" min="0" step="0.1" value="' + item.responsiveness + '" /></td>';
-            tr[8] += '<td index="combi_loss"><select class="w200" value="' + item.combi_loss + '">'
+            out += '</select></td>';
+            out += '<td index="winter_efficiency"><input class="w150" type="number" min="0" max="100" step="1" value="' + item.winter_efficiency + '" /></td>';
+            out += '<td index="summer_efficiency"><input class="w150" type="number" min="0" max="100" step="1" value="' + item.summer_efficiency + '" /></td>';
+            out += '<td index="central_heating_pump"><input class="w150" type="number" min="0" step="1" value="' + item.central_heating_pump + '" /></td>';
+            out += '<td index="fans_and_supply_pumps"><input class="w150" type="number" min="0" step="1" value="' + item.fans_and_supply_pumps + '" /></td>';
+            out += '<td index="responsiveness"><input class="w100" type="number" min="0" step="0.1" value="' + item.responsiveness + '" /></td>';
+            out += '<td index="combi_loss"><select class="w200" value="' + item.combi_loss + '">'
             var options = ['0', 'Instantaneous, without keep hot-facility', 'Instantaneous, with keep-hot facility controlled by time clock', 'Instantaneous, with keep-hot facility not controlled by time clock', 'Storage combi boiler >= 55 litres', 'Storage combi boiler < 55 litres'];
             for (index in options) {
                 if (item.instantaneous_water_heating == options[index])
-                    tr[8] += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
+                    out += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
                 else
-                    tr[8] += '<option value="' + options[index] + '">' + options[index] + '</option>';
+                    out += '<option value="' + options[index] + '">' + options[index] + '</option>';
             }
-            tr[8] += '</select></td>';
-            tr[9] += '<td index="primary_circuit_loss"><select class="w150" value="' + item.primary_circuit_loss + '">'
+            out += '</select></td>';
+            out += '<td index="primary_circuit_loss"><select class="w150" value="' + item.primary_circuit_loss + '">'
             var options = ['Yes', 'No'];
             for (index in options) {
                 if (item.primary_circuit_loss == options[index])
-                    tr[9] += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
+                    out += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
                 else
-                    tr[9] += '<option value="' + options[index] + '">' + options[index] + '</option>';
+                    out += '<option value="' + options[index] + '">' + options[index] + '</option>';
             }
-            tr[9] += '</select></td>';
+            out += '</select></td>';
+            out += '<td index="source" title="' + item.name + '"><input class="w300" type="text" value="' + item.source + '" /></td>';
+            //out += this.measure_fields_for_library_to_html_edit_mode(item);
+            out += '<td><i class="icon-trash if-write delete-library-item" tag="' + z + '" library="' + library_id + '" style="cursor:pointer;margin-left:10px;margin-right:20px"></i></td>';
+            out += '</tr>';
         }
-    }
-    tr[0] += '</tr>';
-    tr[1] += '</tr>';
-    tr[2] += '</tr>';
-    tr[3] += '</tr>';
-    tr[4] += '</tr>';
-    tr[5] += '</tr>';
-    tr[6] += '</tr>';
-    tr[7] += '</tr>';
-    tr[8] += '</tr>';
-    tr[9] += '</tr>';
-    for (var row in tr) {
-        out += tr[row];
     }
     out += '</table></div>';
     return out;
 };
+/*libraryHelper.prototype.heating_systems_library_to_html_edit_mode = function (origin, library_id) {
+ var out = "<style> table.test th{  text-align:left;  width: 250px}table.test td{  padding:10px 15px}</style>";
+ var selected_library = this.get_library_by_id(library_id);
+ var library = selected_library.data;
+ var library_id = selected_library.id;
+ this.orderObjectsByKeys(library);
+ out += '<div><table class="test">';
+ if (Object.keys(library).length == 0)
+ out += '';
+ else {
+ var tr = [];
+ tr[0] = '<tr><th>Tag</th>';
+ tr[1] = '<tr><th>Name</th>';
+ tr[2] = '<tr><th>Category</th>';
+ tr[3] = '<tr><th>Winter efficiency (space heating)</th>';
+ tr[4] = '<tr><th>Summer efficiency (water heating)</th>';
+ tr[5] = '<tr><th>Central heating pump (kWh/year)</th>';
+ tr[6] = '<tr><th>Fans and supply pumps (kWh/year)<i class="icon-question-sign" title="Taken into account for Warm air systems" /></th>';
+ tr[7] = '<tr><th>Responsiveness</th>';
+ tr[8] = '<tr><th>Combi loss</th>';
+ tr[9] = '<tr><th>Primary circuit loss<i class="icon-question-sign" title="No primary loss for the following:\n\   - Electric inmersion heater.\n\   - Combi boiler\n\   - CPSU(including electric CPSU)\n\   - Boiler and thermal store within a single casing\n\   - Separate boiler and thermal store connected by no more than 1.5m of insulated pipework\n\ \n\For other cases (indirect cylinders and thermal stores connected by unsinsulated pipework or more than 1.5m of insulated pipework) the loss is calculated according to the amount of insulated pipework and the type of storage heating controls (in the Hot Water System section) - SAP2012 table 3, p. 199" /></th>';
+ for (z in library) {
+ var item = library[z];
+ for (var field in item) {
+ 
+ }
+ tr[0] += '<td index="tag"><input class="w100" type="text" value="' + z + '" /></td>';
+ tr[1] += '<td index="name" title="' + item.name + '"><textarea rows=4 cols=50>' + item.name + '</textarea></td>';
+ tr[2] += '<td index="category"><select class="w200" value="' + item.category + '">'
+ var categories = ['Combi boilers', 'System boilers', 'Heat pumps', 'Room heaters', 'Warm air systems', 'Hot water only'];
+ for (index in categories) {
+ if (item.category == categories[index])
+ tr[2] += '<option value="' + categories[index] + '" selected>' + categories[index] + '</option>';
+ else
+ tr[2] += '<option value="' + categories[index] + '">' + categories[index] + '</option>';
+ }
+ tr[2] += '</select></td>';
+ tr[3] += '<td index="winter_efficiency"><input class="w150" type="number" min="0" max="100" step="1" value="' + item.winter_efficiency + '" /></td>';
+ tr[4] += '<td index="summer_efficiency"><input class="w150" type="number" min="0" max="100" step="1" value="' + item.summer_efficiency + '" /></td>';
+ tr[5] += '<td index="central_heating_pump"><input class="w150" type="number" min="0" step="1" value="' + item.central_heating_pump + '" /></td>';
+ tr[6] += '<td index="fans_and_supply_pumps"><input class="w150" type="number" min="0" step="1" value="' + item.fans_and_supply_pumps + '" /></td>';
+ tr[7] += '<td index="responsiveness"><input class="w100" type="number" min="0" step="0.1" value="' + item.responsiveness + '" /></td>';
+ tr[8] += '<td index="combi_loss"><select class="w200" value="' + item.combi_loss + '">'
+ var options = ['0', 'Instantaneous, without keep hot-facility', 'Instantaneous, with keep-hot facility controlled by time clock', 'Instantaneous, with keep-hot facility not controlled by time clock', 'Storage combi boiler >= 55 litres', 'Storage combi boiler < 55 litres'];
+ for (index in options) {
+ if (item.instantaneous_water_heating == options[index])
+ tr[8] += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
+ else
+ tr[8] += '<option value="' + options[index] + '">' + options[index] + '</option>';
+ }
+ tr[8] += '</select></td>';
+ tr[9] += '<td index="primary_circuit_loss"><select class="w150" value="' + item.primary_circuit_loss + '">'
+ var options = ['Yes', 'No'];
+ for (index in options) {
+ if (item.primary_circuit_loss == options[index])
+ tr[9] += '<option value="' + options[index] + '" selected>' + options[index] + '</option>';
+ else
+ tr[9] += '<option value="' + options[index] + '">' + options[index] + '</option>';
+ }
+ tr[9] += '</select></td>';
+ }
+ }
+ tr[0] += '</tr>';
+ tr[1] += '</tr>';
+ tr[2] += '</tr>';
+ tr[3] += '</tr>';
+ tr[4] += '</tr>';
+ tr[5] += '</tr>';
+ tr[6] += '</tr>';
+ tr[7] += '</tr>';
+ tr[8] += '</tr>';
+ tr[9] += '</tr>';
+ for (var row in tr) {
+ out += tr[row];
+ }
+ out += '</table></div>';
+ return out;
+ };*/
 libraryHelper.prototype.heating_systems_measures_library_to_html_edit_mode = function (origin, library_id) {
     var out = "";
     var selected_library = this.get_library_by_id(library_id);

@@ -16,6 +16,11 @@ To install the webdrivers, download:
 
 Include their location in your PATH environment variable (/etc/environment)
 
+This setup was originally made using node v.8.15 and there have been problems with 
+newer versions. If your node version is different (`node -v`) you can use nvm to change it. 
+Follow instructions on how [to install nvm](https://github.com/creationix/nvm/blob/master/README.md).
+Then install node v8.15 `nvm install 8.15`, run `nvm use node 8.15` (only affects your current terminal).
+
 ## To run the tests
 First start the selenium server
 `./node_modules/.bin/selenium-standalone start`

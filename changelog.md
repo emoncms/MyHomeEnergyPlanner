@@ -5,7 +5,15 @@ Given a version number MAJOR.MINOR.PATCH:
 - MINOR version MUST be incremented if new, backwards compatible functionality is introduced to the public API. It MUST be incremented if any public API functionality is marked as deprecated. It MAY be incremented if substantial new functionality or improvements are introduced within the private code. It MAY include patch level changes.
 - PATCH version MUST be incremented if only backwards compatible bug fixes are introduced. A bug fix is defined as an internal change that fixes incorrect behaviour.
 
-## Version 1.1.2 - Prerelease (still adding commits)
+## Version 1.1.2 
+
+ - Fix bug in invalid regular expresion after upgrading php
+ - Fix total cost of measure in summary table showing cost per unit
+ - Images directory creation when cloning repository
+ - CI with Travis
+ - Test suite and tests
+ - Added delete_all_from_user() to model
+ - Issue 401: Sections 13a, 13b, 13c of report not displaying properly
  - Issue 33: assessments with a "Complete status" are locked
  - Issue 185: added notes_for_developers.md
  - Cleanup of unused files

@@ -74,7 +74,8 @@ function assessment_controller() {
         if ($route->action == "view" && $session['write']) {
             $locked = $assessment->completed(get('id'));
             $reports = $assessment->accesible_reports($session['userid']);
-            $result = view("Modules/assessment/view.php", array('reports' => $reports, 'locked' => $locked));
+            $openBEM_version = $assessment->get_openBEM_version($session['userid'], get('id'));
+            $result = view("Modules/assessment/view.php", array('reports' => $reports, 'locked' => $locked, "openBEM_version" => $openBEM_version));
         }
 
         if ($route->action == "list" && $session['write'])
@@ -90,7 +91,7 @@ function assessment_controller() {
 // Create assessment
 // -------------------------------------------------------------------------------------------------------------
         if ($route->action == 'create' && $session['write']) {
-            $result = $assessment->create($session['userid'], get('name'), get('description'));
+            $result = $assessment->create($session['userid'], get('name'), get('description'), get('openBEM_version'));
 
             if (isset($_GET['org'])) {
                 $orgid = (int) $_GET['org'];
@@ -127,6 +128,10 @@ function assessment_controller() {
                 $status = $_GET['status'];
                 $result = $assessment->set_status($session['userid'], get('id'), $status);
             }
+        }
+        if ($route->action == 'setopenBEMversion' && $session['write']) {
+            $openBEM_version = prop('openBEM_version');
+            $result = $assessment->set_openBEM_version($session['userid'], prop('id'), $openBEM_version);
         }
 
 // -------------------------------------------------------------------------------------------------------------

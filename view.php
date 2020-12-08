@@ -1,32 +1,25 @@
 <?php
 global $path, $app_color, $app_title, $app_description, $MHEP_image_gallery;
-$d = $path . "Modules/assessment/";
 
+$d = $path . "Modules/assessment/";
 $projectid = (int) $_GET['id'];
 
-/* $reports = array();
-  $reports_dir = scandir("Modules/assessment/reports");
-  for ($i = 2; $i < count($reports_dir); $i++) {
-  $dir = "Modules/assessment/reports/" . $reports_dir[$i];
-  if (filetype($dir) == 'dir' || filetype($dir) == 'link') {
-  if (file_exists($dir . '/report.json')) {
-  $json = json_decode(file_get_contents($dir . '/report.json'));  // Get JSON version information
-  array_push($reports, array('view' => $reports_dir[$i], 'name' => $json->name));
-  }
-  }
-  } */
-?>        
+if (is_null($args["openBEM_version"]))
+    $openBEM_version = "10.1.0";  // first version of the model since we started recording it
+else
+    $openBEM_version = $args["openBEM_version"];
+?>       
 
 <!--<link href='http://fonts.googleapis.com/css?family=Ubuntu:300' rel='stylesheet' type='text/css'>-->
 <link rel="stylesheet" href="<?php echo $d; ?>style.css">
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/mhep-helper.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-helper-r3.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-openbem-r3.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/ui-mhep.js"></script>
 
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/datasets-r5.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/model/model-r10.js"></script>
+<script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/gh/carboncoop/openBEM@<?php echo $openBEM_version; ?>/datasets.js"></script>
+<script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/gh/carboncoop/openBEM@<?php echo $openBEM_version; ?>/openBEM.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/targetbar-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/arrow-r3.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-helper/library-helper-r1.js"></script>
@@ -93,6 +86,7 @@ $projectid = (int) $_GET['id'];
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/export">Import/Export</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/librariesmanager">Libraries manager</a></div>
                 <div class="scenario-nav"><a class="project-menu-item" href="#master/fuelsmanager">Fuels manager</a></div>
+                <div class="scenario-nav"><a class="project-menu-item" href="#master/openBEM_version">openBEM version</a></div>
             </div>
         </div>
 
@@ -249,6 +243,13 @@ $projectid = (int) $_GET['id'];
 
 
 <script>
+
+    //$('#openBem-model').load("https://cdn.jsdelivr.net/gh/carboncoop/openBEM@10.1.0/openBEM.js");
+    /*$.holdReady(true);
+     $.getScript("https://cdn.jsdelivr.net/gh/carboncoop/openBEM@10.1.0/openBEM.js", function () {
+     $.holdReady(false);
+     });*/
+
     //************
     // Variables
     //************
@@ -276,7 +277,7 @@ $projectid = (int) $_GET['id'];
     // Initialize project
     //********************
     var projectid = <?php echo $projectid; ?>;
-    var p = openbem.get(projectid);
+    var p = mhep_helper.get(projectid);
 
     $("#project-title").html(p.name);
     $("#project-description").html(p.description);
@@ -293,8 +294,8 @@ $projectid = (int) $_GET['id'];
     var historical_index; // pointer for the historical array, pointing the current version of project
     historical.unshift(JSON.stringify(project));
     historical_index = 0;
-    $('ul.nav.pull-right').prepend('<li id="redo"><a><img src="' + path + 'Modules/assessment/img-assets/redo.gif" title="Redo" style="width:14px" /></a></li>');
-    $('ul.nav.pull-right').prepend('<li id="undo"><a><img src="' + path + 'Modules/assessment/img-assets/undo.gif" title="Undo" style="width:14px" / > </a></li > ');
+    $('.navbar-inner').append('<div style="display:inline" class="menu-assessment pull-right" id="redo"><a><img src="' + path + 'Modules/assessment/img-assets/redo.gif" title="Redo" style="width:14px" /></a></div>');
+    $('.navbar-inner').append('<div style="display:inline" class="menu-assessment pull-right" id="undo"><a><img src="' + path + 'Modules/assessment/img-assets/undo.gif" title="Undo" style="width:14px" / > </a></div> ');
     refresh_undo_redo_buttons();
 
     //**************************
@@ -533,13 +534,13 @@ $projectid = (int) $_GET['id'];
         $("#project-title").html(p.name);
         $("#project-description").html(p.description);
         $("#modal-edit-project-name-and-description").modal("hide");
-        openbem.set_name_and_description(projectid, p.name, p.description);
+        mhep_helper.set_name_and_description(projectid, p.name, p.description);
     });
     $("#modal-error-submitting-data-done").on('click', function () {
         location.reload();
     });
     // Do/undo
-    $('ul.nav.pull-right').on('click', '#undo', function () {
+    $('#emoncms-navbar').on('click', '#undo', function () {
         if (historical_index < historical.length - 1) {
             historical_index++;
             project = JSON.parse(historical[historical_index]);
@@ -548,7 +549,7 @@ $projectid = (int) $_GET['id'];
 
         refresh_undo_redo_buttons();
     });
-    $('ul.nav.pull-right').on('click', '#redo', function () {
+    $('#emoncms-navbar').on('click', '#redo', function () {
         if (historical_index > 0) {
             historical_index--;
             project = JSON.parse(historical[historical_index]);
@@ -601,7 +602,7 @@ $projectid = (int) $_GET['id'];
 
         $("." + scenario + "_scenario_emissions").html(project[scenario].kgco2perm2.toFixed(0));
 
-        openbem.set(projectid, project, function (result) {
+        mhep_helper.set(projectid, project, function (result) {
             alertifnotlogged(result);
             alert_if_assessment_locked(result);
         });

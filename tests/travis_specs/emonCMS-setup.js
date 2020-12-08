@@ -9,17 +9,20 @@ describe('In a new emonCMS installation ', function () {
                 .setValue('[name=password]', login_details.password1)
                 .setValue("#confirm-password", login_details.password1)
                 .click('#register');
+        if (isAlertPresent()) {
+            browser.alertAccept()
+        }
 
         let page_url = browser.getUrl();
         expect(page_url).not.toBe(login_details.login_url);
-        expect(browser.isExisting('a*=Logout')).toBe(true);
+        expect(browser.isExisting('.menu-assessment #logout-link')).toBe(true);
     });
     it(' the administrator can update the database', function () {
         browser.url(login_details.login_url + "/admin/db?apply=true");
         expect(browser.isVisible('.alert-success')).toBe(true);
     });
     it(' the adminisrtator can logout', function () {
-        browser.click('a*=Logout');
+        browser.click('.menu-assessment #logout-link');
         expect(browser.isExisting('[name=username]')).toBe(true);
     });
     it(' a new user can be created (for the MHEP tests) without getting any Jasmine errors', function () {
@@ -30,6 +33,17 @@ describe('In a new emonCMS installation ', function () {
                 .setValue('[name=password]', login_details.password2)
                 .setValue("#confirm-password", login_details.password2)
                 .click('#register');
-        browser.click('a*=Logout');
+        if (isAlertPresent()) {
+            browser.alertAccept()
+        }
+        browser.click('.menu-assessment #logout-link');
     });
 });
+function isAlertPresent() {
+    try {
+        browser.alertText()
+        return true
+    } catch (err) {
+        return false
+    }
+}

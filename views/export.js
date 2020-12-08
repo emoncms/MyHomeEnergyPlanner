@@ -5,7 +5,7 @@ $('#openbem').on('click', "#import-data", function () {
     project.master.imagegallery = [];
 
     update();
-    openbem.set(projectid, project, function (result) {
+    mhep_helper.set(projectid, project, function (result) {
         alertifnotlogged(result);
     });
     add_scenarios_to_menu();
@@ -14,7 +14,7 @@ $('#openbem').on('click', "#import-data", function () {
 $('#openbem').on('click', "#input-data", function () {
     var project_inputdata = {};
     for (var scenario in project) {
-        project_inputdata[scenario] = openbem.extract_inputdata(project[scenario])
+        project_inputdata[scenario] = mhep_helper.extract_inputdata(project[scenario])
     }
 
     $("#export").html(JSON.stringify(project_inputdata, null, 4));
@@ -69,7 +69,7 @@ function export_initUI() {
     $('#download-project-data').attr('download', p.name + '-' + d.toLocaleString() + '.json');
     /*var project_inputdata = {};
      for (var scenario in project) {
-     project_inputdata[scenario] = openbem.extract_inputdata(project[scenario])
+     project_inputdata[scenario] = mhep_helper.extract_inputdata(project[scenario])
      }*/
 
     //$("#import-export").html(JSON.stringify(project_inputdata, null, 4));

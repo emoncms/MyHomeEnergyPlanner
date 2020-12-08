@@ -1110,7 +1110,7 @@ function measureForCompleteTable(measure) {
     if (measure.performance == undefined)
         var perf = '';
     else
-        format_performance_string(measure.performance); // We have realized that some units were inputted wrong in the library
+        perf = format_performance_string(measure.performance); // We have realized that some units were inputted wrong in the library
     html += '<tr><td><strong>Performance target: </strong></td><td style="width:35%">' + perf + '</td>';
     html += '<td colspan=2><table  style="width:100%">';
     html += measure.min_cost == undefined ? '' : '<tr><td><strong>Minimum cost</strong></td><td colspan=3>' + measure.min_cost + '</td></tr>';

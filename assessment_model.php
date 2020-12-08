@@ -80,10 +80,11 @@ class Assessment {
         return $projects;
     }
 
-    public function create($userid, $name, $description) {
+    public function create($userid, $name, $description, $openBEM_version) {
         $userid = (int) $userid;
         $name = preg_replace('/[^\w\s.",:{}\[\]-]/', '', $name);
         $description = preg_replace('/[^\w\s.",:{}\[\]-]/', '', $description);
+        $openBEM_version = preg_replace('/[^\w\s\.]/', '', $openBEM_version);
 
         $result = $this->mysqli->query("SELECT username FROM users WHERE `id`='$userid'");
         $row = $result->fetch_object();
@@ -95,23 +96,26 @@ class Assessment {
         // Dont save if json_decode fails
 
         $data = false;
-        $result = $this->mysqli->query("INSERT INTO " . $this->tablename . " (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data')");
+        $result = $this->mysqli->query("INSERT INTO " . $this->tablename . " (`name`,`description`,`userid`,`status`,`author`,`mdate`,`data`,`openBEM_version`) VALUES ('$name','$description','$userid','$status','$author','$mdate','$data','$openBEM_version')");
         $id = $this->mysqli->insert_id;
 
+        if ($id > 0) {
+            $project = array(
+                'id' => $id,
+                'name' => $name,
+                'description' => $description,
+                'status' => $status,
+                'userid' => $userid,
+                'author' => $author,
+                'mdate' => $mdate,
+                'openBEM_version' => $openBEM_version
+            );
 
-        $project = array(
-            'id' => $id,
-            'name' => $name,
-            'description' => $description,
-            'status' => $status,
-            'userid' => $userid,
-            'author' => $author,
-            'mdate' => $mdate
-        );
-
-        $this->access($id, $userid, 1);
-
-        return $project;
+            $this->access($id, $userid, 1);
+            return $project;
+        }
+        else 
+            return false;
     }
 
     public function delete($userid, $id) {
@@ -197,7 +201,7 @@ class Assessment {
             }
             else {
                 $stmt = $this->mysqli->prepare("UPDATE " . $this->tablename . " SET `data` = ?, `mdate` = ? WHERE `id` = ?");
-                $stmt->bind_param("sbi", $data, $mdate, $id);
+                $stmt->bind_param("ssi", $data, $mdate, $id);
                 $stmt->execute();
             }
 
@@ -299,7 +303,7 @@ class Assessment {
         while ($row = $result->fetch_object()) {
             global $user;
             if ($row->userid != 0)
-                $username = $user->get_name($row->userid);
+                $username = $user->get_username($row->userid);
             if ($row->orgid != 0) {
                 $orgid = $row->orgid;
                 $orgresult = $this->mysqli->query("SELECT * FROM organisations WHERE `id`='$orgid'");
@@ -342,6 +346,34 @@ class Assessment {
 
         $result = $this->mysqli->query("SELECT * FROM assessment WHERE id='$id' and status='Complete'");
         if ($result->num_rows > 0)
+            return true;
+        else
+            return false;
+    }
+
+    public function get_openBEM_version($userid, $id) {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        if (!$this->has_access($userid, $id))
+            return false;
+
+        $result = $this->mysqli->query("SELECT * FROM " . $this->tablename . " WHERE `id` = '$id'");
+        $row = $result->fetch_object();
+
+        return $row->openBEM_version;
+    }
+
+    public function set_openBEM_version($userid, $id, $version) {
+        $id = (int) $id;
+        $userid = (int) $userid;
+        $status = preg_replace('/[^\w\s\.]/', '', $version);
+        if (!$this->has_access($userid, $id))
+            return false;
+
+        $stmt = $this->mysqli->prepare("UPDATE `assessment` SET `openBEM_version` = ? WHERE `id` = ?");
+        $stmt->bind_param("si", $version, $id);
+
+        if ($stmt->execute())
             return true;
         else
             return false;
@@ -508,8 +540,8 @@ class Assessment {
 
         $data = json_encode($data);
 
-        $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE userid=? AND id=?");
-        $stmt->bind_param("sii", $data, $userid, $id);
+        $stmt = $this->mysqli->prepare("UPDATE element_library SET data=? WHERE id=?");
+        $stmt->bind_param("si", $data, $id);
         $stmt->execute();
         $affected_rows = $stmt->affected_rows;
         $stmt->close();
@@ -620,7 +652,7 @@ class Assessment {
         while ($row = $result->fetch_object()) {
             global $user;
             if ($row->userid != 0)
-                $username = $user->get_name($row->userid);
+                $username = $user->get_username($row->userid);
             if ($row->orgid != 0) {
                 $orgid = $row->orgid;
                 $orgresult = $this->mysqli->query("SELECT * FROM organisations WHERE `id`='$orgid'");

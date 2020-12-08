@@ -35,7 +35,7 @@ $('#openbem #upload_form').submit(function (e) {
         form_data.append($('#files_to_upload')[0].files[file_index].name, $('#files_to_upload')[0].files[file_index]);
     }
 
-    openbem.upload_images(projectid, form_data, upload_images_callback);
+    mhep_helper.upload_images(projectid, form_data, upload_images_callback);
 });
 
 function upload_images_callback(result) {
@@ -126,14 +126,14 @@ $('#gallery').on('click', '.icon-star-empty', function () {
 });
 
 $('#modal-delete-image').on('click', '#delete-file-confirm', function () {
-    openbem.delete_image(projectid, data.imagegallery[$(this).attr('index')], delete_image_callback);
+    mhep_helper.delete_image(projectid, data.imagegallery[$(this).attr('index')], delete_image_callback);
     $("#modal-delete-image").modal("hide");
 });
 $('#modal-delete-images').on('click', '#delete-files-confirm', function () {
     var indexes = JSON.parse($(this).attr('indexes'));
     var deleted_files = 0;
     indexes.forEach(function (index) {
-        openbem.delete_image(projectid, data.imagegallery[index - deleted_files], delete_image_callback);
+        mhep_helper.delete_image(projectid, data.imagegallery[index - deleted_files], delete_image_callback);
         deleted_files++;
     });
     //$('#delete_result').html("<p>Images deleted</p>");

@@ -42,7 +42,7 @@ $d = $path . "Modules/assessment/";
     }
 </style>
 
-<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/openbem-r4.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/mhep-helper.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
 
 <div id="wrapper">
@@ -248,7 +248,16 @@ $d = $path . "Modules/assessment/";
         if (name == "") {
             alert("Please enter a project name");
         } else {
-            var orgselector = "";
+            var callback = function (project) {
+                    projects.push(project);
+                    draw_projects("#projects", projects);
+                    $("#noprojects").hide();
+                };
+            if (viewmode == "organisation" && orgid != 0)
+                mhep_helper.create(name, description, orgid, callback);
+            else 
+                mhep_helper.create(name, description, null, callback);
+            /*var orgselector = "";
             if (viewmode == "organisation" && orgid != 0)
                 orgselector += "&org=" + orgid;
             $.ajax({
@@ -259,7 +268,7 @@ $d = $path . "Modules/assessment/";
                     draw_projects("#projects", projects);
                     $("#noprojects").hide();
                 }
-            });
+            });*/
             $("#project-name-input").val("");
             $("#project-description-input").val("");
             $("#modal-assessment-create").modal("hide");
@@ -279,7 +288,7 @@ $d = $path . "Modules/assessment/";
     $("#confirmdelete").click(function () {
         var projectid = $('#myModal').attr('the_id');
         var z = $('#myModal').attr('the_row');
-        if (openbem.delete(projectid)) {
+        if (mhep_helper.delete(projectid)) {
             projects.splice(z, 1);
             draw_projects("#projects", projects);
         }
@@ -333,7 +342,7 @@ $d = $path . "Modules/assessment/";
         var projectid = $(this).attr('projectid');
         var z = $(this).attr('z');
         var status = $(this).val();
-        openbem.set_status(projectid, status);
+        mhep_helper.set_status(projectid, status);
         projects[z].status = status;
         draw_projects("#projects", projects);
     });
