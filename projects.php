@@ -45,41 +45,38 @@ $d = $path . "Modules/assessment/";
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/mhep-helper.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $d; ?>js/library-r6.js"></script>
 
-<div id="wrapper">
+<div id="organisation" class="main-block" style="display:none">
+    <button id="back-myview" style="float:right; margin-top:5px; margin-right:5px" class="btn">Home</button>
+    <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;">
 
-    <div id="organisation" class="main-block" style="display:none">
-        <button id="back-myview" style="float:right; margin-top:5px; margin-right:5px" class="btn">Home</button>
-        <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;">
-
-            <b>Organisation:</b>
-            <span id="organisation-name"></span>
-        </div>
-
-        <div style="padding:10px">
-            <b>Members:</b><br>
-            <div id="organisationmembers"></div>
-            <br>
-            <div class="input-append">
-                <input id="organisation-add-member-name" type="text" style="width:180px" />
-                <button id="organisation-add-member" class="btn">Add member</button>
-            </div>
-        </div>
+        <b>Organisation:</b>
+        <span id="organisation-name"></span>
     </div>
 
-    <div class="main-block">
-        <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>My Organisations</b></div>
-        <div style="padding:10px">
-            <div id="myorganisations"></div>
-            <br>
-            <div class="input-append">
-                <input id="organisation-create-name" type="text" style="width:135px" />
-                <button id="organisation-create" class="btn">Create organisation</button>
-            </div>
+    <div style="padding:10px">
+        <b>Members:</b><br>
+        <div id="organisationmembers"></div>
+        <br>
+        <div class="input-append">
+            <input id="organisation-add-member-name" type="text" style="width:180px" />
+            <button id="organisation-add-member" class="btn">Add member</button>
         </div>
     </div>
 </div>
 
-<div id="wrapper" class="assessments">
+<div class="main-block">
+    <div style="background-color:rgba(215, 210, 201, 0.9); color:#897A67; padding:10px;"><b>My Organisations</b></div>
+    <div style="padding:10px">
+        <div id="myorganisations"></div>
+        <br>
+        <div class="input-append">
+            <input id="organisation-create-name" type="text" style="width:135px" />
+            <button id="organisation-create" class="btn">Create organisation</button>
+        </div>
+    </div>
+</div>
+
+<div class="assessments">
     <div style="padding-right:10px">
         <div class="main-block">
             <button id="new-assessment" style="float:right; margin-top:5px; margin-right:5px" class="btn">New</button>
